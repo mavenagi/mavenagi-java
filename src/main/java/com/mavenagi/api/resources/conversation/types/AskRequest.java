@@ -9,12 +9,15 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.api.core.ObjectMappers;
 import com.mavenagi.api.resources.commons.types.EntityIdBase;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
@@ -26,16 +29,20 @@ public final class AskRequest {
 
     private final String text;
 
+    private final Optional<List<Attachment>> attachments;
+
     private final Map<String, Object> additionalProperties;
 
     private AskRequest(
             EntityIdBase conversationMessageId,
             EntityIdBase userId,
             String text,
+            Optional<List<Attachment>> attachments,
             Map<String, Object> additionalProperties) {
         this.conversationMessageId = conversationMessageId;
         this.userId = userId;
         this.text = text;
+        this.attachments = attachments;
         this.additionalProperties = additionalProperties;
     }
 
@@ -63,6 +70,14 @@ public final class AskRequest {
         return text;
     }
 
+    /**
+     * @return The attachments to the message.
+     */
+    @JsonProperty("attachments")
+    public Optional<List<Attachment>> getAttachments() {
+        return attachments;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -77,12 +92,13 @@ public final class AskRequest {
     private boolean equalTo(AskRequest other) {
         return conversationMessageId.equals(other.conversationMessageId)
                 && userId.equals(other.userId)
-                && text.equals(other.text);
+                && text.equals(other.text)
+                && attachments.equals(other.attachments);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.conversationMessageId, this.userId, this.text);
+        return Objects.hash(this.conversationMessageId, this.userId, this.text, this.attachments);
     }
 
     @java.lang.Override
@@ -110,6 +126,10 @@ public final class AskRequest {
 
     public interface _FinalStage {
         AskRequest build();
+
+        _FinalStage attachments(Optional<List<Attachment>> attachments);
+
+        _FinalStage attachments(List<Attachment> attachments);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -119,6 +139,8 @@ public final class AskRequest {
         private EntityIdBase userId;
 
         private String text;
+
+        private Optional<List<Attachment>> attachments = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -130,6 +152,7 @@ public final class AskRequest {
             conversationMessageId(other.getConversationMessageId());
             userId(other.getUserId());
             text(other.getText());
+            attachments(other.getAttachments());
             return this;
         }
 
@@ -167,9 +190,26 @@ public final class AskRequest {
             return this;
         }
 
+        /**
+         * <p>The attachments to the message.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage attachments(List<Attachment> attachments) {
+            this.attachments = Optional.ofNullable(attachments);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "attachments", nulls = Nulls.SKIP)
+        public _FinalStage attachments(Optional<List<Attachment>> attachments) {
+            this.attachments = attachments;
+            return this;
+        }
+
         @java.lang.Override
         public AskRequest build() {
-            return new AskRequest(conversationMessageId, userId, text, additionalProperties);
+            return new AskRequest(conversationMessageId, userId, text, attachments, additionalProperties);
         }
     }
 }
