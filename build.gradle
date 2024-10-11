@@ -46,7 +46,7 @@ publishing {
         maven(MavenPublication) {
             groupId = 'com.mavenagi'
             artifactId = 'mavenagi-java'
-            version = '0.0.0-alpha.24'
+            version = '0.0.0-alpha.25'
             from components.java
             pom {
                 scm {

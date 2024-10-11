@@ -30,7 +30,7 @@ public final class ClientOptions {
             {
                 put("X-Fern-Language", "JAVA");
                 put("X-Fern-SDK-Name", "com.mavenagi.fern:api-sdk");
-                put("X-Fern-SDK-Version", "0.0.0-alpha.24");
+                put("X-Fern-SDK-Version", "0.0.0-alpha.25");
             }
         });
         this.headerSuppliers = headerSuppliers;
