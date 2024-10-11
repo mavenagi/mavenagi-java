@@ -2,12 +2,13 @@ plugins {
     id 'java-library'
     id 'maven-publish'
     id 'com.diffplug.spotless' version '6.11.0'
+    id 'signing'
 }
 
 repositories {
     mavenCentral()
     maven {
-        url 'https://s01.oss.sonatype.org/content/repositories/releases/'
+        url 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
     }
 }
 
@@ -35,6 +36,9 @@ java {
     withJavadocJar()
 }
 
+signing {
+    sign(publishing.publications)
+}
 test {
     useJUnitPlatform()
     testLogging {
@@ -46,9 +50,18 @@ publishing {
         maven(MavenPublication) {
             groupId = 'com.mavenagi'
             artifactId = 'mavenagi-java'
-            version = '0.0.0-alpha.25'
+            version = '0.0.0-alpha.26'
             from components.java
             pom {
+                name = 'mavenagi'
+                description = 'The official SDK of mavenagi'
+                url = 'https://buildwithfern.com'
+                developers {
+                    developer {
+                        name = 'mavenagi'
+                        email = 'developers@mavenagi.com'
+                    }
+                }
                 scm {
                     connection = 'scm:git:git://github.com/mavenagi/mavenagi-java.git'
                     developerConnection = 'scm:git:git://github.com/mavenagi/mavenagi-java.git'
