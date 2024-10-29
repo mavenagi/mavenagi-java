@@ -50,7 +50,7 @@ publishing {
         maven(MavenPublication) {
             groupId = 'com.mavenagi'
             artifactId = 'mavenagi-java'
-            version = '0.0.0-alpha.28'
+            version = '0.0.0-alpha.29'
             from components.java
             pom {
                 name = 'mavenagi'
