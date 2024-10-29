@@ -36,6 +36,8 @@ public final class UserMessage implements IUserMessageBase {
 
     private final EntityId conversationMessageId;
 
+    private final Optional<String> language;
+
     private final Map<String, Object> additionalProperties;
 
     private UserMessage(
@@ -45,6 +47,7 @@ public final class UserMessage implements IUserMessageBase {
             Optional<OffsetDateTime> createdAt,
             Optional<OffsetDateTime> updatedAt,
             EntityId conversationMessageId,
+            Optional<String> language,
             Map<String, Object> additionalProperties) {
         this.userId = userId;
         this.text = text;
@@ -52,6 +55,7 @@ public final class UserMessage implements IUserMessageBase {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.conversationMessageId = conversationMessageId;
+        this.language = language;
         this.additionalProperties = additionalProperties;
     }
 
@@ -105,6 +109,14 @@ public final class UserMessage implements IUserMessageBase {
         return conversationMessageId;
     }
 
+    /**
+     * @return The language of the message in ISO 639-1 code format
+     */
+    @JsonProperty("language")
+    public Optional<String> getLanguage() {
+        return language;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -122,7 +134,8 @@ public final class UserMessage implements IUserMessageBase {
                 && userMessageType.equals(other.userMessageType)
                 && createdAt.equals(other.createdAt)
                 && updatedAt.equals(other.updatedAt)
-                && conversationMessageId.equals(other.conversationMessageId);
+                && conversationMessageId.equals(other.conversationMessageId)
+                && language.equals(other.language);
     }
 
     @java.lang.Override
@@ -133,7 +146,8 @@ public final class UserMessage implements IUserMessageBase {
                 this.userMessageType,
                 this.createdAt,
                 this.updatedAt,
-                this.conversationMessageId);
+                this.conversationMessageId,
+                this.language);
     }
 
     @java.lang.Override
@@ -173,6 +187,10 @@ public final class UserMessage implements IUserMessageBase {
         _FinalStage updatedAt(Optional<OffsetDateTime> updatedAt);
 
         _FinalStage updatedAt(OffsetDateTime updatedAt);
+
+        _FinalStage language(Optional<String> language);
+
+        _FinalStage language(String language);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -185,6 +203,8 @@ public final class UserMessage implements IUserMessageBase {
         private UserConversationMessageType userMessageType;
 
         private EntityId conversationMessageId;
+
+        private Optional<String> language = Optional.empty();
 
         private Optional<OffsetDateTime> updatedAt = Optional.empty();
 
@@ -203,6 +223,7 @@ public final class UserMessage implements IUserMessageBase {
             createdAt(other.getCreatedAt());
             updatedAt(other.getUpdatedAt());
             conversationMessageId(other.getConversationMessageId());
+            language(other.getLanguage());
             return this;
         }
 
@@ -248,6 +269,23 @@ public final class UserMessage implements IUserMessageBase {
         }
 
         /**
+         * <p>The language of the message in ISO 639-1 code format</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage language(String language) {
+            this.language = Optional.ofNullable(language);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "language", nulls = Nulls.SKIP)
+        public _FinalStage language(Optional<String> language) {
+            this.language = language;
+            return this;
+        }
+
+        /**
          * <p>The date and time the conversation was last updated</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -284,7 +322,14 @@ public final class UserMessage implements IUserMessageBase {
         @java.lang.Override
         public UserMessage build() {
             return new UserMessage(
-                    userId, text, userMessageType, createdAt, updatedAt, conversationMessageId, additionalProperties);
+                    userId,
+                    text,
+                    userMessageType,
+                    createdAt,
+                    updatedAt,
+                    conversationMessageId,
+                    language,
+                    additionalProperties);
         }
     }
 }

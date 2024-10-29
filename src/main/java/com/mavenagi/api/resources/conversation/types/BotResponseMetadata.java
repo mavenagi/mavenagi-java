@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BotResponseMetadata.Builder.class)
@@ -25,12 +26,18 @@ public final class BotResponseMetadata implements IBotResponseMetadata {
 
     private final List<Source> sources;
 
+    private final Optional<String> language;
+
     private final Map<String, Object> additionalProperties;
 
     private BotResponseMetadata(
-            List<String> followupQuestions, List<Source> sources, Map<String, Object> additionalProperties) {
+            List<String> followupQuestions,
+            List<Source> sources,
+            Optional<String> language,
+            Map<String, Object> additionalProperties) {
         this.followupQuestions = followupQuestions;
         this.sources = sources;
+        this.language = language;
         this.additionalProperties = additionalProperties;
     }
 
@@ -46,6 +53,15 @@ public final class BotResponseMetadata implements IBotResponseMetadata {
         return sources;
     }
 
+    /**
+     * @return The language of the message in ISO 639-1 code format
+     */
+    @JsonProperty("language")
+    @java.lang.Override
+    public Optional<String> getLanguage() {
+        return language;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -58,12 +74,14 @@ public final class BotResponseMetadata implements IBotResponseMetadata {
     }
 
     private boolean equalTo(BotResponseMetadata other) {
-        return followupQuestions.equals(other.followupQuestions) && sources.equals(other.sources);
+        return followupQuestions.equals(other.followupQuestions)
+                && sources.equals(other.sources)
+                && language.equals(other.language);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.followupQuestions, this.sources);
+        return Objects.hash(this.followupQuestions, this.sources, this.language);
     }
 
     @java.lang.Override
@@ -81,6 +99,8 @@ public final class BotResponseMetadata implements IBotResponseMetadata {
 
         private List<Source> sources = new ArrayList<>();
 
+        private Optional<String> language = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -89,6 +109,7 @@ public final class BotResponseMetadata implements IBotResponseMetadata {
         public Builder from(BotResponseMetadata other) {
             followupQuestions(other.getFollowupQuestions());
             sources(other.getSources());
+            language(other.getLanguage());
             return this;
         }
 
@@ -126,8 +147,19 @@ public final class BotResponseMetadata implements IBotResponseMetadata {
             return this;
         }
 
+        @JsonSetter(value = "language", nulls = Nulls.SKIP)
+        public Builder language(Optional<String> language) {
+            this.language = language;
+            return this;
+        }
+
+        public Builder language(String language) {
+            this.language = Optional.ofNullable(language);
+            return this;
+        }
+
         public BotResponseMetadata build() {
-            return new BotResponseMetadata(followupQuestions, sources, additionalProperties);
+            return new BotResponseMetadata(followupQuestions, sources, language, additionalProperties);
         }
     }
 }

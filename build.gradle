@@ -36,6 +36,9 @@ java {
     withJavadocJar()
 }
 
+signing {
+    sign(publishing.publications)
+}
 test {
     useJUnitPlatform()
     testLogging {
@@ -47,7 +50,7 @@ publishing {
         maven(MavenPublication) {
             groupId = 'com.mavenagi'
             artifactId = 'mavenagi-java'
-            version = '0.0.0-alpha.27'
+            version = '0.0.0-alpha.28'
             from components.java
             pom {
                 name = 'mavenagi'
