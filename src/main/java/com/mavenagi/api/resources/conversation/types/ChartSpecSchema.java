@@ -5,18 +5,12 @@ package com.mavenagi.api.resources.conversation.types;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum Capability {
-    MARKDOWN("MARKDOWN"),
-
-    FORMS("FORMS"),
-
-    IMAGES("IMAGES"),
-
-    CHARTS_HIGHCHARTS_TS("CHARTS_HIGHCHARTS_TS");
+public enum ChartSpecSchema {
+    HIGHCHARTS_TS("HIGHCHARTS_TS");
 
     private final String value;
 
-    Capability(String value) {
+    ChartSpecSchema(String value) {
         this.value = value;
     }
 

@@ -34,12 +34,20 @@ public final class BotResponse {
         return new BotResponse(new ActionFormValue(value));
     }
 
+    public static BotResponse chart(BotChartResponse value) {
+        return new BotResponse(new ChartValue(value));
+    }
+
     public boolean isText() {
         return value instanceof TextValue;
     }
 
     public boolean isActionForm() {
         return value instanceof ActionFormValue;
+    }
+
+    public boolean isChart() {
+        return value instanceof ChartValue;
     }
 
     public boolean _isUnknown() {
@@ -56,6 +64,13 @@ public final class BotResponse {
     public Optional<BotActionFormResponse> getActionForm() {
         if (isActionForm()) {
             return Optional.of(((ActionFormValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<BotChartResponse> getChart() {
+        if (isChart()) {
+            return Optional.of(((ChartValue) value).value);
         }
         return Optional.empty();
     }
@@ -77,11 +92,17 @@ public final class BotResponse {
 
         T visitActionForm(BotActionFormResponse actionForm);
 
+        T visitChart(BotChartResponse chart);
+
         T _visitUnknown(Object unknownType);
     }
 
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", visible = true, defaultImpl = _UnknownValue.class)
-    @JsonSubTypes({@JsonSubTypes.Type(TextValue.class), @JsonSubTypes.Type(ActionFormValue.class)})
+    @JsonSubTypes({
+        @JsonSubTypes.Type(TextValue.class),
+        @JsonSubTypes.Type(ActionFormValue.class),
+        @JsonSubTypes.Type(ChartValue.class)
+    })
     @JsonIgnoreProperties(ignoreUnknown = true)
     private interface Value {
         <T> T visit(Visitor<T> visitor);
@@ -149,6 +170,44 @@ public final class BotResponse {
         }
 
         private boolean equalTo(ActionFormValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "BotResponse{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("chart")
+    private static final class ChartValue implements Value {
+        @JsonUnwrapped
+        private BotChartResponse value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private ChartValue() {}
+
+        private ChartValue(BotChartResponse value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitChart(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof ChartValue && equalTo((ChartValue) other);
+        }
+
+        private boolean equalTo(ChartValue other) {
             return value.equals(other.value);
         }
 

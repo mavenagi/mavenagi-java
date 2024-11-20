@@ -493,14 +493,14 @@ public class ConversationClient {
     }
 
     /**
-     * Create feedback
+     * Update feedback or create it if it doesn't exist
      */
     public Feedback createFeedback(FeedbackRequest request) {
         return createFeedback(request, null);
     }
 
     /**
-     * Create feedback
+     * Update feedback or create it if it doesn't exist
      */
     public Feedback createFeedback(FeedbackRequest request, RequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())

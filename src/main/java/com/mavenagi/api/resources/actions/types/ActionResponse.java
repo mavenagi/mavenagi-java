@@ -69,7 +69,7 @@ public final class ActionResponse implements IActionBase {
     }
 
     /**
-     * @return The description of the action. This helps Maven decide if the action is relevant to a conversation and is not displayed directly to the end user.
+     * @return The description of the action. Must be less than 1024 characters. This helps Maven decide if the action is relevant to a conversation and is not displayed directly to the end user. Descriptions are used by the LLM.
      */
     @JsonProperty("description")
     @java.lang.Override
@@ -245,7 +245,7 @@ public final class ActionResponse implements IActionBase {
         }
 
         /**
-         * <p>The description of the action. This helps Maven decide if the action is relevant to a conversation and is not displayed directly to the end user.</p>
+         * <p>The description of the action. Must be less than 1024 characters. This helps Maven decide if the action is relevant to a conversation and is not displayed directly to the end user. Descriptions are used by the LLM.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
