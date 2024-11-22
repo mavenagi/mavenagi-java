@@ -34,6 +34,10 @@ public final class StreamResponse {
         return new StreamResponse(new ActionValue(value));
     }
 
+    public static StreamResponse chart(AskStreamChartEvent value) {
+        return new StreamResponse(new ChartValue(value));
+    }
+
     public static StreamResponse metadata(AskStreamMetadataEvent value) {
         return new StreamResponse(new MetadataValue(value));
     }
@@ -52,6 +56,10 @@ public final class StreamResponse {
 
     public boolean isAction() {
         return value instanceof ActionValue;
+    }
+
+    public boolean isChart() {
+        return value instanceof ChartValue;
     }
 
     public boolean isMetadata() {
@@ -80,6 +88,13 @@ public final class StreamResponse {
     public Optional<AskStreamActionEvent> getAction() {
         if (isAction()) {
             return Optional.of(((ActionValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<AskStreamChartEvent> getChart() {
+        if (isChart()) {
+            return Optional.of(((ChartValue) value).value);
         }
         return Optional.empty();
     }
@@ -122,6 +137,8 @@ public final class StreamResponse {
 
         T visitAction(AskStreamActionEvent action);
 
+        T visitChart(AskStreamChartEvent chart);
+
         T visitMetadata(AskStreamMetadataEvent metadata);
 
         T visitStart(AskStreamStartEvent start);
@@ -135,6 +152,7 @@ public final class StreamResponse {
     @JsonSubTypes({
         @JsonSubTypes.Type(TextValue.class),
         @JsonSubTypes.Type(ActionValue.class),
+        @JsonSubTypes.Type(ChartValue.class),
         @JsonSubTypes.Type(MetadataValue.class),
         @JsonSubTypes.Type(StartValue.class),
         @JsonSubTypes.Type(EndValue.class)
@@ -206,6 +224,44 @@ public final class StreamResponse {
         }
 
         private boolean equalTo(ActionValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "StreamResponse{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("chart")
+    private static final class ChartValue implements Value {
+        @JsonUnwrapped
+        private AskStreamChartEvent value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private ChartValue() {}
+
+        private ChartValue(AskStreamChartEvent value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitChart(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof ChartValue && equalTo((ChartValue) other);
+        }
+
+        private boolean equalTo(ChartValue other) {
             return value.equals(other.value);
         }
 

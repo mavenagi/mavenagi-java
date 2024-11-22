@@ -15,7 +15,9 @@ import com.mavenagi.api.core.ObjectMappers;
 import com.mavenagi.api.resources.commons.types.EntityId;
 import com.mavenagi.api.resources.commons.types.EntityIdBase;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -38,6 +40,8 @@ public final class UserMessage implements IUserMessageBase {
 
     private final Optional<String> language;
 
+    private final List<UserMessageAttachment> attachments;
+
     private final Map<String, Object> additionalProperties;
 
     private UserMessage(
@@ -48,6 +52,7 @@ public final class UserMessage implements IUserMessageBase {
             Optional<OffsetDateTime> updatedAt,
             EntityId conversationMessageId,
             Optional<String> language,
+            List<UserMessageAttachment> attachments,
             Map<String, Object> additionalProperties) {
         this.userId = userId;
         this.text = text;
@@ -56,6 +61,7 @@ public final class UserMessage implements IUserMessageBase {
         this.updatedAt = updatedAt;
         this.conversationMessageId = conversationMessageId;
         this.language = language;
+        this.attachments = attachments;
         this.additionalProperties = additionalProperties;
     }
 
@@ -117,6 +123,14 @@ public final class UserMessage implements IUserMessageBase {
         return language;
     }
 
+    /**
+     * @return The attachments associated with the message
+     */
+    @JsonProperty("attachments")
+    public List<UserMessageAttachment> getAttachments() {
+        return attachments;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -135,7 +149,8 @@ public final class UserMessage implements IUserMessageBase {
                 && createdAt.equals(other.createdAt)
                 && updatedAt.equals(other.updatedAt)
                 && conversationMessageId.equals(other.conversationMessageId)
-                && language.equals(other.language);
+                && language.equals(other.language)
+                && attachments.equals(other.attachments);
     }
 
     @java.lang.Override
@@ -147,7 +162,8 @@ public final class UserMessage implements IUserMessageBase {
                 this.createdAt,
                 this.updatedAt,
                 this.conversationMessageId,
-                this.language);
+                this.language,
+                this.attachments);
     }
 
     @java.lang.Override
@@ -191,6 +207,12 @@ public final class UserMessage implements IUserMessageBase {
         _FinalStage language(Optional<String> language);
 
         _FinalStage language(String language);
+
+        _FinalStage attachments(List<UserMessageAttachment> attachments);
+
+        _FinalStage addAttachments(UserMessageAttachment attachments);
+
+        _FinalStage addAllAttachments(List<UserMessageAttachment> attachments);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -203,6 +225,8 @@ public final class UserMessage implements IUserMessageBase {
         private UserConversationMessageType userMessageType;
 
         private EntityId conversationMessageId;
+
+        private List<UserMessageAttachment> attachments = new ArrayList<>();
 
         private Optional<String> language = Optional.empty();
 
@@ -224,6 +248,7 @@ public final class UserMessage implements IUserMessageBase {
             updatedAt(other.getUpdatedAt());
             conversationMessageId(other.getConversationMessageId());
             language(other.getLanguage());
+            attachments(other.getAttachments());
             return this;
         }
 
@@ -265,6 +290,34 @@ public final class UserMessage implements IUserMessageBase {
         public _FinalStage conversationMessageId(@NotNull EntityId conversationMessageId) {
             this.conversationMessageId =
                     Objects.requireNonNull(conversationMessageId, "conversationMessageId must not be null");
+            return this;
+        }
+
+        /**
+         * <p>The attachments associated with the message</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage addAllAttachments(List<UserMessageAttachment> attachments) {
+            this.attachments.addAll(attachments);
+            return this;
+        }
+
+        /**
+         * <p>The attachments associated with the message</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage addAttachments(UserMessageAttachment attachments) {
+            this.attachments.add(attachments);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "attachments", nulls = Nulls.SKIP)
+        public _FinalStage attachments(List<UserMessageAttachment> attachments) {
+            this.attachments.clear();
+            this.attachments.addAll(attachments);
             return this;
         }
 
@@ -329,6 +382,7 @@ public final class UserMessage implements IUserMessageBase {
                     updatedAt,
                     conversationMessageId,
                     language,
+                    attachments,
                     additionalProperties);
         }
     }

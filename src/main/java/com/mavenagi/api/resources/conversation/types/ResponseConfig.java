@@ -42,7 +42,7 @@ public final class ResponseConfig {
     }
 
     /**
-     * @return List of capabilities supported by the caller. Defaults to all. Only the markdown capability is supported at this time. If not provided, responses will be plain text.
+     * @return List of capabilities supported by the caller. Defaults to everything except charts_highcharts_ts. Note that the forms and images capabilities are not respected at this time.
      */
     @JsonProperty("capabilities")
     public List<Capability> getCapabilities() {
@@ -160,7 +160,7 @@ public final class ResponseConfig {
         }
 
         /**
-         * <p>List of capabilities supported by the caller. Defaults to all. Only the markdown capability is supported at this time. If not provided, responses will be plain text.</p>
+         * <p>List of capabilities supported by the caller. Defaults to everything except charts_highcharts_ts. Note that the forms and images capabilities are not respected at this time.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -170,7 +170,7 @@ public final class ResponseConfig {
         }
 
         /**
-         * <p>List of capabilities supported by the caller. Defaults to all. Only the markdown capability is supported at this time. If not provided, responses will be plain text.</p>
+         * <p>List of capabilities supported by the caller. Defaults to everything except charts_highcharts_ts. Note that the forms and images capabilities are not respected at this time.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override

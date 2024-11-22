@@ -17,8 +17,8 @@ import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonDeserialize(builder = BotChartResponse.Builder.class)
-public final class BotChartResponse implements IBotChartResponse {
+@JsonDeserialize(builder = AskStreamChartEvent.Builder.class)
+public final class AskStreamChartEvent implements IBotChartResponse {
     private final String label;
 
     private final ChartSpecSchema specSchema;
@@ -27,7 +27,7 @@ public final class BotChartResponse implements IBotChartResponse {
 
     private final Map<String, Object> additionalProperties;
 
-    private BotChartResponse(
+    private AskStreamChartEvent(
             String label, ChartSpecSchema specSchema, String spec, Map<String, Object> additionalProperties) {
         this.label = label;
         this.specSchema = specSchema;
@@ -62,7 +62,7 @@ public final class BotChartResponse implements IBotChartResponse {
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
-        return other instanceof BotChartResponse && equalTo((BotChartResponse) other);
+        return other instanceof AskStreamChartEvent && equalTo((AskStreamChartEvent) other);
     }
 
     @JsonAnyGetter
@@ -70,7 +70,7 @@ public final class BotChartResponse implements IBotChartResponse {
         return this.additionalProperties;
     }
 
-    private boolean equalTo(BotChartResponse other) {
+    private boolean equalTo(AskStreamChartEvent other) {
         return label.equals(other.label) && specSchema.equals(other.specSchema) && spec.equals(other.spec);
     }
 
@@ -91,7 +91,7 @@ public final class BotChartResponse implements IBotChartResponse {
     public interface LabelStage {
         SpecSchemaStage label(@NotNull String label);
 
-        Builder from(BotChartResponse other);
+        Builder from(AskStreamChartEvent other);
     }
 
     public interface SpecSchemaStage {
@@ -103,7 +103,7 @@ public final class BotChartResponse implements IBotChartResponse {
     }
 
     public interface _FinalStage {
-        BotChartResponse build();
+        AskStreamChartEvent build();
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -120,7 +120,7 @@ public final class BotChartResponse implements IBotChartResponse {
         private Builder() {}
 
         @java.lang.Override
-        public Builder from(BotChartResponse other) {
+        public Builder from(AskStreamChartEvent other) {
             label(other.getLabel());
             specSchema(other.getSpecSchema());
             spec(other.getSpec());
@@ -157,8 +157,8 @@ public final class BotChartResponse implements IBotChartResponse {
         }
 
         @java.lang.Override
-        public BotChartResponse build() {
-            return new BotChartResponse(label, specSchema, spec, additionalProperties);
+        public AskStreamChartEvent build() {
+            return new AskStreamChartEvent(label, specSchema, spec, additionalProperties);
         }
     }
 }
