@@ -34,6 +34,8 @@ public final class FeedbackRequest implements IFeedbackBase {
 
     private final EntityIdBase conversationMessageId;
 
+    private final Optional<EntityIdBase> userId;
+
     private final Map<String, Object> additionalProperties;
 
     private FeedbackRequest(
@@ -42,12 +44,14 @@ public final class FeedbackRequest implements IFeedbackBase {
             EntityIdBase feedbackId,
             EntityIdBase conversationId,
             EntityIdBase conversationMessageId,
+            Optional<EntityIdBase> userId,
             Map<String, Object> additionalProperties) {
         this.type = type;
         this.text = text;
         this.feedbackId = feedbackId;
         this.conversationId = conversationId;
         this.conversationMessageId = conversationMessageId;
+        this.userId = userId;
         this.additionalProperties = additionalProperties;
     }
 
@@ -93,6 +97,14 @@ public final class FeedbackRequest implements IFeedbackBase {
         return conversationMessageId;
     }
 
+    /**
+     * @return The ID of the user who is creating the feedback
+     */
+    @JsonProperty("userId")
+    public Optional<EntityIdBase> getUserId() {
+        return userId;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -109,12 +121,14 @@ public final class FeedbackRequest implements IFeedbackBase {
                 && text.equals(other.text)
                 && feedbackId.equals(other.feedbackId)
                 && conversationId.equals(other.conversationId)
-                && conversationMessageId.equals(other.conversationMessageId);
+                && conversationMessageId.equals(other.conversationMessageId)
+                && userId.equals(other.userId);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.type, this.text, this.feedbackId, this.conversationId, this.conversationMessageId);
+        return Objects.hash(
+                this.type, this.text, this.feedbackId, this.conversationId, this.conversationMessageId, this.userId);
     }
 
     @java.lang.Override
@@ -150,6 +164,10 @@ public final class FeedbackRequest implements IFeedbackBase {
         _FinalStage text(Optional<String> text);
 
         _FinalStage text(String text);
+
+        _FinalStage userId(Optional<EntityIdBase> userId);
+
+        _FinalStage userId(EntityIdBase userId);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -162,6 +180,8 @@ public final class FeedbackRequest implements IFeedbackBase {
         private EntityIdBase conversationId;
 
         private EntityIdBase conversationMessageId;
+
+        private Optional<EntityIdBase> userId = Optional.empty();
 
         private Optional<String> text = Optional.empty();
 
@@ -177,6 +197,7 @@ public final class FeedbackRequest implements IFeedbackBase {
             feedbackId(other.getFeedbackId());
             conversationId(other.getConversationId());
             conversationMessageId(other.getConversationMessageId());
+            userId(other.getUserId());
             return this;
         }
 
@@ -226,6 +247,23 @@ public final class FeedbackRequest implements IFeedbackBase {
         }
 
         /**
+         * <p>The ID of the user who is creating the feedback</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage userId(EntityIdBase userId) {
+            this.userId = Optional.ofNullable(userId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "userId", nulls = Nulls.SKIP)
+        public _FinalStage userId(Optional<EntityIdBase> userId) {
+            this.userId = userId;
+            return this;
+        }
+
+        /**
          * <p>The feedback text</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -245,7 +283,7 @@ public final class FeedbackRequest implements IFeedbackBase {
         @java.lang.Override
         public FeedbackRequest build() {
             return new FeedbackRequest(
-                    type, text, feedbackId, conversationId, conversationMessageId, additionalProperties);
+                    type, text, feedbackId, conversationId, conversationMessageId, userId, additionalProperties);
         }
     }
 }

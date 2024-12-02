@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.api.core.ObjectMappers;
+import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -31,6 +32,10 @@ public final class Feedback implements IFeedbackBase {
 
     private final EntityId conversationMessageId;
 
+    private final Optional<EntityId> userId;
+
+    private final Optional<OffsetDateTime> createdAt;
+
     private final Map<String, Object> additionalProperties;
 
     private Feedback(
@@ -39,12 +44,16 @@ public final class Feedback implements IFeedbackBase {
             EntityId feedbackId,
             EntityId conversationId,
             EntityId conversationMessageId,
+            Optional<EntityId> userId,
+            Optional<OffsetDateTime> createdAt,
             Map<String, Object> additionalProperties) {
         this.type = type;
         this.text = text;
         this.feedbackId = feedbackId;
         this.conversationId = conversationId;
         this.conversationMessageId = conversationMessageId;
+        this.userId = userId;
+        this.createdAt = createdAt;
         this.additionalProperties = additionalProperties;
     }
 
@@ -90,6 +99,22 @@ public final class Feedback implements IFeedbackBase {
         return conversationMessageId;
     }
 
+    /**
+     * @return The ID of the user who created the feedback
+     */
+    @JsonProperty("userId")
+    public Optional<EntityId> getUserId() {
+        return userId;
+    }
+
+    /**
+     * @return The date and time the feedback was created
+     */
+    @JsonProperty("createdAt")
+    public Optional<OffsetDateTime> getCreatedAt() {
+        return createdAt;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -106,12 +131,21 @@ public final class Feedback implements IFeedbackBase {
                 && text.equals(other.text)
                 && feedbackId.equals(other.feedbackId)
                 && conversationId.equals(other.conversationId)
-                && conversationMessageId.equals(other.conversationMessageId);
+                && conversationMessageId.equals(other.conversationMessageId)
+                && userId.equals(other.userId)
+                && createdAt.equals(other.createdAt);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.type, this.text, this.feedbackId, this.conversationId, this.conversationMessageId);
+        return Objects.hash(
+                this.type,
+                this.text,
+                this.feedbackId,
+                this.conversationId,
+                this.conversationMessageId,
+                this.userId,
+                this.createdAt);
     }
 
     @java.lang.Override
@@ -147,6 +181,14 @@ public final class Feedback implements IFeedbackBase {
         _FinalStage text(Optional<String> text);
 
         _FinalStage text(String text);
+
+        _FinalStage userId(Optional<EntityId> userId);
+
+        _FinalStage userId(EntityId userId);
+
+        _FinalStage createdAt(Optional<OffsetDateTime> createdAt);
+
+        _FinalStage createdAt(OffsetDateTime createdAt);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -159,6 +201,10 @@ public final class Feedback implements IFeedbackBase {
         private EntityId conversationId;
 
         private EntityId conversationMessageId;
+
+        private Optional<OffsetDateTime> createdAt = Optional.empty();
+
+        private Optional<EntityId> userId = Optional.empty();
 
         private Optional<String> text = Optional.empty();
 
@@ -174,6 +220,8 @@ public final class Feedback implements IFeedbackBase {
             feedbackId(other.getFeedbackId());
             conversationId(other.getConversationId());
             conversationMessageId(other.getConversationMessageId());
+            userId(other.getUserId());
+            createdAt(other.getCreatedAt());
             return this;
         }
 
@@ -223,6 +271,40 @@ public final class Feedback implements IFeedbackBase {
         }
 
         /**
+         * <p>The date and time the feedback was created</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage createdAt(OffsetDateTime createdAt) {
+            this.createdAt = Optional.ofNullable(createdAt);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "createdAt", nulls = Nulls.SKIP)
+        public _FinalStage createdAt(Optional<OffsetDateTime> createdAt) {
+            this.createdAt = createdAt;
+            return this;
+        }
+
+        /**
+         * <p>The ID of the user who created the feedback</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage userId(EntityId userId) {
+            this.userId = Optional.ofNullable(userId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "userId", nulls = Nulls.SKIP)
+        public _FinalStage userId(Optional<EntityId> userId) {
+            this.userId = userId;
+            return this;
+        }
+
+        /**
          * <p>The feedback text</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -241,7 +323,15 @@ public final class Feedback implements IFeedbackBase {
 
         @java.lang.Override
         public Feedback build() {
-            return new Feedback(type, text, feedbackId, conversationId, conversationMessageId, additionalProperties);
+            return new Feedback(
+                    type,
+                    text,
+                    feedbackId,
+                    conversationId,
+                    conversationMessageId,
+                    userId,
+                    createdAt,
+                    additionalProperties);
         }
     }
 }
