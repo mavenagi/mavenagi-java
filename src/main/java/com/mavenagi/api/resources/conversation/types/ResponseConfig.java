@@ -42,7 +42,11 @@ public final class ResponseConfig {
     }
 
     /**
-     * @return List of capabilities supported by the caller. Defaults to everything except charts_highcharts_ts. Note that the forms and images capabilities are not respected at this time.
+     * @return List of capabilities supported by the caller. Defaults to [MARKDOWN, FORMS, IMAGES].
+     * <p>MARKDOWN: Whether the response should include markdown formatting. If not provided, the response will be plain text. Not respected while streaming.</p>
+     * <p>FORMS: Whether the response should include forms. If provided, the caller needs to render action forms when returned from the ask API and allow submission of the forms with the submitActionForm API. If not provided, then actions which require user interaction will not be considered by the LLM. Removing this capability is recommended for surfaces which can not display UI (e.g. SMS, voice).</p>
+     * <p>IMAGES: Whether the response should include images. Not yet supported.</p>
+     * <p>CHARTS_HIGHCHARTS_TS: Whether the response should include a Highcharts typescript chart if applicable.</p>
      */
     @JsonProperty("capabilities")
     public List<Capability> getCapabilities() {
@@ -160,7 +164,11 @@ public final class ResponseConfig {
         }
 
         /**
-         * <p>List of capabilities supported by the caller. Defaults to everything except charts_highcharts_ts. Note that the forms and images capabilities are not respected at this time.</p>
+         * <p>List of capabilities supported by the caller. Defaults to [MARKDOWN, FORMS, IMAGES].</p>
+         * <p>MARKDOWN: Whether the response should include markdown formatting. If not provided, the response will be plain text. Not respected while streaming.</p>
+         * <p>FORMS: Whether the response should include forms. If provided, the caller needs to render action forms when returned from the ask API and allow submission of the forms with the submitActionForm API. If not provided, then actions which require user interaction will not be considered by the LLM. Removing this capability is recommended for surfaces which can not display UI (e.g. SMS, voice).</p>
+         * <p>IMAGES: Whether the response should include images. Not yet supported.</p>
+         * <p>CHARTS_HIGHCHARTS_TS: Whether the response should include a Highcharts typescript chart if applicable.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -170,7 +178,11 @@ public final class ResponseConfig {
         }
 
         /**
-         * <p>List of capabilities supported by the caller. Defaults to everything except charts_highcharts_ts. Note that the forms and images capabilities are not respected at this time.</p>
+         * <p>List of capabilities supported by the caller. Defaults to [MARKDOWN, FORMS, IMAGES].</p>
+         * <p>MARKDOWN: Whether the response should include markdown formatting. If not provided, the response will be plain text. Not respected while streaming.</p>
+         * <p>FORMS: Whether the response should include forms. If provided, the caller needs to render action forms when returned from the ask API and allow submission of the forms with the submitActionForm API. If not provided, then actions which require user interaction will not be considered by the LLM. Removing this capability is recommended for surfaces which can not display UI (e.g. SMS, voice).</p>
+         * <p>IMAGES: Whether the response should include images. Not yet supported.</p>
+         * <p>CHARTS_HIGHCHARTS_TS: Whether the response should include a Highcharts typescript chart if applicable.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override

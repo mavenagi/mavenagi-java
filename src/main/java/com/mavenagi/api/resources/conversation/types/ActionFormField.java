@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.api.core.ObjectMappers;
+import com.mavenagi.api.resources.commons.types.ActionParameterType;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -29,7 +30,9 @@ public final class ActionFormField {
 
     private final boolean required;
 
-    private final Optional<String> suggestion;
+    private final Optional<Object> suggestion;
+
+    private final ActionParameterType type;
 
     private final Map<String, Object> additionalProperties;
 
@@ -38,13 +41,15 @@ public final class ActionFormField {
             String label,
             String description,
             boolean required,
-            Optional<String> suggestion,
+            Optional<Object> suggestion,
+            ActionParameterType type,
             Map<String, Object> additionalProperties) {
         this.id = id;
         this.label = label;
         this.description = description;
         this.required = required;
         this.suggestion = suggestion;
+        this.type = type;
         this.additionalProperties = additionalProperties;
     }
 
@@ -69,8 +74,13 @@ public final class ActionFormField {
     }
 
     @JsonProperty("suggestion")
-    public Optional<String> getSuggestion() {
+    public Optional<Object> getSuggestion() {
         return suggestion;
+    }
+
+    @JsonProperty("type")
+    public ActionParameterType getType() {
+        return type;
     }
 
     @java.lang.Override
@@ -89,12 +99,13 @@ public final class ActionFormField {
                 && label.equals(other.label)
                 && description.equals(other.description)
                 && required == other.required
-                && suggestion.equals(other.suggestion);
+                && suggestion.equals(other.suggestion)
+                && type.equals(other.type);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.id, this.label, this.description, this.required, this.suggestion);
+        return Objects.hash(this.id, this.label, this.description, this.required, this.suggestion, this.type);
     }
 
     @java.lang.Override
@@ -121,19 +132,24 @@ public final class ActionFormField {
     }
 
     public interface RequiredStage {
-        _FinalStage required(boolean required);
+        TypeStage required(boolean required);
+    }
+
+    public interface TypeStage {
+        _FinalStage type(@NotNull ActionParameterType type);
     }
 
     public interface _FinalStage {
         ActionFormField build();
 
-        _FinalStage suggestion(Optional<String> suggestion);
+        _FinalStage suggestion(Optional<Object> suggestion);
 
-        _FinalStage suggestion(String suggestion);
+        _FinalStage suggestion(Object suggestion);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements IdStage, LabelStage, DescriptionStage, RequiredStage, _FinalStage {
+    public static final class Builder
+            implements IdStage, LabelStage, DescriptionStage, RequiredStage, TypeStage, _FinalStage {
         private String id;
 
         private String label;
@@ -142,7 +158,9 @@ public final class ActionFormField {
 
         private boolean required;
 
-        private Optional<String> suggestion = Optional.empty();
+        private ActionParameterType type;
+
+        private Optional<Object> suggestion = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -156,6 +174,7 @@ public final class ActionFormField {
             description(other.getDescription());
             required(other.getRequired());
             suggestion(other.getSuggestion());
+            type(other.getType());
             return this;
         }
 
@@ -182,27 +201,34 @@ public final class ActionFormField {
 
         @java.lang.Override
         @JsonSetter("required")
-        public _FinalStage required(boolean required) {
+        public TypeStage required(boolean required) {
             this.required = required;
             return this;
         }
 
         @java.lang.Override
-        public _FinalStage suggestion(String suggestion) {
+        @JsonSetter("type")
+        public _FinalStage type(@NotNull ActionParameterType type) {
+            this.type = Objects.requireNonNull(type, "type must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage suggestion(Object suggestion) {
             this.suggestion = Optional.ofNullable(suggestion);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "suggestion", nulls = Nulls.SKIP)
-        public _FinalStage suggestion(Optional<String> suggestion) {
+        public _FinalStage suggestion(Optional<Object> suggestion) {
             this.suggestion = suggestion;
             return this;
         }
 
         @java.lang.Override
         public ActionFormField build() {
-            return new ActionFormField(id, label, description, required, suggestion, additionalProperties);
+            return new ActionFormField(id, label, description, required, suggestion, type, additionalProperties);
         }
     }
 }

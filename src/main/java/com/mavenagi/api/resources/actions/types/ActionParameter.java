@@ -9,11 +9,14 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.api.core.ObjectMappers;
+import com.mavenagi.api.resources.commons.types.ActionParameterType;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
@@ -27,14 +30,22 @@ public final class ActionParameter {
 
     private final boolean required;
 
+    private final Optional<ActionParameterType> type;
+
     private final Map<String, Object> additionalProperties;
 
     private ActionParameter(
-            String id, String label, String description, boolean required, Map<String, Object> additionalProperties) {
+            String id,
+            String label,
+            String description,
+            boolean required,
+            Optional<ActionParameterType> type,
+            Map<String, Object> additionalProperties) {
         this.id = id;
         this.label = label;
         this.description = description;
         this.required = required;
+        this.type = type;
         this.additionalProperties = additionalProperties;
     }
 
@@ -58,6 +69,14 @@ public final class ActionParameter {
         return required;
     }
 
+    /**
+     * @return The parameter type. Values provided to executeAction will conform to this type. Defaults to STRING.
+     */
+    @JsonProperty("type")
+    public Optional<ActionParameterType> getType() {
+        return type;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -73,12 +92,13 @@ public final class ActionParameter {
         return id.equals(other.id)
                 && label.equals(other.label)
                 && description.equals(other.description)
-                && required == other.required;
+                && required == other.required
+                && type.equals(other.type);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.id, this.label, this.description, this.required);
+        return Objects.hash(this.id, this.label, this.description, this.required, this.type);
     }
 
     @java.lang.Override
@@ -110,6 +130,10 @@ public final class ActionParameter {
 
     public interface _FinalStage {
         ActionParameter build();
+
+        _FinalStage type(Optional<ActionParameterType> type);
+
+        _FinalStage type(ActionParameterType type);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -122,6 +146,8 @@ public final class ActionParameter {
 
         private boolean required;
 
+        private Optional<ActionParameterType> type = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -133,6 +159,7 @@ public final class ActionParameter {
             label(other.getLabel());
             description(other.getDescription());
             required(other.getRequired());
+            type(other.getType());
             return this;
         }
 
@@ -164,9 +191,26 @@ public final class ActionParameter {
             return this;
         }
 
+        /**
+         * <p>The parameter type. Values provided to executeAction will conform to this type. Defaults to STRING.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage type(ActionParameterType type) {
+            this.type = Optional.ofNullable(type);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "type", nulls = Nulls.SKIP)
+        public _FinalStage type(Optional<ActionParameterType> type) {
+            this.type = type;
+            return this;
+        }
+
         @java.lang.Override
         public ActionParameter build() {
-            return new ActionParameter(id, label, description, required, additionalProperties);
+            return new ActionParameter(id, label, description, required, type, additionalProperties);
         }
     }
 }

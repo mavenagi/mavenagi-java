@@ -18,7 +18,7 @@ public enum EntityType {
 
     USER("USER"),
 
-    USER_EVENT("USER_EVENT"),
+    EVENT("EVENT"),
 
     EVENT_TRIGGER("EVENT_TRIGGER"),
 
