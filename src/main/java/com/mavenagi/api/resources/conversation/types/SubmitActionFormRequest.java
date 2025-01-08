@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
@@ -25,12 +26,18 @@ public final class SubmitActionFormRequest {
 
     private final Map<String, Object> parameters;
 
+    private final Optional<Map<String, String>> transientData;
+
     private final Map<String, Object> additionalProperties;
 
     private SubmitActionFormRequest(
-            String actionFormId, Map<String, Object> parameters, Map<String, Object> additionalProperties) {
+            String actionFormId,
+            Map<String, Object> parameters,
+            Optional<Map<String, String>> transientData,
+            Map<String, Object> additionalProperties) {
         this.actionFormId = actionFormId;
         this.parameters = parameters;
+        this.transientData = transientData;
         this.additionalProperties = additionalProperties;
     }
 
@@ -47,6 +54,14 @@ public final class SubmitActionFormRequest {
         return parameters;
     }
 
+    /**
+     * @return Transient data which the Maven platform will not persist. This data will only be forwarded to actions taken. For example, one may put in user tokens as transient data.
+     */
+    @JsonProperty("transientData")
+    public Optional<Map<String, String>> getTransientData() {
+        return transientData;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -59,12 +74,14 @@ public final class SubmitActionFormRequest {
     }
 
     private boolean equalTo(SubmitActionFormRequest other) {
-        return actionFormId.equals(other.actionFormId) && parameters.equals(other.parameters);
+        return actionFormId.equals(other.actionFormId)
+                && parameters.equals(other.parameters)
+                && transientData.equals(other.transientData);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.actionFormId, this.parameters);
+        return Objects.hash(this.actionFormId, this.parameters, this.transientData);
     }
 
     @java.lang.Override
@@ -90,11 +107,17 @@ public final class SubmitActionFormRequest {
         _FinalStage putAllParameters(Map<String, Object> parameters);
 
         _FinalStage parameters(String key, Object value);
+
+        _FinalStage transientData(Optional<Map<String, String>> transientData);
+
+        _FinalStage transientData(Map<String, String> transientData);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements ActionFormIdStage, _FinalStage {
         private String actionFormId;
+
+        private Optional<Map<String, String>> transientData = Optional.empty();
 
         private Map<String, Object> parameters = new LinkedHashMap<>();
 
@@ -107,6 +130,7 @@ public final class SubmitActionFormRequest {
         public Builder from(SubmitActionFormRequest other) {
             actionFormId(other.getActionFormId());
             parameters(other.getParameters());
+            transientData(other.getTransientData());
             return this;
         }
 
@@ -114,6 +138,23 @@ public final class SubmitActionFormRequest {
         @JsonSetter("actionFormId")
         public _FinalStage actionFormId(@NotNull String actionFormId) {
             this.actionFormId = Objects.requireNonNull(actionFormId, "actionFormId must not be null");
+            return this;
+        }
+
+        /**
+         * <p>Transient data which the Maven platform will not persist. This data will only be forwarded to actions taken. For example, one may put in user tokens as transient data.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage transientData(Map<String, String> transientData) {
+            this.transientData = Optional.ofNullable(transientData);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "transientData", nulls = Nulls.SKIP)
+        public _FinalStage transientData(Optional<Map<String, String>> transientData) {
+            this.transientData = transientData;
             return this;
         }
 
@@ -147,7 +188,7 @@ public final class SubmitActionFormRequest {
 
         @java.lang.Override
         public SubmitActionFormRequest build() {
-            return new SubmitActionFormRequest(actionFormId, parameters, additionalProperties);
+            return new SubmitActionFormRequest(actionFormId, parameters, transientData, additionalProperties);
         }
     }
 }

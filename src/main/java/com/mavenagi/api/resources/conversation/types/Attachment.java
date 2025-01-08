@@ -40,7 +40,7 @@ public final class Attachment {
     }
 
     /**
-     * @return The attachment data.
+     * @return The attachment data, up to 5MB.
      */
     @JsonProperty("content")
     public byte[] getContent() {
@@ -120,7 +120,7 @@ public final class Attachment {
         }
 
         /**
-         * <p>The attachment data.</p>
+         * <p>The attachment data, up to 5MB.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override

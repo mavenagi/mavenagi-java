@@ -31,6 +31,8 @@ public final class AskRequest {
 
     private final Optional<List<Attachment>> attachments;
 
+    private final Optional<Map<String, String>> transientData;
+
     private final Map<String, Object> additionalProperties;
 
     private AskRequest(
@@ -38,11 +40,13 @@ public final class AskRequest {
             EntityIdBase userId,
             String text,
             Optional<List<Attachment>> attachments,
+            Optional<Map<String, String>> transientData,
             Map<String, Object> additionalProperties) {
         this.conversationMessageId = conversationMessageId;
         this.userId = userId;
         this.text = text;
         this.attachments = attachments;
+        this.transientData = transientData;
         this.additionalProperties = additionalProperties;
     }
 
@@ -78,6 +82,14 @@ public final class AskRequest {
         return attachments;
     }
 
+    /**
+     * @return Transient data which the Maven platform will not persist. This data will only be forwarded to actions taken by this ask request. For example, one may put in user tokens as transient data.
+     */
+    @JsonProperty("transientData")
+    public Optional<Map<String, String>> getTransientData() {
+        return transientData;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -93,12 +105,13 @@ public final class AskRequest {
         return conversationMessageId.equals(other.conversationMessageId)
                 && userId.equals(other.userId)
                 && text.equals(other.text)
-                && attachments.equals(other.attachments);
+                && attachments.equals(other.attachments)
+                && transientData.equals(other.transientData);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.conversationMessageId, this.userId, this.text, this.attachments);
+        return Objects.hash(this.conversationMessageId, this.userId, this.text, this.attachments, this.transientData);
     }
 
     @java.lang.Override
@@ -130,6 +143,10 @@ public final class AskRequest {
         _FinalStage attachments(Optional<List<Attachment>> attachments);
 
         _FinalStage attachments(List<Attachment> attachments);
+
+        _FinalStage transientData(Optional<Map<String, String>> transientData);
+
+        _FinalStage transientData(Map<String, String> transientData);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -139,6 +156,8 @@ public final class AskRequest {
         private EntityIdBase userId;
 
         private String text;
+
+        private Optional<Map<String, String>> transientData = Optional.empty();
 
         private Optional<List<Attachment>> attachments = Optional.empty();
 
@@ -153,6 +172,7 @@ public final class AskRequest {
             userId(other.getUserId());
             text(other.getText());
             attachments(other.getAttachments());
+            transientData(other.getTransientData());
             return this;
         }
 
@@ -191,6 +211,23 @@ public final class AskRequest {
         }
 
         /**
+         * <p>Transient data which the Maven platform will not persist. This data will only be forwarded to actions taken by this ask request. For example, one may put in user tokens as transient data.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage transientData(Map<String, String> transientData) {
+            this.transientData = Optional.ofNullable(transientData);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "transientData", nulls = Nulls.SKIP)
+        public _FinalStage transientData(Optional<Map<String, String>> transientData) {
+            this.transientData = transientData;
+            return this;
+        }
+
+        /**
          * <p>The attachments to the message.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -209,7 +246,8 @@ public final class AskRequest {
 
         @java.lang.Override
         public AskRequest build() {
-            return new AskRequest(conversationMessageId, userId, text, attachments, additionalProperties);
+            return new AskRequest(
+                    conversationMessageId, userId, text, attachments, transientData, additionalProperties);
         }
     }
 }

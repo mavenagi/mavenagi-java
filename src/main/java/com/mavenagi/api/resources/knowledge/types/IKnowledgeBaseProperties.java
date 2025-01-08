@@ -3,6 +3,7 @@
  */
 package com.mavenagi.api.resources.knowledge.types;
 
+import com.mavenagi.api.resources.commons.types.Precondition;
 import java.util.Optional;
 
 public interface IKnowledgeBaseProperties {
@@ -11,4 +12,6 @@ public interface IKnowledgeBaseProperties {
     KnowledgeBaseType getType();
 
     Optional<String> getUrl();
+
+    Optional<Precondition> getPrecondition();
 }

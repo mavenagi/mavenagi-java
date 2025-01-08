@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.api.core.ObjectMappers;
 import com.mavenagi.api.resources.commons.types.EntityIdBase;
+import com.mavenagi.api.resources.commons.types.Precondition;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -28,6 +29,8 @@ public final class KnowledgeBaseRequest implements IKnowledgeBaseProperties {
 
     private final Optional<String> url;
 
+    private final Optional<Precondition> precondition;
+
     private final EntityIdBase knowledgeBaseId;
 
     private final Map<String, Object> additionalProperties;
@@ -36,11 +39,13 @@ public final class KnowledgeBaseRequest implements IKnowledgeBaseProperties {
             String name,
             KnowledgeBaseType type,
             Optional<String> url,
+            Optional<Precondition> precondition,
             EntityIdBase knowledgeBaseId,
             Map<String, Object> additionalProperties) {
         this.name = name;
         this.type = type;
         this.url = url;
+        this.precondition = precondition;
         this.knowledgeBaseId = knowledgeBaseId;
         this.additionalProperties = additionalProperties;
     }
@@ -73,6 +78,15 @@ public final class KnowledgeBaseRequest implements IKnowledgeBaseProperties {
     }
 
     /**
+     * @return (Beta) The preconditions that must be met for knowledge base be relevant to a conversation. Can be used to limit knowledge to certain types of users.
+     */
+    @JsonProperty("precondition")
+    @java.lang.Override
+    public Optional<Precondition> getPrecondition() {
+        return precondition;
+    }
+
+    /**
      * @return ID that uniquely identifies this knowledge base
      */
     @JsonProperty("knowledgeBaseId")
@@ -95,12 +109,13 @@ public final class KnowledgeBaseRequest implements IKnowledgeBaseProperties {
         return name.equals(other.name)
                 && type.equals(other.type)
                 && url.equals(other.url)
+                && precondition.equals(other.precondition)
                 && knowledgeBaseId.equals(other.knowledgeBaseId);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.name, this.type, this.url, this.knowledgeBaseId);
+        return Objects.hash(this.name, this.type, this.url, this.precondition, this.knowledgeBaseId);
     }
 
     @java.lang.Override
@@ -132,6 +147,10 @@ public final class KnowledgeBaseRequest implements IKnowledgeBaseProperties {
         _FinalStage url(Optional<String> url);
 
         _FinalStage url(String url);
+
+        _FinalStage precondition(Optional<Precondition> precondition);
+
+        _FinalStage precondition(Precondition precondition);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -141,6 +160,8 @@ public final class KnowledgeBaseRequest implements IKnowledgeBaseProperties {
         private KnowledgeBaseType type;
 
         private EntityIdBase knowledgeBaseId;
+
+        private Optional<Precondition> precondition = Optional.empty();
 
         private Optional<String> url = Optional.empty();
 
@@ -154,6 +175,7 @@ public final class KnowledgeBaseRequest implements IKnowledgeBaseProperties {
             name(other.getName());
             type(other.getType());
             url(other.getUrl());
+            precondition(other.getPrecondition());
             knowledgeBaseId(other.getKnowledgeBaseId());
             return this;
         }
@@ -192,6 +214,23 @@ public final class KnowledgeBaseRequest implements IKnowledgeBaseProperties {
         }
 
         /**
+         * <p>(Beta) The preconditions that must be met for knowledge base be relevant to a conversation. Can be used to limit knowledge to certain types of users.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage precondition(Precondition precondition) {
+            this.precondition = Optional.ofNullable(precondition);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "precondition", nulls = Nulls.SKIP)
+        public _FinalStage precondition(Optional<Precondition> precondition) {
+            this.precondition = precondition;
+            return this;
+        }
+
+        /**
          * <p>The URL to pull content from for RSS and URL knowledge bases.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -210,7 +249,7 @@ public final class KnowledgeBaseRequest implements IKnowledgeBaseProperties {
 
         @java.lang.Override
         public KnowledgeBaseRequest build() {
-            return new KnowledgeBaseRequest(name, type, url, knowledgeBaseId, additionalProperties);
+            return new KnowledgeBaseRequest(name, type, url, precondition, knowledgeBaseId, additionalProperties);
         }
     }
 }

@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.api.core.ObjectMappers;
+import com.mavenagi.api.resources.commons.types.Precondition;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -27,13 +28,20 @@ public final class KnowledgeBaseProperties implements IKnowledgeBaseProperties {
 
     private final Optional<String> url;
 
+    private final Optional<Precondition> precondition;
+
     private final Map<String, Object> additionalProperties;
 
     private KnowledgeBaseProperties(
-            String name, KnowledgeBaseType type, Optional<String> url, Map<String, Object> additionalProperties) {
+            String name,
+            KnowledgeBaseType type,
+            Optional<String> url,
+            Optional<Precondition> precondition,
+            Map<String, Object> additionalProperties) {
         this.name = name;
         this.type = type;
         this.url = url;
+        this.precondition = precondition;
         this.additionalProperties = additionalProperties;
     }
 
@@ -64,6 +72,15 @@ public final class KnowledgeBaseProperties implements IKnowledgeBaseProperties {
         return url;
     }
 
+    /**
+     * @return (Beta) The preconditions that must be met for knowledge base be relevant to a conversation. Can be used to limit knowledge to certain types of users.
+     */
+    @JsonProperty("precondition")
+    @java.lang.Override
+    public Optional<Precondition> getPrecondition() {
+        return precondition;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -76,12 +93,15 @@ public final class KnowledgeBaseProperties implements IKnowledgeBaseProperties {
     }
 
     private boolean equalTo(KnowledgeBaseProperties other) {
-        return name.equals(other.name) && type.equals(other.type) && url.equals(other.url);
+        return name.equals(other.name)
+                && type.equals(other.type)
+                && url.equals(other.url)
+                && precondition.equals(other.precondition);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.name, this.type, this.url);
+        return Objects.hash(this.name, this.type, this.url, this.precondition);
     }
 
     @java.lang.Override
@@ -109,6 +129,10 @@ public final class KnowledgeBaseProperties implements IKnowledgeBaseProperties {
         _FinalStage url(Optional<String> url);
 
         _FinalStage url(String url);
+
+        _FinalStage precondition(Optional<Precondition> precondition);
+
+        _FinalStage precondition(Precondition precondition);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -116,6 +140,8 @@ public final class KnowledgeBaseProperties implements IKnowledgeBaseProperties {
         private String name;
 
         private KnowledgeBaseType type;
+
+        private Optional<Precondition> precondition = Optional.empty();
 
         private Optional<String> url = Optional.empty();
 
@@ -129,6 +155,7 @@ public final class KnowledgeBaseProperties implements IKnowledgeBaseProperties {
             name(other.getName());
             type(other.getType());
             url(other.getUrl());
+            precondition(other.getPrecondition());
             return this;
         }
 
@@ -155,6 +182,23 @@ public final class KnowledgeBaseProperties implements IKnowledgeBaseProperties {
         }
 
         /**
+         * <p>(Beta) The preconditions that must be met for knowledge base be relevant to a conversation. Can be used to limit knowledge to certain types of users.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage precondition(Precondition precondition) {
+            this.precondition = Optional.ofNullable(precondition);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "precondition", nulls = Nulls.SKIP)
+        public _FinalStage precondition(Optional<Precondition> precondition) {
+            this.precondition = precondition;
+            return this;
+        }
+
+        /**
          * <p>The URL to pull content from for RSS and URL knowledge bases.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -173,7 +217,7 @@ public final class KnowledgeBaseProperties implements IKnowledgeBaseProperties {
 
         @java.lang.Override
         public KnowledgeBaseProperties build() {
-            return new KnowledgeBaseProperties(name, type, url, additionalProperties);
+            return new KnowledgeBaseProperties(name, type, url, precondition, additionalProperties);
         }
     }
 }

@@ -16,6 +16,7 @@ import com.mavenagi.api.resources.commons.errors.ServerError;
 import com.mavenagi.api.resources.commons.types.AppUserRequest;
 import com.mavenagi.api.resources.commons.types.AppUserResponse;
 import com.mavenagi.api.resources.commons.types.ErrorMessage;
+import com.mavenagi.api.resources.users.requests.UserGetRequest;
 import java.io.IOException;
 import okhttp3.Headers;
 import okhttp3.HttpUrl;
@@ -98,24 +99,33 @@ public class UsersClient {
      * Get a user by its supplied ID
      */
     public AppUserResponse get(String userId) {
-        return get(userId, null);
+        return get(userId, UserGetRequest.builder().build());
     }
 
     /**
      * Get a user by its supplied ID
      */
-    public AppUserResponse get(String userId, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+    public AppUserResponse get(String userId, UserGetRequest request) {
+        return get(userId, request, null);
+    }
+
+    /**
+     * Get a user by its supplied ID
+     */
+    public AppUserResponse get(String userId, UserGetRequest request, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("v1/users")
-                .addPathSegment(userId)
-                .build();
-        Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .addPathSegment(userId);
+        if (request.getAppId().isPresent()) {
+            httpUrl.addQueryParameter("appId", request.getAppId().get());
+        }
+        Request.Builder _requestBuilder = new Request.Builder()
+                .url(httpUrl.build())
                 .method("GET", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
-                .build();
+                .addHeader("Content-Type", "application/json");
+        Request okhttpRequest = _requestBuilder.build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
             client = clientOptions.httpClientWithTimeout(requestOptions);
