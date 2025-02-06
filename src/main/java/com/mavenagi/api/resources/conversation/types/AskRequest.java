@@ -51,7 +51,7 @@ public final class AskRequest {
     }
 
     /**
-     * @return Externally supplied ID to uniquely identify this message within the conversation
+     * @return Externally supplied ID to uniquely identify this message within the conversation. If a message with this ID already exists it will be reused and will not be updated.
      */
     @JsonProperty("conversationMessageId")
     public EntityIdBase getConversationMessageId() {
@@ -177,7 +177,7 @@ public final class AskRequest {
         }
 
         /**
-         * <p>Externally supplied ID to uniquely identify this message within the conversation</p>
+         * <p>Externally supplied ID to uniquely identify this message within the conversation. If a message with this ID already exists it will be reused and will not be updated.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override

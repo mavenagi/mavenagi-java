@@ -17,32 +17,21 @@ import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonDeserialize(builder = EntityId.Builder.class)
-public final class EntityId implements IEntityIdWithoutAgent {
+@JsonDeserialize(builder = EntityIdWithoutAgent.Builder.class)
+public final class EntityIdWithoutAgent implements IEntityIdWithoutAgent, IEntityIdBase {
     private final EntityType type;
 
     private final String appId;
 
     private final String referenceId;
 
-    private final String organizationId;
-
-    private final String agentId;
-
     private final Map<String, Object> additionalProperties;
 
-    private EntityId(
-            EntityType type,
-            String appId,
-            String referenceId,
-            String organizationId,
-            String agentId,
-            Map<String, Object> additionalProperties) {
+    private EntityIdWithoutAgent(
+            EntityType type, String appId, String referenceId, Map<String, Object> additionalProperties) {
         this.type = type;
         this.appId = appId;
         this.referenceId = referenceId;
-        this.organizationId = organizationId;
-        this.agentId = agentId;
         this.additionalProperties = additionalProperties;
     }
 
@@ -73,26 +62,10 @@ public final class EntityId implements IEntityIdWithoutAgent {
         return referenceId;
     }
 
-    /**
-     * @return The ID of the organization that this object belongs to
-     */
-    @JsonProperty("organizationId")
-    public String getOrganizationId() {
-        return organizationId;
-    }
-
-    /**
-     * @return The ID of the agent that this object belongs to
-     */
-    @JsonProperty("agentId")
-    public String getAgentId() {
-        return agentId;
-    }
-
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
-        return other instanceof EntityId && equalTo((EntityId) other);
+        return other instanceof EntityIdWithoutAgent && equalTo((EntityIdWithoutAgent) other);
     }
 
     @JsonAnyGetter
@@ -100,17 +73,13 @@ public final class EntityId implements IEntityIdWithoutAgent {
         return this.additionalProperties;
     }
 
-    private boolean equalTo(EntityId other) {
-        return type.equals(other.type)
-                && appId.equals(other.appId)
-                && referenceId.equals(other.referenceId)
-                && organizationId.equals(other.organizationId)
-                && agentId.equals(other.agentId);
+    private boolean equalTo(EntityIdWithoutAgent other) {
+        return type.equals(other.type) && appId.equals(other.appId) && referenceId.equals(other.referenceId);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.type, this.appId, this.referenceId, this.organizationId, this.agentId);
+        return Objects.hash(this.type, this.appId, this.referenceId);
     }
 
     @java.lang.Override
@@ -125,7 +94,7 @@ public final class EntityId implements IEntityIdWithoutAgent {
     public interface TypeStage {
         AppIdStage type(@NotNull EntityType type);
 
-        Builder from(EntityId other);
+        Builder from(EntityIdWithoutAgent other);
     }
 
     public interface AppIdStage {
@@ -133,33 +102,20 @@ public final class EntityId implements IEntityIdWithoutAgent {
     }
 
     public interface ReferenceIdStage {
-        OrganizationIdStage referenceId(@NotNull String referenceId);
-    }
-
-    public interface OrganizationIdStage {
-        AgentIdStage organizationId(@NotNull String organizationId);
-    }
-
-    public interface AgentIdStage {
-        _FinalStage agentId(@NotNull String agentId);
+        _FinalStage referenceId(@NotNull String referenceId);
     }
 
     public interface _FinalStage {
-        EntityId build();
+        EntityIdWithoutAgent build();
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder
-            implements TypeStage, AppIdStage, ReferenceIdStage, OrganizationIdStage, AgentIdStage, _FinalStage {
+    public static final class Builder implements TypeStage, AppIdStage, ReferenceIdStage, _FinalStage {
         private EntityType type;
 
         private String appId;
 
         private String referenceId;
-
-        private String organizationId;
-
-        private String agentId;
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -167,12 +123,10 @@ public final class EntityId implements IEntityIdWithoutAgent {
         private Builder() {}
 
         @java.lang.Override
-        public Builder from(EntityId other) {
+        public Builder from(EntityIdWithoutAgent other) {
             type(other.getType());
             appId(other.getAppId());
             referenceId(other.getReferenceId());
-            organizationId(other.getOrganizationId());
-            agentId(other.getAgentId());
             return this;
         }
 
@@ -204,36 +158,14 @@ public final class EntityId implements IEntityIdWithoutAgent {
          */
         @java.lang.Override
         @JsonSetter("referenceId")
-        public OrganizationIdStage referenceId(@NotNull String referenceId) {
+        public _FinalStage referenceId(@NotNull String referenceId) {
             this.referenceId = Objects.requireNonNull(referenceId, "referenceId must not be null");
             return this;
         }
 
-        /**
-         * <p>The ID of the organization that this object belongs to</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
         @java.lang.Override
-        @JsonSetter("organizationId")
-        public AgentIdStage organizationId(@NotNull String organizationId) {
-            this.organizationId = Objects.requireNonNull(organizationId, "organizationId must not be null");
-            return this;
-        }
-
-        /**
-         * <p>The ID of the agent that this object belongs to</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("agentId")
-        public _FinalStage agentId(@NotNull String agentId) {
-            this.agentId = Objects.requireNonNull(agentId, "agentId must not be null");
-            return this;
-        }
-
-        @java.lang.Override
-        public EntityId build() {
-            return new EntityId(type, appId, referenceId, organizationId, agentId, additionalProperties);
+        public EntityIdWithoutAgent build() {
+            return new EntityIdWithoutAgent(type, appId, referenceId, additionalProperties);
         }
     }
 }

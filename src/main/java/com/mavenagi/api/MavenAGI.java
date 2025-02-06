@@ -6,6 +6,7 @@ package com.mavenagi.api;
 import com.mavenagi.api.core.ClientOptions;
 import com.mavenagi.api.core.Suppliers;
 import com.mavenagi.api.resources.actions.ActionsClient;
+import com.mavenagi.api.resources.analytics.AnalyticsClient;
 import com.mavenagi.api.resources.appsettings.AppSettingsClient;
 import com.mavenagi.api.resources.conversation.ConversationClient;
 import com.mavenagi.api.resources.knowledge.KnowledgeClient;
@@ -18,6 +19,8 @@ public class MavenAGI {
     protected final ClientOptions clientOptions;
 
     protected final Supplier<ActionsClient> actionsClient;
+
+    protected final Supplier<AnalyticsClient> analyticsClient;
 
     protected final Supplier<AppSettingsClient> appSettingsClient;
 
@@ -34,6 +37,7 @@ public class MavenAGI {
     public MavenAGI(ClientOptions clientOptions) {
         this.clientOptions = clientOptions;
         this.actionsClient = Suppliers.memoize(() -> new ActionsClient(clientOptions));
+        this.analyticsClient = Suppliers.memoize(() -> new AnalyticsClient(clientOptions));
         this.appSettingsClient = Suppliers.memoize(() -> new AppSettingsClient(clientOptions));
         this.conversationClient = Suppliers.memoize(() -> new ConversationClient(clientOptions));
         this.knowledgeClient = Suppliers.memoize(() -> new KnowledgeClient(clientOptions));
@@ -44,6 +48,10 @@ public class MavenAGI {
 
     public ActionsClient actions() {
         return this.actionsClient.get();
+    }
+
+    public AnalyticsClient analytics() {
+        return this.analyticsClient.get();
     }
 
     public AppSettingsClient appSettings() {

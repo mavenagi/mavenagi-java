@@ -19,6 +19,7 @@ import com.mavenagi.api.resources.commons.errors.ServerError;
 import com.mavenagi.api.resources.commons.types.ConversationResponse;
 import com.mavenagi.api.resources.commons.types.ErrorMessage;
 import com.mavenagi.api.resources.commons.types.Feedback;
+import com.mavenagi.api.resources.conversation.requests.ConversationDeleteRequest;
 import com.mavenagi.api.resources.conversation.requests.ConversationGetRequest;
 import com.mavenagi.api.resources.conversation.types.AskRequest;
 import com.mavenagi.api.resources.conversation.types.CategorizationResponse;
@@ -175,14 +176,82 @@ public class ConversationClient {
     }
 
     /**
-     * Append messages to an existing conversation. The conversation must be initialized first. If a message with the same id already exists, it will be ignored.
+     * Wipes a conversation of all user data.
+     * The conversation ID will still exist and non-user specific data will still be retained.
+     * Attempts to modify or add messages to the conversation will throw an error.
+     * <p>&lt;Warning&gt;This is a destructive operation and cannot be undone. &lt;br/&gt;&lt;br/&gt;
+     * The exact fields cleared include: the conversation subject, userRequest, agentResponse.
+     * As well as the text response, followup questions, and backend LLM prompt of all messages.&lt;/Warning&gt;</p>
+     */
+    public void delete(String conversationId, ConversationDeleteRequest request) {
+        delete(conversationId, request, null);
+    }
+
+    /**
+     * Wipes a conversation of all user data.
+     * The conversation ID will still exist and non-user specific data will still be retained.
+     * Attempts to modify or add messages to the conversation will throw an error.
+     * <p>&lt;Warning&gt;This is a destructive operation and cannot be undone. &lt;br/&gt;&lt;br/&gt;
+     * The exact fields cleared include: the conversation subject, userRequest, agentResponse.
+     * As well as the text response, followup questions, and backend LLM prompt of all messages.&lt;/Warning&gt;</p>
+     */
+    public void delete(String conversationId, ConversationDeleteRequest request, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("v1/conversations")
+                .addPathSegment(conversationId);
+        if (request.getAppId().isPresent()) {
+            httpUrl.addQueryParameter("appId", request.getAppId().get());
+        }
+        httpUrl.addQueryParameter("reason", request.getReason());
+        Request.Builder _requestBuilder = new Request.Builder()
+                .url(httpUrl.build())
+                .method("DELETE", null)
+                .headers(Headers.of(clientOptions.headers(requestOptions)));
+        Request okhttpRequest = _requestBuilder.build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            if (response.isSuccessful()) {
+                return;
+            }
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            try {
+                switch (response.code()) {
+                    case 400:
+                        throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class));
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class));
+                    case 500:
+                        throw new ServerError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class));
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            throw new MavenAGIApiException(
+                    "Error with status code " + response.code(),
+                    response.code(),
+                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
+        } catch (IOException e) {
+            throw new MavenAGIException("Network error executing HTTP request", e);
+        }
+    }
+
+    /**
+     * Append messages to an existing conversation. The conversation must be initialized first. If a message with the same ID already exists, it will be ignored. Messages do not allow modification.
      */
     public ConversationResponse appendNewMessages(String conversationId, List<ConversationMessageRequest> request) {
         return appendNewMessages(conversationId, request, null);
     }
 
     /**
-     * Append messages to an existing conversation. The conversation must be initialized first. If a message with the same id already exists, it will be ignored.
+     * Append messages to an existing conversation. The conversation must be initialized first. If a message with the same ID already exists, it will be ignored. Messages do not allow modification.
      */
     public ConversationResponse appendNewMessages(
             String conversationId, List<ConversationMessageRequest> request, RequestOptions requestOptions) {
@@ -240,14 +309,34 @@ public class ConversationClient {
     }
 
     /**
-     * Ask a question
+     * Get an answer from Maven for a given user question. If the user question or its answer already exists,
+     * they will be reused and will not be updated. Messages do not allow modification once generated.
+     * <p>Concurrency Behavior:</p>
+     * <ul>
+     * <li>If another API call is made for the same user question while a response is mid-stream, partial answers may be returned.</li>
+     * <li>The second caller will receive a truncated or partial response depending on where the first stream is in its processing. The first caller's stream will remain unaffected and continue delivering the full response.</li>
+     * </ul>
+     * <p>Known Limitation:</p>
+     * <ul>
+     * <li>The API does not currently expose metadata indicating whether a response or message is incomplete. This will be addressed in a future update.</li>
+     * </ul>
      */
     public ConversationResponse ask(String conversationId, AskRequest request) {
         return ask(conversationId, request, null);
     }
 
     /**
-     * Ask a question
+     * Get an answer from Maven for a given user question. If the user question or its answer already exists,
+     * they will be reused and will not be updated. Messages do not allow modification once generated.
+     * <p>Concurrency Behavior:</p>
+     * <ul>
+     * <li>If another API call is made for the same user question while a response is mid-stream, partial answers may be returned.</li>
+     * <li>The second caller will receive a truncated or partial response depending on where the first stream is in its processing. The first caller's stream will remain unaffected and continue delivering the full response.</li>
+     * </ul>
+     * <p>Known Limitation:</p>
+     * <ul>
+     * <li>The API does not currently expose metadata indicating whether a response or message is incomplete. This will be addressed in a future update.</li>
+     * </ul>
      */
     public ConversationResponse ask(String conversationId, AskRequest request, RequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
@@ -304,14 +393,40 @@ public class ConversationClient {
     }
 
     /**
-     * Ask a question with a streaming response. The response will be sent as a stream of events. The text portions of stream responses should be concatenated to form the full response text. Action and metadata events should overwrite past data and do not need concatenation.
+     * Get an answer from Maven for a given user question with a streaming response. The response will be sent as a stream of events.
+     * The text portions of stream responses should be concatenated to form the full response text.
+     * Action and metadata events should overwrite past data and do not need concatenation.
+     * <p>If the user question or its answer already exists, they will be reused and will not be updated.
+     * Messages do not allow modification once generated.</p>
+     * <p>Concurrency Behavior:</p>
+     * <ul>
+     * <li>If another API call is made for the same user question while a response is mid-stream, partial answers may be returned.</li>
+     * <li>The second caller will receive a truncated or partial response depending on where the first stream is in its processing. The first caller's stream will remain unaffected and continue delivering the full response.</li>
+     * </ul>
+     * <p>Known Limitation:</p>
+     * <ul>
+     * <li>The API does not currently expose metadata indicating whether a response or message is incomplete. This will be addressed in a future update.</li>
+     * </ul>
      */
     public Iterable<StreamResponse> askStream(String conversationId, AskRequest request) {
         return askStream(conversationId, request, null);
     }
 
     /**
-     * Ask a question with a streaming response. The response will be sent as a stream of events. The text portions of stream responses should be concatenated to form the full response text. Action and metadata events should overwrite past data and do not need concatenation.
+     * Get an answer from Maven for a given user question with a streaming response. The response will be sent as a stream of events.
+     * The text portions of stream responses should be concatenated to form the full response text.
+     * Action and metadata events should overwrite past data and do not need concatenation.
+     * <p>If the user question or its answer already exists, they will be reused and will not be updated.
+     * Messages do not allow modification once generated.</p>
+     * <p>Concurrency Behavior:</p>
+     * <ul>
+     * <li>If another API call is made for the same user question while a response is mid-stream, partial answers may be returned.</li>
+     * <li>The second caller will receive a truncated or partial response depending on where the first stream is in its processing. The first caller's stream will remain unaffected and continue delivering the full response.</li>
+     * </ul>
+     * <p>Known Limitation:</p>
+     * <ul>
+     * <li>The API does not currently expose metadata indicating whether a response or message is incomplete. This will be addressed in a future update.</li>
+     * </ul>
      */
     public Iterable<StreamResponse> askStream(
             String conversationId, AskRequest request, RequestOptions requestOptions) {
@@ -370,7 +485,7 @@ public class ConversationClient {
     }
 
     /**
-     * Generate a response suggestion for each requested message id in a conversation
+     * This method is deprecated and will be removed in a future release. Use either <code>ask</code> or <code>askStream</code> instead.
      */
     public ConversationResponse generateMavenSuggestions(
             String conversationId, GenerateMavenSuggestionsRequest request) {
@@ -378,7 +493,7 @@ public class ConversationClient {
     }
 
     /**
-     * Generate a response suggestion for each requested message id in a conversation
+     * This method is deprecated and will be removed in a future release. Use either <code>ask</code> or <code>askStream</code> instead.
      */
     public ConversationResponse generateMavenSuggestions(
             String conversationId, GenerateMavenSuggestionsRequest request, RequestOptions requestOptions) {

@@ -38,6 +38,10 @@ public final class ConversationPrecondition {
         return new ConversationPrecondition(new ActionExecutedValue(value));
     }
 
+    public static ConversationPrecondition responseConfig(ResponseConfigPrecondition value) {
+        return new ConversationPrecondition(new ResponseConfigValue(value));
+    }
+
     public boolean isTags() {
         return value instanceof TagsValue;
     }
@@ -48,6 +52,10 @@ public final class ConversationPrecondition {
 
     public boolean isActionExecuted() {
         return value instanceof ActionExecutedValue;
+    }
+
+    public boolean isResponseConfig() {
+        return value instanceof ResponseConfigValue;
     }
 
     public boolean _isUnknown() {
@@ -75,6 +83,13 @@ public final class ConversationPrecondition {
         return Optional.empty();
     }
 
+    public Optional<ResponseConfigPrecondition> getResponseConfig() {
+        if (isResponseConfig()) {
+            return Optional.of(((ResponseConfigValue) value).value);
+        }
+        return Optional.empty();
+    }
+
     public Optional<Object> _getUnknown() {
         if (_isUnknown()) {
             return Optional.of(((_UnknownValue) value).value);
@@ -94,6 +109,8 @@ public final class ConversationPrecondition {
 
         T visitActionExecuted(ConversationExecutedActionPrecondition actionExecuted);
 
+        T visitResponseConfig(ResponseConfigPrecondition responseConfig);
+
         T _visitUnknown(Object unknownType);
     }
 
@@ -105,7 +122,8 @@ public final class ConversationPrecondition {
     @JsonSubTypes({
         @JsonSubTypes.Type(TagsValue.class),
         @JsonSubTypes.Type(MetadataValue.class),
-        @JsonSubTypes.Type(ActionExecutedValue.class)
+        @JsonSubTypes.Type(ActionExecutedValue.class),
+        @JsonSubTypes.Type(ResponseConfigValue.class)
     })
     @JsonIgnoreProperties(ignoreUnknown = true)
     private interface Value {
@@ -212,6 +230,44 @@ public final class ConversationPrecondition {
         }
 
         private boolean equalTo(ActionExecutedValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "ConversationPrecondition{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("responseConfig")
+    private static final class ResponseConfigValue implements Value {
+        @JsonUnwrapped
+        private ResponseConfigPrecondition value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private ResponseConfigValue() {}
+
+        private ResponseConfigValue(ResponseConfigPrecondition value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitResponseConfig(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof ResponseConfigValue && equalTo((ResponseConfigValue) other);
+        }
+
+        private boolean equalTo(ResponseConfigValue other) {
             return value.equals(other.value);
         }
 
