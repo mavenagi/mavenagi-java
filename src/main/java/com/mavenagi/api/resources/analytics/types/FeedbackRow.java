@@ -12,24 +12,24 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.api.core.ObjectMappers;
-import com.mavenagi.api.resources.conversation.types.ConversationField;
+import com.mavenagi.api.resources.conversation.types.FeedbackField;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonDeserialize(builder = ConversationRow.Builder.class)
-public final class ConversationRow implements IRowBase {
+@JsonDeserialize(builder = FeedbackRow.Builder.class)
+public final class FeedbackRow implements IRowBase {
     private final Map<String, CellData> data;
 
-    private final Map<ConversationField, FieldValue> identifier;
+    private final Map<FeedbackField, FieldValue> identifier;
 
     private final Map<String, Object> additionalProperties;
 
-    private ConversationRow(
+    private FeedbackRow(
             Map<String, CellData> data,
-            Map<ConversationField, FieldValue> identifier,
+            Map<FeedbackField, FieldValue> identifier,
             Map<String, Object> additionalProperties) {
         this.data = data;
         this.identifier = identifier;
@@ -50,14 +50,14 @@ public final class ConversationRow implements IRowBase {
      * This includes time groupings and any specified field groupings.
      */
     @JsonProperty("identifier")
-    public Map<ConversationField, FieldValue> getIdentifier() {
+    public Map<FeedbackField, FieldValue> getIdentifier() {
         return identifier;
     }
 
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
-        return other instanceof ConversationRow && equalTo((ConversationRow) other);
+        return other instanceof FeedbackRow && equalTo((FeedbackRow) other);
     }
 
     @JsonAnyGetter
@@ -65,7 +65,7 @@ public final class ConversationRow implements IRowBase {
         return this.additionalProperties;
     }
 
-    private boolean equalTo(ConversationRow other) {
+    private boolean equalTo(FeedbackRow other) {
         return data.equals(other.data) && identifier.equals(other.identifier);
     }
 
@@ -87,14 +87,14 @@ public final class ConversationRow implements IRowBase {
     public static final class Builder {
         private Map<String, CellData> data = new LinkedHashMap<>();
 
-        private Map<ConversationField, FieldValue> identifier = new LinkedHashMap<>();
+        private Map<FeedbackField, FieldValue> identifier = new LinkedHashMap<>();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
 
-        public Builder from(ConversationRow other) {
+        public Builder from(FeedbackRow other) {
             data(other.getData());
             identifier(other.getIdentifier());
             return this;
@@ -118,24 +118,24 @@ public final class ConversationRow implements IRowBase {
         }
 
         @JsonSetter(value = "identifier", nulls = Nulls.SKIP)
-        public Builder identifier(Map<ConversationField, FieldValue> identifier) {
+        public Builder identifier(Map<FeedbackField, FieldValue> identifier) {
             this.identifier.clear();
             this.identifier.putAll(identifier);
             return this;
         }
 
-        public Builder putAllIdentifier(Map<ConversationField, FieldValue> identifier) {
+        public Builder putAllIdentifier(Map<FeedbackField, FieldValue> identifier) {
             this.identifier.putAll(identifier);
             return this;
         }
 
-        public Builder identifier(ConversationField key, FieldValue value) {
+        public Builder identifier(FeedbackField key, FieldValue value) {
             this.identifier.put(key, value);
             return this;
         }
 
-        public ConversationRow build() {
-            return new ConversationRow(data, identifier, additionalProperties);
+        public FeedbackRow build() {
+            return new FeedbackRow(data, identifier, additionalProperties);
         }
     }
 }

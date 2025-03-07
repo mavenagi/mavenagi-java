@@ -12,27 +12,20 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.api.core.ObjectMappers;
-import com.mavenagi.api.resources.conversation.types.ConversationField;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonDeserialize(builder = ConversationRow.Builder.class)
-public final class ConversationRow implements IRowBase {
+@JsonDeserialize(builder = RowBase.Builder.class)
+public final class RowBase implements IRowBase {
     private final Map<String, CellData> data;
-
-    private final Map<ConversationField, FieldValue> identifier;
 
     private final Map<String, Object> additionalProperties;
 
-    private ConversationRow(
-            Map<String, CellData> data,
-            Map<ConversationField, FieldValue> identifier,
-            Map<String, Object> additionalProperties) {
+    private RowBase(Map<String, CellData> data, Map<String, Object> additionalProperties) {
         this.data = data;
-        this.identifier = identifier;
         this.additionalProperties = additionalProperties;
     }
 
@@ -45,19 +38,10 @@ public final class ConversationRow implements IRowBase {
         return data;
     }
 
-    /**
-     * @return A unique identifier for each row, consisting of field names mapped to their respective values.
-     * This includes time groupings and any specified field groupings.
-     */
-    @JsonProperty("identifier")
-    public Map<ConversationField, FieldValue> getIdentifier() {
-        return identifier;
-    }
-
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
-        return other instanceof ConversationRow && equalTo((ConversationRow) other);
+        return other instanceof RowBase && equalTo((RowBase) other);
     }
 
     @JsonAnyGetter
@@ -65,13 +49,13 @@ public final class ConversationRow implements IRowBase {
         return this.additionalProperties;
     }
 
-    private boolean equalTo(ConversationRow other) {
-        return data.equals(other.data) && identifier.equals(other.identifier);
+    private boolean equalTo(RowBase other) {
+        return data.equals(other.data);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.data, this.identifier);
+        return Objects.hash(this.data);
     }
 
     @java.lang.Override
@@ -87,16 +71,13 @@ public final class ConversationRow implements IRowBase {
     public static final class Builder {
         private Map<String, CellData> data = new LinkedHashMap<>();
 
-        private Map<ConversationField, FieldValue> identifier = new LinkedHashMap<>();
-
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
 
-        public Builder from(ConversationRow other) {
+        public Builder from(RowBase other) {
             data(other.getData());
-            identifier(other.getIdentifier());
             return this;
         }
 
@@ -117,25 +98,8 @@ public final class ConversationRow implements IRowBase {
             return this;
         }
 
-        @JsonSetter(value = "identifier", nulls = Nulls.SKIP)
-        public Builder identifier(Map<ConversationField, FieldValue> identifier) {
-            this.identifier.clear();
-            this.identifier.putAll(identifier);
-            return this;
-        }
-
-        public Builder putAllIdentifier(Map<ConversationField, FieldValue> identifier) {
-            this.identifier.putAll(identifier);
-            return this;
-        }
-
-        public Builder identifier(ConversationField key, FieldValue value) {
-            this.identifier.put(key, value);
-            return this;
-        }
-
-        public ConversationRow build() {
-            return new ConversationRow(data, identifier, additionalProperties);
+        public RowBase build() {
+            return new RowBase(data, additionalProperties);
         }
     }
 }

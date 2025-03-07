@@ -19,16 +19,16 @@ import java.util.Map;
 import java.util.Objects;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonDeserialize(builder = ConversationTableResponse.Builder.class)
-public final class ConversationTableResponse implements ITableResponseBase {
+@JsonDeserialize(builder = FeedbackTableResponse.Builder.class)
+public final class FeedbackTableResponse implements ITableResponseBase {
     private final List<String> headers;
 
-    private final List<ConversationRow> rows;
+    private final List<FeedbackRow> rows;
 
     private final Map<String, Object> additionalProperties;
 
-    private ConversationTableResponse(
-            List<String> headers, List<ConversationRow> rows, Map<String, Object> additionalProperties) {
+    private FeedbackTableResponse(
+            List<String> headers, List<FeedbackRow> rows, Map<String, Object> additionalProperties) {
         this.headers = headers;
         this.rows = rows;
         this.additionalProperties = additionalProperties;
@@ -49,14 +49,14 @@ public final class ConversationTableResponse implements ITableResponseBase {
      * The data map contains column headers mapped to their respective metric values.
      */
     @JsonProperty("rows")
-    public List<ConversationRow> getRows() {
+    public List<FeedbackRow> getRows() {
         return rows;
     }
 
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
-        return other instanceof ConversationTableResponse && equalTo((ConversationTableResponse) other);
+        return other instanceof FeedbackTableResponse && equalTo((FeedbackTableResponse) other);
     }
 
     @JsonAnyGetter
@@ -64,7 +64,7 @@ public final class ConversationTableResponse implements ITableResponseBase {
         return this.additionalProperties;
     }
 
-    private boolean equalTo(ConversationTableResponse other) {
+    private boolean equalTo(FeedbackTableResponse other) {
         return headers.equals(other.headers) && rows.equals(other.rows);
     }
 
@@ -86,14 +86,14 @@ public final class ConversationTableResponse implements ITableResponseBase {
     public static final class Builder {
         private List<String> headers = new ArrayList<>();
 
-        private List<ConversationRow> rows = new ArrayList<>();
+        private List<FeedbackRow> rows = new ArrayList<>();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
 
-        public Builder from(ConversationTableResponse other) {
+        public Builder from(FeedbackTableResponse other) {
             headers(other.getHeaders());
             rows(other.getRows());
             return this;
@@ -117,24 +117,24 @@ public final class ConversationTableResponse implements ITableResponseBase {
         }
 
         @JsonSetter(value = "rows", nulls = Nulls.SKIP)
-        public Builder rows(List<ConversationRow> rows) {
+        public Builder rows(List<FeedbackRow> rows) {
             this.rows.clear();
             this.rows.addAll(rows);
             return this;
         }
 
-        public Builder addRows(ConversationRow rows) {
+        public Builder addRows(FeedbackRow rows) {
             this.rows.add(rows);
             return this;
         }
 
-        public Builder addAllRows(List<ConversationRow> rows) {
+        public Builder addAllRows(List<FeedbackRow> rows) {
             this.rows.addAll(rows);
             return this;
         }
 
-        public ConversationTableResponse build() {
-            return new ConversationTableResponse(headers, rows, additionalProperties);
+        public FeedbackTableResponse build() {
+            return new FeedbackTableResponse(headers, rows, additionalProperties);
         }
     }
 }

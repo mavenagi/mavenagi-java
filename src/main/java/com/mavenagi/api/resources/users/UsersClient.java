@@ -16,6 +16,7 @@ import com.mavenagi.api.resources.commons.errors.ServerError;
 import com.mavenagi.api.resources.commons.types.AppUserRequest;
 import com.mavenagi.api.resources.commons.types.AppUserResponse;
 import com.mavenagi.api.resources.commons.types.ErrorMessage;
+import com.mavenagi.api.resources.users.requests.UserDeleteRequest;
 import com.mavenagi.api.resources.users.requests.UserGetRequest;
 import java.io.IOException;
 import okhttp3.Headers;
@@ -134,6 +135,79 @@ public class UsersClient {
             ResponseBody responseBody = response.body();
             if (response.isSuccessful()) {
                 return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), AppUserResponse.class);
+            }
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            try {
+                switch (response.code()) {
+                    case 400:
+                        throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class));
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class));
+                    case 500:
+                        throw new ServerError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class));
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            throw new MavenAGIApiException(
+                    "Error with status code " + response.code(),
+                    response.code(),
+                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
+        } catch (IOException e) {
+            throw new MavenAGIException("Network error executing HTTP request", e);
+        }
+    }
+
+    /**
+     * Deletes all identifiers and user data saved by the specified app.
+     * Does not modify data or identifiers saved by other apps.
+     * <p>If this user is linked to a user from another app, it will not be unlinked. Unlinking of users is not yet supported.</p>
+     * <p>&lt;Warning&gt;This is a destructive operation and cannot be undone.&lt;/Warning&gt;</p>
+     */
+    public void delete(String userId) {
+        delete(userId, UserDeleteRequest.builder().build());
+    }
+
+    /**
+     * Deletes all identifiers and user data saved by the specified app.
+     * Does not modify data or identifiers saved by other apps.
+     * <p>If this user is linked to a user from another app, it will not be unlinked. Unlinking of users is not yet supported.</p>
+     * <p>&lt;Warning&gt;This is a destructive operation and cannot be undone.&lt;/Warning&gt;</p>
+     */
+    public void delete(String userId, UserDeleteRequest request) {
+        delete(userId, request, null);
+    }
+
+    /**
+     * Deletes all identifiers and user data saved by the specified app.
+     * Does not modify data or identifiers saved by other apps.
+     * <p>If this user is linked to a user from another app, it will not be unlinked. Unlinking of users is not yet supported.</p>
+     * <p>&lt;Warning&gt;This is a destructive operation and cannot be undone.&lt;/Warning&gt;</p>
+     */
+    public void delete(String userId, UserDeleteRequest request, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("v1/users")
+                .addPathSegment(userId);
+        if (request.getAppId().isPresent()) {
+            httpUrl.addQueryParameter("appId", request.getAppId().get());
+        }
+        Request.Builder _requestBuilder = new Request.Builder()
+                .url(httpUrl.build())
+                .method("DELETE", null)
+                .headers(Headers.of(clientOptions.headers(requestOptions)));
+        Request okhttpRequest = _requestBuilder.build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            if (response.isSuccessful()) {
+                return;
             }
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {

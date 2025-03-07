@@ -19,18 +19,14 @@ import java.util.Map;
 import java.util.Objects;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonDeserialize(builder = ConversationTableResponse.Builder.class)
-public final class ConversationTableResponse implements ITableResponseBase {
+@JsonDeserialize(builder = TableResponseBase.Builder.class)
+public final class TableResponseBase implements ITableResponseBase {
     private final List<String> headers;
-
-    private final List<ConversationRow> rows;
 
     private final Map<String, Object> additionalProperties;
 
-    private ConversationTableResponse(
-            List<String> headers, List<ConversationRow> rows, Map<String, Object> additionalProperties) {
+    private TableResponseBase(List<String> headers, Map<String, Object> additionalProperties) {
         this.headers = headers;
-        this.rows = rows;
         this.additionalProperties = additionalProperties;
     }
 
@@ -43,20 +39,10 @@ public final class ConversationTableResponse implements ITableResponseBase {
         return headers;
     }
 
-    /**
-     * @return The dataset rows, where each row represents a unique combination of grouping field values.
-     * The identifier map contains grouping field names mapped to their respective values.
-     * The data map contains column headers mapped to their respective metric values.
-     */
-    @JsonProperty("rows")
-    public List<ConversationRow> getRows() {
-        return rows;
-    }
-
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
-        return other instanceof ConversationTableResponse && equalTo((ConversationTableResponse) other);
+        return other instanceof TableResponseBase && equalTo((TableResponseBase) other);
     }
 
     @JsonAnyGetter
@@ -64,13 +50,13 @@ public final class ConversationTableResponse implements ITableResponseBase {
         return this.additionalProperties;
     }
 
-    private boolean equalTo(ConversationTableResponse other) {
-        return headers.equals(other.headers) && rows.equals(other.rows);
+    private boolean equalTo(TableResponseBase other) {
+        return headers.equals(other.headers);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.headers, this.rows);
+        return Objects.hash(this.headers);
     }
 
     @java.lang.Override
@@ -86,16 +72,13 @@ public final class ConversationTableResponse implements ITableResponseBase {
     public static final class Builder {
         private List<String> headers = new ArrayList<>();
 
-        private List<ConversationRow> rows = new ArrayList<>();
-
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
 
-        public Builder from(ConversationTableResponse other) {
+        public Builder from(TableResponseBase other) {
             headers(other.getHeaders());
-            rows(other.getRows());
             return this;
         }
 
@@ -116,25 +99,8 @@ public final class ConversationTableResponse implements ITableResponseBase {
             return this;
         }
 
-        @JsonSetter(value = "rows", nulls = Nulls.SKIP)
-        public Builder rows(List<ConversationRow> rows) {
-            this.rows.clear();
-            this.rows.addAll(rows);
-            return this;
-        }
-
-        public Builder addRows(ConversationRow rows) {
-            this.rows.add(rows);
-            return this;
-        }
-
-        public Builder addAllRows(List<ConversationRow> rows) {
-            this.rows.addAll(rows);
-            return this;
-        }
-
-        public ConversationTableResponse build() {
-            return new ConversationTableResponse(headers, rows, additionalProperties);
+        public TableResponseBase build() {
+            return new TableResponseBase(headers, additionalProperties);
         }
     }
 }
