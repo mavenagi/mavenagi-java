@@ -20,26 +20,22 @@ import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonDeserialize(builder = DateHistogramRequest.Builder.class)
-public final class DateHistogramRequest implements IConversationAnalyticsRequest {
+@JsonDeserialize(builder = ConversationPieChartRequest.Builder.class)
+public final class ConversationPieChartRequest implements IConversationAnalyticsRequest {
     private final Optional<ConversationFilter> conversationFilter;
 
-    private final TimeInterval timeInterval;
-
-    private final Optional<ConversationGroupBy> groupBy;
+    private final ConversationGroupBy groupBy;
 
     private final ConversationMetric metric;
 
     private final Map<String, Object> additionalProperties;
 
-    private DateHistogramRequest(
+    private ConversationPieChartRequest(
             Optional<ConversationFilter> conversationFilter,
-            TimeInterval timeInterval,
-            Optional<ConversationGroupBy> groupBy,
+            ConversationGroupBy groupBy,
             ConversationMetric metric,
             Map<String, Object> additionalProperties) {
         this.conversationFilter = conversationFilter;
-        this.timeInterval = timeInterval;
         this.groupBy = groupBy;
         this.metric = metric;
         this.additionalProperties = additionalProperties;
@@ -55,23 +51,15 @@ public final class DateHistogramRequest implements IConversationAnalyticsRequest
     }
 
     /**
-     * @return Time-based grouping interval (e.g., HOUR, DAY, WEEK) for the date histogram.
-     */
-    @JsonProperty("timeInterval")
-    public TimeInterval getTimeInterval() {
-        return timeInterval;
-    }
-
-    /**
-     * @return Groups data before applying calculations, forming a separate time series for each group.
+     * @return Field used to group data into slices for the pie chart.
      */
     @JsonProperty("groupBy")
-    public Optional<ConversationGroupBy> getGroupBy() {
+    public ConversationGroupBy getGroupBy() {
         return groupBy;
     }
 
     /**
-     * @return Defines the y-axis values for the date histogram.
+     * @return Metric defining the value for each pie slice, stored in the y-axis value.
      */
     @JsonProperty("metric")
     public ConversationMetric getMetric() {
@@ -81,7 +69,7 @@ public final class DateHistogramRequest implements IConversationAnalyticsRequest
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
-        return other instanceof DateHistogramRequest && equalTo((DateHistogramRequest) other);
+        return other instanceof ConversationPieChartRequest && equalTo((ConversationPieChartRequest) other);
     }
 
     @JsonAnyGetter
@@ -89,16 +77,15 @@ public final class DateHistogramRequest implements IConversationAnalyticsRequest
         return this.additionalProperties;
     }
 
-    private boolean equalTo(DateHistogramRequest other) {
+    private boolean equalTo(ConversationPieChartRequest other) {
         return conversationFilter.equals(other.conversationFilter)
-                && timeInterval.equals(other.timeInterval)
                 && groupBy.equals(other.groupBy)
                 && metric.equals(other.metric);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.conversationFilter, this.timeInterval, this.groupBy, this.metric);
+        return Objects.hash(this.conversationFilter, this.groupBy, this.metric);
     }
 
     @java.lang.Override
@@ -106,14 +93,14 @@ public final class DateHistogramRequest implements IConversationAnalyticsRequest
         return ObjectMappers.stringify(this);
     }
 
-    public static TimeIntervalStage builder() {
+    public static GroupByStage builder() {
         return new Builder();
     }
 
-    public interface TimeIntervalStage {
-        MetricStage timeInterval(@NotNull TimeInterval timeInterval);
+    public interface GroupByStage {
+        MetricStage groupBy(@NotNull ConversationGroupBy groupBy);
 
-        Builder from(DateHistogramRequest other);
+        Builder from(ConversationPieChartRequest other);
     }
 
     public interface MetricStage {
@@ -121,24 +108,18 @@ public final class DateHistogramRequest implements IConversationAnalyticsRequest
     }
 
     public interface _FinalStage {
-        DateHistogramRequest build();
+        ConversationPieChartRequest build();
 
         _FinalStage conversationFilter(Optional<ConversationFilter> conversationFilter);
 
         _FinalStage conversationFilter(ConversationFilter conversationFilter);
-
-        _FinalStage groupBy(Optional<ConversationGroupBy> groupBy);
-
-        _FinalStage groupBy(ConversationGroupBy groupBy);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements TimeIntervalStage, MetricStage, _FinalStage {
-        private TimeInterval timeInterval;
+    public static final class Builder implements GroupByStage, MetricStage, _FinalStage {
+        private ConversationGroupBy groupBy;
 
         private ConversationMetric metric;
-
-        private Optional<ConversationGroupBy> groupBy = Optional.empty();
 
         private Optional<ConversationFilter> conversationFilter = Optional.empty();
 
@@ -148,50 +129,32 @@ public final class DateHistogramRequest implements IConversationAnalyticsRequest
         private Builder() {}
 
         @java.lang.Override
-        public Builder from(DateHistogramRequest other) {
+        public Builder from(ConversationPieChartRequest other) {
             conversationFilter(other.getConversationFilter());
-            timeInterval(other.getTimeInterval());
             groupBy(other.getGroupBy());
             metric(other.getMetric());
             return this;
         }
 
         /**
-         * <p>Time-based grouping interval (e.g., HOUR, DAY, WEEK) for the date histogram.</p>
+         * <p>Field used to group data into slices for the pie chart.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        @JsonSetter("timeInterval")
-        public MetricStage timeInterval(@NotNull TimeInterval timeInterval) {
-            this.timeInterval = Objects.requireNonNull(timeInterval, "timeInterval must not be null");
+        @JsonSetter("groupBy")
+        public MetricStage groupBy(@NotNull ConversationGroupBy groupBy) {
+            this.groupBy = Objects.requireNonNull(groupBy, "groupBy must not be null");
             return this;
         }
 
         /**
-         * <p>Defines the y-axis values for the date histogram.</p>
+         * <p>Metric defining the value for each pie slice, stored in the y-axis value.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("metric")
         public _FinalStage metric(@NotNull ConversationMetric metric) {
             this.metric = Objects.requireNonNull(metric, "metric must not be null");
-            return this;
-        }
-
-        /**
-         * <p>Groups data before applying calculations, forming a separate time series for each group.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage groupBy(ConversationGroupBy groupBy) {
-            this.groupBy = Optional.ofNullable(groupBy);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "groupBy", nulls = Nulls.SKIP)
-        public _FinalStage groupBy(Optional<ConversationGroupBy> groupBy) {
-            this.groupBy = groupBy;
             return this;
         }
 
@@ -213,8 +176,8 @@ public final class DateHistogramRequest implements IConversationAnalyticsRequest
         }
 
         @java.lang.Override
-        public DateHistogramRequest build() {
-            return new DateHistogramRequest(conversationFilter, timeInterval, groupBy, metric, additionalProperties);
+        public ConversationPieChartRequest build() {
+            return new ConversationPieChartRequest(conversationFilter, groupBy, metric, additionalProperties);
         }
     }
 }

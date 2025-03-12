@@ -9,6 +9,7 @@ import com.mavenagi.api.resources.actions.ActionsClient;
 import com.mavenagi.api.resources.analytics.AnalyticsClient;
 import com.mavenagi.api.resources.appsettings.AppSettingsClient;
 import com.mavenagi.api.resources.conversation.ConversationClient;
+import com.mavenagi.api.resources.inbox.InboxClient;
 import com.mavenagi.api.resources.knowledge.KnowledgeClient;
 import com.mavenagi.api.resources.translations.TranslationsClient;
 import com.mavenagi.api.resources.triggers.TriggersClient;
@@ -26,6 +27,8 @@ public class MavenAGI {
 
     protected final Supplier<ConversationClient> conversationClient;
 
+    protected final Supplier<InboxClient> inboxClient;
+
     protected final Supplier<KnowledgeClient> knowledgeClient;
 
     protected final Supplier<TranslationsClient> translationsClient;
@@ -40,6 +43,7 @@ public class MavenAGI {
         this.analyticsClient = Suppliers.memoize(() -> new AnalyticsClient(clientOptions));
         this.appSettingsClient = Suppliers.memoize(() -> new AppSettingsClient(clientOptions));
         this.conversationClient = Suppliers.memoize(() -> new ConversationClient(clientOptions));
+        this.inboxClient = Suppliers.memoize(() -> new InboxClient(clientOptions));
         this.knowledgeClient = Suppliers.memoize(() -> new KnowledgeClient(clientOptions));
         this.translationsClient = Suppliers.memoize(() -> new TranslationsClient(clientOptions));
         this.triggersClient = Suppliers.memoize(() -> new TriggersClient(clientOptions));
@@ -60,6 +64,10 @@ public class MavenAGI {
 
     public ConversationClient conversation() {
         return this.conversationClient.get();
+    }
+
+    public InboxClient inbox() {
+        return this.inboxClient.get();
     }
 
     public KnowledgeClient knowledge() {

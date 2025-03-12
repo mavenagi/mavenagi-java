@@ -24,11 +24,13 @@ import com.mavenagi.api.resources.conversation.requests.ConversationGetRequest;
 import com.mavenagi.api.resources.conversation.types.AskRequest;
 import com.mavenagi.api.resources.conversation.types.CategorizationResponse;
 import com.mavenagi.api.resources.conversation.types.ConversationMessageRequest;
+import com.mavenagi.api.resources.conversation.types.ConversationMetadata;
 import com.mavenagi.api.resources.conversation.types.ConversationRequest;
 import com.mavenagi.api.resources.conversation.types.FeedbackRequest;
 import com.mavenagi.api.resources.conversation.types.GenerateMavenSuggestionsRequest;
 import com.mavenagi.api.resources.conversation.types.StreamResponse;
 import com.mavenagi.api.resources.conversation.types.SubmitActionFormRequest;
+import com.mavenagi.api.resources.conversation.types.UpdateMetadataRequest;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -736,14 +738,16 @@ public class ConversationClient {
     }
 
     /**
-     * Add metadata to an existing conversation. If a metadata field already exists, it will be overwritten.
+     * Replaced by <code>updateConversationMetadata</code>.
+     * <p>Adds metadata to an existing conversation. If a metadata field already exists, it will be overwritten.</p>
      */
     public Map<String, String> addConversationMetadata(String conversationId, Map<String, String> request) {
         return addConversationMetadata(conversationId, request, null);
     }
 
     /**
-     * Add metadata to an existing conversation. If a metadata field already exists, it will be overwritten.
+     * Replaced by <code>updateConversationMetadata</code>.
+     * <p>Adds metadata to an existing conversation. If a metadata field already exists, it will be overwritten.</p>
      */
     public Map<String, String> addConversationMetadata(
             String conversationId, Map<String, String> request, RequestOptions requestOptions) {
@@ -775,6 +779,79 @@ public class ConversationClient {
             if (response.isSuccessful()) {
                 return ObjectMappers.JSON_MAPPER.readValue(
                         responseBody.string(), new TypeReference<Map<String, String>>() {});
+            }
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            try {
+                switch (response.code()) {
+                    case 400:
+                        throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class));
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class));
+                    case 500:
+                        throw new ServerError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class));
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            throw new MavenAGIApiException(
+                    "Error with status code " + response.code(),
+                    response.code(),
+                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
+        } catch (IOException e) {
+            throw new MavenAGIException("Network error executing HTTP request", e);
+        }
+    }
+
+    /**
+     * Update metadata supplied by the calling application for an existing conversation.
+     * Does not modify metadata saved by other apps.
+     * <p>If a metadata field already exists for the calling app, it will be overwritten.
+     * If it does not exist, it will be added. Will not remove metadata fields.</p>
+     * <p>Returns all metadata saved by any app on the conversation.</p>
+     */
+    public ConversationMetadata updateConversationMetadata(String conversationId, UpdateMetadataRequest request) {
+        return updateConversationMetadata(conversationId, request, null);
+    }
+
+    /**
+     * Update metadata supplied by the calling application for an existing conversation.
+     * Does not modify metadata saved by other apps.
+     * <p>If a metadata field already exists for the calling app, it will be overwritten.
+     * If it does not exist, it will be added. Will not remove metadata fields.</p>
+     * <p>Returns all metadata saved by any app on the conversation.</p>
+     */
+    public ConversationMetadata updateConversationMetadata(
+            String conversationId, UpdateMetadataRequest request, RequestOptions requestOptions) {
+        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("v1/conversations")
+                .addPathSegment(conversationId)
+                .addPathSegments("metadata")
+                .build();
+        RequestBody body;
+        try {
+            body = RequestBody.create(
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
+        } catch (JsonProcessingException e) {
+            throw new MavenAGIException("Failed to serialize request", e);
+        }
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl)
+                .method("PUT", body)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
+                .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            if (response.isSuccessful()) {
+                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), ConversationMetadata.class);
             }
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {

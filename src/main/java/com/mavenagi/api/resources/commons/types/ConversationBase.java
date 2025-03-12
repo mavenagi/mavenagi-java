@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.api.core.ObjectMappers;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -36,6 +37,8 @@ public final class ConversationBase implements IConversationBase {
 
     private final Optional<Map<String, String>> metadata;
 
+    private final Map<String, Map<String, String>> allMetadata;
+
     private final Map<String, Object> additionalProperties;
 
     private ConversationBase(
@@ -46,6 +49,7 @@ public final class ConversationBase implements IConversationBase {
             Optional<OffsetDateTime> updatedAt,
             Optional<Set<String>> tags,
             Optional<Map<String, String>> metadata,
+            Map<String, Map<String, String>> allMetadata,
             Map<String, Object> additionalProperties) {
         this.responseConfig = responseConfig;
         this.subject = subject;
@@ -54,6 +58,7 @@ public final class ConversationBase implements IConversationBase {
         this.updatedAt = updatedAt;
         this.tags = tags;
         this.metadata = metadata;
+        this.allMetadata = allMetadata;
         this.additionalProperties = additionalProperties;
     }
 
@@ -112,12 +117,21 @@ public final class ConversationBase implements IConversationBase {
     }
 
     /**
-     * @return The metadata of the conversation.
+     * @return The metadata of the conversation supplied by the app which created the conversation.
      */
     @JsonProperty("metadata")
     @java.lang.Override
     public Optional<Map<String, String>> getMetadata() {
         return metadata;
+    }
+
+    /**
+     * @return All metadata for the conversation. Keyed by appId.
+     */
+    @JsonProperty("allMetadata")
+    @java.lang.Override
+    public Map<String, Map<String, String>> getAllMetadata() {
+        return allMetadata;
     }
 
     @java.lang.Override
@@ -138,13 +152,21 @@ public final class ConversationBase implements IConversationBase {
                 && createdAt.equals(other.createdAt)
                 && updatedAt.equals(other.updatedAt)
                 && tags.equals(other.tags)
-                && metadata.equals(other.metadata);
+                && metadata.equals(other.metadata)
+                && allMetadata.equals(other.allMetadata);
     }
 
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.responseConfig, this.subject, this.url, this.createdAt, this.updatedAt, this.tags, this.metadata);
+                this.responseConfig,
+                this.subject,
+                this.url,
+                this.createdAt,
+                this.updatedAt,
+                this.tags,
+                this.metadata,
+                this.allMetadata);
     }
 
     @java.lang.Override
@@ -172,6 +194,8 @@ public final class ConversationBase implements IConversationBase {
 
         private Optional<Map<String, String>> metadata = Optional.empty();
 
+        private Map<String, Map<String, String>> allMetadata = new LinkedHashMap<>();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -185,6 +209,7 @@ public final class ConversationBase implements IConversationBase {
             updatedAt(other.getUpdatedAt());
             tags(other.getTags());
             metadata(other.getMetadata());
+            allMetadata(other.getAllMetadata());
             return this;
         }
 
@@ -265,9 +290,34 @@ public final class ConversationBase implements IConversationBase {
             return this;
         }
 
+        @JsonSetter(value = "allMetadata", nulls = Nulls.SKIP)
+        public Builder allMetadata(Map<String, Map<String, String>> allMetadata) {
+            this.allMetadata.clear();
+            this.allMetadata.putAll(allMetadata);
+            return this;
+        }
+
+        public Builder putAllAllMetadata(Map<String, Map<String, String>> allMetadata) {
+            this.allMetadata.putAll(allMetadata);
+            return this;
+        }
+
+        public Builder allMetadata(String key, Map<String, String> value) {
+            this.allMetadata.put(key, value);
+            return this;
+        }
+
         public ConversationBase build() {
             return new ConversationBase(
-                    responseConfig, subject, url, createdAt, updatedAt, tags, metadata, additionalProperties);
+                    responseConfig,
+                    subject,
+                    url,
+                    createdAt,
+                    updatedAt,
+                    tags,
+                    metadata,
+                    allMetadata,
+                    additionalProperties);
         }
     }
 }

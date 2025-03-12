@@ -18,6 +18,7 @@ import com.mavenagi.api.resources.commons.types.ResponseConfig;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -42,6 +43,8 @@ public final class ConversationRequest implements IConversationBase {
 
     private final Optional<Map<String, String>> metadata;
 
+    private final Map<String, Map<String, String>> allMetadata;
+
     private final EntityIdBase conversationId;
 
     private final List<ConversationMessageRequest> messages;
@@ -56,6 +59,7 @@ public final class ConversationRequest implements IConversationBase {
             Optional<OffsetDateTime> updatedAt,
             Optional<Set<String>> tags,
             Optional<Map<String, String>> metadata,
+            Map<String, Map<String, String>> allMetadata,
             EntityIdBase conversationId,
             List<ConversationMessageRequest> messages,
             Map<String, Object> additionalProperties) {
@@ -66,6 +70,7 @@ public final class ConversationRequest implements IConversationBase {
         this.updatedAt = updatedAt;
         this.tags = tags;
         this.metadata = metadata;
+        this.allMetadata = allMetadata;
         this.conversationId = conversationId;
         this.messages = messages;
         this.additionalProperties = additionalProperties;
@@ -126,12 +131,21 @@ public final class ConversationRequest implements IConversationBase {
     }
 
     /**
-     * @return The metadata of the conversation.
+     * @return The metadata of the conversation supplied by the app which created the conversation.
      */
     @JsonProperty("metadata")
     @java.lang.Override
     public Optional<Map<String, String>> getMetadata() {
         return metadata;
+    }
+
+    /**
+     * @return All metadata for the conversation. Keyed by appId.
+     */
+    @JsonProperty("allMetadata")
+    @java.lang.Override
+    public Map<String, Map<String, String>> getAllMetadata() {
+        return allMetadata;
     }
 
     /**
@@ -169,6 +183,7 @@ public final class ConversationRequest implements IConversationBase {
                 && updatedAt.equals(other.updatedAt)
                 && tags.equals(other.tags)
                 && metadata.equals(other.metadata)
+                && allMetadata.equals(other.allMetadata)
                 && conversationId.equals(other.conversationId)
                 && messages.equals(other.messages);
     }
@@ -183,6 +198,7 @@ public final class ConversationRequest implements IConversationBase {
                 this.updatedAt,
                 this.tags,
                 this.metadata,
+                this.allMetadata,
                 this.conversationId,
                 this.messages);
     }
@@ -233,6 +249,12 @@ public final class ConversationRequest implements IConversationBase {
 
         _FinalStage metadata(Map<String, String> metadata);
 
+        _FinalStage allMetadata(Map<String, Map<String, String>> allMetadata);
+
+        _FinalStage putAllAllMetadata(Map<String, Map<String, String>> allMetadata);
+
+        _FinalStage allMetadata(String key, Map<String, String> value);
+
         _FinalStage messages(List<ConversationMessageRequest> messages);
 
         _FinalStage addMessages(ConversationMessageRequest messages);
@@ -245,6 +267,8 @@ public final class ConversationRequest implements IConversationBase {
         private EntityIdBase conversationId;
 
         private List<ConversationMessageRequest> messages = new ArrayList<>();
+
+        private Map<String, Map<String, String>> allMetadata = new LinkedHashMap<>();
 
         private Optional<Map<String, String>> metadata = Optional.empty();
 
@@ -274,6 +298,7 @@ public final class ConversationRequest implements IConversationBase {
             updatedAt(other.getUpdatedAt());
             tags(other.getTags());
             metadata(other.getMetadata());
+            allMetadata(other.getAllMetadata());
             conversationId(other.getConversationId());
             messages(other.getMessages());
             return this;
@@ -319,7 +344,35 @@ public final class ConversationRequest implements IConversationBase {
         }
 
         /**
-         * <p>The metadata of the conversation.</p>
+         * <p>All metadata for the conversation. Keyed by appId.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage allMetadata(String key, Map<String, String> value) {
+            this.allMetadata.put(key, value);
+            return this;
+        }
+
+        /**
+         * <p>All metadata for the conversation. Keyed by appId.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage putAllAllMetadata(Map<String, Map<String, String>> allMetadata) {
+            this.allMetadata.putAll(allMetadata);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "allMetadata", nulls = Nulls.SKIP)
+        public _FinalStage allMetadata(Map<String, Map<String, String>> allMetadata) {
+            this.allMetadata.clear();
+            this.allMetadata.putAll(allMetadata);
+            return this;
+        }
+
+        /**
+         * <p>The metadata of the conversation supplied by the app which created the conversation.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -447,6 +500,7 @@ public final class ConversationRequest implements IConversationBase {
                     updatedAt,
                     tags,
                     metadata,
+                    allMetadata,
                     conversationId,
                     messages,
                     additionalProperties);

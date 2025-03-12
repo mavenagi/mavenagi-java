@@ -5,16 +5,20 @@ package com.mavenagi.api.resources.commons.types;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum EventTriggerType {
-    CONVERSATION_CREATED("CONVERSATION_CREATED"),
+public enum InboxItemStatus {
+    OPEN("OPEN"),
 
-    FEEDBACK_CREATED("FEEDBACK_CREATED"),
+    USER_RESOLVED("USER_RESOLVED"),
 
-    INBOX_ITEM_CREATED("INBOX_ITEM_CREATED");
+    SYSTEM_RESOLVED("SYSTEM_RESOLVED"),
+
+    REGRESSED("REGRESSED"),
+
+    IGNORED("IGNORED");
 
     private final String value;
 
-    EventTriggerType(String value) {
+    InboxItemStatus(String value) {
         this.value = value;
     }
 

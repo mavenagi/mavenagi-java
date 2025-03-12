@@ -24,7 +24,11 @@ public enum EntityType {
 
     USER_PROFILE("USER_PROFILE"),
 
-    FEEDBACK("FEEDBACK");
+    FEEDBACK("FEEDBACK"),
+
+    INBOX_ITEM("INBOX_ITEM"),
+
+    INBOX_ITEM_FIX("INBOX_ITEM_FIX");
 
     private final String value;
 

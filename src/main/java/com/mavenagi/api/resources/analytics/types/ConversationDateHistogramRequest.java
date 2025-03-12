@@ -20,28 +20,28 @@ import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonDeserialize(builder = BarChartRequest.Builder.class)
-public final class BarChartRequest implements IConversationAnalyticsRequest {
+@JsonDeserialize(builder = ConversationDateHistogramRequest.Builder.class)
+public final class ConversationDateHistogramRequest implements IConversationAnalyticsRequest {
     private final Optional<ConversationFilter> conversationFilter;
 
-    private final ConversationGroupBy barDefinition;
+    private final TimeInterval timeInterval;
+
+    private final Optional<ConversationGroupBy> groupBy;
 
     private final ConversationMetric metric;
 
-    private final Optional<ConversationGroupBy> verticalGrouping;
-
     private final Map<String, Object> additionalProperties;
 
-    private BarChartRequest(
+    private ConversationDateHistogramRequest(
             Optional<ConversationFilter> conversationFilter,
-            ConversationGroupBy barDefinition,
+            TimeInterval timeInterval,
+            Optional<ConversationGroupBy> groupBy,
             ConversationMetric metric,
-            Optional<ConversationGroupBy> verticalGrouping,
             Map<String, Object> additionalProperties) {
         this.conversationFilter = conversationFilter;
-        this.barDefinition = barDefinition;
+        this.timeInterval = timeInterval;
+        this.groupBy = groupBy;
         this.metric = metric;
-        this.verticalGrouping = verticalGrouping;
         this.additionalProperties = additionalProperties;
     }
 
@@ -55,35 +55,33 @@ public final class BarChartRequest implements IConversationAnalyticsRequest {
     }
 
     /**
-     * @return Determines how data is grouped along the x-axis. Each unique value forms a separate bar.
-     * The name of the bar is derived from the grouping field's value or range.
+     * @return Time-based grouping interval (e.g., HOUR, DAY, WEEK) for the date histogram.
      */
-    @JsonProperty("barDefinition")
-    public ConversationGroupBy getBarDefinition() {
-        return barDefinition;
+    @JsonProperty("timeInterval")
+    public TimeInterval getTimeInterval() {
+        return timeInterval;
     }
 
     /**
-     * @return Metric defining the y-axis values for the bar chart.
+     * @return Groups data before applying calculations, forming a separate time series for each group.
+     */
+    @JsonProperty("groupBy")
+    public Optional<ConversationGroupBy> getGroupBy() {
+        return groupBy;
+    }
+
+    /**
+     * @return Defines the y-axis values for the date histogram.
      */
     @JsonProperty("metric")
     public ConversationMetric getMetric() {
         return metric;
     }
 
-    /**
-     * @return Optionally defines vertical grouping within each bar, producing multiple series.
-     * If omitted, a single series is generated.
-     */
-    @JsonProperty("verticalGrouping")
-    public Optional<ConversationGroupBy> getVerticalGrouping() {
-        return verticalGrouping;
-    }
-
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
-        return other instanceof BarChartRequest && equalTo((BarChartRequest) other);
+        return other instanceof ConversationDateHistogramRequest && equalTo((ConversationDateHistogramRequest) other);
     }
 
     @JsonAnyGetter
@@ -91,16 +89,16 @@ public final class BarChartRequest implements IConversationAnalyticsRequest {
         return this.additionalProperties;
     }
 
-    private boolean equalTo(BarChartRequest other) {
+    private boolean equalTo(ConversationDateHistogramRequest other) {
         return conversationFilter.equals(other.conversationFilter)
-                && barDefinition.equals(other.barDefinition)
-                && metric.equals(other.metric)
-                && verticalGrouping.equals(other.verticalGrouping);
+                && timeInterval.equals(other.timeInterval)
+                && groupBy.equals(other.groupBy)
+                && metric.equals(other.metric);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.conversationFilter, this.barDefinition, this.metric, this.verticalGrouping);
+        return Objects.hash(this.conversationFilter, this.timeInterval, this.groupBy, this.metric);
     }
 
     @java.lang.Override
@@ -108,14 +106,14 @@ public final class BarChartRequest implements IConversationAnalyticsRequest {
         return ObjectMappers.stringify(this);
     }
 
-    public static BarDefinitionStage builder() {
+    public static TimeIntervalStage builder() {
         return new Builder();
     }
 
-    public interface BarDefinitionStage {
-        MetricStage barDefinition(@NotNull ConversationGroupBy barDefinition);
+    public interface TimeIntervalStage {
+        MetricStage timeInterval(@NotNull TimeInterval timeInterval);
 
-        Builder from(BarChartRequest other);
+        Builder from(ConversationDateHistogramRequest other);
     }
 
     public interface MetricStage {
@@ -123,24 +121,24 @@ public final class BarChartRequest implements IConversationAnalyticsRequest {
     }
 
     public interface _FinalStage {
-        BarChartRequest build();
+        ConversationDateHistogramRequest build();
 
         _FinalStage conversationFilter(Optional<ConversationFilter> conversationFilter);
 
         _FinalStage conversationFilter(ConversationFilter conversationFilter);
 
-        _FinalStage verticalGrouping(Optional<ConversationGroupBy> verticalGrouping);
+        _FinalStage groupBy(Optional<ConversationGroupBy> groupBy);
 
-        _FinalStage verticalGrouping(ConversationGroupBy verticalGrouping);
+        _FinalStage groupBy(ConversationGroupBy groupBy);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements BarDefinitionStage, MetricStage, _FinalStage {
-        private ConversationGroupBy barDefinition;
+    public static final class Builder implements TimeIntervalStage, MetricStage, _FinalStage {
+        private TimeInterval timeInterval;
 
         private ConversationMetric metric;
 
-        private Optional<ConversationGroupBy> verticalGrouping = Optional.empty();
+        private Optional<ConversationGroupBy> groupBy = Optional.empty();
 
         private Optional<ConversationFilter> conversationFilter = Optional.empty();
 
@@ -150,28 +148,27 @@ public final class BarChartRequest implements IConversationAnalyticsRequest {
         private Builder() {}
 
         @java.lang.Override
-        public Builder from(BarChartRequest other) {
+        public Builder from(ConversationDateHistogramRequest other) {
             conversationFilter(other.getConversationFilter());
-            barDefinition(other.getBarDefinition());
+            timeInterval(other.getTimeInterval());
+            groupBy(other.getGroupBy());
             metric(other.getMetric());
-            verticalGrouping(other.getVerticalGrouping());
             return this;
         }
 
         /**
-         * <p>Determines how data is grouped along the x-axis. Each unique value forms a separate bar.
-         * The name of the bar is derived from the grouping field's value or range.</p>
+         * <p>Time-based grouping interval (e.g., HOUR, DAY, WEEK) for the date histogram.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        @JsonSetter("barDefinition")
-        public MetricStage barDefinition(@NotNull ConversationGroupBy barDefinition) {
-            this.barDefinition = Objects.requireNonNull(barDefinition, "barDefinition must not be null");
+        @JsonSetter("timeInterval")
+        public MetricStage timeInterval(@NotNull TimeInterval timeInterval) {
+            this.timeInterval = Objects.requireNonNull(timeInterval, "timeInterval must not be null");
             return this;
         }
 
         /**
-         * <p>Metric defining the y-axis values for the bar chart.</p>
+         * <p>Defines the y-axis values for the date histogram.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -182,20 +179,19 @@ public final class BarChartRequest implements IConversationAnalyticsRequest {
         }
 
         /**
-         * <p>Optionally defines vertical grouping within each bar, producing multiple series.
-         * If omitted, a single series is generated.</p>
+         * <p>Groups data before applying calculations, forming a separate time series for each group.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage verticalGrouping(ConversationGroupBy verticalGrouping) {
-            this.verticalGrouping = Optional.ofNullable(verticalGrouping);
+        public _FinalStage groupBy(ConversationGroupBy groupBy) {
+            this.groupBy = Optional.ofNullable(groupBy);
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter(value = "verticalGrouping", nulls = Nulls.SKIP)
-        public _FinalStage verticalGrouping(Optional<ConversationGroupBy> verticalGrouping) {
-            this.verticalGrouping = verticalGrouping;
+        @JsonSetter(value = "groupBy", nulls = Nulls.SKIP)
+        public _FinalStage groupBy(Optional<ConversationGroupBy> groupBy) {
+            this.groupBy = groupBy;
             return this;
         }
 
@@ -217,9 +213,9 @@ public final class BarChartRequest implements IConversationAnalyticsRequest {
         }
 
         @java.lang.Override
-        public BarChartRequest build() {
-            return new BarChartRequest(
-                    conversationFilter, barDefinition, metric, verticalGrouping, additionalProperties);
+        public ConversationDateHistogramRequest build() {
+            return new ConversationDateHistogramRequest(
+                    conversationFilter, timeInterval, groupBy, metric, additionalProperties);
         }
     }
 }

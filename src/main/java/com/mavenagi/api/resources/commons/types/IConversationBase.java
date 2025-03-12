@@ -22,4 +22,6 @@ public interface IConversationBase {
     Optional<Set<String>> getTags();
 
     Optional<Map<String, String>> getMetadata();
+
+    Map<String, Map<String, String>> getAllMetadata();
 }

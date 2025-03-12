@@ -56,6 +56,8 @@ public final class ConversationFilter {
 
     private final Optional<List<String>> tags;
 
+    private final Optional<List<ResolutionStatus>> resolutionStatus;
+
     private final Map<String, Object> additionalProperties;
 
     private ConversationFilter(
@@ -74,6 +76,7 @@ public final class ConversationFilter {
             Optional<List<ResponseLength>> responseLength,
             Optional<List<Sentiment>> sentiment,
             Optional<List<String>> tags,
+            Optional<List<ResolutionStatus>> resolutionStatus,
             Map<String, Object> additionalProperties) {
         this.search = search;
         this.createdAfter = createdAfter;
@@ -90,6 +93,7 @@ public final class ConversationFilter {
         this.responseLength = responseLength;
         this.sentiment = sentiment;
         this.tags = tags;
+        this.resolutionStatus = resolutionStatus;
         this.additionalProperties = additionalProperties;
     }
 
@@ -168,6 +172,11 @@ public final class ConversationFilter {
         return tags;
     }
 
+    @JsonProperty("resolutionStatus")
+    public Optional<List<ResolutionStatus>> getResolutionStatus() {
+        return resolutionStatus;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -194,7 +203,8 @@ public final class ConversationFilter {
                 && qualityReason.equals(other.qualityReason)
                 && responseLength.equals(other.responseLength)
                 && sentiment.equals(other.sentiment)
-                && tags.equals(other.tags);
+                && tags.equals(other.tags)
+                && resolutionStatus.equals(other.resolutionStatus);
     }
 
     @java.lang.Override
@@ -214,7 +224,8 @@ public final class ConversationFilter {
                 this.qualityReason,
                 this.responseLength,
                 this.sentiment,
-                this.tags);
+                this.tags,
+                this.resolutionStatus);
     }
 
     @java.lang.Override
@@ -258,6 +269,8 @@ public final class ConversationFilter {
 
         private Optional<List<String>> tags = Optional.empty();
 
+        private Optional<List<ResolutionStatus>> resolutionStatus = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -279,6 +292,7 @@ public final class ConversationFilter {
             responseLength(other.getResponseLength());
             sentiment(other.getSentiment());
             tags(other.getTags());
+            resolutionStatus(other.getResolutionStatus());
             return this;
         }
 
@@ -447,6 +461,17 @@ public final class ConversationFilter {
             return this;
         }
 
+        @JsonSetter(value = "resolutionStatus", nulls = Nulls.SKIP)
+        public Builder resolutionStatus(Optional<List<ResolutionStatus>> resolutionStatus) {
+            this.resolutionStatus = resolutionStatus;
+            return this;
+        }
+
+        public Builder resolutionStatus(List<ResolutionStatus> resolutionStatus) {
+            this.resolutionStatus = Optional.ofNullable(resolutionStatus);
+            return this;
+        }
+
         public ConversationFilter build() {
             return new ConversationFilter(
                     search,
@@ -464,6 +489,7 @@ public final class ConversationFilter {
                     responseLength,
                     sentiment,
                     tags,
+                    resolutionStatus,
                     additionalProperties);
         }
     }

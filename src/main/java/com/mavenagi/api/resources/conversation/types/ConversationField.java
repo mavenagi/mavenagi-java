@@ -32,6 +32,8 @@ public enum ConversationField {
 
     THUMBS_DOWN_COUNT("ThumbsDownCount"),
 
+    INSERT_COUNT("InsertCount"),
+
     TAGS("Tags"),
 
     USER_MESSAGE_COUNT("UserMessageCount"),

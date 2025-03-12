@@ -66,7 +66,8 @@ public final class ConversationTableRequest implements IConversationAnalyticsReq
     /**
      * @return Specifies the fields by which data should be grouped. Each unique combination forms a row.
      * If multiple fields are provided, the result is grouped by their unique value combinations.
-     * If empty, all data is aggregated into a single row.
+     * If empty, all data is aggregated into a single row. |
+     * Note: The field <code>CreatedAt</code> should not be used here, all time-based grouping should be done using the <code>timeGrouping</code> field.
      */
     @JsonProperty("fieldGroupings")
     public List<ConversationGroupBy> getFieldGroupings() {

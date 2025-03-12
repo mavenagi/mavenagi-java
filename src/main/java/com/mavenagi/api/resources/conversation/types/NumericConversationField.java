@@ -10,6 +10,8 @@ public enum NumericConversationField {
 
     THUMBS_DOWN_COUNT("ThumbsDownCount"),
 
+    INSERT_COUNT("InsertCount"),
+
     USER_MESSAGE_COUNT("UserMessageCount"),
 
     HANDLE_TIME("HandleTime"),

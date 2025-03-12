@@ -20,24 +20,28 @@ import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonDeserialize(builder = PieChartRequest.Builder.class)
-public final class PieChartRequest implements IConversationAnalyticsRequest {
+@JsonDeserialize(builder = ConversationBarChartRequest.Builder.class)
+public final class ConversationBarChartRequest implements IConversationAnalyticsRequest {
     private final Optional<ConversationFilter> conversationFilter;
 
-    private final ConversationGroupBy groupBy;
+    private final ConversationGroupBy barDefinition;
 
     private final ConversationMetric metric;
 
+    private final Optional<ConversationGroupBy> verticalGrouping;
+
     private final Map<String, Object> additionalProperties;
 
-    private PieChartRequest(
+    private ConversationBarChartRequest(
             Optional<ConversationFilter> conversationFilter,
-            ConversationGroupBy groupBy,
+            ConversationGroupBy barDefinition,
             ConversationMetric metric,
+            Optional<ConversationGroupBy> verticalGrouping,
             Map<String, Object> additionalProperties) {
         this.conversationFilter = conversationFilter;
-        this.groupBy = groupBy;
+        this.barDefinition = barDefinition;
         this.metric = metric;
+        this.verticalGrouping = verticalGrouping;
         this.additionalProperties = additionalProperties;
     }
 
@@ -51,25 +55,35 @@ public final class PieChartRequest implements IConversationAnalyticsRequest {
     }
 
     /**
-     * @return Field used to group data into slices for the pie chart.
+     * @return Determines how data is grouped along the x-axis. Each unique value forms a separate bar.
+     * The name of the bar is derived from the grouping field's value or range.
      */
-    @JsonProperty("groupBy")
-    public ConversationGroupBy getGroupBy() {
-        return groupBy;
+    @JsonProperty("barDefinition")
+    public ConversationGroupBy getBarDefinition() {
+        return barDefinition;
     }
 
     /**
-     * @return Metric defining the value for each pie slice, stored in the y-axis value.
+     * @return Metric defining the y-axis values for the bar chart.
      */
     @JsonProperty("metric")
     public ConversationMetric getMetric() {
         return metric;
     }
 
+    /**
+     * @return Optionally defines vertical grouping within each bar, producing multiple series.
+     * If omitted, a single series is generated.
+     */
+    @JsonProperty("verticalGrouping")
+    public Optional<ConversationGroupBy> getVerticalGrouping() {
+        return verticalGrouping;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
-        return other instanceof PieChartRequest && equalTo((PieChartRequest) other);
+        return other instanceof ConversationBarChartRequest && equalTo((ConversationBarChartRequest) other);
     }
 
     @JsonAnyGetter
@@ -77,15 +91,16 @@ public final class PieChartRequest implements IConversationAnalyticsRequest {
         return this.additionalProperties;
     }
 
-    private boolean equalTo(PieChartRequest other) {
+    private boolean equalTo(ConversationBarChartRequest other) {
         return conversationFilter.equals(other.conversationFilter)
-                && groupBy.equals(other.groupBy)
-                && metric.equals(other.metric);
+                && barDefinition.equals(other.barDefinition)
+                && metric.equals(other.metric)
+                && verticalGrouping.equals(other.verticalGrouping);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.conversationFilter, this.groupBy, this.metric);
+        return Objects.hash(this.conversationFilter, this.barDefinition, this.metric, this.verticalGrouping);
     }
 
     @java.lang.Override
@@ -93,14 +108,14 @@ public final class PieChartRequest implements IConversationAnalyticsRequest {
         return ObjectMappers.stringify(this);
     }
 
-    public static GroupByStage builder() {
+    public static BarDefinitionStage builder() {
         return new Builder();
     }
 
-    public interface GroupByStage {
-        MetricStage groupBy(@NotNull ConversationGroupBy groupBy);
+    public interface BarDefinitionStage {
+        MetricStage barDefinition(@NotNull ConversationGroupBy barDefinition);
 
-        Builder from(PieChartRequest other);
+        Builder from(ConversationBarChartRequest other);
     }
 
     public interface MetricStage {
@@ -108,18 +123,24 @@ public final class PieChartRequest implements IConversationAnalyticsRequest {
     }
 
     public interface _FinalStage {
-        PieChartRequest build();
+        ConversationBarChartRequest build();
 
         _FinalStage conversationFilter(Optional<ConversationFilter> conversationFilter);
 
         _FinalStage conversationFilter(ConversationFilter conversationFilter);
+
+        _FinalStage verticalGrouping(Optional<ConversationGroupBy> verticalGrouping);
+
+        _FinalStage verticalGrouping(ConversationGroupBy verticalGrouping);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements GroupByStage, MetricStage, _FinalStage {
-        private ConversationGroupBy groupBy;
+    public static final class Builder implements BarDefinitionStage, MetricStage, _FinalStage {
+        private ConversationGroupBy barDefinition;
 
         private ConversationMetric metric;
+
+        private Optional<ConversationGroupBy> verticalGrouping = Optional.empty();
 
         private Optional<ConversationFilter> conversationFilter = Optional.empty();
 
@@ -129,32 +150,52 @@ public final class PieChartRequest implements IConversationAnalyticsRequest {
         private Builder() {}
 
         @java.lang.Override
-        public Builder from(PieChartRequest other) {
+        public Builder from(ConversationBarChartRequest other) {
             conversationFilter(other.getConversationFilter());
-            groupBy(other.getGroupBy());
+            barDefinition(other.getBarDefinition());
             metric(other.getMetric());
+            verticalGrouping(other.getVerticalGrouping());
             return this;
         }
 
         /**
-         * <p>Field used to group data into slices for the pie chart.</p>
+         * <p>Determines how data is grouped along the x-axis. Each unique value forms a separate bar.
+         * The name of the bar is derived from the grouping field's value or range.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        @JsonSetter("groupBy")
-        public MetricStage groupBy(@NotNull ConversationGroupBy groupBy) {
-            this.groupBy = Objects.requireNonNull(groupBy, "groupBy must not be null");
+        @JsonSetter("barDefinition")
+        public MetricStage barDefinition(@NotNull ConversationGroupBy barDefinition) {
+            this.barDefinition = Objects.requireNonNull(barDefinition, "barDefinition must not be null");
             return this;
         }
 
         /**
-         * <p>Metric defining the value for each pie slice, stored in the y-axis value.</p>
+         * <p>Metric defining the y-axis values for the bar chart.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("metric")
         public _FinalStage metric(@NotNull ConversationMetric metric) {
             this.metric = Objects.requireNonNull(metric, "metric must not be null");
+            return this;
+        }
+
+        /**
+         * <p>Optionally defines vertical grouping within each bar, producing multiple series.
+         * If omitted, a single series is generated.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage verticalGrouping(ConversationGroupBy verticalGrouping) {
+            this.verticalGrouping = Optional.ofNullable(verticalGrouping);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "verticalGrouping", nulls = Nulls.SKIP)
+        public _FinalStage verticalGrouping(Optional<ConversationGroupBy> verticalGrouping) {
+            this.verticalGrouping = verticalGrouping;
             return this;
         }
 
@@ -176,8 +217,9 @@ public final class PieChartRequest implements IConversationAnalyticsRequest {
         }
 
         @java.lang.Override
-        public PieChartRequest build() {
-            return new PieChartRequest(conversationFilter, groupBy, metric, additionalProperties);
+        public ConversationBarChartRequest build() {
+            return new ConversationBarChartRequest(
+                    conversationFilter, barDefinition, metric, verticalGrouping, additionalProperties);
         }
     }
 }
