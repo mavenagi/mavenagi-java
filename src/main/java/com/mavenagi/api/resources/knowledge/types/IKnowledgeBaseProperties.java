@@ -9,9 +9,5 @@ import java.util.Optional;
 public interface IKnowledgeBaseProperties {
     String getName();
 
-    KnowledgeBaseType getType();
-
-    Optional<String> getUrl();
-
     Optional<Precondition> getPrecondition();
 }

@@ -13,10 +13,8 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.api.core.ObjectMappers;
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -24,8 +22,8 @@ import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonDeserialize(builder = ConversationResponse.Builder.class)
-public final class ConversationResponse implements IBaseConversationResponse {
+@JsonDeserialize(builder = BaseConversationResponse.Builder.class)
+public final class BaseConversationResponse implements IBaseConversationResponse {
     private final Optional<ResponseConfig> responseConfig;
 
     private final Optional<String> subject;
@@ -50,11 +48,9 @@ public final class ConversationResponse implements IBaseConversationResponse {
 
     private final boolean deleted;
 
-    private final List<ConversationMessageResponse> messages;
-
     private final Map<String, Object> additionalProperties;
 
-    private ConversationResponse(
+    private BaseConversationResponse(
             Optional<ResponseConfig> responseConfig,
             Optional<String> subject,
             Optional<String> url,
@@ -67,7 +63,6 @@ public final class ConversationResponse implements IBaseConversationResponse {
             ConversationAnalysis analysis,
             ConversationSummary summary,
             boolean deleted,
-            List<ConversationMessageResponse> messages,
             Map<String, Object> additionalProperties) {
         this.responseConfig = responseConfig;
         this.subject = subject;
@@ -81,7 +76,6 @@ public final class ConversationResponse implements IBaseConversationResponse {
         this.analysis = analysis;
         this.summary = summary;
         this.deleted = deleted;
-        this.messages = messages;
         this.additionalProperties = additionalProperties;
     }
 
@@ -193,18 +187,10 @@ public final class ConversationResponse implements IBaseConversationResponse {
         return deleted;
     }
 
-    /**
-     * @return The messages in the conversation
-     */
-    @JsonProperty("messages")
-    public List<ConversationMessageResponse> getMessages() {
-        return messages;
-    }
-
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
-        return other instanceof ConversationResponse && equalTo((ConversationResponse) other);
+        return other instanceof BaseConversationResponse && equalTo((BaseConversationResponse) other);
     }
 
     @JsonAnyGetter
@@ -212,7 +198,7 @@ public final class ConversationResponse implements IBaseConversationResponse {
         return this.additionalProperties;
     }
 
-    private boolean equalTo(ConversationResponse other) {
+    private boolean equalTo(BaseConversationResponse other) {
         return responseConfig.equals(other.responseConfig)
                 && subject.equals(other.subject)
                 && url.equals(other.url)
@@ -224,8 +210,7 @@ public final class ConversationResponse implements IBaseConversationResponse {
                 && conversationId.equals(other.conversationId)
                 && analysis.equals(other.analysis)
                 && summary.equals(other.summary)
-                && deleted == other.deleted
-                && messages.equals(other.messages);
+                && deleted == other.deleted;
     }
 
     @java.lang.Override
@@ -242,8 +227,7 @@ public final class ConversationResponse implements IBaseConversationResponse {
                 this.conversationId,
                 this.analysis,
                 this.summary,
-                this.deleted,
-                this.messages);
+                this.deleted);
     }
 
     @java.lang.Override
@@ -258,7 +242,7 @@ public final class ConversationResponse implements IBaseConversationResponse {
     public interface ConversationIdStage {
         AnalysisStage conversationId(@NotNull EntityId conversationId);
 
-        Builder from(ConversationResponse other);
+        Builder from(BaseConversationResponse other);
     }
 
     public interface AnalysisStage {
@@ -274,7 +258,7 @@ public final class ConversationResponse implements IBaseConversationResponse {
     }
 
     public interface _FinalStage {
-        ConversationResponse build();
+        BaseConversationResponse build();
 
         _FinalStage responseConfig(Optional<ResponseConfig> responseConfig);
 
@@ -309,12 +293,6 @@ public final class ConversationResponse implements IBaseConversationResponse {
         _FinalStage putAllAllMetadata(Map<String, Map<String, String>> allMetadata);
 
         _FinalStage allMetadata(String key, Map<String, String> value);
-
-        _FinalStage messages(List<ConversationMessageResponse> messages);
-
-        _FinalStage addMessages(ConversationMessageResponse messages);
-
-        _FinalStage addAllMessages(List<ConversationMessageResponse> messages);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -327,8 +305,6 @@ public final class ConversationResponse implements IBaseConversationResponse {
         private ConversationSummary summary;
 
         private boolean deleted;
-
-        private List<ConversationMessageResponse> messages = new ArrayList<>();
 
         private Map<String, Map<String, String>> allMetadata = new LinkedHashMap<>();
 
@@ -352,7 +328,7 @@ public final class ConversationResponse implements IBaseConversationResponse {
         private Builder() {}
 
         @java.lang.Override
-        public Builder from(ConversationResponse other) {
+        public Builder from(BaseConversationResponse other) {
             responseConfig(other.getResponseConfig());
             subject(other.getSubject());
             url(other.getUrl());
@@ -365,7 +341,6 @@ public final class ConversationResponse implements IBaseConversationResponse {
             analysis(other.getAnalysis());
             summary(other.getSummary());
             deleted(other.getDeleted());
-            messages(other.getMessages());
             return this;
         }
 
@@ -410,34 +385,6 @@ public final class ConversationResponse implements IBaseConversationResponse {
         @JsonSetter("deleted")
         public _FinalStage deleted(boolean deleted) {
             this.deleted = deleted;
-            return this;
-        }
-
-        /**
-         * <p>The messages in the conversation</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage addAllMessages(List<ConversationMessageResponse> messages) {
-            this.messages.addAll(messages);
-            return this;
-        }
-
-        /**
-         * <p>The messages in the conversation</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage addMessages(ConversationMessageResponse messages) {
-            this.messages.add(messages);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "messages", nulls = Nulls.SKIP)
-        public _FinalStage messages(List<ConversationMessageResponse> messages) {
-            this.messages.clear();
-            this.messages.addAll(messages);
             return this;
         }
 
@@ -589,8 +536,8 @@ public final class ConversationResponse implements IBaseConversationResponse {
         }
 
         @java.lang.Override
-        public ConversationResponse build() {
-            return new ConversationResponse(
+        public BaseConversationResponse build() {
+            return new BaseConversationResponse(
                     responseConfig,
                     subject,
                     url,
@@ -603,7 +550,6 @@ public final class ConversationResponse implements IBaseConversationResponse {
                     analysis,
                     summary,
                     deleted,
-                    messages,
                     additionalProperties);
         }
     }

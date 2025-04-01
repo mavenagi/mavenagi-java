@@ -39,6 +39,8 @@ public final class ActionRequest implements IActionBase {
 
     private final List<ActionParameter> userFormParameters;
 
+    private final Optional<String> language;
+
     private final EntityIdBase actionId;
 
     private final Map<String, Object> additionalProperties;
@@ -50,6 +52,7 @@ public final class ActionRequest implements IActionBase {
             Optional<String> buttonName,
             Optional<Precondition> precondition,
             List<ActionParameter> userFormParameters,
+            Optional<String> language,
             EntityIdBase actionId,
             Map<String, Object> additionalProperties) {
         this.name = name;
@@ -58,6 +61,7 @@ public final class ActionRequest implements IActionBase {
         this.buttonName = buttonName;
         this.precondition = precondition;
         this.userFormParameters = userFormParameters;
+        this.language = language;
         this.actionId = actionId;
         this.additionalProperties = additionalProperties;
     }
@@ -90,7 +94,7 @@ public final class ActionRequest implements IActionBase {
     }
 
     /**
-     * @return When user interaction is required, the name of the button that is shown to the end user to confirm execution of the action
+     * @return When user interaction is required, the name of the button that is shown to the end user to confirm execution of the action. Defaults to &quot;Submit&quot; if not supplied.
      */
     @JsonProperty("buttonName")
     @java.lang.Override
@@ -114,6 +118,15 @@ public final class ActionRequest implements IActionBase {
     @java.lang.Override
     public List<ActionParameter> getUserFormParameters() {
         return userFormParameters;
+    }
+
+    /**
+     * @return The ISO 639-1 code for the language used in all fields of this action. Will be derived using the description's text if not specified.
+     */
+    @JsonProperty("language")
+    @java.lang.Override
+    public Optional<String> getLanguage() {
+        return language;
     }
 
     /**
@@ -142,6 +155,7 @@ public final class ActionRequest implements IActionBase {
                 && buttonName.equals(other.buttonName)
                 && precondition.equals(other.precondition)
                 && userFormParameters.equals(other.userFormParameters)
+                && language.equals(other.language)
                 && actionId.equals(other.actionId);
     }
 
@@ -154,6 +168,7 @@ public final class ActionRequest implements IActionBase {
                 this.buttonName,
                 this.precondition,
                 this.userFormParameters,
+                this.language,
                 this.actionId);
     }
 
@@ -200,6 +215,10 @@ public final class ActionRequest implements IActionBase {
         _FinalStage addUserFormParameters(ActionParameter userFormParameters);
 
         _FinalStage addAllUserFormParameters(List<ActionParameter> userFormParameters);
+
+        _FinalStage language(Optional<String> language);
+
+        _FinalStage language(String language);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -212,6 +231,8 @@ public final class ActionRequest implements IActionBase {
         private boolean userInteractionRequired;
 
         private EntityIdBase actionId;
+
+        private Optional<String> language = Optional.empty();
 
         private List<ActionParameter> userFormParameters = new ArrayList<>();
 
@@ -232,6 +253,7 @@ public final class ActionRequest implements IActionBase {
             buttonName(other.getButtonName());
             precondition(other.getPrecondition());
             userFormParameters(other.getUserFormParameters());
+            language(other.getLanguage());
             actionId(other.getActionId());
             return this;
         }
@@ -281,6 +303,23 @@ public final class ActionRequest implements IActionBase {
         }
 
         /**
+         * <p>The ISO 639-1 code for the language used in all fields of this action. Will be derived using the description's text if not specified.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage language(String language) {
+            this.language = Optional.ofNullable(language);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "language", nulls = Nulls.SKIP)
+        public _FinalStage language(Optional<String> language) {
+            this.language = language;
+            return this;
+        }
+
+        /**
          * <p>The parameters that the action uses as input. An action will only be executed when all of the required parameters are provided. During execution, actions all have access to the full Conversation and User objects. Parameter values may be inferred from the user's conversation by the LLM.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -326,7 +365,7 @@ public final class ActionRequest implements IActionBase {
         }
 
         /**
-         * <p>When user interaction is required, the name of the button that is shown to the end user to confirm execution of the action</p>
+         * <p>When user interaction is required, the name of the button that is shown to the end user to confirm execution of the action. Defaults to &quot;Submit&quot; if not supplied.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -351,6 +390,7 @@ public final class ActionRequest implements IActionBase {
                     buttonName,
                     precondition,
                     userFormParameters,
+                    language,
                     actionId,
                     additionalProperties);
         }

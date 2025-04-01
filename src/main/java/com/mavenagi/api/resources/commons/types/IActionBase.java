@@ -18,4 +18,6 @@ public interface IActionBase {
     Optional<Precondition> getPrecondition();
 
     List<ActionParameter> getUserFormParameters();
+
+    Optional<String> getLanguage();
 }

@@ -25,10 +25,6 @@ import org.jetbrains.annotations.NotNull;
 public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
     private final String name;
 
-    private final KnowledgeBaseType type;
-
-    private final Optional<String> url;
-
     private final Optional<Precondition> precondition;
 
     private final EntityId knowledgeBaseId;
@@ -37,14 +33,10 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
 
     private KnowledgeBaseResponse(
             String name,
-            KnowledgeBaseType type,
-            Optional<String> url,
             Optional<Precondition> precondition,
             EntityId knowledgeBaseId,
             Map<String, Object> additionalProperties) {
         this.name = name;
-        this.type = type;
-        this.url = url;
         this.precondition = precondition;
         this.knowledgeBaseId = knowledgeBaseId;
         this.additionalProperties = additionalProperties;
@@ -57,24 +49,6 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
     @java.lang.Override
     public String getName() {
         return name;
-    }
-
-    /**
-     * @return The type of the knowledge base. Can not be changed once created.
-     */
-    @JsonProperty("type")
-    @java.lang.Override
-    public KnowledgeBaseType getType() {
-        return type;
-    }
-
-    /**
-     * @return The URL to pull content from for RSS and URL knowledge bases.
-     */
-    @JsonProperty("url")
-    @java.lang.Override
-    public Optional<String> getUrl() {
-        return url;
     }
 
     /**
@@ -107,15 +81,13 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
 
     private boolean equalTo(KnowledgeBaseResponse other) {
         return name.equals(other.name)
-                && type.equals(other.type)
-                && url.equals(other.url)
                 && precondition.equals(other.precondition)
                 && knowledgeBaseId.equals(other.knowledgeBaseId);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.name, this.type, this.url, this.precondition, this.knowledgeBaseId);
+        return Objects.hash(this.name, this.precondition, this.knowledgeBaseId);
     }
 
     @java.lang.Override
@@ -128,13 +100,9 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
     }
 
     public interface NameStage {
-        TypeStage name(@NotNull String name);
+        KnowledgeBaseIdStage name(@NotNull String name);
 
         Builder from(KnowledgeBaseResponse other);
-    }
-
-    public interface TypeStage {
-        KnowledgeBaseIdStage type(@NotNull KnowledgeBaseType type);
     }
 
     public interface KnowledgeBaseIdStage {
@@ -144,26 +112,18 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
     public interface _FinalStage {
         KnowledgeBaseResponse build();
 
-        _FinalStage url(Optional<String> url);
-
-        _FinalStage url(String url);
-
         _FinalStage precondition(Optional<Precondition> precondition);
 
         _FinalStage precondition(Precondition precondition);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements NameStage, TypeStage, KnowledgeBaseIdStage, _FinalStage {
+    public static final class Builder implements NameStage, KnowledgeBaseIdStage, _FinalStage {
         private String name;
-
-        private KnowledgeBaseType type;
 
         private EntityId knowledgeBaseId;
 
         private Optional<Precondition> precondition = Optional.empty();
-
-        private Optional<String> url = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -173,8 +133,6 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
         @java.lang.Override
         public Builder from(KnowledgeBaseResponse other) {
             name(other.getName());
-            type(other.getType());
-            url(other.getUrl());
             precondition(other.getPrecondition());
             knowledgeBaseId(other.getKnowledgeBaseId());
             return this;
@@ -186,19 +144,8 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
          */
         @java.lang.Override
         @JsonSetter("name")
-        public TypeStage name(@NotNull String name) {
+        public KnowledgeBaseIdStage name(@NotNull String name) {
             this.name = Objects.requireNonNull(name, "name must not be null");
-            return this;
-        }
-
-        /**
-         * <p>The type of the knowledge base. Can not be changed once created.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("type")
-        public KnowledgeBaseIdStage type(@NotNull KnowledgeBaseType type) {
-            this.type = Objects.requireNonNull(type, "type must not be null");
             return this;
         }
 
@@ -230,26 +177,9 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
             return this;
         }
 
-        /**
-         * <p>The URL to pull content from for RSS and URL knowledge bases.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage url(String url) {
-            this.url = Optional.ofNullable(url);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "url", nulls = Nulls.SKIP)
-        public _FinalStage url(Optional<String> url) {
-            this.url = url;
-            return this;
-        }
-
         @java.lang.Override
         public KnowledgeBaseResponse build() {
-            return new KnowledgeBaseResponse(name, type, url, precondition, knowledgeBaseId, additionalProperties);
+            return new KnowledgeBaseResponse(name, precondition, knowledgeBaseId, additionalProperties);
         }
     }
 }

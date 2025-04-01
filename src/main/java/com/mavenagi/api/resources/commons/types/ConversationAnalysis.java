@@ -30,6 +30,8 @@ public final class ConversationAnalysis {
 
     private final Optional<Sentiment> sentiment;
 
+    private final Optional<Boolean> resolvedByMaven;
+
     private final Map<String, Object> additionalProperties;
 
     private ConversationAnalysis(
@@ -38,12 +40,14 @@ public final class ConversationAnalysis {
             Optional<String> resolutionStatus,
             Optional<String> category,
             Optional<Sentiment> sentiment,
+            Optional<Boolean> resolvedByMaven,
             Map<String, Object> additionalProperties) {
         this.userRequest = userRequest;
         this.agentResponse = agentResponse;
         this.resolutionStatus = resolutionStatus;
         this.category = category;
         this.sentiment = sentiment;
+        this.resolvedByMaven = resolvedByMaven;
         this.additionalProperties = additionalProperties;
     }
 
@@ -87,6 +91,14 @@ public final class ConversationAnalysis {
         return sentiment;
     }
 
+    /**
+     * @return Whether the conversation was resolved by Maven
+     */
+    @JsonProperty("resolvedByMaven")
+    public Optional<Boolean> getResolvedByMaven() {
+        return resolvedByMaven;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -103,12 +115,19 @@ public final class ConversationAnalysis {
                 && agentResponse.equals(other.agentResponse)
                 && resolutionStatus.equals(other.resolutionStatus)
                 && category.equals(other.category)
-                && sentiment.equals(other.sentiment);
+                && sentiment.equals(other.sentiment)
+                && resolvedByMaven.equals(other.resolvedByMaven);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.userRequest, this.agentResponse, this.resolutionStatus, this.category, this.sentiment);
+        return Objects.hash(
+                this.userRequest,
+                this.agentResponse,
+                this.resolutionStatus,
+                this.category,
+                this.sentiment,
+                this.resolvedByMaven);
     }
 
     @java.lang.Override
@@ -132,6 +151,8 @@ public final class ConversationAnalysis {
 
         private Optional<Sentiment> sentiment = Optional.empty();
 
+        private Optional<Boolean> resolvedByMaven = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -143,6 +164,7 @@ public final class ConversationAnalysis {
             resolutionStatus(other.getResolutionStatus());
             category(other.getCategory());
             sentiment(other.getSentiment());
+            resolvedByMaven(other.getResolvedByMaven());
             return this;
         }
 
@@ -201,9 +223,26 @@ public final class ConversationAnalysis {
             return this;
         }
 
+        @JsonSetter(value = "resolvedByMaven", nulls = Nulls.SKIP)
+        public Builder resolvedByMaven(Optional<Boolean> resolvedByMaven) {
+            this.resolvedByMaven = resolvedByMaven;
+            return this;
+        }
+
+        public Builder resolvedByMaven(Boolean resolvedByMaven) {
+            this.resolvedByMaven = Optional.ofNullable(resolvedByMaven);
+            return this;
+        }
+
         public ConversationAnalysis build() {
             return new ConversationAnalysis(
-                    userRequest, agentResponse, resolutionStatus, category, sentiment, additionalProperties);
+                    userRequest,
+                    agentResponse,
+                    resolutionStatus,
+                    category,
+                    sentiment,
+                    resolvedByMaven,
+                    additionalProperties);
         }
     }
 }

@@ -36,6 +36,8 @@ public final class BotMessage implements IConversationMessageBase {
 
     private final BotResponseMetadata metadata;
 
+    private final BotMessageStatus status;
+
     private final Map<String, Object> additionalProperties;
 
     private BotMessage(
@@ -45,6 +47,7 @@ public final class BotMessage implements IConversationMessageBase {
             BotConversationMessageType botMessageType,
             List<BotResponse> responses,
             BotResponseMetadata metadata,
+            BotMessageStatus status,
             Map<String, Object> additionalProperties) {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -52,6 +55,7 @@ public final class BotMessage implements IConversationMessageBase {
         this.botMessageType = botMessageType;
         this.responses = responses;
         this.metadata = metadata;
+        this.status = status;
         this.additionalProperties = additionalProperties;
     }
 
@@ -96,6 +100,11 @@ public final class BotMessage implements IConversationMessageBase {
         return metadata;
     }
 
+    @JsonProperty("status")
+    public BotMessageStatus getStatus() {
+        return status;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -113,7 +122,8 @@ public final class BotMessage implements IConversationMessageBase {
                 && conversationMessageId.equals(other.conversationMessageId)
                 && botMessageType.equals(other.botMessageType)
                 && responses.equals(other.responses)
-                && metadata.equals(other.metadata);
+                && metadata.equals(other.metadata)
+                && status.equals(other.status);
     }
 
     @java.lang.Override
@@ -124,7 +134,8 @@ public final class BotMessage implements IConversationMessageBase {
                 this.conversationMessageId,
                 this.botMessageType,
                 this.responses,
-                this.metadata);
+                this.metadata,
+                this.status);
     }
 
     @java.lang.Override
@@ -147,7 +158,11 @@ public final class BotMessage implements IConversationMessageBase {
     }
 
     public interface MetadataStage {
-        _FinalStage metadata(@NotNull BotResponseMetadata metadata);
+        StatusStage metadata(@NotNull BotResponseMetadata metadata);
+    }
+
+    public interface StatusStage {
+        _FinalStage status(@NotNull BotMessageStatus status);
     }
 
     public interface _FinalStage {
@@ -170,12 +185,14 @@ public final class BotMessage implements IConversationMessageBase {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
-            implements ConversationMessageIdStage, BotMessageTypeStage, MetadataStage, _FinalStage {
+            implements ConversationMessageIdStage, BotMessageTypeStage, MetadataStage, StatusStage, _FinalStage {
         private EntityId conversationMessageId;
 
         private BotConversationMessageType botMessageType;
 
         private BotResponseMetadata metadata;
+
+        private BotMessageStatus status;
 
         private List<BotResponse> responses = new ArrayList<>();
 
@@ -196,6 +213,7 @@ public final class BotMessage implements IConversationMessageBase {
             botMessageType(other.getBotMessageType());
             responses(other.getResponses());
             metadata(other.getMetadata());
+            status(other.getStatus());
             return this;
         }
 
@@ -220,8 +238,15 @@ public final class BotMessage implements IConversationMessageBase {
 
         @java.lang.Override
         @JsonSetter("metadata")
-        public _FinalStage metadata(@NotNull BotResponseMetadata metadata) {
+        public StatusStage metadata(@NotNull BotResponseMetadata metadata) {
             this.metadata = Objects.requireNonNull(metadata, "metadata must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("status")
+        public _FinalStage status(@NotNull BotMessageStatus status) {
+            this.status = Objects.requireNonNull(status, "status must not be null");
             return this;
         }
 
@@ -288,6 +313,7 @@ public final class BotMessage implements IConversationMessageBase {
                     botMessageType,
                     responses,
                     metadata,
+                    status,
                     additionalProperties);
         }
     }

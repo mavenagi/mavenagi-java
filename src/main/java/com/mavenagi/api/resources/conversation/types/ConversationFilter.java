@@ -58,6 +58,8 @@ public final class ConversationFilter {
 
     private final Optional<List<ResolutionStatus>> resolutionStatus;
 
+    private final Optional<Boolean> resolvedByMaven;
+
     private final Map<String, Object> additionalProperties;
 
     private ConversationFilter(
@@ -77,6 +79,7 @@ public final class ConversationFilter {
             Optional<List<Sentiment>> sentiment,
             Optional<List<String>> tags,
             Optional<List<ResolutionStatus>> resolutionStatus,
+            Optional<Boolean> resolvedByMaven,
             Map<String, Object> additionalProperties) {
         this.search = search;
         this.createdAfter = createdAfter;
@@ -94,6 +97,7 @@ public final class ConversationFilter {
         this.sentiment = sentiment;
         this.tags = tags;
         this.resolutionStatus = resolutionStatus;
+        this.resolvedByMaven = resolvedByMaven;
         this.additionalProperties = additionalProperties;
     }
 
@@ -177,6 +181,11 @@ public final class ConversationFilter {
         return resolutionStatus;
     }
 
+    @JsonProperty("resolvedByMaven")
+    public Optional<Boolean> getResolvedByMaven() {
+        return resolvedByMaven;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -204,7 +213,8 @@ public final class ConversationFilter {
                 && responseLength.equals(other.responseLength)
                 && sentiment.equals(other.sentiment)
                 && tags.equals(other.tags)
-                && resolutionStatus.equals(other.resolutionStatus);
+                && resolutionStatus.equals(other.resolutionStatus)
+                && resolvedByMaven.equals(other.resolvedByMaven);
     }
 
     @java.lang.Override
@@ -225,7 +235,8 @@ public final class ConversationFilter {
                 this.responseLength,
                 this.sentiment,
                 this.tags,
-                this.resolutionStatus);
+                this.resolutionStatus,
+                this.resolvedByMaven);
     }
 
     @java.lang.Override
@@ -271,6 +282,8 @@ public final class ConversationFilter {
 
         private Optional<List<ResolutionStatus>> resolutionStatus = Optional.empty();
 
+        private Optional<Boolean> resolvedByMaven = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -293,6 +306,7 @@ public final class ConversationFilter {
             sentiment(other.getSentiment());
             tags(other.getTags());
             resolutionStatus(other.getResolutionStatus());
+            resolvedByMaven(other.getResolvedByMaven());
             return this;
         }
 
@@ -472,6 +486,17 @@ public final class ConversationFilter {
             return this;
         }
 
+        @JsonSetter(value = "resolvedByMaven", nulls = Nulls.SKIP)
+        public Builder resolvedByMaven(Optional<Boolean> resolvedByMaven) {
+            this.resolvedByMaven = resolvedByMaven;
+            return this;
+        }
+
+        public Builder resolvedByMaven(Boolean resolvedByMaven) {
+            this.resolvedByMaven = Optional.ofNullable(resolvedByMaven);
+            return this;
+        }
+
         public ConversationFilter build() {
             return new ConversationFilter(
                     search,
@@ -490,6 +515,7 @@ public final class ConversationFilter {
                     sentiment,
                     tags,
                     resolutionStatus,
+                    resolvedByMaven,
                     additionalProperties);
         }
     }

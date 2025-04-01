@@ -26,6 +26,8 @@ import com.mavenagi.api.resources.conversation.types.CategorizationResponse;
 import com.mavenagi.api.resources.conversation.types.ConversationMessageRequest;
 import com.mavenagi.api.resources.conversation.types.ConversationMetadata;
 import com.mavenagi.api.resources.conversation.types.ConversationRequest;
+import com.mavenagi.api.resources.conversation.types.ConversationsResponse;
+import com.mavenagi.api.resources.conversation.types.ConversationsSearchRequest;
 import com.mavenagi.api.resources.conversation.types.FeedbackRequest;
 import com.mavenagi.api.resources.conversation.types.GenerateMavenSuggestionsRequest;
 import com.mavenagi.api.resources.conversation.types.StreamResponse;
@@ -852,6 +854,76 @@ public class ConversationClient {
             ResponseBody responseBody = response.body();
             if (response.isSuccessful()) {
                 return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), ConversationMetadata.class);
+            }
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            try {
+                switch (response.code()) {
+                    case 400:
+                        throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class));
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class));
+                    case 500:
+                        throw new ServerError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class));
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            throw new MavenAGIApiException(
+                    "Error with status code " + response.code(),
+                    response.code(),
+                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
+        } catch (IOException e) {
+            throw new MavenAGIException("Network error executing HTTP request", e);
+        }
+    }
+
+    /**
+     * Search conversations
+     */
+    public ConversationsResponse search() {
+        return search(ConversationsSearchRequest.builder().build());
+    }
+
+    /**
+     * Search conversations
+     */
+    public ConversationsResponse search(ConversationsSearchRequest request) {
+        return search(request, null);
+    }
+
+    /**
+     * Search conversations
+     */
+    public ConversationsResponse search(ConversationsSearchRequest request, RequestOptions requestOptions) {
+        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("v1/conversations")
+                .addPathSegments("search")
+                .build();
+        RequestBody body;
+        try {
+            body = RequestBody.create(
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
+        } catch (JsonProcessingException e) {
+            throw new MavenAGIException("Failed to serialize request", e);
+        }
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl)
+                .method("POST", body)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
+                .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            if (response.isSuccessful()) {
+                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), ConversationsResponse.class);
             }
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {

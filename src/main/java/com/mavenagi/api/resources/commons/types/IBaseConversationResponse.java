@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-public interface IConversationBase {
+public interface IBaseConversationResponse {
     Optional<ResponseConfig> getResponseConfig();
 
     Optional<String> getSubject();
@@ -24,4 +24,12 @@ public interface IConversationBase {
     Optional<Map<String, String>> getMetadata();
 
     Map<String, Map<String, String>> getAllMetadata();
+
+    EntityId getConversationId();
+
+    ConversationAnalysis getAnalysis();
+
+    ConversationSummary getSummary();
+
+    boolean getDeleted();
 }

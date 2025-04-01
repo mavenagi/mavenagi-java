@@ -13,12 +13,10 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.api.core.ObjectMappers;
 import com.mavenagi.api.resources.commons.types.EntityIdBase;
-import com.mavenagi.api.resources.commons.types.IConversationBase;
 import com.mavenagi.api.resources.commons.types.ResponseConfig;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -28,7 +26,9 @@ import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ConversationRequest.Builder.class)
-public final class ConversationRequest implements IConversationBase {
+public final class ConversationRequest {
+    private final EntityIdBase conversationId;
+
     private final Optional<ResponseConfig> responseConfig;
 
     private final Optional<String> subject;
@@ -43,15 +43,12 @@ public final class ConversationRequest implements IConversationBase {
 
     private final Optional<Map<String, String>> metadata;
 
-    private final Map<String, Map<String, String>> allMetadata;
-
-    private final EntityIdBase conversationId;
-
     private final List<ConversationMessageRequest> messages;
 
     private final Map<String, Object> additionalProperties;
 
     private ConversationRequest(
+            EntityIdBase conversationId,
             Optional<ResponseConfig> responseConfig,
             Optional<String> subject,
             Optional<String> url,
@@ -59,10 +56,9 @@ public final class ConversationRequest implements IConversationBase {
             Optional<OffsetDateTime> updatedAt,
             Optional<Set<String>> tags,
             Optional<Map<String, String>> metadata,
-            Map<String, Map<String, String>> allMetadata,
-            EntityIdBase conversationId,
             List<ConversationMessageRequest> messages,
             Map<String, Object> additionalProperties) {
+        this.conversationId = conversationId;
         this.responseConfig = responseConfig;
         this.subject = subject;
         this.url = url;
@@ -70,82 +66,8 @@ public final class ConversationRequest implements IConversationBase {
         this.updatedAt = updatedAt;
         this.tags = tags;
         this.metadata = metadata;
-        this.allMetadata = allMetadata;
-        this.conversationId = conversationId;
         this.messages = messages;
         this.additionalProperties = additionalProperties;
-    }
-
-    /**
-     * @return Optional configurations for responses to this conversation
-     */
-    @JsonProperty("responseConfig")
-    @java.lang.Override
-    public Optional<ResponseConfig> getResponseConfig() {
-        return responseConfig;
-    }
-
-    /**
-     * @return The subject of the conversation
-     */
-    @JsonProperty("subject")
-    @java.lang.Override
-    public Optional<String> getSubject() {
-        return subject;
-    }
-
-    /**
-     * @return The url of the conversation
-     */
-    @JsonProperty("url")
-    @java.lang.Override
-    public Optional<String> getUrl() {
-        return url;
-    }
-
-    /**
-     * @return The date and time the conversation was created
-     */
-    @JsonProperty("createdAt")
-    @java.lang.Override
-    public Optional<OffsetDateTime> getCreatedAt() {
-        return createdAt;
-    }
-
-    /**
-     * @return The date and time the conversation was last updated
-     */
-    @JsonProperty("updatedAt")
-    @java.lang.Override
-    public Optional<OffsetDateTime> getUpdatedAt() {
-        return updatedAt;
-    }
-
-    /**
-     * @return The tags of the conversation. Used for filtering in Agent Designer.
-     */
-    @JsonProperty("tags")
-    @java.lang.Override
-    public Optional<Set<String>> getTags() {
-        return tags;
-    }
-
-    /**
-     * @return The metadata of the conversation supplied by the app which created the conversation.
-     */
-    @JsonProperty("metadata")
-    @java.lang.Override
-    public Optional<Map<String, String>> getMetadata() {
-        return metadata;
-    }
-
-    /**
-     * @return All metadata for the conversation. Keyed by appId.
-     */
-    @JsonProperty("allMetadata")
-    @java.lang.Override
-    public Map<String, Map<String, String>> getAllMetadata() {
-        return allMetadata;
     }
 
     /**
@@ -154,6 +76,62 @@ public final class ConversationRequest implements IConversationBase {
     @JsonProperty("conversationId")
     public EntityIdBase getConversationId() {
         return conversationId;
+    }
+
+    /**
+     * @return Optional configurations for responses to this conversation
+     */
+    @JsonProperty("responseConfig")
+    public Optional<ResponseConfig> getResponseConfig() {
+        return responseConfig;
+    }
+
+    /**
+     * @return The subject of the conversation
+     */
+    @JsonProperty("subject")
+    public Optional<String> getSubject() {
+        return subject;
+    }
+
+    /**
+     * @return The url of the conversation
+     */
+    @JsonProperty("url")
+    public Optional<String> getUrl() {
+        return url;
+    }
+
+    /**
+     * @return The date and time the conversation was created
+     */
+    @JsonProperty("createdAt")
+    public Optional<OffsetDateTime> getCreatedAt() {
+        return createdAt;
+    }
+
+    /**
+     * @return The date and time the conversation was last updated
+     */
+    @JsonProperty("updatedAt")
+    public Optional<OffsetDateTime> getUpdatedAt() {
+        return updatedAt;
+    }
+
+    /**
+     * @return The tags of the conversation. Used for filtering in Agent Designer.
+     */
+    @JsonProperty("tags")
+    public Optional<Set<String>> getTags() {
+        return tags;
+    }
+
+    /**
+     * @return The metadata of the conversation supplied by the app which created the conversation.
+     */
+    @JsonProperty("metadata")
+    public Optional<Map<String, String>> getMetadata() {
+        return metadata;
     }
 
     /**
@@ -176,21 +154,21 @@ public final class ConversationRequest implements IConversationBase {
     }
 
     private boolean equalTo(ConversationRequest other) {
-        return responseConfig.equals(other.responseConfig)
+        return conversationId.equals(other.conversationId)
+                && responseConfig.equals(other.responseConfig)
                 && subject.equals(other.subject)
                 && url.equals(other.url)
                 && createdAt.equals(other.createdAt)
                 && updatedAt.equals(other.updatedAt)
                 && tags.equals(other.tags)
                 && metadata.equals(other.metadata)
-                && allMetadata.equals(other.allMetadata)
-                && conversationId.equals(other.conversationId)
                 && messages.equals(other.messages);
     }
 
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
+                this.conversationId,
                 this.responseConfig,
                 this.subject,
                 this.url,
@@ -198,8 +176,6 @@ public final class ConversationRequest implements IConversationBase {
                 this.updatedAt,
                 this.tags,
                 this.metadata,
-                this.allMetadata,
-                this.conversationId,
                 this.messages);
     }
 
@@ -249,12 +225,6 @@ public final class ConversationRequest implements IConversationBase {
 
         _FinalStage metadata(Map<String, String> metadata);
 
-        _FinalStage allMetadata(Map<String, Map<String, String>> allMetadata);
-
-        _FinalStage putAllAllMetadata(Map<String, Map<String, String>> allMetadata);
-
-        _FinalStage allMetadata(String key, Map<String, String> value);
-
         _FinalStage messages(List<ConversationMessageRequest> messages);
 
         _FinalStage addMessages(ConversationMessageRequest messages);
@@ -267,8 +237,6 @@ public final class ConversationRequest implements IConversationBase {
         private EntityIdBase conversationId;
 
         private List<ConversationMessageRequest> messages = new ArrayList<>();
-
-        private Map<String, Map<String, String>> allMetadata = new LinkedHashMap<>();
 
         private Optional<Map<String, String>> metadata = Optional.empty();
 
@@ -291,6 +259,7 @@ public final class ConversationRequest implements IConversationBase {
 
         @java.lang.Override
         public Builder from(ConversationRequest other) {
+            conversationId(other.getConversationId());
             responseConfig(other.getResponseConfig());
             subject(other.getSubject());
             url(other.getUrl());
@@ -298,8 +267,6 @@ public final class ConversationRequest implements IConversationBase {
             updatedAt(other.getUpdatedAt());
             tags(other.getTags());
             metadata(other.getMetadata());
-            allMetadata(other.getAllMetadata());
-            conversationId(other.getConversationId());
             messages(other.getMessages());
             return this;
         }
@@ -340,34 +307,6 @@ public final class ConversationRequest implements IConversationBase {
         public _FinalStage messages(List<ConversationMessageRequest> messages) {
             this.messages.clear();
             this.messages.addAll(messages);
-            return this;
-        }
-
-        /**
-         * <p>All metadata for the conversation. Keyed by appId.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage allMetadata(String key, Map<String, String> value) {
-            this.allMetadata.put(key, value);
-            return this;
-        }
-
-        /**
-         * <p>All metadata for the conversation. Keyed by appId.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage putAllAllMetadata(Map<String, Map<String, String>> allMetadata) {
-            this.allMetadata.putAll(allMetadata);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "allMetadata", nulls = Nulls.SKIP)
-        public _FinalStage allMetadata(Map<String, Map<String, String>> allMetadata) {
-            this.allMetadata.clear();
-            this.allMetadata.putAll(allMetadata);
             return this;
         }
 
@@ -493,6 +432,7 @@ public final class ConversationRequest implements IConversationBase {
         @java.lang.Override
         public ConversationRequest build() {
             return new ConversationRequest(
+                    conversationId,
                     responseConfig,
                     subject,
                     url,
@@ -500,8 +440,6 @@ public final class ConversationRequest implements IConversationBase {
                     updatedAt,
                     tags,
                     metadata,
-                    allMetadata,
-                    conversationId,
                     messages,
                     additionalProperties);
         }

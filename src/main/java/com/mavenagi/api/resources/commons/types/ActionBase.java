@@ -35,6 +35,8 @@ public final class ActionBase implements IActionBase {
 
     private final List<ActionParameter> userFormParameters;
 
+    private final Optional<String> language;
+
     private final Map<String, Object> additionalProperties;
 
     private ActionBase(
@@ -44,6 +46,7 @@ public final class ActionBase implements IActionBase {
             Optional<String> buttonName,
             Optional<Precondition> precondition,
             List<ActionParameter> userFormParameters,
+            Optional<String> language,
             Map<String, Object> additionalProperties) {
         this.name = name;
         this.description = description;
@@ -51,6 +54,7 @@ public final class ActionBase implements IActionBase {
         this.buttonName = buttonName;
         this.precondition = precondition;
         this.userFormParameters = userFormParameters;
+        this.language = language;
         this.additionalProperties = additionalProperties;
     }
 
@@ -82,7 +86,7 @@ public final class ActionBase implements IActionBase {
     }
 
     /**
-     * @return When user interaction is required, the name of the button that is shown to the end user to confirm execution of the action
+     * @return When user interaction is required, the name of the button that is shown to the end user to confirm execution of the action. Defaults to &quot;Submit&quot; if not supplied.
      */
     @JsonProperty("buttonName")
     @java.lang.Override
@@ -108,6 +112,15 @@ public final class ActionBase implements IActionBase {
         return userFormParameters;
     }
 
+    /**
+     * @return The ISO 639-1 code for the language used in all fields of this action. Will be derived using the description's text if not specified.
+     */
+    @JsonProperty("language")
+    @java.lang.Override
+    public Optional<String> getLanguage() {
+        return language;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -125,7 +138,8 @@ public final class ActionBase implements IActionBase {
                 && userInteractionRequired == other.userInteractionRequired
                 && buttonName.equals(other.buttonName)
                 && precondition.equals(other.precondition)
-                && userFormParameters.equals(other.userFormParameters);
+                && userFormParameters.equals(other.userFormParameters)
+                && language.equals(other.language);
     }
 
     @java.lang.Override
@@ -136,7 +150,8 @@ public final class ActionBase implements IActionBase {
                 this.userInteractionRequired,
                 this.buttonName,
                 this.precondition,
-                this.userFormParameters);
+                this.userFormParameters,
+                this.language);
     }
 
     @java.lang.Override
@@ -178,6 +193,10 @@ public final class ActionBase implements IActionBase {
         _FinalStage addUserFormParameters(ActionParameter userFormParameters);
 
         _FinalStage addAllUserFormParameters(List<ActionParameter> userFormParameters);
+
+        _FinalStage language(Optional<String> language);
+
+        _FinalStage language(String language);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -188,6 +207,8 @@ public final class ActionBase implements IActionBase {
         private String description;
 
         private boolean userInteractionRequired;
+
+        private Optional<String> language = Optional.empty();
 
         private List<ActionParameter> userFormParameters = new ArrayList<>();
 
@@ -208,6 +229,7 @@ public final class ActionBase implements IActionBase {
             buttonName(other.getButtonName());
             precondition(other.getPrecondition());
             userFormParameters(other.getUserFormParameters());
+            language(other.getLanguage());
             return this;
         }
 
@@ -241,6 +263,23 @@ public final class ActionBase implements IActionBase {
         @JsonSetter("userInteractionRequired")
         public _FinalStage userInteractionRequired(boolean userInteractionRequired) {
             this.userInteractionRequired = userInteractionRequired;
+            return this;
+        }
+
+        /**
+         * <p>The ISO 639-1 code for the language used in all fields of this action. Will be derived using the description's text if not specified.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage language(String language) {
+            this.language = Optional.ofNullable(language);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "language", nulls = Nulls.SKIP)
+        public _FinalStage language(Optional<String> language) {
+            this.language = language;
             return this;
         }
 
@@ -290,7 +329,7 @@ public final class ActionBase implements IActionBase {
         }
 
         /**
-         * <p>When user interaction is required, the name of the button that is shown to the end user to confirm execution of the action</p>
+         * <p>When user interaction is required, the name of the button that is shown to the end user to confirm execution of the action. Defaults to &quot;Submit&quot; if not supplied.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -315,6 +354,7 @@ public final class ActionBase implements IActionBase {
                     buttonName,
                     precondition,
                     userFormParameters,
+                    language,
                     additionalProperties);
         }
     }
