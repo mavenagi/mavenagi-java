@@ -29,16 +29,20 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
 
     private final EntityId knowledgeBaseId;
 
+    private final KnowledgeBaseType type;
+
     private final Map<String, Object> additionalProperties;
 
     private KnowledgeBaseResponse(
             String name,
             Optional<Precondition> precondition,
             EntityId knowledgeBaseId,
+            KnowledgeBaseType type,
             Map<String, Object> additionalProperties) {
         this.name = name;
         this.precondition = precondition;
         this.knowledgeBaseId = knowledgeBaseId;
+        this.type = type;
         this.additionalProperties = additionalProperties;
     }
 
@@ -68,6 +72,14 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
         return knowledgeBaseId;
     }
 
+    /**
+     * @return The type of the knowledge base. Can not be changed once created.
+     */
+    @JsonProperty("type")
+    public KnowledgeBaseType getType() {
+        return type;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -82,12 +94,13 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
     private boolean equalTo(KnowledgeBaseResponse other) {
         return name.equals(other.name)
                 && precondition.equals(other.precondition)
-                && knowledgeBaseId.equals(other.knowledgeBaseId);
+                && knowledgeBaseId.equals(other.knowledgeBaseId)
+                && type.equals(other.type);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.name, this.precondition, this.knowledgeBaseId);
+        return Objects.hash(this.name, this.precondition, this.knowledgeBaseId, this.type);
     }
 
     @java.lang.Override
@@ -106,7 +119,11 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
     }
 
     public interface KnowledgeBaseIdStage {
-        _FinalStage knowledgeBaseId(@NotNull EntityId knowledgeBaseId);
+        TypeStage knowledgeBaseId(@NotNull EntityId knowledgeBaseId);
+    }
+
+    public interface TypeStage {
+        _FinalStage type(@NotNull KnowledgeBaseType type);
     }
 
     public interface _FinalStage {
@@ -118,10 +135,12 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements NameStage, KnowledgeBaseIdStage, _FinalStage {
+    public static final class Builder implements NameStage, KnowledgeBaseIdStage, TypeStage, _FinalStage {
         private String name;
 
         private EntityId knowledgeBaseId;
+
+        private KnowledgeBaseType type;
 
         private Optional<Precondition> precondition = Optional.empty();
 
@@ -135,6 +154,7 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
             name(other.getName());
             precondition(other.getPrecondition());
             knowledgeBaseId(other.getKnowledgeBaseId());
+            type(other.getType());
             return this;
         }
 
@@ -155,8 +175,19 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
          */
         @java.lang.Override
         @JsonSetter("knowledgeBaseId")
-        public _FinalStage knowledgeBaseId(@NotNull EntityId knowledgeBaseId) {
+        public TypeStage knowledgeBaseId(@NotNull EntityId knowledgeBaseId) {
             this.knowledgeBaseId = Objects.requireNonNull(knowledgeBaseId, "knowledgeBaseId must not be null");
+            return this;
+        }
+
+        /**
+         * <p>The type of the knowledge base. Can not be changed once created.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("type")
+        public _FinalStage type(@NotNull KnowledgeBaseType type) {
+            this.type = Objects.requireNonNull(type, "type must not be null");
             return this;
         }
 
@@ -179,7 +210,7 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
 
         @java.lang.Override
         public KnowledgeBaseResponse build() {
-            return new KnowledgeBaseResponse(name, precondition, knowledgeBaseId, additionalProperties);
+            return new KnowledgeBaseResponse(name, precondition, knowledgeBaseId, type, additionalProperties);
         }
     }
 }

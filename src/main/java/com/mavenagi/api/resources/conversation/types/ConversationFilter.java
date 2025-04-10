@@ -14,6 +14,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.api.core.ObjectMappers;
 import com.mavenagi.api.resources.commons.types.EntityIdFilter;
 import com.mavenagi.api.resources.commons.types.FeedbackType;
+import com.mavenagi.api.resources.commons.types.Quality;
+import com.mavenagi.api.resources.commons.types.QualityReason;
 import com.mavenagi.api.resources.commons.types.ResponseLength;
 import com.mavenagi.api.resources.commons.types.Sentiment;
 import java.time.OffsetDateTime;

@@ -52,14 +52,28 @@ public class ConversationClient {
     }
 
     /**
-     * Initialize a new conversation. Only required if the ask request wishes to supply conversation level data or when syncing to external systems.
+     * Initialize a new conversation.
+     * Only required if the ask request wishes to supply conversation level data or when syncing to external systems.
+     * <p>Conversations can not be modified using this API. If the conversation already exists then the existing conversation will be returned.</p>
+     * <p>After initialization,</p>
+     * <ul>
+     * <li>metadata can be changed using the <code>updateConversationMetadata</code> API.</li>
+     * <li>messages can be added to the conversation with the <code>appendNewMessages</code> or <code>ask</code> APIs.</li>
+     * </ul>
      */
     public ConversationResponse initialize(ConversationRequest request) {
         return initialize(request, null);
     }
 
     /**
-     * Initialize a new conversation. Only required if the ask request wishes to supply conversation level data or when syncing to external systems.
+     * Initialize a new conversation.
+     * Only required if the ask request wishes to supply conversation level data or when syncing to external systems.
+     * <p>Conversations can not be modified using this API. If the conversation already exists then the existing conversation will be returned.</p>
+     * <p>After initialization,</p>
+     * <ul>
+     * <li>metadata can be changed using the <code>updateConversationMetadata</code> API.</li>
+     * <li>messages can be added to the conversation with the <code>appendNewMessages</code> or <code>ask</code> APIs.</li>
+     * </ul>
      */
     public ConversationResponse initialize(ConversationRequest request, RequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())

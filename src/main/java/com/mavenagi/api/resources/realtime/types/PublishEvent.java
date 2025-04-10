@@ -30,8 +30,16 @@ public final class PublishEvent {
         return new PublishEvent(new AudioValue(value));
     }
 
+    public static PublishEvent hangUp(HangUpPublishEvent value) {
+        return new PublishEvent(new HangUpValue(value));
+    }
+
     public boolean isAudio() {
         return value instanceof AudioValue;
+    }
+
+    public boolean isHangUp() {
+        return value instanceof HangUpValue;
     }
 
     public boolean _isUnknown() {
@@ -41,6 +49,13 @@ public final class PublishEvent {
     public Optional<AudioPublishEvent> getAudio() {
         if (isAudio()) {
             return Optional.of(((AudioValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<HangUpPublishEvent> getHangUp() {
+        if (isHangUp()) {
+            return Optional.of(((HangUpValue) value).value);
         }
         return Optional.empty();
     }
@@ -60,6 +75,8 @@ public final class PublishEvent {
     public interface Visitor<T> {
         T visitAudio(AudioPublishEvent audio);
 
+        T visitHangUp(HangUpPublishEvent hangUp);
+
         T _visitUnknown(Object unknownType);
     }
 
@@ -68,7 +85,7 @@ public final class PublishEvent {
             property = "messageType",
             visible = true,
             defaultImpl = _UnknownValue.class)
-    @JsonSubTypes(@JsonSubTypes.Type(AudioValue.class))
+    @JsonSubTypes({@JsonSubTypes.Type(AudioValue.class), @JsonSubTypes.Type(HangUpValue.class)})
     @JsonIgnoreProperties(ignoreUnknown = true)
     private interface Value {
         <T> T visit(Visitor<T> visitor);
@@ -98,6 +115,44 @@ public final class PublishEvent {
         }
 
         private boolean equalTo(AudioValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "PublishEvent{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("hangUp")
+    private static final class HangUpValue implements Value {
+        @JsonUnwrapped
+        private HangUpPublishEvent value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private HangUpValue() {}
+
+        private HangUpValue(HangUpPublishEvent value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitHangUp(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof HangUpValue && equalTo((HangUpValue) other);
+        }
+
+        private boolean equalTo(HangUpValue other) {
             return value.equals(other.value);
         }
 

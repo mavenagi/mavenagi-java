@@ -8,6 +8,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.mavenagi.api.core.ClientOptions;
 import com.mavenagi.api.core.MavenAGIApiException;
 import com.mavenagi.api.core.MavenAGIException;
+import com.mavenagi.api.core.MediaTypes;
 import com.mavenagi.api.core.ObjectMappers;
 import com.mavenagi.api.core.RequestOptions;
 import com.mavenagi.api.resources.commons.errors.BadRequestError;
@@ -20,6 +21,7 @@ import okhttp3.Headers;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
@@ -48,6 +50,81 @@ public class AppSettingsClient {
         Request okhttpRequest = new Request.Builder()
                 .url(httpUrl)
                 .method("GET", null)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
+                .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            if (response.isSuccessful()) {
+                return ObjectMappers.JSON_MAPPER.readValue(
+                        responseBody.string(), new TypeReference<Map<String, Object>>() {});
+            }
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            try {
+                switch (response.code()) {
+                    case 400:
+                        throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class));
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class));
+                    case 500:
+                        throw new ServerError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class));
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            throw new MavenAGIApiException(
+                    "Error with status code " + response.code(),
+                    response.code(),
+                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
+        } catch (IOException e) {
+            throw new MavenAGIException("Network error executing HTTP request", e);
+        }
+    }
+
+    /**
+     * Update app settings. Performs a merge of the provided settings with the existing app settings.
+     * <ul>
+     * <li>If a new key is provided, it will be added to the app settings.</li>
+     * <li>If an existing key is provided, it will be updated.</li>
+     * <li>No keys will be removed.</li>
+     * </ul>
+     * <p>Note that if an array value is provided it will fully replace an existing value as arrays cannot be merged.</p>
+     */
+    public Map<String, Object> update(Map<String, Object> request) {
+        return update(request, null);
+    }
+
+    /**
+     * Update app settings. Performs a merge of the provided settings with the existing app settings.
+     * <ul>
+     * <li>If a new key is provided, it will be added to the app settings.</li>
+     * <li>If an existing key is provided, it will be updated.</li>
+     * <li>No keys will be removed.</li>
+     * </ul>
+     * <p>Note that if an array value is provided it will fully replace an existing value as arrays cannot be merged.</p>
+     */
+    public Map<String, Object> update(Map<String, Object> request, RequestOptions requestOptions) {
+        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("v1/app-settings")
+                .build();
+        RequestBody body;
+        try {
+            body = RequestBody.create(
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
+        } catch (JsonProcessingException e) {
+            throw new MavenAGIException("Failed to serialize request", e);
+        }
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl)
+                .method("PATCH", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
                 .build();

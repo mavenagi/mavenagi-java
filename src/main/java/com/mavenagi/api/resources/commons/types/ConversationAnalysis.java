@@ -30,7 +30,13 @@ public final class ConversationAnalysis {
 
     private final Optional<Sentiment> sentiment;
 
+    private final Optional<Quality> quality;
+
+    private final Optional<QualityReason> qualityReason;
+
     private final Optional<Boolean> resolvedByMaven;
+
+    private final Optional<String> primaryLanguage;
 
     private final Map<String, Object> additionalProperties;
 
@@ -40,14 +46,20 @@ public final class ConversationAnalysis {
             Optional<String> resolutionStatus,
             Optional<String> category,
             Optional<Sentiment> sentiment,
+            Optional<Quality> quality,
+            Optional<QualityReason> qualityReason,
             Optional<Boolean> resolvedByMaven,
+            Optional<String> primaryLanguage,
             Map<String, Object> additionalProperties) {
         this.userRequest = userRequest;
         this.agentResponse = agentResponse;
         this.resolutionStatus = resolutionStatus;
         this.category = category;
         this.sentiment = sentiment;
+        this.quality = quality;
+        this.qualityReason = qualityReason;
         this.resolvedByMaven = resolvedByMaven;
+        this.primaryLanguage = primaryLanguage;
         this.additionalProperties = additionalProperties;
     }
 
@@ -92,11 +104,35 @@ public final class ConversationAnalysis {
     }
 
     /**
+     * @return Generated quality of the conversation
+     */
+    @JsonProperty("quality")
+    public Optional<Quality> getQuality() {
+        return quality;
+    }
+
+    /**
+     * @return If the quality of the conversation is <code>UNKNOWN</code> or <code>NEEDS_IMPROVEMENT</code> then a reason for the quality will be provided when possible.
+     */
+    @JsonProperty("qualityReason")
+    public Optional<QualityReason> getQualityReason() {
+        return qualityReason;
+    }
+
+    /**
      * @return Whether the conversation was resolved by Maven
      */
     @JsonProperty("resolvedByMaven")
     public Optional<Boolean> getResolvedByMaven() {
         return resolvedByMaven;
+    }
+
+    /**
+     * @return Primary language of the conversation in ISO 639-1 code format
+     */
+    @JsonProperty("primaryLanguage")
+    public Optional<String> getPrimaryLanguage() {
+        return primaryLanguage;
     }
 
     @java.lang.Override
@@ -116,7 +152,10 @@ public final class ConversationAnalysis {
                 && resolutionStatus.equals(other.resolutionStatus)
                 && category.equals(other.category)
                 && sentiment.equals(other.sentiment)
-                && resolvedByMaven.equals(other.resolvedByMaven);
+                && quality.equals(other.quality)
+                && qualityReason.equals(other.qualityReason)
+                && resolvedByMaven.equals(other.resolvedByMaven)
+                && primaryLanguage.equals(other.primaryLanguage);
     }
 
     @java.lang.Override
@@ -127,7 +166,10 @@ public final class ConversationAnalysis {
                 this.resolutionStatus,
                 this.category,
                 this.sentiment,
-                this.resolvedByMaven);
+                this.quality,
+                this.qualityReason,
+                this.resolvedByMaven,
+                this.primaryLanguage);
     }
 
     @java.lang.Override
@@ -151,7 +193,13 @@ public final class ConversationAnalysis {
 
         private Optional<Sentiment> sentiment = Optional.empty();
 
+        private Optional<Quality> quality = Optional.empty();
+
+        private Optional<QualityReason> qualityReason = Optional.empty();
+
         private Optional<Boolean> resolvedByMaven = Optional.empty();
+
+        private Optional<String> primaryLanguage = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -164,7 +212,10 @@ public final class ConversationAnalysis {
             resolutionStatus(other.getResolutionStatus());
             category(other.getCategory());
             sentiment(other.getSentiment());
+            quality(other.getQuality());
+            qualityReason(other.getQualityReason());
             resolvedByMaven(other.getResolvedByMaven());
+            primaryLanguage(other.getPrimaryLanguage());
             return this;
         }
 
@@ -223,6 +274,28 @@ public final class ConversationAnalysis {
             return this;
         }
 
+        @JsonSetter(value = "quality", nulls = Nulls.SKIP)
+        public Builder quality(Optional<Quality> quality) {
+            this.quality = quality;
+            return this;
+        }
+
+        public Builder quality(Quality quality) {
+            this.quality = Optional.ofNullable(quality);
+            return this;
+        }
+
+        @JsonSetter(value = "qualityReason", nulls = Nulls.SKIP)
+        public Builder qualityReason(Optional<QualityReason> qualityReason) {
+            this.qualityReason = qualityReason;
+            return this;
+        }
+
+        public Builder qualityReason(QualityReason qualityReason) {
+            this.qualityReason = Optional.ofNullable(qualityReason);
+            return this;
+        }
+
         @JsonSetter(value = "resolvedByMaven", nulls = Nulls.SKIP)
         public Builder resolvedByMaven(Optional<Boolean> resolvedByMaven) {
             this.resolvedByMaven = resolvedByMaven;
@@ -234,6 +307,17 @@ public final class ConversationAnalysis {
             return this;
         }
 
+        @JsonSetter(value = "primaryLanguage", nulls = Nulls.SKIP)
+        public Builder primaryLanguage(Optional<String> primaryLanguage) {
+            this.primaryLanguage = primaryLanguage;
+            return this;
+        }
+
+        public Builder primaryLanguage(String primaryLanguage) {
+            this.primaryLanguage = Optional.ofNullable(primaryLanguage);
+            return this;
+        }
+
         public ConversationAnalysis build() {
             return new ConversationAnalysis(
                     userRequest,
@@ -241,7 +325,10 @@ public final class ConversationAnalysis {
                     resolutionStatus,
                     category,
                     sentiment,
+                    quality,
+                    qualityReason,
                     resolvedByMaven,
+                    primaryLanguage,
                     additionalProperties);
         }
     }
