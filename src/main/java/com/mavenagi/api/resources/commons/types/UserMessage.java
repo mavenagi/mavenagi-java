@@ -40,6 +40,8 @@ public final class UserMessage implements IUserMessageBase {
 
     private final List<UserMessageAttachment> attachments;
 
+    private final Optional<String> userDisplayName;
+
     private final Map<String, Object> additionalProperties;
 
     private UserMessage(
@@ -51,6 +53,7 @@ public final class UserMessage implements IUserMessageBase {
             EntityId conversationMessageId,
             Optional<String> language,
             List<UserMessageAttachment> attachments,
+            Optional<String> userDisplayName,
             Map<String, Object> additionalProperties) {
         this.userId = userId;
         this.text = text;
@@ -60,6 +63,7 @@ public final class UserMessage implements IUserMessageBase {
         this.conversationMessageId = conversationMessageId;
         this.language = language;
         this.attachments = attachments;
+        this.userDisplayName = userDisplayName;
         this.additionalProperties = additionalProperties;
     }
 
@@ -129,6 +133,14 @@ public final class UserMessage implements IUserMessageBase {
         return attachments;
     }
 
+    /**
+     * @return The display name of the user who created this message. Only available for users who have saved name information.
+     */
+    @JsonProperty("userDisplayName")
+    public Optional<String> getUserDisplayName() {
+        return userDisplayName;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -148,7 +160,8 @@ public final class UserMessage implements IUserMessageBase {
                 && updatedAt.equals(other.updatedAt)
                 && conversationMessageId.equals(other.conversationMessageId)
                 && language.equals(other.language)
-                && attachments.equals(other.attachments);
+                && attachments.equals(other.attachments)
+                && userDisplayName.equals(other.userDisplayName);
     }
 
     @java.lang.Override
@@ -161,7 +174,8 @@ public final class UserMessage implements IUserMessageBase {
                 this.updatedAt,
                 this.conversationMessageId,
                 this.language,
-                this.attachments);
+                this.attachments,
+                this.userDisplayName);
     }
 
     @java.lang.Override
@@ -211,6 +225,10 @@ public final class UserMessage implements IUserMessageBase {
         _FinalStage addAttachments(UserMessageAttachment attachments);
 
         _FinalStage addAllAttachments(List<UserMessageAttachment> attachments);
+
+        _FinalStage userDisplayName(Optional<String> userDisplayName);
+
+        _FinalStage userDisplayName(String userDisplayName);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -223,6 +241,8 @@ public final class UserMessage implements IUserMessageBase {
         private UserConversationMessageType userMessageType;
 
         private EntityId conversationMessageId;
+
+        private Optional<String> userDisplayName = Optional.empty();
 
         private List<UserMessageAttachment> attachments = new ArrayList<>();
 
@@ -247,6 +267,7 @@ public final class UserMessage implements IUserMessageBase {
             conversationMessageId(other.getConversationMessageId());
             language(other.getLanguage());
             attachments(other.getAttachments());
+            userDisplayName(other.getUserDisplayName());
             return this;
         }
 
@@ -288,6 +309,23 @@ public final class UserMessage implements IUserMessageBase {
         public _FinalStage conversationMessageId(@NotNull EntityId conversationMessageId) {
             this.conversationMessageId =
                     Objects.requireNonNull(conversationMessageId, "conversationMessageId must not be null");
+            return this;
+        }
+
+        /**
+         * <p>The display name of the user who created this message. Only available for users who have saved name information.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage userDisplayName(String userDisplayName) {
+            this.userDisplayName = Optional.ofNullable(userDisplayName);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "userDisplayName", nulls = Nulls.SKIP)
+        public _FinalStage userDisplayName(Optional<String> userDisplayName) {
+            this.userDisplayName = userDisplayName;
             return this;
         }
 
@@ -381,6 +419,7 @@ public final class UserMessage implements IUserMessageBase {
                     conversationMessageId,
                     language,
                     attachments,
+                    userDisplayName,
                     additionalProperties);
         }
     }

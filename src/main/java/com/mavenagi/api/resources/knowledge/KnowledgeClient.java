@@ -14,6 +14,7 @@ import com.mavenagi.api.resources.commons.errors.BadRequestError;
 import com.mavenagi.api.resources.commons.errors.NotFoundError;
 import com.mavenagi.api.resources.commons.errors.ServerError;
 import com.mavenagi.api.resources.commons.types.ErrorMessage;
+import com.mavenagi.api.resources.knowledge.types.FinalizeKnowledgeBaseVersionRequest;
 import com.mavenagi.api.resources.knowledge.types.KnowledgeBaseRequest;
 import com.mavenagi.api.resources.knowledge.types.KnowledgeBaseResponse;
 import com.mavenagi.api.resources.knowledge.types.KnowledgeBaseVersion;
@@ -225,24 +226,45 @@ public class KnowledgeClient {
     /**
      * Finalize the latest knowledge base version. Required to indicate the version is complete. Will throw an exception if the latest version is not in progress.
      */
-    public void finalizeKnowledgeBaseVersion(String knowledgeBaseReferenceId) {
-        finalizeKnowledgeBaseVersion(knowledgeBaseReferenceId, null);
+    public KnowledgeBaseVersion finalizeKnowledgeBaseVersion(String knowledgeBaseReferenceId) {
+        return finalizeKnowledgeBaseVersion(
+                knowledgeBaseReferenceId,
+                FinalizeKnowledgeBaseVersionRequest.builder().build());
     }
 
     /**
      * Finalize the latest knowledge base version. Required to indicate the version is complete. Will throw an exception if the latest version is not in progress.
      */
-    public void finalizeKnowledgeBaseVersion(String knowledgeBaseReferenceId, RequestOptions requestOptions) {
+    public KnowledgeBaseVersion finalizeKnowledgeBaseVersion(
+            String knowledgeBaseReferenceId, FinalizeKnowledgeBaseVersionRequest request) {
+        return finalizeKnowledgeBaseVersion(knowledgeBaseReferenceId, request, null);
+    }
+
+    /**
+     * Finalize the latest knowledge base version. Required to indicate the version is complete. Will throw an exception if the latest version is not in progress.
+     */
+    public KnowledgeBaseVersion finalizeKnowledgeBaseVersion(
+            String knowledgeBaseReferenceId,
+            FinalizeKnowledgeBaseVersionRequest request,
+            RequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("v1/knowledge")
                 .addPathSegment(knowledgeBaseReferenceId)
                 .addPathSegments("version/finalize")
                 .build();
+        RequestBody body;
+        try {
+            body = RequestBody.create(
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
+        } catch (JsonProcessingException e) {
+            throw new MavenAGIException("Failed to serialize request", e);
+        }
         Request okhttpRequest = new Request.Builder()
                 .url(httpUrl)
-                .method("POST", RequestBody.create("", null))
+                .method("POST", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
                 .build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
@@ -251,7 +273,7 @@ public class KnowledgeClient {
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
             if (response.isSuccessful()) {
-                return;
+                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), KnowledgeBaseVersion.class);
             }
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
@@ -280,6 +302,10 @@ public class KnowledgeClient {
 
     /**
      * Create knowledge document. Requires an existing knowledge base with an in progress version. Will throw an exception if the latest version is not in progress.
+     * <p>&lt;Tip&gt;
+     * This API maintains document version history. If for the same reference ID neither the `title` nor `text` fields
+     * have changed, a new document version will not be created. The existing version will be reused.
+     * &lt;/Tip&gt;</p>
      */
     public KnowledgeDocumentResponse createKnowledgeDocument(
             String knowledgeBaseReferenceId, KnowledgeDocumentRequest request) {
@@ -288,6 +314,10 @@ public class KnowledgeClient {
 
     /**
      * Create knowledge document. Requires an existing knowledge base with an in progress version. Will throw an exception if the latest version is not in progress.
+     * <p>&lt;Tip&gt;
+     * This API maintains document version history. If for the same reference ID neither the `title` nor `text` fields
+     * have changed, a new document version will not be created. The existing version will be reused.
+     * &lt;/Tip&gt;</p>
      */
     public KnowledgeDocumentResponse createKnowledgeDocument(
             String knowledgeBaseReferenceId, KnowledgeDocumentRequest request, RequestOptions requestOptions) {

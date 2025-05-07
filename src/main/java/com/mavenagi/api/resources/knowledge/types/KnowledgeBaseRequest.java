@@ -29,16 +29,20 @@ public final class KnowledgeBaseRequest implements IKnowledgeBaseProperties {
 
     private final EntityIdBase knowledgeBaseId;
 
+    private final Optional<Map<String, String>> metadata;
+
     private final Map<String, Object> additionalProperties;
 
     private KnowledgeBaseRequest(
             String name,
             Optional<Precondition> precondition,
             EntityIdBase knowledgeBaseId,
+            Optional<Map<String, String>> metadata,
             Map<String, Object> additionalProperties) {
         this.name = name;
         this.precondition = precondition;
         this.knowledgeBaseId = knowledgeBaseId;
+        this.metadata = metadata;
         this.additionalProperties = additionalProperties;
     }
 
@@ -68,6 +72,14 @@ public final class KnowledgeBaseRequest implements IKnowledgeBaseProperties {
         return knowledgeBaseId;
     }
 
+    /**
+     * @return Metadata for the knowledge base.
+     */
+    @JsonProperty("metadata")
+    public Optional<Map<String, String>> getMetadata() {
+        return metadata;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -82,12 +94,13 @@ public final class KnowledgeBaseRequest implements IKnowledgeBaseProperties {
     private boolean equalTo(KnowledgeBaseRequest other) {
         return name.equals(other.name)
                 && precondition.equals(other.precondition)
-                && knowledgeBaseId.equals(other.knowledgeBaseId);
+                && knowledgeBaseId.equals(other.knowledgeBaseId)
+                && metadata.equals(other.metadata);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.name, this.precondition, this.knowledgeBaseId);
+        return Objects.hash(this.name, this.precondition, this.knowledgeBaseId, this.metadata);
     }
 
     @java.lang.Override
@@ -115,6 +128,10 @@ public final class KnowledgeBaseRequest implements IKnowledgeBaseProperties {
         _FinalStage precondition(Optional<Precondition> precondition);
 
         _FinalStage precondition(Precondition precondition);
+
+        _FinalStage metadata(Optional<Map<String, String>> metadata);
+
+        _FinalStage metadata(Map<String, String> metadata);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -122,6 +139,8 @@ public final class KnowledgeBaseRequest implements IKnowledgeBaseProperties {
         private String name;
 
         private EntityIdBase knowledgeBaseId;
+
+        private Optional<Map<String, String>> metadata = Optional.empty();
 
         private Optional<Precondition> precondition = Optional.empty();
 
@@ -135,6 +154,7 @@ public final class KnowledgeBaseRequest implements IKnowledgeBaseProperties {
             name(other.getName());
             precondition(other.getPrecondition());
             knowledgeBaseId(other.getKnowledgeBaseId());
+            metadata(other.getMetadata());
             return this;
         }
 
@@ -161,6 +181,23 @@ public final class KnowledgeBaseRequest implements IKnowledgeBaseProperties {
         }
 
         /**
+         * <p>Metadata for the knowledge base.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage metadata(Map<String, String> metadata) {
+            this.metadata = Optional.ofNullable(metadata);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "metadata", nulls = Nulls.SKIP)
+        public _FinalStage metadata(Optional<Map<String, String>> metadata) {
+            this.metadata = metadata;
+            return this;
+        }
+
+        /**
          * <p>(Beta) The preconditions that must be met for knowledge base be relevant to a conversation. Can be used to limit knowledge to certain types of users.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -179,7 +216,7 @@ public final class KnowledgeBaseRequest implements IKnowledgeBaseProperties {
 
         @java.lang.Override
         public KnowledgeBaseRequest build() {
-            return new KnowledgeBaseRequest(name, precondition, knowledgeBaseId, additionalProperties);
+            return new KnowledgeBaseRequest(name, precondition, knowledgeBaseId, metadata, additionalProperties);
         }
     }
 }

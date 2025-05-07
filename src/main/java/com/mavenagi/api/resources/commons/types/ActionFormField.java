@@ -58,7 +58,7 @@ public final class ActionFormField {
     }
 
     /**
-     * @return The ID field should be used as the key in the submitActionForm API call.
+     * @return The ID field should be used as the key in the <code>submitActionForm</code> API.
      */
     @JsonProperty("id")
     public String getId() {
@@ -66,7 +66,7 @@ public final class ActionFormField {
     }
 
     /**
-     * @return The title of the field to show on the form.
+     * @return The title of the field to show on the form. Provided in the user's language.
      */
     @JsonProperty("label")
     public String getLabel() {
@@ -74,7 +74,7 @@ public final class ActionFormField {
     }
 
     /**
-     * @return A longer description of the field which should be shown in smaller text near the label.
+     * @return A longer description of the field which should be shown in smaller text near the label. Provided in the user's language.
      */
     @JsonProperty("description")
     public String getDescription() {
@@ -218,7 +218,7 @@ public final class ActionFormField {
         }
 
         /**
-         * <p>The ID field should be used as the key in the submitActionForm API call.</p>
+         * <p>The ID field should be used as the key in the <code>submitActionForm</code> API.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -229,7 +229,7 @@ public final class ActionFormField {
         }
 
         /**
-         * <p>The title of the field to show on the form.</p>
+         * <p>The title of the field to show on the form. Provided in the user's language.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -240,7 +240,7 @@ public final class ActionFormField {
         }
 
         /**
-         * <p>A longer description of the field which should be shown in smaller text near the label.</p>
+         * <p>A longer description of the field which should be shown in smaller text near the label. Provided in the user's language.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override

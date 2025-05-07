@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ConversationSummary.Builder.class)
@@ -25,14 +26,50 @@ public final class ConversationSummary {
 
     private final List<EntityIdWithoutAgent> incompleteActionIds;
 
+    private final int insertCount;
+
+    private final int thumbsUpCount;
+
+    private final int thumbsDownCount;
+
+    private final int userMessageCount;
+
+    private final Optional<Long> handleTime;
+
+    private final Optional<Long> humanAgentResponseDelay;
+
+    private final List<String> humanAgents;
+
+    private final List<String> humanAgentsWithInserts;
+
+    private final List<String> users;
+
     private final Map<String, Object> additionalProperties;
 
     private ConversationSummary(
             List<EntityIdWithoutAgent> actionIds,
             List<EntityIdWithoutAgent> incompleteActionIds,
+            int insertCount,
+            int thumbsUpCount,
+            int thumbsDownCount,
+            int userMessageCount,
+            Optional<Long> handleTime,
+            Optional<Long> humanAgentResponseDelay,
+            List<String> humanAgents,
+            List<String> humanAgentsWithInserts,
+            List<String> users,
             Map<String, Object> additionalProperties) {
         this.actionIds = actionIds;
         this.incompleteActionIds = incompleteActionIds;
+        this.insertCount = insertCount;
+        this.thumbsUpCount = thumbsUpCount;
+        this.thumbsDownCount = thumbsDownCount;
+        this.userMessageCount = userMessageCount;
+        this.handleTime = handleTime;
+        this.humanAgentResponseDelay = humanAgentResponseDelay;
+        this.humanAgents = humanAgents;
+        this.humanAgentsWithInserts = humanAgentsWithInserts;
+        this.users = users;
         this.additionalProperties = additionalProperties;
     }
 
@@ -52,6 +89,82 @@ public final class ConversationSummary {
         return incompleteActionIds;
     }
 
+    /**
+     * @return The number of insert events on messages in the conversation.
+     */
+    @JsonProperty("insertCount")
+    public int getInsertCount() {
+        return insertCount;
+    }
+
+    /**
+     * @return The number of thumbs up events on messages in the conversation.
+     */
+    @JsonProperty("thumbsUpCount")
+    public int getThumbsUpCount() {
+        return thumbsUpCount;
+    }
+
+    /**
+     * @return The number of thumbs down events on messages in the conversation.
+     */
+    @JsonProperty("thumbsDownCount")
+    public int getThumbsDownCount() {
+        return thumbsDownCount;
+    }
+
+    /**
+     * @return The number of messages of type <code>USER</code> in the conversation.
+     */
+    @JsonProperty("userMessageCount")
+    public int getUserMessageCount() {
+        return userMessageCount;
+    }
+
+    /**
+     * @return The total time in milliseconds that the user spent interacting with the conversation.
+     * Calculated by taking the timestamp of the last message in the conversation minus the timestamp of the first message.
+     */
+    @JsonProperty("handleTime")
+    public Optional<Long> getHandleTime() {
+        return handleTime;
+    }
+
+    /**
+     * @return The time in milliseconds that elapsed before a human agent responded to the conversation.
+     * Calculated by taking the timestamp of the first message of type <code>HUMAN_AGENT</code>
+     * minus the timestamp of the first message in the conversation.
+     * <p>Will not be provided if the conversation does not have a message of type <code>HUMAN_AGENT</code>.</p>
+     */
+    @JsonProperty("humanAgentResponseDelay")
+    public Optional<Long> getHumanAgentResponseDelay() {
+        return humanAgentResponseDelay;
+    }
+
+    /**
+     * @return The names of all users that have a message of type <code>HUMAN_AGENT</code> on the conversation.
+     */
+    @JsonProperty("humanAgents")
+    public List<String> getHumanAgents() {
+        return humanAgents;
+    }
+
+    /**
+     * @return The names of all users that have an associated insert event on the conversation.
+     */
+    @JsonProperty("humanAgentsWithInserts")
+    public List<String> getHumanAgentsWithInserts() {
+        return humanAgentsWithInserts;
+    }
+
+    /**
+     * @return The names of all users that have a message of type <code>USER</code> on the conversation.
+     */
+    @JsonProperty("users")
+    public List<String> getUsers() {
+        return users;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -64,12 +177,33 @@ public final class ConversationSummary {
     }
 
     private boolean equalTo(ConversationSummary other) {
-        return actionIds.equals(other.actionIds) && incompleteActionIds.equals(other.incompleteActionIds);
+        return actionIds.equals(other.actionIds)
+                && incompleteActionIds.equals(other.incompleteActionIds)
+                && insertCount == other.insertCount
+                && thumbsUpCount == other.thumbsUpCount
+                && thumbsDownCount == other.thumbsDownCount
+                && userMessageCount == other.userMessageCount
+                && handleTime.equals(other.handleTime)
+                && humanAgentResponseDelay.equals(other.humanAgentResponseDelay)
+                && humanAgents.equals(other.humanAgents)
+                && humanAgentsWithInserts.equals(other.humanAgentsWithInserts)
+                && users.equals(other.users);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.actionIds, this.incompleteActionIds);
+        return Objects.hash(
+                this.actionIds,
+                this.incompleteActionIds,
+                this.insertCount,
+                this.thumbsUpCount,
+                this.thumbsDownCount,
+                this.userMessageCount,
+                this.handleTime,
+                this.humanAgentResponseDelay,
+                this.humanAgents,
+                this.humanAgentsWithInserts,
+                this.users);
     }
 
     @java.lang.Override
@@ -77,63 +211,353 @@ public final class ConversationSummary {
         return ObjectMappers.stringify(this);
     }
 
-    public static Builder builder() {
+    public static InsertCountStage builder() {
         return new Builder();
     }
 
+    public interface InsertCountStage {
+        ThumbsUpCountStage insertCount(int insertCount);
+
+        Builder from(ConversationSummary other);
+    }
+
+    public interface ThumbsUpCountStage {
+        ThumbsDownCountStage thumbsUpCount(int thumbsUpCount);
+    }
+
+    public interface ThumbsDownCountStage {
+        UserMessageCountStage thumbsDownCount(int thumbsDownCount);
+    }
+
+    public interface UserMessageCountStage {
+        _FinalStage userMessageCount(int userMessageCount);
+    }
+
+    public interface _FinalStage {
+        ConversationSummary build();
+
+        _FinalStage actionIds(List<EntityIdWithoutAgent> actionIds);
+
+        _FinalStage addActionIds(EntityIdWithoutAgent actionIds);
+
+        _FinalStage addAllActionIds(List<EntityIdWithoutAgent> actionIds);
+
+        _FinalStage incompleteActionIds(List<EntityIdWithoutAgent> incompleteActionIds);
+
+        _FinalStage addIncompleteActionIds(EntityIdWithoutAgent incompleteActionIds);
+
+        _FinalStage addAllIncompleteActionIds(List<EntityIdWithoutAgent> incompleteActionIds);
+
+        _FinalStage handleTime(Optional<Long> handleTime);
+
+        _FinalStage handleTime(Long handleTime);
+
+        _FinalStage humanAgentResponseDelay(Optional<Long> humanAgentResponseDelay);
+
+        _FinalStage humanAgentResponseDelay(Long humanAgentResponseDelay);
+
+        _FinalStage humanAgents(List<String> humanAgents);
+
+        _FinalStage addHumanAgents(String humanAgents);
+
+        _FinalStage addAllHumanAgents(List<String> humanAgents);
+
+        _FinalStage humanAgentsWithInserts(List<String> humanAgentsWithInserts);
+
+        _FinalStage addHumanAgentsWithInserts(String humanAgentsWithInserts);
+
+        _FinalStage addAllHumanAgentsWithInserts(List<String> humanAgentsWithInserts);
+
+        _FinalStage users(List<String> users);
+
+        _FinalStage addUsers(String users);
+
+        _FinalStage addAllUsers(List<String> users);
+    }
+
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder {
-        private List<EntityIdWithoutAgent> actionIds = new ArrayList<>();
+    public static final class Builder
+            implements InsertCountStage, ThumbsUpCountStage, ThumbsDownCountStage, UserMessageCountStage, _FinalStage {
+        private int insertCount;
+
+        private int thumbsUpCount;
+
+        private int thumbsDownCount;
+
+        private int userMessageCount;
+
+        private List<String> users = new ArrayList<>();
+
+        private List<String> humanAgentsWithInserts = new ArrayList<>();
+
+        private List<String> humanAgents = new ArrayList<>();
+
+        private Optional<Long> humanAgentResponseDelay = Optional.empty();
+
+        private Optional<Long> handleTime = Optional.empty();
 
         private List<EntityIdWithoutAgent> incompleteActionIds = new ArrayList<>();
+
+        private List<EntityIdWithoutAgent> actionIds = new ArrayList<>();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
 
+        @java.lang.Override
         public Builder from(ConversationSummary other) {
             actionIds(other.getActionIds());
             incompleteActionIds(other.getIncompleteActionIds());
+            insertCount(other.getInsertCount());
+            thumbsUpCount(other.getThumbsUpCount());
+            thumbsDownCount(other.getThumbsDownCount());
+            userMessageCount(other.getUserMessageCount());
+            handleTime(other.getHandleTime());
+            humanAgentResponseDelay(other.getHumanAgentResponseDelay());
+            humanAgents(other.getHumanAgents());
+            humanAgentsWithInserts(other.getHumanAgentsWithInserts());
+            users(other.getUsers());
             return this;
         }
 
-        @JsonSetter(value = "actionIds", nulls = Nulls.SKIP)
-        public Builder actionIds(List<EntityIdWithoutAgent> actionIds) {
-            this.actionIds.clear();
-            this.actionIds.addAll(actionIds);
+        /**
+         * <p>The number of insert events on messages in the conversation.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("insertCount")
+        public ThumbsUpCountStage insertCount(int insertCount) {
+            this.insertCount = insertCount;
             return this;
         }
 
-        public Builder addActionIds(EntityIdWithoutAgent actionIds) {
-            this.actionIds.add(actionIds);
+        /**
+         * <p>The number of thumbs up events on messages in the conversation.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("thumbsUpCount")
+        public ThumbsDownCountStage thumbsUpCount(int thumbsUpCount) {
+            this.thumbsUpCount = thumbsUpCount;
             return this;
         }
 
-        public Builder addAllActionIds(List<EntityIdWithoutAgent> actionIds) {
-            this.actionIds.addAll(actionIds);
+        /**
+         * <p>The number of thumbs down events on messages in the conversation.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("thumbsDownCount")
+        public UserMessageCountStage thumbsDownCount(int thumbsDownCount) {
+            this.thumbsDownCount = thumbsDownCount;
             return this;
         }
 
+        /**
+         * <p>The number of messages of type <code>USER</code> in the conversation.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("userMessageCount")
+        public _FinalStage userMessageCount(int userMessageCount) {
+            this.userMessageCount = userMessageCount;
+            return this;
+        }
+
+        /**
+         * <p>The names of all users that have a message of type <code>USER</code> on the conversation.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage addAllUsers(List<String> users) {
+            this.users.addAll(users);
+            return this;
+        }
+
+        /**
+         * <p>The names of all users that have a message of type <code>USER</code> on the conversation.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage addUsers(String users) {
+            this.users.add(users);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "users", nulls = Nulls.SKIP)
+        public _FinalStage users(List<String> users) {
+            this.users.clear();
+            this.users.addAll(users);
+            return this;
+        }
+
+        /**
+         * <p>The names of all users that have an associated insert event on the conversation.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage addAllHumanAgentsWithInserts(List<String> humanAgentsWithInserts) {
+            this.humanAgentsWithInserts.addAll(humanAgentsWithInserts);
+            return this;
+        }
+
+        /**
+         * <p>The names of all users that have an associated insert event on the conversation.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage addHumanAgentsWithInserts(String humanAgentsWithInserts) {
+            this.humanAgentsWithInserts.add(humanAgentsWithInserts);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "humanAgentsWithInserts", nulls = Nulls.SKIP)
+        public _FinalStage humanAgentsWithInserts(List<String> humanAgentsWithInserts) {
+            this.humanAgentsWithInserts.clear();
+            this.humanAgentsWithInserts.addAll(humanAgentsWithInserts);
+            return this;
+        }
+
+        /**
+         * <p>The names of all users that have a message of type <code>HUMAN_AGENT</code> on the conversation.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage addAllHumanAgents(List<String> humanAgents) {
+            this.humanAgents.addAll(humanAgents);
+            return this;
+        }
+
+        /**
+         * <p>The names of all users that have a message of type <code>HUMAN_AGENT</code> on the conversation.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage addHumanAgents(String humanAgents) {
+            this.humanAgents.add(humanAgents);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "humanAgents", nulls = Nulls.SKIP)
+        public _FinalStage humanAgents(List<String> humanAgents) {
+            this.humanAgents.clear();
+            this.humanAgents.addAll(humanAgents);
+            return this;
+        }
+
+        /**
+         * <p>The time in milliseconds that elapsed before a human agent responded to the conversation.
+         * Calculated by taking the timestamp of the first message of type <code>HUMAN_AGENT</code>
+         * minus the timestamp of the first message in the conversation.</p>
+         * <p>Will not be provided if the conversation does not have a message of type <code>HUMAN_AGENT</code>.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage humanAgentResponseDelay(Long humanAgentResponseDelay) {
+            this.humanAgentResponseDelay = Optional.ofNullable(humanAgentResponseDelay);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "humanAgentResponseDelay", nulls = Nulls.SKIP)
+        public _FinalStage humanAgentResponseDelay(Optional<Long> humanAgentResponseDelay) {
+            this.humanAgentResponseDelay = humanAgentResponseDelay;
+            return this;
+        }
+
+        /**
+         * <p>The total time in milliseconds that the user spent interacting with the conversation.
+         * Calculated by taking the timestamp of the last message in the conversation minus the timestamp of the first message.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage handleTime(Long handleTime) {
+            this.handleTime = Optional.ofNullable(handleTime);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "handleTime", nulls = Nulls.SKIP)
+        public _FinalStage handleTime(Optional<Long> handleTime) {
+            this.handleTime = handleTime;
+            return this;
+        }
+
+        /**
+         * <p>The IDs of the actions that were taken by Maven but not completed in the conversation. Occurs when the user is shown an action form but does not submit it.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage addAllIncompleteActionIds(List<EntityIdWithoutAgent> incompleteActionIds) {
+            this.incompleteActionIds.addAll(incompleteActionIds);
+            return this;
+        }
+
+        /**
+         * <p>The IDs of the actions that were taken by Maven but not completed in the conversation. Occurs when the user is shown an action form but does not submit it.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage addIncompleteActionIds(EntityIdWithoutAgent incompleteActionIds) {
+            this.incompleteActionIds.add(incompleteActionIds);
+            return this;
+        }
+
+        @java.lang.Override
         @JsonSetter(value = "incompleteActionIds", nulls = Nulls.SKIP)
-        public Builder incompleteActionIds(List<EntityIdWithoutAgent> incompleteActionIds) {
+        public _FinalStage incompleteActionIds(List<EntityIdWithoutAgent> incompleteActionIds) {
             this.incompleteActionIds.clear();
             this.incompleteActionIds.addAll(incompleteActionIds);
             return this;
         }
 
-        public Builder addIncompleteActionIds(EntityIdWithoutAgent incompleteActionIds) {
-            this.incompleteActionIds.add(incompleteActionIds);
+        /**
+         * <p>The IDs of the actions that were taken by Maven in the conversation</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage addAllActionIds(List<EntityIdWithoutAgent> actionIds) {
+            this.actionIds.addAll(actionIds);
             return this;
         }
 
-        public Builder addAllIncompleteActionIds(List<EntityIdWithoutAgent> incompleteActionIds) {
-            this.incompleteActionIds.addAll(incompleteActionIds);
+        /**
+         * <p>The IDs of the actions that were taken by Maven in the conversation</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage addActionIds(EntityIdWithoutAgent actionIds) {
+            this.actionIds.add(actionIds);
             return this;
         }
 
+        @java.lang.Override
+        @JsonSetter(value = "actionIds", nulls = Nulls.SKIP)
+        public _FinalStage actionIds(List<EntityIdWithoutAgent> actionIds) {
+            this.actionIds.clear();
+            this.actionIds.addAll(actionIds);
+            return this;
+        }
+
+        @java.lang.Override
         public ConversationSummary build() {
-            return new ConversationSummary(actionIds, incompleteActionIds, additionalProperties);
+            return new ConversationSummary(
+                    actionIds,
+                    incompleteActionIds,
+                    insertCount,
+                    thumbsUpCount,
+                    thumbsDownCount,
+                    userMessageCount,
+                    handleTime,
+                    humanAgentResponseDelay,
+                    humanAgents,
+                    humanAgentsWithInserts,
+                    users,
+                    additionalProperties);
         }
     }
 }

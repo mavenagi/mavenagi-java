@@ -24,6 +24,8 @@ import org.jetbrains.annotations.NotNull;
 public final class BotActionFormResponse implements IBotActionFormResponse {
     private final String id;
 
+    private final EntityIdWithoutAgent actionId;
+
     private final String formLabel;
 
     private final List<ActionFormField> fields;
@@ -34,35 +36,58 @@ public final class BotActionFormResponse implements IBotActionFormResponse {
 
     private BotActionFormResponse(
             String id,
+            EntityIdWithoutAgent actionId,
             String formLabel,
             List<ActionFormField> fields,
             String submitLabel,
             Map<String, Object> additionalProperties) {
         this.id = id;
+        this.actionId = actionId;
         this.formLabel = formLabel;
         this.fields = fields;
         this.submitLabel = submitLabel;
         this.additionalProperties = additionalProperties;
     }
 
+    /**
+     * @return The ID to use when submitting the form via the <code>submitActionForm</code> API.
+     */
     @JsonProperty("id")
     @java.lang.Override
     public String getId() {
         return id;
     }
 
+    /**
+     * @return The ID of the action that will be executed when the form is submitted.
+     */
+    @JsonProperty("actionId")
+    @java.lang.Override
+    public EntityIdWithoutAgent getActionId() {
+        return actionId;
+    }
+
+    /**
+     * @return Text which should be displayed to the user at the top of the form. Provided in the user's language.
+     */
     @JsonProperty("formLabel")
     @java.lang.Override
     public String getFormLabel() {
         return formLabel;
     }
 
+    /**
+     * @return The fields that should be displayed within the form.
+     */
     @JsonProperty("fields")
     @java.lang.Override
     public List<ActionFormField> getFields() {
         return fields;
     }
 
+    /**
+     * @return Text that should be displayed to the user on the submit button. Provided in the user's language.
+     */
     @JsonProperty("submitLabel")
     @java.lang.Override
     public String getSubmitLabel() {
@@ -82,6 +107,7 @@ public final class BotActionFormResponse implements IBotActionFormResponse {
 
     private boolean equalTo(BotActionFormResponse other) {
         return id.equals(other.id)
+                && actionId.equals(other.actionId)
                 && formLabel.equals(other.formLabel)
                 && fields.equals(other.fields)
                 && submitLabel.equals(other.submitLabel);
@@ -89,7 +115,7 @@ public final class BotActionFormResponse implements IBotActionFormResponse {
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.id, this.formLabel, this.fields, this.submitLabel);
+        return Objects.hash(this.id, this.actionId, this.formLabel, this.fields, this.submitLabel);
     }
 
     @java.lang.Override
@@ -102,9 +128,13 @@ public final class BotActionFormResponse implements IBotActionFormResponse {
     }
 
     public interface IdStage {
-        FormLabelStage id(@NotNull String id);
+        ActionIdStage id(@NotNull String id);
 
         Builder from(BotActionFormResponse other);
+    }
+
+    public interface ActionIdStage {
+        FormLabelStage actionId(@NotNull EntityIdWithoutAgent actionId);
     }
 
     public interface FormLabelStage {
@@ -126,8 +156,10 @@ public final class BotActionFormResponse implements IBotActionFormResponse {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements IdStage, FormLabelStage, SubmitLabelStage, _FinalStage {
+    public static final class Builder implements IdStage, ActionIdStage, FormLabelStage, SubmitLabelStage, _FinalStage {
         private String id;
+
+        private EntityIdWithoutAgent actionId;
 
         private String formLabel;
 
@@ -143,19 +175,39 @@ public final class BotActionFormResponse implements IBotActionFormResponse {
         @java.lang.Override
         public Builder from(BotActionFormResponse other) {
             id(other.getId());
+            actionId(other.getActionId());
             formLabel(other.getFormLabel());
             fields(other.getFields());
             submitLabel(other.getSubmitLabel());
             return this;
         }
 
+        /**
+         * <p>The ID to use when submitting the form via the <code>submitActionForm</code> API.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
         @JsonSetter("id")
-        public FormLabelStage id(@NotNull String id) {
+        public ActionIdStage id(@NotNull String id) {
             this.id = Objects.requireNonNull(id, "id must not be null");
             return this;
         }
 
+        /**
+         * <p>The ID of the action that will be executed when the form is submitted.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("actionId")
+        public FormLabelStage actionId(@NotNull EntityIdWithoutAgent actionId) {
+            this.actionId = Objects.requireNonNull(actionId, "actionId must not be null");
+            return this;
+        }
+
+        /**
+         * <p>Text which should be displayed to the user at the top of the form. Provided in the user's language.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
         @JsonSetter("formLabel")
         public SubmitLabelStage formLabel(@NotNull String formLabel) {
@@ -163,6 +215,10 @@ public final class BotActionFormResponse implements IBotActionFormResponse {
             return this;
         }
 
+        /**
+         * <p>Text that should be displayed to the user on the submit button. Provided in the user's language.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
         @JsonSetter("submitLabel")
         public _FinalStage submitLabel(@NotNull String submitLabel) {
@@ -170,12 +226,20 @@ public final class BotActionFormResponse implements IBotActionFormResponse {
             return this;
         }
 
+        /**
+         * <p>The fields that should be displayed within the form.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
         public _FinalStage addAllFields(List<ActionFormField> fields) {
             this.fields.addAll(fields);
             return this;
         }
 
+        /**
+         * <p>The fields that should be displayed within the form.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
         public _FinalStage addFields(ActionFormField fields) {
             this.fields.add(fields);
@@ -192,7 +256,7 @@ public final class BotActionFormResponse implements IBotActionFormResponse {
 
         @java.lang.Override
         public BotActionFormResponse build() {
-            return new BotActionFormResponse(id, formLabel, fields, submitLabel, additionalProperties);
+            return new BotActionFormResponse(id, actionId, formLabel, fields, submitLabel, additionalProperties);
         }
     }
 }

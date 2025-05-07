@@ -38,6 +38,8 @@ public final class ConversationAnalysis {
 
     private final Optional<String> primaryLanguage;
 
+    private final Optional<Double> predictedNps;
+
     private final Map<String, Object> additionalProperties;
 
     private ConversationAnalysis(
@@ -50,6 +52,7 @@ public final class ConversationAnalysis {
             Optional<QualityReason> qualityReason,
             Optional<Boolean> resolvedByMaven,
             Optional<String> primaryLanguage,
+            Optional<Double> predictedNps,
             Map<String, Object> additionalProperties) {
         this.userRequest = userRequest;
         this.agentResponse = agentResponse;
@@ -60,6 +63,7 @@ public final class ConversationAnalysis {
         this.qualityReason = qualityReason;
         this.resolvedByMaven = resolvedByMaven;
         this.primaryLanguage = primaryLanguage;
+        this.predictedNps = predictedNps;
         this.additionalProperties = additionalProperties;
     }
 
@@ -135,6 +139,14 @@ public final class ConversationAnalysis {
         return primaryLanguage;
     }
 
+    /**
+     * @return The predicted NPS of the conversation.
+     */
+    @JsonProperty("predictedNps")
+    public Optional<Double> getPredictedNps() {
+        return predictedNps;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -155,7 +167,8 @@ public final class ConversationAnalysis {
                 && quality.equals(other.quality)
                 && qualityReason.equals(other.qualityReason)
                 && resolvedByMaven.equals(other.resolvedByMaven)
-                && primaryLanguage.equals(other.primaryLanguage);
+                && primaryLanguage.equals(other.primaryLanguage)
+                && predictedNps.equals(other.predictedNps);
     }
 
     @java.lang.Override
@@ -169,7 +182,8 @@ public final class ConversationAnalysis {
                 this.quality,
                 this.qualityReason,
                 this.resolvedByMaven,
-                this.primaryLanguage);
+                this.primaryLanguage,
+                this.predictedNps);
     }
 
     @java.lang.Override
@@ -201,6 +215,8 @@ public final class ConversationAnalysis {
 
         private Optional<String> primaryLanguage = Optional.empty();
 
+        private Optional<Double> predictedNps = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -216,6 +232,7 @@ public final class ConversationAnalysis {
             qualityReason(other.getQualityReason());
             resolvedByMaven(other.getResolvedByMaven());
             primaryLanguage(other.getPrimaryLanguage());
+            predictedNps(other.getPredictedNps());
             return this;
         }
 
@@ -318,6 +335,17 @@ public final class ConversationAnalysis {
             return this;
         }
 
+        @JsonSetter(value = "predictedNps", nulls = Nulls.SKIP)
+        public Builder predictedNps(Optional<Double> predictedNps) {
+            this.predictedNps = predictedNps;
+            return this;
+        }
+
+        public Builder predictedNps(Double predictedNps) {
+            this.predictedNps = Optional.ofNullable(predictedNps);
+            return this;
+        }
+
         public ConversationAnalysis build() {
             return new ConversationAnalysis(
                     userRequest,
@@ -329,6 +357,7 @@ public final class ConversationAnalysis {
                     qualityReason,
                     resolvedByMaven,
                     primaryLanguage,
+                    predictedNps,
                     additionalProperties);
         }
     }

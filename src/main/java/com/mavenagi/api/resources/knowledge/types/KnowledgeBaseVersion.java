@@ -9,23 +9,48 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.api.core.ObjectMappers;
+import com.mavenagi.api.resources.commons.types.EntityId;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = KnowledgeBaseVersion.Builder.class)
 public final class KnowledgeBaseVersion {
+    private final EntityId versionId;
+
     private final KnowledgeBaseVersionType type;
+
+    private final KnowledgeBaseVersionStatus status;
+
+    private final Optional<String> errorMessage;
 
     private final Map<String, Object> additionalProperties;
 
-    private KnowledgeBaseVersion(KnowledgeBaseVersionType type, Map<String, Object> additionalProperties) {
+    private KnowledgeBaseVersion(
+            EntityId versionId,
+            KnowledgeBaseVersionType type,
+            KnowledgeBaseVersionStatus status,
+            Optional<String> errorMessage,
+            Map<String, Object> additionalProperties) {
+        this.versionId = versionId;
         this.type = type;
+        this.status = status;
+        this.errorMessage = errorMessage;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return The unique ID of the knowledge base version.
+     */
+    @JsonProperty("versionId")
+    public EntityId getVersionId() {
+        return versionId;
     }
 
     /**
@@ -34,6 +59,22 @@ public final class KnowledgeBaseVersion {
     @JsonProperty("type")
     public KnowledgeBaseVersionType getType() {
         return type;
+    }
+
+    /**
+     * @return The status of the knowledge base version
+     */
+    @JsonProperty("status")
+    public KnowledgeBaseVersionStatus getStatus() {
+        return status;
+    }
+
+    /**
+     * @return A user-facing error message that provides more details about a version failure.
+     */
+    @JsonProperty("errorMessage")
+    public Optional<String> getErrorMessage() {
+        return errorMessage;
     }
 
     @java.lang.Override
@@ -48,12 +89,15 @@ public final class KnowledgeBaseVersion {
     }
 
     private boolean equalTo(KnowledgeBaseVersion other) {
-        return type.equals(other.type);
+        return versionId.equals(other.versionId)
+                && type.equals(other.type)
+                && status.equals(other.status)
+                && errorMessage.equals(other.errorMessage);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.type);
+        return Objects.hash(this.versionId, this.type, this.status, this.errorMessage);
     }
 
     @java.lang.Override
@@ -61,23 +105,41 @@ public final class KnowledgeBaseVersion {
         return ObjectMappers.stringify(this);
     }
 
-    public static TypeStage builder() {
+    public static VersionIdStage builder() {
         return new Builder();
     }
 
-    public interface TypeStage {
-        _FinalStage type(@NotNull KnowledgeBaseVersionType type);
+    public interface VersionIdStage {
+        TypeStage versionId(@NotNull EntityId versionId);
 
         Builder from(KnowledgeBaseVersion other);
     }
 
+    public interface TypeStage {
+        StatusStage type(@NotNull KnowledgeBaseVersionType type);
+    }
+
+    public interface StatusStage {
+        _FinalStage status(@NotNull KnowledgeBaseVersionStatus status);
+    }
+
     public interface _FinalStage {
         KnowledgeBaseVersion build();
+
+        _FinalStage errorMessage(Optional<String> errorMessage);
+
+        _FinalStage errorMessage(String errorMessage);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements TypeStage, _FinalStage {
+    public static final class Builder implements VersionIdStage, TypeStage, StatusStage, _FinalStage {
+        private EntityId versionId;
+
         private KnowledgeBaseVersionType type;
+
+        private KnowledgeBaseVersionStatus status;
+
+        private Optional<String> errorMessage = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -86,7 +148,21 @@ public final class KnowledgeBaseVersion {
 
         @java.lang.Override
         public Builder from(KnowledgeBaseVersion other) {
+            versionId(other.getVersionId());
             type(other.getType());
+            status(other.getStatus());
+            errorMessage(other.getErrorMessage());
+            return this;
+        }
+
+        /**
+         * <p>The unique ID of the knowledge base version.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("versionId")
+        public TypeStage versionId(@NotNull EntityId versionId) {
+            this.versionId = Objects.requireNonNull(versionId, "versionId must not be null");
             return this;
         }
 
@@ -96,14 +172,42 @@ public final class KnowledgeBaseVersion {
          */
         @java.lang.Override
         @JsonSetter("type")
-        public _FinalStage type(@NotNull KnowledgeBaseVersionType type) {
+        public StatusStage type(@NotNull KnowledgeBaseVersionType type) {
             this.type = Objects.requireNonNull(type, "type must not be null");
+            return this;
+        }
+
+        /**
+         * <p>The status of the knowledge base version</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("status")
+        public _FinalStage status(@NotNull KnowledgeBaseVersionStatus status) {
+            this.status = Objects.requireNonNull(status, "status must not be null");
+            return this;
+        }
+
+        /**
+         * <p>A user-facing error message that provides more details about a version failure.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage errorMessage(String errorMessage) {
+            this.errorMessage = Optional.ofNullable(errorMessage);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "errorMessage", nulls = Nulls.SKIP)
+        public _FinalStage errorMessage(Optional<String> errorMessage) {
+            this.errorMessage = errorMessage;
             return this;
         }
 
         @java.lang.Override
         public KnowledgeBaseVersion build() {
-            return new KnowledgeBaseVersion(type, additionalProperties);
+            return new KnowledgeBaseVersion(versionId, type, status, errorMessage, additionalProperties);
         }
     }
 }

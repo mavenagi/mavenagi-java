@@ -11,6 +11,7 @@ import com.mavenagi.api.resources.appsettings.AppSettingsClient;
 import com.mavenagi.api.resources.conversation.ConversationClient;
 import com.mavenagi.api.resources.inbox.InboxClient;
 import com.mavenagi.api.resources.knowledge.KnowledgeClient;
+import com.mavenagi.api.resources.organizations.OrganizationsClient;
 import com.mavenagi.api.resources.translations.TranslationsClient;
 import com.mavenagi.api.resources.triggers.TriggersClient;
 import com.mavenagi.api.resources.users.UsersClient;
@@ -31,6 +32,8 @@ public class MavenAGI {
 
     protected final Supplier<KnowledgeClient> knowledgeClient;
 
+    protected final Supplier<OrganizationsClient> organizationsClient;
+
     protected final Supplier<TranslationsClient> translationsClient;
 
     protected final Supplier<TriggersClient> triggersClient;
@@ -45,6 +48,7 @@ public class MavenAGI {
         this.conversationClient = Suppliers.memoize(() -> new ConversationClient(clientOptions));
         this.inboxClient = Suppliers.memoize(() -> new InboxClient(clientOptions));
         this.knowledgeClient = Suppliers.memoize(() -> new KnowledgeClient(clientOptions));
+        this.organizationsClient = Suppliers.memoize(() -> new OrganizationsClient(clientOptions));
         this.translationsClient = Suppliers.memoize(() -> new TranslationsClient(clientOptions));
         this.triggersClient = Suppliers.memoize(() -> new TriggersClient(clientOptions));
         this.usersClient = Suppliers.memoize(() -> new UsersClient(clientOptions));
@@ -72,6 +76,10 @@ public class MavenAGI {
 
     public KnowledgeClient knowledge() {
         return this.knowledgeClient.get();
+    }
+
+    public OrganizationsClient organizations() {
+        return this.organizationsClient.get();
     }
 
     public TranslationsClient translations() {

@@ -8,6 +8,8 @@ import java.util.List;
 public interface IBotActionFormResponse {
     String getId();
 
+    EntityIdWithoutAgent getActionId();
+
     String getFormLabel();
 
     List<ActionFormField> getFields();

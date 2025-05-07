@@ -15,6 +15,7 @@ import com.mavenagi.api.core.ObjectMappers;
 import com.mavenagi.api.resources.commons.types.EntityId;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -39,6 +40,8 @@ public final class KnowledgeDocumentResponse implements IBaseKnowledgeDocument {
 
     private final String content;
 
+    private final Map<String, String> metadata;
+
     private final Map<String, Object> additionalProperties;
 
     private KnowledgeDocumentResponse(
@@ -50,6 +53,7 @@ public final class KnowledgeDocumentResponse implements IBaseKnowledgeDocument {
             Optional<String> author,
             EntityId knowledgeDocumentId,
             String content,
+            Map<String, String> metadata,
             Map<String, Object> additionalProperties) {
         this.title = title;
         this.url = url;
@@ -59,6 +63,7 @@ public final class KnowledgeDocumentResponse implements IBaseKnowledgeDocument {
         this.author = author;
         this.knowledgeDocumentId = knowledgeDocumentId;
         this.content = content;
+        this.metadata = metadata;
         this.additionalProperties = additionalProperties;
     }
 
@@ -132,6 +137,14 @@ public final class KnowledgeDocumentResponse implements IBaseKnowledgeDocument {
         return content;
     }
 
+    /**
+     * @return Metadata for the knowledge document.
+     */
+    @JsonProperty("metadata")
+    public Map<String, String> getMetadata() {
+        return metadata;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -151,7 +164,8 @@ public final class KnowledgeDocumentResponse implements IBaseKnowledgeDocument {
                 && updatedAt.equals(other.updatedAt)
                 && author.equals(other.author)
                 && knowledgeDocumentId.equals(other.knowledgeDocumentId)
-                && content.equals(other.content);
+                && content.equals(other.content)
+                && metadata.equals(other.metadata);
     }
 
     @java.lang.Override
@@ -164,7 +178,8 @@ public final class KnowledgeDocumentResponse implements IBaseKnowledgeDocument {
                 this.updatedAt,
                 this.author,
                 this.knowledgeDocumentId,
-                this.content);
+                this.content,
+                this.metadata);
     }
 
     @java.lang.Override
@@ -212,6 +227,12 @@ public final class KnowledgeDocumentResponse implements IBaseKnowledgeDocument {
         _FinalStage author(Optional<String> author);
 
         _FinalStage author(String author);
+
+        _FinalStage metadata(Map<String, String> metadata);
+
+        _FinalStage putAllMetadata(Map<String, String> metadata);
+
+        _FinalStage metadata(String key, String value);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -221,6 +242,8 @@ public final class KnowledgeDocumentResponse implements IBaseKnowledgeDocument {
         private EntityId knowledgeDocumentId;
 
         private String content;
+
+        private Map<String, String> metadata = new LinkedHashMap<>();
 
         private Optional<String> author = Optional.empty();
 
@@ -247,6 +270,7 @@ public final class KnowledgeDocumentResponse implements IBaseKnowledgeDocument {
             author(other.getAuthor());
             knowledgeDocumentId(other.getKnowledgeDocumentId());
             content(other.getContent());
+            metadata(other.getMetadata());
             return this;
         }
 
@@ -281,6 +305,34 @@ public final class KnowledgeDocumentResponse implements IBaseKnowledgeDocument {
         @JsonSetter("content")
         public _FinalStage content(@NotNull String content) {
             this.content = Objects.requireNonNull(content, "content must not be null");
+            return this;
+        }
+
+        /**
+         * <p>Metadata for the knowledge document.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage metadata(String key, String value) {
+            this.metadata.put(key, value);
+            return this;
+        }
+
+        /**
+         * <p>Metadata for the knowledge document.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage putAllMetadata(Map<String, String> metadata) {
+            this.metadata.putAll(metadata);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "metadata", nulls = Nulls.SKIP)
+        public _FinalStage metadata(Map<String, String> metadata) {
+            this.metadata.clear();
+            this.metadata.putAll(metadata);
             return this;
         }
 
@@ -380,6 +432,7 @@ public final class KnowledgeDocumentResponse implements IBaseKnowledgeDocument {
                     author,
                     knowledgeDocumentId,
                     content,
+                    metadata,
                     additionalProperties);
         }
     }

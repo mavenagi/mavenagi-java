@@ -12,8 +12,6 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.api.core.ObjectMappers;
 import com.mavenagi.api.resources.commons.types.EntityIdBase;
-import com.mavenagi.api.resources.commons.types.EventTriggerType;
-import com.mavenagi.api.resources.commons.types.IEventTriggerBase;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;

@@ -42,6 +42,10 @@ public final class ConversationPrecondition {
         return new ConversationPrecondition(new ResponseConfigValue(value));
     }
 
+    public static ConversationPrecondition app(AppPrecondition value) {
+        return new ConversationPrecondition(new AppValue(value));
+    }
+
     public boolean isTags() {
         return value instanceof TagsValue;
     }
@@ -56,6 +60,10 @@ public final class ConversationPrecondition {
 
     public boolean isResponseConfig() {
         return value instanceof ResponseConfigValue;
+    }
+
+    public boolean isApp() {
+        return value instanceof AppValue;
     }
 
     public boolean _isUnknown() {
@@ -90,6 +98,13 @@ public final class ConversationPrecondition {
         return Optional.empty();
     }
 
+    public Optional<AppPrecondition> getApp() {
+        if (isApp()) {
+            return Optional.of(((AppValue) value).value);
+        }
+        return Optional.empty();
+    }
+
     public Optional<Object> _getUnknown() {
         if (_isUnknown()) {
             return Optional.of(((_UnknownValue) value).value);
@@ -111,6 +126,8 @@ public final class ConversationPrecondition {
 
         T visitResponseConfig(ResponseConfigPrecondition responseConfig);
 
+        T visitApp(AppPrecondition app);
+
         T _visitUnknown(Object unknownType);
     }
 
@@ -123,7 +140,8 @@ public final class ConversationPrecondition {
         @JsonSubTypes.Type(TagsValue.class),
         @JsonSubTypes.Type(MetadataValue.class),
         @JsonSubTypes.Type(ActionExecutedValue.class),
-        @JsonSubTypes.Type(ResponseConfigValue.class)
+        @JsonSubTypes.Type(ResponseConfigValue.class),
+        @JsonSubTypes.Type(AppValue.class)
     })
     @JsonIgnoreProperties(ignoreUnknown = true)
     private interface Value {
@@ -268,6 +286,44 @@ public final class ConversationPrecondition {
         }
 
         private boolean equalTo(ResponseConfigValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "ConversationPrecondition{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("app")
+    private static final class AppValue implements Value {
+        @JsonUnwrapped
+        private AppPrecondition value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private AppValue() {}
+
+        private AppValue(AppPrecondition value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitApp(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof AppValue && equalTo((AppValue) other);
+        }
+
+        private boolean equalTo(AppValue other) {
             return value.equals(other.value);
         }
 

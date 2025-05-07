@@ -33,6 +33,8 @@ public final class AskRequest {
 
     private final Optional<Map<String, String>> transientData;
 
+    private final Optional<String> timezone;
+
     private final Map<String, Object> additionalProperties;
 
     private AskRequest(
@@ -41,12 +43,14 @@ public final class AskRequest {
             String text,
             Optional<List<Attachment>> attachments,
             Optional<Map<String, String>> transientData,
+            Optional<String> timezone,
             Map<String, Object> additionalProperties) {
         this.conversationMessageId = conversationMessageId;
         this.userId = userId;
         this.text = text;
         this.attachments = attachments;
         this.transientData = transientData;
+        this.timezone = timezone;
         this.additionalProperties = additionalProperties;
     }
 
@@ -90,6 +94,14 @@ public final class AskRequest {
         return transientData;
     }
 
+    /**
+     * @return IANA timezone identifier (e.g. &quot;America/New_York&quot;, &quot;Europe/London&quot;) to be used for time-based operations in the conversation.
+     */
+    @JsonProperty("timezone")
+    public Optional<String> getTimezone() {
+        return timezone;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -106,12 +118,19 @@ public final class AskRequest {
                 && userId.equals(other.userId)
                 && text.equals(other.text)
                 && attachments.equals(other.attachments)
-                && transientData.equals(other.transientData);
+                && transientData.equals(other.transientData)
+                && timezone.equals(other.timezone);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.conversationMessageId, this.userId, this.text, this.attachments, this.transientData);
+        return Objects.hash(
+                this.conversationMessageId,
+                this.userId,
+                this.text,
+                this.attachments,
+                this.transientData,
+                this.timezone);
     }
 
     @java.lang.Override
@@ -147,6 +166,10 @@ public final class AskRequest {
         _FinalStage transientData(Optional<Map<String, String>> transientData);
 
         _FinalStage transientData(Map<String, String> transientData);
+
+        _FinalStage timezone(Optional<String> timezone);
+
+        _FinalStage timezone(String timezone);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -156,6 +179,8 @@ public final class AskRequest {
         private EntityIdBase userId;
 
         private String text;
+
+        private Optional<String> timezone = Optional.empty();
 
         private Optional<Map<String, String>> transientData = Optional.empty();
 
@@ -173,6 +198,7 @@ public final class AskRequest {
             text(other.getText());
             attachments(other.getAttachments());
             transientData(other.getTransientData());
+            timezone(other.getTimezone());
             return this;
         }
 
@@ -207,6 +233,23 @@ public final class AskRequest {
         @JsonSetter("text")
         public _FinalStage text(@NotNull String text) {
             this.text = Objects.requireNonNull(text, "text must not be null");
+            return this;
+        }
+
+        /**
+         * <p>IANA timezone identifier (e.g. &quot;America/New_York&quot;, &quot;Europe/London&quot;) to be used for time-based operations in the conversation.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage timezone(String timezone) {
+            this.timezone = Optional.ofNullable(timezone);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "timezone", nulls = Nulls.SKIP)
+        public _FinalStage timezone(Optional<String> timezone) {
+            this.timezone = timezone;
             return this;
         }
 
@@ -247,7 +290,7 @@ public final class AskRequest {
         @java.lang.Override
         public AskRequest build() {
             return new AskRequest(
-                    conversationMessageId, userId, text, attachments, transientData, additionalProperties);
+                    conversationMessageId, userId, text, attachments, transientData, timezone, additionalProperties);
         }
     }
 }

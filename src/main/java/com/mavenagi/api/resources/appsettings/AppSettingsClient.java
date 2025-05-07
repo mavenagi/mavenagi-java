@@ -11,6 +11,8 @@ import com.mavenagi.api.core.MavenAGIException;
 import com.mavenagi.api.core.MediaTypes;
 import com.mavenagi.api.core.ObjectMappers;
 import com.mavenagi.api.core.RequestOptions;
+import com.mavenagi.api.resources.appsettings.requests.SearchAppSettingsRequest;
+import com.mavenagi.api.resources.appsettings.types.SearchAppSettingsResponse;
 import com.mavenagi.api.resources.commons.errors.BadRequestError;
 import com.mavenagi.api.resources.commons.errors.NotFoundError;
 import com.mavenagi.api.resources.commons.errors.ServerError;
@@ -30,6 +32,65 @@ public class AppSettingsClient {
 
     public AppSettingsClient(ClientOptions clientOptions) {
         this.clientOptions = clientOptions;
+    }
+
+    /**
+     * Search for app settings which have the <code>$index</code> key set to the provided value.
+     * <p>You can set the <code>$index</code> key using the Update app settings API.</p>
+     * <p>&lt;Warning&gt;This API currently requires an organization ID and agent ID for any agent which is installed on the app. This requirement will be removed in a future update.&lt;/Warning&gt;</p>
+     */
+    public SearchAppSettingsResponse search(SearchAppSettingsRequest request) {
+        return search(request, null);
+    }
+
+    /**
+     * Search for app settings which have the <code>$index</code> key set to the provided value.
+     * <p>You can set the <code>$index</code> key using the Update app settings API.</p>
+     * <p>&lt;Warning&gt;This API currently requires an organization ID and agent ID for any agent which is installed on the app. This requirement will be removed in a future update.&lt;/Warning&gt;</p>
+     */
+    public SearchAppSettingsResponse search(SearchAppSettingsRequest request, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("v1/app-settings/search");
+        httpUrl.addQueryParameter("index", request.getIndex());
+        Request.Builder _requestBuilder = new Request.Builder()
+                .url(httpUrl.build())
+                .method("GET", null)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json");
+        Request okhttpRequest = _requestBuilder.build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            if (response.isSuccessful()) {
+                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), SearchAppSettingsResponse.class);
+            }
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            try {
+                switch (response.code()) {
+                    case 400:
+                        throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class));
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class));
+                    case 500:
+                        throw new ServerError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class));
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            throw new MavenAGIApiException(
+                    "Error with status code " + response.code(),
+                    response.code(),
+                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
+        } catch (IOException e) {
+            throw new MavenAGIException("Network error executing HTTP request", e);
+        }
     }
 
     /**

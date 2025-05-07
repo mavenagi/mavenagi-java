@@ -15,6 +15,7 @@ import com.mavenagi.api.core.ObjectMappers;
 import com.mavenagi.api.resources.commons.types.EntityId;
 import com.mavenagi.api.resources.commons.types.Precondition;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -31,6 +32,8 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
 
     private final KnowledgeBaseType type;
 
+    private final Map<String, String> metadata;
+
     private final Map<String, Object> additionalProperties;
 
     private KnowledgeBaseResponse(
@@ -38,11 +41,13 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
             Optional<Precondition> precondition,
             EntityId knowledgeBaseId,
             KnowledgeBaseType type,
+            Map<String, String> metadata,
             Map<String, Object> additionalProperties) {
         this.name = name;
         this.precondition = precondition;
         this.knowledgeBaseId = knowledgeBaseId;
         this.type = type;
+        this.metadata = metadata;
         this.additionalProperties = additionalProperties;
     }
 
@@ -80,6 +85,14 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
         return type;
     }
 
+    /**
+     * @return Metadata for the knowledge base.
+     */
+    @JsonProperty("metadata")
+    public Map<String, String> getMetadata() {
+        return metadata;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -95,12 +108,13 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
         return name.equals(other.name)
                 && precondition.equals(other.precondition)
                 && knowledgeBaseId.equals(other.knowledgeBaseId)
-                && type.equals(other.type);
+                && type.equals(other.type)
+                && metadata.equals(other.metadata);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.name, this.precondition, this.knowledgeBaseId, this.type);
+        return Objects.hash(this.name, this.precondition, this.knowledgeBaseId, this.type, this.metadata);
     }
 
     @java.lang.Override
@@ -132,6 +146,12 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
         _FinalStage precondition(Optional<Precondition> precondition);
 
         _FinalStage precondition(Precondition precondition);
+
+        _FinalStage metadata(Map<String, String> metadata);
+
+        _FinalStage putAllMetadata(Map<String, String> metadata);
+
+        _FinalStage metadata(String key, String value);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -141,6 +161,8 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
         private EntityId knowledgeBaseId;
 
         private KnowledgeBaseType type;
+
+        private Map<String, String> metadata = new LinkedHashMap<>();
 
         private Optional<Precondition> precondition = Optional.empty();
 
@@ -155,6 +177,7 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
             precondition(other.getPrecondition());
             knowledgeBaseId(other.getKnowledgeBaseId());
             type(other.getType());
+            metadata(other.getMetadata());
             return this;
         }
 
@@ -192,6 +215,34 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
         }
 
         /**
+         * <p>Metadata for the knowledge base.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage metadata(String key, String value) {
+            this.metadata.put(key, value);
+            return this;
+        }
+
+        /**
+         * <p>Metadata for the knowledge base.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage putAllMetadata(Map<String, String> metadata) {
+            this.metadata.putAll(metadata);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "metadata", nulls = Nulls.SKIP)
+        public _FinalStage metadata(Map<String, String> metadata) {
+            this.metadata.clear();
+            this.metadata.putAll(metadata);
+            return this;
+        }
+
+        /**
          * <p>(Beta) The preconditions that must be met for knowledge base be relevant to a conversation. Can be used to limit knowledge to certain types of users.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -210,7 +261,7 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
 
         @java.lang.Override
         public KnowledgeBaseResponse build() {
-            return new KnowledgeBaseResponse(name, precondition, knowledgeBaseId, type, additionalProperties);
+            return new KnowledgeBaseResponse(name, precondition, knowledgeBaseId, type, metadata, additionalProperties);
         }
     }
 }

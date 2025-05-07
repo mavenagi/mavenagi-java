@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.api.core.ObjectMappers;
 import com.mavenagi.api.resources.commons.types.EntityIdBase;
+import com.mavenagi.api.resources.commons.types.EntityIdWithoutAgent;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,9 +38,13 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
 
     private final EntityIdBase knowledgeDocumentId;
 
+    private final Optional<EntityIdWithoutAgent> versionId;
+
     private final KnowledgeDocumentContentType contentType;
 
     private final String content;
+
+    private final Optional<Map<String, String>> metadata;
 
     private final Map<String, Object> additionalProperties;
 
@@ -51,8 +56,10 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
             Optional<OffsetDateTime> updatedAt,
             Optional<String> author,
             EntityIdBase knowledgeDocumentId,
+            Optional<EntityIdWithoutAgent> versionId,
             KnowledgeDocumentContentType contentType,
             String content,
+            Optional<Map<String, String>> metadata,
             Map<String, Object> additionalProperties) {
         this.title = title;
         this.url = url;
@@ -61,8 +68,10 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
         this.updatedAt = updatedAt;
         this.author = author;
         this.knowledgeDocumentId = knowledgeDocumentId;
+        this.versionId = versionId;
         this.contentType = contentType;
         this.content = content;
+        this.metadata = metadata;
         this.additionalProperties = additionalProperties;
     }
 
@@ -128,6 +137,14 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
         return knowledgeDocumentId;
     }
 
+    /**
+     * @return ID that uniquely identifies which knowledge base version to create the document in. If not provided will use the most recent version of the knowledge base.
+     */
+    @JsonProperty("versionId")
+    public Optional<EntityIdWithoutAgent> getVersionId() {
+        return versionId;
+    }
+
     @JsonProperty("contentType")
     public KnowledgeDocumentContentType getContentType() {
         return contentType;
@@ -139,6 +156,14 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
     @JsonProperty("content")
     public String getContent() {
         return content;
+    }
+
+    /**
+     * @return Metadata for the knowledge document.
+     */
+    @JsonProperty("metadata")
+    public Optional<Map<String, String>> getMetadata() {
+        return metadata;
     }
 
     @java.lang.Override
@@ -160,8 +185,10 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
                 && updatedAt.equals(other.updatedAt)
                 && author.equals(other.author)
                 && knowledgeDocumentId.equals(other.knowledgeDocumentId)
+                && versionId.equals(other.versionId)
                 && contentType.equals(other.contentType)
-                && content.equals(other.content);
+                && content.equals(other.content)
+                && metadata.equals(other.metadata);
     }
 
     @java.lang.Override
@@ -174,8 +201,10 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
                 this.updatedAt,
                 this.author,
                 this.knowledgeDocumentId,
+                this.versionId,
                 this.contentType,
-                this.content);
+                this.content,
+                this.metadata);
     }
 
     @java.lang.Override
@@ -227,6 +256,14 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
         _FinalStage author(Optional<String> author);
 
         _FinalStage author(String author);
+
+        _FinalStage versionId(Optional<EntityIdWithoutAgent> versionId);
+
+        _FinalStage versionId(EntityIdWithoutAgent versionId);
+
+        _FinalStage metadata(Optional<Map<String, String>> metadata);
+
+        _FinalStage metadata(Map<String, String> metadata);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -239,6 +276,10 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
         private KnowledgeDocumentContentType contentType;
 
         private String content;
+
+        private Optional<Map<String, String>> metadata = Optional.empty();
+
+        private Optional<EntityIdWithoutAgent> versionId = Optional.empty();
 
         private Optional<String> author = Optional.empty();
 
@@ -264,8 +305,10 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
             updatedAt(other.getUpdatedAt());
             author(other.getAuthor());
             knowledgeDocumentId(other.getKnowledgeDocumentId());
+            versionId(other.getVersionId());
             contentType(other.getContentType());
             content(other.getContent());
+            metadata(other.getMetadata());
             return this;
         }
 
@@ -307,6 +350,40 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
         @JsonSetter("content")
         public _FinalStage content(@NotNull String content) {
             this.content = Objects.requireNonNull(content, "content must not be null");
+            return this;
+        }
+
+        /**
+         * <p>Metadata for the knowledge document.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage metadata(Map<String, String> metadata) {
+            this.metadata = Optional.ofNullable(metadata);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "metadata", nulls = Nulls.SKIP)
+        public _FinalStage metadata(Optional<Map<String, String>> metadata) {
+            this.metadata = metadata;
+            return this;
+        }
+
+        /**
+         * <p>ID that uniquely identifies which knowledge base version to create the document in. If not provided will use the most recent version of the knowledge base.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage versionId(EntityIdWithoutAgent versionId) {
+            this.versionId = Optional.ofNullable(versionId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "versionId", nulls = Nulls.SKIP)
+        public _FinalStage versionId(Optional<EntityIdWithoutAgent> versionId) {
+            this.versionId = versionId;
             return this;
         }
 
@@ -405,8 +482,10 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
                     updatedAt,
                     author,
                     knowledgeDocumentId,
+                    versionId,
                     contentType,
                     content,
+                    metadata,
                     additionalProperties);
         }
     }

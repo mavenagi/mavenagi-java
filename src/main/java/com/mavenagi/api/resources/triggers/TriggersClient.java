@@ -14,8 +14,11 @@ import com.mavenagi.api.resources.commons.errors.BadRequestError;
 import com.mavenagi.api.resources.commons.errors.NotFoundError;
 import com.mavenagi.api.resources.commons.errors.ServerError;
 import com.mavenagi.api.resources.commons.types.ErrorMessage;
-import com.mavenagi.api.resources.commons.types.EventTriggerResponse;
+import com.mavenagi.api.resources.triggers.requests.PartialUpdateRequest;
 import com.mavenagi.api.resources.triggers.types.EventTriggerRequest;
+import com.mavenagi.api.resources.triggers.types.EventTriggerResponse;
+import com.mavenagi.api.resources.triggers.types.EventTriggersSearchRequest;
+import com.mavenagi.api.resources.triggers.types.EventTriggersSearchResponse;
 import java.io.IOException;
 import okhttp3.Headers;
 import okhttp3.HttpUrl;
@@ -30,6 +33,66 @@ public class TriggersClient {
 
     public TriggersClient(ClientOptions clientOptions) {
         this.clientOptions = clientOptions;
+    }
+
+    public EventTriggersSearchResponse search() {
+        return search(EventTriggersSearchRequest.builder().build());
+    }
+
+    public EventTriggersSearchResponse search(EventTriggersSearchRequest request) {
+        return search(request, null);
+    }
+
+    public EventTriggersSearchResponse search(EventTriggersSearchRequest request, RequestOptions requestOptions) {
+        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("v1/triggers")
+                .build();
+        RequestBody body;
+        try {
+            body = RequestBody.create(
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
+        } catch (JsonProcessingException e) {
+            throw new MavenAGIException("Failed to serialize request", e);
+        }
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl)
+                .method("POST", body)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
+                .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            if (response.isSuccessful()) {
+                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), EventTriggersSearchResponse.class);
+            }
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            try {
+                switch (response.code()) {
+                    case 400:
+                        throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class));
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class));
+                    case 500:
+                        throw new ServerError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class));
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            throw new MavenAGIApiException(
+                    "Error with status code " + response.code(),
+                    response.code(),
+                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
+        } catch (IOException e) {
+            throw new MavenAGIException("Network error executing HTTP request", e);
+        }
     }
 
     /**
@@ -179,6 +242,72 @@ public class TriggersClient {
             ResponseBody responseBody = response.body();
             if (response.isSuccessful()) {
                 return;
+            }
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            try {
+                switch (response.code()) {
+                    case 400:
+                        throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class));
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class));
+                    case 500:
+                        throw new ServerError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class));
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            throw new MavenAGIApiException(
+                    "Error with status code " + response.code(),
+                    response.code(),
+                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
+        } catch (IOException e) {
+            throw new MavenAGIException("Network error executing HTTP request", e);
+        }
+    }
+
+    /**
+     * Updates an event trigger. Only the enabled field is editable.
+     */
+    public EventTriggerResponse partialUpdate(String triggerReferenceId, PartialUpdateRequest request) {
+        return partialUpdate(triggerReferenceId, request, null);
+    }
+
+    /**
+     * Updates an event trigger. Only the enabled field is editable.
+     */
+    public EventTriggerResponse partialUpdate(
+            String triggerReferenceId, PartialUpdateRequest request, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("v1/triggers")
+                .addPathSegment(triggerReferenceId);
+        if (request.getAppId().isPresent()) {
+            httpUrl.addQueryParameter("appId", request.getAppId().get());
+        }
+        RequestBody body;
+        try {
+            body = RequestBody.create(
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request.getBody()), MediaTypes.APPLICATION_JSON);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        Request.Builder _requestBuilder = new Request.Builder()
+                .url(httpUrl.build())
+                .method("PATCH", body)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json");
+        Request okhttpRequest = _requestBuilder.build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            if (response.isSuccessful()) {
+                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), EventTriggerResponse.class);
             }
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
