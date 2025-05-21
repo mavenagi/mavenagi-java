@@ -6,9 +6,11 @@ package com.mavenagi.api;
 import com.mavenagi.api.core.ClientOptions;
 import com.mavenagi.api.core.Suppliers;
 import com.mavenagi.api.resources.actions.ActionsClient;
+import com.mavenagi.api.resources.agents.AgentsClient;
 import com.mavenagi.api.resources.analytics.AnalyticsClient;
 import com.mavenagi.api.resources.appsettings.AppSettingsClient;
 import com.mavenagi.api.resources.conversation.ConversationClient;
+import com.mavenagi.api.resources.events.EventsClient;
 import com.mavenagi.api.resources.inbox.InboxClient;
 import com.mavenagi.api.resources.knowledge.KnowledgeClient;
 import com.mavenagi.api.resources.organizations.OrganizationsClient;
@@ -22,11 +24,15 @@ public class MavenAGI {
 
     protected final Supplier<ActionsClient> actionsClient;
 
+    protected final Supplier<AgentsClient> agentsClient;
+
     protected final Supplier<AnalyticsClient> analyticsClient;
 
     protected final Supplier<AppSettingsClient> appSettingsClient;
 
     protected final Supplier<ConversationClient> conversationClient;
+
+    protected final Supplier<EventsClient> eventsClient;
 
     protected final Supplier<InboxClient> inboxClient;
 
@@ -43,9 +49,11 @@ public class MavenAGI {
     public MavenAGI(ClientOptions clientOptions) {
         this.clientOptions = clientOptions;
         this.actionsClient = Suppliers.memoize(() -> new ActionsClient(clientOptions));
+        this.agentsClient = Suppliers.memoize(() -> new AgentsClient(clientOptions));
         this.analyticsClient = Suppliers.memoize(() -> new AnalyticsClient(clientOptions));
         this.appSettingsClient = Suppliers.memoize(() -> new AppSettingsClient(clientOptions));
         this.conversationClient = Suppliers.memoize(() -> new ConversationClient(clientOptions));
+        this.eventsClient = Suppliers.memoize(() -> new EventsClient(clientOptions));
         this.inboxClient = Suppliers.memoize(() -> new InboxClient(clientOptions));
         this.knowledgeClient = Suppliers.memoize(() -> new KnowledgeClient(clientOptions));
         this.organizationsClient = Suppliers.memoize(() -> new OrganizationsClient(clientOptions));
@@ -58,6 +66,10 @@ public class MavenAGI {
         return this.actionsClient.get();
     }
 
+    public AgentsClient agents() {
+        return this.agentsClient.get();
+    }
+
     public AnalyticsClient analytics() {
         return this.analyticsClient.get();
     }
@@ -68,6 +80,10 @@ public class MavenAGI {
 
     public ConversationClient conversation() {
         return this.conversationClient.get();
+    }
+
+    public EventsClient events() {
+        return this.eventsClient.get();
     }
 
     public InboxClient inbox() {

@@ -18,24 +18,14 @@ import java.util.Objects;
 import java.util.Optional;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonDeserialize(builder = ControlEvent.Builder.class)
-public final class ControlEvent implements IMessageBase {
+@JsonDeserialize(builder = MessageBase.Builder.class)
+public final class MessageBase implements IMessageBase {
     private final Optional<Integer> seqId;
-
-    private final Optional<String> reason;
-
-    private final Optional<AudioFormat> unused;
 
     private final Map<String, Object> additionalProperties;
 
-    private ControlEvent(
-            Optional<Integer> seqId,
-            Optional<String> reason,
-            Optional<AudioFormat> unused,
-            Map<String, Object> additionalProperties) {
+    private MessageBase(Optional<Integer> seqId, Map<String, Object> additionalProperties) {
         this.seqId = seqId;
-        this.reason = reason;
-        this.unused = unused;
         this.additionalProperties = additionalProperties;
     }
 
@@ -45,23 +35,10 @@ public final class ControlEvent implements IMessageBase {
         return seqId;
     }
 
-    @JsonProperty("reason")
-    public Optional<String> getReason() {
-        return reason;
-    }
-
-    /**
-     * @return not used.
-     */
-    @JsonProperty("unused")
-    public Optional<AudioFormat> getUnused() {
-        return unused;
-    }
-
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
-        return other instanceof ControlEvent && equalTo((ControlEvent) other);
+        return other instanceof MessageBase && equalTo((MessageBase) other);
     }
 
     @JsonAnyGetter
@@ -69,13 +46,13 @@ public final class ControlEvent implements IMessageBase {
         return this.additionalProperties;
     }
 
-    private boolean equalTo(ControlEvent other) {
-        return seqId.equals(other.seqId) && reason.equals(other.reason) && unused.equals(other.unused);
+    private boolean equalTo(MessageBase other) {
+        return seqId.equals(other.seqId);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.seqId, this.reason, this.unused);
+        return Objects.hash(this.seqId);
     }
 
     @java.lang.Override
@@ -91,19 +68,13 @@ public final class ControlEvent implements IMessageBase {
     public static final class Builder {
         private Optional<Integer> seqId = Optional.empty();
 
-        private Optional<String> reason = Optional.empty();
-
-        private Optional<AudioFormat> unused = Optional.empty();
-
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
 
-        public Builder from(ControlEvent other) {
+        public Builder from(MessageBase other) {
             seqId(other.getSeqId());
-            reason(other.getReason());
-            unused(other.getUnused());
             return this;
         }
 
@@ -118,30 +89,8 @@ public final class ControlEvent implements IMessageBase {
             return this;
         }
 
-        @JsonSetter(value = "reason", nulls = Nulls.SKIP)
-        public Builder reason(Optional<String> reason) {
-            this.reason = reason;
-            return this;
-        }
-
-        public Builder reason(String reason) {
-            this.reason = Optional.ofNullable(reason);
-            return this;
-        }
-
-        @JsonSetter(value = "unused", nulls = Nulls.SKIP)
-        public Builder unused(Optional<AudioFormat> unused) {
-            this.unused = unused;
-            return this;
-        }
-
-        public Builder unused(AudioFormat unused) {
-            this.unused = Optional.ofNullable(unused);
-            return this;
-        }
-
-        public ControlEvent build() {
-            return new ControlEvent(seqId, reason, unused, additionalProperties);
+        public MessageBase build() {
+            return new MessageBase(seqId, additionalProperties);
         }
     }
 }

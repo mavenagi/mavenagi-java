@@ -6,6 +6,8 @@ package com.mavenagi.api.resources.commons.types;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum EntityType {
+    AGENT("AGENT"),
+
     CONVERSATION("CONVERSATION"),
 
     CONVERSATION_MESSAGE("CONVERSATION_MESSAGE"),

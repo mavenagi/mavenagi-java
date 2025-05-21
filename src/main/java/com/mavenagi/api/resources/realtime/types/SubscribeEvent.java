@@ -42,6 +42,10 @@ public final class SubscribeEvent {
         return new SubscribeEvent(new ControlAudioDoneValue(value));
     }
 
+    public static SubscribeEvent controlSessionUpdated(ControlEvent value) {
+        return new SubscribeEvent(new ControlSessionUpdatedValue(value));
+    }
+
     public boolean isAudio() {
         return value instanceof AudioValue;
     }
@@ -56,6 +60,10 @@ public final class SubscribeEvent {
 
     public boolean isControlAudioDone() {
         return value instanceof ControlAudioDoneValue;
+    }
+
+    public boolean isControlSessionUpdated() {
+        return value instanceof ControlSessionUpdatedValue;
     }
 
     public boolean _isUnknown() {
@@ -90,6 +98,13 @@ public final class SubscribeEvent {
         return Optional.empty();
     }
 
+    public Optional<ControlEvent> getControlSessionUpdated() {
+        if (isControlSessionUpdated()) {
+            return Optional.of(((ControlSessionUpdatedValue) value).value);
+        }
+        return Optional.empty();
+    }
+
     public Optional<Object> _getUnknown() {
         if (_isUnknown()) {
             return Optional.of(((_UnknownValue) value).value);
@@ -111,6 +126,8 @@ public final class SubscribeEvent {
 
         T visitControlAudioDone(ControlEvent controlAudioDone);
 
+        T visitControlSessionUpdated(ControlEvent controlSessionUpdated);
+
         T _visitUnknown(Object unknownType);
     }
 
@@ -123,7 +140,8 @@ public final class SubscribeEvent {
         @JsonSubTypes.Type(AudioValue.class),
         @JsonSubTypes.Type(ControlSessionStartValue.class),
         @JsonSubTypes.Type(ControlSessionStopValue.class),
-        @JsonSubTypes.Type(ControlAudioDoneValue.class)
+        @JsonSubTypes.Type(ControlAudioDoneValue.class),
+        @JsonSubTypes.Type(ControlSessionUpdatedValue.class)
     })
     @JsonIgnoreProperties(ignoreUnknown = true)
     private interface Value {
@@ -268,6 +286,44 @@ public final class SubscribeEvent {
         }
 
         private boolean equalTo(ControlAudioDoneValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "SubscribeEvent{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("controlSessionUpdated")
+    private static final class ControlSessionUpdatedValue implements Value {
+        @JsonUnwrapped
+        private ControlEvent value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private ControlSessionUpdatedValue() {}
+
+        private ControlSessionUpdatedValue(ControlEvent value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitControlSessionUpdated(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof ControlSessionUpdatedValue && equalTo((ControlSessionUpdatedValue) other);
+        }
+
+        private boolean equalTo(ControlSessionUpdatedValue other) {
             return value.equals(other.value);
         }
 

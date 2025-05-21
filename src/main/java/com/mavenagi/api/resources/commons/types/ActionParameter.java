@@ -34,6 +34,8 @@ public final class ActionParameter {
 
     private final Optional<List<ActionEnumOption>> enumOptions;
 
+    private final Optional<String> schema;
+
     private final Map<String, Object> additionalProperties;
 
     private ActionParameter(
@@ -43,6 +45,7 @@ public final class ActionParameter {
             boolean required,
             Optional<ActionParameterType> type,
             Optional<List<ActionEnumOption>> enumOptions,
+            Optional<String> schema,
             Map<String, Object> additionalProperties) {
         this.id = id;
         this.label = label;
@@ -50,6 +53,7 @@ public final class ActionParameter {
         this.required = required;
         this.type = type;
         this.enumOptions = enumOptions;
+        this.schema = schema;
         this.additionalProperties = additionalProperties;
     }
 
@@ -101,6 +105,14 @@ public final class ActionParameter {
         return enumOptions;
     }
 
+    /**
+     * @return JSON schema for validating the parameter value. Only valid when type is <code>SCHEMA</code>.
+     */
+    @JsonProperty("schema")
+    public Optional<String> getSchema() {
+        return schema;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -118,12 +130,14 @@ public final class ActionParameter {
                 && description.equals(other.description)
                 && required == other.required
                 && type.equals(other.type)
-                && enumOptions.equals(other.enumOptions);
+                && enumOptions.equals(other.enumOptions)
+                && schema.equals(other.schema);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.id, this.label, this.description, this.required, this.type, this.enumOptions);
+        return Objects.hash(
+                this.id, this.label, this.description, this.required, this.type, this.enumOptions, this.schema);
     }
 
     @java.lang.Override
@@ -163,6 +177,10 @@ public final class ActionParameter {
         _FinalStage enumOptions(Optional<List<ActionEnumOption>> enumOptions);
 
         _FinalStage enumOptions(List<ActionEnumOption> enumOptions);
+
+        _FinalStage schema(Optional<String> schema);
+
+        _FinalStage schema(String schema);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -174,6 +192,8 @@ public final class ActionParameter {
         private String description;
 
         private boolean required;
+
+        private Optional<String> schema = Optional.empty();
 
         private Optional<List<ActionEnumOption>> enumOptions = Optional.empty();
 
@@ -192,6 +212,7 @@ public final class ActionParameter {
             required(other.getRequired());
             type(other.getType());
             enumOptions(other.getEnumOptions());
+            schema(other.getSchema());
             return this;
         }
 
@@ -240,6 +261,23 @@ public final class ActionParameter {
         }
 
         /**
+         * <p>JSON schema for validating the parameter value. Only valid when type is <code>SCHEMA</code>.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage schema(String schema) {
+            this.schema = Optional.ofNullable(schema);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "schema", nulls = Nulls.SKIP)
+        public _FinalStage schema(Optional<String> schema) {
+            this.schema = schema;
+            return this;
+        }
+
+        /**
          * <p>Restricts the action parameter to only the options in this list. Valid for type <code>STRING</code>, <code>BOOLEAN</code>, and <code>NUMBER</code>.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -275,7 +313,8 @@ public final class ActionParameter {
 
         @java.lang.Override
         public ActionParameter build() {
-            return new ActionParameter(id, label, description, required, type, enumOptions, additionalProperties);
+            return new ActionParameter(
+                    id, label, description, required, type, enumOptions, schema, additionalProperties);
         }
     }
 }
