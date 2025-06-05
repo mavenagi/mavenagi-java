@@ -29,10 +29,6 @@ public final class FeedbackFilter {
 
     private final Optional<OffsetDateTime> createdBefore;
 
-    private final Optional<List<String>> users;
-
-    private final Optional<List<String>> apps;
-
     private final Optional<List<FeedbackType>> types;
 
     private final Map<String, Object> additionalProperties;
@@ -41,15 +37,11 @@ public final class FeedbackFilter {
             Optional<String> search,
             Optional<OffsetDateTime> createdAfter,
             Optional<OffsetDateTime> createdBefore,
-            Optional<List<String>> users,
-            Optional<List<String>> apps,
             Optional<List<FeedbackType>> types,
             Map<String, Object> additionalProperties) {
         this.search = search;
         this.createdAfter = createdAfter;
         this.createdBefore = createdBefore;
-        this.users = users;
-        this.apps = apps;
         this.types = types;
         this.additionalProperties = additionalProperties;
     }
@@ -67,16 +59,6 @@ public final class FeedbackFilter {
     @JsonProperty("createdBefore")
     public Optional<OffsetDateTime> getCreatedBefore() {
         return createdBefore;
-    }
-
-    @JsonProperty("users")
-    public Optional<List<String>> getUsers() {
-        return users;
-    }
-
-    @JsonProperty("apps")
-    public Optional<List<String>> getApps() {
-        return apps;
     }
 
     @JsonProperty("types")
@@ -99,14 +81,12 @@ public final class FeedbackFilter {
         return search.equals(other.search)
                 && createdAfter.equals(other.createdAfter)
                 && createdBefore.equals(other.createdBefore)
-                && users.equals(other.users)
-                && apps.equals(other.apps)
                 && types.equals(other.types);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.search, this.createdAfter, this.createdBefore, this.users, this.apps, this.types);
+        return Objects.hash(this.search, this.createdAfter, this.createdBefore, this.types);
     }
 
     @java.lang.Override
@@ -126,10 +106,6 @@ public final class FeedbackFilter {
 
         private Optional<OffsetDateTime> createdBefore = Optional.empty();
 
-        private Optional<List<String>> users = Optional.empty();
-
-        private Optional<List<String>> apps = Optional.empty();
-
         private Optional<List<FeedbackType>> types = Optional.empty();
 
         @JsonAnySetter
@@ -141,8 +117,6 @@ public final class FeedbackFilter {
             search(other.getSearch());
             createdAfter(other.getCreatedAfter());
             createdBefore(other.getCreatedBefore());
-            users(other.getUsers());
-            apps(other.getApps());
             types(other.getTypes());
             return this;
         }
@@ -180,28 +154,6 @@ public final class FeedbackFilter {
             return this;
         }
 
-        @JsonSetter(value = "users", nulls = Nulls.SKIP)
-        public Builder users(Optional<List<String>> users) {
-            this.users = users;
-            return this;
-        }
-
-        public Builder users(List<String> users) {
-            this.users = Optional.ofNullable(users);
-            return this;
-        }
-
-        @JsonSetter(value = "apps", nulls = Nulls.SKIP)
-        public Builder apps(Optional<List<String>> apps) {
-            this.apps = apps;
-            return this;
-        }
-
-        public Builder apps(List<String> apps) {
-            this.apps = Optional.ofNullable(apps);
-            return this;
-        }
-
         @JsonSetter(value = "types", nulls = Nulls.SKIP)
         public Builder types(Optional<List<FeedbackType>> types) {
             this.types = types;
@@ -214,7 +166,7 @@ public final class FeedbackFilter {
         }
 
         public FeedbackFilter build() {
-            return new FeedbackFilter(search, createdAfter, createdBefore, users, apps, types, additionalProperties);
+            return new FeedbackFilter(search, createdAfter, createdBefore, types, additionalProperties);
         }
     }
 }

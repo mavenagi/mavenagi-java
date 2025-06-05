@@ -10,9 +10,7 @@ public enum FeedbackField {
 
     CREATED_BY("CreatedBy"),
 
-    CREATED_AT("CreatedAt"),
-
-    APP("App");
+    CREATED_AT("CreatedAt");
 
     private final String value;
 
