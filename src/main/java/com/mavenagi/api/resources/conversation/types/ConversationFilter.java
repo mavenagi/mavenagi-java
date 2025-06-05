@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.api.core.ObjectMappers;
 import com.mavenagi.api.resources.commons.types.EntityIdFilter;
 import com.mavenagi.api.resources.commons.types.FeedbackType;
+import com.mavenagi.api.resources.commons.types.NumberRange;
 import com.mavenagi.api.resources.commons.types.Quality;
 import com.mavenagi.api.resources.commons.types.QualityReason;
 import com.mavenagi.api.resources.commons.types.ResponseLength;
@@ -46,6 +47,8 @@ public final class ConversationFilter {
 
     private final Optional<List<String>> humanAgents;
 
+    private final Optional<List<String>> humanAgentsWithInserts;
+
     private final Optional<List<String>> languages;
 
     private final Optional<List<Quality>> quality;
@@ -62,6 +65,8 @@ public final class ConversationFilter {
 
     private final Optional<Boolean> resolvedByMaven;
 
+    private final Optional<NumberRange> userMessageCount;
+
     private final Map<String, Object> additionalProperties;
 
     private ConversationFilter(
@@ -74,6 +79,7 @@ public final class ConversationFilter {
             Optional<List<EntityIdFilter>> incompleteActions,
             Optional<List<FeedbackType>> feedback,
             Optional<List<String>> humanAgents,
+            Optional<List<String>> humanAgentsWithInserts,
             Optional<List<String>> languages,
             Optional<List<Quality>> quality,
             Optional<List<QualityReason>> qualityReason,
@@ -82,6 +88,7 @@ public final class ConversationFilter {
             Optional<List<String>> tags,
             Optional<List<ResolutionStatus>> resolutionStatus,
             Optional<Boolean> resolvedByMaven,
+            Optional<NumberRange> userMessageCount,
             Map<String, Object> additionalProperties) {
         this.search = search;
         this.createdAfter = createdAfter;
@@ -92,6 +99,7 @@ public final class ConversationFilter {
         this.incompleteActions = incompleteActions;
         this.feedback = feedback;
         this.humanAgents = humanAgents;
+        this.humanAgentsWithInserts = humanAgentsWithInserts;
         this.languages = languages;
         this.quality = quality;
         this.qualityReason = qualityReason;
@@ -100,92 +108,160 @@ public final class ConversationFilter {
         this.tags = tags;
         this.resolutionStatus = resolutionStatus;
         this.resolvedByMaven = resolvedByMaven;
+        this.userMessageCount = userMessageCount;
         this.additionalProperties = additionalProperties;
     }
 
+    /**
+     * @return Full-text search query for matching conversations by content. When you search with this parameter, you're performing a full-text search across all textual content in the conversations, including both the user's messages and the AI's responses.
+     */
     @JsonProperty("search")
     public Optional<String> getSearch() {
         return search;
     }
 
+    /**
+     * @return Filter conversations created on or after this timestamp
+     */
     @JsonProperty("createdAfter")
     public Optional<OffsetDateTime> getCreatedAfter() {
         return createdAfter;
     }
 
+    /**
+     * @return Filter conversations created on or before this timestamp
+     */
     @JsonProperty("createdBefore")
     public Optional<OffsetDateTime> getCreatedBefore() {
         return createdBefore;
     }
 
+    /**
+     * @return Filter by app IDs
+     */
     @JsonProperty("apps")
     public Optional<List<String>> getApps() {
         return apps;
     }
 
+    /**
+     * @return Filter by conversation categories
+     */
     @JsonProperty("categories")
     public Optional<List<String>> getCategories() {
         return categories;
     }
 
+    /**
+     * @return Filter by actions that were executed in the conversation
+     */
     @JsonProperty("actions")
     public Optional<List<EntityIdFilter>> getActions() {
         return actions;
     }
 
+    /**
+     * @return Filter by actions that were suggested but not completed by the AI agent
+     */
     @JsonProperty("incompleteActions")
     public Optional<List<EntityIdFilter>> getIncompleteActions() {
         return incompleteActions;
     }
 
+    /**
+     * @return Filter by user feedback types received in the conversation
+     */
     @JsonProperty("feedback")
     public Optional<List<FeedbackType>> getFeedback() {
         return feedback;
     }
 
+    /**
+     * @return Filter by human agents who participated in the conversation
+     */
     @JsonProperty("humanAgents")
     public Optional<List<String>> getHumanAgents() {
         return humanAgents;
     }
 
+    /**
+     * @return Filter by human agents who inserted a maven AI generated suggestion in the conversation
+     */
+    @JsonProperty("humanAgentsWithInserts")
+    public Optional<List<String>> getHumanAgentsWithInserts() {
+        return humanAgentsWithInserts;
+    }
+
+    /**
+     * @return Filter by conversation languages
+     */
     @JsonProperty("languages")
     public Optional<List<String>> getLanguages() {
         return languages;
     }
 
+    /**
+     * @return Filter by AI assessed conversation quality classification
+     */
     @JsonProperty("quality")
     public Optional<List<Quality>> getQuality() {
         return quality;
     }
 
+    /**
+     * @return Filter by AI assessed quality reason classification
+     */
     @JsonProperty("qualityReason")
     public Optional<List<QualityReason>> getQualityReason() {
         return qualityReason;
     }
 
+    /**
+     * @return Filter by AI response length classification
+     */
     @JsonProperty("responseLength")
     public Optional<List<ResponseLength>> getResponseLength() {
         return responseLength;
     }
 
+    /**
+     * @return Filter by AI assessed sentiment analysis
+     */
     @JsonProperty("sentiment")
     public Optional<List<Sentiment>> getSentiment() {
         return sentiment;
     }
 
+    /**
+     * @return Filter by tags applied to the conversation
+     */
     @JsonProperty("tags")
     public Optional<List<String>> getTags() {
         return tags;
     }
 
+    /**
+     * @return Filter by conversation resolution status which is determined by AI based on the conversation content.
+     */
     @JsonProperty("resolutionStatus")
     public Optional<List<ResolutionStatus>> getResolutionStatus() {
         return resolutionStatus;
     }
 
+    /**
+     * @return Filter conversations based on whether they were resolved by Maven AI
+     */
     @JsonProperty("resolvedByMaven")
     public Optional<Boolean> getResolvedByMaven() {
         return resolvedByMaven;
+    }
+
+    /**
+     * @return Filter by the number of messages sent by the user in the conversation
+     */
+    @JsonProperty("userMessageCount")
+    public Optional<NumberRange> getUserMessageCount() {
+        return userMessageCount;
     }
 
     @java.lang.Override
@@ -209,6 +285,7 @@ public final class ConversationFilter {
                 && incompleteActions.equals(other.incompleteActions)
                 && feedback.equals(other.feedback)
                 && humanAgents.equals(other.humanAgents)
+                && humanAgentsWithInserts.equals(other.humanAgentsWithInserts)
                 && languages.equals(other.languages)
                 && quality.equals(other.quality)
                 && qualityReason.equals(other.qualityReason)
@@ -216,7 +293,8 @@ public final class ConversationFilter {
                 && sentiment.equals(other.sentiment)
                 && tags.equals(other.tags)
                 && resolutionStatus.equals(other.resolutionStatus)
-                && resolvedByMaven.equals(other.resolvedByMaven);
+                && resolvedByMaven.equals(other.resolvedByMaven)
+                && userMessageCount.equals(other.userMessageCount);
     }
 
     @java.lang.Override
@@ -231,6 +309,7 @@ public final class ConversationFilter {
                 this.incompleteActions,
                 this.feedback,
                 this.humanAgents,
+                this.humanAgentsWithInserts,
                 this.languages,
                 this.quality,
                 this.qualityReason,
@@ -238,7 +317,8 @@ public final class ConversationFilter {
                 this.sentiment,
                 this.tags,
                 this.resolutionStatus,
-                this.resolvedByMaven);
+                this.resolvedByMaven,
+                this.userMessageCount);
     }
 
     @java.lang.Override
@@ -270,6 +350,8 @@ public final class ConversationFilter {
 
         private Optional<List<String>> humanAgents = Optional.empty();
 
+        private Optional<List<String>> humanAgentsWithInserts = Optional.empty();
+
         private Optional<List<String>> languages = Optional.empty();
 
         private Optional<List<Quality>> quality = Optional.empty();
@@ -286,6 +368,8 @@ public final class ConversationFilter {
 
         private Optional<Boolean> resolvedByMaven = Optional.empty();
 
+        private Optional<NumberRange> userMessageCount = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -301,6 +385,7 @@ public final class ConversationFilter {
             incompleteActions(other.getIncompleteActions());
             feedback(other.getFeedback());
             humanAgents(other.getHumanAgents());
+            humanAgentsWithInserts(other.getHumanAgentsWithInserts());
             languages(other.getLanguages());
             quality(other.getQuality());
             qualityReason(other.getQualityReason());
@@ -309,6 +394,7 @@ public final class ConversationFilter {
             tags(other.getTags());
             resolutionStatus(other.getResolutionStatus());
             resolvedByMaven(other.getResolvedByMaven());
+            userMessageCount(other.getUserMessageCount());
             return this;
         }
 
@@ -411,6 +497,17 @@ public final class ConversationFilter {
             return this;
         }
 
+        @JsonSetter(value = "humanAgentsWithInserts", nulls = Nulls.SKIP)
+        public Builder humanAgentsWithInserts(Optional<List<String>> humanAgentsWithInserts) {
+            this.humanAgentsWithInserts = humanAgentsWithInserts;
+            return this;
+        }
+
+        public Builder humanAgentsWithInserts(List<String> humanAgentsWithInserts) {
+            this.humanAgentsWithInserts = Optional.ofNullable(humanAgentsWithInserts);
+            return this;
+        }
+
         @JsonSetter(value = "languages", nulls = Nulls.SKIP)
         public Builder languages(Optional<List<String>> languages) {
             this.languages = languages;
@@ -499,6 +596,17 @@ public final class ConversationFilter {
             return this;
         }
 
+        @JsonSetter(value = "userMessageCount", nulls = Nulls.SKIP)
+        public Builder userMessageCount(Optional<NumberRange> userMessageCount) {
+            this.userMessageCount = userMessageCount;
+            return this;
+        }
+
+        public Builder userMessageCount(NumberRange userMessageCount) {
+            this.userMessageCount = Optional.ofNullable(userMessageCount);
+            return this;
+        }
+
         public ConversationFilter build() {
             return new ConversationFilter(
                     search,
@@ -510,6 +618,7 @@ public final class ConversationFilter {
                     incompleteActions,
                     feedback,
                     humanAgents,
+                    humanAgentsWithInserts,
                     languages,
                     quality,
                     qualityReason,
@@ -518,6 +627,7 @@ public final class ConversationFilter {
                     tags,
                     resolutionStatus,
                     resolvedByMaven,
+                    userMessageCount,
                     additionalProperties);
         }
     }

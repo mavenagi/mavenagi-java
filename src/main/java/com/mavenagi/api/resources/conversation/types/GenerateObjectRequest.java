@@ -21,8 +21,8 @@ import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonDeserialize(builder = AskRequest.Builder.class)
-public final class AskRequest implements IAskRequest {
+@JsonDeserialize(builder = GenerateObjectRequest.Builder.class)
+public final class GenerateObjectRequest implements IAskRequest {
     private final EntityIdBase conversationMessageId;
 
     private final EntityIdBase userId;
@@ -35,15 +35,18 @@ public final class AskRequest implements IAskRequest {
 
     private final Optional<String> timezone;
 
+    private final String schema;
+
     private final Map<String, Object> additionalProperties;
 
-    private AskRequest(
+    private GenerateObjectRequest(
             EntityIdBase conversationMessageId,
             EntityIdBase userId,
             String text,
             Optional<List<Attachment>> attachments,
             Optional<Map<String, String>> transientData,
             Optional<String> timezone,
+            String schema,
             Map<String, Object> additionalProperties) {
         this.conversationMessageId = conversationMessageId;
         this.userId = userId;
@@ -51,6 +54,7 @@ public final class AskRequest implements IAskRequest {
         this.attachments = attachments;
         this.transientData = transientData;
         this.timezone = timezone;
+        this.schema = schema;
         this.additionalProperties = additionalProperties;
     }
 
@@ -108,10 +112,18 @@ public final class AskRequest implements IAskRequest {
         return timezone;
     }
 
+    /**
+     * @return JSON schema string defining the expected object shape.
+     */
+    @JsonProperty("schema")
+    public String getSchema() {
+        return schema;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
-        return other instanceof AskRequest && equalTo((AskRequest) other);
+        return other instanceof GenerateObjectRequest && equalTo((GenerateObjectRequest) other);
     }
 
     @JsonAnyGetter
@@ -119,13 +131,14 @@ public final class AskRequest implements IAskRequest {
         return this.additionalProperties;
     }
 
-    private boolean equalTo(AskRequest other) {
+    private boolean equalTo(GenerateObjectRequest other) {
         return conversationMessageId.equals(other.conversationMessageId)
                 && userId.equals(other.userId)
                 && text.equals(other.text)
                 && attachments.equals(other.attachments)
                 && transientData.equals(other.transientData)
-                && timezone.equals(other.timezone);
+                && timezone.equals(other.timezone)
+                && schema.equals(other.schema);
     }
 
     @java.lang.Override
@@ -136,7 +149,8 @@ public final class AskRequest implements IAskRequest {
                 this.text,
                 this.attachments,
                 this.transientData,
-                this.timezone);
+                this.timezone,
+                this.schema);
     }
 
     @java.lang.Override
@@ -151,7 +165,7 @@ public final class AskRequest implements IAskRequest {
     public interface ConversationMessageIdStage {
         UserIdStage conversationMessageId(@NotNull EntityIdBase conversationMessageId);
 
-        Builder from(AskRequest other);
+        Builder from(GenerateObjectRequest other);
     }
 
     public interface UserIdStage {
@@ -159,11 +173,15 @@ public final class AskRequest implements IAskRequest {
     }
 
     public interface TextStage {
-        _FinalStage text(@NotNull String text);
+        SchemaStage text(@NotNull String text);
+    }
+
+    public interface SchemaStage {
+        _FinalStage schema(@NotNull String schema);
     }
 
     public interface _FinalStage {
-        AskRequest build();
+        GenerateObjectRequest build();
 
         _FinalStage attachments(Optional<List<Attachment>> attachments);
 
@@ -179,12 +197,15 @@ public final class AskRequest implements IAskRequest {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements ConversationMessageIdStage, UserIdStage, TextStage, _FinalStage {
+    public static final class Builder
+            implements ConversationMessageIdStage, UserIdStage, TextStage, SchemaStage, _FinalStage {
         private EntityIdBase conversationMessageId;
 
         private EntityIdBase userId;
 
         private String text;
+
+        private String schema;
 
         private Optional<String> timezone = Optional.empty();
 
@@ -198,13 +219,14 @@ public final class AskRequest implements IAskRequest {
         private Builder() {}
 
         @java.lang.Override
-        public Builder from(AskRequest other) {
+        public Builder from(GenerateObjectRequest other) {
             conversationMessageId(other.getConversationMessageId());
             userId(other.getUserId());
             text(other.getText());
             attachments(other.getAttachments());
             transientData(other.getTransientData());
             timezone(other.getTimezone());
+            schema(other.getSchema());
             return this;
         }
 
@@ -237,8 +259,19 @@ public final class AskRequest implements IAskRequest {
          */
         @java.lang.Override
         @JsonSetter("text")
-        public _FinalStage text(@NotNull String text) {
+        public SchemaStage text(@NotNull String text) {
             this.text = Objects.requireNonNull(text, "text must not be null");
+            return this;
+        }
+
+        /**
+         * <p>JSON schema string defining the expected object shape.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("schema")
+        public _FinalStage schema(@NotNull String schema) {
+            this.schema = Objects.requireNonNull(schema, "schema must not be null");
             return this;
         }
 
@@ -294,9 +327,16 @@ public final class AskRequest implements IAskRequest {
         }
 
         @java.lang.Override
-        public AskRequest build() {
-            return new AskRequest(
-                    conversationMessageId, userId, text, attachments, transientData, timezone, additionalProperties);
+        public GenerateObjectRequest build() {
+            return new GenerateObjectRequest(
+                    conversationMessageId,
+                    userId,
+                    text,
+                    attachments,
+                    transientData,
+                    timezone,
+                    schema,
+                    additionalProperties);
         }
     }
 }

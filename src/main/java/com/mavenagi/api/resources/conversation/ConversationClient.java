@@ -16,6 +16,7 @@ import com.mavenagi.api.core.Stream;
 import com.mavenagi.api.resources.commons.errors.BadRequestError;
 import com.mavenagi.api.resources.commons.errors.NotFoundError;
 import com.mavenagi.api.resources.commons.errors.ServerError;
+import com.mavenagi.api.resources.commons.types.BotObjectResponse;
 import com.mavenagi.api.resources.commons.types.ConversationResponse;
 import com.mavenagi.api.resources.commons.types.ErrorMessage;
 import com.mavenagi.api.resources.commons.types.Feedback;
@@ -30,6 +31,7 @@ import com.mavenagi.api.resources.conversation.types.ConversationsResponse;
 import com.mavenagi.api.resources.conversation.types.ConversationsSearchRequest;
 import com.mavenagi.api.resources.conversation.types.FeedbackRequest;
 import com.mavenagi.api.resources.conversation.types.GenerateMavenSuggestionsRequest;
+import com.mavenagi.api.resources.conversation.types.GenerateObjectRequest;
 import com.mavenagi.api.resources.conversation.types.StreamResponse;
 import com.mavenagi.api.resources.conversation.types.SubmitActionFormRequest;
 import com.mavenagi.api.resources.conversation.types.UpdateMetadataRequest;
@@ -542,6 +544,83 @@ public class ConversationClient {
             ResponseBody responseBody = response.body();
             if (response.isSuccessful()) {
                 return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), ConversationResponse.class);
+            }
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            try {
+                switch (response.code()) {
+                    case 400:
+                        throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class));
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class));
+                    case 500:
+                        throw new ServerError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class));
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            throw new MavenAGIApiException(
+                    "Error with status code " + response.code(),
+                    response.code(),
+                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
+        } catch (IOException e) {
+            throw new MavenAGIException("Network error executing HTTP request", e);
+        }
+    }
+
+    /**
+     * Generate a structured object response based on a provided schema and user prompt.
+     * <p>If the user question and object response already exist, they will be reused and not updated.</p>
+     * <p>Known Limitations:</p>
+     * <ul>
+     * <li>Schema enforcement is best-effort and may not guarantee exact conformity.</li>
+     * <li>This endpoint does not stream results. Use <code>askDataStream</code> (coming soon) for progressive rendering.</li>
+     * </ul>
+     */
+    public BotObjectResponse generateObject(String conversationId, GenerateObjectRequest request) {
+        return generateObject(conversationId, request, null);
+    }
+
+    /**
+     * Generate a structured object response based on a provided schema and user prompt.
+     * <p>If the user question and object response already exist, they will be reused and not updated.</p>
+     * <p>Known Limitations:</p>
+     * <ul>
+     * <li>Schema enforcement is best-effort and may not guarantee exact conformity.</li>
+     * <li>This endpoint does not stream results. Use <code>askDataStream</code> (coming soon) for progressive rendering.</li>
+     * </ul>
+     */
+    public BotObjectResponse generateObject(
+            String conversationId, GenerateObjectRequest request, RequestOptions requestOptions) {
+        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("v1/conversations")
+                .addPathSegment(conversationId)
+                .addPathSegments("generate_object")
+                .build();
+        RequestBody body;
+        try {
+            body = RequestBody.create(
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
+        } catch (JsonProcessingException e) {
+            throw new MavenAGIException("Failed to serialize request", e);
+        }
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl)
+                .method("POST", body)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
+                .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            if (response.isSuccessful()) {
+                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), BotObjectResponse.class);
             }
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {

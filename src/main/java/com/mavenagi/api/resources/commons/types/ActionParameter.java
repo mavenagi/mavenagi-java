@@ -98,7 +98,7 @@ public final class ActionParameter {
     }
 
     /**
-     * @return Restricts the action parameter to only the options in this list. Valid for type <code>STRING</code>, <code>BOOLEAN</code>, and <code>NUMBER</code>.
+     * @return Restricts the action parameter to only the options in this list. Valid for type <code>STRING</code>, <code>BOOLEAN</code>, and <code>NUMBER</code>. Should not be used when type is <code>SCHEMA</code>.
      */
     @JsonProperty("enumOptions")
     public Optional<List<ActionEnumOption>> getEnumOptions() {
@@ -278,7 +278,7 @@ public final class ActionParameter {
         }
 
         /**
-         * <p>Restricts the action parameter to only the options in this list. Valid for type <code>STRING</code>, <code>BOOLEAN</code>, and <code>NUMBER</code>.</p>
+         * <p>Restricts the action parameter to only the options in this list. Valid for type <code>STRING</code>, <code>BOOLEAN</code>, and <code>NUMBER</code>. Should not be used when type is <code>SCHEMA</code>.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override

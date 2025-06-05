@@ -14,6 +14,8 @@ public enum ConversationField {
 
     HUMAN_AGENTS("HumanAgents"),
 
+    HUMAN_AGENTS_WITH_INSERTS("HumanAgentsWithInserts"),
+
     APP("App"),
 
     SENTIMENT("Sentiment"),
