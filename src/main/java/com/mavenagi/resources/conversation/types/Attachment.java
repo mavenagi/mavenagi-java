@@ -32,7 +32,21 @@ public final class Attachment {
     }
 
     /**
-     * @return The mime-type of the attachment. Supported types are {image/jpeg, image/jpg, image/png, image/gif, image/webp}.
+     * @return The mime-type of the attachment. Supported types are:
+     * <ul>
+     * <li>image/jpeg</li>
+     * <li>image/jpg</li>
+     * <li>image/png</li>
+     * <li>image/gif</li>
+     * <li>image/webp</li>
+     * <li>application/pdf</li>
+     * <li>audio/aac</li>
+     * <li>audio/mpeg</li>
+     * <li>audio/mp4</li>
+     * <li>video/mp4</li>
+     * </ul>
+     * <p>Image attachments will be sent to the LLM as additional data.
+     * Non-image attachments can be stored and downloaded from the API but will not be sent to the LLM.</p>
      */
     @JsonProperty("type")
     public String getType() {
@@ -78,7 +92,21 @@ public final class Attachment {
 
     public interface TypeStage {
         /**
-         * <p>The mime-type of the attachment. Supported types are {image/jpeg, image/jpg, image/png, image/gif, image/webp}.</p>
+         * <p>The mime-type of the attachment. Supported types are:</p>
+         * <ul>
+         * <li>image/jpeg</li>
+         * <li>image/jpg</li>
+         * <li>image/png</li>
+         * <li>image/gif</li>
+         * <li>image/webp</li>
+         * <li>application/pdf</li>
+         * <li>audio/aac</li>
+         * <li>audio/mpeg</li>
+         * <li>audio/mp4</li>
+         * <li>video/mp4</li>
+         * </ul>
+         * <p>Image attachments will be sent to the LLM as additional data.
+         * Non-image attachments can be stored and downloaded from the API but will not be sent to the LLM.</p>
          */
         ContentStage type(@NotNull String type);
 
@@ -115,8 +143,36 @@ public final class Attachment {
         }
 
         /**
-         * <p>The mime-type of the attachment. Supported types are {image/jpeg, image/jpg, image/png, image/gif, image/webp}.</p>
-         * <p>The mime-type of the attachment. Supported types are {image/jpeg, image/jpg, image/png, image/gif, image/webp}.</p>
+         * <p>The mime-type of the attachment. Supported types are:</p>
+         * <ul>
+         * <li>image/jpeg</li>
+         * <li>image/jpg</li>
+         * <li>image/png</li>
+         * <li>image/gif</li>
+         * <li>image/webp</li>
+         * <li>application/pdf</li>
+         * <li>audio/aac</li>
+         * <li>audio/mpeg</li>
+         * <li>audio/mp4</li>
+         * <li>video/mp4</li>
+         * </ul>
+         * <p>Image attachments will be sent to the LLM as additional data.
+         * Non-image attachments can be stored and downloaded from the API but will not be sent to the LLM.</p>
+         * <p>The mime-type of the attachment. Supported types are:</p>
+         * <ul>
+         * <li>image/jpeg</li>
+         * <li>image/jpg</li>
+         * <li>image/png</li>
+         * <li>image/gif</li>
+         * <li>image/webp</li>
+         * <li>application/pdf</li>
+         * <li>audio/aac</li>
+         * <li>audio/mpeg</li>
+         * <li>audio/mp4</li>
+         * <li>video/mp4</li>
+         * </ul>
+         * <p>Image attachments will be sent to the LLM as additional data.
+         * Non-image attachments can be stored and downloaded from the API but will not be sent to the LLM.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override

@@ -502,8 +502,7 @@ public class RawConversationClient {
             ResponseBody responseBody = response.body();
             if (response.isSuccessful()) {
                 return new MavenAGIHttpResponse<>(
-                        new Stream<StreamResponse>(StreamResponse.class, new ResponseBodyReader(response), "\n"),
-                        response);
+                        Stream.fromSse(StreamResponse.class, new ResponseBodyReader(response)), response);
             }
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {

@@ -19,13 +19,36 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UserMessageAttachment.Builder.class)
 public final class UserMessageAttachment {
+    private final String type;
+
     private final String url;
 
     private final Map<String, Object> additionalProperties;
 
-    private UserMessageAttachment(String url, Map<String, Object> additionalProperties) {
+    private UserMessageAttachment(String type, String url, Map<String, Object> additionalProperties) {
+        this.type = type;
         this.url = url;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return The mime-type of the attachment. Supported types are:
+     * <ul>
+     * <li>image/jpeg</li>
+     * <li>image/jpg</li>
+     * <li>image/png</li>
+     * <li>image/gif</li>
+     * <li>image/webp</li>
+     * <li>application/pdf</li>
+     * <li>audio/aac</li>
+     * <li>audio/mpeg</li>
+     * <li>audio/mp4</li>
+     * <li>video/mp4</li>
+     * </ul>
+     */
+    @JsonProperty("type")
+    public String getType() {
+        return type;
     }
 
     /**
@@ -48,12 +71,12 @@ public final class UserMessageAttachment {
     }
 
     private boolean equalTo(UserMessageAttachment other) {
-        return url.equals(other.url);
+        return type.equals(other.type) && url.equals(other.url);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.url);
+        return Objects.hash(this.type, this.url);
     }
 
     @java.lang.Override
@@ -61,8 +84,29 @@ public final class UserMessageAttachment {
         return ObjectMappers.stringify(this);
     }
 
-    public static UrlStage builder() {
+    public static TypeStage builder() {
         return new Builder();
+    }
+
+    public interface TypeStage {
+        /**
+         * <p>The mime-type of the attachment. Supported types are:</p>
+         * <ul>
+         * <li>image/jpeg</li>
+         * <li>image/jpg</li>
+         * <li>image/png</li>
+         * <li>image/gif</li>
+         * <li>image/webp</li>
+         * <li>application/pdf</li>
+         * <li>audio/aac</li>
+         * <li>audio/mpeg</li>
+         * <li>audio/mp4</li>
+         * <li>video/mp4</li>
+         * </ul>
+         */
+        UrlStage type(@NotNull String type);
+
+        Builder from(UserMessageAttachment other);
     }
 
     public interface UrlStage {
@@ -70,8 +114,6 @@ public final class UserMessageAttachment {
          * <p>The URL to access the attachment, The URL will be valid for 20 minutes.</p>
          */
         _FinalStage url(@NotNull String url);
-
-        Builder from(UserMessageAttachment other);
     }
 
     public interface _FinalStage {
@@ -79,7 +121,9 @@ public final class UserMessageAttachment {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements UrlStage, _FinalStage {
+    public static final class Builder implements TypeStage, UrlStage, _FinalStage {
+        private String type;
+
         private String url;
 
         @JsonAnySetter
@@ -89,7 +133,44 @@ public final class UserMessageAttachment {
 
         @java.lang.Override
         public Builder from(UserMessageAttachment other) {
+            type(other.getType());
             url(other.getUrl());
+            return this;
+        }
+
+        /**
+         * <p>The mime-type of the attachment. Supported types are:</p>
+         * <ul>
+         * <li>image/jpeg</li>
+         * <li>image/jpg</li>
+         * <li>image/png</li>
+         * <li>image/gif</li>
+         * <li>image/webp</li>
+         * <li>application/pdf</li>
+         * <li>audio/aac</li>
+         * <li>audio/mpeg</li>
+         * <li>audio/mp4</li>
+         * <li>video/mp4</li>
+         * </ul>
+         * <p>The mime-type of the attachment. Supported types are:</p>
+         * <ul>
+         * <li>image/jpeg</li>
+         * <li>image/jpg</li>
+         * <li>image/png</li>
+         * <li>image/gif</li>
+         * <li>image/webp</li>
+         * <li>application/pdf</li>
+         * <li>audio/aac</li>
+         * <li>audio/mpeg</li>
+         * <li>audio/mp4</li>
+         * <li>video/mp4</li>
+         * </ul>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("type")
+        public UrlStage type(@NotNull String type) {
+            this.type = Objects.requireNonNull(type, "type must not be null");
             return this;
         }
 
@@ -107,7 +188,7 @@ public final class UserMessageAttachment {
 
         @java.lang.Override
         public UserMessageAttachment build() {
-            return new UserMessageAttachment(url, additionalProperties);
+            return new UserMessageAttachment(type, url, additionalProperties);
         }
     }
 }

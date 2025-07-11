@@ -608,9 +608,7 @@ public class AsyncRawConversationClient {
                     ResponseBody responseBody = response.body();
                     if (response.isSuccessful()) {
                         future.complete(new MavenAGIHttpResponse<>(
-                                new Stream<StreamResponse>(
-                                        StreamResponse.class, new ResponseBodyReader(response), "\n"),
-                                response));
+                                Stream.fromSse(StreamResponse.class, new ResponseBodyReader(response)), response));
                         return;
                     }
                     String responseBodyString = responseBody != null ? responseBody.string() : "{}";
