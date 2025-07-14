@@ -9,11 +9,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
@@ -23,11 +25,15 @@ public final class UserMessageAttachment {
 
     private final String url;
 
+    private final Optional<String> name;
+
     private final Map<String, Object> additionalProperties;
 
-    private UserMessageAttachment(String type, String url, Map<String, Object> additionalProperties) {
+    private UserMessageAttachment(
+            String type, String url, Optional<String> name, Map<String, Object> additionalProperties) {
         this.type = type;
         this.url = url;
+        this.name = name;
         this.additionalProperties = additionalProperties;
     }
 
@@ -59,6 +65,14 @@ public final class UserMessageAttachment {
         return url;
     }
 
+    /**
+     * @return An optional name for the attachment.
+     */
+    @JsonProperty("name")
+    public Optional<String> getName() {
+        return name;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -71,12 +85,12 @@ public final class UserMessageAttachment {
     }
 
     private boolean equalTo(UserMessageAttachment other) {
-        return type.equals(other.type) && url.equals(other.url);
+        return type.equals(other.type) && url.equals(other.url) && name.equals(other.name);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.type, this.url);
+        return Objects.hash(this.type, this.url, this.name);
     }
 
     @java.lang.Override
@@ -118,6 +132,13 @@ public final class UserMessageAttachment {
 
     public interface _FinalStage {
         UserMessageAttachment build();
+
+        /**
+         * <p>An optional name for the attachment.</p>
+         */
+        _FinalStage name(Optional<String> name);
+
+        _FinalStage name(String name);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -125,6 +146,8 @@ public final class UserMessageAttachment {
         private String type;
 
         private String url;
+
+        private Optional<String> name = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -135,6 +158,7 @@ public final class UserMessageAttachment {
         public Builder from(UserMessageAttachment other) {
             type(other.getType());
             url(other.getUrl());
+            name(other.getName());
             return this;
         }
 
@@ -186,9 +210,29 @@ public final class UserMessageAttachment {
             return this;
         }
 
+        /**
+         * <p>An optional name for the attachment.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage name(String name) {
+            this.name = Optional.ofNullable(name);
+            return this;
+        }
+
+        /**
+         * <p>An optional name for the attachment.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "name", nulls = Nulls.SKIP)
+        public _FinalStage name(Optional<String> name) {
+            this.name = name;
+            return this;
+        }
+
         @java.lang.Override
         public UserMessageAttachment build() {
-            return new UserMessageAttachment(type, url, additionalProperties);
+            return new UserMessageAttachment(type, url, name, additionalProperties);
         }
     }
 }

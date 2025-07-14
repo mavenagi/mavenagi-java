@@ -9,11 +9,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
@@ -23,11 +25,14 @@ public final class Attachment {
 
     private final byte[] content;
 
+    private final Optional<String> name;
+
     private final Map<String, Object> additionalProperties;
 
-    private Attachment(String type, byte[] content, Map<String, Object> additionalProperties) {
+    private Attachment(String type, byte[] content, Optional<String> name, Map<String, Object> additionalProperties) {
         this.type = type;
         this.content = content;
+        this.name = name;
         this.additionalProperties = additionalProperties;
     }
 
@@ -61,6 +66,14 @@ public final class Attachment {
         return content;
     }
 
+    /**
+     * @return The name of the attachment, if one was provided.
+     */
+    @JsonProperty("name")
+    public Optional<String> getName() {
+        return name;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -73,12 +86,12 @@ public final class Attachment {
     }
 
     private boolean equalTo(Attachment other) {
-        return type.equals(other.type) && content.equals(other.content);
+        return type.equals(other.type) && content.equals(other.content) && name.equals(other.name);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.type, this.content);
+        return Objects.hash(this.type, this.content, this.name);
     }
 
     @java.lang.Override
@@ -122,6 +135,13 @@ public final class Attachment {
 
     public interface _FinalStage {
         Attachment build();
+
+        /**
+         * <p>The name of the attachment, if one was provided.</p>
+         */
+        _FinalStage name(Optional<String> name);
+
+        _FinalStage name(String name);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -129,6 +149,8 @@ public final class Attachment {
         private String type;
 
         private byte[] content;
+
+        private Optional<String> name = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -139,6 +161,7 @@ public final class Attachment {
         public Builder from(Attachment other) {
             type(other.getType());
             content(other.getContent());
+            name(other.getName());
             return this;
         }
 
@@ -194,9 +217,29 @@ public final class Attachment {
             return this;
         }
 
+        /**
+         * <p>The name of the attachment, if one was provided.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage name(String name) {
+            this.name = Optional.ofNullable(name);
+            return this;
+        }
+
+        /**
+         * <p>The name of the attachment, if one was provided.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "name", nulls = Nulls.SKIP)
+        public _FinalStage name(Optional<String> name) {
+            this.name = name;
+            return this;
+        }
+
         @java.lang.Override
         public Attachment build() {
-            return new Attachment(type, content, additionalProperties);
+            return new Attachment(type, content, name, additionalProperties);
         }
     }
 }
