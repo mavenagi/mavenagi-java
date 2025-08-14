@@ -5,12 +5,18 @@ package com.mavenagi.resources.knowledge;
 
 import com.mavenagi.core.ClientOptions;
 import com.mavenagi.core.RequestOptions;
+import com.mavenagi.resources.knowledge.requests.KnowledgeBaseGetRequest;
 import com.mavenagi.resources.knowledge.types.FinalizeKnowledgeBaseVersionRequest;
+import com.mavenagi.resources.knowledge.types.KnowledgeBasePatchRequest;
 import com.mavenagi.resources.knowledge.types.KnowledgeBaseRequest;
 import com.mavenagi.resources.knowledge.types.KnowledgeBaseResponse;
+import com.mavenagi.resources.knowledge.types.KnowledgeBaseSearchRequest;
 import com.mavenagi.resources.knowledge.types.KnowledgeBaseVersion;
+import com.mavenagi.resources.knowledge.types.KnowledgeBasesResponse;
 import com.mavenagi.resources.knowledge.types.KnowledgeDocumentRequest;
 import com.mavenagi.resources.knowledge.types.KnowledgeDocumentResponse;
+import com.mavenagi.resources.knowledge.types.KnowledgeDocumentSearchRequest;
+import com.mavenagi.resources.knowledge.types.KnowledgeDocumentsResponse;
 import java.util.concurrent.CompletableFuture;
 
 public class AsyncKnowledgeClient {
@@ -28,6 +34,28 @@ public class AsyncKnowledgeClient {
      */
     public AsyncRawKnowledgeClient withRawResponse() {
         return this.rawClient;
+    }
+
+    /**
+     * Search knowledge bases
+     */
+    public CompletableFuture<KnowledgeBasesResponse> searchKnowledgeBases() {
+        return this.rawClient.searchKnowledgeBases().thenApply(response -> response.body());
+    }
+
+    /**
+     * Search knowledge bases
+     */
+    public CompletableFuture<KnowledgeBasesResponse> searchKnowledgeBases(KnowledgeBaseSearchRequest request) {
+        return this.rawClient.searchKnowledgeBases(request).thenApply(response -> response.body());
+    }
+
+    /**
+     * Search knowledge bases
+     */
+    public CompletableFuture<KnowledgeBasesResponse> searchKnowledgeBases(
+            KnowledgeBaseSearchRequest request, RequestOptions requestOptions) {
+        return this.rawClient.searchKnowledgeBases(request, requestOptions).thenApply(response -> response.body());
     }
 
     /**
@@ -58,9 +86,52 @@ public class AsyncKnowledgeClient {
      * Get an existing knowledge base by its supplied ID
      */
     public CompletableFuture<KnowledgeBaseResponse> getKnowledgeBase(
-            String knowledgeBaseReferenceId, RequestOptions requestOptions) {
+            String knowledgeBaseReferenceId, KnowledgeBaseGetRequest request) {
         return this.rawClient
-                .getKnowledgeBase(knowledgeBaseReferenceId, requestOptions)
+                .getKnowledgeBase(knowledgeBaseReferenceId, request)
+                .thenApply(response -> response.body());
+    }
+
+    /**
+     * Get an existing knowledge base by its supplied ID
+     */
+    public CompletableFuture<KnowledgeBaseResponse> getKnowledgeBase(
+            String knowledgeBaseReferenceId, KnowledgeBaseGetRequest request, RequestOptions requestOptions) {
+        return this.rawClient
+                .getKnowledgeBase(knowledgeBaseReferenceId, request, requestOptions)
+                .thenApply(response -> response.body());
+    }
+
+    /**
+     * Update mutable knowledge base fields
+     * <p>The <code>appId</code> field can be provided to update a knowledge base owned by a different app.
+     * All other fields will overwrite the existing value on the knowledge base only if provided.</p>
+     */
+    public CompletableFuture<KnowledgeBaseResponse> patchKnowledgeBase(String knowledgeBaseReferenceId) {
+        return this.rawClient.patchKnowledgeBase(knowledgeBaseReferenceId).thenApply(response -> response.body());
+    }
+
+    /**
+     * Update mutable knowledge base fields
+     * <p>The <code>appId</code> field can be provided to update a knowledge base owned by a different app.
+     * All other fields will overwrite the existing value on the knowledge base only if provided.</p>
+     */
+    public CompletableFuture<KnowledgeBaseResponse> patchKnowledgeBase(
+            String knowledgeBaseReferenceId, KnowledgeBasePatchRequest request) {
+        return this.rawClient
+                .patchKnowledgeBase(knowledgeBaseReferenceId, request)
+                .thenApply(response -> response.body());
+    }
+
+    /**
+     * Update mutable knowledge base fields
+     * <p>The <code>appId</code> field can be provided to update a knowledge base owned by a different app.
+     * All other fields will overwrite the existing value on the knowledge base only if provided.</p>
+     */
+    public CompletableFuture<KnowledgeBaseResponse> patchKnowledgeBase(
+            String knowledgeBaseReferenceId, KnowledgeBasePatchRequest request, RequestOptions requestOptions) {
+        return this.rawClient
+                .patchKnowledgeBase(knowledgeBaseReferenceId, request, requestOptions)
                 .thenApply(response -> response.body());
     }
 
@@ -115,6 +186,29 @@ public class AsyncKnowledgeClient {
         return this.rawClient
                 .finalizeKnowledgeBaseVersion(knowledgeBaseReferenceId, request, requestOptions)
                 .thenApply(response -> response.body());
+    }
+
+    /**
+     * Search knowledge documents
+     */
+    public CompletableFuture<KnowledgeDocumentsResponse> searchKnowledgeDocuments() {
+        return this.rawClient.searchKnowledgeDocuments().thenApply(response -> response.body());
+    }
+
+    /**
+     * Search knowledge documents
+     */
+    public CompletableFuture<KnowledgeDocumentsResponse> searchKnowledgeDocuments(
+            KnowledgeDocumentSearchRequest request) {
+        return this.rawClient.searchKnowledgeDocuments(request).thenApply(response -> response.body());
+    }
+
+    /**
+     * Search knowledge documents
+     */
+    public CompletableFuture<KnowledgeDocumentsResponse> searchKnowledgeDocuments(
+            KnowledgeDocumentSearchRequest request, RequestOptions requestOptions) {
+        return this.rawClient.searchKnowledgeDocuments(request, requestOptions).thenApply(response -> response.body());
     }
 
     /**

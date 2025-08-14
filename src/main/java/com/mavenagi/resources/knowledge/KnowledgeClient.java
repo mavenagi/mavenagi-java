@@ -5,12 +5,18 @@ package com.mavenagi.resources.knowledge;
 
 import com.mavenagi.core.ClientOptions;
 import com.mavenagi.core.RequestOptions;
+import com.mavenagi.resources.knowledge.requests.KnowledgeBaseGetRequest;
 import com.mavenagi.resources.knowledge.types.FinalizeKnowledgeBaseVersionRequest;
+import com.mavenagi.resources.knowledge.types.KnowledgeBasePatchRequest;
 import com.mavenagi.resources.knowledge.types.KnowledgeBaseRequest;
 import com.mavenagi.resources.knowledge.types.KnowledgeBaseResponse;
+import com.mavenagi.resources.knowledge.types.KnowledgeBaseSearchRequest;
 import com.mavenagi.resources.knowledge.types.KnowledgeBaseVersion;
+import com.mavenagi.resources.knowledge.types.KnowledgeBasesResponse;
 import com.mavenagi.resources.knowledge.types.KnowledgeDocumentRequest;
 import com.mavenagi.resources.knowledge.types.KnowledgeDocumentResponse;
+import com.mavenagi.resources.knowledge.types.KnowledgeDocumentSearchRequest;
+import com.mavenagi.resources.knowledge.types.KnowledgeDocumentsResponse;
 
 public class KnowledgeClient {
     protected final ClientOptions clientOptions;
@@ -27,6 +33,28 @@ public class KnowledgeClient {
      */
     public RawKnowledgeClient withRawResponse() {
         return this.rawClient;
+    }
+
+    /**
+     * Search knowledge bases
+     */
+    public KnowledgeBasesResponse searchKnowledgeBases() {
+        return this.rawClient.searchKnowledgeBases().body();
+    }
+
+    /**
+     * Search knowledge bases
+     */
+    public KnowledgeBasesResponse searchKnowledgeBases(KnowledgeBaseSearchRequest request) {
+        return this.rawClient.searchKnowledgeBases(request).body();
+    }
+
+    /**
+     * Search knowledge bases
+     */
+    public KnowledgeBasesResponse searchKnowledgeBases(
+            KnowledgeBaseSearchRequest request, RequestOptions requestOptions) {
+        return this.rawClient.searchKnowledgeBases(request, requestOptions).body();
     }
 
     /**
@@ -56,9 +84,52 @@ public class KnowledgeClient {
     /**
      * Get an existing knowledge base by its supplied ID
      */
-    public KnowledgeBaseResponse getKnowledgeBase(String knowledgeBaseReferenceId, RequestOptions requestOptions) {
+    public KnowledgeBaseResponse getKnowledgeBase(String knowledgeBaseReferenceId, KnowledgeBaseGetRequest request) {
         return this.rawClient
-                .getKnowledgeBase(knowledgeBaseReferenceId, requestOptions)
+                .getKnowledgeBase(knowledgeBaseReferenceId, request)
+                .body();
+    }
+
+    /**
+     * Get an existing knowledge base by its supplied ID
+     */
+    public KnowledgeBaseResponse getKnowledgeBase(
+            String knowledgeBaseReferenceId, KnowledgeBaseGetRequest request, RequestOptions requestOptions) {
+        return this.rawClient
+                .getKnowledgeBase(knowledgeBaseReferenceId, request, requestOptions)
+                .body();
+    }
+
+    /**
+     * Update mutable knowledge base fields
+     * <p>The <code>appId</code> field can be provided to update a knowledge base owned by a different app.
+     * All other fields will overwrite the existing value on the knowledge base only if provided.</p>
+     */
+    public KnowledgeBaseResponse patchKnowledgeBase(String knowledgeBaseReferenceId) {
+        return this.rawClient.patchKnowledgeBase(knowledgeBaseReferenceId).body();
+    }
+
+    /**
+     * Update mutable knowledge base fields
+     * <p>The <code>appId</code> field can be provided to update a knowledge base owned by a different app.
+     * All other fields will overwrite the existing value on the knowledge base only if provided.</p>
+     */
+    public KnowledgeBaseResponse patchKnowledgeBase(
+            String knowledgeBaseReferenceId, KnowledgeBasePatchRequest request) {
+        return this.rawClient
+                .patchKnowledgeBase(knowledgeBaseReferenceId, request)
+                .body();
+    }
+
+    /**
+     * Update mutable knowledge base fields
+     * <p>The <code>appId</code> field can be provided to update a knowledge base owned by a different app.
+     * All other fields will overwrite the existing value on the knowledge base only if provided.</p>
+     */
+    public KnowledgeBaseResponse patchKnowledgeBase(
+            String knowledgeBaseReferenceId, KnowledgeBasePatchRequest request, RequestOptions requestOptions) {
+        return this.rawClient
+                .patchKnowledgeBase(knowledgeBaseReferenceId, request, requestOptions)
                 .body();
     }
 
@@ -113,6 +184,28 @@ public class KnowledgeClient {
         return this.rawClient
                 .finalizeKnowledgeBaseVersion(knowledgeBaseReferenceId, request, requestOptions)
                 .body();
+    }
+
+    /**
+     * Search knowledge documents
+     */
+    public KnowledgeDocumentsResponse searchKnowledgeDocuments() {
+        return this.rawClient.searchKnowledgeDocuments().body();
+    }
+
+    /**
+     * Search knowledge documents
+     */
+    public KnowledgeDocumentsResponse searchKnowledgeDocuments(KnowledgeDocumentSearchRequest request) {
+        return this.rawClient.searchKnowledgeDocuments(request).body();
+    }
+
+    /**
+     * Search knowledge documents
+     */
+    public KnowledgeDocumentsResponse searchKnowledgeDocuments(
+            KnowledgeDocumentSearchRequest request, RequestOptions requestOptions) {
+        return this.rawClient.searchKnowledgeDocuments(request, requestOptions).body();
     }
 
     /**

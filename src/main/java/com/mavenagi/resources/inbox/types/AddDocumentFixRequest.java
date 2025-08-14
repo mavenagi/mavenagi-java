@@ -44,7 +44,8 @@ public final class AddDocumentFixRequest {
     }
 
     /**
-     * @return Reference id of the Knowledge Base the document will be added to
+     * @return Reference id of the Knowledge Base the document will be added to.
+     * The appId is inferred from the request. Apps can only add documents to their own knowledge bases.
      */
     @JsonProperty("knowledgeBaseReferenceId")
     public String getKnowledgeBaseReferenceId() {
@@ -93,7 +94,8 @@ public final class AddDocumentFixRequest {
 
     public interface KnowledgeBaseReferenceIdStage {
         /**
-         * <p>Reference id of the Knowledge Base the document will be added to</p>
+         * <p>Reference id of the Knowledge Base the document will be added to.
+         * The appId is inferred from the request. Apps can only add documents to their own knowledge bases.</p>
          */
         _FinalStage knowledgeBaseReferenceId(@NotNull String knowledgeBaseReferenceId);
     }
@@ -136,8 +138,10 @@ public final class AddDocumentFixRequest {
         }
 
         /**
-         * <p>Reference id of the Knowledge Base the document will be added to</p>
-         * <p>Reference id of the Knowledge Base the document will be added to</p>
+         * <p>Reference id of the Knowledge Base the document will be added to.
+         * The appId is inferred from the request. Apps can only add documents to their own knowledge bases.</p>
+         * <p>Reference id of the Knowledge Base the document will be added to.
+         * The appId is inferred from the request. Apps can only add documents to their own knowledge bases.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override

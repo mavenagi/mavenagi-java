@@ -48,6 +48,10 @@ public final class ConversationPreview implements IBaseConversationResponse {
 
     private final boolean deleted;
 
+    private final boolean open;
+
+    private final boolean llmEnabled;
+
     private final Map<String, Object> additionalProperties;
 
     private ConversationPreview(
@@ -63,6 +67,8 @@ public final class ConversationPreview implements IBaseConversationResponse {
             ConversationAnalysis analysis,
             ConversationSummary summary,
             boolean deleted,
+            boolean open,
+            boolean llmEnabled,
             Map<String, Object> additionalProperties) {
         this.responseConfig = responseConfig;
         this.subject = subject;
@@ -76,6 +82,8 @@ public final class ConversationPreview implements IBaseConversationResponse {
         this.analysis = analysis;
         this.summary = summary;
         this.deleted = deleted;
+        this.open = open;
+        this.llmEnabled = llmEnabled;
         this.additionalProperties = additionalProperties;
     }
 
@@ -187,6 +195,27 @@ public final class ConversationPreview implements IBaseConversationResponse {
         return deleted;
     }
 
+    /**
+     * @return Whether the conversation is able to receive asynchronous messages.
+     * Only applicable if a conversation is initialized with the <code>ASYNC</code> capability. Defaults to true. Can be closed using the <code>PATCH</code> API.
+     */
+    @JsonProperty("open")
+    @java.lang.Override
+    public boolean getOpen() {
+        return open;
+    }
+
+    /**
+     * @return Whether the LLM is enabled for this conversation.
+     * If true, <code>USER</code> messages sent via the ask API will be sent to the LLM and a <code>BOT_RESPONSE</code> or <code>BOT_SUGGESTION</code> message will be generated.
+     * If false, <code>USER</code> messages will not be sent to the LLM.
+     */
+    @JsonProperty("llmEnabled")
+    @java.lang.Override
+    public boolean getLlmEnabled() {
+        return llmEnabled;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -210,7 +239,9 @@ public final class ConversationPreview implements IBaseConversationResponse {
                 && conversationId.equals(other.conversationId)
                 && analysis.equals(other.analysis)
                 && summary.equals(other.summary)
-                && deleted == other.deleted;
+                && deleted == other.deleted
+                && open == other.open
+                && llmEnabled == other.llmEnabled;
     }
 
     @java.lang.Override
@@ -227,7 +258,9 @@ public final class ConversationPreview implements IBaseConversationResponse {
                 this.conversationId,
                 this.analysis,
                 this.summary,
-                this.deleted);
+                this.deleted,
+                this.open,
+                this.llmEnabled);
     }
 
     @java.lang.Override
@@ -266,7 +299,24 @@ public final class ConversationPreview implements IBaseConversationResponse {
         /**
          * <p>Whether the conversation user-specific data has been deleted. See <code>deleteConversation</code> for details.</p>
          */
-        _FinalStage deleted(boolean deleted);
+        OpenStage deleted(boolean deleted);
+    }
+
+    public interface OpenStage {
+        /**
+         * <p>Whether the conversation is able to receive asynchronous messages.
+         * Only applicable if a conversation is initialized with the <code>ASYNC</code> capability. Defaults to true. Can be closed using the <code>PATCH</code> API.</p>
+         */
+        LlmEnabledStage open(boolean open);
+    }
+
+    public interface LlmEnabledStage {
+        /**
+         * <p>Whether the LLM is enabled for this conversation.
+         * If true, <code>USER</code> messages sent via the ask API will be sent to the LLM and a <code>BOT_RESPONSE</code> or <code>BOT_SUGGESTION</code> message will be generated.
+         * If false, <code>USER</code> messages will not be sent to the LLM.</p>
+         */
+        _FinalStage llmEnabled(boolean llmEnabled);
     }
 
     public interface _FinalStage {
@@ -333,7 +383,13 @@ public final class ConversationPreview implements IBaseConversationResponse {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
-            implements ConversationIdStage, AnalysisStage, SummaryStage, DeletedStage, _FinalStage {
+            implements ConversationIdStage,
+                    AnalysisStage,
+                    SummaryStage,
+                    DeletedStage,
+                    OpenStage,
+                    LlmEnabledStage,
+                    _FinalStage {
         private EntityId conversationId;
 
         private ConversationAnalysis analysis;
@@ -341,6 +397,10 @@ public final class ConversationPreview implements IBaseConversationResponse {
         private ConversationSummary summary;
 
         private boolean deleted;
+
+        private boolean open;
+
+        private boolean llmEnabled;
 
         private Map<String, Map<String, String>> allMetadata = new LinkedHashMap<>();
 
@@ -377,6 +437,8 @@ public final class ConversationPreview implements IBaseConversationResponse {
             analysis(other.getAnalysis());
             summary(other.getSummary());
             deleted(other.getDeleted());
+            open(other.getOpen());
+            llmEnabled(other.getLlmEnabled());
             return this;
         }
 
@@ -423,8 +485,38 @@ public final class ConversationPreview implements IBaseConversationResponse {
          */
         @java.lang.Override
         @JsonSetter("deleted")
-        public _FinalStage deleted(boolean deleted) {
+        public OpenStage deleted(boolean deleted) {
             this.deleted = deleted;
+            return this;
+        }
+
+        /**
+         * <p>Whether the conversation is able to receive asynchronous messages.
+         * Only applicable if a conversation is initialized with the <code>ASYNC</code> capability. Defaults to true. Can be closed using the <code>PATCH</code> API.</p>
+         * <p>Whether the conversation is able to receive asynchronous messages.
+         * Only applicable if a conversation is initialized with the <code>ASYNC</code> capability. Defaults to true. Can be closed using the <code>PATCH</code> API.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("open")
+        public LlmEnabledStage open(boolean open) {
+            this.open = open;
+            return this;
+        }
+
+        /**
+         * <p>Whether the LLM is enabled for this conversation.
+         * If true, <code>USER</code> messages sent via the ask API will be sent to the LLM and a <code>BOT_RESPONSE</code> or <code>BOT_SUGGESTION</code> message will be generated.
+         * If false, <code>USER</code> messages will not be sent to the LLM.</p>
+         * <p>Whether the LLM is enabled for this conversation.
+         * If true, <code>USER</code> messages sent via the ask API will be sent to the LLM and a <code>BOT_RESPONSE</code> or <code>BOT_SUGGESTION</code> message will be generated.
+         * If false, <code>USER</code> messages will not be sent to the LLM.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("llmEnabled")
+        public _FinalStage llmEnabled(boolean llmEnabled) {
+            this.llmEnabled = llmEnabled;
             return this;
         }
 
@@ -614,6 +706,8 @@ public final class ConversationPreview implements IBaseConversationResponse {
                     analysis,
                     summary,
                     deleted,
+                    open,
+                    llmEnabled,
                     additionalProperties);
         }
     }

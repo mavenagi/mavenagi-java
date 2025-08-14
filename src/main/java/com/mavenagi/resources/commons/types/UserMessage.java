@@ -38,9 +38,15 @@ public final class UserMessage implements IUserMessageBase, IConversationMessage
 
     private final Optional<String> language;
 
-    private final List<UserMessageAttachment> attachments;
+    private final List<AttachmentResponse> attachments;
+
+    private final Optional<String> agentUserId;
 
     private final Optional<String> userDisplayName;
+
+    private final MessageStatus status;
+
+    private final Optional<UserMessageResponseState> responseState;
 
     private final Map<String, Object> additionalProperties;
 
@@ -52,8 +58,11 @@ public final class UserMessage implements IUserMessageBase, IConversationMessage
             Optional<OffsetDateTime> updatedAt,
             EntityId conversationMessageId,
             Optional<String> language,
-            List<UserMessageAttachment> attachments,
+            List<AttachmentResponse> attachments,
+            Optional<String> agentUserId,
             Optional<String> userDisplayName,
+            MessageStatus status,
+            Optional<UserMessageResponseState> responseState,
             Map<String, Object> additionalProperties) {
         this.userId = userId;
         this.text = text;
@@ -63,7 +72,10 @@ public final class UserMessage implements IUserMessageBase, IConversationMessage
         this.conversationMessageId = conversationMessageId;
         this.language = language;
         this.attachments = attachments;
+        this.agentUserId = agentUserId;
         this.userDisplayName = userDisplayName;
+        this.status = status;
+        this.responseState = responseState;
         this.additionalProperties = additionalProperties;
     }
 
@@ -129,8 +141,16 @@ public final class UserMessage implements IUserMessageBase, IConversationMessage
      * @return The attachments associated with the message
      */
     @JsonProperty("attachments")
-    public List<UserMessageAttachment> getAttachments() {
+    public List<AttachmentResponse> getAttachments() {
         return attachments;
+    }
+
+    /**
+     * @return The ID of the agent user that created this message. More detail can be fetched via the agent user APIs. Will be empty only for legacy conversations.
+     */
+    @JsonProperty("agentUserId")
+    public Optional<String> getAgentUserId() {
+        return agentUserId;
     }
 
     /**
@@ -139,6 +159,34 @@ public final class UserMessage implements IUserMessageBase, IConversationMessage
     @JsonProperty("userDisplayName")
     public Optional<String> getUserDisplayName() {
         return userDisplayName;
+    }
+
+    /**
+     * @return The delivery status of the message. Only applicable to messages sent via the deliverMessage API.
+     * All other messages have an <code>UNKNOWN</code> status.
+     * <ul>
+     * <li><code>SENT</code>: The message has been sent to the user.</li>
+     * <li><code>FAILED</code>: The message sending encountered an error.</li>
+     * <li><code>UNKNOWN</code>: The message status is unknown.</li>
+     * </ul>
+     */
+    @JsonProperty("status")
+    public MessageStatus getStatus() {
+        return status;
+    }
+
+    /**
+     * @return Only present on newer messaged where <code>userMessageType</code> is <code>USER</code>.
+     * Indicates the state of the answer to the user message.
+     * <ul>
+     * <li><code>NOT_ASKED</code>: An answer was not requested for this user message.</li>
+     * <li><code>LLM_ENABLED</code>: An answer was requested for this user message and the LLM was enabled.</li>
+     * <li><code>LLM_DISABLED</code>: An answer was requested for this user message and the LLM was disabled.</li>
+     * </ul>
+     */
+    @JsonProperty("responseState")
+    public Optional<UserMessageResponseState> getResponseState() {
+        return responseState;
     }
 
     @java.lang.Override
@@ -161,7 +209,10 @@ public final class UserMessage implements IUserMessageBase, IConversationMessage
                 && conversationMessageId.equals(other.conversationMessageId)
                 && language.equals(other.language)
                 && attachments.equals(other.attachments)
-                && userDisplayName.equals(other.userDisplayName);
+                && agentUserId.equals(other.agentUserId)
+                && userDisplayName.equals(other.userDisplayName)
+                && status.equals(other.status)
+                && responseState.equals(other.responseState);
     }
 
     @java.lang.Override
@@ -175,7 +226,10 @@ public final class UserMessage implements IUserMessageBase, IConversationMessage
                 this.conversationMessageId,
                 this.language,
                 this.attachments,
-                this.userDisplayName);
+                this.agentUserId,
+                this.userDisplayName,
+                this.status,
+                this.responseState);
     }
 
     @java.lang.Override
@@ -211,7 +265,20 @@ public final class UserMessage implements IUserMessageBase, IConversationMessage
         /**
          * <p>The ID that uniquely identifies this message within the conversation</p>
          */
-        _FinalStage conversationMessageId(@NotNull EntityId conversationMessageId);
+        StatusStage conversationMessageId(@NotNull EntityId conversationMessageId);
+    }
+
+    public interface StatusStage {
+        /**
+         * <p>The delivery status of the message. Only applicable to messages sent via the deliverMessage API.
+         * All other messages have an <code>UNKNOWN</code> status.</p>
+         * <ul>
+         * <li><code>SENT</code>: The message has been sent to the user.</li>
+         * <li><code>FAILED</code>: The message sending encountered an error.</li>
+         * <li><code>UNKNOWN</code>: The message status is unknown.</li>
+         * </ul>
+         */
+        _FinalStage status(@NotNull MessageStatus status);
     }
 
     public interface _FinalStage {
@@ -241,11 +308,18 @@ public final class UserMessage implements IUserMessageBase, IConversationMessage
         /**
          * <p>The attachments associated with the message</p>
          */
-        _FinalStage attachments(List<UserMessageAttachment> attachments);
+        _FinalStage attachments(List<AttachmentResponse> attachments);
 
-        _FinalStage addAttachments(UserMessageAttachment attachments);
+        _FinalStage addAttachments(AttachmentResponse attachments);
 
-        _FinalStage addAllAttachments(List<UserMessageAttachment> attachments);
+        _FinalStage addAllAttachments(List<AttachmentResponse> attachments);
+
+        /**
+         * <p>The ID of the agent user that created this message. More detail can be fetched via the agent user APIs. Will be empty only for legacy conversations.</p>
+         */
+        _FinalStage agentUserId(Optional<String> agentUserId);
+
+        _FinalStage agentUserId(String agentUserId);
 
         /**
          * <p>The display name of the user who created this message. Only available for users who have saved name information.</p>
@@ -253,11 +327,29 @@ public final class UserMessage implements IUserMessageBase, IConversationMessage
         _FinalStage userDisplayName(Optional<String> userDisplayName);
 
         _FinalStage userDisplayName(String userDisplayName);
+
+        /**
+         * <p>Only present on newer messaged where <code>userMessageType</code> is <code>USER</code>.
+         * Indicates the state of the answer to the user message.</p>
+         * <ul>
+         * <li><code>NOT_ASKED</code>: An answer was not requested for this user message.</li>
+         * <li><code>LLM_ENABLED</code>: An answer was requested for this user message and the LLM was enabled.</li>
+         * <li><code>LLM_DISABLED</code>: An answer was requested for this user message and the LLM was disabled.</li>
+         * </ul>
+         */
+        _FinalStage responseState(Optional<UserMessageResponseState> responseState);
+
+        _FinalStage responseState(UserMessageResponseState responseState);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
-            implements UserIdStage, TextStage, UserMessageTypeStage, ConversationMessageIdStage, _FinalStage {
+            implements UserIdStage,
+                    TextStage,
+                    UserMessageTypeStage,
+                    ConversationMessageIdStage,
+                    StatusStage,
+                    _FinalStage {
         private EntityIdBase userId;
 
         private String text;
@@ -266,9 +358,15 @@ public final class UserMessage implements IUserMessageBase, IConversationMessage
 
         private EntityId conversationMessageId;
 
+        private MessageStatus status;
+
+        private Optional<UserMessageResponseState> responseState = Optional.empty();
+
         private Optional<String> userDisplayName = Optional.empty();
 
-        private List<UserMessageAttachment> attachments = new ArrayList<>();
+        private Optional<String> agentUserId = Optional.empty();
+
+        private List<AttachmentResponse> attachments = new ArrayList<>();
 
         private Optional<String> language = Optional.empty();
 
@@ -291,7 +389,10 @@ public final class UserMessage implements IUserMessageBase, IConversationMessage
             conversationMessageId(other.getConversationMessageId());
             language(other.getLanguage());
             attachments(other.getAttachments());
+            agentUserId(other.getAgentUserId());
             userDisplayName(other.getUserDisplayName());
+            status(other.getStatus());
+            responseState(other.getResponseState());
             return this;
         }
 
@@ -333,9 +434,65 @@ public final class UserMessage implements IUserMessageBase, IConversationMessage
          */
         @java.lang.Override
         @JsonSetter("conversationMessageId")
-        public _FinalStage conversationMessageId(@NotNull EntityId conversationMessageId) {
+        public StatusStage conversationMessageId(@NotNull EntityId conversationMessageId) {
             this.conversationMessageId =
                     Objects.requireNonNull(conversationMessageId, "conversationMessageId must not be null");
+            return this;
+        }
+
+        /**
+         * <p>The delivery status of the message. Only applicable to messages sent via the deliverMessage API.
+         * All other messages have an <code>UNKNOWN</code> status.</p>
+         * <ul>
+         * <li><code>SENT</code>: The message has been sent to the user.</li>
+         * <li><code>FAILED</code>: The message sending encountered an error.</li>
+         * <li><code>UNKNOWN</code>: The message status is unknown.</li>
+         * </ul>
+         * <p>The delivery status of the message. Only applicable to messages sent via the deliverMessage API.
+         * All other messages have an <code>UNKNOWN</code> status.</p>
+         * <ul>
+         * <li><code>SENT</code>: The message has been sent to the user.</li>
+         * <li><code>FAILED</code>: The message sending encountered an error.</li>
+         * <li><code>UNKNOWN</code>: The message status is unknown.</li>
+         * </ul>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("status")
+        public _FinalStage status(@NotNull MessageStatus status) {
+            this.status = Objects.requireNonNull(status, "status must not be null");
+            return this;
+        }
+
+        /**
+         * <p>Only present on newer messaged where <code>userMessageType</code> is <code>USER</code>.
+         * Indicates the state of the answer to the user message.</p>
+         * <ul>
+         * <li><code>NOT_ASKED</code>: An answer was not requested for this user message.</li>
+         * <li><code>LLM_ENABLED</code>: An answer was requested for this user message and the LLM was enabled.</li>
+         * <li><code>LLM_DISABLED</code>: An answer was requested for this user message and the LLM was disabled.</li>
+         * </ul>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage responseState(UserMessageResponseState responseState) {
+            this.responseState = Optional.ofNullable(responseState);
+            return this;
+        }
+
+        /**
+         * <p>Only present on newer messaged where <code>userMessageType</code> is <code>USER</code>.
+         * Indicates the state of the answer to the user message.</p>
+         * <ul>
+         * <li><code>NOT_ASKED</code>: An answer was not requested for this user message.</li>
+         * <li><code>LLM_ENABLED</code>: An answer was requested for this user message and the LLM was enabled.</li>
+         * <li><code>LLM_DISABLED</code>: An answer was requested for this user message and the LLM was disabled.</li>
+         * </ul>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "responseState", nulls = Nulls.SKIP)
+        public _FinalStage responseState(Optional<UserMessageResponseState> responseState) {
+            this.responseState = responseState;
             return this;
         }
 
@@ -360,11 +517,31 @@ public final class UserMessage implements IUserMessageBase, IConversationMessage
         }
 
         /**
+         * <p>The ID of the agent user that created this message. More detail can be fetched via the agent user APIs. Will be empty only for legacy conversations.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage agentUserId(String agentUserId) {
+            this.agentUserId = Optional.ofNullable(agentUserId);
+            return this;
+        }
+
+        /**
+         * <p>The ID of the agent user that created this message. More detail can be fetched via the agent user APIs. Will be empty only for legacy conversations.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "agentUserId", nulls = Nulls.SKIP)
+        public _FinalStage agentUserId(Optional<String> agentUserId) {
+            this.agentUserId = agentUserId;
+            return this;
+        }
+
+        /**
          * <p>The attachments associated with the message</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage addAllAttachments(List<UserMessageAttachment> attachments) {
+        public _FinalStage addAllAttachments(List<AttachmentResponse> attachments) {
             this.attachments.addAll(attachments);
             return this;
         }
@@ -374,7 +551,7 @@ public final class UserMessage implements IUserMessageBase, IConversationMessage
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage addAttachments(UserMessageAttachment attachments) {
+        public _FinalStage addAttachments(AttachmentResponse attachments) {
             this.attachments.add(attachments);
             return this;
         }
@@ -384,7 +561,7 @@ public final class UserMessage implements IUserMessageBase, IConversationMessage
          */
         @java.lang.Override
         @JsonSetter(value = "attachments", nulls = Nulls.SKIP)
-        public _FinalStage attachments(List<UserMessageAttachment> attachments) {
+        public _FinalStage attachments(List<AttachmentResponse> attachments) {
             this.attachments.clear();
             this.attachments.addAll(attachments);
             return this;
@@ -461,7 +638,10 @@ public final class UserMessage implements IUserMessageBase, IConversationMessage
                     conversationMessageId,
                     language,
                     attachments,
+                    agentUserId,
                     userDisplayName,
+                    status,
+                    responseState,
                     additionalProperties);
         }
     }

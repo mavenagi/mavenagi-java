@@ -31,7 +31,7 @@ public final class InboxSearchResponse implements IPage {
 
     private final int totalPages;
 
-    private final List<InboxItem> content;
+    private final List<InboxItem> items;
 
     private final Map<String, Object> additionalProperties;
 
@@ -40,13 +40,13 @@ public final class InboxSearchResponse implements IPage {
             int size,
             long totalElements,
             int totalPages,
-            List<InboxItem> content,
+            List<InboxItem> items,
             Map<String, Object> additionalProperties) {
         this.number = number;
         this.size = size;
         this.totalElements = totalElements;
         this.totalPages = totalPages;
-        this.content = content;
+        this.items = items;
         this.additionalProperties = additionalProperties;
     }
 
@@ -89,9 +89,9 @@ public final class InboxSearchResponse implements IPage {
     /**
      * @return The list of inbox items returned in the search response.
      */
-    @JsonProperty("content")
-    public List<InboxItem> getContent() {
-        return content;
+    @JsonProperty("items")
+    public List<InboxItem> getItems() {
+        return items;
     }
 
     @java.lang.Override
@@ -110,12 +110,12 @@ public final class InboxSearchResponse implements IPage {
                 && size == other.size
                 && totalElements == other.totalElements
                 && totalPages == other.totalPages
-                && content.equals(other.content);
+                && items.equals(other.items);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.number, this.size, this.totalElements, this.totalPages, this.content);
+        return Objects.hash(this.number, this.size, this.totalElements, this.totalPages, this.items);
     }
 
     @java.lang.Override
@@ -163,11 +163,11 @@ public final class InboxSearchResponse implements IPage {
         /**
          * <p>The list of inbox items returned in the search response.</p>
          */
-        _FinalStage content(List<InboxItem> content);
+        _FinalStage items(List<InboxItem> items);
 
-        _FinalStage addContent(InboxItem content);
+        _FinalStage addItems(InboxItem items);
 
-        _FinalStage addAllContent(List<InboxItem> content);
+        _FinalStage addAllItems(List<InboxItem> items);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -181,7 +181,7 @@ public final class InboxSearchResponse implements IPage {
 
         private int totalPages;
 
-        private List<InboxItem> content = new ArrayList<>();
+        private List<InboxItem> items = new ArrayList<>();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -194,7 +194,7 @@ public final class InboxSearchResponse implements IPage {
             size(other.getSize());
             totalElements(other.getTotalElements());
             totalPages(other.getTotalPages());
-            content(other.getContent());
+            items(other.getItems());
             return this;
         }
 
@@ -251,8 +251,8 @@ public final class InboxSearchResponse implements IPage {
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage addAllContent(List<InboxItem> content) {
-            this.content.addAll(content);
+        public _FinalStage addAllItems(List<InboxItem> items) {
+            this.items.addAll(items);
             return this;
         }
 
@@ -261,8 +261,8 @@ public final class InboxSearchResponse implements IPage {
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage addContent(InboxItem content) {
-            this.content.add(content);
+        public _FinalStage addItems(InboxItem items) {
+            this.items.add(items);
             return this;
         }
 
@@ -270,16 +270,16 @@ public final class InboxSearchResponse implements IPage {
          * <p>The list of inbox items returned in the search response.</p>
          */
         @java.lang.Override
-        @JsonSetter(value = "content", nulls = Nulls.SKIP)
-        public _FinalStage content(List<InboxItem> content) {
-            this.content.clear();
-            this.content.addAll(content);
+        @JsonSetter(value = "items", nulls = Nulls.SKIP)
+        public _FinalStage items(List<InboxItem> items) {
+            this.items.clear();
+            this.items.addAll(items);
             return this;
         }
 
         @java.lang.Override
         public InboxSearchResponse build() {
-            return new InboxSearchResponse(number, size, totalElements, totalPages, content, additionalProperties);
+            return new InboxSearchResponse(number, size, totalElements, totalPages, items, additionalProperties);
         }
     }
 }

@@ -20,6 +20,9 @@ import com.mavenagi.resources.commons.types.AppUserResponse;
 import com.mavenagi.resources.commons.types.ErrorMessage;
 import com.mavenagi.resources.users.requests.UserDeleteRequest;
 import com.mavenagi.resources.users.requests.UserGetRequest;
+import com.mavenagi.resources.users.types.AgentUser;
+import com.mavenagi.resources.users.types.AgentUserSearchRequest;
+import com.mavenagi.resources.users.types.AgentUserSearchResponse;
 import java.io.IOException;
 import okhttp3.Headers;
 import okhttp3.HttpUrl;
@@ -37,19 +40,159 @@ public class RawUsersClient {
     }
 
     /**
-     * Update a user or create it if it doesn't exist.
+     * Search across all agent users on an agent.
+     * <p>Agent users are a merged view of the users created by individual apps.</p>
+     */
+    public MavenAGIHttpResponse<AgentUserSearchResponse> search() {
+        return search(AgentUserSearchRequest.builder().build());
+    }
+
+    /**
+     * Search across all agent users on an agent.
+     * <p>Agent users are a merged view of the users created by individual apps.</p>
+     */
+    public MavenAGIHttpResponse<AgentUserSearchResponse> search(AgentUserSearchRequest request) {
+        return search(request, null);
+    }
+
+    /**
+     * Search across all agent users on an agent.
+     * <p>Agent users are a merged view of the users created by individual apps.</p>
+     */
+    public MavenAGIHttpResponse<AgentUserSearchResponse> search(
+            AgentUserSearchRequest request, RequestOptions requestOptions) {
+        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("v1")
+                .addPathSegments("agentusers/search")
+                .build();
+        RequestBody body;
+        try {
+            body = RequestBody.create(
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
+        } catch (JsonProcessingException e) {
+            throw new MavenAGIException("Failed to serialize request", e);
+        }
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl)
+                .method("POST", body)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
+                .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            if (response.isSuccessful()) {
+                return new MavenAGIHttpResponse<>(
+                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), AgentUserSearchResponse.class),
+                        response);
+            }
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            try {
+                switch (response.code()) {
+                    case 400:
+                        throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                    case 500:
+                        throw new ServerError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            throw new MavenAGIApiException(
+                    "Error with status code " + response.code(),
+                    response.code(),
+                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                    response);
+        } catch (IOException e) {
+            throw new MavenAGIException("Network error executing HTTP request", e);
+        }
+    }
+
+    /**
+     * Get an agent user by its supplied ID.
+     * <p>Agent users are a merged view of the users created by individual apps.</p>
+     */
+    public MavenAGIHttpResponse<AgentUser> getAgentUser(String userId) {
+        return getAgentUser(userId, null);
+    }
+
+    /**
+     * Get an agent user by its supplied ID.
+     * <p>Agent users are a merged view of the users created by individual apps.</p>
+     */
+    public MavenAGIHttpResponse<AgentUser> getAgentUser(String userId, RequestOptions requestOptions) {
+        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("v1")
+                .addPathSegments("agentusers")
+                .addPathSegment(userId)
+                .build();
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl)
+                .method("GET", null)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Accept", "application/json")
+                .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            if (response.isSuccessful()) {
+                return new MavenAGIHttpResponse<>(
+                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), AgentUser.class), response);
+            }
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            try {
+                switch (response.code()) {
+                    case 400:
+                        throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                    case 500:
+                        throw new ServerError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            throw new MavenAGIApiException(
+                    "Error with status code " + response.code(),
+                    response.code(),
+                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                    response);
+        } catch (IOException e) {
+            throw new MavenAGIException("Network error executing HTTP request", e);
+        }
+    }
+
+    /**
+     * Update an app user or create it if it doesn't exist.
      */
     public MavenAGIHttpResponse<AppUserResponse> createOrUpdate(AppUserRequest request) {
         return createOrUpdate(request, null);
     }
 
     /**
-     * Update a user or create it if it doesn't exist.
+     * Update an app user or create it if it doesn't exist.
      */
     public MavenAGIHttpResponse<AppUserResponse> createOrUpdate(AppUserRequest request, RequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
-                .addPathSegments("v1/users")
+                .addPathSegments("v1")
+                .addPathSegments("users")
                 .build();
         RequestBody body;
         try {
@@ -102,27 +245,28 @@ public class RawUsersClient {
     }
 
     /**
-     * Get a user by its supplied ID
+     * Get an app user by its supplied ID
      */
     public MavenAGIHttpResponse<AppUserResponse> get(String userId) {
         return get(userId, UserGetRequest.builder().build());
     }
 
     /**
-     * Get a user by its supplied ID
+     * Get an app user by its supplied ID
      */
     public MavenAGIHttpResponse<AppUserResponse> get(String userId, UserGetRequest request) {
         return get(userId, request, null);
     }
 
     /**
-     * Get a user by its supplied ID
+     * Get an app user by its supplied ID
      */
     public MavenAGIHttpResponse<AppUserResponse> get(
             String userId, UserGetRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
-                .addPathSegments("v1/users")
+                .addPathSegments("v1")
+                .addPathSegments("users")
                 .addPathSegment(userId);
         if (request.getAppId().isPresent()) {
             QueryStringMapper.addQueryParameter(
@@ -199,7 +343,8 @@ public class RawUsersClient {
     public MavenAGIHttpResponse<Void> delete(String userId, UserDeleteRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
-                .addPathSegments("v1/users")
+                .addPathSegments("v1")
+                .addPathSegments("users")
                 .addPathSegment(userId);
         if (request.getAppId().isPresent()) {
             QueryStringMapper.addQueryParameter(

@@ -32,4 +32,8 @@ public interface IBaseConversationResponse {
     ConversationSummary getSummary();
 
     boolean getDeleted();
+
+    boolean getOpen();
+
+    boolean getLlmEnabled();
 }

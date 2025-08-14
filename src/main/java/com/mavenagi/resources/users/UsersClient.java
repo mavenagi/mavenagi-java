@@ -9,6 +9,9 @@ import com.mavenagi.resources.commons.types.AppUserRequest;
 import com.mavenagi.resources.commons.types.AppUserResponse;
 import com.mavenagi.resources.users.requests.UserDeleteRequest;
 import com.mavenagi.resources.users.requests.UserGetRequest;
+import com.mavenagi.resources.users.types.AgentUser;
+import com.mavenagi.resources.users.types.AgentUserSearchRequest;
+import com.mavenagi.resources.users.types.AgentUserSearchResponse;
 
 public class UsersClient {
     protected final ClientOptions clientOptions;
@@ -28,35 +31,75 @@ public class UsersClient {
     }
 
     /**
-     * Update a user or create it if it doesn't exist.
+     * Search across all agent users on an agent.
+     * <p>Agent users are a merged view of the users created by individual apps.</p>
+     */
+    public AgentUserSearchResponse search() {
+        return this.rawClient.search().body();
+    }
+
+    /**
+     * Search across all agent users on an agent.
+     * <p>Agent users are a merged view of the users created by individual apps.</p>
+     */
+    public AgentUserSearchResponse search(AgentUserSearchRequest request) {
+        return this.rawClient.search(request).body();
+    }
+
+    /**
+     * Search across all agent users on an agent.
+     * <p>Agent users are a merged view of the users created by individual apps.</p>
+     */
+    public AgentUserSearchResponse search(AgentUserSearchRequest request, RequestOptions requestOptions) {
+        return this.rawClient.search(request, requestOptions).body();
+    }
+
+    /**
+     * Get an agent user by its supplied ID.
+     * <p>Agent users are a merged view of the users created by individual apps.</p>
+     */
+    public AgentUser getAgentUser(String userId) {
+        return this.rawClient.getAgentUser(userId).body();
+    }
+
+    /**
+     * Get an agent user by its supplied ID.
+     * <p>Agent users are a merged view of the users created by individual apps.</p>
+     */
+    public AgentUser getAgentUser(String userId, RequestOptions requestOptions) {
+        return this.rawClient.getAgentUser(userId, requestOptions).body();
+    }
+
+    /**
+     * Update an app user or create it if it doesn't exist.
      */
     public AppUserResponse createOrUpdate(AppUserRequest request) {
         return this.rawClient.createOrUpdate(request).body();
     }
 
     /**
-     * Update a user or create it if it doesn't exist.
+     * Update an app user or create it if it doesn't exist.
      */
     public AppUserResponse createOrUpdate(AppUserRequest request, RequestOptions requestOptions) {
         return this.rawClient.createOrUpdate(request, requestOptions).body();
     }
 
     /**
-     * Get a user by its supplied ID
+     * Get an app user by its supplied ID
      */
     public AppUserResponse get(String userId) {
         return this.rawClient.get(userId).body();
     }
 
     /**
-     * Get a user by its supplied ID
+     * Get an app user by its supplied ID
      */
     public AppUserResponse get(String userId, UserGetRequest request) {
         return this.rawClient.get(userId, request).body();
     }
 
     /**
-     * Get a user by its supplied ID
+     * Get an app user by its supplied ID
      */
     public AppUserResponse get(String userId, UserGetRequest request, RequestOptions requestOptions) {
         return this.rawClient.get(userId, request, requestOptions).body();

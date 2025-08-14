@@ -10,7 +10,7 @@ import com.mavenagi.resources.commons.types.InboxItemFix;
 import com.mavenagi.resources.inbox.requests.InboxItemFixRequest;
 import com.mavenagi.resources.inbox.requests.InboxItemIgnoreRequest;
 import com.mavenagi.resources.inbox.requests.InboxItemRequest;
-import com.mavenagi.resources.inbox.types.ApplyInboxItemFixRequest;
+import com.mavenagi.resources.inbox.types.ApplyFixesRequest;
 import com.mavenagi.resources.inbox.types.InboxSearchRequest;
 import com.mavenagi.resources.inbox.types.InboxSearchResponse;
 import java.util.concurrent.CompletableFuture;
@@ -84,18 +84,18 @@ public class AsyncInboxClient {
     }
 
     /**
-     * Apply a fix to an inbox item with a specific document.
+     * Apply a list of fixes belonging to an inbox item.
      */
-    public CompletableFuture<Void> applyFix(String inboxItemFixId, ApplyInboxItemFixRequest request) {
-        return this.rawClient.applyFix(inboxItemFixId, request).thenApply(response -> response.body());
+    public CompletableFuture<Void> applyFixes(String inboxItemId, ApplyFixesRequest request) {
+        return this.rawClient.applyFixes(inboxItemId, request).thenApply(response -> response.body());
     }
 
     /**
-     * Apply a fix to an inbox item with a specific document.
+     * Apply a list of fixes belonging to an inbox item.
      */
-    public CompletableFuture<Void> applyFix(
-            String inboxItemFixId, ApplyInboxItemFixRequest request, RequestOptions requestOptions) {
-        return this.rawClient.applyFix(inboxItemFixId, request, requestOptions).thenApply(response -> response.body());
+    public CompletableFuture<Void> applyFixes(
+            String inboxItemId, ApplyFixesRequest request, RequestOptions requestOptions) {
+        return this.rawClient.applyFixes(inboxItemId, request, requestOptions).thenApply(response -> response.body());
     }
 
     /**

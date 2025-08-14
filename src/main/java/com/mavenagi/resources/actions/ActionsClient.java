@@ -5,7 +5,11 @@ package com.mavenagi.resources.actions;
 
 import com.mavenagi.core.ClientOptions;
 import com.mavenagi.core.RequestOptions;
+import com.mavenagi.resources.actions.requests.ActionGetRequest;
+import com.mavenagi.resources.actions.types.ActionPatchRequest;
 import com.mavenagi.resources.actions.types.ActionRequest;
+import com.mavenagi.resources.actions.types.ActionsResponse;
+import com.mavenagi.resources.actions.types.ActionsSearchRequest;
 import com.mavenagi.resources.commons.types.ActionResponse;
 
 public class ActionsClient {
@@ -23,6 +27,18 @@ public class ActionsClient {
      */
     public RawActionsClient withRawResponse() {
         return this.rawClient;
+    }
+
+    public ActionsResponse search() {
+        return this.rawClient.search().body();
+    }
+
+    public ActionsResponse search(ActionsSearchRequest request) {
+        return this.rawClient.search(request).body();
+    }
+
+    public ActionsResponse search(ActionsSearchRequest request, RequestOptions requestOptions) {
+        return this.rawClient.search(request, requestOptions).body();
     }
 
     /**
@@ -49,8 +65,42 @@ public class ActionsClient {
     /**
      * Get an action by its supplied ID
      */
-    public ActionResponse get(String actionReferenceId, RequestOptions requestOptions) {
-        return this.rawClient.get(actionReferenceId, requestOptions).body();
+    public ActionResponse get(String actionReferenceId, ActionGetRequest request) {
+        return this.rawClient.get(actionReferenceId, request).body();
+    }
+
+    /**
+     * Get an action by its supplied ID
+     */
+    public ActionResponse get(String actionReferenceId, ActionGetRequest request, RequestOptions requestOptions) {
+        return this.rawClient.get(actionReferenceId, request, requestOptions).body();
+    }
+
+    /**
+     * Update mutable action fields
+     * <p>The <code>appId</code> field can be provided to update an action owned by a different app.
+     * All other fields will overwrite the existing value on the action only if provided.</p>
+     */
+    public ActionResponse patch(String actionReferenceId) {
+        return this.rawClient.patch(actionReferenceId).body();
+    }
+
+    /**
+     * Update mutable action fields
+     * <p>The <code>appId</code> field can be provided to update an action owned by a different app.
+     * All other fields will overwrite the existing value on the action only if provided.</p>
+     */
+    public ActionResponse patch(String actionReferenceId, ActionPatchRequest request) {
+        return this.rawClient.patch(actionReferenceId, request).body();
+    }
+
+    /**
+     * Update mutable action fields
+     * <p>The <code>appId</code> field can be provided to update an action owned by a different app.
+     * All other fields will overwrite the existing value on the action only if provided.</p>
+     */
+    public ActionResponse patch(String actionReferenceId, ActionPatchRequest request, RequestOptions requestOptions) {
+        return this.rawClient.patch(actionReferenceId, request, requestOptions).body();
     }
 
     /**

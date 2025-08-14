@@ -36,7 +36,9 @@ public final class BotMessage implements IConversationMessageBase {
 
     private final BotResponseMetadata metadata;
 
-    private final BotMessageStatus status;
+    private final MessageStatus status;
+
+    private final Optional<BotLogic> logic;
 
     private final Map<String, Object> additionalProperties;
 
@@ -47,7 +49,8 @@ public final class BotMessage implements IConversationMessageBase {
             BotConversationMessageType botMessageType,
             List<BotResponse> responses,
             BotResponseMetadata metadata,
-            BotMessageStatus status,
+            MessageStatus status,
+            Optional<BotLogic> logic,
             Map<String, Object> additionalProperties) {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -56,6 +59,7 @@ public final class BotMessage implements IConversationMessageBase {
         this.responses = responses;
         this.metadata = metadata;
         this.status = status;
+        this.logic = logic;
         this.additionalProperties = additionalProperties;
     }
 
@@ -101,8 +105,16 @@ public final class BotMessage implements IConversationMessageBase {
     }
 
     @JsonProperty("status")
-    public BotMessageStatus getStatus() {
+    public MessageStatus getStatus() {
         return status;
+    }
+
+    /**
+     * @return The logic that was used to generate the response. Response size may be large; only present on the getConversation request.
+     */
+    @JsonProperty("logic")
+    public Optional<BotLogic> getLogic() {
+        return logic;
     }
 
     @java.lang.Override
@@ -123,7 +135,8 @@ public final class BotMessage implements IConversationMessageBase {
                 && botMessageType.equals(other.botMessageType)
                 && responses.equals(other.responses)
                 && metadata.equals(other.metadata)
-                && status.equals(other.status);
+                && status.equals(other.status)
+                && logic.equals(other.logic);
     }
 
     @java.lang.Override
@@ -135,7 +148,8 @@ public final class BotMessage implements IConversationMessageBase {
                 this.botMessageType,
                 this.responses,
                 this.metadata,
-                this.status);
+                this.status,
+                this.logic);
     }
 
     @java.lang.Override
@@ -165,7 +179,7 @@ public final class BotMessage implements IConversationMessageBase {
     }
 
     public interface StatusStage {
-        _FinalStage status(@NotNull BotMessageStatus status);
+        _FinalStage status(@NotNull MessageStatus status);
     }
 
     public interface _FinalStage {
@@ -190,6 +204,13 @@ public final class BotMessage implements IConversationMessageBase {
         _FinalStage addResponses(BotResponse responses);
 
         _FinalStage addAllResponses(List<BotResponse> responses);
+
+        /**
+         * <p>The logic that was used to generate the response. Response size may be large; only present on the getConversation request.</p>
+         */
+        _FinalStage logic(Optional<BotLogic> logic);
+
+        _FinalStage logic(BotLogic logic);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -201,7 +222,9 @@ public final class BotMessage implements IConversationMessageBase {
 
         private BotResponseMetadata metadata;
 
-        private BotMessageStatus status;
+        private MessageStatus status;
+
+        private Optional<BotLogic> logic = Optional.empty();
 
         private List<BotResponse> responses = new ArrayList<>();
 
@@ -223,6 +246,7 @@ public final class BotMessage implements IConversationMessageBase {
             responses(other.getResponses());
             metadata(other.getMetadata());
             status(other.getStatus());
+            logic(other.getLogic());
             return this;
         }
 
@@ -255,8 +279,28 @@ public final class BotMessage implements IConversationMessageBase {
 
         @java.lang.Override
         @JsonSetter("status")
-        public _FinalStage status(@NotNull BotMessageStatus status) {
+        public _FinalStage status(@NotNull MessageStatus status) {
             this.status = Objects.requireNonNull(status, "status must not be null");
+            return this;
+        }
+
+        /**
+         * <p>The logic that was used to generate the response. Response size may be large; only present on the getConversation request.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage logic(BotLogic logic) {
+            this.logic = Optional.ofNullable(logic);
+            return this;
+        }
+
+        /**
+         * <p>The logic that was used to generate the response. Response size may be large; only present on the getConversation request.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "logic", nulls = Nulls.SKIP)
+        public _FinalStage logic(Optional<BotLogic> logic) {
+            this.logic = logic;
             return this;
         }
 
@@ -330,6 +374,7 @@ public final class BotMessage implements IConversationMessageBase {
                     responses,
                     metadata,
                     status,
+                    logic,
                     additionalProperties);
         }
     }

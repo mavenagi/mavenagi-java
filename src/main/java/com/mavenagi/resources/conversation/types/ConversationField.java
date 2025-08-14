@@ -24,6 +24,8 @@ public enum ConversationField {
 
     RESOLUTION_STATUS("ResolutionStatus"),
 
+    RESOLVED_BY_MAVEN("ResolvedByMaven"),
+
     QUALITY("Quality"),
 
     USERS("Users"),
@@ -48,7 +50,13 @@ public enum ConversationField {
 
     SOURCES("Sources"),
 
-    CREATED_AT("CreatedAt");
+    CREATED_AT("CreatedAt"),
+
+    PREDICTED_NPS("PredictedNPS"),
+
+    ORGANIZATION_ID("OrganizationId"),
+
+    AGENT_ID("AgentId");
 
     private final String value;
 

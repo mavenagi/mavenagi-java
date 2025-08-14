@@ -9,13 +9,16 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
 import com.mavenagi.resources.commons.types.EntityId;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
@@ -29,6 +32,8 @@ public final class Agent {
 
     private final AgentEnvironment environment;
 
+    private final Set<PiiCategory> enabledPiiCategories;
+
     private final Map<String, Object> additionalProperties;
 
     private Agent(
@@ -36,11 +41,13 @@ public final class Agent {
             String name,
             OffsetDateTime createdAt,
             AgentEnvironment environment,
+            Set<PiiCategory> enabledPiiCategories,
             Map<String, Object> additionalProperties) {
         this.agentId = agentId;
         this.name = name;
         this.createdAt = createdAt;
         this.environment = environment;
+        this.enabledPiiCategories = enabledPiiCategories;
         this.additionalProperties = additionalProperties;
     }
 
@@ -76,6 +83,19 @@ public final class Agent {
         return environment;
     }
 
+    /**
+     * @return The PII categories that are enabled for the agent.
+     * PII will be automatically redacted from all conversation message text.
+     * Attachments and form submissions are not affected.
+     * <p>Defaults to <code>AbaRoutingNumber</code>, <code>CreditCardNumber</code>, <code>IpAddress</code>, <code>PhoneNumber</code>, <code>SwiftCode</code>,
+     * <code>UsBankAccountNumber</code>, <code>UsDriversLicenseNumber</code>, <code>UsIndividualTaxpayerIdentification</code>,
+     * <code>UsUkPassportNumber</code>, <code>UsSocialSecurityNumber</code>.</p>
+     */
+    @JsonProperty("enabledPiiCategories")
+    public Set<PiiCategory> getEnabledPiiCategories() {
+        return enabledPiiCategories;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -91,12 +111,13 @@ public final class Agent {
         return agentId.equals(other.agentId)
                 && name.equals(other.name)
                 && createdAt.equals(other.createdAt)
-                && environment.equals(other.environment);
+                && environment.equals(other.environment)
+                && enabledPiiCategories.equals(other.enabledPiiCategories);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.agentId, this.name, this.createdAt, this.environment);
+        return Objects.hash(this.agentId, this.name, this.createdAt, this.environment, this.enabledPiiCategories);
     }
 
     @java.lang.Override
@@ -140,6 +161,20 @@ public final class Agent {
 
     public interface _FinalStage {
         Agent build();
+
+        /**
+         * <p>The PII categories that are enabled for the agent.
+         * PII will be automatically redacted from all conversation message text.
+         * Attachments and form submissions are not affected.</p>
+         * <p>Defaults to <code>AbaRoutingNumber</code>, <code>CreditCardNumber</code>, <code>IpAddress</code>, <code>PhoneNumber</code>, <code>SwiftCode</code>,
+         * <code>UsBankAccountNumber</code>, <code>UsDriversLicenseNumber</code>, <code>UsIndividualTaxpayerIdentification</code>,
+         * <code>UsUkPassportNumber</code>, <code>UsSocialSecurityNumber</code>.</p>
+         */
+        _FinalStage enabledPiiCategories(Set<PiiCategory> enabledPiiCategories);
+
+        _FinalStage addEnabledPiiCategories(PiiCategory enabledPiiCategories);
+
+        _FinalStage addAllEnabledPiiCategories(Set<PiiCategory> enabledPiiCategories);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -153,6 +188,8 @@ public final class Agent {
 
         private AgentEnvironment environment;
 
+        private Set<PiiCategory> enabledPiiCategories = new LinkedHashSet<>();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -164,6 +201,7 @@ public final class Agent {
             name(other.getName());
             createdAt(other.getCreatedAt());
             environment(other.getEnvironment());
+            enabledPiiCategories(other.getEnabledPiiCategories());
             return this;
         }
 
@@ -215,9 +253,55 @@ public final class Agent {
             return this;
         }
 
+        /**
+         * <p>The PII categories that are enabled for the agent.
+         * PII will be automatically redacted from all conversation message text.
+         * Attachments and form submissions are not affected.</p>
+         * <p>Defaults to <code>AbaRoutingNumber</code>, <code>CreditCardNumber</code>, <code>IpAddress</code>, <code>PhoneNumber</code>, <code>SwiftCode</code>,
+         * <code>UsBankAccountNumber</code>, <code>UsDriversLicenseNumber</code>, <code>UsIndividualTaxpayerIdentification</code>,
+         * <code>UsUkPassportNumber</code>, <code>UsSocialSecurityNumber</code>.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage addAllEnabledPiiCategories(Set<PiiCategory> enabledPiiCategories) {
+            this.enabledPiiCategories.addAll(enabledPiiCategories);
+            return this;
+        }
+
+        /**
+         * <p>The PII categories that are enabled for the agent.
+         * PII will be automatically redacted from all conversation message text.
+         * Attachments and form submissions are not affected.</p>
+         * <p>Defaults to <code>AbaRoutingNumber</code>, <code>CreditCardNumber</code>, <code>IpAddress</code>, <code>PhoneNumber</code>, <code>SwiftCode</code>,
+         * <code>UsBankAccountNumber</code>, <code>UsDriversLicenseNumber</code>, <code>UsIndividualTaxpayerIdentification</code>,
+         * <code>UsUkPassportNumber</code>, <code>UsSocialSecurityNumber</code>.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage addEnabledPiiCategories(PiiCategory enabledPiiCategories) {
+            this.enabledPiiCategories.add(enabledPiiCategories);
+            return this;
+        }
+
+        /**
+         * <p>The PII categories that are enabled for the agent.
+         * PII will be automatically redacted from all conversation message text.
+         * Attachments and form submissions are not affected.</p>
+         * <p>Defaults to <code>AbaRoutingNumber</code>, <code>CreditCardNumber</code>, <code>IpAddress</code>, <code>PhoneNumber</code>, <code>SwiftCode</code>,
+         * <code>UsBankAccountNumber</code>, <code>UsDriversLicenseNumber</code>, <code>UsIndividualTaxpayerIdentification</code>,
+         * <code>UsUkPassportNumber</code>, <code>UsSocialSecurityNumber</code>.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "enabledPiiCategories", nulls = Nulls.SKIP)
+        public _FinalStage enabledPiiCategories(Set<PiiCategory> enabledPiiCategories) {
+            this.enabledPiiCategories.clear();
+            this.enabledPiiCategories.addAll(enabledPiiCategories);
+            return this;
+        }
+
         @java.lang.Override
         public Agent build() {
-            return new Agent(agentId, name, createdAt, environment, additionalProperties);
+            return new Agent(agentId, name, createdAt, environment, enabledPiiCategories, additionalProperties);
         }
     }
 }

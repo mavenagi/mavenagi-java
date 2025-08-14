@@ -20,6 +20,9 @@ import com.mavenagi.resources.commons.types.AppUserResponse;
 import com.mavenagi.resources.commons.types.ErrorMessage;
 import com.mavenagi.resources.users.requests.UserDeleteRequest;
 import com.mavenagi.resources.users.requests.UserGetRequest;
+import com.mavenagi.resources.users.types.AgentUser;
+import com.mavenagi.resources.users.types.AgentUserSearchRequest;
+import com.mavenagi.resources.users.types.AgentUserSearchResponse;
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 import okhttp3.Call;
@@ -41,20 +44,200 @@ public class AsyncRawUsersClient {
     }
 
     /**
-     * Update a user or create it if it doesn't exist.
+     * Search across all agent users on an agent.
+     * <p>Agent users are a merged view of the users created by individual apps.</p>
+     */
+    public CompletableFuture<MavenAGIHttpResponse<AgentUserSearchResponse>> search() {
+        return search(AgentUserSearchRequest.builder().build());
+    }
+
+    /**
+     * Search across all agent users on an agent.
+     * <p>Agent users are a merged view of the users created by individual apps.</p>
+     */
+    public CompletableFuture<MavenAGIHttpResponse<AgentUserSearchResponse>> search(AgentUserSearchRequest request) {
+        return search(request, null);
+    }
+
+    /**
+     * Search across all agent users on an agent.
+     * <p>Agent users are a merged view of the users created by individual apps.</p>
+     */
+    public CompletableFuture<MavenAGIHttpResponse<AgentUserSearchResponse>> search(
+            AgentUserSearchRequest request, RequestOptions requestOptions) {
+        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("v1")
+                .addPathSegments("agentusers/search")
+                .build();
+        RequestBody body;
+        try {
+            body = RequestBody.create(
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
+        } catch (JsonProcessingException e) {
+            throw new MavenAGIException("Failed to serialize request", e);
+        }
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl)
+                .method("POST", body)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
+                .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        CompletableFuture<MavenAGIHttpResponse<AgentUserSearchResponse>> future = new CompletableFuture<>();
+        client.newCall(okhttpRequest).enqueue(new Callback() {
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                try (ResponseBody responseBody = response.body()) {
+                    if (response.isSuccessful()) {
+                        future.complete(new MavenAGIHttpResponse<>(
+                                ObjectMappers.JSON_MAPPER.readValue(
+                                        responseBody.string(), AgentUserSearchResponse.class),
+                                response));
+                        return;
+                    }
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+                    try {
+                        switch (response.code()) {
+                            case 400:
+                                future.completeExceptionally(new BadRequestError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
+                                        response));
+                                return;
+                            case 404:
+                                future.completeExceptionally(new NotFoundError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
+                                        response));
+                                return;
+                            case 500:
+                                future.completeExceptionally(new ServerError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
+                                        response));
+                                return;
+                        }
+                    } catch (JsonProcessingException ignored) {
+                        // unable to map error response, throwing generic error
+                    }
+                    future.completeExceptionally(new MavenAGIApiException(
+                            "Error with status code " + response.code(),
+                            response.code(),
+                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                            response));
+                    return;
+                } catch (IOException e) {
+                    future.completeExceptionally(new MavenAGIException("Network error executing HTTP request", e));
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                future.completeExceptionally(new MavenAGIException("Network error executing HTTP request", e));
+            }
+        });
+        return future;
+    }
+
+    /**
+     * Get an agent user by its supplied ID.
+     * <p>Agent users are a merged view of the users created by individual apps.</p>
+     */
+    public CompletableFuture<MavenAGIHttpResponse<AgentUser>> getAgentUser(String userId) {
+        return getAgentUser(userId, null);
+    }
+
+    /**
+     * Get an agent user by its supplied ID.
+     * <p>Agent users are a merged view of the users created by individual apps.</p>
+     */
+    public CompletableFuture<MavenAGIHttpResponse<AgentUser>> getAgentUser(
+            String userId, RequestOptions requestOptions) {
+        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("v1")
+                .addPathSegments("agentusers")
+                .addPathSegment(userId)
+                .build();
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl)
+                .method("GET", null)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Accept", "application/json")
+                .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        CompletableFuture<MavenAGIHttpResponse<AgentUser>> future = new CompletableFuture<>();
+        client.newCall(okhttpRequest).enqueue(new Callback() {
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                try (ResponseBody responseBody = response.body()) {
+                    if (response.isSuccessful()) {
+                        future.complete(new MavenAGIHttpResponse<>(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), AgentUser.class), response));
+                        return;
+                    }
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+                    try {
+                        switch (response.code()) {
+                            case 400:
+                                future.completeExceptionally(new BadRequestError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
+                                        response));
+                                return;
+                            case 404:
+                                future.completeExceptionally(new NotFoundError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
+                                        response));
+                                return;
+                            case 500:
+                                future.completeExceptionally(new ServerError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
+                                        response));
+                                return;
+                        }
+                    } catch (JsonProcessingException ignored) {
+                        // unable to map error response, throwing generic error
+                    }
+                    future.completeExceptionally(new MavenAGIApiException(
+                            "Error with status code " + response.code(),
+                            response.code(),
+                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                            response));
+                    return;
+                } catch (IOException e) {
+                    future.completeExceptionally(new MavenAGIException("Network error executing HTTP request", e));
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                future.completeExceptionally(new MavenAGIException("Network error executing HTTP request", e));
+            }
+        });
+        return future;
+    }
+
+    /**
+     * Update an app user or create it if it doesn't exist.
      */
     public CompletableFuture<MavenAGIHttpResponse<AppUserResponse>> createOrUpdate(AppUserRequest request) {
         return createOrUpdate(request, null);
     }
 
     /**
-     * Update a user or create it if it doesn't exist.
+     * Update an app user or create it if it doesn't exist.
      */
     public CompletableFuture<MavenAGIHttpResponse<AppUserResponse>> createOrUpdate(
             AppUserRequest request, RequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
-                .addPathSegments("v1/users")
+                .addPathSegments("v1")
+                .addPathSegments("users")
                 .build();
         RequestBody body;
         try {
@@ -127,27 +310,28 @@ public class AsyncRawUsersClient {
     }
 
     /**
-     * Get a user by its supplied ID
+     * Get an app user by its supplied ID
      */
     public CompletableFuture<MavenAGIHttpResponse<AppUserResponse>> get(String userId) {
         return get(userId, UserGetRequest.builder().build());
     }
 
     /**
-     * Get a user by its supplied ID
+     * Get an app user by its supplied ID
      */
     public CompletableFuture<MavenAGIHttpResponse<AppUserResponse>> get(String userId, UserGetRequest request) {
         return get(userId, request, null);
     }
 
     /**
-     * Get a user by its supplied ID
+     * Get an app user by its supplied ID
      */
     public CompletableFuture<MavenAGIHttpResponse<AppUserResponse>> get(
             String userId, UserGetRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
-                .addPathSegments("v1/users")
+                .addPathSegments("v1")
+                .addPathSegments("users")
                 .addPathSegment(userId);
         if (request.getAppId().isPresent()) {
             QueryStringMapper.addQueryParameter(
@@ -245,7 +429,8 @@ public class AsyncRawUsersClient {
             String userId, UserDeleteRequest request, RequestOptions requestOptions) {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
-                .addPathSegments("v1/users")
+                .addPathSegments("v1")
+                .addPathSegments("users")
                 .addPathSegment(userId);
         if (request.getAppId().isPresent()) {
             QueryStringMapper.addQueryParameter(

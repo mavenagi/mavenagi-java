@@ -10,7 +10,7 @@ import com.mavenagi.resources.commons.types.InboxItemFix;
 import com.mavenagi.resources.inbox.requests.InboxItemFixRequest;
 import com.mavenagi.resources.inbox.requests.InboxItemIgnoreRequest;
 import com.mavenagi.resources.inbox.requests.InboxItemRequest;
-import com.mavenagi.resources.inbox.types.ApplyInboxItemFixRequest;
+import com.mavenagi.resources.inbox.types.ApplyFixesRequest;
 import com.mavenagi.resources.inbox.types.InboxSearchRequest;
 import com.mavenagi.resources.inbox.types.InboxSearchResponse;
 
@@ -81,17 +81,17 @@ public class InboxClient {
     }
 
     /**
-     * Apply a fix to an inbox item with a specific document.
+     * Apply a list of fixes belonging to an inbox item.
      */
-    public void applyFix(String inboxItemFixId, ApplyInboxItemFixRequest request) {
-        this.rawClient.applyFix(inboxItemFixId, request).body();
+    public void applyFixes(String inboxItemId, ApplyFixesRequest request) {
+        this.rawClient.applyFixes(inboxItemId, request).body();
     }
 
     /**
-     * Apply a fix to an inbox item with a specific document.
+     * Apply a list of fixes belonging to an inbox item.
      */
-    public void applyFix(String inboxItemFixId, ApplyInboxItemFixRequest request, RequestOptions requestOptions) {
-        this.rawClient.applyFix(inboxItemFixId, request, requestOptions).body();
+    public void applyFixes(String inboxItemId, ApplyFixesRequest request, RequestOptions requestOptions) {
+        this.rawClient.applyFixes(inboxItemId, request, requestOptions).body();
     }
 
     /**

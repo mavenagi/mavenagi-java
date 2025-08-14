@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
+import com.mavenagi.resources.commons.types.AttachmentRequest;
 import com.mavenagi.resources.commons.types.EntityIdBase;
 import com.mavenagi.resources.commons.types.IConversationMessageBase;
 import com.mavenagi.resources.commons.types.IUserMessageBase;
@@ -39,7 +40,7 @@ public final class ConversationMessageRequest implements IUserMessageBase, IConv
 
     private final EntityIdBase conversationMessageId;
 
-    private final Optional<List<Attachment>> attachments;
+    private final Optional<List<AttachmentRequest>> attachments;
 
     private final Map<String, Object> additionalProperties;
 
@@ -50,7 +51,7 @@ public final class ConversationMessageRequest implements IUserMessageBase, IConv
             Optional<OffsetDateTime> createdAt,
             Optional<OffsetDateTime> updatedAt,
             EntityIdBase conversationMessageId,
-            Optional<List<Attachment>> attachments,
+            Optional<List<AttachmentRequest>> attachments,
             Map<String, Object> additionalProperties) {
         this.userId = userId;
         this.text = text;
@@ -116,7 +117,7 @@ public final class ConversationMessageRequest implements IUserMessageBase, IConv
      * @return The attachments to the message.
      */
     @JsonProperty("attachments")
-    public Optional<List<Attachment>> getAttachments() {
+    public Optional<List<AttachmentRequest>> getAttachments() {
         return attachments;
     }
 
@@ -209,9 +210,9 @@ public final class ConversationMessageRequest implements IUserMessageBase, IConv
         /**
          * <p>The attachments to the message.</p>
          */
-        _FinalStage attachments(Optional<List<Attachment>> attachments);
+        _FinalStage attachments(Optional<List<AttachmentRequest>> attachments);
 
-        _FinalStage attachments(List<Attachment> attachments);
+        _FinalStage attachments(List<AttachmentRequest> attachments);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -225,7 +226,7 @@ public final class ConversationMessageRequest implements IUserMessageBase, IConv
 
         private EntityIdBase conversationMessageId;
 
-        private Optional<List<Attachment>> attachments = Optional.empty();
+        private Optional<List<AttachmentRequest>> attachments = Optional.empty();
 
         private Optional<OffsetDateTime> updatedAt = Optional.empty();
 
@@ -297,7 +298,7 @@ public final class ConversationMessageRequest implements IUserMessageBase, IConv
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage attachments(List<Attachment> attachments) {
+        public _FinalStage attachments(List<AttachmentRequest> attachments) {
             this.attachments = Optional.ofNullable(attachments);
             return this;
         }
@@ -307,7 +308,7 @@ public final class ConversationMessageRequest implements IUserMessageBase, IConv
          */
         @java.lang.Override
         @JsonSetter(value = "attachments", nulls = Nulls.SKIP)
-        public _FinalStage attachments(Optional<List<Attachment>> attachments) {
+        public _FinalStage attachments(Optional<List<AttachmentRequest>> attachments) {
             this.attachments = attachments;
             return this;
         }

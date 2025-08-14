@@ -5,7 +5,11 @@ package com.mavenagi.resources.actions;
 
 import com.mavenagi.core.ClientOptions;
 import com.mavenagi.core.RequestOptions;
+import com.mavenagi.resources.actions.requests.ActionGetRequest;
+import com.mavenagi.resources.actions.types.ActionPatchRequest;
 import com.mavenagi.resources.actions.types.ActionRequest;
+import com.mavenagi.resources.actions.types.ActionsResponse;
+import com.mavenagi.resources.actions.types.ActionsSearchRequest;
 import com.mavenagi.resources.commons.types.ActionResponse;
 import java.util.concurrent.CompletableFuture;
 
@@ -24,6 +28,18 @@ public class AsyncActionsClient {
      */
     public AsyncRawActionsClient withRawResponse() {
         return this.rawClient;
+    }
+
+    public CompletableFuture<ActionsResponse> search() {
+        return this.rawClient.search().thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<ActionsResponse> search(ActionsSearchRequest request) {
+        return this.rawClient.search(request).thenApply(response -> response.body());
+    }
+
+    public CompletableFuture<ActionsResponse> search(ActionsSearchRequest request, RequestOptions requestOptions) {
+        return this.rawClient.search(request, requestOptions).thenApply(response -> response.body());
     }
 
     /**
@@ -50,8 +66,44 @@ public class AsyncActionsClient {
     /**
      * Get an action by its supplied ID
      */
-    public CompletableFuture<ActionResponse> get(String actionReferenceId, RequestOptions requestOptions) {
-        return this.rawClient.get(actionReferenceId, requestOptions).thenApply(response -> response.body());
+    public CompletableFuture<ActionResponse> get(String actionReferenceId, ActionGetRequest request) {
+        return this.rawClient.get(actionReferenceId, request).thenApply(response -> response.body());
+    }
+
+    /**
+     * Get an action by its supplied ID
+     */
+    public CompletableFuture<ActionResponse> get(
+            String actionReferenceId, ActionGetRequest request, RequestOptions requestOptions) {
+        return this.rawClient.get(actionReferenceId, request, requestOptions).thenApply(response -> response.body());
+    }
+
+    /**
+     * Update mutable action fields
+     * <p>The <code>appId</code> field can be provided to update an action owned by a different app.
+     * All other fields will overwrite the existing value on the action only if provided.</p>
+     */
+    public CompletableFuture<ActionResponse> patch(String actionReferenceId) {
+        return this.rawClient.patch(actionReferenceId).thenApply(response -> response.body());
+    }
+
+    /**
+     * Update mutable action fields
+     * <p>The <code>appId</code> field can be provided to update an action owned by a different app.
+     * All other fields will overwrite the existing value on the action only if provided.</p>
+     */
+    public CompletableFuture<ActionResponse> patch(String actionReferenceId, ActionPatchRequest request) {
+        return this.rawClient.patch(actionReferenceId, request).thenApply(response -> response.body());
+    }
+
+    /**
+     * Update mutable action fields
+     * <p>The <code>appId</code> field can be provided to update an action owned by a different app.
+     * All other fields will overwrite the existing value on the action only if provided.</p>
+     */
+    public CompletableFuture<ActionResponse> patch(
+            String actionReferenceId, ActionPatchRequest request, RequestOptions requestOptions) {
+        return this.rawClient.patch(actionReferenceId, request, requestOptions).thenApply(response -> response.body());
     }
 
     /**

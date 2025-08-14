@@ -13,4 +13,6 @@ public interface IInboxItemBase {
     OffsetDateTime getUpdatedAt();
 
     InboxItemStatus getStatus();
+
+    InboxItemSeverity getSeverity();
 }

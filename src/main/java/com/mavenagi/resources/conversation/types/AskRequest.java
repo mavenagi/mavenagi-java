@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
+import com.mavenagi.resources.commons.types.AttachmentRequest;
 import com.mavenagi.resources.commons.types.EntityIdBase;
 import java.util.HashMap;
 import java.util.List;
@@ -22,14 +23,14 @@ import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = AskRequest.Builder.class)
-public final class AskRequest {
+public final class AskRequest implements IAskRequest {
     private final EntityIdBase conversationMessageId;
 
     private final EntityIdBase userId;
 
     private final String text;
 
-    private final Optional<List<Attachment>> attachments;
+    private final Optional<List<AttachmentRequest>> attachments;
 
     private final Optional<Map<String, String>> transientData;
 
@@ -41,7 +42,7 @@ public final class AskRequest {
             EntityIdBase conversationMessageId,
             EntityIdBase userId,
             String text,
-            Optional<List<Attachment>> attachments,
+            Optional<List<AttachmentRequest>> attachments,
             Optional<Map<String, String>> transientData,
             Optional<String> timezone,
             Map<String, Object> additionalProperties) {
@@ -58,6 +59,7 @@ public final class AskRequest {
      * @return Externally supplied ID to uniquely identify this message within the conversation. If a message with this ID already exists it will be reused and will not be updated.
      */
     @JsonProperty("conversationMessageId")
+    @java.lang.Override
     public EntityIdBase getConversationMessageId() {
         return conversationMessageId;
     }
@@ -66,6 +68,7 @@ public final class AskRequest {
      * @return Externally supplied ID to uniquely identify the user that created this message
      */
     @JsonProperty("userId")
+    @java.lang.Override
     public EntityIdBase getUserId() {
         return userId;
     }
@@ -74,15 +77,18 @@ public final class AskRequest {
      * @return The text of the message
      */
     @JsonProperty("text")
+    @java.lang.Override
     public String getText() {
         return text;
     }
 
     /**
-     * @return The attachments to the message.
+     * @return The attachments to the message. Image attachments will be sent to the LLM as additional data.
+     * Non-image attachments can be stored and downloaded from the API but will not be sent to the LLM.
      */
     @JsonProperty("attachments")
-    public Optional<List<Attachment>> getAttachments() {
+    @java.lang.Override
+    public Optional<List<AttachmentRequest>> getAttachments() {
         return attachments;
     }
 
@@ -90,6 +96,7 @@ public final class AskRequest {
      * @return Transient data which the Maven platform will not persist. This data will only be forwarded to actions taken by this ask request. For example, one may put in user tokens as transient data.
      */
     @JsonProperty("transientData")
+    @java.lang.Override
     public Optional<Map<String, String>> getTransientData() {
         return transientData;
     }
@@ -98,6 +105,7 @@ public final class AskRequest {
      * @return IANA timezone identifier (e.g. &quot;America/New_York&quot;, &quot;Europe/London&quot;) to be used for time-based operations in the conversation.
      */
     @JsonProperty("timezone")
+    @java.lang.Override
     public Optional<String> getTimezone() {
         return timezone;
     }
@@ -169,11 +177,12 @@ public final class AskRequest {
         AskRequest build();
 
         /**
-         * <p>The attachments to the message.</p>
+         * <p>The attachments to the message. Image attachments will be sent to the LLM as additional data.
+         * Non-image attachments can be stored and downloaded from the API but will not be sent to the LLM.</p>
          */
-        _FinalStage attachments(Optional<List<Attachment>> attachments);
+        _FinalStage attachments(Optional<List<AttachmentRequest>> attachments);
 
-        _FinalStage attachments(List<Attachment> attachments);
+        _FinalStage attachments(List<AttachmentRequest> attachments);
 
         /**
          * <p>Transient data which the Maven platform will not persist. This data will only be forwarded to actions taken by this ask request. For example, one may put in user tokens as transient data.</p>
@@ -202,7 +211,7 @@ public final class AskRequest {
 
         private Optional<Map<String, String>> transientData = Optional.empty();
 
-        private Optional<List<Attachment>> attachments = Optional.empty();
+        private Optional<List<AttachmentRequest>> attachments = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -298,21 +307,23 @@ public final class AskRequest {
         }
 
         /**
-         * <p>The attachments to the message.</p>
+         * <p>The attachments to the message. Image attachments will be sent to the LLM as additional data.
+         * Non-image attachments can be stored and downloaded from the API but will not be sent to the LLM.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage attachments(List<Attachment> attachments) {
+        public _FinalStage attachments(List<AttachmentRequest> attachments) {
             this.attachments = Optional.ofNullable(attachments);
             return this;
         }
 
         /**
-         * <p>The attachments to the message.</p>
+         * <p>The attachments to the message. Image attachments will be sent to the LLM as additional data.
+         * Non-image attachments can be stored and downloaded from the API but will not be sent to the LLM.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "attachments", nulls = Nulls.SKIP)
-        public _FinalStage attachments(Optional<List<Attachment>> attachments) {
+        public _FinalStage attachments(Optional<List<AttachmentRequest>> attachments) {
             this.attachments = attachments;
             return this;
         }

@@ -67,6 +67,8 @@ public final class ConversationFilter {
 
     private final Optional<NumberRange> userMessageCount;
 
+    private final Optional<Boolean> hasAttachment;
+
     private final Map<String, Object> additionalProperties;
 
     private ConversationFilter(
@@ -89,6 +91,7 @@ public final class ConversationFilter {
             Optional<List<ResolutionStatus>> resolutionStatus,
             Optional<Boolean> resolvedByMaven,
             Optional<NumberRange> userMessageCount,
+            Optional<Boolean> hasAttachment,
             Map<String, Object> additionalProperties) {
         this.search = search;
         this.createdAfter = createdAfter;
@@ -109,11 +112,31 @@ public final class ConversationFilter {
         this.resolutionStatus = resolutionStatus;
         this.resolvedByMaven = resolvedByMaven;
         this.userMessageCount = userMessageCount;
+        this.hasAttachment = hasAttachment;
         this.additionalProperties = additionalProperties;
     }
 
     /**
-     * @return Full-text search query for matching conversations by content. When you search with this parameter, you're performing a full-text search across all textual content in the conversations, including both the user's messages and the AI's responses.
+     * @return Full-text search query for matching conversations by content.
+     * When you search with this parameter, you're performing a full-text search across all textual content
+     * in the conversations, including both the user's messages and the AI's responses.
+     * <p>This field also supports a syntax for advanced filtering the <code>metadata</code> and <code>tags</code> fields.</p>
+     * <p>Metadata examples:</p>
+     * <ul>
+     * <li><code>metadata:myvalue</code> - matches conversations with any metadata field set to <code>myvalue</code></li>
+     * <li><code>metadata.mykey:myvalue</code> - matches conversations with a metadata field <code>mykey</code> set to <code>myvalue</code></li>
+     * <li><code>metadata.mykey:myvalue OR anothervalue</code> - matches conversations with a metadata field <code>mykey</code> set to <code>myvalue</code> or <code>anothervalue</code></li>
+     * <li><code>metadata.mykey:*</code> - matches conversations with a metadata field <code>mykey</code></li>
+     * <li><code>-metadata:myvalue</code> - matches conversations that do not have any metadata field set to <code>myvalue</code></li>
+     * <li><code>_exists_:metadata</code> - matches conversations that have any metadata field set</li>
+     * </ul>
+     * <p>Tags examples:</p>
+     * <ul>
+     * <li><code>tags:myvalue</code> - matches conversations with a tag of <code>myvalue</code></li>
+     * <li><code>tags:myvalue OR anothervalue</code> - matches conversations with a tag of <code>myvalue</code> or <code>anothervalue</code></li>
+     * <li><code>-tags:myvalue</code> - matches conversations that do not have the tag <code>myvalue</code></li>
+     * <li><code>_exists_:tags</code> - matches conversations that have any tags field set</li>
+     * </ul>
      */
     @JsonProperty("search")
     public Optional<String> getSearch() {
@@ -264,6 +287,14 @@ public final class ConversationFilter {
         return userMessageCount;
     }
 
+    /**
+     * @return Filter by whether any message in the conversation has an attachment
+     */
+    @JsonProperty("hasAttachment")
+    public Optional<Boolean> getHasAttachment() {
+        return hasAttachment;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -294,7 +325,8 @@ public final class ConversationFilter {
                 && tags.equals(other.tags)
                 && resolutionStatus.equals(other.resolutionStatus)
                 && resolvedByMaven.equals(other.resolvedByMaven)
-                && userMessageCount.equals(other.userMessageCount);
+                && userMessageCount.equals(other.userMessageCount)
+                && hasAttachment.equals(other.hasAttachment);
     }
 
     @java.lang.Override
@@ -318,7 +350,8 @@ public final class ConversationFilter {
                 this.tags,
                 this.resolutionStatus,
                 this.resolvedByMaven,
-                this.userMessageCount);
+                this.userMessageCount,
+                this.hasAttachment);
     }
 
     @java.lang.Override
@@ -370,6 +403,8 @@ public final class ConversationFilter {
 
         private Optional<NumberRange> userMessageCount = Optional.empty();
 
+        private Optional<Boolean> hasAttachment = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -395,11 +430,31 @@ public final class ConversationFilter {
             resolutionStatus(other.getResolutionStatus());
             resolvedByMaven(other.getResolvedByMaven());
             userMessageCount(other.getUserMessageCount());
+            hasAttachment(other.getHasAttachment());
             return this;
         }
 
         /**
-         * <p>Full-text search query for matching conversations by content. When you search with this parameter, you're performing a full-text search across all textual content in the conversations, including both the user's messages and the AI's responses.</p>
+         * <p>Full-text search query for matching conversations by content.
+         * When you search with this parameter, you're performing a full-text search across all textual content
+         * in the conversations, including both the user's messages and the AI's responses.</p>
+         * <p>This field also supports a syntax for advanced filtering the <code>metadata</code> and <code>tags</code> fields.</p>
+         * <p>Metadata examples:</p>
+         * <ul>
+         * <li><code>metadata:myvalue</code> - matches conversations with any metadata field set to <code>myvalue</code></li>
+         * <li><code>metadata.mykey:myvalue</code> - matches conversations with a metadata field <code>mykey</code> set to <code>myvalue</code></li>
+         * <li><code>metadata.mykey:myvalue OR anothervalue</code> - matches conversations with a metadata field <code>mykey</code> set to <code>myvalue</code> or <code>anothervalue</code></li>
+         * <li><code>metadata.mykey:*</code> - matches conversations with a metadata field <code>mykey</code></li>
+         * <li><code>-metadata:myvalue</code> - matches conversations that do not have any metadata field set to <code>myvalue</code></li>
+         * <li><code>_exists_:metadata</code> - matches conversations that have any metadata field set</li>
+         * </ul>
+         * <p>Tags examples:</p>
+         * <ul>
+         * <li><code>tags:myvalue</code> - matches conversations with a tag of <code>myvalue</code></li>
+         * <li><code>tags:myvalue OR anothervalue</code> - matches conversations with a tag of <code>myvalue</code> or <code>anothervalue</code></li>
+         * <li><code>-tags:myvalue</code> - matches conversations that do not have the tag <code>myvalue</code></li>
+         * <li><code>_exists_:tags</code> - matches conversations that have any tags field set</li>
+         * </ul>
          */
         @JsonSetter(value = "search", nulls = Nulls.SKIP)
         public Builder search(Optional<String> search) {
@@ -664,6 +719,20 @@ public final class ConversationFilter {
             return this;
         }
 
+        /**
+         * <p>Filter by whether any message in the conversation has an attachment</p>
+         */
+        @JsonSetter(value = "hasAttachment", nulls = Nulls.SKIP)
+        public Builder hasAttachment(Optional<Boolean> hasAttachment) {
+            this.hasAttachment = hasAttachment;
+            return this;
+        }
+
+        public Builder hasAttachment(Boolean hasAttachment) {
+            this.hasAttachment = Optional.ofNullable(hasAttachment);
+            return this;
+        }
+
         public ConversationFilter build() {
             return new ConversationFilter(
                     search,
@@ -685,6 +754,7 @@ public final class ConversationFilter {
                     resolutionStatus,
                     resolvedByMaven,
                     userMessageCount,
+                    hasAttachment,
                     additionalProperties);
         }
     }

@@ -8,11 +8,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public enum InboxItemType {
     DUPLICATE_DOCUMENT("DUPLICATE_DOCUMENT"),
 
-    DUPLICATE_KNOWLEDGE_BASE("DUPLICATE_KNOWLEDGE_BASE"),
-
-    MISSING_KNOWLEDGE("MISSING_KNOWLEDGE"),
-
-    LOW_QUALITY_KNOWLEDGE_BASE("LOW_QUALITY_KNOWLEDGE_BASE");
+    MISSING_KNOWLEDGE("MISSING_KNOWLEDGE");
 
     private final String value;
 

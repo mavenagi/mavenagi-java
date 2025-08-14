@@ -9,6 +9,9 @@ import com.mavenagi.resources.commons.types.AppUserRequest;
 import com.mavenagi.resources.commons.types.AppUserResponse;
 import com.mavenagi.resources.users.requests.UserDeleteRequest;
 import com.mavenagi.resources.users.requests.UserGetRequest;
+import com.mavenagi.resources.users.types.AgentUser;
+import com.mavenagi.resources.users.types.AgentUserSearchRequest;
+import com.mavenagi.resources.users.types.AgentUserSearchResponse;
 import java.util.concurrent.CompletableFuture;
 
 public class AsyncUsersClient {
@@ -29,35 +32,76 @@ public class AsyncUsersClient {
     }
 
     /**
-     * Update a user or create it if it doesn't exist.
+     * Search across all agent users on an agent.
+     * <p>Agent users are a merged view of the users created by individual apps.</p>
+     */
+    public CompletableFuture<AgentUserSearchResponse> search() {
+        return this.rawClient.search().thenApply(response -> response.body());
+    }
+
+    /**
+     * Search across all agent users on an agent.
+     * <p>Agent users are a merged view of the users created by individual apps.</p>
+     */
+    public CompletableFuture<AgentUserSearchResponse> search(AgentUserSearchRequest request) {
+        return this.rawClient.search(request).thenApply(response -> response.body());
+    }
+
+    /**
+     * Search across all agent users on an agent.
+     * <p>Agent users are a merged view of the users created by individual apps.</p>
+     */
+    public CompletableFuture<AgentUserSearchResponse> search(
+            AgentUserSearchRequest request, RequestOptions requestOptions) {
+        return this.rawClient.search(request, requestOptions).thenApply(response -> response.body());
+    }
+
+    /**
+     * Get an agent user by its supplied ID.
+     * <p>Agent users are a merged view of the users created by individual apps.</p>
+     */
+    public CompletableFuture<AgentUser> getAgentUser(String userId) {
+        return this.rawClient.getAgentUser(userId).thenApply(response -> response.body());
+    }
+
+    /**
+     * Get an agent user by its supplied ID.
+     * <p>Agent users are a merged view of the users created by individual apps.</p>
+     */
+    public CompletableFuture<AgentUser> getAgentUser(String userId, RequestOptions requestOptions) {
+        return this.rawClient.getAgentUser(userId, requestOptions).thenApply(response -> response.body());
+    }
+
+    /**
+     * Update an app user or create it if it doesn't exist.
      */
     public CompletableFuture<AppUserResponse> createOrUpdate(AppUserRequest request) {
         return this.rawClient.createOrUpdate(request).thenApply(response -> response.body());
     }
 
     /**
-     * Update a user or create it if it doesn't exist.
+     * Update an app user or create it if it doesn't exist.
      */
     public CompletableFuture<AppUserResponse> createOrUpdate(AppUserRequest request, RequestOptions requestOptions) {
         return this.rawClient.createOrUpdate(request, requestOptions).thenApply(response -> response.body());
     }
 
     /**
-     * Get a user by its supplied ID
+     * Get an app user by its supplied ID
      */
     public CompletableFuture<AppUserResponse> get(String userId) {
         return this.rawClient.get(userId).thenApply(response -> response.body());
     }
 
     /**
-     * Get a user by its supplied ID
+     * Get an app user by its supplied ID
      */
     public CompletableFuture<AppUserResponse> get(String userId, UserGetRequest request) {
         return this.rawClient.get(userId, request).thenApply(response -> response.body());
     }
 
     /**
-     * Get a user by its supplied ID
+     * Get an app user by its supplied ID
      */
     public CompletableFuture<AppUserResponse> get(
             String userId, UserGetRequest request, RequestOptions requestOptions) {

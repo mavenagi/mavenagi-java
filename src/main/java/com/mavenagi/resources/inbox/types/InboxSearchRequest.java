@@ -12,54 +12,35 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
-import com.mavenagi.resources.commons.types.InboxItemStatus;
-import com.mavenagi.resources.commons.types.InboxItemType;
-import java.time.OffsetDateTime;
+import com.mavenagi.resources.commons.types.IBasePaginatedRequest;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = InboxSearchRequest.Builder.class)
-public final class InboxSearchRequest implements IBaseInboxSearchRequest {
+public final class InboxSearchRequest implements IBasePaginatedRequest {
     private final Optional<Integer> page;
 
     private final Optional<Integer> size;
 
-    private final Optional<List<InboxItemStatus>> statuses;
-
-    private final Optional<List<InboxItemType>> type;
-
-    private final Optional<OffsetDateTime> createdAfter;
-
-    private final Optional<OffsetDateTime> createdBefore;
-
-    private final Optional<String> sortId;
-
     private final Optional<Boolean> sortDesc;
+
+    private final Optional<InboxFilter> filter;
 
     private final Map<String, Object> additionalProperties;
 
     private InboxSearchRequest(
             Optional<Integer> page,
             Optional<Integer> size,
-            Optional<List<InboxItemStatus>> statuses,
-            Optional<List<InboxItemType>> type,
-            Optional<OffsetDateTime> createdAfter,
-            Optional<OffsetDateTime> createdBefore,
-            Optional<String> sortId,
             Optional<Boolean> sortDesc,
+            Optional<InboxFilter> filter,
             Map<String, Object> additionalProperties) {
         this.page = page;
         this.size = size;
-        this.statuses = statuses;
-        this.type = type;
-        this.createdAfter = createdAfter;
-        this.createdBefore = createdBefore;
-        this.sortId = sortId;
         this.sortDesc = sortDesc;
+        this.filter = filter;
         this.additionalProperties = additionalProperties;
     }
 
@@ -82,51 +63,17 @@ public final class InboxSearchRequest implements IBaseInboxSearchRequest {
     }
 
     /**
-     * @return List of inbox item statuses to filter by.
-     */
-    @JsonProperty("statuses")
-    public Optional<List<InboxItemStatus>> getStatuses() {
-        return statuses;
-    }
-
-    /**
-     * @return List of inbox item types to filter by.
-     */
-    @JsonProperty("type")
-    public Optional<List<InboxItemType>> getType() {
-        return type;
-    }
-
-    /**
-     * @return Filter for items created after this timestamp.
-     */
-    @JsonProperty("createdAfter")
-    public Optional<OffsetDateTime> getCreatedAfter() {
-        return createdAfter;
-    }
-
-    /**
-     * @return Filter for items created before this timestamp.
-     */
-    @JsonProperty("createdBefore")
-    public Optional<OffsetDateTime> getCreatedBefore() {
-        return createdBefore;
-    }
-
-    /**
-     * @return The field to sort by, defaults to created timestamp.
-     */
-    @JsonProperty("sortId")
-    public Optional<String> getSortId() {
-        return sortId;
-    }
-
-    /**
-     * @return Whether to sort descending, defaults to true.
+     * @return Whether to sort descending, defaults to true
      */
     @JsonProperty("sortDesc")
+    @java.lang.Override
     public Optional<Boolean> getSortDesc() {
         return sortDesc;
+    }
+
+    @JsonProperty("filter")
+    public Optional<InboxFilter> getFilter() {
+        return filter;
     }
 
     @java.lang.Override
@@ -143,25 +90,13 @@ public final class InboxSearchRequest implements IBaseInboxSearchRequest {
     private boolean equalTo(InboxSearchRequest other) {
         return page.equals(other.page)
                 && size.equals(other.size)
-                && statuses.equals(other.statuses)
-                && type.equals(other.type)
-                && createdAfter.equals(other.createdAfter)
-                && createdBefore.equals(other.createdBefore)
-                && sortId.equals(other.sortId)
-                && sortDesc.equals(other.sortDesc);
+                && sortDesc.equals(other.sortDesc)
+                && filter.equals(other.filter);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(
-                this.page,
-                this.size,
-                this.statuses,
-                this.type,
-                this.createdAfter,
-                this.createdBefore,
-                this.sortId,
-                this.sortDesc);
+        return Objects.hash(this.page, this.size, this.sortDesc, this.filter);
     }
 
     @java.lang.Override
@@ -179,17 +114,9 @@ public final class InboxSearchRequest implements IBaseInboxSearchRequest {
 
         private Optional<Integer> size = Optional.empty();
 
-        private Optional<List<InboxItemStatus>> statuses = Optional.empty();
-
-        private Optional<List<InboxItemType>> type = Optional.empty();
-
-        private Optional<OffsetDateTime> createdAfter = Optional.empty();
-
-        private Optional<OffsetDateTime> createdBefore = Optional.empty();
-
-        private Optional<String> sortId = Optional.empty();
-
         private Optional<Boolean> sortDesc = Optional.empty();
+
+        private Optional<InboxFilter> filter = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -199,12 +126,8 @@ public final class InboxSearchRequest implements IBaseInboxSearchRequest {
         public Builder from(InboxSearchRequest other) {
             page(other.getPage());
             size(other.getSize());
-            statuses(other.getStatuses());
-            type(other.getType());
-            createdAfter(other.getCreatedAfter());
-            createdBefore(other.getCreatedBefore());
-            sortId(other.getSortId());
             sortDesc(other.getSortDesc());
+            filter(other.getFilter());
             return this;
         }
 
@@ -237,77 +160,7 @@ public final class InboxSearchRequest implements IBaseInboxSearchRequest {
         }
 
         /**
-         * <p>List of inbox item statuses to filter by.</p>
-         */
-        @JsonSetter(value = "statuses", nulls = Nulls.SKIP)
-        public Builder statuses(Optional<List<InboxItemStatus>> statuses) {
-            this.statuses = statuses;
-            return this;
-        }
-
-        public Builder statuses(List<InboxItemStatus> statuses) {
-            this.statuses = Optional.ofNullable(statuses);
-            return this;
-        }
-
-        /**
-         * <p>List of inbox item types to filter by.</p>
-         */
-        @JsonSetter(value = "type", nulls = Nulls.SKIP)
-        public Builder type(Optional<List<InboxItemType>> type) {
-            this.type = type;
-            return this;
-        }
-
-        public Builder type(List<InboxItemType> type) {
-            this.type = Optional.ofNullable(type);
-            return this;
-        }
-
-        /**
-         * <p>Filter for items created after this timestamp.</p>
-         */
-        @JsonSetter(value = "createdAfter", nulls = Nulls.SKIP)
-        public Builder createdAfter(Optional<OffsetDateTime> createdAfter) {
-            this.createdAfter = createdAfter;
-            return this;
-        }
-
-        public Builder createdAfter(OffsetDateTime createdAfter) {
-            this.createdAfter = Optional.ofNullable(createdAfter);
-            return this;
-        }
-
-        /**
-         * <p>Filter for items created before this timestamp.</p>
-         */
-        @JsonSetter(value = "createdBefore", nulls = Nulls.SKIP)
-        public Builder createdBefore(Optional<OffsetDateTime> createdBefore) {
-            this.createdBefore = createdBefore;
-            return this;
-        }
-
-        public Builder createdBefore(OffsetDateTime createdBefore) {
-            this.createdBefore = Optional.ofNullable(createdBefore);
-            return this;
-        }
-
-        /**
-         * <p>The field to sort by, defaults to created timestamp.</p>
-         */
-        @JsonSetter(value = "sortId", nulls = Nulls.SKIP)
-        public Builder sortId(Optional<String> sortId) {
-            this.sortId = sortId;
-            return this;
-        }
-
-        public Builder sortId(String sortId) {
-            this.sortId = Optional.ofNullable(sortId);
-            return this;
-        }
-
-        /**
-         * <p>Whether to sort descending, defaults to true.</p>
+         * <p>Whether to sort descending, defaults to true</p>
          */
         @JsonSetter(value = "sortDesc", nulls = Nulls.SKIP)
         public Builder sortDesc(Optional<Boolean> sortDesc) {
@@ -320,9 +173,19 @@ public final class InboxSearchRequest implements IBaseInboxSearchRequest {
             return this;
         }
 
+        @JsonSetter(value = "filter", nulls = Nulls.SKIP)
+        public Builder filter(Optional<InboxFilter> filter) {
+            this.filter = filter;
+            return this;
+        }
+
+        public Builder filter(InboxFilter filter) {
+            this.filter = Optional.ofNullable(filter);
+            return this;
+        }
+
         public InboxSearchRequest build() {
-            return new InboxSearchRequest(
-                    page, size, statuses, type, createdAfter, createdBefore, sortId, sortDesc, additionalProperties);
+            return new InboxSearchRequest(page, size, sortDesc, filter, additionalProperties);
         }
     }
 }

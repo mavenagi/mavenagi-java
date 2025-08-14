@@ -10,17 +10,24 @@ import com.mavenagi.core.MavenAGIException;
 import com.mavenagi.core.MavenAGIHttpResponse;
 import com.mavenagi.core.MediaTypes;
 import com.mavenagi.core.ObjectMappers;
+import com.mavenagi.core.QueryStringMapper;
 import com.mavenagi.core.RequestOptions;
 import com.mavenagi.resources.commons.errors.BadRequestError;
 import com.mavenagi.resources.commons.errors.NotFoundError;
 import com.mavenagi.resources.commons.errors.ServerError;
 import com.mavenagi.resources.commons.types.ErrorMessage;
+import com.mavenagi.resources.knowledge.requests.KnowledgeBaseGetRequest;
 import com.mavenagi.resources.knowledge.types.FinalizeKnowledgeBaseVersionRequest;
+import com.mavenagi.resources.knowledge.types.KnowledgeBasePatchRequest;
 import com.mavenagi.resources.knowledge.types.KnowledgeBaseRequest;
 import com.mavenagi.resources.knowledge.types.KnowledgeBaseResponse;
+import com.mavenagi.resources.knowledge.types.KnowledgeBaseSearchRequest;
 import com.mavenagi.resources.knowledge.types.KnowledgeBaseVersion;
+import com.mavenagi.resources.knowledge.types.KnowledgeBasesResponse;
 import com.mavenagi.resources.knowledge.types.KnowledgeDocumentRequest;
 import com.mavenagi.resources.knowledge.types.KnowledgeDocumentResponse;
+import com.mavenagi.resources.knowledge.types.KnowledgeDocumentSearchRequest;
+import com.mavenagi.resources.knowledge.types.KnowledgeDocumentsResponse;
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 import okhttp3.Call;
@@ -39,6 +46,102 @@ public class AsyncRawKnowledgeClient {
 
     public AsyncRawKnowledgeClient(ClientOptions clientOptions) {
         this.clientOptions = clientOptions;
+    }
+
+    /**
+     * Search knowledge bases
+     */
+    public CompletableFuture<MavenAGIHttpResponse<KnowledgeBasesResponse>> searchKnowledgeBases() {
+        return searchKnowledgeBases(KnowledgeBaseSearchRequest.builder().build());
+    }
+
+    /**
+     * Search knowledge bases
+     */
+    public CompletableFuture<MavenAGIHttpResponse<KnowledgeBasesResponse>> searchKnowledgeBases(
+            KnowledgeBaseSearchRequest request) {
+        return searchKnowledgeBases(request, null);
+    }
+
+    /**
+     * Search knowledge bases
+     */
+    public CompletableFuture<MavenAGIHttpResponse<KnowledgeBasesResponse>> searchKnowledgeBases(
+            KnowledgeBaseSearchRequest request, RequestOptions requestOptions) {
+        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("v1/knowledge")
+                .addPathSegments("search")
+                .build();
+        RequestBody body;
+        try {
+            body = RequestBody.create(
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
+        } catch (JsonProcessingException e) {
+            throw new MavenAGIException("Failed to serialize request", e);
+        }
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl)
+                .method("POST", body)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
+                .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        CompletableFuture<MavenAGIHttpResponse<KnowledgeBasesResponse>> future = new CompletableFuture<>();
+        client.newCall(okhttpRequest).enqueue(new Callback() {
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                try (ResponseBody responseBody = response.body()) {
+                    if (response.isSuccessful()) {
+                        future.complete(new MavenAGIHttpResponse<>(
+                                ObjectMappers.JSON_MAPPER.readValue(
+                                        responseBody.string(), KnowledgeBasesResponse.class),
+                                response));
+                        return;
+                    }
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+                    try {
+                        switch (response.code()) {
+                            case 400:
+                                future.completeExceptionally(new BadRequestError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
+                                        response));
+                                return;
+                            case 404:
+                                future.completeExceptionally(new NotFoundError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
+                                        response));
+                                return;
+                            case 500:
+                                future.completeExceptionally(new ServerError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
+                                        response));
+                                return;
+                        }
+                    } catch (JsonProcessingException ignored) {
+                        // unable to map error response, throwing generic error
+                    }
+                    future.completeExceptionally(new MavenAGIApiException(
+                            "Error with status code " + response.code(),
+                            response.code(),
+                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                            response));
+                    return;
+                } catch (IOException e) {
+                    future.completeExceptionally(new MavenAGIException("Network error executing HTTP request", e));
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                future.completeExceptionally(new MavenAGIException("Network error executing HTTP request", e));
+            }
+        });
+        return future;
     }
 
     /**
@@ -133,23 +236,138 @@ public class AsyncRawKnowledgeClient {
      */
     public CompletableFuture<MavenAGIHttpResponse<KnowledgeBaseResponse>> getKnowledgeBase(
             String knowledgeBaseReferenceId) {
-        return getKnowledgeBase(knowledgeBaseReferenceId, null);
+        return getKnowledgeBase(
+                knowledgeBaseReferenceId, KnowledgeBaseGetRequest.builder().build());
     }
 
     /**
      * Get an existing knowledge base by its supplied ID
      */
     public CompletableFuture<MavenAGIHttpResponse<KnowledgeBaseResponse>> getKnowledgeBase(
-            String knowledgeBaseReferenceId, RequestOptions requestOptions) {
+            String knowledgeBaseReferenceId, KnowledgeBaseGetRequest request) {
+        return getKnowledgeBase(knowledgeBaseReferenceId, request, null);
+    }
+
+    /**
+     * Get an existing knowledge base by its supplied ID
+     */
+    public CompletableFuture<MavenAGIHttpResponse<KnowledgeBaseResponse>> getKnowledgeBase(
+            String knowledgeBaseReferenceId, KnowledgeBaseGetRequest request, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("v1/knowledge")
+                .addPathSegment(knowledgeBaseReferenceId);
+        if (request.getAppId().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "appId", request.getAppId().get(), false);
+        }
+        Request.Builder _requestBuilder = new Request.Builder()
+                .url(httpUrl.build())
+                .method("GET", null)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Accept", "application/json");
+        Request okhttpRequest = _requestBuilder.build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        CompletableFuture<MavenAGIHttpResponse<KnowledgeBaseResponse>> future = new CompletableFuture<>();
+        client.newCall(okhttpRequest).enqueue(new Callback() {
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                try (ResponseBody responseBody = response.body()) {
+                    if (response.isSuccessful()) {
+                        future.complete(new MavenAGIHttpResponse<>(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), KnowledgeBaseResponse.class),
+                                response));
+                        return;
+                    }
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+                    try {
+                        switch (response.code()) {
+                            case 400:
+                                future.completeExceptionally(new BadRequestError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
+                                        response));
+                                return;
+                            case 404:
+                                future.completeExceptionally(new NotFoundError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
+                                        response));
+                                return;
+                            case 500:
+                                future.completeExceptionally(new ServerError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
+                                        response));
+                                return;
+                        }
+                    } catch (JsonProcessingException ignored) {
+                        // unable to map error response, throwing generic error
+                    }
+                    future.completeExceptionally(new MavenAGIApiException(
+                            "Error with status code " + response.code(),
+                            response.code(),
+                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                            response));
+                    return;
+                } catch (IOException e) {
+                    future.completeExceptionally(new MavenAGIException("Network error executing HTTP request", e));
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                future.completeExceptionally(new MavenAGIException("Network error executing HTTP request", e));
+            }
+        });
+        return future;
+    }
+
+    /**
+     * Update mutable knowledge base fields
+     * <p>The <code>appId</code> field can be provided to update a knowledge base owned by a different app.
+     * All other fields will overwrite the existing value on the knowledge base only if provided.</p>
+     */
+    public CompletableFuture<MavenAGIHttpResponse<KnowledgeBaseResponse>> patchKnowledgeBase(
+            String knowledgeBaseReferenceId) {
+        return patchKnowledgeBase(
+                knowledgeBaseReferenceId, KnowledgeBasePatchRequest.builder().build());
+    }
+
+    /**
+     * Update mutable knowledge base fields
+     * <p>The <code>appId</code> field can be provided to update a knowledge base owned by a different app.
+     * All other fields will overwrite the existing value on the knowledge base only if provided.</p>
+     */
+    public CompletableFuture<MavenAGIHttpResponse<KnowledgeBaseResponse>> patchKnowledgeBase(
+            String knowledgeBaseReferenceId, KnowledgeBasePatchRequest request) {
+        return patchKnowledgeBase(knowledgeBaseReferenceId, request, null);
+    }
+
+    /**
+     * Update mutable knowledge base fields
+     * <p>The <code>appId</code> field can be provided to update a knowledge base owned by a different app.
+     * All other fields will overwrite the existing value on the knowledge base only if provided.</p>
+     */
+    public CompletableFuture<MavenAGIHttpResponse<KnowledgeBaseResponse>> patchKnowledgeBase(
+            String knowledgeBaseReferenceId, KnowledgeBasePatchRequest request, RequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("v1/knowledge")
                 .addPathSegment(knowledgeBaseReferenceId)
                 .build();
+        RequestBody body;
+        try {
+            body = RequestBody.create(
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
+        } catch (JsonProcessingException e) {
+            throw new MavenAGIException("Failed to serialize request", e);
+        }
         Request okhttpRequest = new Request.Builder()
                 .url(httpUrl)
-                .method("GET", null)
+                .method("PATCH", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
                 .addHeader("Accept", "application/json")
                 .build();
         OkHttpClient client = clientOptions.httpClient();
@@ -356,6 +574,102 @@ public class AsyncRawKnowledgeClient {
                     if (response.isSuccessful()) {
                         future.complete(new MavenAGIHttpResponse<>(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), KnowledgeBaseVersion.class),
+                                response));
+                        return;
+                    }
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+                    try {
+                        switch (response.code()) {
+                            case 400:
+                                future.completeExceptionally(new BadRequestError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
+                                        response));
+                                return;
+                            case 404:
+                                future.completeExceptionally(new NotFoundError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
+                                        response));
+                                return;
+                            case 500:
+                                future.completeExceptionally(new ServerError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
+                                        response));
+                                return;
+                        }
+                    } catch (JsonProcessingException ignored) {
+                        // unable to map error response, throwing generic error
+                    }
+                    future.completeExceptionally(new MavenAGIApiException(
+                            "Error with status code " + response.code(),
+                            response.code(),
+                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                            response));
+                    return;
+                } catch (IOException e) {
+                    future.completeExceptionally(new MavenAGIException("Network error executing HTTP request", e));
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                future.completeExceptionally(new MavenAGIException("Network error executing HTTP request", e));
+            }
+        });
+        return future;
+    }
+
+    /**
+     * Search knowledge documents
+     */
+    public CompletableFuture<MavenAGIHttpResponse<KnowledgeDocumentsResponse>> searchKnowledgeDocuments() {
+        return searchKnowledgeDocuments(KnowledgeDocumentSearchRequest.builder().build());
+    }
+
+    /**
+     * Search knowledge documents
+     */
+    public CompletableFuture<MavenAGIHttpResponse<KnowledgeDocumentsResponse>> searchKnowledgeDocuments(
+            KnowledgeDocumentSearchRequest request) {
+        return searchKnowledgeDocuments(request, null);
+    }
+
+    /**
+     * Search knowledge documents
+     */
+    public CompletableFuture<MavenAGIHttpResponse<KnowledgeDocumentsResponse>> searchKnowledgeDocuments(
+            KnowledgeDocumentSearchRequest request, RequestOptions requestOptions) {
+        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("v1/knowledge")
+                .addPathSegments("documents/search")
+                .build();
+        RequestBody body;
+        try {
+            body = RequestBody.create(
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
+        } catch (JsonProcessingException e) {
+            throw new MavenAGIException("Failed to serialize request", e);
+        }
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl)
+                .method("POST", body)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
+                .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        CompletableFuture<MavenAGIHttpResponse<KnowledgeDocumentsResponse>> future = new CompletableFuture<>();
+        client.newCall(okhttpRequest).enqueue(new Callback() {
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                try (ResponseBody responseBody = response.body()) {
+                    if (response.isSuccessful()) {
+                        future.complete(new MavenAGIHttpResponse<>(
+                                ObjectMappers.JSON_MAPPER.readValue(
+                                        responseBody.string(), KnowledgeDocumentsResponse.class),
                                 response));
                         return;
                     }

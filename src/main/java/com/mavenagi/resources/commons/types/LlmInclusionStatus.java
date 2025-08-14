@@ -5,22 +5,16 @@ package com.mavenagi.resources.commons.types;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum BotMessageStatus {
-    SENDING("SENDING"),
+public enum LlmInclusionStatus {
+    ALWAYS("ALWAYS"),
 
-    SENT("SENT"),
+    WHEN_RELEVANT("WHEN_RELEVANT"),
 
-    REJECTED("REJECTED"),
-
-    CANCELED("CANCELED"),
-
-    FAILED("FAILED"),
-
-    UNKNOWN("UNKNOWN");
+    NEVER("NEVER");
 
     private final String value;
 
-    BotMessageStatus(String value) {
+    LlmInclusionStatus(String value) {
         this.value = value;
     }
 

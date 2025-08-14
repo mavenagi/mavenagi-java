@@ -45,7 +45,7 @@ public final class KnowledgeBaseProperties implements IKnowledgeBaseProperties {
     }
 
     /**
-     * @return (Beta) The preconditions that must be met for knowledge base be relevant to a conversation. Can be used to limit knowledge to certain types of users.
+     * @return The preconditions that must be met for knowledge base be relevant to a conversation. Can be used to restrict knowledge bases to certain types of users.
      */
     @JsonProperty("precondition")
     @java.lang.Override
@@ -95,7 +95,7 @@ public final class KnowledgeBaseProperties implements IKnowledgeBaseProperties {
         KnowledgeBaseProperties build();
 
         /**
-         * <p>(Beta) The preconditions that must be met for knowledge base be relevant to a conversation. Can be used to limit knowledge to certain types of users.</p>
+         * <p>The preconditions that must be met for knowledge base be relevant to a conversation. Can be used to restrict knowledge bases to certain types of users.</p>
          */
         _FinalStage precondition(Optional<Precondition> precondition);
 
@@ -133,7 +133,7 @@ public final class KnowledgeBaseProperties implements IKnowledgeBaseProperties {
         }
 
         /**
-         * <p>(Beta) The preconditions that must be met for knowledge base be relevant to a conversation. Can be used to limit knowledge to certain types of users.</p>
+         * <p>The preconditions that must be met for knowledge base be relevant to a conversation. Can be used to restrict knowledge bases to certain types of users.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -143,7 +143,7 @@ public final class KnowledgeBaseProperties implements IKnowledgeBaseProperties {
         }
 
         /**
-         * <p>(Beta) The preconditions that must be met for knowledge base be relevant to a conversation. Can be used to limit knowledge to certain types of users.</p>
+         * <p>The preconditions that must be met for knowledge base be relevant to a conversation. Can be used to restrict knowledge bases to certain types of users.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "precondition", nulls = Nulls.SKIP)

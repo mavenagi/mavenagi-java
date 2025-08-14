@@ -42,11 +42,14 @@ public final class ResponseConfig {
     }
 
     /**
-     * @return List of capabilities supported by the caller. Defaults to [MARKDOWN, FORMS, IMAGES].
-     * <p>MARKDOWN: Whether the response should include markdown formatting. If not provided, the response will be plain text. Not respected while streaming.</p>
-     * <p>FORMS: Whether the response should include forms. If provided, the caller needs to render action forms when returned from the ask API and allow submission of the forms with the submitActionForm API. If not provided, then actions which require user interaction will not be considered by the LLM. Removing this capability is recommended for surfaces which can not display UI (e.g. SMS, voice).</p>
-     * <p>IMAGES: Whether the response should include images. Not yet supported.</p>
-     * <p>CHARTS_HIGHCHARTS_TS: Whether the response should include a Highcharts typescript chart if applicable.</p>
+     * @return List of capabilities supported by the caller. Defaults to <code>[MARKDOWN, FORMS, IMAGES]</code>.
+     * <ul>
+     * <li><code>MARKDOWN</code>: Whether the response should include markdown formatting. If not provided, the response will be plain text. Not respected while streaming.</li>
+     * <li><code>FORMS</code>: Whether the response should include forms. If provided, the caller needs to render action forms when returned from the ask API and allow submission of the forms with the submitActionForm API. If not provided, then actions which require user interaction will not be considered by the LLM. Removing this capability is recommended for surfaces which can not display UI (e.g. SMS, voice).</li>
+     * <li><code>IMAGES</code>: Whether the response should include images. Not yet supported.</li>
+     * <li><code>CHARTS_HIGHCHARTS_TS</code>: Whether the response should include a Highcharts typescript chart if applicable.</li>
+     * <li><code>ASYNC</code>: Whether the app that created this conversation supports asynchronous message delivery. If provided, messages may be sent to the app via the <code>handleMessage</code> function.</li>
+     * </ul>
      */
     @JsonProperty("capabilities")
     public List<Capability> getCapabilities() {
@@ -120,11 +123,14 @@ public final class ResponseConfig {
         ResponseConfig build();
 
         /**
-         * <p>List of capabilities supported by the caller. Defaults to [MARKDOWN, FORMS, IMAGES].</p>
-         * <p>MARKDOWN: Whether the response should include markdown formatting. If not provided, the response will be plain text. Not respected while streaming.</p>
-         * <p>FORMS: Whether the response should include forms. If provided, the caller needs to render action forms when returned from the ask API and allow submission of the forms with the submitActionForm API. If not provided, then actions which require user interaction will not be considered by the LLM. Removing this capability is recommended for surfaces which can not display UI (e.g. SMS, voice).</p>
-         * <p>IMAGES: Whether the response should include images. Not yet supported.</p>
-         * <p>CHARTS_HIGHCHARTS_TS: Whether the response should include a Highcharts typescript chart if applicable.</p>
+         * <p>List of capabilities supported by the caller. Defaults to <code>[MARKDOWN, FORMS, IMAGES]</code>.</p>
+         * <ul>
+         * <li><code>MARKDOWN</code>: Whether the response should include markdown formatting. If not provided, the response will be plain text. Not respected while streaming.</li>
+         * <li><code>FORMS</code>: Whether the response should include forms. If provided, the caller needs to render action forms when returned from the ask API and allow submission of the forms with the submitActionForm API. If not provided, then actions which require user interaction will not be considered by the LLM. Removing this capability is recommended for surfaces which can not display UI (e.g. SMS, voice).</li>
+         * <li><code>IMAGES</code>: Whether the response should include images. Not yet supported.</li>
+         * <li><code>CHARTS_HIGHCHARTS_TS</code>: Whether the response should include a Highcharts typescript chart if applicable.</li>
+         * <li><code>ASYNC</code>: Whether the app that created this conversation supports asynchronous message delivery. If provided, messages may be sent to the app via the <code>handleMessage</code> function.</li>
+         * </ul>
          */
         _FinalStage capabilities(List<Capability> capabilities);
 
@@ -179,11 +185,14 @@ public final class ResponseConfig {
         }
 
         /**
-         * <p>List of capabilities supported by the caller. Defaults to [MARKDOWN, FORMS, IMAGES].</p>
-         * <p>MARKDOWN: Whether the response should include markdown formatting. If not provided, the response will be plain text. Not respected while streaming.</p>
-         * <p>FORMS: Whether the response should include forms. If provided, the caller needs to render action forms when returned from the ask API and allow submission of the forms with the submitActionForm API. If not provided, then actions which require user interaction will not be considered by the LLM. Removing this capability is recommended for surfaces which can not display UI (e.g. SMS, voice).</p>
-         * <p>IMAGES: Whether the response should include images. Not yet supported.</p>
-         * <p>CHARTS_HIGHCHARTS_TS: Whether the response should include a Highcharts typescript chart if applicable.</p>
+         * <p>List of capabilities supported by the caller. Defaults to <code>[MARKDOWN, FORMS, IMAGES]</code>.</p>
+         * <ul>
+         * <li><code>MARKDOWN</code>: Whether the response should include markdown formatting. If not provided, the response will be plain text. Not respected while streaming.</li>
+         * <li><code>FORMS</code>: Whether the response should include forms. If provided, the caller needs to render action forms when returned from the ask API and allow submission of the forms with the submitActionForm API. If not provided, then actions which require user interaction will not be considered by the LLM. Removing this capability is recommended for surfaces which can not display UI (e.g. SMS, voice).</li>
+         * <li><code>IMAGES</code>: Whether the response should include images. Not yet supported.</li>
+         * <li><code>CHARTS_HIGHCHARTS_TS</code>: Whether the response should include a Highcharts typescript chart if applicable.</li>
+         * <li><code>ASYNC</code>: Whether the app that created this conversation supports asynchronous message delivery. If provided, messages may be sent to the app via the <code>handleMessage</code> function.</li>
+         * </ul>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -193,11 +202,14 @@ public final class ResponseConfig {
         }
 
         /**
-         * <p>List of capabilities supported by the caller. Defaults to [MARKDOWN, FORMS, IMAGES].</p>
-         * <p>MARKDOWN: Whether the response should include markdown formatting. If not provided, the response will be plain text. Not respected while streaming.</p>
-         * <p>FORMS: Whether the response should include forms. If provided, the caller needs to render action forms when returned from the ask API and allow submission of the forms with the submitActionForm API. If not provided, then actions which require user interaction will not be considered by the LLM. Removing this capability is recommended for surfaces which can not display UI (e.g. SMS, voice).</p>
-         * <p>IMAGES: Whether the response should include images. Not yet supported.</p>
-         * <p>CHARTS_HIGHCHARTS_TS: Whether the response should include a Highcharts typescript chart if applicable.</p>
+         * <p>List of capabilities supported by the caller. Defaults to <code>[MARKDOWN, FORMS, IMAGES]</code>.</p>
+         * <ul>
+         * <li><code>MARKDOWN</code>: Whether the response should include markdown formatting. If not provided, the response will be plain text. Not respected while streaming.</li>
+         * <li><code>FORMS</code>: Whether the response should include forms. If provided, the caller needs to render action forms when returned from the ask API and allow submission of the forms with the submitActionForm API. If not provided, then actions which require user interaction will not be considered by the LLM. Removing this capability is recommended for surfaces which can not display UI (e.g. SMS, voice).</li>
+         * <li><code>IMAGES</code>: Whether the response should include images. Not yet supported.</li>
+         * <li><code>CHARTS_HIGHCHARTS_TS</code>: Whether the response should include a Highcharts typescript chart if applicable.</li>
+         * <li><code>ASYNC</code>: Whether the app that created this conversation supports asynchronous message delivery. If provided, messages may be sent to the app via the <code>handleMessage</code> function.</li>
+         * </ul>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -207,11 +219,14 @@ public final class ResponseConfig {
         }
 
         /**
-         * <p>List of capabilities supported by the caller. Defaults to [MARKDOWN, FORMS, IMAGES].</p>
-         * <p>MARKDOWN: Whether the response should include markdown formatting. If not provided, the response will be plain text. Not respected while streaming.</p>
-         * <p>FORMS: Whether the response should include forms. If provided, the caller needs to render action forms when returned from the ask API and allow submission of the forms with the submitActionForm API. If not provided, then actions which require user interaction will not be considered by the LLM. Removing this capability is recommended for surfaces which can not display UI (e.g. SMS, voice).</p>
-         * <p>IMAGES: Whether the response should include images. Not yet supported.</p>
-         * <p>CHARTS_HIGHCHARTS_TS: Whether the response should include a Highcharts typescript chart if applicable.</p>
+         * <p>List of capabilities supported by the caller. Defaults to <code>[MARKDOWN, FORMS, IMAGES]</code>.</p>
+         * <ul>
+         * <li><code>MARKDOWN</code>: Whether the response should include markdown formatting. If not provided, the response will be plain text. Not respected while streaming.</li>
+         * <li><code>FORMS</code>: Whether the response should include forms. If provided, the caller needs to render action forms when returned from the ask API and allow submission of the forms with the submitActionForm API. If not provided, then actions which require user interaction will not be considered by the LLM. Removing this capability is recommended for surfaces which can not display UI (e.g. SMS, voice).</li>
+         * <li><code>IMAGES</code>: Whether the response should include images. Not yet supported.</li>
+         * <li><code>CHARTS_HIGHCHARTS_TS</code>: Whether the response should include a Highcharts typescript chart if applicable.</li>
+         * <li><code>ASYNC</code>: Whether the app that created this conversation supports asynchronous message delivery. If provided, messages may be sent to the app via the <code>handleMessage</code> function.</li>
+         * </ul>
          */
         @java.lang.Override
         @JsonSetter(value = "capabilities", nulls = Nulls.SKIP)

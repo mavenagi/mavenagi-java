@@ -39,6 +39,16 @@ public final class ActionResponse implements IActionBase {
 
     private final EntityId actionId;
 
+    private final Optional<String> instructions;
+
+    private final LlmInclusionStatus llmInclusionStatus;
+
+    private final Optional<EntityId> segmentId;
+
+    private final Optional<String> preconditionExplanation;
+
+    private final boolean deleted;
+
     private final Map<String, Object> additionalProperties;
 
     private ActionResponse(
@@ -50,6 +60,11 @@ public final class ActionResponse implements IActionBase {
             List<ActionParameter> userFormParameters,
             Optional<String> language,
             EntityId actionId,
+            Optional<String> instructions,
+            LlmInclusionStatus llmInclusionStatus,
+            Optional<EntityId> segmentId,
+            Optional<String> preconditionExplanation,
+            boolean deleted,
             Map<String, Object> additionalProperties) {
         this.name = name;
         this.description = description;
@@ -59,6 +74,11 @@ public final class ActionResponse implements IActionBase {
         this.userFormParameters = userFormParameters;
         this.language = language;
         this.actionId = actionId;
+        this.instructions = instructions;
+        this.llmInclusionStatus = llmInclusionStatus;
+        this.segmentId = segmentId;
+        this.preconditionExplanation = preconditionExplanation;
+        this.deleted = deleted;
         this.additionalProperties = additionalProperties;
     }
 
@@ -133,6 +153,54 @@ public final class ActionResponse implements IActionBase {
         return actionId;
     }
 
+    /**
+     * @return The instructions given to the LLM when determining whether to execute the action.
+     * This field defaults to the <code>description</code> field if not provided. Use the <code>patch</code> API to update.
+     */
+    @JsonProperty("instructions")
+    public Optional<String> getInstructions() {
+        return instructions;
+    }
+
+    /**
+     * @return Determines whether the action is sent to the LLM as part of a conversation.
+     * <ul>
+     * <li><code>ALWAYS</code>: The action is always available for use in conversations, textual relevance is not considered.</li>
+     * <li><code>WHEN_RELEVANT</code>: The action is available only in conversations where the action is determined to be relevant to the user's question.</li>
+     * <li><code>NEVER</code>: The action is not available for use in conversations.</li>
+     * </ul>
+     */
+    @JsonProperty("llmInclusionStatus")
+    public LlmInclusionStatus getLlmInclusionStatus() {
+        return llmInclusionStatus;
+    }
+
+    /**
+     * @return The IDs of the segment that must be matched for the action to be relevant to a conversation.
+     * Segments are replacing inline preconditions - an Action may not have both an inline precondition and a segment.
+     * Inline precondition support will be removed in a future release.
+     */
+    @JsonProperty("segmentId")
+    public Optional<EntityId> getSegmentId() {
+        return segmentId;
+    }
+
+    /**
+     * @return A human-readable explanation of the precondition associated with this action, if present.
+     */
+    @JsonProperty("preconditionExplanation")
+    public Optional<String> getPreconditionExplanation() {
+        return preconditionExplanation;
+    }
+
+    /**
+     * @return Whether the action has been deleted. Deleted actions will not sent to the LLM nor returned in search results.
+     */
+    @JsonProperty("deleted")
+    public boolean getDeleted() {
+        return deleted;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -152,7 +220,12 @@ public final class ActionResponse implements IActionBase {
                 && precondition.equals(other.precondition)
                 && userFormParameters.equals(other.userFormParameters)
                 && language.equals(other.language)
-                && actionId.equals(other.actionId);
+                && actionId.equals(other.actionId)
+                && instructions.equals(other.instructions)
+                && llmInclusionStatus.equals(other.llmInclusionStatus)
+                && segmentId.equals(other.segmentId)
+                && preconditionExplanation.equals(other.preconditionExplanation)
+                && deleted == other.deleted;
     }
 
     @java.lang.Override
@@ -165,7 +238,12 @@ public final class ActionResponse implements IActionBase {
                 this.precondition,
                 this.userFormParameters,
                 this.language,
-                this.actionId);
+                this.actionId,
+                this.instructions,
+                this.llmInclusionStatus,
+                this.segmentId,
+                this.preconditionExplanation,
+                this.deleted);
     }
 
     @java.lang.Override
@@ -204,7 +282,26 @@ public final class ActionResponse implements IActionBase {
         /**
          * <p>ID that uniquely identifies this action</p>
          */
-        _FinalStage actionId(@NotNull EntityId actionId);
+        LlmInclusionStatusStage actionId(@NotNull EntityId actionId);
+    }
+
+    public interface LlmInclusionStatusStage {
+        /**
+         * <p>Determines whether the action is sent to the LLM as part of a conversation.</p>
+         * <ul>
+         * <li><code>ALWAYS</code>: The action is always available for use in conversations, textual relevance is not considered.</li>
+         * <li><code>WHEN_RELEVANT</code>: The action is available only in conversations where the action is determined to be relevant to the user's question.</li>
+         * <li><code>NEVER</code>: The action is not available for use in conversations.</li>
+         * </ul>
+         */
+        DeletedStage llmInclusionStatus(@NotNull LlmInclusionStatus llmInclusionStatus);
+    }
+
+    public interface DeletedStage {
+        /**
+         * <p>Whether the action has been deleted. Deleted actions will not sent to the LLM nor returned in search results.</p>
+         */
+        _FinalStage deleted(boolean deleted);
     }
 
     public interface _FinalStage {
@@ -239,11 +336,41 @@ public final class ActionResponse implements IActionBase {
         _FinalStage language(Optional<String> language);
 
         _FinalStage language(String language);
+
+        /**
+         * <p>The instructions given to the LLM when determining whether to execute the action.
+         * This field defaults to the <code>description</code> field if not provided. Use the <code>patch</code> API to update.</p>
+         */
+        _FinalStage instructions(Optional<String> instructions);
+
+        _FinalStage instructions(String instructions);
+
+        /**
+         * <p>The IDs of the segment that must be matched for the action to be relevant to a conversation.
+         * Segments are replacing inline preconditions - an Action may not have both an inline precondition and a segment.
+         * Inline precondition support will be removed in a future release.</p>
+         */
+        _FinalStage segmentId(Optional<EntityId> segmentId);
+
+        _FinalStage segmentId(EntityId segmentId);
+
+        /**
+         * <p>A human-readable explanation of the precondition associated with this action, if present.</p>
+         */
+        _FinalStage preconditionExplanation(Optional<String> preconditionExplanation);
+
+        _FinalStage preconditionExplanation(String preconditionExplanation);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
-            implements NameStage, DescriptionStage, UserInteractionRequiredStage, ActionIdStage, _FinalStage {
+            implements NameStage,
+                    DescriptionStage,
+                    UserInteractionRequiredStage,
+                    ActionIdStage,
+                    LlmInclusionStatusStage,
+                    DeletedStage,
+                    _FinalStage {
         private String name;
 
         private String description;
@@ -251,6 +378,16 @@ public final class ActionResponse implements IActionBase {
         private boolean userInteractionRequired;
 
         private EntityId actionId;
+
+        private LlmInclusionStatus llmInclusionStatus;
+
+        private boolean deleted;
+
+        private Optional<String> preconditionExplanation = Optional.empty();
+
+        private Optional<EntityId> segmentId = Optional.empty();
+
+        private Optional<String> instructions = Optional.empty();
 
         private Optional<String> language = Optional.empty();
 
@@ -275,6 +412,11 @@ public final class ActionResponse implements IActionBase {
             userFormParameters(other.getUserFormParameters());
             language(other.getLanguage());
             actionId(other.getActionId());
+            instructions(other.getInstructions());
+            llmInclusionStatus(other.getLlmInclusionStatus());
+            segmentId(other.getSegmentId());
+            preconditionExplanation(other.getPreconditionExplanation());
+            deleted(other.getDeleted());
             return this;
         }
 
@@ -321,8 +463,108 @@ public final class ActionResponse implements IActionBase {
          */
         @java.lang.Override
         @JsonSetter("actionId")
-        public _FinalStage actionId(@NotNull EntityId actionId) {
+        public LlmInclusionStatusStage actionId(@NotNull EntityId actionId) {
             this.actionId = Objects.requireNonNull(actionId, "actionId must not be null");
+            return this;
+        }
+
+        /**
+         * <p>Determines whether the action is sent to the LLM as part of a conversation.</p>
+         * <ul>
+         * <li><code>ALWAYS</code>: The action is always available for use in conversations, textual relevance is not considered.</li>
+         * <li><code>WHEN_RELEVANT</code>: The action is available only in conversations where the action is determined to be relevant to the user's question.</li>
+         * <li><code>NEVER</code>: The action is not available for use in conversations.</li>
+         * </ul>
+         * <p>Determines whether the action is sent to the LLM as part of a conversation.</p>
+         * <ul>
+         * <li><code>ALWAYS</code>: The action is always available for use in conversations, textual relevance is not considered.</li>
+         * <li><code>WHEN_RELEVANT</code>: The action is available only in conversations where the action is determined to be relevant to the user's question.</li>
+         * <li><code>NEVER</code>: The action is not available for use in conversations.</li>
+         * </ul>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("llmInclusionStatus")
+        public DeletedStage llmInclusionStatus(@NotNull LlmInclusionStatus llmInclusionStatus) {
+            this.llmInclusionStatus = Objects.requireNonNull(llmInclusionStatus, "llmInclusionStatus must not be null");
+            return this;
+        }
+
+        /**
+         * <p>Whether the action has been deleted. Deleted actions will not sent to the LLM nor returned in search results.</p>
+         * <p>Whether the action has been deleted. Deleted actions will not sent to the LLM nor returned in search results.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("deleted")
+        public _FinalStage deleted(boolean deleted) {
+            this.deleted = deleted;
+            return this;
+        }
+
+        /**
+         * <p>A human-readable explanation of the precondition associated with this action, if present.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage preconditionExplanation(String preconditionExplanation) {
+            this.preconditionExplanation = Optional.ofNullable(preconditionExplanation);
+            return this;
+        }
+
+        /**
+         * <p>A human-readable explanation of the precondition associated with this action, if present.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "preconditionExplanation", nulls = Nulls.SKIP)
+        public _FinalStage preconditionExplanation(Optional<String> preconditionExplanation) {
+            this.preconditionExplanation = preconditionExplanation;
+            return this;
+        }
+
+        /**
+         * <p>The IDs of the segment that must be matched for the action to be relevant to a conversation.
+         * Segments are replacing inline preconditions - an Action may not have both an inline precondition and a segment.
+         * Inline precondition support will be removed in a future release.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage segmentId(EntityId segmentId) {
+            this.segmentId = Optional.ofNullable(segmentId);
+            return this;
+        }
+
+        /**
+         * <p>The IDs of the segment that must be matched for the action to be relevant to a conversation.
+         * Segments are replacing inline preconditions - an Action may not have both an inline precondition and a segment.
+         * Inline precondition support will be removed in a future release.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "segmentId", nulls = Nulls.SKIP)
+        public _FinalStage segmentId(Optional<EntityId> segmentId) {
+            this.segmentId = segmentId;
+            return this;
+        }
+
+        /**
+         * <p>The instructions given to the LLM when determining whether to execute the action.
+         * This field defaults to the <code>description</code> field if not provided. Use the <code>patch</code> API to update.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage instructions(String instructions) {
+            this.instructions = Optional.ofNullable(instructions);
+            return this;
+        }
+
+        /**
+         * <p>The instructions given to the LLM when determining whether to execute the action.
+         * This field defaults to the <code>description</code> field if not provided. Use the <code>patch</code> API to update.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "instructions", nulls = Nulls.SKIP)
+        public _FinalStage instructions(Optional<String> instructions) {
+            this.instructions = instructions;
             return this;
         }
 
@@ -428,6 +670,11 @@ public final class ActionResponse implements IActionBase {
                     userFormParameters,
                     language,
                     actionId,
+                    instructions,
+                    llmInclusionStatus,
+                    segmentId,
+                    preconditionExplanation,
+                    deleted,
                     additionalProperties);
         }
     }

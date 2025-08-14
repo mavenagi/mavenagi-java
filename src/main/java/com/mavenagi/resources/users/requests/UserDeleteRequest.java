@@ -30,7 +30,7 @@ public final class UserDeleteRequest {
     }
 
     /**
-     * @return The App ID of the user to delete. If not provided the ID of the calling app will be used.
+     * @return The App ID of the app user to delete. If not provided the ID of the calling app will be used.
      */
     @JsonProperty("appId")
     public Optional<String> getAppId() {
@@ -81,7 +81,7 @@ public final class UserDeleteRequest {
         }
 
         /**
-         * <p>The App ID of the user to delete. If not provided the ID of the calling app will be used.</p>
+         * <p>The App ID of the app user to delete. If not provided the ID of the calling app will be used.</p>
          */
         @JsonSetter(value = "appId", nulls = Nulls.SKIP)
         public Builder appId(Optional<String> appId) {

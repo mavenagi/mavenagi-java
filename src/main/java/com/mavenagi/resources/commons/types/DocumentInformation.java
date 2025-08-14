@@ -21,6 +21,8 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = DocumentInformation.Builder.class)
 public final class DocumentInformation {
+    private final EntityIdWithoutAgent knowledgeBaseId;
+
     private final EntityIdWithoutAgent documentId;
 
     private final Optional<String> title;
@@ -30,14 +32,24 @@ public final class DocumentInformation {
     private final Map<String, Object> additionalProperties;
 
     private DocumentInformation(
+            EntityIdWithoutAgent knowledgeBaseId,
             EntityIdWithoutAgent documentId,
             Optional<String> title,
             Optional<String> snippet,
             Map<String, Object> additionalProperties) {
+        this.knowledgeBaseId = knowledgeBaseId;
         this.documentId = documentId;
         this.title = title;
         this.snippet = snippet;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return Unique identifier for the knowledge base.
+     */
+    @JsonProperty("knowledgeBaseId")
+    public EntityIdWithoutAgent getKnowledgeBaseId() {
+        return knowledgeBaseId;
     }
 
     /**
@@ -76,12 +88,15 @@ public final class DocumentInformation {
     }
 
     private boolean equalTo(DocumentInformation other) {
-        return documentId.equals(other.documentId) && title.equals(other.title) && snippet.equals(other.snippet);
+        return knowledgeBaseId.equals(other.knowledgeBaseId)
+                && documentId.equals(other.documentId)
+                && title.equals(other.title)
+                && snippet.equals(other.snippet);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.documentId, this.title, this.snippet);
+        return Objects.hash(this.knowledgeBaseId, this.documentId, this.title, this.snippet);
     }
 
     @java.lang.Override
@@ -89,8 +104,17 @@ public final class DocumentInformation {
         return ObjectMappers.stringify(this);
     }
 
-    public static DocumentIdStage builder() {
+    public static KnowledgeBaseIdStage builder() {
         return new Builder();
+    }
+
+    public interface KnowledgeBaseIdStage {
+        /**
+         * <p>Unique identifier for the knowledge base.</p>
+         */
+        DocumentIdStage knowledgeBaseId(@NotNull EntityIdWithoutAgent knowledgeBaseId);
+
+        Builder from(DocumentInformation other);
     }
 
     public interface DocumentIdStage {
@@ -98,8 +122,6 @@ public final class DocumentInformation {
          * <p>Unique identifier for the document.</p>
          */
         _FinalStage documentId(@NotNull EntityIdWithoutAgent documentId);
-
-        Builder from(DocumentInformation other);
     }
 
     public interface _FinalStage {
@@ -121,7 +143,9 @@ public final class DocumentInformation {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements DocumentIdStage, _FinalStage {
+    public static final class Builder implements KnowledgeBaseIdStage, DocumentIdStage, _FinalStage {
+        private EntityIdWithoutAgent knowledgeBaseId;
+
         private EntityIdWithoutAgent documentId;
 
         private Optional<String> snippet = Optional.empty();
@@ -135,9 +159,22 @@ public final class DocumentInformation {
 
         @java.lang.Override
         public Builder from(DocumentInformation other) {
+            knowledgeBaseId(other.getKnowledgeBaseId());
             documentId(other.getDocumentId());
             title(other.getTitle());
             snippet(other.getSnippet());
+            return this;
+        }
+
+        /**
+         * <p>Unique identifier for the knowledge base.</p>
+         * <p>Unique identifier for the knowledge base.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("knowledgeBaseId")
+        public DocumentIdStage knowledgeBaseId(@NotNull EntityIdWithoutAgent knowledgeBaseId) {
+            this.knowledgeBaseId = Objects.requireNonNull(knowledgeBaseId, "knowledgeBaseId must not be null");
             return this;
         }
 
@@ -195,7 +232,7 @@ public final class DocumentInformation {
 
         @java.lang.Override
         public DocumentInformation build() {
-            return new DocumentInformation(documentId, title, snippet, additionalProperties);
+            return new DocumentInformation(knowledgeBaseId, documentId, title, snippet, additionalProperties);
         }
     }
 }

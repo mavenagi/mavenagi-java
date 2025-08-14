@@ -21,7 +21,7 @@ import com.mavenagi.resources.commons.types.InboxItemFix;
 import com.mavenagi.resources.inbox.requests.InboxItemFixRequest;
 import com.mavenagi.resources.inbox.requests.InboxItemIgnoreRequest;
 import com.mavenagi.resources.inbox.requests.InboxItemRequest;
-import com.mavenagi.resources.inbox.types.ApplyInboxItemFixRequest;
+import com.mavenagi.resources.inbox.types.ApplyFixesRequest;
 import com.mavenagi.resources.inbox.types.InboxSearchRequest;
 import com.mavenagi.resources.inbox.types.InboxSearchResponse;
 import java.io.IOException;
@@ -155,7 +155,6 @@ public class AsyncRawInboxClient {
                 .addPathSegments("v1/inbox")
                 .addPathSegment(inboxItemId);
         QueryStringMapper.addQueryParameter(httpUrl, "appId", request.getAppId(), false);
-        QueryStringMapper.addQueryParameter(httpUrl, "itemType", request.getItemType(), false);
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
@@ -236,7 +235,6 @@ public class AsyncRawInboxClient {
                 .addPathSegments("fix")
                 .addPathSegment(inboxItemFixId);
         QueryStringMapper.addQueryParameter(httpUrl, "appId", request.getAppId(), false);
-        QueryStringMapper.addQueryParameter(httpUrl, "fixType", request.getFixType(), false);
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
@@ -300,24 +298,22 @@ public class AsyncRawInboxClient {
     }
 
     /**
-     * Apply a fix to an inbox item with a specific document.
+     * Apply a list of fixes belonging to an inbox item.
      */
-    public CompletableFuture<MavenAGIHttpResponse<Void>> applyFix(
-            String inboxItemFixId, ApplyInboxItemFixRequest request) {
-        return applyFix(inboxItemFixId, request, null);
+    public CompletableFuture<MavenAGIHttpResponse<Void>> applyFixes(String inboxItemId, ApplyFixesRequest request) {
+        return applyFixes(inboxItemId, request, null);
     }
 
     /**
-     * Apply a fix to an inbox item with a specific document.
+     * Apply a list of fixes belonging to an inbox item.
      */
-    public CompletableFuture<MavenAGIHttpResponse<Void>> applyFix(
-            String inboxItemFixId, ApplyInboxItemFixRequest request, RequestOptions requestOptions) {
+    public CompletableFuture<MavenAGIHttpResponse<Void>> applyFixes(
+            String inboxItemId, ApplyFixesRequest request, RequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("v1/inbox")
-                .addPathSegments("fix")
-                .addPathSegment(inboxItemFixId)
-                .addPathSegments("apply")
+                .addPathSegment(inboxItemId)
+                .addPathSegments("applyfixes")
                 .build();
         RequestBody body;
         try {
@@ -405,7 +401,6 @@ public class AsyncRawInboxClient {
                 .addPathSegment(inboxItemId)
                 .addPathSegments("ignore");
         QueryStringMapper.addQueryParameter(httpUrl, "appId", request.getAppId(), false);
-        QueryStringMapper.addQueryParameter(httpUrl, "itemType", request.getItemType(), false);
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("POST", RequestBody.create("", null))

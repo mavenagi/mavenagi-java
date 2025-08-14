@@ -32,7 +32,9 @@ public enum EntityType {
 
     INBOX_ITEM("INBOX_ITEM"),
 
-    INBOX_ITEM_FIX("INBOX_ITEM_FIX");
+    INBOX_ITEM_FIX("INBOX_ITEM_FIX"),
+
+    SEGMENT("SEGMENT");
 
     private final String value;
 

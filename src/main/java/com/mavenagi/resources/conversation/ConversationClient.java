@@ -9,15 +9,20 @@ import com.mavenagi.resources.commons.types.ConversationResponse;
 import com.mavenagi.resources.commons.types.Feedback;
 import com.mavenagi.resources.conversation.requests.ConversationDeleteRequest;
 import com.mavenagi.resources.conversation.requests.ConversationGetRequest;
+import com.mavenagi.resources.conversation.types.AskObjectRequest;
 import com.mavenagi.resources.conversation.types.AskRequest;
 import com.mavenagi.resources.conversation.types.CategorizationResponse;
 import com.mavenagi.resources.conversation.types.ConversationMessageRequest;
 import com.mavenagi.resources.conversation.types.ConversationMetadata;
+import com.mavenagi.resources.conversation.types.ConversationPatchRequest;
 import com.mavenagi.resources.conversation.types.ConversationRequest;
 import com.mavenagi.resources.conversation.types.ConversationsResponse;
 import com.mavenagi.resources.conversation.types.ConversationsSearchRequest;
+import com.mavenagi.resources.conversation.types.DeliverMessageRequest;
+import com.mavenagi.resources.conversation.types.DeliverMessageResponse;
 import com.mavenagi.resources.conversation.types.FeedbackRequest;
 import com.mavenagi.resources.conversation.types.GenerateMavenSuggestionsRequest;
+import com.mavenagi.resources.conversation.types.ObjectStreamResponse;
 import com.mavenagi.resources.conversation.types.StreamResponse;
 import com.mavenagi.resources.conversation.types.SubmitActionFormRequest;
 import com.mavenagi.resources.conversation.types.UpdateMetadataRequest;
@@ -67,6 +72,34 @@ public class ConversationClient {
      */
     public ConversationResponse initialize(ConversationRequest request, RequestOptions requestOptions) {
         return this.rawClient.initialize(request, requestOptions).body();
+    }
+
+    /**
+     * Update mutable conversation fields.
+     * <p>The <code>appId</code> field can be provided to update a conversation owned by a different app.
+     * All other fields will overwrite the existing value on the conversation only if provided.</p>
+     */
+    public ConversationResponse patch(String conversationId) {
+        return this.rawClient.patch(conversationId).body();
+    }
+
+    /**
+     * Update mutable conversation fields.
+     * <p>The <code>appId</code> field can be provided to update a conversation owned by a different app.
+     * All other fields will overwrite the existing value on the conversation only if provided.</p>
+     */
+    public ConversationResponse patch(String conversationId, ConversationPatchRequest request) {
+        return this.rawClient.patch(conversationId, request).body();
+    }
+
+    /**
+     * Update mutable conversation fields.
+     * <p>The <code>appId</code> field can be provided to update a conversation owned by a different app.
+     * All other fields will overwrite the existing value on the conversation only if provided.</p>
+     */
+    public ConversationResponse patch(
+            String conversationId, ConversationPatchRequest request, RequestOptions requestOptions) {
+        return this.rawClient.patch(conversationId, request, requestOptions).body();
     }
 
     /**
@@ -226,6 +259,49 @@ public class ConversationClient {
     }
 
     /**
+     * Generate a structured object response based on a provided schema and user prompt with a streaming response.
+     * The response will be sent as a stream of events containing text, start, and end events.
+     * The text portions of stream responses should be concatenated to form the full response text.
+     * <p>If the user question and object response already exist, they will be reused and not updated.</p>
+     * <p>Concurrency Behavior:</p>
+     * <ul>
+     * <li>If another API call is made for the same user question while a response is mid-stream, partial answers may be returned.</li>
+     * <li>The second caller will receive a truncated or partial response depending on where the first stream is in its processing. The first caller's stream will remain unaffected and continue delivering the full response.</li>
+     * </ul>
+     * <p>Known Limitations:</p>
+     * <ul>
+     * <li>Schema enforcement is best-effort and may not guarantee exact conformity.</li>
+     * <li>The API does not currently expose metadata indicating whether a response or message is incomplete. This will be addressed in a future update.</li>
+     * </ul>
+     */
+    public Iterable<ObjectStreamResponse> askObjectStream(String conversationId, AskObjectRequest request) {
+        return this.rawClient.askObjectStream(conversationId, request).body();
+    }
+
+    /**
+     * Generate a structured object response based on a provided schema and user prompt with a streaming response.
+     * The response will be sent as a stream of events containing text, start, and end events.
+     * The text portions of stream responses should be concatenated to form the full response text.
+     * <p>If the user question and object response already exist, they will be reused and not updated.</p>
+     * <p>Concurrency Behavior:</p>
+     * <ul>
+     * <li>If another API call is made for the same user question while a response is mid-stream, partial answers may be returned.</li>
+     * <li>The second caller will receive a truncated or partial response depending on where the first stream is in its processing. The first caller's stream will remain unaffected and continue delivering the full response.</li>
+     * </ul>
+     * <p>Known Limitations:</p>
+     * <ul>
+     * <li>Schema enforcement is best-effort and may not guarantee exact conformity.</li>
+     * <li>The API does not currently expose metadata indicating whether a response or message is incomplete. This will be addressed in a future update.</li>
+     * </ul>
+     */
+    public Iterable<ObjectStreamResponse> askObjectStream(
+            String conversationId, AskObjectRequest request, RequestOptions requestOptions) {
+        return this.rawClient
+                .askObjectStream(conversationId, request, requestOptions)
+                .body();
+    }
+
+    /**
      * Uses an LLM flow to categorize the conversation. Experimental.
      */
     public CategorizationResponse categorize(String conversationId) {
@@ -335,5 +411,27 @@ public class ConversationClient {
      */
     public ConversationsResponse search(ConversationsSearchRequest request, RequestOptions requestOptions) {
         return this.rawClient.search(request, requestOptions).body();
+    }
+
+    /**
+     * Deliver a message to a user or conversation.
+     * <p>&lt;Warning&gt;
+     * Currently, messages can only be successfully delivered to conversations with the `ASYNC` capability that are `open`.
+     * User message delivery is not yet supported.
+     * &lt;/Warning&gt;</p>
+     */
+    public DeliverMessageResponse deliverMessage(DeliverMessageRequest request) {
+        return this.rawClient.deliverMessage(request).body();
+    }
+
+    /**
+     * Deliver a message to a user or conversation.
+     * <p>&lt;Warning&gt;
+     * Currently, messages can only be successfully delivered to conversations with the `ASYNC` capability that are `open`.
+     * User message delivery is not yet supported.
+     * &lt;/Warning&gt;</p>
+     */
+    public DeliverMessageResponse deliverMessage(DeliverMessageRequest request, RequestOptions requestOptions) {
+        return this.rawClient.deliverMessage(request, requestOptions).body();
     }
 }

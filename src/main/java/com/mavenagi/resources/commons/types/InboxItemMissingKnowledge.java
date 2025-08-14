@@ -31,6 +31,8 @@ public final class InboxItemMissingKnowledge implements IInboxItemBase {
 
     private final InboxItemStatus status;
 
+    private final InboxItemSeverity severity;
+
     private final InboxItemFixAddDocument fix;
 
     private final List<ConversationInformation> conversations;
@@ -42,6 +44,7 @@ public final class InboxItemMissingKnowledge implements IInboxItemBase {
             OffsetDateTime createdAt,
             OffsetDateTime updatedAt,
             InboxItemStatus status,
+            InboxItemSeverity severity,
             InboxItemFixAddDocument fix,
             List<ConversationInformation> conversations,
             Map<String, Object> additionalProperties) {
@@ -49,6 +52,7 @@ public final class InboxItemMissingKnowledge implements IInboxItemBase {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.status = status;
+        this.severity = severity;
         this.fix = fix;
         this.conversations = conversations;
         this.additionalProperties = additionalProperties;
@@ -91,6 +95,15 @@ public final class InboxItemMissingKnowledge implements IInboxItemBase {
     }
 
     /**
+     * @return Severity of the inbox item.
+     */
+    @JsonProperty("severity")
+    @java.lang.Override
+    public InboxItemSeverity getSeverity() {
+        return severity;
+    }
+
+    /**
      * @return Fix associated with the inbox item.
      */
     @JsonProperty("fix")
@@ -122,13 +135,15 @@ public final class InboxItemMissingKnowledge implements IInboxItemBase {
                 && createdAt.equals(other.createdAt)
                 && updatedAt.equals(other.updatedAt)
                 && status.equals(other.status)
+                && severity.equals(other.severity)
                 && fix.equals(other.fix)
                 && conversations.equals(other.conversations);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.id, this.createdAt, this.updatedAt, this.status, this.fix, this.conversations);
+        return Objects.hash(
+                this.id, this.createdAt, this.updatedAt, this.status, this.severity, this.fix, this.conversations);
     }
 
     @java.lang.Override
@@ -167,7 +182,14 @@ public final class InboxItemMissingKnowledge implements IInboxItemBase {
         /**
          * <p>Status of the inbox item.</p>
          */
-        FixStage status(@NotNull InboxItemStatus status);
+        SeverityStage status(@NotNull InboxItemStatus status);
+    }
+
+    public interface SeverityStage {
+        /**
+         * <p>Severity of the inbox item.</p>
+         */
+        FixStage severity(@NotNull InboxItemSeverity severity);
     }
 
     public interface FixStage {
@@ -192,7 +214,7 @@ public final class InboxItemMissingKnowledge implements IInboxItemBase {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
-            implements IdStage, CreatedAtStage, UpdatedAtStage, StatusStage, FixStage, _FinalStage {
+            implements IdStage, CreatedAtStage, UpdatedAtStage, StatusStage, SeverityStage, FixStage, _FinalStage {
         private EntityId id;
 
         private OffsetDateTime createdAt;
@@ -200,6 +222,8 @@ public final class InboxItemMissingKnowledge implements IInboxItemBase {
         private OffsetDateTime updatedAt;
 
         private InboxItemStatus status;
+
+        private InboxItemSeverity severity;
 
         private InboxItemFixAddDocument fix;
 
@@ -216,6 +240,7 @@ public final class InboxItemMissingKnowledge implements IInboxItemBase {
             createdAt(other.getCreatedAt());
             updatedAt(other.getUpdatedAt());
             status(other.getStatus());
+            severity(other.getSeverity());
             fix(other.getFix());
             conversations(other.getConversations());
             return this;
@@ -264,8 +289,20 @@ public final class InboxItemMissingKnowledge implements IInboxItemBase {
          */
         @java.lang.Override
         @JsonSetter("status")
-        public FixStage status(@NotNull InboxItemStatus status) {
+        public SeverityStage status(@NotNull InboxItemStatus status) {
             this.status = Objects.requireNonNull(status, "status must not be null");
+            return this;
+        }
+
+        /**
+         * <p>Severity of the inbox item.</p>
+         * <p>Severity of the inbox item.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("severity")
+        public FixStage severity(@NotNull InboxItemSeverity severity) {
+            this.severity = Objects.requireNonNull(severity, "severity must not be null");
             return this;
         }
 
@@ -315,7 +352,7 @@ public final class InboxItemMissingKnowledge implements IInboxItemBase {
         @java.lang.Override
         public InboxItemMissingKnowledge build() {
             return new InboxItemMissingKnowledge(
-                    id, createdAt, updatedAt, status, fix, conversations, additionalProperties);
+                    id, createdAt, updatedAt, status, severity, fix, conversations, additionalProperties);
         }
     }
 }

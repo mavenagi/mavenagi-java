@@ -13,12 +13,15 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
 import com.mavenagi.resources.commons.types.EntityId;
+import com.mavenagi.resources.commons.types.LlmInclusionStatus;
 import com.mavenagi.resources.commons.types.Precondition;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
@@ -34,6 +37,14 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
 
     private final Map<String, String> metadata;
 
+    private final Set<String> tags;
+
+    private final Optional<LlmInclusionStatus> llmInclusionStatus;
+
+    private final KnowledgeBaseRefreshFrequency refreshFrequency;
+
+    private final Optional<EntityId> segmentId;
+
     private final Map<String, Object> additionalProperties;
 
     private KnowledgeBaseResponse(
@@ -42,12 +53,20 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
             EntityId knowledgeBaseId,
             KnowledgeBaseType type,
             Map<String, String> metadata,
+            Set<String> tags,
+            Optional<LlmInclusionStatus> llmInclusionStatus,
+            KnowledgeBaseRefreshFrequency refreshFrequency,
+            Optional<EntityId> segmentId,
             Map<String, Object> additionalProperties) {
         this.name = name;
         this.precondition = precondition;
         this.knowledgeBaseId = knowledgeBaseId;
         this.type = type;
         this.metadata = metadata;
+        this.tags = tags;
+        this.llmInclusionStatus = llmInclusionStatus;
+        this.refreshFrequency = refreshFrequency;
+        this.segmentId = segmentId;
         this.additionalProperties = additionalProperties;
     }
 
@@ -61,7 +80,7 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
     }
 
     /**
-     * @return (Beta) The preconditions that must be met for knowledge base be relevant to a conversation. Can be used to limit knowledge to certain types of users.
+     * @return The preconditions that must be met for knowledge base be relevant to a conversation. Can be used to restrict knowledge bases to certain types of users.
      */
     @JsonProperty("precondition")
     @java.lang.Override
@@ -93,6 +112,40 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
         return metadata;
     }
 
+    /**
+     * @return The tags of the knowledge base.
+     */
+    @JsonProperty("tags")
+    public Set<String> getTags() {
+        return tags;
+    }
+
+    /**
+     * @return Determines whether documents in the knowledge base are sent to the LLM as part of a conversation.
+     */
+    @JsonProperty("llmInclusionStatus")
+    public Optional<LlmInclusionStatus> getLlmInclusionStatus() {
+        return llmInclusionStatus;
+    }
+
+    /**
+     * @return How often the knowledge base should be refreshed.
+     */
+    @JsonProperty("refreshFrequency")
+    public KnowledgeBaseRefreshFrequency getRefreshFrequency() {
+        return refreshFrequency;
+    }
+
+    /**
+     * @return The IDs of the segment that must be matched for the knowledge base to be relevant to a conversation.
+     * Segments are replacing inline preconditions - a Knowledge Base may not have both an inline precondition and a segment.
+     * Inline precondition support will be removed in a future release.
+     */
+    @JsonProperty("segmentId")
+    public Optional<EntityId> getSegmentId() {
+        return segmentId;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -109,12 +162,25 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
                 && precondition.equals(other.precondition)
                 && knowledgeBaseId.equals(other.knowledgeBaseId)
                 && type.equals(other.type)
-                && metadata.equals(other.metadata);
+                && metadata.equals(other.metadata)
+                && tags.equals(other.tags)
+                && llmInclusionStatus.equals(other.llmInclusionStatus)
+                && refreshFrequency.equals(other.refreshFrequency)
+                && segmentId.equals(other.segmentId);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.name, this.precondition, this.knowledgeBaseId, this.type, this.metadata);
+        return Objects.hash(
+                this.name,
+                this.precondition,
+                this.knowledgeBaseId,
+                this.type,
+                this.metadata,
+                this.tags,
+                this.llmInclusionStatus,
+                this.refreshFrequency,
+                this.segmentId);
     }
 
     @java.lang.Override
@@ -146,14 +212,21 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
         /**
          * <p>The type of the knowledge base. Can not be changed once created.</p>
          */
-        _FinalStage type(@NotNull KnowledgeBaseType type);
+        RefreshFrequencyStage type(@NotNull KnowledgeBaseType type);
+    }
+
+    public interface RefreshFrequencyStage {
+        /**
+         * <p>How often the knowledge base should be refreshed.</p>
+         */
+        _FinalStage refreshFrequency(@NotNull KnowledgeBaseRefreshFrequency refreshFrequency);
     }
 
     public interface _FinalStage {
         KnowledgeBaseResponse build();
 
         /**
-         * <p>(Beta) The preconditions that must be met for knowledge base be relevant to a conversation. Can be used to limit knowledge to certain types of users.</p>
+         * <p>The preconditions that must be met for knowledge base be relevant to a conversation. Can be used to restrict knowledge bases to certain types of users.</p>
          */
         _FinalStage precondition(Optional<Precondition> precondition);
 
@@ -167,15 +240,49 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
         _FinalStage putAllMetadata(Map<String, String> metadata);
 
         _FinalStage metadata(String key, String value);
+
+        /**
+         * <p>The tags of the knowledge base.</p>
+         */
+        _FinalStage tags(Set<String> tags);
+
+        _FinalStage addTags(String tags);
+
+        _FinalStage addAllTags(Set<String> tags);
+
+        /**
+         * <p>Determines whether documents in the knowledge base are sent to the LLM as part of a conversation.</p>
+         */
+        _FinalStage llmInclusionStatus(Optional<LlmInclusionStatus> llmInclusionStatus);
+
+        _FinalStage llmInclusionStatus(LlmInclusionStatus llmInclusionStatus);
+
+        /**
+         * <p>The IDs of the segment that must be matched for the knowledge base to be relevant to a conversation.
+         * Segments are replacing inline preconditions - a Knowledge Base may not have both an inline precondition and a segment.
+         * Inline precondition support will be removed in a future release.</p>
+         */
+        _FinalStage segmentId(Optional<EntityId> segmentId);
+
+        _FinalStage segmentId(EntityId segmentId);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements NameStage, KnowledgeBaseIdStage, TypeStage, _FinalStage {
+    public static final class Builder
+            implements NameStage, KnowledgeBaseIdStage, TypeStage, RefreshFrequencyStage, _FinalStage {
         private String name;
 
         private EntityId knowledgeBaseId;
 
         private KnowledgeBaseType type;
+
+        private KnowledgeBaseRefreshFrequency refreshFrequency;
+
+        private Optional<EntityId> segmentId = Optional.empty();
+
+        private Optional<LlmInclusionStatus> llmInclusionStatus = Optional.empty();
+
+        private Set<String> tags = new LinkedHashSet<>();
 
         private Map<String, String> metadata = new LinkedHashMap<>();
 
@@ -193,6 +300,10 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
             knowledgeBaseId(other.getKnowledgeBaseId());
             type(other.getType());
             metadata(other.getMetadata());
+            tags(other.getTags());
+            llmInclusionStatus(other.getLlmInclusionStatus());
+            refreshFrequency(other.getRefreshFrequency());
+            segmentId(other.getSegmentId());
             return this;
         }
 
@@ -227,8 +338,95 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
          */
         @java.lang.Override
         @JsonSetter("type")
-        public _FinalStage type(@NotNull KnowledgeBaseType type) {
+        public RefreshFrequencyStage type(@NotNull KnowledgeBaseType type) {
             this.type = Objects.requireNonNull(type, "type must not be null");
+            return this;
+        }
+
+        /**
+         * <p>How often the knowledge base should be refreshed.</p>
+         * <p>How often the knowledge base should be refreshed.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("refreshFrequency")
+        public _FinalStage refreshFrequency(@NotNull KnowledgeBaseRefreshFrequency refreshFrequency) {
+            this.refreshFrequency = Objects.requireNonNull(refreshFrequency, "refreshFrequency must not be null");
+            return this;
+        }
+
+        /**
+         * <p>The IDs of the segment that must be matched for the knowledge base to be relevant to a conversation.
+         * Segments are replacing inline preconditions - a Knowledge Base may not have both an inline precondition and a segment.
+         * Inline precondition support will be removed in a future release.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage segmentId(EntityId segmentId) {
+            this.segmentId = Optional.ofNullable(segmentId);
+            return this;
+        }
+
+        /**
+         * <p>The IDs of the segment that must be matched for the knowledge base to be relevant to a conversation.
+         * Segments are replacing inline preconditions - a Knowledge Base may not have both an inline precondition and a segment.
+         * Inline precondition support will be removed in a future release.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "segmentId", nulls = Nulls.SKIP)
+        public _FinalStage segmentId(Optional<EntityId> segmentId) {
+            this.segmentId = segmentId;
+            return this;
+        }
+
+        /**
+         * <p>Determines whether documents in the knowledge base are sent to the LLM as part of a conversation.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage llmInclusionStatus(LlmInclusionStatus llmInclusionStatus) {
+            this.llmInclusionStatus = Optional.ofNullable(llmInclusionStatus);
+            return this;
+        }
+
+        /**
+         * <p>Determines whether documents in the knowledge base are sent to the LLM as part of a conversation.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "llmInclusionStatus", nulls = Nulls.SKIP)
+        public _FinalStage llmInclusionStatus(Optional<LlmInclusionStatus> llmInclusionStatus) {
+            this.llmInclusionStatus = llmInclusionStatus;
+            return this;
+        }
+
+        /**
+         * <p>The tags of the knowledge base.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage addAllTags(Set<String> tags) {
+            this.tags.addAll(tags);
+            return this;
+        }
+
+        /**
+         * <p>The tags of the knowledge base.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage addTags(String tags) {
+            this.tags.add(tags);
+            return this;
+        }
+
+        /**
+         * <p>The tags of the knowledge base.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "tags", nulls = Nulls.SKIP)
+        public _FinalStage tags(Set<String> tags) {
+            this.tags.clear();
+            this.tags.addAll(tags);
             return this;
         }
 
@@ -264,7 +462,7 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
         }
 
         /**
-         * <p>(Beta) The preconditions that must be met for knowledge base be relevant to a conversation. Can be used to limit knowledge to certain types of users.</p>
+         * <p>The preconditions that must be met for knowledge base be relevant to a conversation. Can be used to restrict knowledge bases to certain types of users.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -274,7 +472,7 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
         }
 
         /**
-         * <p>(Beta) The preconditions that must be met for knowledge base be relevant to a conversation. Can be used to limit knowledge to certain types of users.</p>
+         * <p>The preconditions that must be met for knowledge base be relevant to a conversation. Can be used to restrict knowledge bases to certain types of users.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "precondition", nulls = Nulls.SKIP)
@@ -285,7 +483,17 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
 
         @java.lang.Override
         public KnowledgeBaseResponse build() {
-            return new KnowledgeBaseResponse(name, precondition, knowledgeBaseId, type, metadata, additionalProperties);
+            return new KnowledgeBaseResponse(
+                    name,
+                    precondition,
+                    knowledgeBaseId,
+                    type,
+                    metadata,
+                    tags,
+                    llmInclusionStatus,
+                    refreshFrequency,
+                    segmentId,
+                    additionalProperties);
         }
     }
 }

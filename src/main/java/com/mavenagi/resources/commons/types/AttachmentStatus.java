@@ -5,14 +5,18 @@ package com.mavenagi.resources.commons.types;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum InboxItemFixType {
-    REMOVE_DOCUMENT("REMOVE_DOCUMENT"),
+public enum AttachmentStatus {
+    PENDING("PENDING"),
 
-    ADD_DOCUMENT("ADD_DOCUMENT");
+    PROCESSING("PROCESSING"),
+
+    ACCEPTED("ACCEPTED"),
+
+    REJECTED("REJECTED");
 
     private final String value;
 
-    InboxItemFixType(String value) {
+    AttachmentStatus(String value) {
         this.value = value;
     }
 

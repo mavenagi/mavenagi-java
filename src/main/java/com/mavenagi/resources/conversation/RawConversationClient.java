@@ -23,15 +23,20 @@ import com.mavenagi.resources.commons.types.ErrorMessage;
 import com.mavenagi.resources.commons.types.Feedback;
 import com.mavenagi.resources.conversation.requests.ConversationDeleteRequest;
 import com.mavenagi.resources.conversation.requests.ConversationGetRequest;
+import com.mavenagi.resources.conversation.types.AskObjectRequest;
 import com.mavenagi.resources.conversation.types.AskRequest;
 import com.mavenagi.resources.conversation.types.CategorizationResponse;
 import com.mavenagi.resources.conversation.types.ConversationMessageRequest;
 import com.mavenagi.resources.conversation.types.ConversationMetadata;
+import com.mavenagi.resources.conversation.types.ConversationPatchRequest;
 import com.mavenagi.resources.conversation.types.ConversationRequest;
 import com.mavenagi.resources.conversation.types.ConversationsResponse;
 import com.mavenagi.resources.conversation.types.ConversationsSearchRequest;
+import com.mavenagi.resources.conversation.types.DeliverMessageRequest;
+import com.mavenagi.resources.conversation.types.DeliverMessageResponse;
 import com.mavenagi.resources.conversation.types.FeedbackRequest;
 import com.mavenagi.resources.conversation.types.GenerateMavenSuggestionsRequest;
+import com.mavenagi.resources.conversation.types.ObjectStreamResponse;
 import com.mavenagi.resources.conversation.types.StreamResponse;
 import com.mavenagi.resources.conversation.types.SubmitActionFormRequest;
 import com.mavenagi.resources.conversation.types.UpdateMetadataRequest;
@@ -93,6 +98,87 @@ public class RawConversationClient {
         Request okhttpRequest = new Request.Builder()
                 .url(httpUrl)
                 .method("POST", body)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
+                .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            if (response.isSuccessful()) {
+                return new MavenAGIHttpResponse<>(
+                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), ConversationResponse.class),
+                        response);
+            }
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            try {
+                switch (response.code()) {
+                    case 400:
+                        throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                    case 500:
+                        throw new ServerError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            throw new MavenAGIApiException(
+                    "Error with status code " + response.code(),
+                    response.code(),
+                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                    response);
+        } catch (IOException e) {
+            throw new MavenAGIException("Network error executing HTTP request", e);
+        }
+    }
+
+    /**
+     * Update mutable conversation fields.
+     * <p>The <code>appId</code> field can be provided to update a conversation owned by a different app.
+     * All other fields will overwrite the existing value on the conversation only if provided.</p>
+     */
+    public MavenAGIHttpResponse<ConversationResponse> patch(String conversationId) {
+        return patch(conversationId, ConversationPatchRequest.builder().build());
+    }
+
+    /**
+     * Update mutable conversation fields.
+     * <p>The <code>appId</code> field can be provided to update a conversation owned by a different app.
+     * All other fields will overwrite the existing value on the conversation only if provided.</p>
+     */
+    public MavenAGIHttpResponse<ConversationResponse> patch(String conversationId, ConversationPatchRequest request) {
+        return patch(conversationId, request, null);
+    }
+
+    /**
+     * Update mutable conversation fields.
+     * <p>The <code>appId</code> field can be provided to update a conversation owned by a different app.
+     * All other fields will overwrite the existing value on the conversation only if provided.</p>
+     */
+    public MavenAGIHttpResponse<ConversationResponse> patch(
+            String conversationId, ConversationPatchRequest request, RequestOptions requestOptions) {
+        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("v1/conversations")
+                .addPathSegment(conversationId)
+                .build();
+        RequestBody body;
+        try {
+            body = RequestBody.create(
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
+        } catch (JsonProcessingException e) {
+            throw new MavenAGIException("Failed to serialize request", e);
+        }
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl)
+                .method("PATCH", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
                 .addHeader("Accept", "application/json")
@@ -601,6 +687,102 @@ public class RawConversationClient {
     }
 
     /**
+     * Generate a structured object response based on a provided schema and user prompt with a streaming response.
+     * The response will be sent as a stream of events containing text, start, and end events.
+     * The text portions of stream responses should be concatenated to form the full response text.
+     * <p>If the user question and object response already exist, they will be reused and not updated.</p>
+     * <p>Concurrency Behavior:</p>
+     * <ul>
+     * <li>If another API call is made for the same user question while a response is mid-stream, partial answers may be returned.</li>
+     * <li>The second caller will receive a truncated or partial response depending on where the first stream is in its processing. The first caller's stream will remain unaffected and continue delivering the full response.</li>
+     * </ul>
+     * <p>Known Limitations:</p>
+     * <ul>
+     * <li>Schema enforcement is best-effort and may not guarantee exact conformity.</li>
+     * <li>The API does not currently expose metadata indicating whether a response or message is incomplete. This will be addressed in a future update.</li>
+     * </ul>
+     */
+    public MavenAGIHttpResponse<Iterable<ObjectStreamResponse>> askObjectStream(
+            String conversationId, AskObjectRequest request) {
+        return askObjectStream(conversationId, request, null);
+    }
+
+    /**
+     * Generate a structured object response based on a provided schema and user prompt with a streaming response.
+     * The response will be sent as a stream of events containing text, start, and end events.
+     * The text portions of stream responses should be concatenated to form the full response text.
+     * <p>If the user question and object response already exist, they will be reused and not updated.</p>
+     * <p>Concurrency Behavior:</p>
+     * <ul>
+     * <li>If another API call is made for the same user question while a response is mid-stream, partial answers may be returned.</li>
+     * <li>The second caller will receive a truncated or partial response depending on where the first stream is in its processing. The first caller's stream will remain unaffected and continue delivering the full response.</li>
+     * </ul>
+     * <p>Known Limitations:</p>
+     * <ul>
+     * <li>Schema enforcement is best-effort and may not guarantee exact conformity.</li>
+     * <li>The API does not currently expose metadata indicating whether a response or message is incomplete. This will be addressed in a future update.</li>
+     * </ul>
+     */
+    public MavenAGIHttpResponse<Iterable<ObjectStreamResponse>> askObjectStream(
+            String conversationId, AskObjectRequest request, RequestOptions requestOptions) {
+        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("v1/conversations")
+                .addPathSegment(conversationId)
+                .addPathSegments("ask_object_stream")
+                .build();
+        RequestBody body;
+        try {
+            body = RequestBody.create(
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
+        } catch (JsonProcessingException e) {
+            throw new MavenAGIException("Failed to serialize request", e);
+        }
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl)
+                .method("POST", body)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
+                .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        try {
+            Response response = client.newCall(okhttpRequest).execute();
+            ResponseBody responseBody = response.body();
+            if (response.isSuccessful()) {
+                return new MavenAGIHttpResponse<>(
+                        Stream.fromSse(ObjectStreamResponse.class, new ResponseBodyReader(response)), response);
+            }
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            try {
+                switch (response.code()) {
+                    case 400:
+                        throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                    case 500:
+                        throw new ServerError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            throw new MavenAGIApiException(
+                    "Error with status code " + response.code(),
+                    response.code(),
+                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                    response);
+        } catch (IOException e) {
+            throw new MavenAGIException("Network error executing HTTP request", e);
+        }
+    }
+
+    /**
      * Uses an LLM flow to categorize the conversation. Experimental.
      */
     public MavenAGIHttpResponse<CategorizationResponse> categorize(String conversationId) {
@@ -995,6 +1177,82 @@ public class RawConversationClient {
             if (response.isSuccessful()) {
                 return new MavenAGIHttpResponse<>(
                         ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), ConversationsResponse.class),
+                        response);
+            }
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            try {
+                switch (response.code()) {
+                    case 400:
+                        throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                    case 500:
+                        throw new ServerError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            throw new MavenAGIApiException(
+                    "Error with status code " + response.code(),
+                    response.code(),
+                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                    response);
+        } catch (IOException e) {
+            throw new MavenAGIException("Network error executing HTTP request", e);
+        }
+    }
+
+    /**
+     * Deliver a message to a user or conversation.
+     * <p>&lt;Warning&gt;
+     * Currently, messages can only be successfully delivered to conversations with the `ASYNC` capability that are `open`.
+     * User message delivery is not yet supported.
+     * &lt;/Warning&gt;</p>
+     */
+    public MavenAGIHttpResponse<DeliverMessageResponse> deliverMessage(DeliverMessageRequest request) {
+        return deliverMessage(request, null);
+    }
+
+    /**
+     * Deliver a message to a user or conversation.
+     * <p>&lt;Warning&gt;
+     * Currently, messages can only be successfully delivered to conversations with the `ASYNC` capability that are `open`.
+     * User message delivery is not yet supported.
+     * &lt;/Warning&gt;</p>
+     */
+    public MavenAGIHttpResponse<DeliverMessageResponse> deliverMessage(
+            DeliverMessageRequest request, RequestOptions requestOptions) {
+        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("v1/conversations")
+                .addPathSegments("deliver-message")
+                .build();
+        RequestBody body;
+        try {
+            body = RequestBody.create(
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
+        } catch (JsonProcessingException e) {
+            throw new MavenAGIException("Failed to serialize request", e);
+        }
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl)
+                .method("POST", body)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
+                .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            if (response.isSuccessful()) {
+                return new MavenAGIHttpResponse<>(
+                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), DeliverMessageResponse.class),
                         response);
             }
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";

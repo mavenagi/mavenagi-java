@@ -18,7 +18,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
@@ -32,11 +31,13 @@ public final class InboxItemDuplicateDocuments implements IInboxItemBase {
 
     private final InboxItemStatus status;
 
+    private final InboxItemSeverity severity;
+
     private final List<InboxItemFixDeactivateDocument> recommendedFixes;
 
     private final List<InboxItemFixDeactivateDocument> otherFixes;
 
-    private final Optional<DocumentInformation> sourceDocument;
+    private final DocumentInformation sourceDocument;
 
     private final List<DocumentInformation> documents;
 
@@ -47,15 +48,17 @@ public final class InboxItemDuplicateDocuments implements IInboxItemBase {
             OffsetDateTime createdAt,
             OffsetDateTime updatedAt,
             InboxItemStatus status,
+            InboxItemSeverity severity,
             List<InboxItemFixDeactivateDocument> recommendedFixes,
             List<InboxItemFixDeactivateDocument> otherFixes,
-            Optional<DocumentInformation> sourceDocument,
+            DocumentInformation sourceDocument,
             List<DocumentInformation> documents,
             Map<String, Object> additionalProperties) {
         this.id = id;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.status = status;
+        this.severity = severity;
         this.recommendedFixes = recommendedFixes;
         this.otherFixes = otherFixes;
         this.sourceDocument = sourceDocument;
@@ -100,6 +103,15 @@ public final class InboxItemDuplicateDocuments implements IInboxItemBase {
     }
 
     /**
+     * @return Severity of the inbox item.
+     */
+    @JsonProperty("severity")
+    @java.lang.Override
+    public InboxItemSeverity getSeverity() {
+        return severity;
+    }
+
+    /**
      * @return The fix recommended for being applied
      */
     @JsonProperty("recommendedFixes")
@@ -119,7 +131,7 @@ public final class InboxItemDuplicateDocuments implements IInboxItemBase {
      * @return Information about the source document associated with the inbox item.
      */
     @JsonProperty("sourceDocument")
-    public Optional<DocumentInformation> getSourceDocument() {
+    public DocumentInformation getSourceDocument() {
         return sourceDocument;
     }
 
@@ -147,6 +159,7 @@ public final class InboxItemDuplicateDocuments implements IInboxItemBase {
                 && createdAt.equals(other.createdAt)
                 && updatedAt.equals(other.updatedAt)
                 && status.equals(other.status)
+                && severity.equals(other.severity)
                 && recommendedFixes.equals(other.recommendedFixes)
                 && otherFixes.equals(other.otherFixes)
                 && sourceDocument.equals(other.sourceDocument)
@@ -160,6 +173,7 @@ public final class InboxItemDuplicateDocuments implements IInboxItemBase {
                 this.createdAt,
                 this.updatedAt,
                 this.status,
+                this.severity,
                 this.recommendedFixes,
                 this.otherFixes,
                 this.sourceDocument,
@@ -202,7 +216,21 @@ public final class InboxItemDuplicateDocuments implements IInboxItemBase {
         /**
          * <p>Status of the inbox item.</p>
          */
-        _FinalStage status(@NotNull InboxItemStatus status);
+        SeverityStage status(@NotNull InboxItemStatus status);
+    }
+
+    public interface SeverityStage {
+        /**
+         * <p>Severity of the inbox item.</p>
+         */
+        SourceDocumentStage severity(@NotNull InboxItemSeverity severity);
+    }
+
+    public interface SourceDocumentStage {
+        /**
+         * <p>Information about the source document associated with the inbox item.</p>
+         */
+        _FinalStage sourceDocument(@NotNull DocumentInformation sourceDocument);
     }
 
     public interface _FinalStage {
@@ -227,13 +255,6 @@ public final class InboxItemDuplicateDocuments implements IInboxItemBase {
         _FinalStage addAllOtherFixes(List<InboxItemFixDeactivateDocument> otherFixes);
 
         /**
-         * <p>Information about the source document associated with the inbox item.</p>
-         */
-        _FinalStage sourceDocument(Optional<DocumentInformation> sourceDocument);
-
-        _FinalStage sourceDocument(DocumentInformation sourceDocument);
-
-        /**
          * <p>List of Document information objects related to the inbox item.</p>
          */
         _FinalStage documents(List<DocumentInformation> documents);
@@ -244,7 +265,14 @@ public final class InboxItemDuplicateDocuments implements IInboxItemBase {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements IdStage, CreatedAtStage, UpdatedAtStage, StatusStage, _FinalStage {
+    public static final class Builder
+            implements IdStage,
+                    CreatedAtStage,
+                    UpdatedAtStage,
+                    StatusStage,
+                    SeverityStage,
+                    SourceDocumentStage,
+                    _FinalStage {
         private EntityId id;
 
         private OffsetDateTime createdAt;
@@ -253,9 +281,11 @@ public final class InboxItemDuplicateDocuments implements IInboxItemBase {
 
         private InboxItemStatus status;
 
-        private List<DocumentInformation> documents = new ArrayList<>();
+        private InboxItemSeverity severity;
 
-        private Optional<DocumentInformation> sourceDocument = Optional.empty();
+        private DocumentInformation sourceDocument;
+
+        private List<DocumentInformation> documents = new ArrayList<>();
 
         private List<InboxItemFixDeactivateDocument> otherFixes = new ArrayList<>();
 
@@ -272,6 +302,7 @@ public final class InboxItemDuplicateDocuments implements IInboxItemBase {
             createdAt(other.getCreatedAt());
             updatedAt(other.getUpdatedAt());
             status(other.getStatus());
+            severity(other.getSeverity());
             recommendedFixes(other.getRecommendedFixes());
             otherFixes(other.getOtherFixes());
             sourceDocument(other.getSourceDocument());
@@ -322,8 +353,32 @@ public final class InboxItemDuplicateDocuments implements IInboxItemBase {
          */
         @java.lang.Override
         @JsonSetter("status")
-        public _FinalStage status(@NotNull InboxItemStatus status) {
+        public SeverityStage status(@NotNull InboxItemStatus status) {
             this.status = Objects.requireNonNull(status, "status must not be null");
+            return this;
+        }
+
+        /**
+         * <p>Severity of the inbox item.</p>
+         * <p>Severity of the inbox item.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("severity")
+        public SourceDocumentStage severity(@NotNull InboxItemSeverity severity) {
+            this.severity = Objects.requireNonNull(severity, "severity must not be null");
+            return this;
+        }
+
+        /**
+         * <p>Information about the source document associated with the inbox item.</p>
+         * <p>Information about the source document associated with the inbox item.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("sourceDocument")
+        public _FinalStage sourceDocument(@NotNull DocumentInformation sourceDocument) {
+            this.sourceDocument = Objects.requireNonNull(sourceDocument, "sourceDocument must not be null");
             return this;
         }
 
@@ -355,26 +410,6 @@ public final class InboxItemDuplicateDocuments implements IInboxItemBase {
         public _FinalStage documents(List<DocumentInformation> documents) {
             this.documents.clear();
             this.documents.addAll(documents);
-            return this;
-        }
-
-        /**
-         * <p>Information about the source document associated with the inbox item.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage sourceDocument(DocumentInformation sourceDocument) {
-            this.sourceDocument = Optional.ofNullable(sourceDocument);
-            return this;
-        }
-
-        /**
-         * <p>Information about the source document associated with the inbox item.</p>
-         */
-        @java.lang.Override
-        @JsonSetter(value = "sourceDocument", nulls = Nulls.SKIP)
-        public _FinalStage sourceDocument(Optional<DocumentInformation> sourceDocument) {
-            this.sourceDocument = sourceDocument;
             return this;
         }
 
@@ -447,6 +482,7 @@ public final class InboxItemDuplicateDocuments implements IInboxItemBase {
                     createdAt,
                     updatedAt,
                     status,
+                    severity,
                     recommendedFixes,
                     otherFixes,
                     sourceDocument,

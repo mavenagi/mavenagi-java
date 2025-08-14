@@ -13,7 +13,7 @@ Instantiate and use the client with the following:
 package com.example.usage;
 
 import com.mavenagi.MavenAGI;
-import com.mavenagi.resources.agents.types.AgentsSearchRequest;
+import com.mavenagi.resources.actions.types.ActionsSearchRequest;
 
 public class Example {
     public static void main(String[] args) {
@@ -22,8 +22,8 @@ public class Example {
             .credentials("<username>", "<password>")
             .build();
 
-        client.agents().search(
-            AgentsSearchRequest
+        client.actions().search(
+            ActionsSearchRequest
                 .builder()
                 .build()
         );
@@ -66,7 +66,7 @@ When the API returns a non-success status code (4xx or 5xx response), an API exc
 import com.mavenagi.core.MavenagiApiApiException;
 
 try {
-    client.agents().search(...);
+    client.actions().search(...);
 } catch (MavenagiApiApiException e) {
     // Do something with the API exception...
 }
@@ -129,7 +129,7 @@ MavenAGI client = MavenAGI
     .build();
 
 // Request level
-client.agents().search(
+client.actions().search(
     ...,
     RequestOptions
         .builder()
@@ -167,6 +167,6 @@ Add the dependency in your `pom.xml` file:
 <dependency>
   <groupId>com.mavenagi</groupId>
   <artifactId>mavenagi-java</artifactId>
-  <version>1.1.0</version>
+  <version>1.2.0</version>
 </dependency>
 ```

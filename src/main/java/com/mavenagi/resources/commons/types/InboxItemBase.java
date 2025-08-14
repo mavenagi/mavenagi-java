@@ -28,6 +28,8 @@ public final class InboxItemBase implements IInboxItemBase {
 
     private final InboxItemStatus status;
 
+    private final InboxItemSeverity severity;
+
     private final Map<String, Object> additionalProperties;
 
     private InboxItemBase(
@@ -35,11 +37,13 @@ public final class InboxItemBase implements IInboxItemBase {
             OffsetDateTime createdAt,
             OffsetDateTime updatedAt,
             InboxItemStatus status,
+            InboxItemSeverity severity,
             Map<String, Object> additionalProperties) {
         this.id = id;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.status = status;
+        this.severity = severity;
         this.additionalProperties = additionalProperties;
     }
 
@@ -79,6 +83,15 @@ public final class InboxItemBase implements IInboxItemBase {
         return status;
     }
 
+    /**
+     * @return Severity of the inbox item.
+     */
+    @JsonProperty("severity")
+    @java.lang.Override
+    public InboxItemSeverity getSeverity() {
+        return severity;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -94,12 +107,13 @@ public final class InboxItemBase implements IInboxItemBase {
         return id.equals(other.id)
                 && createdAt.equals(other.createdAt)
                 && updatedAt.equals(other.updatedAt)
-                && status.equals(other.status);
+                && status.equals(other.status)
+                && severity.equals(other.severity);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.id, this.createdAt, this.updatedAt, this.status);
+        return Objects.hash(this.id, this.createdAt, this.updatedAt, this.status, this.severity);
     }
 
     @java.lang.Override
@@ -138,7 +152,14 @@ public final class InboxItemBase implements IInboxItemBase {
         /**
          * <p>Status of the inbox item.</p>
          */
-        _FinalStage status(@NotNull InboxItemStatus status);
+        SeverityStage status(@NotNull InboxItemStatus status);
+    }
+
+    public interface SeverityStage {
+        /**
+         * <p>Severity of the inbox item.</p>
+         */
+        _FinalStage severity(@NotNull InboxItemSeverity severity);
     }
 
     public interface _FinalStage {
@@ -146,7 +167,8 @@ public final class InboxItemBase implements IInboxItemBase {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements IdStage, CreatedAtStage, UpdatedAtStage, StatusStage, _FinalStage {
+    public static final class Builder
+            implements IdStage, CreatedAtStage, UpdatedAtStage, StatusStage, SeverityStage, _FinalStage {
         private EntityId id;
 
         private OffsetDateTime createdAt;
@@ -154,6 +176,8 @@ public final class InboxItemBase implements IInboxItemBase {
         private OffsetDateTime updatedAt;
 
         private InboxItemStatus status;
+
+        private InboxItemSeverity severity;
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -166,6 +190,7 @@ public final class InboxItemBase implements IInboxItemBase {
             createdAt(other.getCreatedAt());
             updatedAt(other.getUpdatedAt());
             status(other.getStatus());
+            severity(other.getSeverity());
             return this;
         }
 
@@ -212,14 +237,26 @@ public final class InboxItemBase implements IInboxItemBase {
          */
         @java.lang.Override
         @JsonSetter("status")
-        public _FinalStage status(@NotNull InboxItemStatus status) {
+        public SeverityStage status(@NotNull InboxItemStatus status) {
             this.status = Objects.requireNonNull(status, "status must not be null");
+            return this;
+        }
+
+        /**
+         * <p>Severity of the inbox item.</p>
+         * <p>Severity of the inbox item.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("severity")
+        public _FinalStage severity(@NotNull InboxItemSeverity severity) {
+            this.severity = Objects.requireNonNull(severity, "severity must not be null");
             return this;
         }
 
         @java.lang.Override
         public InboxItemBase build() {
-            return new InboxItemBase(id, createdAt, updatedAt, status, additionalProperties);
+            return new InboxItemBase(id, createdAt, updatedAt, status, severity, additionalProperties);
         }
     }
 }

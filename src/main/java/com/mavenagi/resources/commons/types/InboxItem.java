@@ -26,32 +26,16 @@ public final class InboxItem {
         return value.visit(visitor);
     }
 
-    public static InboxItem duplicateKnowledgeBase(InboxItemDuplicateKnowledgeBase value) {
-        return new InboxItem(new DuplicateKnowledgeBaseValue(value));
-    }
-
     public static InboxItem duplicateDocuments(InboxItemDuplicateDocuments value) {
         return new InboxItem(new DuplicateDocumentsValue(value));
-    }
-
-    public static InboxItem knowledgeBaseAlert(InboxItemKnowledgeBaseAlert value) {
-        return new InboxItem(new KnowledgeBaseAlertValue(value));
     }
 
     public static InboxItem missingKnowledge(InboxItemMissingKnowledge value) {
         return new InboxItem(new MissingKnowledgeValue(value));
     }
 
-    public boolean isDuplicateKnowledgeBase() {
-        return value instanceof DuplicateKnowledgeBaseValue;
-    }
-
     public boolean isDuplicateDocuments() {
         return value instanceof DuplicateDocumentsValue;
-    }
-
-    public boolean isKnowledgeBaseAlert() {
-        return value instanceof KnowledgeBaseAlertValue;
     }
 
     public boolean isMissingKnowledge() {
@@ -62,23 +46,9 @@ public final class InboxItem {
         return value instanceof _UnknownValue;
     }
 
-    public Optional<InboxItemDuplicateKnowledgeBase> getDuplicateKnowledgeBase() {
-        if (isDuplicateKnowledgeBase()) {
-            return Optional.of(((DuplicateKnowledgeBaseValue) value).value);
-        }
-        return Optional.empty();
-    }
-
     public Optional<InboxItemDuplicateDocuments> getDuplicateDocuments() {
         if (isDuplicateDocuments()) {
             return Optional.of(((DuplicateDocumentsValue) value).value);
-        }
-        return Optional.empty();
-    }
-
-    public Optional<InboxItemKnowledgeBaseAlert> getKnowledgeBaseAlert() {
-        if (isKnowledgeBaseAlert()) {
-            return Optional.of(((KnowledgeBaseAlertValue) value).value);
         }
         return Optional.empty();
     }
@@ -103,11 +73,7 @@ public final class InboxItem {
     }
 
     public interface Visitor<T> {
-        T visitDuplicateKnowledgeBase(InboxItemDuplicateKnowledgeBase duplicateKnowledgeBase);
-
         T visitDuplicateDocuments(InboxItemDuplicateDocuments duplicateDocuments);
-
-        T visitKnowledgeBaseAlert(InboxItemKnowledgeBaseAlert knowledgeBaseAlert);
 
         T visitMissingKnowledge(InboxItemMissingKnowledge missingKnowledge);
 
@@ -115,54 +81,10 @@ public final class InboxItem {
     }
 
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", visible = true, defaultImpl = _UnknownValue.class)
-    @JsonSubTypes({
-        @JsonSubTypes.Type(DuplicateKnowledgeBaseValue.class),
-        @JsonSubTypes.Type(DuplicateDocumentsValue.class),
-        @JsonSubTypes.Type(KnowledgeBaseAlertValue.class),
-        @JsonSubTypes.Type(MissingKnowledgeValue.class)
-    })
+    @JsonSubTypes({@JsonSubTypes.Type(DuplicateDocumentsValue.class), @JsonSubTypes.Type(MissingKnowledgeValue.class)})
     @JsonIgnoreProperties(ignoreUnknown = true)
     private interface Value {
         <T> T visit(Visitor<T> visitor);
-    }
-
-    @JsonTypeName("duplicateKnowledgeBase")
-    @JsonIgnoreProperties("type")
-    private static final class DuplicateKnowledgeBaseValue implements Value {
-        @JsonUnwrapped
-        private InboxItemDuplicateKnowledgeBase value;
-
-        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-        private DuplicateKnowledgeBaseValue() {}
-
-        private DuplicateKnowledgeBaseValue(InboxItemDuplicateKnowledgeBase value) {
-            this.value = value;
-        }
-
-        @java.lang.Override
-        public <T> T visit(Visitor<T> visitor) {
-            return visitor.visitDuplicateKnowledgeBase(value);
-        }
-
-        @java.lang.Override
-        public boolean equals(Object other) {
-            if (this == other) return true;
-            return other instanceof DuplicateKnowledgeBaseValue && equalTo((DuplicateKnowledgeBaseValue) other);
-        }
-
-        private boolean equalTo(DuplicateKnowledgeBaseValue other) {
-            return value.equals(other.value);
-        }
-
-        @java.lang.Override
-        public int hashCode() {
-            return Objects.hash(this.value);
-        }
-
-        @java.lang.Override
-        public String toString() {
-            return "InboxItem{" + "value: " + value + "}";
-        }
     }
 
     @JsonTypeName("duplicateDocuments")
@@ -190,45 +112,6 @@ public final class InboxItem {
         }
 
         private boolean equalTo(DuplicateDocumentsValue other) {
-            return value.equals(other.value);
-        }
-
-        @java.lang.Override
-        public int hashCode() {
-            return Objects.hash(this.value);
-        }
-
-        @java.lang.Override
-        public String toString() {
-            return "InboxItem{" + "value: " + value + "}";
-        }
-    }
-
-    @JsonTypeName("knowledgeBaseAlert")
-    @JsonIgnoreProperties("type")
-    private static final class KnowledgeBaseAlertValue implements Value {
-        @JsonUnwrapped
-        private InboxItemKnowledgeBaseAlert value;
-
-        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-        private KnowledgeBaseAlertValue() {}
-
-        private KnowledgeBaseAlertValue(InboxItemKnowledgeBaseAlert value) {
-            this.value = value;
-        }
-
-        @java.lang.Override
-        public <T> T visit(Visitor<T> visitor) {
-            return visitor.visitKnowledgeBaseAlert(value);
-        }
-
-        @java.lang.Override
-        public boolean equals(Object other) {
-            if (this == other) return true;
-            return other instanceof KnowledgeBaseAlertValue && equalTo((KnowledgeBaseAlertValue) other);
-        }
-
-        private boolean equalTo(KnowledgeBaseAlertValue other) {
             return value.equals(other.value);
         }
 

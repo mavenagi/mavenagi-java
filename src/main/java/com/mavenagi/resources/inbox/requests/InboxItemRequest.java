@@ -11,7 +11,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
-import com.mavenagi.resources.commons.types.InboxItemType;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -22,13 +21,10 @@ import org.jetbrains.annotations.NotNull;
 public final class InboxItemRequest {
     private final String appId;
 
-    private final InboxItemType itemType;
-
     private final Map<String, Object> additionalProperties;
 
-    private InboxItemRequest(String appId, InboxItemType itemType, Map<String, Object> additionalProperties) {
+    private InboxItemRequest(String appId, Map<String, Object> additionalProperties) {
         this.appId = appId;
-        this.itemType = itemType;
         this.additionalProperties = additionalProperties;
     }
 
@@ -38,14 +34,6 @@ public final class InboxItemRequest {
     @JsonProperty("appId")
     public String getAppId() {
         return appId;
-    }
-
-    /**
-     * @return The type of the inbox item to retrieve
-     */
-    @JsonProperty("itemType")
-    public InboxItemType getItemType() {
-        return itemType;
     }
 
     @java.lang.Override
@@ -60,12 +48,12 @@ public final class InboxItemRequest {
     }
 
     private boolean equalTo(InboxItemRequest other) {
-        return appId.equals(other.appId) && itemType.equals(other.itemType);
+        return appId.equals(other.appId);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.appId, this.itemType);
+        return Objects.hash(this.appId);
     }
 
     @java.lang.Override
@@ -81,16 +69,9 @@ public final class InboxItemRequest {
         /**
          * <p>The App ID of the inbox item to retrieve</p>
          */
-        ItemTypeStage appId(@NotNull String appId);
+        _FinalStage appId(@NotNull String appId);
 
         Builder from(InboxItemRequest other);
-    }
-
-    public interface ItemTypeStage {
-        /**
-         * <p>The type of the inbox item to retrieve</p>
-         */
-        _FinalStage itemType(@NotNull InboxItemType itemType);
     }
 
     public interface _FinalStage {
@@ -98,10 +79,8 @@ public final class InboxItemRequest {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements AppIdStage, ItemTypeStage, _FinalStage {
+    public static final class Builder implements AppIdStage, _FinalStage {
         private String appId;
-
-        private InboxItemType itemType;
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -111,7 +90,6 @@ public final class InboxItemRequest {
         @java.lang.Override
         public Builder from(InboxItemRequest other) {
             appId(other.getAppId());
-            itemType(other.getItemType());
             return this;
         }
 
@@ -122,26 +100,14 @@ public final class InboxItemRequest {
          */
         @java.lang.Override
         @JsonSetter("appId")
-        public ItemTypeStage appId(@NotNull String appId) {
+        public _FinalStage appId(@NotNull String appId) {
             this.appId = Objects.requireNonNull(appId, "appId must not be null");
-            return this;
-        }
-
-        /**
-         * <p>The type of the inbox item to retrieve</p>
-         * <p>The type of the inbox item to retrieve</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("itemType")
-        public _FinalStage itemType(@NotNull InboxItemType itemType) {
-            this.itemType = Objects.requireNonNull(itemType, "itemType must not be null");
             return this;
         }
 
         @java.lang.Override
         public InboxItemRequest build() {
-            return new InboxItemRequest(appId, itemType, additionalProperties);
+            return new InboxItemRequest(appId, additionalProperties);
         }
     }
 }

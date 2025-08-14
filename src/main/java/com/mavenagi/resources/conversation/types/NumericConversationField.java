@@ -16,7 +16,9 @@ public enum NumericConversationField {
 
     HANDLE_TIME("HandleTime"),
 
-    FIRST_RESPONSE_TIME("FirstResponseTime");
+    FIRST_RESPONSE_TIME("FirstResponseTime"),
+
+    PREDICTED_NPS("PredictedNPS");
 
     private final String value;
 

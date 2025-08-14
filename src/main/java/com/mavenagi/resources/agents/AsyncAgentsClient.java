@@ -6,8 +6,10 @@ package com.mavenagi.resources.agents;
 import com.mavenagi.core.ClientOptions;
 import com.mavenagi.core.RequestOptions;
 import com.mavenagi.resources.agents.types.Agent;
+import com.mavenagi.resources.agents.types.AgentPatchRequest;
 import com.mavenagi.resources.agents.types.AgentsSearchRequest;
 import com.mavenagi.resources.agents.types.AgentsSearchResponse;
+import com.mavenagi.resources.agents.types.CreateAgentRequest;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -73,6 +75,35 @@ public class AsyncAgentsClient {
     }
 
     /**
+     * Create a new agent
+     * <p>&lt;Tip&gt;
+     * This endpoint requires additional permissions. Contact support to request access.
+     * &lt;/Tip&gt;</p>
+     */
+    public CompletableFuture<Agent> create(
+            String organizationReferenceId, String agentReferenceId, CreateAgentRequest request) {
+        return this.rawClient
+                .create(organizationReferenceId, agentReferenceId, request)
+                .thenApply(response -> response.body());
+    }
+
+    /**
+     * Create a new agent
+     * <p>&lt;Tip&gt;
+     * This endpoint requires additional permissions. Contact support to request access.
+     * &lt;/Tip&gt;</p>
+     */
+    public CompletableFuture<Agent> create(
+            String organizationReferenceId,
+            String agentReferenceId,
+            CreateAgentRequest request,
+            RequestOptions requestOptions) {
+        return this.rawClient
+                .create(organizationReferenceId, agentReferenceId, request, requestOptions)
+                .thenApply(response -> response.body());
+    }
+
+    /**
      * Get an agent
      */
     public CompletableFuture<Agent> get(String organizationReferenceId, String agentReferenceId) {
@@ -86,6 +117,71 @@ public class AsyncAgentsClient {
             String organizationReferenceId, String agentReferenceId, RequestOptions requestOptions) {
         return this.rawClient
                 .get(organizationReferenceId, agentReferenceId, requestOptions)
+                .thenApply(response -> response.body());
+    }
+
+    /**
+     * Update mutable agent fields
+     * All fields will overwrite the existing value on the agent only if provided.
+     * <p>&lt;Tip&gt;
+     * This endpoint requires additional permissions. Contact support to request access.
+     * &lt;/Tip&gt;</p>
+     */
+    public CompletableFuture<Agent> patch(String organizationReferenceId, String agentReferenceId) {
+        return this.rawClient.patch(organizationReferenceId, agentReferenceId).thenApply(response -> response.body());
+    }
+
+    /**
+     * Update mutable agent fields
+     * All fields will overwrite the existing value on the agent only if provided.
+     * <p>&lt;Tip&gt;
+     * This endpoint requires additional permissions. Contact support to request access.
+     * &lt;/Tip&gt;</p>
+     */
+    public CompletableFuture<Agent> patch(
+            String organizationReferenceId, String agentReferenceId, AgentPatchRequest request) {
+        return this.rawClient
+                .patch(organizationReferenceId, agentReferenceId, request)
+                .thenApply(response -> response.body());
+    }
+
+    /**
+     * Update mutable agent fields
+     * All fields will overwrite the existing value on the agent only if provided.
+     * <p>&lt;Tip&gt;
+     * This endpoint requires additional permissions. Contact support to request access.
+     * &lt;/Tip&gt;</p>
+     */
+    public CompletableFuture<Agent> patch(
+            String organizationReferenceId,
+            String agentReferenceId,
+            AgentPatchRequest request,
+            RequestOptions requestOptions) {
+        return this.rawClient
+                .patch(organizationReferenceId, agentReferenceId, request, requestOptions)
+                .thenApply(response -> response.body());
+    }
+
+    /**
+     * Delete an agent.
+     * <p>&lt;Tip&gt;
+     * This endpoint requires additional permissions. Contact support to request access.
+     * &lt;/Tip&gt;</p>
+     */
+    public CompletableFuture<Void> delete(String organizationReferenceId, String agentReferenceId) {
+        return this.rawClient.delete(organizationReferenceId, agentReferenceId).thenApply(response -> response.body());
+    }
+
+    /**
+     * Delete an agent.
+     * <p>&lt;Tip&gt;
+     * This endpoint requires additional permissions. Contact support to request access.
+     * &lt;/Tip&gt;</p>
+     */
+    public CompletableFuture<Void> delete(
+            String organizationReferenceId, String agentReferenceId, RequestOptions requestOptions) {
+        return this.rawClient
+                .delete(organizationReferenceId, agentReferenceId, requestOptions)
                 .thenApply(response -> response.body());
     }
 }

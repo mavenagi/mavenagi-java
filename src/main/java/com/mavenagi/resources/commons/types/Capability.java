@@ -12,7 +12,9 @@ public enum Capability {
 
     IMAGES("IMAGES"),
 
-    CHARTS_HIGHCHARTS_TS("CHARTS_HIGHCHARTS_TS");
+    CHARTS_HIGHCHARTS_TS("CHARTS_HIGHCHARTS_TS"),
+
+    ASYNC("ASYNC");
 
     private final String value;
 
