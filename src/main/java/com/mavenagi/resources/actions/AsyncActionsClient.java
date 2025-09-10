@@ -6,7 +6,7 @@ package com.mavenagi.resources.actions;
 import com.mavenagi.core.ClientOptions;
 import com.mavenagi.core.RequestOptions;
 import com.mavenagi.resources.actions.requests.ActionGetRequest;
-import com.mavenagi.resources.actions.types.ActionPatchRequest;
+import com.mavenagi.resources.actions.requests.ActionPatchRequest;
 import com.mavenagi.resources.actions.types.ActionRequest;
 import com.mavenagi.resources.actions.types.ActionsResponse;
 import com.mavenagi.resources.actions.types.ActionsSearchRequest;

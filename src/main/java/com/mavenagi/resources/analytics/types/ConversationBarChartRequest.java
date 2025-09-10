@@ -24,6 +24,8 @@ import org.jetbrains.annotations.NotNull;
 public final class ConversationBarChartRequest implements IConversationAnalyticsRequest {
     private final Optional<ConversationFilter> conversationFilter;
 
+    private final Optional<String> timezone;
+
     private final ConversationGroupBy barDefinition;
 
     private final ConversationMetric metric;
@@ -34,11 +36,13 @@ public final class ConversationBarChartRequest implements IConversationAnalytics
 
     private ConversationBarChartRequest(
             Optional<ConversationFilter> conversationFilter,
+            Optional<String> timezone,
             ConversationGroupBy barDefinition,
             ConversationMetric metric,
             Optional<ConversationGroupBy> verticalGrouping,
             Map<String, Object> additionalProperties) {
         this.conversationFilter = conversationFilter;
+        this.timezone = timezone;
         this.barDefinition = barDefinition;
         this.metric = metric;
         this.verticalGrouping = verticalGrouping;
@@ -52,6 +56,17 @@ public final class ConversationBarChartRequest implements IConversationAnalytics
     @java.lang.Override
     public Optional<ConversationFilter> getConversationFilter() {
         return conversationFilter;
+    }
+
+    /**
+     * @return IANA timezone identifier (e.g., &quot;America/Los_Angeles&quot;).
+     * When provided, time-based groupings (e.g., DAY) and date filters are evaluated in this timezone;
+     * otherwise UTC is used.
+     */
+    @JsonProperty("timezone")
+    @java.lang.Override
+    public Optional<String> getTimezone() {
+        return timezone;
     }
 
     /**
@@ -93,6 +108,7 @@ public final class ConversationBarChartRequest implements IConversationAnalytics
 
     private boolean equalTo(ConversationBarChartRequest other) {
         return conversationFilter.equals(other.conversationFilter)
+                && timezone.equals(other.timezone)
                 && barDefinition.equals(other.barDefinition)
                 && metric.equals(other.metric)
                 && verticalGrouping.equals(other.verticalGrouping);
@@ -100,7 +116,8 @@ public final class ConversationBarChartRequest implements IConversationAnalytics
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.conversationFilter, this.barDefinition, this.metric, this.verticalGrouping);
+        return Objects.hash(
+                this.conversationFilter, this.timezone, this.barDefinition, this.metric, this.verticalGrouping);
     }
 
     @java.lang.Override
@@ -140,6 +157,15 @@ public final class ConversationBarChartRequest implements IConversationAnalytics
         _FinalStage conversationFilter(ConversationFilter conversationFilter);
 
         /**
+         * <p>IANA timezone identifier (e.g., &quot;America/Los_Angeles&quot;).
+         * When provided, time-based groupings (e.g., DAY) and date filters are evaluated in this timezone;
+         * otherwise UTC is used.</p>
+         */
+        _FinalStage timezone(Optional<String> timezone);
+
+        _FinalStage timezone(String timezone);
+
+        /**
          * <p>Optionally defines vertical grouping within each bar, producing multiple series.
          * If omitted, a single series is generated.</p>
          */
@@ -156,6 +182,8 @@ public final class ConversationBarChartRequest implements IConversationAnalytics
 
         private Optional<ConversationGroupBy> verticalGrouping = Optional.empty();
 
+        private Optional<String> timezone = Optional.empty();
+
         private Optional<ConversationFilter> conversationFilter = Optional.empty();
 
         @JsonAnySetter
@@ -166,6 +194,7 @@ public final class ConversationBarChartRequest implements IConversationAnalytics
         @java.lang.Override
         public Builder from(ConversationBarChartRequest other) {
             conversationFilter(other.getConversationFilter());
+            timezone(other.getTimezone());
             barDefinition(other.getBarDefinition());
             metric(other.getMetric());
             verticalGrouping(other.getVerticalGrouping());
@@ -221,6 +250,30 @@ public final class ConversationBarChartRequest implements IConversationAnalytics
         }
 
         /**
+         * <p>IANA timezone identifier (e.g., &quot;America/Los_Angeles&quot;).
+         * When provided, time-based groupings (e.g., DAY) and date filters are evaluated in this timezone;
+         * otherwise UTC is used.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage timezone(String timezone) {
+            this.timezone = Optional.ofNullable(timezone);
+            return this;
+        }
+
+        /**
+         * <p>IANA timezone identifier (e.g., &quot;America/Los_Angeles&quot;).
+         * When provided, time-based groupings (e.g., DAY) and date filters are evaluated in this timezone;
+         * otherwise UTC is used.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "timezone", nulls = Nulls.SKIP)
+        public _FinalStage timezone(Optional<String> timezone) {
+            this.timezone = timezone;
+            return this;
+        }
+
+        /**
          * <p>Optional filter applied to refine the conversation data before processing.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -243,7 +296,7 @@ public final class ConversationBarChartRequest implements IConversationAnalytics
         @java.lang.Override
         public ConversationBarChartRequest build() {
             return new ConversationBarChartRequest(
-                    conversationFilter, barDefinition, metric, verticalGrouping, additionalProperties);
+                    conversationFilter, timezone, barDefinition, metric, verticalGrouping, additionalProperties);
         }
     }
 }

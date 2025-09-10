@@ -19,6 +19,9 @@ import com.mavenagi.resources.commons.errors.BadRequestError;
 import com.mavenagi.resources.commons.errors.NotFoundError;
 import com.mavenagi.resources.commons.errors.ServerError;
 import com.mavenagi.resources.commons.types.ErrorMessage;
+import com.mavenagi.resources.organizations.types.CreateOrganizationRequest;
+import com.mavenagi.resources.organizations.types.Organization;
+import com.mavenagi.resources.organizations.types.OrganizationPatchRequest;
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 import okhttp3.Call;
@@ -37,6 +40,369 @@ public class AsyncRawOrganizationsClient {
 
     public AsyncRawOrganizationsClient(ClientOptions clientOptions) {
         this.clientOptions = clientOptions;
+    }
+
+    /**
+     * Create a new organization.
+     * <p>&lt;Tip&gt;
+     * This endpoint requires additional permissions. Contact support to request access.
+     * &lt;/Tip&gt;</p>
+     */
+    public CompletableFuture<MavenAGIHttpResponse<Organization>> create(
+            String organizationReferenceId, CreateOrganizationRequest request) {
+        return create(organizationReferenceId, request, null);
+    }
+
+    /**
+     * Create a new organization.
+     * <p>&lt;Tip&gt;
+     * This endpoint requires additional permissions. Contact support to request access.
+     * &lt;/Tip&gt;</p>
+     */
+    public CompletableFuture<MavenAGIHttpResponse<Organization>> create(
+            String organizationReferenceId, CreateOrganizationRequest request, RequestOptions requestOptions) {
+        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("v1/organizations")
+                .addPathSegment(organizationReferenceId)
+                .build();
+        RequestBody body;
+        try {
+            body = RequestBody.create(
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
+        } catch (JsonProcessingException e) {
+            throw new MavenAGIException("Failed to serialize request", e);
+        }
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl)
+                .method("POST", body)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
+                .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        CompletableFuture<MavenAGIHttpResponse<Organization>> future = new CompletableFuture<>();
+        client.newCall(okhttpRequest).enqueue(new Callback() {
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                try (ResponseBody responseBody = response.body()) {
+                    if (response.isSuccessful()) {
+                        future.complete(new MavenAGIHttpResponse<>(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), Organization.class),
+                                response));
+                        return;
+                    }
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+                    try {
+                        switch (response.code()) {
+                            case 400:
+                                future.completeExceptionally(new BadRequestError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
+                                        response));
+                                return;
+                            case 404:
+                                future.completeExceptionally(new NotFoundError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
+                                        response));
+                                return;
+                            case 500:
+                                future.completeExceptionally(new ServerError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
+                                        response));
+                                return;
+                        }
+                    } catch (JsonProcessingException ignored) {
+                        // unable to map error response, throwing generic error
+                    }
+                    future.completeExceptionally(new MavenAGIApiException(
+                            "Error with status code " + response.code(),
+                            response.code(),
+                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                            response));
+                    return;
+                } catch (IOException e) {
+                    future.completeExceptionally(new MavenAGIException("Network error executing HTTP request", e));
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                future.completeExceptionally(new MavenAGIException("Network error executing HTTP request", e));
+            }
+        });
+        return future;
+    }
+
+    /**
+     * Get an organization by ID
+     */
+    public CompletableFuture<MavenAGIHttpResponse<Organization>> get(String organizationReferenceId) {
+        return get(organizationReferenceId, null);
+    }
+
+    /**
+     * Get an organization by ID
+     */
+    public CompletableFuture<MavenAGIHttpResponse<Organization>> get(
+            String organizationReferenceId, RequestOptions requestOptions) {
+        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("v1/organizations")
+                .addPathSegment(organizationReferenceId)
+                .build();
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl)
+                .method("GET", null)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Accept", "application/json")
+                .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        CompletableFuture<MavenAGIHttpResponse<Organization>> future = new CompletableFuture<>();
+        client.newCall(okhttpRequest).enqueue(new Callback() {
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                try (ResponseBody responseBody = response.body()) {
+                    if (response.isSuccessful()) {
+                        future.complete(new MavenAGIHttpResponse<>(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), Organization.class),
+                                response));
+                        return;
+                    }
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+                    try {
+                        switch (response.code()) {
+                            case 400:
+                                future.completeExceptionally(new BadRequestError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
+                                        response));
+                                return;
+                            case 404:
+                                future.completeExceptionally(new NotFoundError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
+                                        response));
+                                return;
+                            case 500:
+                                future.completeExceptionally(new ServerError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
+                                        response));
+                                return;
+                        }
+                    } catch (JsonProcessingException ignored) {
+                        // unable to map error response, throwing generic error
+                    }
+                    future.completeExceptionally(new MavenAGIApiException(
+                            "Error with status code " + response.code(),
+                            response.code(),
+                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                            response));
+                    return;
+                } catch (IOException e) {
+                    future.completeExceptionally(new MavenAGIException("Network error executing HTTP request", e));
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                future.completeExceptionally(new MavenAGIException("Network error executing HTTP request", e));
+            }
+        });
+        return future;
+    }
+
+    /**
+     * Update mutable organization fields.
+     * All fields will overwrite the existing value on the organization only if provided.
+     * <p>&lt;Tip&gt;
+     * This endpoint requires additional permissions. Contact support to request access.
+     * &lt;/Tip&gt;</p>
+     */
+    public CompletableFuture<MavenAGIHttpResponse<Organization>> patch(String organizationReferenceId) {
+        return patch(organizationReferenceId, OrganizationPatchRequest.builder().build());
+    }
+
+    /**
+     * Update mutable organization fields.
+     * All fields will overwrite the existing value on the organization only if provided.
+     * <p>&lt;Tip&gt;
+     * This endpoint requires additional permissions. Contact support to request access.
+     * &lt;/Tip&gt;</p>
+     */
+    public CompletableFuture<MavenAGIHttpResponse<Organization>> patch(
+            String organizationReferenceId, OrganizationPatchRequest request) {
+        return patch(organizationReferenceId, request, null);
+    }
+
+    /**
+     * Update mutable organization fields.
+     * All fields will overwrite the existing value on the organization only if provided.
+     * <p>&lt;Tip&gt;
+     * This endpoint requires additional permissions. Contact support to request access.
+     * &lt;/Tip&gt;</p>
+     */
+    public CompletableFuture<MavenAGIHttpResponse<Organization>> patch(
+            String organizationReferenceId, OrganizationPatchRequest request, RequestOptions requestOptions) {
+        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("v1/organizations")
+                .addPathSegment(organizationReferenceId)
+                .build();
+        RequestBody body;
+        try {
+            body = RequestBody.create(
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
+        } catch (JsonProcessingException e) {
+            throw new MavenAGIException("Failed to serialize request", e);
+        }
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl)
+                .method("PATCH", body)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
+                .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        CompletableFuture<MavenAGIHttpResponse<Organization>> future = new CompletableFuture<>();
+        client.newCall(okhttpRequest).enqueue(new Callback() {
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                try (ResponseBody responseBody = response.body()) {
+                    if (response.isSuccessful()) {
+                        future.complete(new MavenAGIHttpResponse<>(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), Organization.class),
+                                response));
+                        return;
+                    }
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+                    try {
+                        switch (response.code()) {
+                            case 400:
+                                future.completeExceptionally(new BadRequestError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
+                                        response));
+                                return;
+                            case 404:
+                                future.completeExceptionally(new NotFoundError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
+                                        response));
+                                return;
+                            case 500:
+                                future.completeExceptionally(new ServerError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
+                                        response));
+                                return;
+                        }
+                    } catch (JsonProcessingException ignored) {
+                        // unable to map error response, throwing generic error
+                    }
+                    future.completeExceptionally(new MavenAGIApiException(
+                            "Error with status code " + response.code(),
+                            response.code(),
+                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                            response));
+                    return;
+                } catch (IOException e) {
+                    future.completeExceptionally(new MavenAGIException("Network error executing HTTP request", e));
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                future.completeExceptionally(new MavenAGIException("Network error executing HTTP request", e));
+            }
+        });
+        return future;
+    }
+
+    /**
+     * Delete an organization.
+     * <p>&lt;Tip&gt;
+     * This endpoint requires additional permissions. Contact support to request access.
+     * &lt;/Tip&gt;</p>
+     */
+    public CompletableFuture<MavenAGIHttpResponse<Void>> delete(String organizationReferenceId) {
+        return delete(organizationReferenceId, null);
+    }
+
+    /**
+     * Delete an organization.
+     * <p>&lt;Tip&gt;
+     * This endpoint requires additional permissions. Contact support to request access.
+     * &lt;/Tip&gt;</p>
+     */
+    public CompletableFuture<MavenAGIHttpResponse<Void>> delete(
+            String organizationReferenceId, RequestOptions requestOptions) {
+        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("v1/organizations")
+                .addPathSegment(organizationReferenceId)
+                .build();
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl)
+                .method("DELETE", null)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Accept", "application/json")
+                .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        CompletableFuture<MavenAGIHttpResponse<Void>> future = new CompletableFuture<>();
+        client.newCall(okhttpRequest).enqueue(new Callback() {
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                try (ResponseBody responseBody = response.body()) {
+                    if (response.isSuccessful()) {
+                        future.complete(new MavenAGIHttpResponse<>(null, response));
+                        return;
+                    }
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+                    try {
+                        switch (response.code()) {
+                            case 400:
+                                future.completeExceptionally(new BadRequestError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
+                                        response));
+                                return;
+                            case 404:
+                                future.completeExceptionally(new NotFoundError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
+                                        response));
+                                return;
+                            case 500:
+                                future.completeExceptionally(new ServerError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
+                                        response));
+                                return;
+                        }
+                    } catch (JsonProcessingException ignored) {
+                        // unable to map error response, throwing generic error
+                    }
+                    future.completeExceptionally(new MavenAGIApiException(
+                            "Error with status code " + response.code(),
+                            response.code(),
+                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                            response));
+                    return;
+                } catch (IOException e) {
+                    future.completeExceptionally(new MavenAGIException("Network error executing HTTP request", e));
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                future.completeExceptionally(new MavenAGIException("Network error executing HTTP request", e));
+            }
+        });
+        return future;
     }
 
     /**

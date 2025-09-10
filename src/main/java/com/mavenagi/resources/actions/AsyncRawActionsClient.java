@@ -13,7 +13,7 @@ import com.mavenagi.core.ObjectMappers;
 import com.mavenagi.core.QueryStringMapper;
 import com.mavenagi.core.RequestOptions;
 import com.mavenagi.resources.actions.requests.ActionGetRequest;
-import com.mavenagi.resources.actions.types.ActionPatchRequest;
+import com.mavenagi.resources.actions.requests.ActionPatchRequest;
 import com.mavenagi.resources.actions.types.ActionRequest;
 import com.mavenagi.resources.actions.types.ActionsResponse;
 import com.mavenagi.resources.actions.types.ActionsSearchRequest;
@@ -28,6 +28,7 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Headers;
 import okhttp3.HttpUrl;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -337,7 +338,8 @@ public class AsyncRawActionsClient {
         RequestBody body;
         try {
             body = RequestBody.create(
-                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request),
+                    MediaType.parse("application/merge-patch+json"));
         } catch (JsonProcessingException e) {
             throw new MavenAGIException("Failed to serialize request", e);
         }
@@ -345,7 +347,7 @@ public class AsyncRawActionsClient {
                 .url(httpUrl)
                 .method("PATCH", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
+                .addHeader("Content-Type", "application/merge-patch+json")
                 .addHeader("Accept", "application/json")
                 .build();
         OkHttpClient client = clientOptions.httpClient();

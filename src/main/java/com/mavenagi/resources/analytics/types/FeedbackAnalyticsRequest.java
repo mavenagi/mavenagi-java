@@ -23,11 +23,16 @@ import java.util.Optional;
 public final class FeedbackAnalyticsRequest implements IFeedbackAnalyticsRequest {
     private final Optional<FeedbackFilter> feedbackFilter;
 
+    private final Optional<String> timezone;
+
     private final Map<String, Object> additionalProperties;
 
     private FeedbackAnalyticsRequest(
-            Optional<FeedbackFilter> feedbackFilter, Map<String, Object> additionalProperties) {
+            Optional<FeedbackFilter> feedbackFilter,
+            Optional<String> timezone,
+            Map<String, Object> additionalProperties) {
         this.feedbackFilter = feedbackFilter;
+        this.timezone = timezone;
         this.additionalProperties = additionalProperties;
     }
 
@@ -38,6 +43,17 @@ public final class FeedbackAnalyticsRequest implements IFeedbackAnalyticsRequest
     @java.lang.Override
     public Optional<FeedbackFilter> getFeedbackFilter() {
         return feedbackFilter;
+    }
+
+    /**
+     * @return IANA timezone identifier (e.g., &quot;America/Los_Angeles&quot;).
+     * When provided, time-based groupings (e.g., DAY) and date filters are evaluated in this timezone;
+     * otherwise UTC is used.
+     */
+    @JsonProperty("timezone")
+    @java.lang.Override
+    public Optional<String> getTimezone() {
+        return timezone;
     }
 
     @java.lang.Override
@@ -52,12 +68,12 @@ public final class FeedbackAnalyticsRequest implements IFeedbackAnalyticsRequest
     }
 
     private boolean equalTo(FeedbackAnalyticsRequest other) {
-        return feedbackFilter.equals(other.feedbackFilter);
+        return feedbackFilter.equals(other.feedbackFilter) && timezone.equals(other.timezone);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.feedbackFilter);
+        return Objects.hash(this.feedbackFilter, this.timezone);
     }
 
     @java.lang.Override
@@ -73,6 +89,8 @@ public final class FeedbackAnalyticsRequest implements IFeedbackAnalyticsRequest
     public static final class Builder {
         private Optional<FeedbackFilter> feedbackFilter = Optional.empty();
 
+        private Optional<String> timezone = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -80,6 +98,7 @@ public final class FeedbackAnalyticsRequest implements IFeedbackAnalyticsRequest
 
         public Builder from(FeedbackAnalyticsRequest other) {
             feedbackFilter(other.getFeedbackFilter());
+            timezone(other.getTimezone());
             return this;
         }
 
@@ -97,8 +116,24 @@ public final class FeedbackAnalyticsRequest implements IFeedbackAnalyticsRequest
             return this;
         }
 
+        /**
+         * <p>IANA timezone identifier (e.g., &quot;America/Los_Angeles&quot;).
+         * When provided, time-based groupings (e.g., DAY) and date filters are evaluated in this timezone;
+         * otherwise UTC is used.</p>
+         */
+        @JsonSetter(value = "timezone", nulls = Nulls.SKIP)
+        public Builder timezone(Optional<String> timezone) {
+            this.timezone = timezone;
+            return this;
+        }
+
+        public Builder timezone(String timezone) {
+            this.timezone = Optional.ofNullable(timezone);
+            return this;
+        }
+
         public FeedbackAnalyticsRequest build() {
-            return new FeedbackAnalyticsRequest(feedbackFilter, additionalProperties);
+            return new FeedbackAnalyticsRequest(feedbackFilter, timezone, additionalProperties);
         }
     }
 }

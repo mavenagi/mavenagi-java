@@ -8,4 +8,6 @@ import java.util.Optional;
 
 public interface IConversationAnalyticsRequest {
     Optional<ConversationFilter> getConversationFilter();
+
+    Optional<String> getTimezone();
 }

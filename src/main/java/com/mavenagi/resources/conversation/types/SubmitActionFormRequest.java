@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 public final class SubmitActionFormRequest {
     private final String actionFormId;
 
-    private final Map<String, Object> parameters;
+    private final Map<String, ActionFormRequestParamValue> parameters;
 
     private final Optional<Map<String, String>> transientData;
 
@@ -32,7 +32,7 @@ public final class SubmitActionFormRequest {
 
     private SubmitActionFormRequest(
             String actionFormId,
-            Map<String, Object> parameters,
+            Map<String, ActionFormRequestParamValue> parameters,
             Optional<Map<String, String>> transientData,
             Map<String, Object> additionalProperties) {
         this.actionFormId = actionFormId;
@@ -50,7 +50,7 @@ public final class SubmitActionFormRequest {
      * @return Map of parameter IDs to values provided by the user. All required action fields must be provided.
      */
     @JsonProperty("parameters")
-    public Map<String, Object> getParameters() {
+    public Map<String, ActionFormRequestParamValue> getParameters() {
         return parameters;
     }
 
@@ -105,11 +105,11 @@ public final class SubmitActionFormRequest {
         /**
          * <p>Map of parameter IDs to values provided by the user. All required action fields must be provided.</p>
          */
-        _FinalStage parameters(Map<String, Object> parameters);
+        _FinalStage parameters(Map<String, ActionFormRequestParamValue> parameters);
 
-        _FinalStage putAllParameters(Map<String, Object> parameters);
+        _FinalStage putAllParameters(Map<String, ActionFormRequestParamValue> parameters);
 
-        _FinalStage parameters(String key, Object value);
+        _FinalStage parameters(String key, ActionFormRequestParamValue value);
 
         /**
          * <p>Transient data which the Maven platform will not persist. This data will only be forwarded to actions taken. For example, one may put in user tokens as transient data.</p>
@@ -125,7 +125,7 @@ public final class SubmitActionFormRequest {
 
         private Optional<Map<String, String>> transientData = Optional.empty();
 
-        private Map<String, Object> parameters = new LinkedHashMap<>();
+        private Map<String, ActionFormRequestParamValue> parameters = new LinkedHashMap<>();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -172,7 +172,7 @@ public final class SubmitActionFormRequest {
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage parameters(String key, Object value) {
+        public _FinalStage parameters(String key, ActionFormRequestParamValue value) {
             this.parameters.put(key, value);
             return this;
         }
@@ -182,7 +182,7 @@ public final class SubmitActionFormRequest {
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage putAllParameters(Map<String, Object> parameters) {
+        public _FinalStage putAllParameters(Map<String, ActionFormRequestParamValue> parameters) {
             this.parameters.putAll(parameters);
             return this;
         }
@@ -192,7 +192,7 @@ public final class SubmitActionFormRequest {
          */
         @java.lang.Override
         @JsonSetter(value = "parameters", nulls = Nulls.SKIP)
-        public _FinalStage parameters(Map<String, Object> parameters) {
+        public _FinalStage parameters(Map<String, ActionFormRequestParamValue> parameters) {
             this.parameters.clear();
             this.parameters.putAll(parameters);
             return this;

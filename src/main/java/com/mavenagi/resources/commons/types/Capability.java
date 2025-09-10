@@ -14,7 +14,9 @@ public enum Capability {
 
     CHARTS_HIGHCHARTS_TS("CHARTS_HIGHCHARTS_TS"),
 
-    ASYNC("ASYNC");
+    ASYNC("ASYNC"),
+
+    OAUTH_BUTTONS("OAUTH_BUTTONS");
 
     private final String value;
 

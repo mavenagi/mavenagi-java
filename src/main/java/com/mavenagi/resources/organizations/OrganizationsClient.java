@@ -9,6 +9,9 @@ import com.mavenagi.resources.analytics.types.ChartResponse;
 import com.mavenagi.resources.analytics.types.ConversationChartRequest;
 import com.mavenagi.resources.analytics.types.ConversationTableRequest;
 import com.mavenagi.resources.analytics.types.ConversationTableResponse;
+import com.mavenagi.resources.organizations.types.CreateOrganizationRequest;
+import com.mavenagi.resources.organizations.types.Organization;
+import com.mavenagi.resources.organizations.types.OrganizationPatchRequest;
 
 public class OrganizationsClient {
     protected final ClientOptions clientOptions;
@@ -25,6 +28,99 @@ public class OrganizationsClient {
      */
     public RawOrganizationsClient withRawResponse() {
         return this.rawClient;
+    }
+
+    /**
+     * Create a new organization.
+     * <p>&lt;Tip&gt;
+     * This endpoint requires additional permissions. Contact support to request access.
+     * &lt;/Tip&gt;</p>
+     */
+    public Organization create(String organizationReferenceId, CreateOrganizationRequest request) {
+        return this.rawClient.create(organizationReferenceId, request).body();
+    }
+
+    /**
+     * Create a new organization.
+     * <p>&lt;Tip&gt;
+     * This endpoint requires additional permissions. Contact support to request access.
+     * &lt;/Tip&gt;</p>
+     */
+    public Organization create(
+            String organizationReferenceId, CreateOrganizationRequest request, RequestOptions requestOptions) {
+        return this.rawClient
+                .create(organizationReferenceId, request, requestOptions)
+                .body();
+    }
+
+    /**
+     * Get an organization by ID
+     */
+    public Organization get(String organizationReferenceId) {
+        return this.rawClient.get(organizationReferenceId).body();
+    }
+
+    /**
+     * Get an organization by ID
+     */
+    public Organization get(String organizationReferenceId, RequestOptions requestOptions) {
+        return this.rawClient.get(organizationReferenceId, requestOptions).body();
+    }
+
+    /**
+     * Update mutable organization fields.
+     * All fields will overwrite the existing value on the organization only if provided.
+     * <p>&lt;Tip&gt;
+     * This endpoint requires additional permissions. Contact support to request access.
+     * &lt;/Tip&gt;</p>
+     */
+    public Organization patch(String organizationReferenceId) {
+        return this.rawClient.patch(organizationReferenceId).body();
+    }
+
+    /**
+     * Update mutable organization fields.
+     * All fields will overwrite the existing value on the organization only if provided.
+     * <p>&lt;Tip&gt;
+     * This endpoint requires additional permissions. Contact support to request access.
+     * &lt;/Tip&gt;</p>
+     */
+    public Organization patch(String organizationReferenceId, OrganizationPatchRequest request) {
+        return this.rawClient.patch(organizationReferenceId, request).body();
+    }
+
+    /**
+     * Update mutable organization fields.
+     * All fields will overwrite the existing value on the organization only if provided.
+     * <p>&lt;Tip&gt;
+     * This endpoint requires additional permissions. Contact support to request access.
+     * &lt;/Tip&gt;</p>
+     */
+    public Organization patch(
+            String organizationReferenceId, OrganizationPatchRequest request, RequestOptions requestOptions) {
+        return this.rawClient
+                .patch(organizationReferenceId, request, requestOptions)
+                .body();
+    }
+
+    /**
+     * Delete an organization.
+     * <p>&lt;Tip&gt;
+     * This endpoint requires additional permissions. Contact support to request access.
+     * &lt;/Tip&gt;</p>
+     */
+    public void delete(String organizationReferenceId) {
+        this.rawClient.delete(organizationReferenceId).body();
+    }
+
+    /**
+     * Delete an organization.
+     * <p>&lt;Tip&gt;
+     * This endpoint requires additional permissions. Contact support to request access.
+     * &lt;/Tip&gt;</p>
+     */
+    public void delete(String organizationReferenceId, RequestOptions requestOptions) {
+        this.rawClient.delete(organizationReferenceId, requestOptions).body();
     }
 
     /**

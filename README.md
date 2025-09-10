@@ -3,7 +3,7 @@
 [![fern shield](https://img.shields.io/badge/%F0%9F%8C%BF-Built%20with%20Fern-brightgreen)](https://buildwithfern.com?utm_source=github&utm_medium=github&utm_campaign=readme&utm_source=https%3A%2F%2Fgithub.com%2Fmavenagi%2Fmavenagi-java)
 [![Maven Central](https://img.shields.io/maven-central/v/com.mavenagi/mavenagi-java)](https://central.sonatype.com/artifact/com.mavenagi/mavenagi-java)
 
-The Mavenagi Java library provides convenient access to the Mavenagi API from Java.
+The Mavenagi Java library provides convenient access to the Mavenagi APIs from Java.
 
 ## Usage
 
@@ -167,6 +167,6 @@ Add the dependency in your `pom.xml` file:
 <dependency>
   <groupId>com.mavenagi</groupId>
   <artifactId>mavenagi-java</artifactId>
-  <version>1.2.0</version>
+  <version>1.2.1</version>
 </dependency>
 ```

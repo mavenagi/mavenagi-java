@@ -5,6 +5,8 @@ package com.mavenagi.resources.events;
 
 import com.mavenagi.core.ClientOptions;
 import com.mavenagi.core.RequestOptions;
+import com.mavenagi.resources.events.types.EventRequest;
+import com.mavenagi.resources.events.types.EventResponse;
 import com.mavenagi.resources.events.types.EventsSearchRequest;
 import com.mavenagi.resources.events.types.EventsSearchResponse;
 
@@ -23,6 +25,20 @@ public class EventsClient {
      */
     public RawEventsClient withRawResponse() {
         return this.rawClient;
+    }
+
+    /**
+     * Create a new event
+     */
+    public EventResponse create(EventRequest request) {
+        return this.rawClient.create(request).body();
+    }
+
+    /**
+     * Create a new event
+     */
+    public EventResponse create(EventRequest request, RequestOptions requestOptions) {
+        return this.rawClient.create(request, requestOptions).body();
     }
 
     /**

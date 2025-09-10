@@ -12,7 +12,6 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
-import com.mavenagi.resources.commons.types.EntityId;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,7 +27,7 @@ public final class NovelSystemEventNoId implements INovelSystemEventNoId, IEvent
 
     private final Optional<OffsetDateTime> timestamp;
 
-    private final Optional<Set<EntityId>> references;
+    private final Optional<Set<ScopedEntity>> references;
 
     private final Optional<SourceInfo> sourceInfo;
 
@@ -41,7 +40,7 @@ public final class NovelSystemEventNoId implements INovelSystemEventNoId, IEvent
     private NovelSystemEventNoId(
             SystemEventName eventName,
             Optional<OffsetDateTime> timestamp,
-            Optional<Set<EntityId>> references,
+            Optional<Set<ScopedEntity>> references,
             Optional<SourceInfo> sourceInfo,
             Optional<SessionInfo> sessionInfo,
             Optional<ContextInfo> contextInfo,
@@ -72,7 +71,7 @@ public final class NovelSystemEventNoId implements INovelSystemEventNoId, IEvent
 
     @JsonProperty("references")
     @java.lang.Override
-    public Optional<Set<EntityId>> getReferences() {
+    public Optional<Set<ScopedEntity>> getReferences() {
         return references;
     }
 
@@ -145,9 +144,9 @@ public final class NovelSystemEventNoId implements INovelSystemEventNoId, IEvent
 
         _FinalStage timestamp(OffsetDateTime timestamp);
 
-        _FinalStage references(Optional<Set<EntityId>> references);
+        _FinalStage references(Optional<Set<ScopedEntity>> references);
 
-        _FinalStage references(Set<EntityId> references);
+        _FinalStage references(Set<ScopedEntity> references);
 
         _FinalStage sourceInfo(Optional<SourceInfo> sourceInfo);
 
@@ -172,7 +171,7 @@ public final class NovelSystemEventNoId implements INovelSystemEventNoId, IEvent
 
         private Optional<SourceInfo> sourceInfo = Optional.empty();
 
-        private Optional<Set<EntityId>> references = Optional.empty();
+        private Optional<Set<ScopedEntity>> references = Optional.empty();
 
         private Optional<OffsetDateTime> timestamp = Optional.empty();
 
@@ -244,14 +243,14 @@ public final class NovelSystemEventNoId implements INovelSystemEventNoId, IEvent
         }
 
         @java.lang.Override
-        public _FinalStage references(Set<EntityId> references) {
+        public _FinalStage references(Set<ScopedEntity> references) {
             this.references = Optional.ofNullable(references);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "references", nulls = Nulls.SKIP)
-        public _FinalStage references(Optional<Set<EntityId>> references) {
+        public _FinalStage references(Optional<Set<ScopedEntity>> references) {
             this.references = references;
             return this;
         }

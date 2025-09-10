@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -29,6 +30,8 @@ public final class KnowledgeBaseFilter {
 
     private final Optional<OffsetDateTime> createdBefore;
 
+    private final Optional<List<String>> appIds;
+
     private final Map<String, Object> additionalProperties;
 
     private KnowledgeBaseFilter(
@@ -36,11 +39,13 @@ public final class KnowledgeBaseFilter {
             Optional<String> title,
             Optional<OffsetDateTime> createdAfter,
             Optional<OffsetDateTime> createdBefore,
+            Optional<List<String>> appIds,
             Map<String, Object> additionalProperties) {
         this.search = search;
         this.title = title;
         this.createdAfter = createdAfter;
         this.createdBefore = createdBefore;
+        this.appIds = appIds;
         this.additionalProperties = additionalProperties;
     }
 
@@ -87,6 +92,14 @@ public final class KnowledgeBaseFilter {
         return createdBefore;
     }
 
+    /**
+     * @return Filter by app IDs
+     */
+    @JsonProperty("appIds")
+    public Optional<List<String>> getAppIds() {
+        return appIds;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -102,12 +115,13 @@ public final class KnowledgeBaseFilter {
         return search.equals(other.search)
                 && title.equals(other.title)
                 && createdAfter.equals(other.createdAfter)
-                && createdBefore.equals(other.createdBefore);
+                && createdBefore.equals(other.createdBefore)
+                && appIds.equals(other.appIds);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.search, this.title, this.createdAfter, this.createdBefore);
+        return Objects.hash(this.search, this.title, this.createdAfter, this.createdBefore, this.appIds);
     }
 
     @java.lang.Override
@@ -129,6 +143,8 @@ public final class KnowledgeBaseFilter {
 
         private Optional<OffsetDateTime> createdBefore = Optional.empty();
 
+        private Optional<List<String>> appIds = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -139,6 +155,7 @@ public final class KnowledgeBaseFilter {
             title(other.getTitle());
             createdAfter(other.getCreatedAfter());
             createdBefore(other.getCreatedBefore());
+            appIds(other.getAppIds());
             return this;
         }
 
@@ -209,8 +226,22 @@ public final class KnowledgeBaseFilter {
             return this;
         }
 
+        /**
+         * <p>Filter by app IDs</p>
+         */
+        @JsonSetter(value = "appIds", nulls = Nulls.SKIP)
+        public Builder appIds(Optional<List<String>> appIds) {
+            this.appIds = appIds;
+            return this;
+        }
+
+        public Builder appIds(List<String> appIds) {
+            this.appIds = Optional.ofNullable(appIds);
+            return this;
+        }
+
         public KnowledgeBaseFilter build() {
-            return new KnowledgeBaseFilter(search, title, createdAfter, createdBefore, additionalProperties);
+            return new KnowledgeBaseFilter(search, title, createdAfter, createdBefore, appIds, additionalProperties);
         }
     }
 }

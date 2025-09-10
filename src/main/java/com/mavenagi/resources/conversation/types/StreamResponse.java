@@ -34,6 +34,10 @@ public final class StreamResponse {
         return new StreamResponse(new ActionValue(value));
     }
 
+    public static StreamResponse oauthButton(AskStreamOAuthButtonEvent value) {
+        return new StreamResponse(new OauthButtonValue(value));
+    }
+
     public static StreamResponse chart(AskStreamChartEvent value) {
         return new StreamResponse(new ChartValue(value));
     }
@@ -56,6 +60,10 @@ public final class StreamResponse {
 
     public boolean isAction() {
         return value instanceof ActionValue;
+    }
+
+    public boolean isOauthButton() {
+        return value instanceof OauthButtonValue;
     }
 
     public boolean isChart() {
@@ -88,6 +96,13 @@ public final class StreamResponse {
     public Optional<AskStreamActionEvent> getAction() {
         if (isAction()) {
             return Optional.of(((ActionValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<AskStreamOAuthButtonEvent> getOauthButton() {
+        if (isOauthButton()) {
+            return Optional.of(((OauthButtonValue) value).value);
         }
         return Optional.empty();
     }
@@ -137,6 +152,8 @@ public final class StreamResponse {
 
         T visitAction(AskStreamActionEvent action);
 
+        T visitOauthButton(AskStreamOAuthButtonEvent oauthButton);
+
         T visitChart(AskStreamChartEvent chart);
 
         T visitMetadata(AskStreamMetadataEvent metadata);
@@ -152,6 +169,7 @@ public final class StreamResponse {
     @JsonSubTypes({
         @JsonSubTypes.Type(TextValue.class),
         @JsonSubTypes.Type(ActionValue.class),
+        @JsonSubTypes.Type(OauthButtonValue.class),
         @JsonSubTypes.Type(ChartValue.class),
         @JsonSubTypes.Type(MetadataValue.class),
         @JsonSubTypes.Type(StartValue.class),
@@ -226,6 +244,45 @@ public final class StreamResponse {
         }
 
         private boolean equalTo(ActionValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "StreamResponse{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("oauthButton")
+    @JsonIgnoreProperties("eventType")
+    private static final class OauthButtonValue implements Value {
+        @JsonUnwrapped
+        private AskStreamOAuthButtonEvent value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private OauthButtonValue() {}
+
+        private OauthButtonValue(AskStreamOAuthButtonEvent value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitOauthButton(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof OauthButtonValue && equalTo((OauthButtonValue) other);
+        }
+
+        private boolean equalTo(OauthButtonValue other) {
             return value.equals(other.value);
         }
 

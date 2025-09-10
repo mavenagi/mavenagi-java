@@ -34,6 +34,10 @@ public final class BotResponse {
         return new BotResponse(new ActionFormValue(value));
     }
 
+    public static BotResponse oauthButton(BotOAuthButtonResponse value) {
+        return new BotResponse(new OauthButtonValue(value));
+    }
+
     public static BotResponse chart(BotChartResponse value) {
         return new BotResponse(new ChartValue(value));
     }
@@ -48,6 +52,10 @@ public final class BotResponse {
 
     public boolean isActionForm() {
         return value instanceof ActionFormValue;
+    }
+
+    public boolean isOauthButton() {
+        return value instanceof OauthButtonValue;
     }
 
     public boolean isChart() {
@@ -72,6 +80,13 @@ public final class BotResponse {
     public Optional<BotActionFormResponse> getActionForm() {
         if (isActionForm()) {
             return Optional.of(((ActionFormValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<BotOAuthButtonResponse> getOauthButton() {
+        if (isOauthButton()) {
+            return Optional.of(((OauthButtonValue) value).value);
         }
         return Optional.empty();
     }
@@ -107,6 +122,8 @@ public final class BotResponse {
 
         T visitActionForm(BotActionFormResponse actionForm);
 
+        T visitOauthButton(BotOAuthButtonResponse oauthButton);
+
         T visitChart(BotChartResponse chart);
 
         T visitObject(BotObjectResponse object);
@@ -118,6 +135,7 @@ public final class BotResponse {
     @JsonSubTypes({
         @JsonSubTypes.Type(TextValue.class),
         @JsonSubTypes.Type(ActionFormValue.class),
+        @JsonSubTypes.Type(OauthButtonValue.class),
         @JsonSubTypes.Type(ChartValue.class),
         @JsonSubTypes.Type(ObjectValue.class)
     })
@@ -190,6 +208,45 @@ public final class BotResponse {
         }
 
         private boolean equalTo(ActionFormValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "BotResponse{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("oauthButton")
+    @JsonIgnoreProperties("type")
+    private static final class OauthButtonValue implements Value {
+        @JsonUnwrapped
+        private BotOAuthButtonResponse value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private OauthButtonValue() {}
+
+        private OauthButtonValue(BotOAuthButtonResponse value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitOauthButton(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof OauthButtonValue && equalTo((OauthButtonValue) other);
+        }
+
+        private boolean equalTo(OauthButtonValue other) {
             return value.equals(other.value);
         }
 

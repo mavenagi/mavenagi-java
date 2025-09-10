@@ -23,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
 @JsonDeserialize(builder = BotLogicActionExecutedDetail.Builder.class)
 public final class BotLogicActionExecutedDetail
         implements IBotLogicActionExecutedDetail, IBotLogicActionReviewedDetail {
-    private final Map<String, Object> actionParameters;
+    private final Map<String, ActionExecutionParamValue> actionParameters;
 
     private final Optional<String> executionResult;
 
@@ -36,7 +36,7 @@ public final class BotLogicActionExecutedDetail
     private final Map<String, Object> additionalProperties;
 
     private BotLogicActionExecutedDetail(
-            Map<String, Object> actionParameters,
+            Map<String, ActionExecutionParamValue> actionParameters,
             Optional<String> executionResult,
             Optional<String> executionError,
             EntityIdWithoutAgent actionId,
@@ -52,7 +52,7 @@ public final class BotLogicActionExecutedDetail
 
     @JsonProperty("actionParameters")
     @java.lang.Override
-    public Map<String, Object> getActionParameters() {
+    public Map<String, ActionExecutionParamValue> getActionParameters() {
         return actionParameters;
     }
 
@@ -127,11 +127,11 @@ public final class BotLogicActionExecutedDetail
     public interface _FinalStage {
         BotLogicActionExecutedDetail build();
 
-        _FinalStage actionParameters(Map<String, Object> actionParameters);
+        _FinalStage actionParameters(Map<String, ActionExecutionParamValue> actionParameters);
 
-        _FinalStage putAllActionParameters(Map<String, Object> actionParameters);
+        _FinalStage putAllActionParameters(Map<String, ActionExecutionParamValue> actionParameters);
 
-        _FinalStage actionParameters(String key, Object value);
+        _FinalStage actionParameters(String key, ActionExecutionParamValue value);
 
         _FinalStage executionResult(Optional<String> executionResult);
 
@@ -152,7 +152,7 @@ public final class BotLogicActionExecutedDetail
 
         private Optional<String> executionResult = Optional.empty();
 
-        private Map<String, Object> actionParameters = new LinkedHashMap<>();
+        private Map<String, ActionExecutionParamValue> actionParameters = new LinkedHashMap<>();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -210,20 +210,20 @@ public final class BotLogicActionExecutedDetail
         }
 
         @java.lang.Override
-        public _FinalStage actionParameters(String key, Object value) {
+        public _FinalStage actionParameters(String key, ActionExecutionParamValue value) {
             this.actionParameters.put(key, value);
             return this;
         }
 
         @java.lang.Override
-        public _FinalStage putAllActionParameters(Map<String, Object> actionParameters) {
+        public _FinalStage putAllActionParameters(Map<String, ActionExecutionParamValue> actionParameters) {
             this.actionParameters.putAll(actionParameters);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "actionParameters", nulls = Nulls.SKIP)
-        public _FinalStage actionParameters(Map<String, Object> actionParameters) {
+        public _FinalStage actionParameters(Map<String, ActionExecutionParamValue> actionParameters) {
             this.actionParameters.clear();
             this.actionParameters.putAll(actionParameters);
             return this;

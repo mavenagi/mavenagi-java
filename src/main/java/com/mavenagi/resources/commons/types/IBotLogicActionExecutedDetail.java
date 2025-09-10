@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Optional;
 
 public interface IBotLogicActionExecutedDetail extends IBotLogicActionReviewedDetail {
-    Map<String, Object> getActionParameters();
+    Map<String, ActionExecutionParamValue> getActionParameters();
 
     Optional<String> getExecutionResult();
 

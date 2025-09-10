@@ -12,7 +12,9 @@ public enum UserEventName {
 
     CHAT_OPENED("CHAT_OPENED"),
 
-    CHAT_CLOSED("CHAT_CLOSED");
+    CHAT_CLOSED("CHAT_CLOSED"),
+
+    TEXT_INSERTED("TEXT_INSERTED");
 
     private final String value;
 

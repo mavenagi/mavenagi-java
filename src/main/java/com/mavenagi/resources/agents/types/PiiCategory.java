@@ -24,6 +24,8 @@ public enum PiiCategory {
 
     US_DRIVERS_LICENSE_NUMBER("UsDriversLicenseNumber"),
 
+    US_INDIVIDUAL_TAXPAYER_IDENTIFICATION("UsIndividualTaxpayerIdentification"),
+
     DATE("Date"),
 
     IP_ADDRESS("IpAddress"),
@@ -116,9 +118,7 @@ public enum PiiCategory {
 
     UK_NATIONAL_INSURANCE_NUMBER("UkNationalInsuranceNumber"),
 
-    UK_UNIQUE_TAXPAYER_NUMBER("UkUniqueTaxpayerNumber"),
-
-    US_INDIVIDUAL_TAXPAYER_IDENTIFICATION("UsIndividualTaxpayerIdentification");
+    UK_UNIQUE_TAXPAYER_NUMBER("UkUniqueTaxpayerNumber");
 
     private final String value;
 

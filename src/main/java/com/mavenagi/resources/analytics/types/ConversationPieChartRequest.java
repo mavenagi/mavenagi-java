@@ -24,6 +24,8 @@ import org.jetbrains.annotations.NotNull;
 public final class ConversationPieChartRequest implements IConversationAnalyticsRequest {
     private final Optional<ConversationFilter> conversationFilter;
 
+    private final Optional<String> timezone;
+
     private final ConversationGroupBy groupBy;
 
     private final ConversationMetric metric;
@@ -32,10 +34,12 @@ public final class ConversationPieChartRequest implements IConversationAnalytics
 
     private ConversationPieChartRequest(
             Optional<ConversationFilter> conversationFilter,
+            Optional<String> timezone,
             ConversationGroupBy groupBy,
             ConversationMetric metric,
             Map<String, Object> additionalProperties) {
         this.conversationFilter = conversationFilter;
+        this.timezone = timezone;
         this.groupBy = groupBy;
         this.metric = metric;
         this.additionalProperties = additionalProperties;
@@ -48,6 +52,17 @@ public final class ConversationPieChartRequest implements IConversationAnalytics
     @java.lang.Override
     public Optional<ConversationFilter> getConversationFilter() {
         return conversationFilter;
+    }
+
+    /**
+     * @return IANA timezone identifier (e.g., &quot;America/Los_Angeles&quot;).
+     * When provided, time-based groupings (e.g., DAY) and date filters are evaluated in this timezone;
+     * otherwise UTC is used.
+     */
+    @JsonProperty("timezone")
+    @java.lang.Override
+    public Optional<String> getTimezone() {
+        return timezone;
     }
 
     /**
@@ -79,13 +94,14 @@ public final class ConversationPieChartRequest implements IConversationAnalytics
 
     private boolean equalTo(ConversationPieChartRequest other) {
         return conversationFilter.equals(other.conversationFilter)
+                && timezone.equals(other.timezone)
                 && groupBy.equals(other.groupBy)
                 && metric.equals(other.metric);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.conversationFilter, this.groupBy, this.metric);
+        return Objects.hash(this.conversationFilter, this.timezone, this.groupBy, this.metric);
     }
 
     @java.lang.Override
@@ -122,6 +138,15 @@ public final class ConversationPieChartRequest implements IConversationAnalytics
         _FinalStage conversationFilter(Optional<ConversationFilter> conversationFilter);
 
         _FinalStage conversationFilter(ConversationFilter conversationFilter);
+
+        /**
+         * <p>IANA timezone identifier (e.g., &quot;America/Los_Angeles&quot;).
+         * When provided, time-based groupings (e.g., DAY) and date filters are evaluated in this timezone;
+         * otherwise UTC is used.</p>
+         */
+        _FinalStage timezone(Optional<String> timezone);
+
+        _FinalStage timezone(String timezone);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -129,6 +154,8 @@ public final class ConversationPieChartRequest implements IConversationAnalytics
         private ConversationGroupBy groupBy;
 
         private ConversationMetric metric;
+
+        private Optional<String> timezone = Optional.empty();
 
         private Optional<ConversationFilter> conversationFilter = Optional.empty();
 
@@ -140,6 +167,7 @@ public final class ConversationPieChartRequest implements IConversationAnalytics
         @java.lang.Override
         public Builder from(ConversationPieChartRequest other) {
             conversationFilter(other.getConversationFilter());
+            timezone(other.getTimezone());
             groupBy(other.getGroupBy());
             metric(other.getMetric());
             return this;
@@ -170,6 +198,30 @@ public final class ConversationPieChartRequest implements IConversationAnalytics
         }
 
         /**
+         * <p>IANA timezone identifier (e.g., &quot;America/Los_Angeles&quot;).
+         * When provided, time-based groupings (e.g., DAY) and date filters are evaluated in this timezone;
+         * otherwise UTC is used.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage timezone(String timezone) {
+            this.timezone = Optional.ofNullable(timezone);
+            return this;
+        }
+
+        /**
+         * <p>IANA timezone identifier (e.g., &quot;America/Los_Angeles&quot;).
+         * When provided, time-based groupings (e.g., DAY) and date filters are evaluated in this timezone;
+         * otherwise UTC is used.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "timezone", nulls = Nulls.SKIP)
+        public _FinalStage timezone(Optional<String> timezone) {
+            this.timezone = timezone;
+            return this;
+        }
+
+        /**
          * <p>Optional filter applied to refine the conversation data before processing.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -191,7 +243,7 @@ public final class ConversationPieChartRequest implements IConversationAnalytics
 
         @java.lang.Override
         public ConversationPieChartRequest build() {
-            return new ConversationPieChartRequest(conversationFilter, groupBy, metric, additionalProperties);
+            return new ConversationPieChartRequest(conversationFilter, timezone, groupBy, metric, additionalProperties);
         }
     }
 }

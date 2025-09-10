@@ -5,6 +5,8 @@ package com.mavenagi.resources.events;
 
 import com.mavenagi.core.ClientOptions;
 import com.mavenagi.core.RequestOptions;
+import com.mavenagi.resources.events.types.EventRequest;
+import com.mavenagi.resources.events.types.EventResponse;
 import com.mavenagi.resources.events.types.EventsSearchRequest;
 import com.mavenagi.resources.events.types.EventsSearchResponse;
 import java.util.concurrent.CompletableFuture;
@@ -24,6 +26,20 @@ public class AsyncEventsClient {
      */
     public AsyncRawEventsClient withRawResponse() {
         return this.rawClient;
+    }
+
+    /**
+     * Create a new event
+     */
+    public CompletableFuture<EventResponse> create(EventRequest request) {
+        return this.rawClient.create(request).thenApply(response -> response.body());
+    }
+
+    /**
+     * Create a new event
+     */
+    public CompletableFuture<EventResponse> create(EventRequest request, RequestOptions requestOptions) {
+        return this.rawClient.create(request, requestOptions).thenApply(response -> response.body());
     }
 
     /**

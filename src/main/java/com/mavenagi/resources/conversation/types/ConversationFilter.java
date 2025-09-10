@@ -61,6 +61,8 @@ public final class ConversationFilter {
 
     private final Optional<List<String>> tags;
 
+    private final Optional<List<String>> agentUserIds;
+
     private final Optional<List<ResolutionStatus>> resolutionStatus;
 
     private final Optional<Boolean> resolvedByMaven;
@@ -68,6 +70,8 @@ public final class ConversationFilter {
     private final Optional<NumberRange> userMessageCount;
 
     private final Optional<Boolean> hasAttachment;
+
+    private final Optional<List<EntityIdFilter>> matchedSegmentIds;
 
     private final Map<String, Object> additionalProperties;
 
@@ -88,10 +92,12 @@ public final class ConversationFilter {
             Optional<List<ResponseLength>> responseLength,
             Optional<List<Sentiment>> sentiment,
             Optional<List<String>> tags,
+            Optional<List<String>> agentUserIds,
             Optional<List<ResolutionStatus>> resolutionStatus,
             Optional<Boolean> resolvedByMaven,
             Optional<NumberRange> userMessageCount,
             Optional<Boolean> hasAttachment,
+            Optional<List<EntityIdFilter>> matchedSegmentIds,
             Map<String, Object> additionalProperties) {
         this.search = search;
         this.createdAfter = createdAfter;
@@ -109,10 +115,12 @@ public final class ConversationFilter {
         this.responseLength = responseLength;
         this.sentiment = sentiment;
         this.tags = tags;
+        this.agentUserIds = agentUserIds;
         this.resolutionStatus = resolutionStatus;
         this.resolvedByMaven = resolvedByMaven;
         this.userMessageCount = userMessageCount;
         this.hasAttachment = hasAttachment;
+        this.matchedSegmentIds = matchedSegmentIds;
         this.additionalProperties = additionalProperties;
     }
 
@@ -264,6 +272,14 @@ public final class ConversationFilter {
     }
 
     /**
+     * @return Filter by agent user IDs associated with the conversation
+     */
+    @JsonProperty("agentUserIds")
+    public Optional<List<String>> getAgentUserIds() {
+        return agentUserIds;
+    }
+
+    /**
      * @return Filter by conversation resolution status which is determined by AI based on the conversation content.
      */
     @JsonProperty("resolutionStatus")
@@ -295,6 +311,14 @@ public final class ConversationFilter {
         return hasAttachment;
     }
 
+    /**
+     * @return Filter by the segments that any message on a conversation matched.
+     */
+    @JsonProperty("matchedSegmentIds")
+    public Optional<List<EntityIdFilter>> getMatchedSegmentIds() {
+        return matchedSegmentIds;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -323,10 +347,12 @@ public final class ConversationFilter {
                 && responseLength.equals(other.responseLength)
                 && sentiment.equals(other.sentiment)
                 && tags.equals(other.tags)
+                && agentUserIds.equals(other.agentUserIds)
                 && resolutionStatus.equals(other.resolutionStatus)
                 && resolvedByMaven.equals(other.resolvedByMaven)
                 && userMessageCount.equals(other.userMessageCount)
-                && hasAttachment.equals(other.hasAttachment);
+                && hasAttachment.equals(other.hasAttachment)
+                && matchedSegmentIds.equals(other.matchedSegmentIds);
     }
 
     @java.lang.Override
@@ -348,10 +374,12 @@ public final class ConversationFilter {
                 this.responseLength,
                 this.sentiment,
                 this.tags,
+                this.agentUserIds,
                 this.resolutionStatus,
                 this.resolvedByMaven,
                 this.userMessageCount,
-                this.hasAttachment);
+                this.hasAttachment,
+                this.matchedSegmentIds);
     }
 
     @java.lang.Override
@@ -397,6 +425,8 @@ public final class ConversationFilter {
 
         private Optional<List<String>> tags = Optional.empty();
 
+        private Optional<List<String>> agentUserIds = Optional.empty();
+
         private Optional<List<ResolutionStatus>> resolutionStatus = Optional.empty();
 
         private Optional<Boolean> resolvedByMaven = Optional.empty();
@@ -404,6 +434,8 @@ public final class ConversationFilter {
         private Optional<NumberRange> userMessageCount = Optional.empty();
 
         private Optional<Boolean> hasAttachment = Optional.empty();
+
+        private Optional<List<EntityIdFilter>> matchedSegmentIds = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -427,10 +459,12 @@ public final class ConversationFilter {
             responseLength(other.getResponseLength());
             sentiment(other.getSentiment());
             tags(other.getTags());
+            agentUserIds(other.getAgentUserIds());
             resolutionStatus(other.getResolutionStatus());
             resolvedByMaven(other.getResolvedByMaven());
             userMessageCount(other.getUserMessageCount());
             hasAttachment(other.getHasAttachment());
+            matchedSegmentIds(other.getMatchedSegmentIds());
             return this;
         }
 
@@ -678,6 +712,20 @@ public final class ConversationFilter {
         }
 
         /**
+         * <p>Filter by agent user IDs associated with the conversation</p>
+         */
+        @JsonSetter(value = "agentUserIds", nulls = Nulls.SKIP)
+        public Builder agentUserIds(Optional<List<String>> agentUserIds) {
+            this.agentUserIds = agentUserIds;
+            return this;
+        }
+
+        public Builder agentUserIds(List<String> agentUserIds) {
+            this.agentUserIds = Optional.ofNullable(agentUserIds);
+            return this;
+        }
+
+        /**
          * <p>Filter by conversation resolution status which is determined by AI based on the conversation content.</p>
          */
         @JsonSetter(value = "resolutionStatus", nulls = Nulls.SKIP)
@@ -733,6 +781,20 @@ public final class ConversationFilter {
             return this;
         }
 
+        /**
+         * <p>Filter by the segments that any message on a conversation matched.</p>
+         */
+        @JsonSetter(value = "matchedSegmentIds", nulls = Nulls.SKIP)
+        public Builder matchedSegmentIds(Optional<List<EntityIdFilter>> matchedSegmentIds) {
+            this.matchedSegmentIds = matchedSegmentIds;
+            return this;
+        }
+
+        public Builder matchedSegmentIds(List<EntityIdFilter> matchedSegmentIds) {
+            this.matchedSegmentIds = Optional.ofNullable(matchedSegmentIds);
+            return this;
+        }
+
         public ConversationFilter build() {
             return new ConversationFilter(
                     search,
@@ -751,10 +813,12 @@ public final class ConversationFilter {
                     responseLength,
                     sentiment,
                     tags,
+                    agentUserIds,
                     resolutionStatus,
                     resolvedByMaven,
                     userMessageCount,
                     hasAttachment,
+                    matchedSegmentIds,
                     additionalProperties);
         }
     }

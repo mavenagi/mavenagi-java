@@ -3,7 +3,6 @@
  */
 package com.mavenagi.resources.events.types;
 
-import com.mavenagi.resources.commons.types.EntityId;
 import java.time.OffsetDateTime;
 import java.util.Optional;
 import java.util.Set;
@@ -11,7 +10,7 @@ import java.util.Set;
 public interface IEventBaseNoId {
     Optional<OffsetDateTime> getTimestamp();
 
-    Optional<Set<EntityId>> getReferences();
+    Optional<Set<ScopedEntity>> getReferences();
 
     Optional<SourceInfo> getSourceInfo();
 

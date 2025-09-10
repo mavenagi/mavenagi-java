@@ -17,13 +17,18 @@ import com.mavenagi.resources.commons.errors.NotFoundError;
 import com.mavenagi.resources.commons.errors.ServerError;
 import com.mavenagi.resources.commons.types.ErrorMessage;
 import com.mavenagi.resources.knowledge.requests.KnowledgeBaseGetRequest;
+import com.mavenagi.resources.knowledge.requests.KnowledgeBasePatchRequest;
+import com.mavenagi.resources.knowledge.requests.KnowledgeBaseVersionsListRequest;
+import com.mavenagi.resources.knowledge.requests.KnowledgeDocumentGetRequest;
 import com.mavenagi.resources.knowledge.types.FinalizeKnowledgeBaseVersionRequest;
-import com.mavenagi.resources.knowledge.types.KnowledgeBasePatchRequest;
 import com.mavenagi.resources.knowledge.types.KnowledgeBaseRequest;
 import com.mavenagi.resources.knowledge.types.KnowledgeBaseResponse;
 import com.mavenagi.resources.knowledge.types.KnowledgeBaseSearchRequest;
 import com.mavenagi.resources.knowledge.types.KnowledgeBaseVersion;
+import com.mavenagi.resources.knowledge.types.KnowledgeBaseVersionRequest;
+import com.mavenagi.resources.knowledge.types.KnowledgeBaseVersionsListResponse;
 import com.mavenagi.resources.knowledge.types.KnowledgeBasesResponse;
+import com.mavenagi.resources.knowledge.types.KnowledgeDeleteRequest;
 import com.mavenagi.resources.knowledge.types.KnowledgeDocumentRequest;
 import com.mavenagi.resources.knowledge.types.KnowledgeDocumentResponse;
 import com.mavenagi.resources.knowledge.types.KnowledgeDocumentSearchRequest;
@@ -34,6 +39,7 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Headers;
 import okhttp3.HttpUrl;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -359,7 +365,8 @@ public class AsyncRawKnowledgeClient {
         RequestBody body;
         try {
             body = RequestBody.create(
-                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request),
+                    MediaType.parse("application/merge-patch+json"));
         } catch (JsonProcessingException e) {
             throw new MavenAGIException("Failed to serialize request", e);
         }
@@ -367,7 +374,7 @@ public class AsyncRawKnowledgeClient {
                 .url(httpUrl)
                 .method("PATCH", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
+                .addHeader("Content-Type", "application/merge-patch+json")
                 .addHeader("Accept", "application/json")
                 .build();
         OkHttpClient client = clientOptions.httpClient();
@@ -431,7 +438,7 @@ public class AsyncRawKnowledgeClient {
      * <p>If an existing version is in progress, then that version will be finalized in an error state.</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<KnowledgeBaseVersion>> createKnowledgeBaseVersion(
-            String knowledgeBaseReferenceId, KnowledgeBaseVersion request) {
+            String knowledgeBaseReferenceId, KnowledgeBaseVersionRequest request) {
         return createKnowledgeBaseVersion(knowledgeBaseReferenceId, request, null);
     }
 
@@ -440,7 +447,7 @@ public class AsyncRawKnowledgeClient {
      * <p>If an existing version is in progress, then that version will be finalized in an error state.</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<KnowledgeBaseVersion>> createKnowledgeBaseVersion(
-            String knowledgeBaseReferenceId, KnowledgeBaseVersion request, RequestOptions requestOptions) {
+            String knowledgeBaseReferenceId, KnowledgeBaseVersionRequest request, RequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("v1/knowledge")
@@ -619,6 +626,101 @@ public class AsyncRawKnowledgeClient {
     }
 
     /**
+     * List all active versions for a knowledge base. Returns the most recent versions first.
+     */
+    public CompletableFuture<MavenAGIHttpResponse<KnowledgeBaseVersionsListResponse>> listKnowledgeBaseVersions(
+            String knowledgeBaseReferenceId) {
+        return listKnowledgeBaseVersions(
+                knowledgeBaseReferenceId,
+                KnowledgeBaseVersionsListRequest.builder().build());
+    }
+
+    /**
+     * List all active versions for a knowledge base. Returns the most recent versions first.
+     */
+    public CompletableFuture<MavenAGIHttpResponse<KnowledgeBaseVersionsListResponse>> listKnowledgeBaseVersions(
+            String knowledgeBaseReferenceId, KnowledgeBaseVersionsListRequest request) {
+        return listKnowledgeBaseVersions(knowledgeBaseReferenceId, request, null);
+    }
+
+    /**
+     * List all active versions for a knowledge base. Returns the most recent versions first.
+     */
+    public CompletableFuture<MavenAGIHttpResponse<KnowledgeBaseVersionsListResponse>> listKnowledgeBaseVersions(
+            String knowledgeBaseReferenceId, KnowledgeBaseVersionsListRequest request, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("v1/knowledge")
+                .addPathSegment(knowledgeBaseReferenceId)
+                .addPathSegments("versions");
+        if (request.getAppId().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "appId", request.getAppId().get(), false);
+        }
+        Request.Builder _requestBuilder = new Request.Builder()
+                .url(httpUrl.build())
+                .method("GET", null)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Accept", "application/json");
+        Request okhttpRequest = _requestBuilder.build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        CompletableFuture<MavenAGIHttpResponse<KnowledgeBaseVersionsListResponse>> future = new CompletableFuture<>();
+        client.newCall(okhttpRequest).enqueue(new Callback() {
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                try (ResponseBody responseBody = response.body()) {
+                    if (response.isSuccessful()) {
+                        future.complete(new MavenAGIHttpResponse<>(
+                                ObjectMappers.JSON_MAPPER.readValue(
+                                        responseBody.string(), KnowledgeBaseVersionsListResponse.class),
+                                response));
+                        return;
+                    }
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+                    try {
+                        switch (response.code()) {
+                            case 400:
+                                future.completeExceptionally(new BadRequestError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
+                                        response));
+                                return;
+                            case 404:
+                                future.completeExceptionally(new NotFoundError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
+                                        response));
+                                return;
+                            case 500:
+                                future.completeExceptionally(new ServerError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
+                                        response));
+                                return;
+                        }
+                    } catch (JsonProcessingException ignored) {
+                        // unable to map error response, throwing generic error
+                    }
+                    future.completeExceptionally(new MavenAGIApiException(
+                            "Error with status code " + response.code(),
+                            response.code(),
+                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                            response));
+                    return;
+                } catch (IOException e) {
+                    future.completeExceptionally(new MavenAGIException("Network error executing HTTP request", e));
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                future.completeExceptionally(new MavenAGIException("Network error executing HTTP request", e));
+            }
+        });
+        return future;
+    }
+
+    /**
      * Search knowledge documents
      */
     public CompletableFuture<MavenAGIHttpResponse<KnowledgeDocumentsResponse>> searchKnowledgeDocuments() {
@@ -715,9 +817,10 @@ public class AsyncRawKnowledgeClient {
     }
 
     /**
-     * Create knowledge document. Requires an existing knowledge base with an in progress version. Will throw an exception if the latest version is not in progress.
+     * Create or update a knowledge document. Requires an existing knowledge base with an in progress version.
+     * Will throw an exception if the latest version is not in progress.
      * <p>&lt;Tip&gt;
-     * This API maintains document version history. If for the same reference ID neither the `title` nor `text` fields
+     * This API maintains document version history. If for the same reference ID none of the `title`, `text`, `sourceUrl`, `metadata` fields
      * have changed, a new document version will not be created. The existing version will be reused.
      * &lt;/Tip&gt;</p>
      */
@@ -727,9 +830,10 @@ public class AsyncRawKnowledgeClient {
     }
 
     /**
-     * Create knowledge document. Requires an existing knowledge base with an in progress version. Will throw an exception if the latest version is not in progress.
+     * Create or update a knowledge document. Requires an existing knowledge base with an in progress version.
+     * Will throw an exception if the latest version is not in progress.
      * <p>&lt;Tip&gt;
-     * This API maintains document version history. If for the same reference ID neither the `title` nor `text` fields
+     * This API maintains document version history. If for the same reference ID none of the `title`, `text`, `sourceUrl`, `metadata` fields
      * have changed, a new document version will not be created. The existing version will be reused.
      * &lt;/Tip&gt;</p>
      */
@@ -813,22 +917,28 @@ public class AsyncRawKnowledgeClient {
     }
 
     /**
-     * Not yet implemented. Update knowledge document. Requires an existing knowledge base with an in progress version of type PARTIAL. Will throw an exception if the latest version is not in progress.
+     * Delete knowledge document from a specific version.
+     * Requires an existing knowledge base with an in progress version of type PARTIAL. Will throw an exception if the version is not in progress.
      */
-    public CompletableFuture<MavenAGIHttpResponse<KnowledgeDocumentResponse>> updateKnowledgeDocument(
-            String knowledgeBaseReferenceId, KnowledgeDocumentRequest request) {
-        return updateKnowledgeDocument(knowledgeBaseReferenceId, request, null);
+    public CompletableFuture<MavenAGIHttpResponse<Void>> deleteKnowledgeDocument(
+            String knowledgeBaseReferenceId, String knowledgeDocumentReferenceId, KnowledgeDeleteRequest request) {
+        return deleteKnowledgeDocument(knowledgeBaseReferenceId, knowledgeDocumentReferenceId, request, null);
     }
 
     /**
-     * Not yet implemented. Update knowledge document. Requires an existing knowledge base with an in progress version of type PARTIAL. Will throw an exception if the latest version is not in progress.
+     * Delete knowledge document from a specific version.
+     * Requires an existing knowledge base with an in progress version of type PARTIAL. Will throw an exception if the version is not in progress.
      */
-    public CompletableFuture<MavenAGIHttpResponse<KnowledgeDocumentResponse>> updateKnowledgeDocument(
-            String knowledgeBaseReferenceId, KnowledgeDocumentRequest request, RequestOptions requestOptions) {
+    public CompletableFuture<MavenAGIHttpResponse<Void>> deleteKnowledgeDocument(
+            String knowledgeBaseReferenceId,
+            String knowledgeDocumentReferenceId,
+            KnowledgeDeleteRequest request,
+            RequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("v1/knowledge")
                 .addPathSegment(knowledgeBaseReferenceId)
+                .addPathSegment(knowledgeDocumentReferenceId)
                 .addPathSegments("document")
                 .build();
         RequestBody body;
@@ -840,7 +950,7 @@ public class AsyncRawKnowledgeClient {
         }
         Request okhttpRequest = new Request.Builder()
                 .url(httpUrl)
-                .method("PUT", body)
+                .method("DELETE", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
                 .addHeader("Accept", "application/json")
@@ -849,16 +959,13 @@ public class AsyncRawKnowledgeClient {
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
             client = clientOptions.httpClientWithTimeout(requestOptions);
         }
-        CompletableFuture<MavenAGIHttpResponse<KnowledgeDocumentResponse>> future = new CompletableFuture<>();
+        CompletableFuture<MavenAGIHttpResponse<Void>> future = new CompletableFuture<>();
         client.newCall(okhttpRequest).enqueue(new Callback() {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
                     if (response.isSuccessful()) {
-                        future.complete(new MavenAGIHttpResponse<>(
-                                ObjectMappers.JSON_MAPPER.readValue(
-                                        responseBody.string(), KnowledgeDocumentResponse.class),
-                                response));
+                        future.complete(new MavenAGIHttpResponse<>(null, response));
                         return;
                     }
                     String responseBodyString = responseBody != null ? responseBody.string() : "{}";
@@ -903,42 +1010,52 @@ public class AsyncRawKnowledgeClient {
     }
 
     /**
-     * Not yet implemented. Delete knowledge document. Requires an existing knowledge base with an in progress version of type PARTIAL. Will throw an exception if the latest version is not in progress.
+     * Get a knowledge document by its supplied version and document IDs. Response includes document content in markdown format.
      */
-    public CompletableFuture<MavenAGIHttpResponse<Void>> deleteKnowledgeDocument(
-            String knowledgeBaseReferenceId, String knowledgeDocumentReferenceId) {
-        return deleteKnowledgeDocument(knowledgeBaseReferenceId, knowledgeDocumentReferenceId, null);
+    public CompletableFuture<MavenAGIHttpResponse<KnowledgeDocumentResponse>> getKnowledgeDocument(
+            String knowledgeBaseVersionReferenceId,
+            String knowledgeDocumentReferenceId,
+            KnowledgeDocumentGetRequest request) {
+        return getKnowledgeDocument(knowledgeBaseVersionReferenceId, knowledgeDocumentReferenceId, request, null);
     }
 
     /**
-     * Not yet implemented. Delete knowledge document. Requires an existing knowledge base with an in progress version of type PARTIAL. Will throw an exception if the latest version is not in progress.
+     * Get a knowledge document by its supplied version and document IDs. Response includes document content in markdown format.
      */
-    public CompletableFuture<MavenAGIHttpResponse<Void>> deleteKnowledgeDocument(
-            String knowledgeBaseReferenceId, String knowledgeDocumentReferenceId, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+    public CompletableFuture<MavenAGIHttpResponse<KnowledgeDocumentResponse>> getKnowledgeDocument(
+            String knowledgeBaseVersionReferenceId,
+            String knowledgeDocumentReferenceId,
+            KnowledgeDocumentGetRequest request,
+            RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("v1/knowledge")
-                .addPathSegment(knowledgeBaseReferenceId)
-                .addPathSegment(knowledgeDocumentReferenceId)
-                .addPathSegments("document")
-                .build();
-        Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
-                .method("DELETE", null)
+                .addPathSegments("versions")
+                .addPathSegment(knowledgeBaseVersionReferenceId)
+                .addPathSegments("documents")
+                .addPathSegment(knowledgeDocumentReferenceId);
+        QueryStringMapper.addQueryParameter(
+                httpUrl, "knowledgeBaseVersionAppId", request.getKnowledgeBaseVersionAppId(), false);
+        Request.Builder _requestBuilder = new Request.Builder()
+                .url(httpUrl.build())
+                .method("GET", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Accept", "application/json")
-                .build();
+                .addHeader("Accept", "application/json");
+        Request okhttpRequest = _requestBuilder.build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
             client = clientOptions.httpClientWithTimeout(requestOptions);
         }
-        CompletableFuture<MavenAGIHttpResponse<Void>> future = new CompletableFuture<>();
+        CompletableFuture<MavenAGIHttpResponse<KnowledgeDocumentResponse>> future = new CompletableFuture<>();
         client.newCall(okhttpRequest).enqueue(new Callback() {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 try (ResponseBody responseBody = response.body()) {
                     if (response.isSuccessful()) {
-                        future.complete(new MavenAGIHttpResponse<>(null, response));
+                        future.complete(new MavenAGIHttpResponse<>(
+                                ObjectMappers.JSON_MAPPER.readValue(
+                                        responseBody.string(), KnowledgeDocumentResponse.class),
+                                response));
                         return;
                     }
                     String responseBodyString = responseBody != null ? responseBody.string() : "{}";

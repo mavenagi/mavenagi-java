@@ -25,6 +25,8 @@ public final class AgentPatchRequest {
 
     private final Optional<AgentEnvironment> environment;
 
+    private final Optional<String> defaultTimezone;
+
     private final Optional<Set<PiiCategory>> enabledPiiCategories;
 
     private final Map<String, Object> additionalProperties;
@@ -32,10 +34,12 @@ public final class AgentPatchRequest {
     private AgentPatchRequest(
             Optional<String> name,
             Optional<AgentEnvironment> environment,
+            Optional<String> defaultTimezone,
             Optional<Set<PiiCategory>> enabledPiiCategories,
             Map<String, Object> additionalProperties) {
         this.name = name;
         this.environment = environment;
+        this.defaultTimezone = defaultTimezone;
         this.enabledPiiCategories = enabledPiiCategories;
         this.additionalProperties = additionalProperties;
     }
@@ -54,6 +58,14 @@ public final class AgentPatchRequest {
     @JsonProperty("environment")
     public Optional<AgentEnvironment> getEnvironment() {
         return environment;
+    }
+
+    /**
+     * @return The agent's default timezone. This is used when a timezone is not set on a conversation.
+     */
+    @JsonProperty("defaultTimezone")
+    public Optional<String> getDefaultTimezone() {
+        return defaultTimezone;
     }
 
     /**
@@ -78,12 +90,13 @@ public final class AgentPatchRequest {
     private boolean equalTo(AgentPatchRequest other) {
         return name.equals(other.name)
                 && environment.equals(other.environment)
+                && defaultTimezone.equals(other.defaultTimezone)
                 && enabledPiiCategories.equals(other.enabledPiiCategories);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.name, this.environment, this.enabledPiiCategories);
+        return Objects.hash(this.name, this.environment, this.defaultTimezone, this.enabledPiiCategories);
     }
 
     @java.lang.Override
@@ -101,6 +114,8 @@ public final class AgentPatchRequest {
 
         private Optional<AgentEnvironment> environment = Optional.empty();
 
+        private Optional<String> defaultTimezone = Optional.empty();
+
         private Optional<Set<PiiCategory>> enabledPiiCategories = Optional.empty();
 
         @JsonAnySetter
@@ -111,6 +126,7 @@ public final class AgentPatchRequest {
         public Builder from(AgentPatchRequest other) {
             name(other.getName());
             environment(other.getEnvironment());
+            defaultTimezone(other.getDefaultTimezone());
             enabledPiiCategories(other.getEnabledPiiCategories());
             return this;
         }
@@ -144,6 +160,20 @@ public final class AgentPatchRequest {
         }
 
         /**
+         * <p>The agent's default timezone. This is used when a timezone is not set on a conversation.</p>
+         */
+        @JsonSetter(value = "defaultTimezone", nulls = Nulls.SKIP)
+        public Builder defaultTimezone(Optional<String> defaultTimezone) {
+            this.defaultTimezone = defaultTimezone;
+            return this;
+        }
+
+        public Builder defaultTimezone(String defaultTimezone) {
+            this.defaultTimezone = Optional.ofNullable(defaultTimezone);
+            return this;
+        }
+
+        /**
          * <p>The PII categories that are enabled for the agent.</p>
          */
         @JsonSetter(value = "enabledPiiCategories", nulls = Nulls.SKIP)
@@ -158,7 +188,8 @@ public final class AgentPatchRequest {
         }
 
         public AgentPatchRequest build() {
-            return new AgentPatchRequest(name, environment, enabledPiiCategories, additionalProperties);
+            return new AgentPatchRequest(
+                    name, environment, defaultTimezone, enabledPiiCategories, additionalProperties);
         }
     }
 }

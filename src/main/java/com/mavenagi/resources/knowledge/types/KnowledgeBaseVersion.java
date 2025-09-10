@@ -21,10 +21,10 @@ import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = KnowledgeBaseVersion.Builder.class)
-public final class KnowledgeBaseVersion {
-    private final EntityId versionId;
-
+public final class KnowledgeBaseVersion implements IKnowledgeBaseVersionRequest {
     private final KnowledgeBaseVersionType type;
+
+    private final EntityId versionId;
 
     private final KnowledgeBaseVersionStatus status;
 
@@ -33,16 +33,25 @@ public final class KnowledgeBaseVersion {
     private final Map<String, Object> additionalProperties;
 
     private KnowledgeBaseVersion(
-            EntityId versionId,
             KnowledgeBaseVersionType type,
+            EntityId versionId,
             KnowledgeBaseVersionStatus status,
             Optional<String> errorMessage,
             Map<String, Object> additionalProperties) {
-        this.versionId = versionId;
         this.type = type;
+        this.versionId = versionId;
         this.status = status;
         this.errorMessage = errorMessage;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return Indicates whether the completed version constitutes a full or partial refresh of the knowledge base. Deleting and updating documents is only supported for partial refreshes.
+     */
+    @JsonProperty("type")
+    @java.lang.Override
+    public KnowledgeBaseVersionType getType() {
+        return type;
     }
 
     /**
@@ -51,14 +60,6 @@ public final class KnowledgeBaseVersion {
     @JsonProperty("versionId")
     public EntityId getVersionId() {
         return versionId;
-    }
-
-    /**
-     * @return Indicates whether the completed version constitutes a full or partial refresh of the knowledge base. Deleting and updating documents is only supported for partial refreshes.
-     */
-    @JsonProperty("type")
-    public KnowledgeBaseVersionType getType() {
-        return type;
     }
 
     /**
@@ -89,15 +90,15 @@ public final class KnowledgeBaseVersion {
     }
 
     private boolean equalTo(KnowledgeBaseVersion other) {
-        return versionId.equals(other.versionId)
-                && type.equals(other.type)
+        return type.equals(other.type)
+                && versionId.equals(other.versionId)
                 && status.equals(other.status)
                 && errorMessage.equals(other.errorMessage);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.versionId, this.type, this.status, this.errorMessage);
+        return Objects.hash(this.type, this.versionId, this.status, this.errorMessage);
     }
 
     @java.lang.Override
@@ -105,24 +106,24 @@ public final class KnowledgeBaseVersion {
         return ObjectMappers.stringify(this);
     }
 
-    public static VersionIdStage builder() {
+    public static TypeStage builder() {
         return new Builder();
-    }
-
-    public interface VersionIdStage {
-        /**
-         * <p>The unique ID of the knowledge base version.</p>
-         */
-        TypeStage versionId(@NotNull EntityId versionId);
-
-        Builder from(KnowledgeBaseVersion other);
     }
 
     public interface TypeStage {
         /**
          * <p>Indicates whether the completed version constitutes a full or partial refresh of the knowledge base. Deleting and updating documents is only supported for partial refreshes.</p>
          */
-        StatusStage type(@NotNull KnowledgeBaseVersionType type);
+        VersionIdStage type(@NotNull KnowledgeBaseVersionType type);
+
+        Builder from(KnowledgeBaseVersion other);
+    }
+
+    public interface VersionIdStage {
+        /**
+         * <p>The unique ID of the knowledge base version.</p>
+         */
+        StatusStage versionId(@NotNull EntityId versionId);
     }
 
     public interface StatusStage {
@@ -144,10 +145,10 @@ public final class KnowledgeBaseVersion {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements VersionIdStage, TypeStage, StatusStage, _FinalStage {
-        private EntityId versionId;
-
+    public static final class Builder implements TypeStage, VersionIdStage, StatusStage, _FinalStage {
         private KnowledgeBaseVersionType type;
+
+        private EntityId versionId;
 
         private KnowledgeBaseVersionStatus status;
 
@@ -160,22 +161,10 @@ public final class KnowledgeBaseVersion {
 
         @java.lang.Override
         public Builder from(KnowledgeBaseVersion other) {
-            versionId(other.getVersionId());
             type(other.getType());
+            versionId(other.getVersionId());
             status(other.getStatus());
             errorMessage(other.getErrorMessage());
-            return this;
-        }
-
-        /**
-         * <p>The unique ID of the knowledge base version.</p>
-         * <p>The unique ID of the knowledge base version.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("versionId")
-        public TypeStage versionId(@NotNull EntityId versionId) {
-            this.versionId = Objects.requireNonNull(versionId, "versionId must not be null");
             return this;
         }
 
@@ -186,8 +175,20 @@ public final class KnowledgeBaseVersion {
          */
         @java.lang.Override
         @JsonSetter("type")
-        public StatusStage type(@NotNull KnowledgeBaseVersionType type) {
+        public VersionIdStage type(@NotNull KnowledgeBaseVersionType type) {
             this.type = Objects.requireNonNull(type, "type must not be null");
+            return this;
+        }
+
+        /**
+         * <p>The unique ID of the knowledge base version.</p>
+         * <p>The unique ID of the knowledge base version.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("versionId")
+        public StatusStage versionId(@NotNull EntityId versionId) {
+            this.versionId = Objects.requireNonNull(versionId, "versionId must not be null");
             return this;
         }
 
@@ -225,7 +226,7 @@ public final class KnowledgeBaseVersion {
 
         @java.lang.Override
         public KnowledgeBaseVersion build() {
-            return new KnowledgeBaseVersion(versionId, type, status, errorMessage, additionalProperties);
+            return new KnowledgeBaseVersion(type, versionId, status, errorMessage, additionalProperties);
         }
     }
 }

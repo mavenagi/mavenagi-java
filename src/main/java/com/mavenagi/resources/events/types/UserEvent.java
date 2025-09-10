@@ -27,7 +27,7 @@ import org.jetbrains.annotations.NotNull;
 public final class UserEvent implements IEventBaseNoId {
     private final Optional<OffsetDateTime> timestamp;
 
-    private final Optional<Set<EntityId>> references;
+    private final Optional<Set<ScopedEntity>> references;
 
     private final Optional<SourceInfo> sourceInfo;
 
@@ -49,7 +49,7 @@ public final class UserEvent implements IEventBaseNoId {
 
     private UserEvent(
             Optional<OffsetDateTime> timestamp,
-            Optional<Set<EntityId>> references,
+            Optional<Set<ScopedEntity>> references,
             Optional<SourceInfo> sourceInfo,
             Optional<SessionInfo> sessionInfo,
             Optional<ContextInfo> contextInfo,
@@ -80,7 +80,7 @@ public final class UserEvent implements IEventBaseNoId {
 
     @JsonProperty("references")
     @java.lang.Override
-    public Optional<Set<EntityId>> getReferences() {
+    public Optional<Set<ScopedEntity>> getReferences() {
         return references;
     }
 
@@ -220,9 +220,9 @@ public final class UserEvent implements IEventBaseNoId {
 
         _FinalStage timestamp(OffsetDateTime timestamp);
 
-        _FinalStage references(Optional<Set<EntityId>> references);
+        _FinalStage references(Optional<Set<ScopedEntity>> references);
 
-        _FinalStage references(Set<EntityId> references);
+        _FinalStage references(Set<ScopedEntity> references);
 
         _FinalStage sourceInfo(Optional<SourceInfo> sourceInfo);
 
@@ -269,7 +269,7 @@ public final class UserEvent implements IEventBaseNoId {
 
         private Optional<SourceInfo> sourceInfo = Optional.empty();
 
-        private Optional<Set<EntityId>> references = Optional.empty();
+        private Optional<Set<ScopedEntity>> references = Optional.empty();
 
         private Optional<OffsetDateTime> timestamp = Optional.empty();
 
@@ -409,14 +409,14 @@ public final class UserEvent implements IEventBaseNoId {
         }
 
         @java.lang.Override
-        public _FinalStage references(Set<EntityId> references) {
+        public _FinalStage references(Set<ScopedEntity> references) {
             this.references = Optional.ofNullable(references);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "references", nulls = Nulls.SKIP)
-        public _FinalStage references(Optional<Set<EntityId>> references) {
+        public _FinalStage references(Optional<Set<ScopedEntity>> references) {
             this.references = references;
             return this;
         }

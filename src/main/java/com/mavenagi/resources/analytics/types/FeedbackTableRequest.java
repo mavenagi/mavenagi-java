@@ -25,6 +25,8 @@ import java.util.Optional;
 public final class FeedbackTableRequest implements IFeedbackAnalyticsRequest {
     private final Optional<FeedbackFilter> feedbackFilter;
 
+    private final Optional<String> timezone;
+
     private final Optional<TimeInterval> timeGrouping;
 
     private final List<FeedbackGroupBy> fieldGroupings;
@@ -35,11 +37,13 @@ public final class FeedbackTableRequest implements IFeedbackAnalyticsRequest {
 
     private FeedbackTableRequest(
             Optional<FeedbackFilter> feedbackFilter,
+            Optional<String> timezone,
             Optional<TimeInterval> timeGrouping,
             List<FeedbackGroupBy> fieldGroupings,
             List<FeedbackColumnDefinition> columnDefinitions,
             Map<String, Object> additionalProperties) {
         this.feedbackFilter = feedbackFilter;
+        this.timezone = timezone;
         this.timeGrouping = timeGrouping;
         this.fieldGroupings = fieldGroupings;
         this.columnDefinitions = columnDefinitions;
@@ -53,6 +57,17 @@ public final class FeedbackTableRequest implements IFeedbackAnalyticsRequest {
     @java.lang.Override
     public Optional<FeedbackFilter> getFeedbackFilter() {
         return feedbackFilter;
+    }
+
+    /**
+     * @return IANA timezone identifier (e.g., &quot;America/Los_Angeles&quot;).
+     * When provided, time-based groupings (e.g., DAY) and date filters are evaluated in this timezone;
+     * otherwise UTC is used.
+     */
+    @JsonProperty("timezone")
+    @java.lang.Override
+    public Optional<String> getTimezone() {
+        return timezone;
     }
 
     /**
@@ -98,6 +113,7 @@ public final class FeedbackTableRequest implements IFeedbackAnalyticsRequest {
 
     private boolean equalTo(FeedbackTableRequest other) {
         return feedbackFilter.equals(other.feedbackFilter)
+                && timezone.equals(other.timezone)
                 && timeGrouping.equals(other.timeGrouping)
                 && fieldGroupings.equals(other.fieldGroupings)
                 && columnDefinitions.equals(other.columnDefinitions);
@@ -105,7 +121,8 @@ public final class FeedbackTableRequest implements IFeedbackAnalyticsRequest {
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.feedbackFilter, this.timeGrouping, this.fieldGroupings, this.columnDefinitions);
+        return Objects.hash(
+                this.feedbackFilter, this.timezone, this.timeGrouping, this.fieldGroupings, this.columnDefinitions);
     }
 
     @java.lang.Override
@@ -121,6 +138,8 @@ public final class FeedbackTableRequest implements IFeedbackAnalyticsRequest {
     public static final class Builder {
         private Optional<FeedbackFilter> feedbackFilter = Optional.empty();
 
+        private Optional<String> timezone = Optional.empty();
+
         private Optional<TimeInterval> timeGrouping = Optional.empty();
 
         private List<FeedbackGroupBy> fieldGroupings = new ArrayList<>();
@@ -134,6 +153,7 @@ public final class FeedbackTableRequest implements IFeedbackAnalyticsRequest {
 
         public Builder from(FeedbackTableRequest other) {
             feedbackFilter(other.getFeedbackFilter());
+            timezone(other.getTimezone());
             timeGrouping(other.getTimeGrouping());
             fieldGroupings(other.getFieldGroupings());
             columnDefinitions(other.getColumnDefinitions());
@@ -151,6 +171,22 @@ public final class FeedbackTableRequest implements IFeedbackAnalyticsRequest {
 
         public Builder feedbackFilter(FeedbackFilter feedbackFilter) {
             this.feedbackFilter = Optional.ofNullable(feedbackFilter);
+            return this;
+        }
+
+        /**
+         * <p>IANA timezone identifier (e.g., &quot;America/Los_Angeles&quot;).
+         * When provided, time-based groupings (e.g., DAY) and date filters are evaluated in this timezone;
+         * otherwise UTC is used.</p>
+         */
+        @JsonSetter(value = "timezone", nulls = Nulls.SKIP)
+        public Builder timezone(Optional<String> timezone) {
+            this.timezone = timezone;
+            return this;
+        }
+
+        public Builder timezone(String timezone) {
+            this.timezone = Optional.ofNullable(timezone);
             return this;
         }
 
@@ -216,7 +252,7 @@ public final class FeedbackTableRequest implements IFeedbackAnalyticsRequest {
 
         public FeedbackTableRequest build() {
             return new FeedbackTableRequest(
-                    feedbackFilter, timeGrouping, fieldGroupings, columnDefinitions, additionalProperties);
+                    feedbackFilter, timezone, timeGrouping, fieldGroupings, columnDefinitions, additionalProperties);
         }
     }
 }

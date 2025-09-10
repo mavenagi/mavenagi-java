@@ -12,7 +12,11 @@ public enum ActionParameterType {
 
     NUMBER("NUMBER"),
 
-    SCHEMA("SCHEMA");
+    SCHEMA("SCHEMA"),
+
+    FILE("FILE"),
+
+    OAUTH("OAUTH");
 
     private final String value;
 

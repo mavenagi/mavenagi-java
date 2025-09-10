@@ -33,6 +33,8 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
 
     private final EntityId knowledgeBaseId;
 
+    private final Optional<EntityId> activeVersionId;
+
     private final KnowledgeBaseType type;
 
     private final Map<String, String> metadata;
@@ -51,6 +53,7 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
             String name,
             Optional<Precondition> precondition,
             EntityId knowledgeBaseId,
+            Optional<EntityId> activeVersionId,
             KnowledgeBaseType type,
             Map<String, String> metadata,
             Set<String> tags,
@@ -61,6 +64,7 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
         this.name = name;
         this.precondition = precondition;
         this.knowledgeBaseId = knowledgeBaseId;
+        this.activeVersionId = activeVersionId;
         this.type = type;
         this.metadata = metadata;
         this.tags = tags;
@@ -94,6 +98,14 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
     @JsonProperty("knowledgeBaseId")
     public EntityId getKnowledgeBaseId() {
         return knowledgeBaseId;
+    }
+
+    /**
+     * @return ID of the knowledge base version that is currently active. Documents can be fetched using this version ID.
+     */
+    @JsonProperty("activeVersionId")
+    public Optional<EntityId> getActiveVersionId() {
+        return activeVersionId;
     }
 
     /**
@@ -161,6 +173,7 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
         return name.equals(other.name)
                 && precondition.equals(other.precondition)
                 && knowledgeBaseId.equals(other.knowledgeBaseId)
+                && activeVersionId.equals(other.activeVersionId)
                 && type.equals(other.type)
                 && metadata.equals(other.metadata)
                 && tags.equals(other.tags)
@@ -175,6 +188,7 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
                 this.name,
                 this.precondition,
                 this.knowledgeBaseId,
+                this.activeVersionId,
                 this.type,
                 this.metadata,
                 this.tags,
@@ -233,6 +247,13 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
         _FinalStage precondition(Precondition precondition);
 
         /**
+         * <p>ID of the knowledge base version that is currently active. Documents can be fetched using this version ID.</p>
+         */
+        _FinalStage activeVersionId(Optional<EntityId> activeVersionId);
+
+        _FinalStage activeVersionId(EntityId activeVersionId);
+
+        /**
          * <p>Metadata for the knowledge base.</p>
          */
         _FinalStage metadata(Map<String, String> metadata);
@@ -286,6 +307,8 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
 
         private Map<String, String> metadata = new LinkedHashMap<>();
 
+        private Optional<EntityId> activeVersionId = Optional.empty();
+
         private Optional<Precondition> precondition = Optional.empty();
 
         @JsonAnySetter
@@ -298,6 +321,7 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
             name(other.getName());
             precondition(other.getPrecondition());
             knowledgeBaseId(other.getKnowledgeBaseId());
+            activeVersionId(other.getActiveVersionId());
             type(other.getType());
             metadata(other.getMetadata());
             tags(other.getTags());
@@ -462,6 +486,26 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
         }
 
         /**
+         * <p>ID of the knowledge base version that is currently active. Documents can be fetched using this version ID.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage activeVersionId(EntityId activeVersionId) {
+            this.activeVersionId = Optional.ofNullable(activeVersionId);
+            return this;
+        }
+
+        /**
+         * <p>ID of the knowledge base version that is currently active. Documents can be fetched using this version ID.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "activeVersionId", nulls = Nulls.SKIP)
+        public _FinalStage activeVersionId(Optional<EntityId> activeVersionId) {
+            this.activeVersionId = activeVersionId;
+            return this;
+        }
+
+        /**
          * <p>The preconditions that must be met for knowledge base be relevant to a conversation. Can be used to restrict knowledge bases to certain types of users.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -487,6 +531,7 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
                     name,
                     precondition,
                     knowledgeBaseId,
+                    activeVersionId,
                     type,
                     metadata,
                     tags,

@@ -12,8 +12,10 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
+import com.mavenagi.resources.commons.types.EntityIdWithoutAgent;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -29,6 +31,10 @@ public final class KnowledgeDocumentFilter {
 
     private final Optional<OffsetDateTime> createdBefore;
 
+    private final Optional<List<String>> appIds;
+
+    private final Optional<EntityIdWithoutAgent> knowledgeBaseVersionId;
+
     private final Map<String, Object> additionalProperties;
 
     private KnowledgeDocumentFilter(
@@ -36,11 +42,15 @@ public final class KnowledgeDocumentFilter {
             Optional<String> title,
             Optional<OffsetDateTime> createdAfter,
             Optional<OffsetDateTime> createdBefore,
+            Optional<List<String>> appIds,
+            Optional<EntityIdWithoutAgent> knowledgeBaseVersionId,
             Map<String, Object> additionalProperties) {
         this.search = search;
         this.title = title;
         this.createdAfter = createdAfter;
         this.createdBefore = createdBefore;
+        this.appIds = appIds;
+        this.knowledgeBaseVersionId = knowledgeBaseVersionId;
         this.additionalProperties = additionalProperties;
     }
 
@@ -87,6 +97,23 @@ public final class KnowledgeDocumentFilter {
         return createdBefore;
     }
 
+    /**
+     * @return Filter by app IDs
+     */
+    @JsonProperty("appIds")
+    public Optional<List<String>> getAppIds() {
+        return appIds;
+    }
+
+    /**
+     * @return Filter documents within the specified knowledge base version.
+     * If not provided all active knowledge base versions within the agent will be searched.
+     */
+    @JsonProperty("knowledgeBaseVersionId")
+    public Optional<EntityIdWithoutAgent> getKnowledgeBaseVersionId() {
+        return knowledgeBaseVersionId;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -102,12 +129,20 @@ public final class KnowledgeDocumentFilter {
         return search.equals(other.search)
                 && title.equals(other.title)
                 && createdAfter.equals(other.createdAfter)
-                && createdBefore.equals(other.createdBefore);
+                && createdBefore.equals(other.createdBefore)
+                && appIds.equals(other.appIds)
+                && knowledgeBaseVersionId.equals(other.knowledgeBaseVersionId);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.search, this.title, this.createdAfter, this.createdBefore);
+        return Objects.hash(
+                this.search,
+                this.title,
+                this.createdAfter,
+                this.createdBefore,
+                this.appIds,
+                this.knowledgeBaseVersionId);
     }
 
     @java.lang.Override
@@ -129,6 +164,10 @@ public final class KnowledgeDocumentFilter {
 
         private Optional<OffsetDateTime> createdBefore = Optional.empty();
 
+        private Optional<List<String>> appIds = Optional.empty();
+
+        private Optional<EntityIdWithoutAgent> knowledgeBaseVersionId = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -139,6 +178,8 @@ public final class KnowledgeDocumentFilter {
             title(other.getTitle());
             createdAfter(other.getCreatedAfter());
             createdBefore(other.getCreatedBefore());
+            appIds(other.getAppIds());
+            knowledgeBaseVersionId(other.getKnowledgeBaseVersionId());
             return this;
         }
 
@@ -209,8 +250,38 @@ public final class KnowledgeDocumentFilter {
             return this;
         }
 
+        /**
+         * <p>Filter by app IDs</p>
+         */
+        @JsonSetter(value = "appIds", nulls = Nulls.SKIP)
+        public Builder appIds(Optional<List<String>> appIds) {
+            this.appIds = appIds;
+            return this;
+        }
+
+        public Builder appIds(List<String> appIds) {
+            this.appIds = Optional.ofNullable(appIds);
+            return this;
+        }
+
+        /**
+         * <p>Filter documents within the specified knowledge base version.
+         * If not provided all active knowledge base versions within the agent will be searched.</p>
+         */
+        @JsonSetter(value = "knowledgeBaseVersionId", nulls = Nulls.SKIP)
+        public Builder knowledgeBaseVersionId(Optional<EntityIdWithoutAgent> knowledgeBaseVersionId) {
+            this.knowledgeBaseVersionId = knowledgeBaseVersionId;
+            return this;
+        }
+
+        public Builder knowledgeBaseVersionId(EntityIdWithoutAgent knowledgeBaseVersionId) {
+            this.knowledgeBaseVersionId = Optional.ofNullable(knowledgeBaseVersionId);
+            return this;
+        }
+
         public KnowledgeDocumentFilter build() {
-            return new KnowledgeDocumentFilter(search, title, createdAfter, createdBefore, additionalProperties);
+            return new KnowledgeDocumentFilter(
+                    search, title, createdAfter, createdBefore, appIds, knowledgeBaseVersionId, additionalProperties);
         }
     }
 }

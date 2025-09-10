@@ -15,7 +15,6 @@ import com.mavenagi.core.ObjectMappers;
 import com.mavenagi.resources.commons.types.EntityId;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -23,7 +22,11 @@ import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = KnowledgeDocumentSearchResponse.Builder.class)
-public final class KnowledgeDocumentSearchResponse implements IBaseKnowledgeDocument {
+public final class KnowledgeDocumentSearchResponse implements IKnowledgeDocumentSearchResponse, IBaseKnowledgeDocument {
+    private final EntityId knowledgeDocumentId;
+
+    private final Optional<EntityId> knowledgeBaseVersionId;
+
     private final String title;
 
     private final Optional<String> url;
@@ -36,31 +39,46 @@ public final class KnowledgeDocumentSearchResponse implements IBaseKnowledgeDocu
 
     private final Optional<String> author;
 
-    private final EntityId knowledgeDocumentId;
-
-    private final Map<String, String> metadata;
-
     private final Map<String, Object> additionalProperties;
 
     private KnowledgeDocumentSearchResponse(
+            EntityId knowledgeDocumentId,
+            Optional<EntityId> knowledgeBaseVersionId,
             String title,
             Optional<String> url,
             Optional<String> language,
             Optional<OffsetDateTime> createdAt,
             Optional<OffsetDateTime> updatedAt,
             Optional<String> author,
-            EntityId knowledgeDocumentId,
-            Map<String, String> metadata,
             Map<String, Object> additionalProperties) {
+        this.knowledgeDocumentId = knowledgeDocumentId;
+        this.knowledgeBaseVersionId = knowledgeBaseVersionId;
         this.title = title;
         this.url = url;
         this.language = language;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.author = author;
-        this.knowledgeDocumentId = knowledgeDocumentId;
-        this.metadata = metadata;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return ID that uniquely identifies this knowledge document within its knowledge base
+     */
+    @JsonProperty("knowledgeDocumentId")
+    @java.lang.Override
+    public EntityId getKnowledgeDocumentId() {
+        return knowledgeDocumentId;
+    }
+
+    /**
+     * @return ID that uniquely identifies the knowledge base version that contains this document.
+     * This may be missing on legacy documents.
+     */
+    @JsonProperty("knowledgeBaseVersionId")
+    @java.lang.Override
+    public Optional<EntityId> getKnowledgeBaseVersionId() {
+        return knowledgeBaseVersionId;
     }
 
     /**
@@ -117,22 +135,6 @@ public final class KnowledgeDocumentSearchResponse implements IBaseKnowledgeDocu
         return author;
     }
 
-    /**
-     * @return ID that uniquely identifies this knowledge document within its knowledge base
-     */
-    @JsonProperty("knowledgeDocumentId")
-    public EntityId getKnowledgeDocumentId() {
-        return knowledgeDocumentId;
-    }
-
-    /**
-     * @return Metadata for the knowledge document.
-     */
-    @JsonProperty("metadata")
-    public Map<String, String> getMetadata() {
-        return metadata;
-    }
-
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -145,27 +147,27 @@ public final class KnowledgeDocumentSearchResponse implements IBaseKnowledgeDocu
     }
 
     private boolean equalTo(KnowledgeDocumentSearchResponse other) {
-        return title.equals(other.title)
+        return knowledgeDocumentId.equals(other.knowledgeDocumentId)
+                && knowledgeBaseVersionId.equals(other.knowledgeBaseVersionId)
+                && title.equals(other.title)
                 && url.equals(other.url)
                 && language.equals(other.language)
                 && createdAt.equals(other.createdAt)
                 && updatedAt.equals(other.updatedAt)
-                && author.equals(other.author)
-                && knowledgeDocumentId.equals(other.knowledgeDocumentId)
-                && metadata.equals(other.metadata);
+                && author.equals(other.author);
     }
 
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
+                this.knowledgeDocumentId,
+                this.knowledgeBaseVersionId,
                 this.title,
                 this.url,
                 this.language,
                 this.createdAt,
                 this.updatedAt,
-                this.author,
-                this.knowledgeDocumentId,
-                this.metadata);
+                this.author);
     }
 
     @java.lang.Override
@@ -173,28 +175,36 @@ public final class KnowledgeDocumentSearchResponse implements IBaseKnowledgeDocu
         return ObjectMappers.stringify(this);
     }
 
-    public static TitleStage builder() {
+    public static KnowledgeDocumentIdStage builder() {
         return new Builder();
-    }
-
-    public interface TitleStage {
-        /**
-         * <p>The title of the document. Will be shown as part of answers.</p>
-         */
-        KnowledgeDocumentIdStage title(@NotNull String title);
-
-        Builder from(KnowledgeDocumentSearchResponse other);
     }
 
     public interface KnowledgeDocumentIdStage {
         /**
          * <p>ID that uniquely identifies this knowledge document within its knowledge base</p>
          */
-        _FinalStage knowledgeDocumentId(@NotNull EntityId knowledgeDocumentId);
+        TitleStage knowledgeDocumentId(@NotNull EntityId knowledgeDocumentId);
+
+        Builder from(KnowledgeDocumentSearchResponse other);
+    }
+
+    public interface TitleStage {
+        /**
+         * <p>The title of the document. Will be shown as part of answers.</p>
+         */
+        _FinalStage title(@NotNull String title);
     }
 
     public interface _FinalStage {
         KnowledgeDocumentSearchResponse build();
+
+        /**
+         * <p>ID that uniquely identifies the knowledge base version that contains this document.
+         * This may be missing on legacy documents.</p>
+         */
+        _FinalStage knowledgeBaseVersionId(Optional<EntityId> knowledgeBaseVersionId);
+
+        _FinalStage knowledgeBaseVersionId(EntityId knowledgeBaseVersionId);
 
         /**
          * <p>The URL of the document. Should be visible to end users. Will be shown as part of answers. Not used for crawling.</p>
@@ -230,24 +240,13 @@ public final class KnowledgeDocumentSearchResponse implements IBaseKnowledgeDocu
         _FinalStage author(Optional<String> author);
 
         _FinalStage author(String author);
-
-        /**
-         * <p>Metadata for the knowledge document.</p>
-         */
-        _FinalStage metadata(Map<String, String> metadata);
-
-        _FinalStage putAllMetadata(Map<String, String> metadata);
-
-        _FinalStage metadata(String key, String value);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements TitleStage, KnowledgeDocumentIdStage, _FinalStage {
-        private String title;
-
+    public static final class Builder implements KnowledgeDocumentIdStage, TitleStage, _FinalStage {
         private EntityId knowledgeDocumentId;
 
-        private Map<String, String> metadata = new LinkedHashMap<>();
+        private String title;
 
         private Optional<String> author = Optional.empty();
 
@@ -259,6 +258,8 @@ public final class KnowledgeDocumentSearchResponse implements IBaseKnowledgeDocu
 
         private Optional<String> url = Optional.empty();
 
+        private Optional<EntityId> knowledgeBaseVersionId = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -266,26 +267,14 @@ public final class KnowledgeDocumentSearchResponse implements IBaseKnowledgeDocu
 
         @java.lang.Override
         public Builder from(KnowledgeDocumentSearchResponse other) {
+            knowledgeDocumentId(other.getKnowledgeDocumentId());
+            knowledgeBaseVersionId(other.getKnowledgeBaseVersionId());
             title(other.getTitle());
             url(other.getUrl());
             language(other.getLanguage());
             createdAt(other.getCreatedAt());
             updatedAt(other.getUpdatedAt());
             author(other.getAuthor());
-            knowledgeDocumentId(other.getKnowledgeDocumentId());
-            metadata(other.getMetadata());
-            return this;
-        }
-
-        /**
-         * <p>The title of the document. Will be shown as part of answers.</p>
-         * <p>The title of the document. Will be shown as part of answers.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("title")
-        public KnowledgeDocumentIdStage title(@NotNull String title) {
-            this.title = Objects.requireNonNull(title, "title must not be null");
             return this;
         }
 
@@ -296,40 +285,21 @@ public final class KnowledgeDocumentSearchResponse implements IBaseKnowledgeDocu
          */
         @java.lang.Override
         @JsonSetter("knowledgeDocumentId")
-        public _FinalStage knowledgeDocumentId(@NotNull EntityId knowledgeDocumentId) {
+        public TitleStage knowledgeDocumentId(@NotNull EntityId knowledgeDocumentId) {
             this.knowledgeDocumentId =
                     Objects.requireNonNull(knowledgeDocumentId, "knowledgeDocumentId must not be null");
             return this;
         }
 
         /**
-         * <p>Metadata for the knowledge document.</p>
+         * <p>The title of the document. Will be shown as part of answers.</p>
+         * <p>The title of the document. Will be shown as part of answers.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage metadata(String key, String value) {
-            this.metadata.put(key, value);
-            return this;
-        }
-
-        /**
-         * <p>Metadata for the knowledge document.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage putAllMetadata(Map<String, String> metadata) {
-            this.metadata.putAll(metadata);
-            return this;
-        }
-
-        /**
-         * <p>Metadata for the knowledge document.</p>
-         */
-        @java.lang.Override
-        @JsonSetter(value = "metadata", nulls = Nulls.SKIP)
-        public _FinalStage metadata(Map<String, String> metadata) {
-            this.metadata.clear();
-            this.metadata.putAll(metadata);
+        @JsonSetter("title")
+        public _FinalStage title(@NotNull String title) {
+            this.title = Objects.requireNonNull(title, "title must not be null");
             return this;
         }
 
@@ -433,17 +403,39 @@ public final class KnowledgeDocumentSearchResponse implements IBaseKnowledgeDocu
             return this;
         }
 
+        /**
+         * <p>ID that uniquely identifies the knowledge base version that contains this document.
+         * This may be missing on legacy documents.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage knowledgeBaseVersionId(EntityId knowledgeBaseVersionId) {
+            this.knowledgeBaseVersionId = Optional.ofNullable(knowledgeBaseVersionId);
+            return this;
+        }
+
+        /**
+         * <p>ID that uniquely identifies the knowledge base version that contains this document.
+         * This may be missing on legacy documents.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "knowledgeBaseVersionId", nulls = Nulls.SKIP)
+        public _FinalStage knowledgeBaseVersionId(Optional<EntityId> knowledgeBaseVersionId) {
+            this.knowledgeBaseVersionId = knowledgeBaseVersionId;
+            return this;
+        }
+
         @java.lang.Override
         public KnowledgeDocumentSearchResponse build() {
             return new KnowledgeDocumentSearchResponse(
+                    knowledgeDocumentId,
+                    knowledgeBaseVersionId,
                     title,
                     url,
                     language,
                     createdAt,
                     updatedAt,
                     author,
-                    knowledgeDocumentId,
-                    metadata,
                     additionalProperties);
         }
     }

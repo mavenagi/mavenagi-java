@@ -32,6 +32,8 @@ public final class Agent {
 
     private final AgentEnvironment environment;
 
+    private final String defaultTimezone;
+
     private final Set<PiiCategory> enabledPiiCategories;
 
     private final Map<String, Object> additionalProperties;
@@ -41,12 +43,14 @@ public final class Agent {
             String name,
             OffsetDateTime createdAt,
             AgentEnvironment environment,
+            String defaultTimezone,
             Set<PiiCategory> enabledPiiCategories,
             Map<String, Object> additionalProperties) {
         this.agentId = agentId;
         this.name = name;
         this.createdAt = createdAt;
         this.environment = environment;
+        this.defaultTimezone = defaultTimezone;
         this.enabledPiiCategories = enabledPiiCategories;
         this.additionalProperties = additionalProperties;
     }
@@ -84,6 +88,14 @@ public final class Agent {
     }
 
     /**
+     * @return The agent's default timezone. This is used when a timezone is not set on a conversation.
+     */
+    @JsonProperty("defaultTimezone")
+    public String getDefaultTimezone() {
+        return defaultTimezone;
+    }
+
+    /**
      * @return The PII categories that are enabled for the agent.
      * PII will be automatically redacted from all conversation message text.
      * Attachments and form submissions are not affected.
@@ -112,12 +124,19 @@ public final class Agent {
                 && name.equals(other.name)
                 && createdAt.equals(other.createdAt)
                 && environment.equals(other.environment)
+                && defaultTimezone.equals(other.defaultTimezone)
                 && enabledPiiCategories.equals(other.enabledPiiCategories);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.agentId, this.name, this.createdAt, this.environment, this.enabledPiiCategories);
+        return Objects.hash(
+                this.agentId,
+                this.name,
+                this.createdAt,
+                this.environment,
+                this.defaultTimezone,
+                this.enabledPiiCategories);
     }
 
     @java.lang.Override
@@ -156,7 +175,14 @@ public final class Agent {
         /**
          * <p>The environment of the agent. Default is <code>DEMO</code>.</p>
          */
-        _FinalStage environment(@NotNull AgentEnvironment environment);
+        DefaultTimezoneStage environment(@NotNull AgentEnvironment environment);
+    }
+
+    public interface DefaultTimezoneStage {
+        /**
+         * <p>The agent's default timezone. This is used when a timezone is not set on a conversation.</p>
+         */
+        _FinalStage defaultTimezone(@NotNull String defaultTimezone);
     }
 
     public interface _FinalStage {
@@ -179,7 +205,7 @@ public final class Agent {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
-            implements AgentIdStage, NameStage, CreatedAtStage, EnvironmentStage, _FinalStage {
+            implements AgentIdStage, NameStage, CreatedAtStage, EnvironmentStage, DefaultTimezoneStage, _FinalStage {
         private EntityId agentId;
 
         private String name;
@@ -187,6 +213,8 @@ public final class Agent {
         private OffsetDateTime createdAt;
 
         private AgentEnvironment environment;
+
+        private String defaultTimezone;
 
         private Set<PiiCategory> enabledPiiCategories = new LinkedHashSet<>();
 
@@ -201,6 +229,7 @@ public final class Agent {
             name(other.getName());
             createdAt(other.getCreatedAt());
             environment(other.getEnvironment());
+            defaultTimezone(other.getDefaultTimezone());
             enabledPiiCategories(other.getEnabledPiiCategories());
             return this;
         }
@@ -248,8 +277,20 @@ public final class Agent {
          */
         @java.lang.Override
         @JsonSetter("environment")
-        public _FinalStage environment(@NotNull AgentEnvironment environment) {
+        public DefaultTimezoneStage environment(@NotNull AgentEnvironment environment) {
             this.environment = Objects.requireNonNull(environment, "environment must not be null");
+            return this;
+        }
+
+        /**
+         * <p>The agent's default timezone. This is used when a timezone is not set on a conversation.</p>
+         * <p>The agent's default timezone. This is used when a timezone is not set on a conversation.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("defaultTimezone")
+        public _FinalStage defaultTimezone(@NotNull String defaultTimezone) {
+            this.defaultTimezone = Objects.requireNonNull(defaultTimezone, "defaultTimezone must not be null");
             return this;
         }
 
@@ -301,7 +342,8 @@ public final class Agent {
 
         @java.lang.Override
         public Agent build() {
-            return new Agent(agentId, name, createdAt, environment, enabledPiiCategories, additionalProperties);
+            return new Agent(
+                    agentId, name, createdAt, environment, defaultTimezone, enabledPiiCategories, additionalProperties);
         }
     }
 }

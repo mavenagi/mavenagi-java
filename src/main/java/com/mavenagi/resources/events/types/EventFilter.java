@@ -12,7 +12,6 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
-import com.mavenagi.resources.commons.types.EntityId;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -29,7 +28,7 @@ public final class EventFilter {
 
     private final Optional<OffsetDateTime> createdBefore;
 
-    private final Optional<List<EntityId>> references;
+    private final Optional<List<ScopedEntity>> references;
 
     private final Optional<List<EventType>> eventTypes;
 
@@ -43,7 +42,7 @@ public final class EventFilter {
             Optional<String> search,
             Optional<OffsetDateTime> createdAfter,
             Optional<OffsetDateTime> createdBefore,
-            Optional<List<EntityId>> references,
+            Optional<List<ScopedEntity>> references,
             Optional<List<EventType>> eventTypes,
             Optional<List<UserEventName>> userEventNames,
             Optional<List<SystemEventName>> systemEventNames,
@@ -74,7 +73,7 @@ public final class EventFilter {
     }
 
     @JsonProperty("references")
-    public Optional<List<EntityId>> getReferences() {
+    public Optional<List<ScopedEntity>> getReferences() {
         return references;
     }
 
@@ -143,7 +142,7 @@ public final class EventFilter {
 
         private Optional<OffsetDateTime> createdBefore = Optional.empty();
 
-        private Optional<List<EntityId>> references = Optional.empty();
+        private Optional<List<ScopedEntity>> references = Optional.empty();
 
         private Optional<List<EventType>> eventTypes = Optional.empty();
 
@@ -201,12 +200,12 @@ public final class EventFilter {
         }
 
         @JsonSetter(value = "references", nulls = Nulls.SKIP)
-        public Builder references(Optional<List<EntityId>> references) {
+        public Builder references(Optional<List<ScopedEntity>> references) {
             this.references = references;
             return this;
         }
 
-        public Builder references(List<EntityId> references) {
+        public Builder references(List<ScopedEntity> references) {
             this.references = Optional.ofNullable(references);
             return this;
         }

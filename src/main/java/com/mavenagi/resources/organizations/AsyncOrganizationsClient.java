@@ -9,6 +9,9 @@ import com.mavenagi.resources.analytics.types.ChartResponse;
 import com.mavenagi.resources.analytics.types.ConversationChartRequest;
 import com.mavenagi.resources.analytics.types.ConversationTableRequest;
 import com.mavenagi.resources.analytics.types.ConversationTableResponse;
+import com.mavenagi.resources.organizations.types.CreateOrganizationRequest;
+import com.mavenagi.resources.organizations.types.Organization;
+import com.mavenagi.resources.organizations.types.OrganizationPatchRequest;
 import java.util.concurrent.CompletableFuture;
 
 public class AsyncOrganizationsClient {
@@ -26,6 +29,99 @@ public class AsyncOrganizationsClient {
      */
     public AsyncRawOrganizationsClient withRawResponse() {
         return this.rawClient;
+    }
+
+    /**
+     * Create a new organization.
+     * <p>&lt;Tip&gt;
+     * This endpoint requires additional permissions. Contact support to request access.
+     * &lt;/Tip&gt;</p>
+     */
+    public CompletableFuture<Organization> create(String organizationReferenceId, CreateOrganizationRequest request) {
+        return this.rawClient.create(organizationReferenceId, request).thenApply(response -> response.body());
+    }
+
+    /**
+     * Create a new organization.
+     * <p>&lt;Tip&gt;
+     * This endpoint requires additional permissions. Contact support to request access.
+     * &lt;/Tip&gt;</p>
+     */
+    public CompletableFuture<Organization> create(
+            String organizationReferenceId, CreateOrganizationRequest request, RequestOptions requestOptions) {
+        return this.rawClient
+                .create(organizationReferenceId, request, requestOptions)
+                .thenApply(response -> response.body());
+    }
+
+    /**
+     * Get an organization by ID
+     */
+    public CompletableFuture<Organization> get(String organizationReferenceId) {
+        return this.rawClient.get(organizationReferenceId).thenApply(response -> response.body());
+    }
+
+    /**
+     * Get an organization by ID
+     */
+    public CompletableFuture<Organization> get(String organizationReferenceId, RequestOptions requestOptions) {
+        return this.rawClient.get(organizationReferenceId, requestOptions).thenApply(response -> response.body());
+    }
+
+    /**
+     * Update mutable organization fields.
+     * All fields will overwrite the existing value on the organization only if provided.
+     * <p>&lt;Tip&gt;
+     * This endpoint requires additional permissions. Contact support to request access.
+     * &lt;/Tip&gt;</p>
+     */
+    public CompletableFuture<Organization> patch(String organizationReferenceId) {
+        return this.rawClient.patch(organizationReferenceId).thenApply(response -> response.body());
+    }
+
+    /**
+     * Update mutable organization fields.
+     * All fields will overwrite the existing value on the organization only if provided.
+     * <p>&lt;Tip&gt;
+     * This endpoint requires additional permissions. Contact support to request access.
+     * &lt;/Tip&gt;</p>
+     */
+    public CompletableFuture<Organization> patch(String organizationReferenceId, OrganizationPatchRequest request) {
+        return this.rawClient.patch(organizationReferenceId, request).thenApply(response -> response.body());
+    }
+
+    /**
+     * Update mutable organization fields.
+     * All fields will overwrite the existing value on the organization only if provided.
+     * <p>&lt;Tip&gt;
+     * This endpoint requires additional permissions. Contact support to request access.
+     * &lt;/Tip&gt;</p>
+     */
+    public CompletableFuture<Organization> patch(
+            String organizationReferenceId, OrganizationPatchRequest request, RequestOptions requestOptions) {
+        return this.rawClient
+                .patch(organizationReferenceId, request, requestOptions)
+                .thenApply(response -> response.body());
+    }
+
+    /**
+     * Delete an organization.
+     * <p>&lt;Tip&gt;
+     * This endpoint requires additional permissions. Contact support to request access.
+     * &lt;/Tip&gt;</p>
+     */
+    public CompletableFuture<Void> delete(String organizationReferenceId) {
+        return this.rawClient.delete(organizationReferenceId).thenApply(response -> response.body());
+    }
+
+    /**
+     * Delete an organization.
+     * <p>&lt;Tip&gt;
+     * This endpoint requires additional permissions. Contact support to request access.
+     * &lt;/Tip&gt;</p>
+     */
+    public CompletableFuture<Void> delete(String organizationReferenceId, RequestOptions requestOptions) {
+        return this.rawClient.delete(organizationReferenceId, requestOptions).thenApply(response -> response.body());
     }
 
     /**

@@ -6,13 +6,18 @@ package com.mavenagi.resources.knowledge;
 import com.mavenagi.core.ClientOptions;
 import com.mavenagi.core.RequestOptions;
 import com.mavenagi.resources.knowledge.requests.KnowledgeBaseGetRequest;
+import com.mavenagi.resources.knowledge.requests.KnowledgeBasePatchRequest;
+import com.mavenagi.resources.knowledge.requests.KnowledgeBaseVersionsListRequest;
+import com.mavenagi.resources.knowledge.requests.KnowledgeDocumentGetRequest;
 import com.mavenagi.resources.knowledge.types.FinalizeKnowledgeBaseVersionRequest;
-import com.mavenagi.resources.knowledge.types.KnowledgeBasePatchRequest;
 import com.mavenagi.resources.knowledge.types.KnowledgeBaseRequest;
 import com.mavenagi.resources.knowledge.types.KnowledgeBaseResponse;
 import com.mavenagi.resources.knowledge.types.KnowledgeBaseSearchRequest;
 import com.mavenagi.resources.knowledge.types.KnowledgeBaseVersion;
+import com.mavenagi.resources.knowledge.types.KnowledgeBaseVersionRequest;
+import com.mavenagi.resources.knowledge.types.KnowledgeBaseVersionsListResponse;
 import com.mavenagi.resources.knowledge.types.KnowledgeBasesResponse;
+import com.mavenagi.resources.knowledge.types.KnowledgeDeleteRequest;
 import com.mavenagi.resources.knowledge.types.KnowledgeDocumentRequest;
 import com.mavenagi.resources.knowledge.types.KnowledgeDocumentResponse;
 import com.mavenagi.resources.knowledge.types.KnowledgeDocumentSearchRequest;
@@ -140,7 +145,7 @@ public class AsyncKnowledgeClient {
      * <p>If an existing version is in progress, then that version will be finalized in an error state.</p>
      */
     public CompletableFuture<KnowledgeBaseVersion> createKnowledgeBaseVersion(
-            String knowledgeBaseReferenceId, KnowledgeBaseVersion request) {
+            String knowledgeBaseReferenceId, KnowledgeBaseVersionRequest request) {
         return this.rawClient
                 .createKnowledgeBaseVersion(knowledgeBaseReferenceId, request)
                 .thenApply(response -> response.body());
@@ -151,7 +156,7 @@ public class AsyncKnowledgeClient {
      * <p>If an existing version is in progress, then that version will be finalized in an error state.</p>
      */
     public CompletableFuture<KnowledgeBaseVersion> createKnowledgeBaseVersion(
-            String knowledgeBaseReferenceId, KnowledgeBaseVersion request, RequestOptions requestOptions) {
+            String knowledgeBaseReferenceId, KnowledgeBaseVersionRequest request, RequestOptions requestOptions) {
         return this.rawClient
                 .createKnowledgeBaseVersion(knowledgeBaseReferenceId, request, requestOptions)
                 .thenApply(response -> response.body());
@@ -189,6 +194,36 @@ public class AsyncKnowledgeClient {
     }
 
     /**
+     * List all active versions for a knowledge base. Returns the most recent versions first.
+     */
+    public CompletableFuture<KnowledgeBaseVersionsListResponse> listKnowledgeBaseVersions(
+            String knowledgeBaseReferenceId) {
+        return this.rawClient
+                .listKnowledgeBaseVersions(knowledgeBaseReferenceId)
+                .thenApply(response -> response.body());
+    }
+
+    /**
+     * List all active versions for a knowledge base. Returns the most recent versions first.
+     */
+    public CompletableFuture<KnowledgeBaseVersionsListResponse> listKnowledgeBaseVersions(
+            String knowledgeBaseReferenceId, KnowledgeBaseVersionsListRequest request) {
+        return this.rawClient
+                .listKnowledgeBaseVersions(knowledgeBaseReferenceId, request)
+                .thenApply(response -> response.body());
+    }
+
+    /**
+     * List all active versions for a knowledge base. Returns the most recent versions first.
+     */
+    public CompletableFuture<KnowledgeBaseVersionsListResponse> listKnowledgeBaseVersions(
+            String knowledgeBaseReferenceId, KnowledgeBaseVersionsListRequest request, RequestOptions requestOptions) {
+        return this.rawClient
+                .listKnowledgeBaseVersions(knowledgeBaseReferenceId, request, requestOptions)
+                .thenApply(response -> response.body());
+    }
+
+    /**
      * Search knowledge documents
      */
     public CompletableFuture<KnowledgeDocumentsResponse> searchKnowledgeDocuments() {
@@ -212,9 +247,10 @@ public class AsyncKnowledgeClient {
     }
 
     /**
-     * Create knowledge document. Requires an existing knowledge base with an in progress version. Will throw an exception if the latest version is not in progress.
+     * Create or update a knowledge document. Requires an existing knowledge base with an in progress version.
+     * Will throw an exception if the latest version is not in progress.
      * <p>&lt;Tip&gt;
-     * This API maintains document version history. If for the same reference ID neither the `title` nor `text` fields
+     * This API maintains document version history. If for the same reference ID none of the `title`, `text`, `sourceUrl`, `metadata` fields
      * have changed, a new document version will not be created. The existing version will be reused.
      * &lt;/Tip&gt;</p>
      */
@@ -226,9 +262,10 @@ public class AsyncKnowledgeClient {
     }
 
     /**
-     * Create knowledge document. Requires an existing knowledge base with an in progress version. Will throw an exception if the latest version is not in progress.
+     * Create or update a knowledge document. Requires an existing knowledge base with an in progress version.
+     * Will throw an exception if the latest version is not in progress.
      * <p>&lt;Tip&gt;
-     * This API maintains document version history. If for the same reference ID neither the `title` nor `text` fields
+     * This API maintains document version history. If for the same reference ID none of the `title`, `text`, `sourceUrl`, `metadata` fields
      * have changed, a new document version will not be created. The existing version will be reused.
      * &lt;/Tip&gt;</p>
      */
@@ -240,42 +277,54 @@ public class AsyncKnowledgeClient {
     }
 
     /**
-     * Not yet implemented. Update knowledge document. Requires an existing knowledge base with an in progress version of type PARTIAL. Will throw an exception if the latest version is not in progress.
-     */
-    public CompletableFuture<KnowledgeDocumentResponse> updateKnowledgeDocument(
-            String knowledgeBaseReferenceId, KnowledgeDocumentRequest request) {
-        return this.rawClient
-                .updateKnowledgeDocument(knowledgeBaseReferenceId, request)
-                .thenApply(response -> response.body());
-    }
-
-    /**
-     * Not yet implemented. Update knowledge document. Requires an existing knowledge base with an in progress version of type PARTIAL. Will throw an exception if the latest version is not in progress.
-     */
-    public CompletableFuture<KnowledgeDocumentResponse> updateKnowledgeDocument(
-            String knowledgeBaseReferenceId, KnowledgeDocumentRequest request, RequestOptions requestOptions) {
-        return this.rawClient
-                .updateKnowledgeDocument(knowledgeBaseReferenceId, request, requestOptions)
-                .thenApply(response -> response.body());
-    }
-
-    /**
-     * Not yet implemented. Delete knowledge document. Requires an existing knowledge base with an in progress version of type PARTIAL. Will throw an exception if the latest version is not in progress.
+     * Delete knowledge document from a specific version.
+     * Requires an existing knowledge base with an in progress version of type PARTIAL. Will throw an exception if the version is not in progress.
      */
     public CompletableFuture<Void> deleteKnowledgeDocument(
-            String knowledgeBaseReferenceId, String knowledgeDocumentReferenceId) {
+            String knowledgeBaseReferenceId, String knowledgeDocumentReferenceId, KnowledgeDeleteRequest request) {
         return this.rawClient
-                .deleteKnowledgeDocument(knowledgeBaseReferenceId, knowledgeDocumentReferenceId)
+                .deleteKnowledgeDocument(knowledgeBaseReferenceId, knowledgeDocumentReferenceId, request)
                 .thenApply(response -> response.body());
     }
 
     /**
-     * Not yet implemented. Delete knowledge document. Requires an existing knowledge base with an in progress version of type PARTIAL. Will throw an exception if the latest version is not in progress.
+     * Delete knowledge document from a specific version.
+     * Requires an existing knowledge base with an in progress version of type PARTIAL. Will throw an exception if the version is not in progress.
      */
     public CompletableFuture<Void> deleteKnowledgeDocument(
-            String knowledgeBaseReferenceId, String knowledgeDocumentReferenceId, RequestOptions requestOptions) {
+            String knowledgeBaseReferenceId,
+            String knowledgeDocumentReferenceId,
+            KnowledgeDeleteRequest request,
+            RequestOptions requestOptions) {
         return this.rawClient
-                .deleteKnowledgeDocument(knowledgeBaseReferenceId, knowledgeDocumentReferenceId, requestOptions)
+                .deleteKnowledgeDocument(
+                        knowledgeBaseReferenceId, knowledgeDocumentReferenceId, request, requestOptions)
+                .thenApply(response -> response.body());
+    }
+
+    /**
+     * Get a knowledge document by its supplied version and document IDs. Response includes document content in markdown format.
+     */
+    public CompletableFuture<KnowledgeDocumentResponse> getKnowledgeDocument(
+            String knowledgeBaseVersionReferenceId,
+            String knowledgeDocumentReferenceId,
+            KnowledgeDocumentGetRequest request) {
+        return this.rawClient
+                .getKnowledgeDocument(knowledgeBaseVersionReferenceId, knowledgeDocumentReferenceId, request)
+                .thenApply(response -> response.body());
+    }
+
+    /**
+     * Get a knowledge document by its supplied version and document IDs. Response includes document content in markdown format.
+     */
+    public CompletableFuture<KnowledgeDocumentResponse> getKnowledgeDocument(
+            String knowledgeBaseVersionReferenceId,
+            String knowledgeDocumentReferenceId,
+            KnowledgeDocumentGetRequest request,
+            RequestOptions requestOptions) {
+        return this.rawClient
+                .getKnowledgeDocument(
+                        knowledgeBaseVersionReferenceId, knowledgeDocumentReferenceId, request, requestOptions)
                 .thenApply(response -> response.body());
     }
 }

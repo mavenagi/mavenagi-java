@@ -247,6 +247,13 @@ public class RawConversationClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "appId", request.getAppId().get(), false);
         }
+        if (request.getTranslationLanguage().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl,
+                    "translationLanguage",
+                    request.getTranslationLanguage().get(),
+                    false);
+        }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)

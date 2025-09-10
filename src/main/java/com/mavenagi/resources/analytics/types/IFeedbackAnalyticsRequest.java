@@ -8,4 +8,6 @@ import java.util.Optional;
 
 public interface IFeedbackAnalyticsRequest {
     Optional<FeedbackFilter> getFeedbackFilter();
+
+    Optional<String> getTimezone();
 }

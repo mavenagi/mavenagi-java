@@ -24,6 +24,8 @@ import org.jetbrains.annotations.NotNull;
 public final class ConversationDateHistogramRequest implements IConversationAnalyticsRequest {
     private final Optional<ConversationFilter> conversationFilter;
 
+    private final Optional<String> timezone;
+
     private final TimeInterval timeInterval;
 
     private final Optional<ConversationGroupBy> groupBy;
@@ -34,11 +36,13 @@ public final class ConversationDateHistogramRequest implements IConversationAnal
 
     private ConversationDateHistogramRequest(
             Optional<ConversationFilter> conversationFilter,
+            Optional<String> timezone,
             TimeInterval timeInterval,
             Optional<ConversationGroupBy> groupBy,
             ConversationMetric metric,
             Map<String, Object> additionalProperties) {
         this.conversationFilter = conversationFilter;
+        this.timezone = timezone;
         this.timeInterval = timeInterval;
         this.groupBy = groupBy;
         this.metric = metric;
@@ -52,6 +56,17 @@ public final class ConversationDateHistogramRequest implements IConversationAnal
     @java.lang.Override
     public Optional<ConversationFilter> getConversationFilter() {
         return conversationFilter;
+    }
+
+    /**
+     * @return IANA timezone identifier (e.g., &quot;America/Los_Angeles&quot;).
+     * When provided, time-based groupings (e.g., DAY) and date filters are evaluated in this timezone;
+     * otherwise UTC is used.
+     */
+    @JsonProperty("timezone")
+    @java.lang.Override
+    public Optional<String> getTimezone() {
+        return timezone;
     }
 
     /**
@@ -91,6 +106,7 @@ public final class ConversationDateHistogramRequest implements IConversationAnal
 
     private boolean equalTo(ConversationDateHistogramRequest other) {
         return conversationFilter.equals(other.conversationFilter)
+                && timezone.equals(other.timezone)
                 && timeInterval.equals(other.timeInterval)
                 && groupBy.equals(other.groupBy)
                 && metric.equals(other.metric);
@@ -98,7 +114,7 @@ public final class ConversationDateHistogramRequest implements IConversationAnal
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.conversationFilter, this.timeInterval, this.groupBy, this.metric);
+        return Objects.hash(this.conversationFilter, this.timezone, this.timeInterval, this.groupBy, this.metric);
     }
 
     @java.lang.Override
@@ -137,6 +153,15 @@ public final class ConversationDateHistogramRequest implements IConversationAnal
         _FinalStage conversationFilter(ConversationFilter conversationFilter);
 
         /**
+         * <p>IANA timezone identifier (e.g., &quot;America/Los_Angeles&quot;).
+         * When provided, time-based groupings (e.g., DAY) and date filters are evaluated in this timezone;
+         * otherwise UTC is used.</p>
+         */
+        _FinalStage timezone(Optional<String> timezone);
+
+        _FinalStage timezone(String timezone);
+
+        /**
          * <p>Groups data before applying calculations, forming a separate time series for each group.</p>
          */
         _FinalStage groupBy(Optional<ConversationGroupBy> groupBy);
@@ -152,6 +177,8 @@ public final class ConversationDateHistogramRequest implements IConversationAnal
 
         private Optional<ConversationGroupBy> groupBy = Optional.empty();
 
+        private Optional<String> timezone = Optional.empty();
+
         private Optional<ConversationFilter> conversationFilter = Optional.empty();
 
         @JsonAnySetter
@@ -162,6 +189,7 @@ public final class ConversationDateHistogramRequest implements IConversationAnal
         @java.lang.Override
         public Builder from(ConversationDateHistogramRequest other) {
             conversationFilter(other.getConversationFilter());
+            timezone(other.getTimezone());
             timeInterval(other.getTimeInterval());
             groupBy(other.getGroupBy());
             metric(other.getMetric());
@@ -213,6 +241,30 @@ public final class ConversationDateHistogramRequest implements IConversationAnal
         }
 
         /**
+         * <p>IANA timezone identifier (e.g., &quot;America/Los_Angeles&quot;).
+         * When provided, time-based groupings (e.g., DAY) and date filters are evaluated in this timezone;
+         * otherwise UTC is used.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage timezone(String timezone) {
+            this.timezone = Optional.ofNullable(timezone);
+            return this;
+        }
+
+        /**
+         * <p>IANA timezone identifier (e.g., &quot;America/Los_Angeles&quot;).
+         * When provided, time-based groupings (e.g., DAY) and date filters are evaluated in this timezone;
+         * otherwise UTC is used.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "timezone", nulls = Nulls.SKIP)
+        public _FinalStage timezone(Optional<String> timezone) {
+            this.timezone = timezone;
+            return this;
+        }
+
+        /**
          * <p>Optional filter applied to refine the conversation data before processing.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -235,7 +287,7 @@ public final class ConversationDateHistogramRequest implements IConversationAnal
         @java.lang.Override
         public ConversationDateHistogramRequest build() {
             return new ConversationDateHistogramRequest(
-                    conversationFilter, timeInterval, groupBy, metric, additionalProperties);
+                    conversationFilter, timezone, timeInterval, groupBy, metric, additionalProperties);
         }
     }
 }

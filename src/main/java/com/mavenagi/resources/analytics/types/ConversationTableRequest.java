@@ -25,6 +25,8 @@ import java.util.Optional;
 public final class ConversationTableRequest implements IConversationAnalyticsRequest {
     private final Optional<ConversationFilter> conversationFilter;
 
+    private final Optional<String> timezone;
+
     private final Optional<TimeInterval> timeGrouping;
 
     private final List<ConversationGroupBy> fieldGroupings;
@@ -35,11 +37,13 @@ public final class ConversationTableRequest implements IConversationAnalyticsReq
 
     private ConversationTableRequest(
             Optional<ConversationFilter> conversationFilter,
+            Optional<String> timezone,
             Optional<TimeInterval> timeGrouping,
             List<ConversationGroupBy> fieldGroupings,
             List<ConversationColumnDefinition> columnDefinitions,
             Map<String, Object> additionalProperties) {
         this.conversationFilter = conversationFilter;
+        this.timezone = timezone;
         this.timeGrouping = timeGrouping;
         this.fieldGroupings = fieldGroupings;
         this.columnDefinitions = columnDefinitions;
@@ -53,6 +57,17 @@ public final class ConversationTableRequest implements IConversationAnalyticsReq
     @java.lang.Override
     public Optional<ConversationFilter> getConversationFilter() {
         return conversationFilter;
+    }
+
+    /**
+     * @return IANA timezone identifier (e.g., &quot;America/Los_Angeles&quot;).
+     * When provided, time-based groupings (e.g., DAY) and date filters are evaluated in this timezone;
+     * otherwise UTC is used.
+     */
+    @JsonProperty("timezone")
+    @java.lang.Override
+    public Optional<String> getTimezone() {
+        return timezone;
     }
 
     /**
@@ -95,6 +110,7 @@ public final class ConversationTableRequest implements IConversationAnalyticsReq
 
     private boolean equalTo(ConversationTableRequest other) {
         return conversationFilter.equals(other.conversationFilter)
+                && timezone.equals(other.timezone)
                 && timeGrouping.equals(other.timeGrouping)
                 && fieldGroupings.equals(other.fieldGroupings)
                 && columnDefinitions.equals(other.columnDefinitions);
@@ -102,7 +118,8 @@ public final class ConversationTableRequest implements IConversationAnalyticsReq
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.conversationFilter, this.timeGrouping, this.fieldGroupings, this.columnDefinitions);
+        return Objects.hash(
+                this.conversationFilter, this.timezone, this.timeGrouping, this.fieldGroupings, this.columnDefinitions);
     }
 
     @java.lang.Override
@@ -118,6 +135,8 @@ public final class ConversationTableRequest implements IConversationAnalyticsReq
     public static final class Builder {
         private Optional<ConversationFilter> conversationFilter = Optional.empty();
 
+        private Optional<String> timezone = Optional.empty();
+
         private Optional<TimeInterval> timeGrouping = Optional.empty();
 
         private List<ConversationGroupBy> fieldGroupings = new ArrayList<>();
@@ -131,6 +150,7 @@ public final class ConversationTableRequest implements IConversationAnalyticsReq
 
         public Builder from(ConversationTableRequest other) {
             conversationFilter(other.getConversationFilter());
+            timezone(other.getTimezone());
             timeGrouping(other.getTimeGrouping());
             fieldGroupings(other.getFieldGroupings());
             columnDefinitions(other.getColumnDefinitions());
@@ -148,6 +168,22 @@ public final class ConversationTableRequest implements IConversationAnalyticsReq
 
         public Builder conversationFilter(ConversationFilter conversationFilter) {
             this.conversationFilter = Optional.ofNullable(conversationFilter);
+            return this;
+        }
+
+        /**
+         * <p>IANA timezone identifier (e.g., &quot;America/Los_Angeles&quot;).
+         * When provided, time-based groupings (e.g., DAY) and date filters are evaluated in this timezone;
+         * otherwise UTC is used.</p>
+         */
+        @JsonSetter(value = "timezone", nulls = Nulls.SKIP)
+        public Builder timezone(Optional<String> timezone) {
+            this.timezone = timezone;
+            return this;
+        }
+
+        public Builder timezone(String timezone) {
+            this.timezone = Optional.ofNullable(timezone);
             return this;
         }
 
@@ -210,7 +246,12 @@ public final class ConversationTableRequest implements IConversationAnalyticsReq
 
         public ConversationTableRequest build() {
             return new ConversationTableRequest(
-                    conversationFilter, timeGrouping, fieldGroupings, columnDefinitions, additionalProperties);
+                    conversationFilter,
+                    timezone,
+                    timeGrouping,
+                    fieldGroupings,
+                    columnDefinitions,
+                    additionalProperties);
         }
     }
 }

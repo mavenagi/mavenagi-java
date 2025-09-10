@@ -23,11 +23,16 @@ import java.util.Optional;
 public final class ConversationAnalyticsRequest implements IConversationAnalyticsRequest {
     private final Optional<ConversationFilter> conversationFilter;
 
+    private final Optional<String> timezone;
+
     private final Map<String, Object> additionalProperties;
 
     private ConversationAnalyticsRequest(
-            Optional<ConversationFilter> conversationFilter, Map<String, Object> additionalProperties) {
+            Optional<ConversationFilter> conversationFilter,
+            Optional<String> timezone,
+            Map<String, Object> additionalProperties) {
         this.conversationFilter = conversationFilter;
+        this.timezone = timezone;
         this.additionalProperties = additionalProperties;
     }
 
@@ -38,6 +43,17 @@ public final class ConversationAnalyticsRequest implements IConversationAnalytic
     @java.lang.Override
     public Optional<ConversationFilter> getConversationFilter() {
         return conversationFilter;
+    }
+
+    /**
+     * @return IANA timezone identifier (e.g., &quot;America/Los_Angeles&quot;).
+     * When provided, time-based groupings (e.g., DAY) and date filters are evaluated in this timezone;
+     * otherwise UTC is used.
+     */
+    @JsonProperty("timezone")
+    @java.lang.Override
+    public Optional<String> getTimezone() {
+        return timezone;
     }
 
     @java.lang.Override
@@ -52,12 +68,12 @@ public final class ConversationAnalyticsRequest implements IConversationAnalytic
     }
 
     private boolean equalTo(ConversationAnalyticsRequest other) {
-        return conversationFilter.equals(other.conversationFilter);
+        return conversationFilter.equals(other.conversationFilter) && timezone.equals(other.timezone);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.conversationFilter);
+        return Objects.hash(this.conversationFilter, this.timezone);
     }
 
     @java.lang.Override
@@ -73,6 +89,8 @@ public final class ConversationAnalyticsRequest implements IConversationAnalytic
     public static final class Builder {
         private Optional<ConversationFilter> conversationFilter = Optional.empty();
 
+        private Optional<String> timezone = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -80,6 +98,7 @@ public final class ConversationAnalyticsRequest implements IConversationAnalytic
 
         public Builder from(ConversationAnalyticsRequest other) {
             conversationFilter(other.getConversationFilter());
+            timezone(other.getTimezone());
             return this;
         }
 
@@ -97,8 +116,24 @@ public final class ConversationAnalyticsRequest implements IConversationAnalytic
             return this;
         }
 
+        /**
+         * <p>IANA timezone identifier (e.g., &quot;America/Los_Angeles&quot;).
+         * When provided, time-based groupings (e.g., DAY) and date filters are evaluated in this timezone;
+         * otherwise UTC is used.</p>
+         */
+        @JsonSetter(value = "timezone", nulls = Nulls.SKIP)
+        public Builder timezone(Optional<String> timezone) {
+            this.timezone = timezone;
+            return this;
+        }
+
+        public Builder timezone(String timezone) {
+            this.timezone = Optional.ofNullable(timezone);
+            return this;
+        }
+
         public ConversationAnalyticsRequest build() {
-            return new ConversationAnalyticsRequest(conversationFilter, additionalProperties);
+            return new ConversationAnalyticsRequest(conversationFilter, timezone, additionalProperties);
         }
     }
 }

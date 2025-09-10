@@ -30,11 +30,15 @@ public final class ActionParameter {
 
     private final boolean required;
 
+    private final Optional<Boolean> hidden;
+
     private final Optional<ActionParameterType> type;
 
     private final Optional<List<ActionEnumOption>> enumOptions;
 
     private final Optional<String> schema;
+
+    private final Optional<ActionOAuthConfiguration> oauthConfiguration;
 
     private final Map<String, Object> additionalProperties;
 
@@ -43,17 +47,21 @@ public final class ActionParameter {
             String label,
             String description,
             boolean required,
+            Optional<Boolean> hidden,
             Optional<ActionParameterType> type,
             Optional<List<ActionEnumOption>> enumOptions,
             Optional<String> schema,
+            Optional<ActionOAuthConfiguration> oauthConfiguration,
             Map<String, Object> additionalProperties) {
         this.id = id;
         this.label = label;
         this.description = description;
         this.required = required;
+        this.hidden = hidden;
         this.type = type;
         this.enumOptions = enumOptions;
         this.schema = schema;
+        this.oauthConfiguration = oauthConfiguration;
         this.additionalProperties = additionalProperties;
     }
 
@@ -90,6 +98,14 @@ public final class ActionParameter {
     }
 
     /**
+     * @return When user interaction is required, whether this parameter should be excluded from forms. Hidden parameters are not displayed to users but their values are still populated by the LLM and sent to actions. Defaults to false.
+     */
+    @JsonProperty("hidden")
+    public Optional<Boolean> getHidden() {
+        return hidden;
+    }
+
+    /**
      * @return The parameter type. Values provided to <code>executeAction</code> will conform to this type. Defaults to <code>STRING</code>.
      */
     @JsonProperty("type")
@@ -113,6 +129,14 @@ public final class ActionParameter {
         return schema;
     }
 
+    /**
+     * @return OAuth configuration required to start an OAuth authorization flow when this parameter's type is <code>OAUTH</code>.
+     */
+    @JsonProperty("oauthConfiguration")
+    public Optional<ActionOAuthConfiguration> getOauthConfiguration() {
+        return oauthConfiguration;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -129,15 +153,25 @@ public final class ActionParameter {
                 && label.equals(other.label)
                 && description.equals(other.description)
                 && required == other.required
+                && hidden.equals(other.hidden)
                 && type.equals(other.type)
                 && enumOptions.equals(other.enumOptions)
-                && schema.equals(other.schema);
+                && schema.equals(other.schema)
+                && oauthConfiguration.equals(other.oauthConfiguration);
     }
 
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.id, this.label, this.description, this.required, this.type, this.enumOptions, this.schema);
+                this.id,
+                this.label,
+                this.description,
+                this.required,
+                this.hidden,
+                this.type,
+                this.enumOptions,
+                this.schema,
+                this.oauthConfiguration);
     }
 
     @java.lang.Override
@@ -183,6 +217,13 @@ public final class ActionParameter {
         ActionParameter build();
 
         /**
+         * <p>When user interaction is required, whether this parameter should be excluded from forms. Hidden parameters are not displayed to users but their values are still populated by the LLM and sent to actions. Defaults to false.</p>
+         */
+        _FinalStage hidden(Optional<Boolean> hidden);
+
+        _FinalStage hidden(Boolean hidden);
+
+        /**
          * <p>The parameter type. Values provided to <code>executeAction</code> will conform to this type. Defaults to <code>STRING</code>.</p>
          */
         _FinalStage type(Optional<ActionParameterType> type);
@@ -202,6 +243,13 @@ public final class ActionParameter {
         _FinalStage schema(Optional<String> schema);
 
         _FinalStage schema(String schema);
+
+        /**
+         * <p>OAuth configuration required to start an OAuth authorization flow when this parameter's type is <code>OAUTH</code>.</p>
+         */
+        _FinalStage oauthConfiguration(Optional<ActionOAuthConfiguration> oauthConfiguration);
+
+        _FinalStage oauthConfiguration(ActionOAuthConfiguration oauthConfiguration);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -214,11 +262,15 @@ public final class ActionParameter {
 
         private boolean required;
 
+        private Optional<ActionOAuthConfiguration> oauthConfiguration = Optional.empty();
+
         private Optional<String> schema = Optional.empty();
 
         private Optional<List<ActionEnumOption>> enumOptions = Optional.empty();
 
         private Optional<ActionParameterType> type = Optional.empty();
+
+        private Optional<Boolean> hidden = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -231,9 +283,11 @@ public final class ActionParameter {
             label(other.getLabel());
             description(other.getDescription());
             required(other.getRequired());
+            hidden(other.getHidden());
             type(other.getType());
             enumOptions(other.getEnumOptions());
             schema(other.getSchema());
+            oauthConfiguration(other.getOauthConfiguration());
             return this;
         }
 
@@ -282,6 +336,26 @@ public final class ActionParameter {
         @JsonSetter("required")
         public _FinalStage required(boolean required) {
             this.required = required;
+            return this;
+        }
+
+        /**
+         * <p>OAuth configuration required to start an OAuth authorization flow when this parameter's type is <code>OAUTH</code>.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage oauthConfiguration(ActionOAuthConfiguration oauthConfiguration) {
+            this.oauthConfiguration = Optional.ofNullable(oauthConfiguration);
+            return this;
+        }
+
+        /**
+         * <p>OAuth configuration required to start an OAuth authorization flow when this parameter's type is <code>OAUTH</code>.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "oauthConfiguration", nulls = Nulls.SKIP)
+        public _FinalStage oauthConfiguration(Optional<ActionOAuthConfiguration> oauthConfiguration) {
+            this.oauthConfiguration = oauthConfiguration;
             return this;
         }
 
@@ -345,10 +419,39 @@ public final class ActionParameter {
             return this;
         }
 
+        /**
+         * <p>When user interaction is required, whether this parameter should be excluded from forms. Hidden parameters are not displayed to users but their values are still populated by the LLM and sent to actions. Defaults to false.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage hidden(Boolean hidden) {
+            this.hidden = Optional.ofNullable(hidden);
+            return this;
+        }
+
+        /**
+         * <p>When user interaction is required, whether this parameter should be excluded from forms. Hidden parameters are not displayed to users but their values are still populated by the LLM and sent to actions. Defaults to false.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "hidden", nulls = Nulls.SKIP)
+        public _FinalStage hidden(Optional<Boolean> hidden) {
+            this.hidden = hidden;
+            return this;
+        }
+
         @java.lang.Override
         public ActionParameter build() {
             return new ActionParameter(
-                    id, label, description, required, type, enumOptions, schema, additionalProperties);
+                    id,
+                    label,
+                    description,
+                    required,
+                    hidden,
+                    type,
+                    enumOptions,
+                    schema,
+                    oauthConfiguration,
+                    additionalProperties);
         }
     }
 }

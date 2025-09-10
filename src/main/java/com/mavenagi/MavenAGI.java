@@ -6,6 +6,7 @@ package com.mavenagi;
 import com.mavenagi.core.ClientOptions;
 import com.mavenagi.core.Suppliers;
 import com.mavenagi.resources.actions.ActionsClient;
+import com.mavenagi.resources.agentcapabilities.AgentCapabilitiesClient;
 import com.mavenagi.resources.agents.AgentsClient;
 import com.mavenagi.resources.analytics.AnalyticsClient;
 import com.mavenagi.resources.appsettings.AppSettingsClient;
@@ -25,6 +26,8 @@ public class MavenAGI {
     protected final ClientOptions clientOptions;
 
     protected final Supplier<ActionsClient> actionsClient;
+
+    protected final Supplier<AgentCapabilitiesClient> agentCapabilitiesClient;
 
     protected final Supplier<AgentsClient> agentsClient;
 
@@ -55,6 +58,7 @@ public class MavenAGI {
     public MavenAGI(ClientOptions clientOptions) {
         this.clientOptions = clientOptions;
         this.actionsClient = Suppliers.memoize(() -> new ActionsClient(clientOptions));
+        this.agentCapabilitiesClient = Suppliers.memoize(() -> new AgentCapabilitiesClient(clientOptions));
         this.agentsClient = Suppliers.memoize(() -> new AgentsClient(clientOptions));
         this.analyticsClient = Suppliers.memoize(() -> new AnalyticsClient(clientOptions));
         this.appSettingsClient = Suppliers.memoize(() -> new AppSettingsClient(clientOptions));
@@ -72,6 +76,10 @@ public class MavenAGI {
 
     public ActionsClient actions() {
         return this.actionsClient.get();
+    }
+
+    public AgentCapabilitiesClient agentCapabilities() {
+        return this.agentCapabilitiesClient.get();
     }
 
     public AgentsClient agents() {

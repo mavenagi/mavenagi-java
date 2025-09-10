@@ -266,7 +266,37 @@ client.actions().patch(
 <dl>
 <dd>
 
-**request:** `ActionPatchRequest` 
+**appId:** `Optional<String>` — The App ID of the action to patch. If not provided the ID of the calling app will be used.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**instructions:** `Optional<String>` — The instructions given to the LLM when determining whether to execute the action.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**llmInclusionStatus:** `Optional<LlmInclusionStatus>` — Determines whether the action is sent to the LLM as part of a conversation.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**segmentId:** `Optional<EntityId>` 
+
+The ID of the segment that must be matched for the action to be relevant to a conversation. 
+A null value will remove the segment from the action, it will be available on all conversations.
+
+Segments are replacing inline preconditions - an action may not have both an inline precondition and a segment.
+Inline precondition support will be removed in a future release.
     
 </dd>
 </dl>
@@ -321,6 +351,175 @@ client.actions().delete("get-balance");
 <dd>
 
 **actionReferenceId:** `String` — The reference ID of the action to unregister. All other entity ID fields are inferred from the request.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## AgentCapabilities
+<details><summary><code>client.agentCapabilities.list(request) -> ListAgentCapabilitiesResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+List all capabilities for an agent.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.agentCapabilities().list(
+    AgentCapabilityListRequest
+        .builder()
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `AgentCapabilityListRequest` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agentCapabilities.get(integrationId, capabilityId) -> AgentCapability</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.agentCapabilities().get("integrationId", "capabilityId");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**integrationId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**capabilityId:** `String` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agentCapabilities.patch(integrationId, capabilityId, request) -> AgentCapability</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.agentCapabilities().patch(
+    "integrationId",
+    "capabilityId",
+    PatchAgentCapabilityRequest
+        .builder()
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**integrationId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**capabilityId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `PatchAgentCapabilityRequest` 
     
 </dd>
 </dl>
@@ -1580,6 +1779,14 @@ client.conversation().get(
     
 </dd>
 </dl>
+
+<dl>
+<dd>
+
+**translationLanguage:** `Optional<String>` — The language to translate the conversation analysis into
+    
+</dd>
+</dl>
 </dd>
 </dl>
 
@@ -2333,10 +2540,10 @@ client.conversation().submitActionForm(
         .builder()
         .actionFormId("actionFormId")
         .parameters(
-            new HashMap<String, Object>() {{
-                put("parameters", new 
+            new HashMap<String, ActionFormRequestParamValue>() {{
+                put("parameters", ActionFormRequestParamValue.ofUnknown(new 
                 HashMap<String, Object>() {{put("key", "value");
-                }});
+                }}));
             }}
         )
         .build()
@@ -2674,6 +2881,84 @@ client.conversation().deliverMessage(
 </details>
 
 ## Events
+<details><summary><code>client.events.create(request) -> EventResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Create a new event
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.events().create(
+    EventRequest.userEvent(
+        NovelUserEvent
+            .builder()
+            .id(
+                EntityIdBase
+                    .builder()
+                    .referenceId("referenceId")
+                    .build()
+            )
+            .eventName(UserEventName.BUTTON_CLICKED)
+            .userInfo(
+                UserInfoBase
+                    .builder()
+                    .id(
+                        EntityIdBase
+                            .builder()
+                            .referenceId("referenceId")
+                            .build()
+                    )
+                    .build()
+            )
+            .build()
+    )
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `EventRequest` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.events.search(request) -> EventsSearchResponse</code></summary>
 <dl>
 <dd>
@@ -3317,7 +3602,61 @@ client.knowledge().patchKnowledgeBase(
 <dl>
 <dd>
 
-**request:** `KnowledgeBasePatchRequest` 
+**appId:** `Optional<String>` — The App ID of the knowledge base to patch. If not provided the ID of the calling app will be used.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**name:** `Optional<String>` — The name of the knowledge base.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**tags:** `Optional<Set<String>>` — The tags of the knowledge base.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**llmInclusionStatus:** `Optional<LlmInclusionStatus>` — Determines whether documents in the knowledge base are sent to the LLM as part of a conversation. Note that at this time knowledge bases can not be set to `ALWAYS`.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**precondition:** `Optional<Precondition>` — The preconditions that must be met for a knowledge base to be relevant to a conversation. Can be used to restrict knowledge bases to certain types of users. A null value will remove the precondition from the knowledge base, it will be available on all conversations.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**segmentId:** `Optional<EntityId>` 
+
+The ID of the segment that must be matched for the knowledge base to be relevant to a conversation. 
+A null value will remove the segment from the knowledge base, it will be available on all conversations.
+
+Segments are replacing inline preconditions - a knowledge base may not have both an inline precondition and a segment.
+Inline precondition support will be removed in a future release.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**refreshFrequency:** `Optional<KnowledgeBaseRefreshFrequency>` — How often the knowledge base should be refreshed.
     
 </dd>
 </dl>
@@ -3360,20 +3699,9 @@ If an existing version is in progress, then that version will be finalized in an
 ```java
 client.knowledge().createKnowledgeBaseVersion(
     "help-center",
-    KnowledgeBaseVersion
+    KnowledgeBaseVersionRequest
         .builder()
-        .versionId(
-            EntityId
-                .builder()
-                .type(EntityType.KNOWLEDGE_BASE_VERSION)
-                .referenceId("versionId")
-                .appId("maven")
-                .organizationId("acme")
-                .agentId("support")
-                .build()
-        )
         .type(KnowledgeBaseVersionType.FULL)
-        .status(KnowledgeBaseVersionStatus.IN_PROGRESS)
         .build()
 );
 ```
@@ -3398,7 +3726,7 @@ client.knowledge().createKnowledgeBaseVersion(
 <dl>
 <dd>
 
-**request:** `KnowledgeBaseVersion` 
+**request:** `KnowledgeBaseVersionRequest` 
     
 </dd>
 </dl>
@@ -3486,6 +3814,73 @@ client.knowledge().finalizeKnowledgeBaseVersion(
 </dl>
 </details>
 
+<details><summary><code>client.knowledge.listKnowledgeBaseVersions(knowledgeBaseReferenceId) -> KnowledgeBaseVersionsListResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+List all active versions for a knowledge base. Returns the most recent versions first.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.knowledge().listKnowledgeBaseVersions(
+    "knowledgeBaseReferenceId",
+    KnowledgeBaseVersionsListRequest
+        .builder()
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**knowledgeBaseReferenceId:** `String` — The reference ID of the knowledge base to list versions for. All other entity ID fields are inferred from the request.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**appId:** `Optional<String>` — The App ID of the knowledge base. If not provided the ID of the calling app will be used.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.knowledge.searchKnowledgeDocuments(request) -> KnowledgeDocumentsResponse</code></summary>
 <dl>
 <dd>
@@ -3556,10 +3951,11 @@ client.knowledge().searchKnowledgeDocuments(
 <dl>
 <dd>
 
-Create knowledge document. Requires an existing knowledge base with an in progress version. Will throw an exception if the latest version is not in progress.
+Create or update a knowledge document. Requires an existing knowledge base with an in progress version. 
+Will throw an exception if the latest version is not in progress.
         
 <Tip>
-This API maintains document version history. If for the same reference ID neither the `title` nor `text` fields 
+This API maintains document version history. If for the same reference ID none of the `title`, `text`, `sourceUrl`, `metadata` fields 
 have changed, a new document version will not be created. The existing version will be reused.
 </Tip>
 </dd>
@@ -3638,7 +4034,7 @@ client.knowledge().createKnowledgeDocument(
 </dl>
 </details>
 
-<details><summary><code>client.knowledge.updateKnowledgeDocument(knowledgeBaseReferenceId, request) -> KnowledgeDocumentResponse</code></summary>
+<details><summary><code>client.knowledge.deleteKnowledgeDocument(knowledgeBaseReferenceId, knowledgeDocumentReferenceId, request)</code></summary>
 <dl>
 <dd>
 
@@ -3650,7 +4046,8 @@ client.knowledge().createKnowledgeDocument(
 <dl>
 <dd>
 
-Not yet implemented. Update knowledge document. Requires an existing knowledge base with an in progress version of type PARTIAL. Will throw an exception if the latest version is not in progress.
+Delete knowledge document from a specific version. 
+Requires an existing knowledge base with an in progress version of type PARTIAL. Will throw an exception if the version is not in progress.
 </dd>
 </dl>
 </dd>
@@ -3665,96 +4062,21 @@ Not yet implemented. Update knowledge document. Requires an existing knowledge b
 <dd>
 
 ```java
-client.knowledge().updateKnowledgeDocument(
+client.knowledge().deleteKnowledgeDocument(
     "help-center",
-    KnowledgeDocumentRequest
+    "getting-started",
+    KnowledgeDeleteRequest
         .builder()
-        .knowledgeDocumentId(
-            EntityIdBase
-                .builder()
-                .referenceId("getting-started")
-                .build()
-        )
-        .contentType(KnowledgeDocumentContentType.MARKDOWN)
-        .content("## Getting started\\nThis is a getting started guide for the help center.")
-        .title("Getting started")
         .versionId(
             EntityIdWithoutAgent
                 .builder()
                 .type(EntityType.KNOWLEDGE_BASE_VERSION)
-                .referenceId("versionId")
                 .appId("maven")
+                .referenceId("versionId")
                 .build()
-        )
-        .metadata(
-            new HashMap<String, String>() {{
-                put("category", "getting-started");
-            }}
         )
         .build()
 );
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**knowledgeBaseReferenceId:** `String` — The reference ID of the knowledge base that contains the document to update. All other entity ID fields are inferred from the request.
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request:** `KnowledgeDocumentRequest` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.knowledge.deleteKnowledgeDocument(knowledgeBaseReferenceId, knowledgeDocumentReferenceId)</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Not yet implemented. Delete knowledge document. Requires an existing knowledge base with an in progress version of type PARTIAL. Will throw an exception if the latest version is not in progress.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```java
-client.knowledge().deleteKnowledgeDocument("help-center", "getting-started");
 ```
 </dd>
 </dl>
@@ -3781,6 +4103,91 @@ client.knowledge().deleteKnowledgeDocument("help-center", "getting-started");
     
 </dd>
 </dl>
+
+<dl>
+<dd>
+
+**request:** `KnowledgeDeleteRequest` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.knowledge.getKnowledgeDocument(knowledgeBaseVersionReferenceId, knowledgeDocumentReferenceId) -> KnowledgeDocumentResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Get a knowledge document by its supplied version and document IDs. Response includes document content in markdown format.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.knowledge().getKnowledgeDocument(
+    "knowledgeBaseVersionReferenceId",
+    "knowledgeDocumentReferenceId",
+    KnowledgeDocumentGetRequest
+        .builder()
+        .knowledgeBaseVersionAppId("knowledgeBaseVersionAppId")
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**knowledgeBaseVersionReferenceId:** `String` — The reference ID of the knowledge base version that contains the document. All other entity ID fields are inferred from the request.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**knowledgeDocumentReferenceId:** `String` — The reference ID of the knowledge document to get. All other entity ID fields are inferred from the request.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**knowledgeBaseVersionAppId:** `String` — The App ID of the knowledge base version.
+    
+</dd>
+</dl>
 </dd>
 </dl>
 
@@ -3790,6 +4197,263 @@ client.knowledge().deleteKnowledgeDocument("help-center", "getting-started");
 </details>
 
 ## Organizations
+<details><summary><code>client.organizations.create(organizationReferenceId, request) -> Organization</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Create a new organization.
+
+<Tip>
+This endpoint requires additional permissions. Contact support to request access.
+</Tip>
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.organizations().create(
+    "organizationReferenceId",
+    CreateOrganizationRequest
+        .builder()
+        .name("name")
+        .defaultLanguage("defaultLanguage")
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**organizationReferenceId:** `String` — The reference ID of the organization.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `CreateOrganizationRequest` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.organizations.get(organizationReferenceId) -> Organization</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Get an organization by ID
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.organizations().get("organizationReferenceId");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**organizationReferenceId:** `String` — The reference ID of the organization.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.organizations.patch(organizationReferenceId, request) -> Organization</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update mutable organization fields.
+All fields will overwrite the existing value on the organization only if provided.
+
+<Tip>
+This endpoint requires additional permissions. Contact support to request access.
+</Tip>
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.organizations().patch(
+    "organizationReferenceId",
+    OrganizationPatchRequest
+        .builder()
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**organizationReferenceId:** `String` — The reference ID of the organization.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `OrganizationPatchRequest` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.organizations.delete(organizationReferenceId)</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Delete an organization.
+
+<Tip>
+This endpoint requires additional permissions. Contact support to request access.
+</Tip>
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.organizations().delete("organizationReferenceId");
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**organizationReferenceId:** `String` — The reference ID of the organization.
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.organizations.getConversationTable(request) -> ConversationTableResponse</code></summary>
 <dl>
 <dd>

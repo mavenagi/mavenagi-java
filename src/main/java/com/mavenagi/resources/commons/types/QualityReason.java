@@ -20,7 +20,9 @@ public enum QualityReason {
 
     UNSUPPORTED_USER_BEHAVIOR("UNSUPPORTED_USER_BEHAVIOR"),
 
-    UNKNOWN("UNKNOWN");
+    UNKNOWN("UNKNOWN"),
+
+    NO_BOT_REPLIES("NO_BOT_REPLIES");
 
     private final String value;
 

@@ -22,10 +22,14 @@ import java.util.Optional;
 public final class ConversationGetRequest {
     private final Optional<String> appId;
 
+    private final Optional<String> translationLanguage;
+
     private final Map<String, Object> additionalProperties;
 
-    private ConversationGetRequest(Optional<String> appId, Map<String, Object> additionalProperties) {
+    private ConversationGetRequest(
+            Optional<String> appId, Optional<String> translationLanguage, Map<String, Object> additionalProperties) {
         this.appId = appId;
+        this.translationLanguage = translationLanguage;
         this.additionalProperties = additionalProperties;
     }
 
@@ -35,6 +39,14 @@ public final class ConversationGetRequest {
     @JsonProperty("appId")
     public Optional<String> getAppId() {
         return appId;
+    }
+
+    /**
+     * @return The language to translate the conversation analysis into
+     */
+    @JsonProperty("translationLanguage")
+    public Optional<String> getTranslationLanguage() {
+        return translationLanguage;
     }
 
     @java.lang.Override
@@ -49,12 +61,12 @@ public final class ConversationGetRequest {
     }
 
     private boolean equalTo(ConversationGetRequest other) {
-        return appId.equals(other.appId);
+        return appId.equals(other.appId) && translationLanguage.equals(other.translationLanguage);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.appId);
+        return Objects.hash(this.appId, this.translationLanguage);
     }
 
     @java.lang.Override
@@ -70,6 +82,8 @@ public final class ConversationGetRequest {
     public static final class Builder {
         private Optional<String> appId = Optional.empty();
 
+        private Optional<String> translationLanguage = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -77,6 +91,7 @@ public final class ConversationGetRequest {
 
         public Builder from(ConversationGetRequest other) {
             appId(other.getAppId());
+            translationLanguage(other.getTranslationLanguage());
             return this;
         }
 
@@ -94,8 +109,22 @@ public final class ConversationGetRequest {
             return this;
         }
 
+        /**
+         * <p>The language to translate the conversation analysis into</p>
+         */
+        @JsonSetter(value = "translationLanguage", nulls = Nulls.SKIP)
+        public Builder translationLanguage(Optional<String> translationLanguage) {
+            this.translationLanguage = translationLanguage;
+            return this;
+        }
+
+        public Builder translationLanguage(String translationLanguage) {
+            this.translationLanguage = Optional.ofNullable(translationLanguage);
+            return this;
+        }
+
         public ConversationGetRequest build() {
-            return new ConversationGetRequest(appId, additionalProperties);
+            return new ConversationGetRequest(appId, translationLanguage, additionalProperties);
         }
     }
 }
