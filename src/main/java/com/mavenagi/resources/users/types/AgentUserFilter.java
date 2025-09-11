@@ -25,12 +25,18 @@ public final class AgentUserFilter {
 
     private final Optional<List<String>> identifiers;
 
+    private final Optional<Boolean> isAnonymous;
+
     private final Map<String, Object> additionalProperties;
 
     private AgentUserFilter(
-            Optional<String> search, Optional<List<String>> identifiers, Map<String, Object> additionalProperties) {
+            Optional<String> search,
+            Optional<List<String>> identifiers,
+            Optional<Boolean> isAnonymous,
+            Map<String, Object> additionalProperties) {
         this.search = search;
         this.identifiers = identifiers;
+        this.isAnonymous = isAnonymous;
         this.additionalProperties = additionalProperties;
     }
 
@@ -51,6 +57,15 @@ public final class AgentUserFilter {
         return identifiers;
     }
 
+    /**
+     * @return Filter by anonymous users. When true, only anonymous users are returned.
+     * When false, only non-anonymous users are returned. An anonymous user is one without any identifiers or name data.
+     */
+    @JsonProperty("isAnonymous")
+    public Optional<Boolean> getIsAnonymous() {
+        return isAnonymous;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -63,12 +78,14 @@ public final class AgentUserFilter {
     }
 
     private boolean equalTo(AgentUserFilter other) {
-        return search.equals(other.search) && identifiers.equals(other.identifiers);
+        return search.equals(other.search)
+                && identifiers.equals(other.identifiers)
+                && isAnonymous.equals(other.isAnonymous);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.search, this.identifiers);
+        return Objects.hash(this.search, this.identifiers, this.isAnonymous);
     }
 
     @java.lang.Override
@@ -86,6 +103,8 @@ public final class AgentUserFilter {
 
         private Optional<List<String>> identifiers = Optional.empty();
 
+        private Optional<Boolean> isAnonymous = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -94,6 +113,7 @@ public final class AgentUserFilter {
         public Builder from(AgentUserFilter other) {
             search(other.getSearch());
             identifiers(other.getIdentifiers());
+            isAnonymous(other.getIsAnonymous());
             return this;
         }
 
@@ -126,8 +146,23 @@ public final class AgentUserFilter {
             return this;
         }
 
+        /**
+         * <p>Filter by anonymous users. When true, only anonymous users are returned.
+         * When false, only non-anonymous users are returned. An anonymous user is one without any identifiers or name data.</p>
+         */
+        @JsonSetter(value = "isAnonymous", nulls = Nulls.SKIP)
+        public Builder isAnonymous(Optional<Boolean> isAnonymous) {
+            this.isAnonymous = isAnonymous;
+            return this;
+        }
+
+        public Builder isAnonymous(Boolean isAnonymous) {
+            this.isAnonymous = Optional.ofNullable(isAnonymous);
+            return this;
+        }
+
         public AgentUserFilter build() {
-            return new AgentUserFilter(search, identifiers, additionalProperties);
+            return new AgentUserFilter(search, identifiers, isAnonymous, additionalProperties);
         }
     }
 }

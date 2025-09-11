@@ -5,10 +5,10 @@ package com.mavenagi.resources.events;
 
 import com.mavenagi.core.ClientOptions;
 import com.mavenagi.core.RequestOptions;
-import com.mavenagi.resources.events.types.EventRequest;
-import com.mavenagi.resources.events.types.EventResponse;
-import com.mavenagi.resources.events.types.EventsSearchRequest;
-import com.mavenagi.resources.events.types.EventsSearchResponse;
+import com.mavenagi.resources.commons.types.EventRequest;
+import com.mavenagi.resources.commons.types.EventResponse;
+import com.mavenagi.resources.commons.types.EventsSearchRequest;
+import com.mavenagi.resources.commons.types.EventsSearchResponse;
 
 public class EventsClient {
     protected final ClientOptions clientOptions;

@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.mavenagi.resources.commons.types.EntityIdFilter;
+import com.mavenagi.resources.commons.types.EntityResult;
 import java.time.OffsetDateTime;
 import java.util.Objects;
 import java.util.Optional;
@@ -52,7 +52,7 @@ public final class FieldValue {
         return new FieldValue(new BooleanValue(value));
     }
 
-    public static FieldValue entityId(EntityIdFilter value) {
+    public static FieldValue entityId(EntityResult value) {
         return new FieldValue(new EntityIdValue(value));
     }
 
@@ -130,7 +130,7 @@ public final class FieldValue {
         return Optional.empty();
     }
 
-    public Optional<EntityIdFilter> getEntityId() {
+    public Optional<EntityResult> getEntityId() {
         if (isEntityId()) {
             return Optional.of(((EntityIdValue) value).value);
         }
@@ -162,7 +162,7 @@ public final class FieldValue {
 
         T visitBoolean(boolean boolean_);
 
-        T visitEntityId(EntityIdFilter entityId);
+        T visitEntityId(EntityResult entityId);
 
         T _visitUnknown(Object unknownType);
     }
@@ -410,12 +410,12 @@ public final class FieldValue {
     @JsonIgnoreProperties("type")
     private static final class EntityIdValue implements Value {
         @JsonUnwrapped
-        private EntityIdFilter value;
+        private EntityResult value;
 
         @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
         private EntityIdValue() {}
 
-        private EntityIdValue(EntityIdFilter value) {
+        private EntityIdValue(EntityResult value) {
             this.value = value;
         }
 

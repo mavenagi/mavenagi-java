@@ -2920,7 +2920,7 @@ client.events().create(
             )
             .eventName(UserEventName.BUTTON_CLICKED)
             .userInfo(
-                UserInfoBase
+                EventUserInfoBase
                     .builder()
                     .id(
                         EntityIdBase

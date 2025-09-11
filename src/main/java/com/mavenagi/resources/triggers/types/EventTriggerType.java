@@ -10,7 +10,9 @@ public enum EventTriggerType {
 
     FEEDBACK_CREATED("FEEDBACK_CREATED"),
 
-    INBOX_ITEM_CREATED("INBOX_ITEM_CREATED");
+    INBOX_ITEM_CREATED("INBOX_ITEM_CREATED"),
+
+    EVENT_CREATED("EVENT_CREATED");
 
     private final String value;
 

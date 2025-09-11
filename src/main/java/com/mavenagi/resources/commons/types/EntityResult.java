@@ -9,25 +9,31 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonDeserialize(builder = EntityIdFilter.Builder.class)
-public final class EntityIdFilter implements IEntityIdFilter {
+@JsonDeserialize(builder = EntityResult.Builder.class)
+public final class EntityResult implements IEntityIdFilter {
     private final String referenceId;
 
     private final String appId;
 
+    private final Optional<String> name;
+
     private final Map<String, Object> additionalProperties;
 
-    private EntityIdFilter(String referenceId, String appId, Map<String, Object> additionalProperties) {
+    private EntityResult(
+            String referenceId, String appId, Optional<String> name, Map<String, Object> additionalProperties) {
         this.referenceId = referenceId;
         this.appId = appId;
+        this.name = name;
         this.additionalProperties = additionalProperties;
     }
 
@@ -43,10 +49,18 @@ public final class EntityIdFilter implements IEntityIdFilter {
         return appId;
     }
 
+    /**
+     * @return Human-readable name for the referenced entity (e.g., action name or document title).
+     */
+    @JsonProperty("name")
+    public Optional<String> getName() {
+        return name;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
-        return other instanceof EntityIdFilter && equalTo((EntityIdFilter) other);
+        return other instanceof EntityResult && equalTo((EntityResult) other);
     }
 
     @JsonAnyGetter
@@ -54,13 +68,13 @@ public final class EntityIdFilter implements IEntityIdFilter {
         return this.additionalProperties;
     }
 
-    private boolean equalTo(EntityIdFilter other) {
-        return referenceId.equals(other.referenceId) && appId.equals(other.appId);
+    private boolean equalTo(EntityResult other) {
+        return referenceId.equals(other.referenceId) && appId.equals(other.appId) && name.equals(other.name);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.referenceId, this.appId);
+        return Objects.hash(this.referenceId, this.appId, this.name);
     }
 
     @java.lang.Override
@@ -75,7 +89,7 @@ public final class EntityIdFilter implements IEntityIdFilter {
     public interface ReferenceIdStage {
         AppIdStage referenceId(@NotNull String referenceId);
 
-        Builder from(EntityIdFilter other);
+        Builder from(EntityResult other);
     }
 
     public interface AppIdStage {
@@ -83,7 +97,14 @@ public final class EntityIdFilter implements IEntityIdFilter {
     }
 
     public interface _FinalStage {
-        EntityIdFilter build();
+        EntityResult build();
+
+        /**
+         * <p>Human-readable name for the referenced entity (e.g., action name or document title).</p>
+         */
+        _FinalStage name(Optional<String> name);
+
+        _FinalStage name(String name);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -92,15 +113,18 @@ public final class EntityIdFilter implements IEntityIdFilter {
 
         private String appId;
 
+        private Optional<String> name = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
 
         @java.lang.Override
-        public Builder from(EntityIdFilter other) {
+        public Builder from(EntityResult other) {
             referenceId(other.getReferenceId());
             appId(other.getAppId());
+            name(other.getName());
             return this;
         }
 
@@ -118,9 +142,29 @@ public final class EntityIdFilter implements IEntityIdFilter {
             return this;
         }
 
+        /**
+         * <p>Human-readable name for the referenced entity (e.g., action name or document title).</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
-        public EntityIdFilter build() {
-            return new EntityIdFilter(referenceId, appId, additionalProperties);
+        public _FinalStage name(String name) {
+            this.name = Optional.ofNullable(name);
+            return this;
+        }
+
+        /**
+         * <p>Human-readable name for the referenced entity (e.g., action name or document title).</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "name", nulls = Nulls.SKIP)
+        public _FinalStage name(Optional<String> name) {
+            this.name = name;
+            return this;
+        }
+
+        @java.lang.Override
+        public EntityResult build() {
+            return new EntityResult(referenceId, appId, name, additionalProperties);
         }
     }
 }

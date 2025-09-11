@@ -123,6 +123,21 @@ public final class ActionParameter {
 
     /**
      * @return JSON schema for validating the parameter value. Only valid when type is <code>SCHEMA</code>.
+     * <p><strong>Schema Requirements:</strong></p>
+     * <ul>
+     * <li>Root type must be &quot;object&quot; - The top-level schema must define an object type</li>
+     * <li>Supported types: string, number, boolean, integer, object, array, enum, anyOf</li>
+     * <li>Unsupported features: oneOf, allOf, const, not, if/then/else, pattern, maxLength, minLength</li>
+     * <li>Required fields: All fields must be required (no optional properties)</li>
+     * <li>Additional properties: Must be set to false</li>
+     * </ul>
+     * <p><strong>Limits:</strong></p>
+     * <ul>
+     * <li>Maximum nesting depth: 5 levels</li>
+     * <li>Maximum total properties: 100</li>
+     * <li>Maximum total string length: 15,000 characters</li>
+     * <li>Maximum total enum values: 500</li>
+     * </ul>
      */
     @JsonProperty("schema")
     public Optional<String> getSchema() {
@@ -239,6 +254,21 @@ public final class ActionParameter {
 
         /**
          * <p>JSON schema for validating the parameter value. Only valid when type is <code>SCHEMA</code>.</p>
+         * <p><strong>Schema Requirements:</strong></p>
+         * <ul>
+         * <li>Root type must be &quot;object&quot; - The top-level schema must define an object type</li>
+         * <li>Supported types: string, number, boolean, integer, object, array, enum, anyOf</li>
+         * <li>Unsupported features: oneOf, allOf, const, not, if/then/else, pattern, maxLength, minLength</li>
+         * <li>Required fields: All fields must be required (no optional properties)</li>
+         * <li>Additional properties: Must be set to false</li>
+         * </ul>
+         * <p><strong>Limits:</strong></p>
+         * <ul>
+         * <li>Maximum nesting depth: 5 levels</li>
+         * <li>Maximum total properties: 100</li>
+         * <li>Maximum total string length: 15,000 characters</li>
+         * <li>Maximum total enum values: 500</li>
+         * </ul>
          */
         _FinalStage schema(Optional<String> schema);
 
@@ -361,6 +391,21 @@ public final class ActionParameter {
 
         /**
          * <p>JSON schema for validating the parameter value. Only valid when type is <code>SCHEMA</code>.</p>
+         * <p><strong>Schema Requirements:</strong></p>
+         * <ul>
+         * <li>Root type must be &quot;object&quot; - The top-level schema must define an object type</li>
+         * <li>Supported types: string, number, boolean, integer, object, array, enum, anyOf</li>
+         * <li>Unsupported features: oneOf, allOf, const, not, if/then/else, pattern, maxLength, minLength</li>
+         * <li>Required fields: All fields must be required (no optional properties)</li>
+         * <li>Additional properties: Must be set to false</li>
+         * </ul>
+         * <p><strong>Limits:</strong></p>
+         * <ul>
+         * <li>Maximum nesting depth: 5 levels</li>
+         * <li>Maximum total properties: 100</li>
+         * <li>Maximum total string length: 15,000 characters</li>
+         * <li>Maximum total enum values: 500</li>
+         * </ul>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -371,6 +416,21 @@ public final class ActionParameter {
 
         /**
          * <p>JSON schema for validating the parameter value. Only valid when type is <code>SCHEMA</code>.</p>
+         * <p><strong>Schema Requirements:</strong></p>
+         * <ul>
+         * <li>Root type must be &quot;object&quot; - The top-level schema must define an object type</li>
+         * <li>Supported types: string, number, boolean, integer, object, array, enum, anyOf</li>
+         * <li>Unsupported features: oneOf, allOf, const, not, if/then/else, pattern, maxLength, minLength</li>
+         * <li>Required fields: All fields must be required (no optional properties)</li>
+         * <li>Additional properties: Must be set to false</li>
+         * </ul>
+         * <p><strong>Limits:</strong></p>
+         * <ul>
+         * <li>Maximum nesting depth: 5 levels</li>
+         * <li>Maximum total properties: 100</li>
+         * <li>Maximum total string length: 15,000 characters</li>
+         * <li>Maximum total enum values: 500</li>
+         * </ul>
          */
         @java.lang.Override
         @JsonSetter(value = "schema", nulls = Nulls.SKIP)
