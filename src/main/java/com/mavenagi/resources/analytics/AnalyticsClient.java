@@ -5,6 +5,8 @@ package com.mavenagi.resources.analytics;
 
 import com.mavenagi.core.ClientOptions;
 import com.mavenagi.core.RequestOptions;
+import com.mavenagi.resources.analytics.types.AgentUserTableRequest;
+import com.mavenagi.resources.analytics.types.AgentUserTableResponse;
 import com.mavenagi.resources.analytics.types.ChartResponse;
 import com.mavenagi.resources.analytics.types.ConversationChartRequest;
 import com.mavenagi.resources.analytics.types.ConversationTableRequest;
@@ -70,5 +72,19 @@ public class AnalyticsClient {
      */
     public FeedbackTableResponse getFeedbackTable(FeedbackTableRequest request, RequestOptions requestOptions) {
         return this.rawClient.getFeedbackTable(request, requestOptions).body();
+    }
+
+    /**
+     * Retrieves structured agent user data formatted as a table, allowing users to group, filter,  and define specific metrics to display as columns.
+     */
+    public AgentUserTableResponse getAgentUserTable(AgentUserTableRequest request) {
+        return this.rawClient.getAgentUserTable(request).body();
+    }
+
+    /**
+     * Retrieves structured agent user data formatted as a table, allowing users to group, filter,  and define specific metrics to display as columns.
+     */
+    public AgentUserTableResponse getAgentUserTable(AgentUserTableRequest request, RequestOptions requestOptions) {
+        return this.rawClient.getAgentUserTable(request, requestOptions).body();
     }
 }

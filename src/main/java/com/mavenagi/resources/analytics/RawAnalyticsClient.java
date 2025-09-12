@@ -11,6 +11,8 @@ import com.mavenagi.core.MavenAGIHttpResponse;
 import com.mavenagi.core.MediaTypes;
 import com.mavenagi.core.ObjectMappers;
 import com.mavenagi.core.RequestOptions;
+import com.mavenagi.resources.analytics.types.AgentUserTableRequest;
+import com.mavenagi.resources.analytics.types.AgentUserTableResponse;
 import com.mavenagi.resources.analytics.types.ChartResponse;
 import com.mavenagi.resources.analytics.types.ConversationChartRequest;
 import com.mavenagi.resources.analytics.types.ConversationTableRequest;
@@ -212,6 +214,74 @@ public class RawAnalyticsClient {
             if (response.isSuccessful()) {
                 return new MavenAGIHttpResponse<>(
                         ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), FeedbackTableResponse.class),
+                        response);
+            }
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            try {
+                switch (response.code()) {
+                    case 400:
+                        throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                    case 500:
+                        throw new ServerError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            throw new MavenAGIApiException(
+                    "Error with status code " + response.code(),
+                    response.code(),
+                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                    response);
+        } catch (IOException e) {
+            throw new MavenAGIException("Network error executing HTTP request", e);
+        }
+    }
+
+    /**
+     * Retrieves structured agent user data formatted as a table, allowing users to group, filter,  and define specific metrics to display as columns.
+     */
+    public MavenAGIHttpResponse<AgentUserTableResponse> getAgentUserTable(AgentUserTableRequest request) {
+        return getAgentUserTable(request, null);
+    }
+
+    /**
+     * Retrieves structured agent user data formatted as a table, allowing users to group, filter,  and define specific metrics to display as columns.
+     */
+    public MavenAGIHttpResponse<AgentUserTableResponse> getAgentUserTable(
+            AgentUserTableRequest request, RequestOptions requestOptions) {
+        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("v1")
+                .addPathSegments("tables/agent-users")
+                .build();
+        RequestBody body;
+        try {
+            body = RequestBody.create(
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
+        } catch (JsonProcessingException e) {
+            throw new MavenAGIException("Failed to serialize request", e);
+        }
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl)
+                .method("POST", body)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
+                .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            if (response.isSuccessful()) {
+                return new MavenAGIHttpResponse<>(
+                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), AgentUserTableResponse.class),
                         response);
             }
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";

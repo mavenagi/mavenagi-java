@@ -1239,6 +1239,87 @@ client.analytics().getFeedbackTable(
 </dl>
 </details>
 
+<details><summary><code>client.analytics.getAgentUserTable(request) -> AgentUserTableResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieves structured agent user data formatted as a table, allowing users to group, filter,  and define specific metrics to display as columns.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.analytics().getAgentUserTable(
+    AgentUserTableRequest
+        .builder()
+        .columnDefinitions(
+            new ArrayList<AgentUserColumnDefinition>(
+                Arrays.asList(
+                    AgentUserColumnDefinition
+                        .builder()
+                        .header("user_count")
+                        .metric(
+                            AgentUserMetric.count(
+                                AgentUserCount
+                                    .builder()
+                                    .build()
+                            )
+                        )
+                        .build()
+                )
+            )
+        )
+        .agentUserFilter(
+            AgentUserFilter
+                .builder()
+                .search("john")
+                .build()
+        )
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `AgentUserTableRequest` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## AppSettings
 <details><summary><code>client.appSettings.search() -> SearchAppSettingsResponse</code></summary>
 <dl>

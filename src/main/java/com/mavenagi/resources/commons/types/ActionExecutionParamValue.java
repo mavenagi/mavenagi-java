@@ -26,16 +26,16 @@ public final class ActionExecutionParamValue {
         return value.visit(visitor);
     }
 
-    public static ActionExecutionParamValue raw(Object value) {
-        return new ActionExecutionParamValue(new RawValue(value));
+    public static ActionExecutionParamValue primitive(Object value) {
+        return new ActionExecutionParamValue(new PrimitiveValue(value));
     }
 
     public static ActionExecutionParamValue attachment(AttachmentResponse value) {
         return new ActionExecutionParamValue(new AttachmentValue(value));
     }
 
-    public boolean isRaw() {
-        return value instanceof RawValue;
+    public boolean isPrimitive() {
+        return value instanceof PrimitiveValue;
     }
 
     public boolean isAttachment() {
@@ -46,9 +46,9 @@ public final class ActionExecutionParamValue {
         return value instanceof _UnknownValue;
     }
 
-    public Optional<Object> getRaw() {
-        if (isRaw()) {
-            return Optional.of(((RawValue) value).value);
+    public Optional<Object> getPrimitive() {
+        if (isPrimitive()) {
+            return Optional.of(((PrimitiveValue) value).value);
         }
         return Optional.empty();
     }
@@ -73,7 +73,7 @@ public final class ActionExecutionParamValue {
     }
 
     public interface Visitor<T> {
-        T visitRaw(Object raw);
+        T visitPrimitive(Object primitive);
 
         T visitAttachment(AttachmentResponse attachment);
 
@@ -81,35 +81,35 @@ public final class ActionExecutionParamValue {
     }
 
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "valueType", visible = true, defaultImpl = _UnknownValue.class)
-    @JsonSubTypes({@JsonSubTypes.Type(RawValue.class), @JsonSubTypes.Type(AttachmentValue.class)})
+    @JsonSubTypes({@JsonSubTypes.Type(PrimitiveValue.class), @JsonSubTypes.Type(AttachmentValue.class)})
     @JsonIgnoreProperties(ignoreUnknown = true)
     private interface Value {
         <T> T visit(Visitor<T> visitor);
     }
 
-    @JsonTypeName("raw")
+    @JsonTypeName("primitive")
     @JsonIgnoreProperties("valueType")
-    private static final class RawValue implements Value {
+    private static final class PrimitiveValue implements Value {
         @JsonProperty("value")
         private Object value;
 
         @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-        private RawValue(@JsonProperty("value") Object value) {
+        private PrimitiveValue(@JsonProperty("value") Object value) {
             this.value = value;
         }
 
         @java.lang.Override
         public <T> T visit(Visitor<T> visitor) {
-            return visitor.visitRaw(value);
+            return visitor.visitPrimitive(value);
         }
 
         @java.lang.Override
         public boolean equals(Object other) {
             if (this == other) return true;
-            return other instanceof RawValue && equalTo((RawValue) other);
+            return other instanceof PrimitiveValue && equalTo((PrimitiveValue) other);
         }
 
-        private boolean equalTo(RawValue other) {
+        private boolean equalTo(PrimitiveValue other) {
             return value.equals(other.value);
         }
 
