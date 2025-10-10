@@ -86,12 +86,16 @@ public final class ConversationMetadata {
         @JsonSetter(value = "metadata", nulls = Nulls.SKIP)
         public Builder metadata(Map<String, Map<String, String>> metadata) {
             this.metadata.clear();
-            this.metadata.putAll(metadata);
+            if (metadata != null) {
+                this.metadata.putAll(metadata);
+            }
             return this;
         }
 
         public Builder putAllMetadata(Map<String, Map<String, String>> metadata) {
-            this.metadata.putAll(metadata);
+            if (metadata != null) {
+                this.metadata.putAll(metadata);
+            }
             return this;
         }
 

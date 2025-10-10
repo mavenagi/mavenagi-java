@@ -92,20 +92,18 @@ client.actions().createOrUpdate(
                     .builder()
                     .operator(PreconditionGroupOperator.AND)
                     .preconditions(
-                        new ArrayList<Precondition>(
-                            Arrays.asList(
-                                Precondition.user(
-                                    MetadataPrecondition
-                                        .builder()
-                                        .key("userKey")
-                                        .build()
-                                ),
-                                Precondition.user(
-                                    MetadataPrecondition
-                                        .builder()
-                                        .key("userKey2")
-                                        .build()
-                                )
+                        Arrays.asList(
+                            Precondition.user(
+                                MetadataPrecondition
+                                    .builder()
+                                    .key("userKey")
+                                    .build()
+                            ),
+                            Precondition.user(
+                                MetadataPrecondition
+                                    .builder()
+                                    .key("userKey2")
+                                    .build()
                             )
                         )
                     )
@@ -520,6 +518,82 @@ client.agentCapabilities().patch(
 <dd>
 
 **request:** `PatchAgentCapabilityRequest` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agentCapabilities.execute(integrationId, capabilityId, request) -> ExecuteCapabilityResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Execute an action capability.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.agentCapabilities().execute(
+    "integrationId",
+    "capabilityId",
+    ExecuteCapabilityRequest
+        .builder()
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**integrationId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**capabilityId:** `String` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `ExecuteCapabilityRequest` 
     
 </dd>
 </dl>
@@ -971,62 +1045,58 @@ client.analytics().getConversationTable(
     ConversationTableRequest
         .builder()
         .fieldGroupings(
-            new ArrayList<ConversationGroupBy>(
-                Arrays.asList(
-                    ConversationGroupBy
-                        .builder()
-                        .field(ConversationField.CATEGORY)
-                        .build()
-                )
+            Arrays.asList(
+                ConversationGroupBy
+                    .builder()
+                    .field(ConversationField.CATEGORY)
+                    .build()
             )
         )
         .columnDefinitions(
-            new ArrayList<ConversationColumnDefinition>(
-                Arrays.asList(
-                    ConversationColumnDefinition
-                        .builder()
-                        .header("count")
-                        .metric(
-                            ConversationMetric.count(
-                                ConversationCount
-                                    .builder()
-                                    .build()
-                            )
+            Arrays.asList(
+                ConversationColumnDefinition
+                    .builder()
+                    .header("count")
+                    .metric(
+                        ConversationMetric.count(
+                            ConversationCount
+                                .builder()
+                                .build()
                         )
-                        .build(),
-                    ConversationColumnDefinition
-                        .builder()
-                        .header("avg_first_response_time")
-                        .metric(
-                            ConversationMetric.average(
-                                ConversationAverage
-                                    .builder()
-                                    .targetField(NumericConversationField.FIRST_RESPONSE_TIME)
-                                    .build()
-                            )
+                    )
+                    .build(),
+                ConversationColumnDefinition
+                    .builder()
+                    .header("avg_first_response_time")
+                    .metric(
+                        ConversationMetric.average(
+                            ConversationAverage
+                                .builder()
+                                .targetField(NumericConversationField.FIRST_RESPONSE_TIME)
+                                .build()
                         )
-                        .build(),
-                    ConversationColumnDefinition
-                        .builder()
-                        .header("percentile_handle_time")
-                        .metric(
-                            ConversationMetric.percentile(
-                                ConversationPercentile
-                                    .builder()
-                                    .targetField(NumericConversationField.HANDLE_TIME)
-                                    .percentile(25)
-                                    .build()
-                            )
+                    )
+                    .build(),
+                ConversationColumnDefinition
+                    .builder()
+                    .header("percentile_handle_time")
+                    .metric(
+                        ConversationMetric.percentile(
+                            ConversationPercentile
+                                .builder()
+                                .targetField(NumericConversationField.HANDLE_TIME)
+                                .percentile(25.0)
+                                .build()
                         )
-                        .build()
-                )
+                    )
+                    .build()
             )
         )
         .conversationFilter(
             ConversationFilter
                 .builder()
                 .languages(
-                    new ArrayList<String>(
+                    Optional.of(
                         Arrays.asList("en", "es")
                     )
                 )
@@ -1109,7 +1179,7 @@ client.analytics().getConversationChart(
                 ConversationFilter
                     .builder()
                     .languages(
-                        new ArrayList<String>(
+                        Optional.of(
                             Arrays.asList("en", "es")
                         )
                     )
@@ -1175,37 +1245,33 @@ client.analytics().getFeedbackTable(
     FeedbackTableRequest
         .builder()
         .fieldGroupings(
-            new ArrayList<FeedbackGroupBy>(
-                Arrays.asList(
-                    FeedbackGroupBy
-                        .builder()
-                        .field(FeedbackField.CREATED_BY)
-                        .build()
-                )
+            Arrays.asList(
+                FeedbackGroupBy
+                    .builder()
+                    .field(FeedbackField.CREATED_BY)
+                    .build()
             )
         )
         .columnDefinitions(
-            new ArrayList<FeedbackColumnDefinition>(
-                Arrays.asList(
-                    FeedbackColumnDefinition
-                        .builder()
-                        .header("feedback_count")
-                        .metric(
-                            FeedbackMetric.count(
-                                FeedbackCount
-                                    .builder()
-                                    .build()
-                            )
+            Arrays.asList(
+                FeedbackColumnDefinition
+                    .builder()
+                    .header("feedback_count")
+                    .metric(
+                        FeedbackMetric.count(
+                            FeedbackCount
+                                .builder()
+                                .build()
                         )
-                        .build()
-                )
+                    )
+                    .build()
             )
         )
         .feedbackFilter(
             FeedbackFilter
                 .builder()
                 .types(
-                    new ArrayList<FeedbackType>(
+                    Optional.of(
                         Arrays.asList(FeedbackType.THUMBS_UP, FeedbackType.INSERT)
                     )
                 )
@@ -1270,20 +1336,18 @@ client.analytics().getAgentUserTable(
     AgentUserTableRequest
         .builder()
         .columnDefinitions(
-            new ArrayList<AgentUserColumnDefinition>(
-                Arrays.asList(
-                    AgentUserColumnDefinition
-                        .builder()
-                        .header("user_count")
-                        .metric(
-                            AgentUserMetric.count(
-                                AgentUserCount
-                                    .builder()
-                                    .build()
-                            )
+            Arrays.asList(
+                AgentUserColumnDefinition
+                    .builder()
+                    .header("user_count")
+                    .metric(
+                        AgentUserMetric.count(
+                            AgentUserCount
+                                .builder()
+                                .build()
                         )
-                        .build()
-                )
+                    )
+                    .build()
             )
         )
         .agentUserFilter(
@@ -1663,43 +1727,41 @@ client.conversation().initialize(
                 .build()
         )
         .messages(
-            new ArrayList<ConversationMessageRequest>(
-                Arrays.asList(
-                    ConversationMessageRequest
-                        .builder()
-                        .conversationMessageId(
-                            EntityIdBase
-                                .builder()
-                                .referenceId("referenceId")
-                                .build()
-                        )
-                        .userId(
-                            EntityIdBase
-                                .builder()
-                                .referenceId("referenceId")
-                                .build()
-                        )
-                        .text("text")
-                        .userMessageType(UserConversationMessageType.USER)
-                        .build(),
-                    ConversationMessageRequest
-                        .builder()
-                        .conversationMessageId(
-                            EntityIdBase
-                                .builder()
-                                .referenceId("referenceId")
-                                .build()
-                        )
-                        .userId(
-                            EntityIdBase
-                                .builder()
-                                .referenceId("referenceId")
-                                .build()
-                        )
-                        .text("text")
-                        .userMessageType(UserConversationMessageType.USER)
-                        .build()
-                )
+            Arrays.asList(
+                ConversationMessageRequest
+                    .builder()
+                    .conversationMessageId(
+                        EntityIdBase
+                            .builder()
+                            .referenceId("referenceId")
+                            .build()
+                    )
+                    .userId(
+                        EntityIdBase
+                            .builder()
+                            .referenceId("referenceId")
+                            .build()
+                    )
+                    .text("text")
+                    .userMessageType(UserConversationMessageType.USER)
+                    .build(),
+                ConversationMessageRequest
+                    .builder()
+                    .conversationMessageId(
+                        EntityIdBase
+                            .builder()
+                            .referenceId("referenceId")
+                            .build()
+                    )
+                    .userId(
+                        EntityIdBase
+                            .builder()
+                            .referenceId("referenceId")
+                            .build()
+                    )
+                    .text("text")
+                    .userMessageType(UserConversationMessageType.USER)
+                    .build()
             )
         )
         .build()
@@ -1892,6 +1954,9 @@ Wipes a conversation of all user data.
 The conversation ID will still exist and non-user specific data will still be retained. 
 Attempts to modify or add messages to the conversation will throw an error. 
 
+Simulation conversations will no longer be visible in search results nor metrics. 
+Non-simulation conversations will remain visible - they can not be fully removed from the system.
+
 <Warning>This is a destructive operation and cannot be undone. <br/><br/>
 The exact fields cleared include: the conversation subject, userRequest, agentResponse. 
 As well as the text response, followup questions, and backend LLM prompt of all messages.</Warning>
@@ -1987,43 +2052,41 @@ Append messages to an existing conversation. The conversation must be initialize
 ```java
 client.conversation().appendNewMessages(
     "conversationId",
-    new ArrayList<ConversationMessageRequest>(
-        Arrays.asList(
-            ConversationMessageRequest
-                .builder()
-                .conversationMessageId(
-                    EntityIdBase
-                        .builder()
-                        .referenceId("referenceId")
-                        .build()
-                )
-                .userId(
-                    EntityIdBase
-                        .builder()
-                        .referenceId("referenceId")
-                        .build()
-                )
-                .text("text")
-                .userMessageType(UserConversationMessageType.USER)
-                .build(),
-            ConversationMessageRequest
-                .builder()
-                .conversationMessageId(
-                    EntityIdBase
-                        .builder()
-                        .referenceId("referenceId")
-                        .build()
-                )
-                .userId(
-                    EntityIdBase
-                        .builder()
-                        .referenceId("referenceId")
-                        .build()
-                )
-                .text("text")
-                .userMessageType(UserConversationMessageType.USER)
-                .build()
-        )
+    Arrays.asList(
+        ConversationMessageRequest
+            .builder()
+            .conversationMessageId(
+                EntityIdBase
+                    .builder()
+                    .referenceId("referenceId")
+                    .build()
+            )
+            .userId(
+                EntityIdBase
+                    .builder()
+                    .referenceId("referenceId")
+                    .build()
+            )
+            .text("text")
+            .userMessageType(UserConversationMessageType.USER)
+            .build(),
+        ConversationMessageRequest
+            .builder()
+            .conversationMessageId(
+                EntityIdBase
+                    .builder()
+                    .referenceId("referenceId")
+                    .build()
+            )
+            .userId(
+                EntityIdBase
+                    .builder()
+                    .referenceId("referenceId")
+                    .build()
+            )
+            .text("text")
+            .userMessageType(UserConversationMessageType.USER)
+            .build()
     )
 );
 ```
@@ -2113,7 +2176,7 @@ client.conversation().ask(
         )
         .text("How do I reset my password?")
         .attachments(
-            new ArrayList<AttachmentRequest>(
+            Optional.of(
                 Arrays.asList(
                     AttachmentRequest
                         .builder()
@@ -2223,7 +2286,7 @@ client.conversation().askStream(
         )
         .text("How do I reset my password?")
         .attachments(
-            new ArrayList<AttachmentRequest>(
+            Optional.of(
                 Arrays.asList(
                     AttachmentRequest
                         .builder()
@@ -2265,87 +2328,6 @@ client.conversation().askStream(
 <dd>
 
 **request:** `AskRequest` 
-    
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.conversation.generateMavenSuggestions(conversationId, request) -> ConversationResponse</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-This method is deprecated and will be removed in a future release. Use either `ask` or `askStream` instead.
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```java
-client.conversation().generateMavenSuggestions(
-    "conversationId",
-    GenerateMavenSuggestionsRequest
-        .builder()
-        .conversationMessageIds(
-            new ArrayList<EntityIdBase>(
-                Arrays.asList(
-                    EntityIdBase
-                        .builder()
-                        .referenceId("referenceId")
-                        .build(),
-                    EntityIdBase
-                        .builder()
-                        .referenceId("referenceId")
-                        .build()
-                )
-            )
-        )
-        .build()
-);
-```
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**conversationId:** `String` — The ID of a conversation the messages belong to
-    
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request:** `GenerateMavenSuggestionsRequest` 
     
 </dd>
 </dl>
@@ -2622,7 +2604,7 @@ client.conversation().submitActionForm(
         .actionFormId("actionFormId")
         .parameters(
             new HashMap<String, ActionFormRequestParamValue>() {{
-                put("parameters", ActionFormRequestParamValue.ofUnknown(new 
+                put("parameters", ActionFormRequestParamValue.of(new 
                 HashMap<String, Object>() {{put("key", "value");
                 }}));
             }}
@@ -3098,6 +3080,74 @@ client.events().search(
 </dl>
 </details>
 
+<details><summary><code>client.events.get(eventId) -> EventResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve details of a specific Event item by its ID.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.events().get(
+    "eventId",
+    EventGetRequest
+        .builder()
+        .appId("appId")
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**eventId:** `String` — The ID of the Event to get.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**appId:** `String` — The App ID of the Event to retrieve
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## Inbox
 <details><summary><code>client.inbox.search(request) -> InboxSearchResponse</code></summary>
 <dl>
@@ -3326,9 +3376,7 @@ client.inbox().applyFixes(
         .builder()
         .appId("appId")
         .fixReferenceIds(
-            new ArrayList<String>(
-                Arrays.asList("fixReferenceIds", "fixReferenceIds")
-            )
+            Arrays.asList("fixReferenceIds", "fixReferenceIds")
         )
         .build()
 );
@@ -4571,62 +4619,58 @@ client.organizations().getConversationTable(
     ConversationTableRequest
         .builder()
         .fieldGroupings(
-            new ArrayList<ConversationGroupBy>(
-                Arrays.asList(
-                    ConversationGroupBy
-                        .builder()
-                        .field(ConversationField.CATEGORY)
-                        .build()
-                )
+            Arrays.asList(
+                ConversationGroupBy
+                    .builder()
+                    .field(ConversationField.CATEGORY)
+                    .build()
             )
         )
         .columnDefinitions(
-            new ArrayList<ConversationColumnDefinition>(
-                Arrays.asList(
-                    ConversationColumnDefinition
-                        .builder()
-                        .header("count")
-                        .metric(
-                            ConversationMetric.count(
-                                ConversationCount
-                                    .builder()
-                                    .build()
-                            )
+            Arrays.asList(
+                ConversationColumnDefinition
+                    .builder()
+                    .header("count")
+                    .metric(
+                        ConversationMetric.count(
+                            ConversationCount
+                                .builder()
+                                .build()
                         )
-                        .build(),
-                    ConversationColumnDefinition
-                        .builder()
-                        .header("avg_first_response_time")
-                        .metric(
-                            ConversationMetric.average(
-                                ConversationAverage
-                                    .builder()
-                                    .targetField(NumericConversationField.FIRST_RESPONSE_TIME)
-                                    .build()
-                            )
+                    )
+                    .build(),
+                ConversationColumnDefinition
+                    .builder()
+                    .header("avg_first_response_time")
+                    .metric(
+                        ConversationMetric.average(
+                            ConversationAverage
+                                .builder()
+                                .targetField(NumericConversationField.FIRST_RESPONSE_TIME)
+                                .build()
                         )
-                        .build(),
-                    ConversationColumnDefinition
-                        .builder()
-                        .header("percentile_handle_time")
-                        .metric(
-                            ConversationMetric.percentile(
-                                ConversationPercentile
-                                    .builder()
-                                    .targetField(NumericConversationField.HANDLE_TIME)
-                                    .percentile(25)
-                                    .build()
-                            )
+                    )
+                    .build(),
+                ConversationColumnDefinition
+                    .builder()
+                    .header("percentile_handle_time")
+                    .metric(
+                        ConversationMetric.percentile(
+                            ConversationPercentile
+                                .builder()
+                                .targetField(NumericConversationField.HANDLE_TIME)
+                                .percentile(25.0)
+                                .build()
                         )
-                        .build()
-                )
+                    )
+                    .build()
             )
         )
         .conversationFilter(
             ConversationFilter
                 .builder()
                 .languages(
-                    new ArrayList<String>(
+                    Optional.of(
                         Arrays.asList("en", "es")
                     )
                 )
@@ -4714,7 +4758,7 @@ client.organizations().getConversationChart(
                 ConversationFilter
                     .builder()
                     .languages(
-                        new ArrayList<String>(
+                        Optional.of(
                             Arrays.asList("en", "es")
                         )
                     )
@@ -4837,20 +4881,18 @@ client.segments().createOrUpdate(
                     .builder()
                     .operator(PreconditionGroupOperator.AND)
                     .preconditions(
-                        new ArrayList<Precondition>(
-                            Arrays.asList(
-                                Precondition.user(
-                                    MetadataPrecondition
-                                        .builder()
-                                        .key("userKey")
-                                        .build()
-                                ),
-                                Precondition.user(
-                                    MetadataPrecondition
-                                        .builder()
-                                        .key("userKey2")
-                                        .build()
-                                )
+                        Arrays.asList(
+                            Precondition.user(
+                                MetadataPrecondition
+                                    .builder()
+                                    .key("userKey")
+                                    .build()
+                            ),
+                            Precondition.user(
+                                MetadataPrecondition
+                                    .builder()
+                                    .key("userKey2")
+                                    .build()
                             )
                         )
                     )
@@ -5443,7 +5485,7 @@ client.users().search(
 </dl>
 </details>
 
-<details><summary><code>client.users.getAgentUser(userId) -> AgentUser</code></summary>
+<details><summary><code>client.users.getAgentUser(agentUserId) -> AgentUser</code></summary>
 <dl>
 <dd>
 
@@ -5472,7 +5514,7 @@ Agent users are a merged view of the users created by individual apps.
 <dd>
 
 ```java
-client.users().getAgentUser("userId");
+client.users().getAgentUser("aus_1234567890");
 ```
 </dd>
 </dl>
@@ -5487,7 +5529,7 @@ client.users().getAgentUser("userId");
 <dl>
 <dd>
 
-**userId:** `String` — The ID of the agent user to get.
+**agentUserId:** `String` — The ID of the agent user to get.
     
 </dd>
 </dl>
@@ -5662,7 +5704,7 @@ client.users().get(
 <dl>
 <dd>
 
-Deletes all identifiers and user data saved by the specified app. 
+Deletes all identifiers and user data saved by the specified app.
 Does not modify data or identifiers saved by other apps.
 
 If this user is linked to a user from another app, it will not be unlinked. Unlinking of users is not yet supported.

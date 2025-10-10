@@ -252,7 +252,9 @@ public final class InboxSearchResponse implements IPage {
          */
         @java.lang.Override
         public _FinalStage addAllItems(List<InboxItem> items) {
-            this.items.addAll(items);
+            if (items != null) {
+                this.items.addAll(items);
+            }
             return this;
         }
 
@@ -273,7 +275,9 @@ public final class InboxSearchResponse implements IPage {
         @JsonSetter(value = "items", nulls = Nulls.SKIP)
         public _FinalStage items(List<InboxItem> items) {
             this.items.clear();
-            this.items.addAll(items);
+            if (items != null) {
+                this.items.addAll(items);
+            }
             return this;
         }
 

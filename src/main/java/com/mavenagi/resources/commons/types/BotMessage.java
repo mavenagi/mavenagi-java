@@ -306,7 +306,9 @@ public final class BotMessage implements IConversationMessageBase {
 
         @java.lang.Override
         public _FinalStage addAllResponses(List<BotResponse> responses) {
-            this.responses.addAll(responses);
+            if (responses != null) {
+                this.responses.addAll(responses);
+            }
             return this;
         }
 
@@ -320,7 +322,9 @@ public final class BotMessage implements IConversationMessageBase {
         @JsonSetter(value = "responses", nulls = Nulls.SKIP)
         public _FinalStage responses(List<BotResponse> responses) {
             this.responses.clear();
-            this.responses.addAll(responses);
+            if (responses != null) {
+                this.responses.addAll(responses);
+            }
             return this;
         }
 

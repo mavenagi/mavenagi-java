@@ -3,22 +3,81 @@
  */
 package com.mavenagi.resources.knowledge.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum KnowledgeBaseField {
-    TITLE("Title"),
+public final class KnowledgeBaseField {
+    public static final KnowledgeBaseField UPDATED_AT = new KnowledgeBaseField(Value.UPDATED_AT, "UpdatedAt");
 
-    UPDATED_AT("UpdatedAt");
+    public static final KnowledgeBaseField TITLE = new KnowledgeBaseField(Value.TITLE, "Title");
 
-    private final String value;
+    private final Value value;
 
-    KnowledgeBaseField(String value) {
+    private final String string;
+
+    KnowledgeBaseField(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof KnowledgeBaseField && this.string.equals(((KnowledgeBaseField) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case UPDATED_AT:
+                return visitor.visitUpdatedAt();
+            case TITLE:
+                return visitor.visitTitle();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static KnowledgeBaseField valueOf(String value) {
+        switch (value) {
+            case "UpdatedAt":
+                return UPDATED_AT;
+            case "Title":
+                return TITLE;
+            default:
+                return new KnowledgeBaseField(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        TITLE,
+
+        UPDATED_AT,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitTitle();
+
+        T visitUpdatedAt();
+
+        T visitUnknown(String unknownType);
     }
 }

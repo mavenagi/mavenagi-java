@@ -21,7 +21,6 @@ import com.mavenagi.resources.conversation.types.ConversationsSearchRequest;
 import com.mavenagi.resources.conversation.types.DeliverMessageRequest;
 import com.mavenagi.resources.conversation.types.DeliverMessageResponse;
 import com.mavenagi.resources.conversation.types.FeedbackRequest;
-import com.mavenagi.resources.conversation.types.GenerateMavenSuggestionsRequest;
 import com.mavenagi.resources.conversation.types.ObjectStreamResponse;
 import com.mavenagi.resources.conversation.types.StreamResponse;
 import com.mavenagi.resources.conversation.types.SubmitActionFormRequest;
@@ -128,6 +127,8 @@ public class ConversationClient {
      * Wipes a conversation of all user data.
      * The conversation ID will still exist and non-user specific data will still be retained.
      * Attempts to modify or add messages to the conversation will throw an error.
+     * <p>Simulation conversations will no longer be visible in search results nor metrics.
+     * Non-simulation conversations will remain visible - they can not be fully removed from the system.</p>
      * <p>&lt;Warning&gt;This is a destructive operation and cannot be undone. &lt;br/&gt;&lt;br/&gt;
      * The exact fields cleared include: the conversation subject, userRequest, agentResponse.
      * As well as the text response, followup questions, and backend LLM prompt of all messages.&lt;/Warning&gt;</p>
@@ -140,6 +141,8 @@ public class ConversationClient {
      * Wipes a conversation of all user data.
      * The conversation ID will still exist and non-user specific data will still be retained.
      * Attempts to modify or add messages to the conversation will throw an error.
+     * <p>Simulation conversations will no longer be visible in search results nor metrics.
+     * Non-simulation conversations will remain visible - they can not be fully removed from the system.</p>
      * <p>&lt;Warning&gt;This is a destructive operation and cannot be undone. &lt;br/&gt;&lt;br/&gt;
      * The exact fields cleared include: the conversation subject, userRequest, agentResponse.
      * As well as the text response, followup questions, and backend LLM prompt of all messages.&lt;/Warning&gt;</p>
@@ -238,24 +241,6 @@ public class ConversationClient {
     public Iterable<StreamResponse> askStream(
             String conversationId, AskRequest request, RequestOptions requestOptions) {
         return this.rawClient.askStream(conversationId, request, requestOptions).body();
-    }
-
-    /**
-     * This method is deprecated and will be removed in a future release. Use either <code>ask</code> or <code>askStream</code> instead.
-     */
-    public ConversationResponse generateMavenSuggestions(
-            String conversationId, GenerateMavenSuggestionsRequest request) {
-        return this.rawClient.generateMavenSuggestions(conversationId, request).body();
-    }
-
-    /**
-     * This method is deprecated and will be removed in a future release. Use either <code>ask</code> or <code>askStream</code> instead.
-     */
-    public ConversationResponse generateMavenSuggestions(
-            String conversationId, GenerateMavenSuggestionsRequest request, RequestOptions requestOptions) {
-        return this.rawClient
-                .generateMavenSuggestions(conversationId, request, requestOptions)
-                .body();
     }
 
     /**

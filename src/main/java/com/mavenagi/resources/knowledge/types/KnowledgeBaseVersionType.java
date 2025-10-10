@@ -3,22 +3,82 @@
  */
 package com.mavenagi.resources.knowledge.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum KnowledgeBaseVersionType {
-    FULL("FULL"),
+public final class KnowledgeBaseVersionType {
+    public static final KnowledgeBaseVersionType PARTIAL = new KnowledgeBaseVersionType(Value.PARTIAL, "PARTIAL");
 
-    PARTIAL("PARTIAL");
+    public static final KnowledgeBaseVersionType FULL = new KnowledgeBaseVersionType(Value.FULL, "FULL");
 
-    private final String value;
+    private final Value value;
 
-    KnowledgeBaseVersionType(String value) {
+    private final String string;
+
+    KnowledgeBaseVersionType(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof KnowledgeBaseVersionType
+                        && this.string.equals(((KnowledgeBaseVersionType) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case PARTIAL:
+                return visitor.visitPartial();
+            case FULL:
+                return visitor.visitFull();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static KnowledgeBaseVersionType valueOf(String value) {
+        switch (value) {
+            case "PARTIAL":
+                return PARTIAL;
+            case "FULL":
+                return FULL;
+            default:
+                return new KnowledgeBaseVersionType(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        FULL,
+
+        PARTIAL,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitFull();
+
+        T visitPartial();
+
+        T visitUnknown(String unknownType);
     }
 }

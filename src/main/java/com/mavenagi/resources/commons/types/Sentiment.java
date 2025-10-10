@@ -3,28 +3,110 @@
  */
 package com.mavenagi.resources.commons.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum Sentiment {
-    POSITIVE("POSITIVE"),
+public final class Sentiment {
+    public static final Sentiment NEUTRAL = new Sentiment(Value.NEUTRAL, "NEUTRAL");
 
-    NEGATIVE("NEGATIVE"),
+    public static final Sentiment NEGATIVE = new Sentiment(Value.NEGATIVE, "NEGATIVE");
 
-    NEUTRAL("NEUTRAL"),
+    public static final Sentiment POSITIVE = new Sentiment(Value.POSITIVE, "POSITIVE");
 
-    MIXED("MIXED"),
+    public static final Sentiment UNKNOWN = new Sentiment(Value.UNKNOWN, "UNKNOWN");
 
-    UNKNOWN("UNKNOWN");
+    public static final Sentiment MIXED = new Sentiment(Value.MIXED, "MIXED");
 
-    private final String value;
+    private final Value value;
 
-    Sentiment(String value) {
+    private final String string;
+
+    Sentiment(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other) || (other instanceof Sentiment && this.string.equals(((Sentiment) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case NEUTRAL:
+                return visitor.visitNeutral();
+            case NEGATIVE:
+                return visitor.visitNegative();
+            case POSITIVE:
+                return visitor.visitPositive();
+            case UNKNOWN:
+                return visitor.visitUnknown();
+            case MIXED:
+                return visitor.visitMixed();
+            case _UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static Sentiment valueOf(String value) {
+        switch (value) {
+            case "NEUTRAL":
+                return NEUTRAL;
+            case "NEGATIVE":
+                return NEGATIVE;
+            case "POSITIVE":
+                return POSITIVE;
+            case "UNKNOWN":
+                return UNKNOWN;
+            case "MIXED":
+                return MIXED;
+            default:
+                return new Sentiment(Value._UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        POSITIVE,
+
+        NEGATIVE,
+
+        NEUTRAL,
+
+        MIXED,
+
+        UNKNOWN,
+
+        _UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitPositive();
+
+        T visitNegative();
+
+        T visitNeutral();
+
+        T visitMixed();
+
+        T visitUnknown();
+
+        T visitUnknown(String unknownType);
     }
 }

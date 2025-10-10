@@ -3,20 +3,71 @@
  */
 package com.mavenagi.resources.commons.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum ChartSpecSchema {
-    HIGHCHARTS_TS("HIGHCHARTS_TS");
+public final class ChartSpecSchema {
+    public static final ChartSpecSchema HIGHCHARTS_TS = new ChartSpecSchema(Value.HIGHCHARTS_TS, "HIGHCHARTS_TS");
 
-    private final String value;
+    private final Value value;
 
-    ChartSpecSchema(String value) {
+    private final String string;
+
+    ChartSpecSchema(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof ChartSpecSchema && this.string.equals(((ChartSpecSchema) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case HIGHCHARTS_TS:
+                return visitor.visitHighchartsTs();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static ChartSpecSchema valueOf(String value) {
+        switch (value) {
+            case "HIGHCHARTS_TS":
+                return HIGHCHARTS_TS;
+            default:
+                return new ChartSpecSchema(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        HIGHCHARTS_TS,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitHighchartsTs();
+
+        T visitUnknown(String unknownType);
     }
 }

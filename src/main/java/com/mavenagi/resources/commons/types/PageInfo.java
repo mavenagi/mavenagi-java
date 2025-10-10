@@ -16,12 +16,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = PageInfo.Builder.class)
 public final class PageInfo {
-    private final String pageName;
+    private final Optional<String> pageName;
 
     private final Optional<String> pageUrl;
 
@@ -34,7 +33,7 @@ public final class PageInfo {
     private final Map<String, Object> additionalProperties;
 
     private PageInfo(
-            String pageName,
+            Optional<String> pageName,
             Optional<String> pageUrl,
             Optional<String> pageTitle,
             Optional<String> linkUrl,
@@ -49,7 +48,7 @@ public final class PageInfo {
     }
 
     @JsonProperty("pageName")
-    public String getPageName() {
+    public Optional<String> getPageName() {
         return pageName;
     }
 
@@ -102,54 +101,27 @@ public final class PageInfo {
         return ObjectMappers.stringify(this);
     }
 
-    public static PageNameStage builder() {
+    public static Builder builder() {
         return new Builder();
     }
 
-    public interface PageNameStage {
-        _FinalStage pageName(@NotNull String pageName);
-
-        Builder from(PageInfo other);
-    }
-
-    public interface _FinalStage {
-        PageInfo build();
-
-        _FinalStage pageUrl(Optional<String> pageUrl);
-
-        _FinalStage pageUrl(String pageUrl);
-
-        _FinalStage pageTitle(Optional<String> pageTitle);
-
-        _FinalStage pageTitle(String pageTitle);
-
-        _FinalStage linkUrl(Optional<String> linkUrl);
-
-        _FinalStage linkUrl(String linkUrl);
-
-        _FinalStage elementId(Optional<String> elementId);
-
-        _FinalStage elementId(String elementId);
-    }
-
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements PageNameStage, _FinalStage {
-        private String pageName;
+    public static final class Builder {
+        private Optional<String> pageName = Optional.empty();
 
-        private Optional<String> elementId = Optional.empty();
-
-        private Optional<String> linkUrl = Optional.empty();
+        private Optional<String> pageUrl = Optional.empty();
 
         private Optional<String> pageTitle = Optional.empty();
 
-        private Optional<String> pageUrl = Optional.empty();
+        private Optional<String> linkUrl = Optional.empty();
+
+        private Optional<String> elementId = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
 
-        @java.lang.Override
         public Builder from(PageInfo other) {
             pageName(other.getPageName());
             pageUrl(other.getPageUrl());
@@ -159,66 +131,61 @@ public final class PageInfo {
             return this;
         }
 
-        @java.lang.Override
-        @JsonSetter("pageName")
-        public _FinalStage pageName(@NotNull String pageName) {
-            this.pageName = Objects.requireNonNull(pageName, "pageName must not be null");
+        @JsonSetter(value = "pageName", nulls = Nulls.SKIP)
+        public Builder pageName(Optional<String> pageName) {
+            this.pageName = pageName;
             return this;
         }
 
-        @java.lang.Override
-        public _FinalStage elementId(String elementId) {
-            this.elementId = Optional.ofNullable(elementId);
+        public Builder pageName(String pageName) {
+            this.pageName = Optional.ofNullable(pageName);
             return this;
         }
 
-        @java.lang.Override
-        @JsonSetter(value = "elementId", nulls = Nulls.SKIP)
-        public _FinalStage elementId(Optional<String> elementId) {
-            this.elementId = elementId;
-            return this;
-        }
-
-        @java.lang.Override
-        public _FinalStage linkUrl(String linkUrl) {
-            this.linkUrl = Optional.ofNullable(linkUrl);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "linkUrl", nulls = Nulls.SKIP)
-        public _FinalStage linkUrl(Optional<String> linkUrl) {
-            this.linkUrl = linkUrl;
-            return this;
-        }
-
-        @java.lang.Override
-        public _FinalStage pageTitle(String pageTitle) {
-            this.pageTitle = Optional.ofNullable(pageTitle);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "pageTitle", nulls = Nulls.SKIP)
-        public _FinalStage pageTitle(Optional<String> pageTitle) {
-            this.pageTitle = pageTitle;
-            return this;
-        }
-
-        @java.lang.Override
-        public _FinalStage pageUrl(String pageUrl) {
-            this.pageUrl = Optional.ofNullable(pageUrl);
-            return this;
-        }
-
-        @java.lang.Override
         @JsonSetter(value = "pageUrl", nulls = Nulls.SKIP)
-        public _FinalStage pageUrl(Optional<String> pageUrl) {
+        public Builder pageUrl(Optional<String> pageUrl) {
             this.pageUrl = pageUrl;
             return this;
         }
 
-        @java.lang.Override
+        public Builder pageUrl(String pageUrl) {
+            this.pageUrl = Optional.ofNullable(pageUrl);
+            return this;
+        }
+
+        @JsonSetter(value = "pageTitle", nulls = Nulls.SKIP)
+        public Builder pageTitle(Optional<String> pageTitle) {
+            this.pageTitle = pageTitle;
+            return this;
+        }
+
+        public Builder pageTitle(String pageTitle) {
+            this.pageTitle = Optional.ofNullable(pageTitle);
+            return this;
+        }
+
+        @JsonSetter(value = "linkUrl", nulls = Nulls.SKIP)
+        public Builder linkUrl(Optional<String> linkUrl) {
+            this.linkUrl = linkUrl;
+            return this;
+        }
+
+        public Builder linkUrl(String linkUrl) {
+            this.linkUrl = Optional.ofNullable(linkUrl);
+            return this;
+        }
+
+        @JsonSetter(value = "elementId", nulls = Nulls.SKIP)
+        public Builder elementId(Optional<String> elementId) {
+            this.elementId = elementId;
+            return this;
+        }
+
+        public Builder elementId(String elementId) {
+            this.elementId = Optional.ofNullable(elementId);
+            return this;
+        }
+
         public PageInfo build() {
             return new PageInfo(pageName, pageUrl, pageTitle, linkUrl, elementId, additionalProperties);
         }

@@ -3,28 +3,112 @@
  */
 package com.mavenagi.resources.agentcapabilities.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum AgentCapabilityField {
-    CREATED_AT("CreatedAt"),
+public final class AgentCapabilityField {
+    public static final AgentCapabilityField NAME = new AgentCapabilityField(Value.NAME, "Name");
 
-    ENABLED("Enabled"),
+    public static final AgentCapabilityField USER_INTERACTION_REQUIRED =
+            new AgentCapabilityField(Value.USER_INTERACTION_REQUIRED, "UserInteractionRequired");
 
-    NAME("Name"),
+    public static final AgentCapabilityField CREATED_AT = new AgentCapabilityField(Value.CREATED_AT, "CreatedAt");
 
-    TYPE("Type"),
+    public static final AgentCapabilityField ENABLED = new AgentCapabilityField(Value.ENABLED, "Enabled");
 
-    USER_INTERACTION_REQUIRED("UserInteractionRequired");
+    public static final AgentCapabilityField TYPE = new AgentCapabilityField(Value.TYPE, "Type");
 
-    private final String value;
+    private final Value value;
 
-    AgentCapabilityField(String value) {
+    private final String string;
+
+    AgentCapabilityField(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof AgentCapabilityField && this.string.equals(((AgentCapabilityField) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case NAME:
+                return visitor.visitName();
+            case USER_INTERACTION_REQUIRED:
+                return visitor.visitUserInteractionRequired();
+            case CREATED_AT:
+                return visitor.visitCreatedAt();
+            case ENABLED:
+                return visitor.visitEnabled();
+            case TYPE:
+                return visitor.visitType();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static AgentCapabilityField valueOf(String value) {
+        switch (value) {
+            case "Name":
+                return NAME;
+            case "UserInteractionRequired":
+                return USER_INTERACTION_REQUIRED;
+            case "CreatedAt":
+                return CREATED_AT;
+            case "Enabled":
+                return ENABLED;
+            case "Type":
+                return TYPE;
+            default:
+                return new AgentCapabilityField(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        CREATED_AT,
+
+        ENABLED,
+
+        NAME,
+
+        TYPE,
+
+        USER_INTERACTION_REQUIRED,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitCreatedAt();
+
+        T visitEnabled();
+
+        T visitName();
+
+        T visitType();
+
+        T visitUserInteractionRequired();
+
+        T visitUnknown(String unknownType);
     }
 }

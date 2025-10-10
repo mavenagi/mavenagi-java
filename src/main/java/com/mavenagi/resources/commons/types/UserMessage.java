@@ -542,7 +542,9 @@ public final class UserMessage implements IUserMessageBase, IConversationMessage
          */
         @java.lang.Override
         public _FinalStage addAllAttachments(List<AttachmentResponse> attachments) {
-            this.attachments.addAll(attachments);
+            if (attachments != null) {
+                this.attachments.addAll(attachments);
+            }
             return this;
         }
 
@@ -563,7 +565,9 @@ public final class UserMessage implements IUserMessageBase, IConversationMessage
         @JsonSetter(value = "attachments", nulls = Nulls.SKIP)
         public _FinalStage attachments(List<AttachmentResponse> attachments) {
             this.attachments.clear();
-            this.attachments.addAll(attachments);
+            if (attachments != null) {
+                this.attachments.addAll(attachments);
+            }
             return this;
         }
 

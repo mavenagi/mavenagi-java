@@ -3,22 +3,81 @@
  */
 package com.mavenagi.resources.agentcapabilities.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum AgentCapabilityType {
-    ACTION("ACTION"),
+public final class AgentCapabilityType {
+    public static final AgentCapabilityType ACTION = new AgentCapabilityType(Value.ACTION, "ACTION");
 
-    TRIGGER("TRIGGER");
+    public static final AgentCapabilityType TRIGGER = new AgentCapabilityType(Value.TRIGGER, "TRIGGER");
 
-    private final String value;
+    private final Value value;
 
-    AgentCapabilityType(String value) {
+    private final String string;
+
+    AgentCapabilityType(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof AgentCapabilityType && this.string.equals(((AgentCapabilityType) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case ACTION:
+                return visitor.visitAction();
+            case TRIGGER:
+                return visitor.visitTrigger();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static AgentCapabilityType valueOf(String value) {
+        switch (value) {
+            case "ACTION":
+                return ACTION;
+            case "TRIGGER":
+                return TRIGGER;
+            default:
+                return new AgentCapabilityType(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        ACTION,
+
+        TRIGGER,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitAction();
+
+        T visitTrigger();
+
+        T visitUnknown(String unknownType);
     }
 }

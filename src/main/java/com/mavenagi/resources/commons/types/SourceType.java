@@ -3,24 +3,90 @@
  */
 package com.mavenagi.resources.commons.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum SourceType {
-    WEB("WEB"),
+public final class SourceType {
+    public static final SourceType API = new SourceType(Value.API, "API");
 
-    API("API"),
+    public static final SourceType WEB = new SourceType(Value.WEB, "WEB");
 
-    SYSTEM("SYSTEM");
+    public static final SourceType SYSTEM = new SourceType(Value.SYSTEM, "SYSTEM");
 
-    private final String value;
+    private final Value value;
 
-    SourceType(String value) {
+    private final String string;
+
+    SourceType(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other) || (other instanceof SourceType && this.string.equals(((SourceType) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case API:
+                return visitor.visitApi();
+            case WEB:
+                return visitor.visitWeb();
+            case SYSTEM:
+                return visitor.visitSystem();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static SourceType valueOf(String value) {
+        switch (value) {
+            case "API":
+                return API;
+            case "WEB":
+                return WEB;
+            case "SYSTEM":
+                return SYSTEM;
+            default:
+                return new SourceType(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        WEB,
+
+        API,
+
+        SYSTEM,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitWeb();
+
+        T visitApi();
+
+        T visitSystem();
+
+        T visitUnknown(String unknownType);
     }
 }

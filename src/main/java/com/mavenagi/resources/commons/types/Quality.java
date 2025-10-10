@@ -3,24 +3,90 @@
  */
 package com.mavenagi.resources.commons.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum Quality {
-    GOOD("GOOD"),
+public final class Quality {
+    public static final Quality NEEDS_IMPROVEMENT = new Quality(Value.NEEDS_IMPROVEMENT, "NEEDS_IMPROVEMENT");
 
-    NEEDS_IMPROVEMENT("NEEDS_IMPROVEMENT"),
+    public static final Quality GOOD = new Quality(Value.GOOD, "GOOD");
 
-    UNKNOWN("UNKNOWN");
+    public static final Quality UNKNOWN = new Quality(Value.UNKNOWN, "UNKNOWN");
 
-    private final String value;
+    private final Value value;
 
-    Quality(String value) {
+    private final String string;
+
+    Quality(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other) || (other instanceof Quality && this.string.equals(((Quality) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case NEEDS_IMPROVEMENT:
+                return visitor.visitNeedsImprovement();
+            case GOOD:
+                return visitor.visitGood();
+            case UNKNOWN:
+                return visitor.visitUnknown();
+            case _UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static Quality valueOf(String value) {
+        switch (value) {
+            case "NEEDS_IMPROVEMENT":
+                return NEEDS_IMPROVEMENT;
+            case "GOOD":
+                return GOOD;
+            case "UNKNOWN":
+                return UNKNOWN;
+            default:
+                return new Quality(Value._UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        GOOD,
+
+        NEEDS_IMPROVEMENT,
+
+        UNKNOWN,
+
+        _UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitGood();
+
+        T visitNeedsImprovement();
+
+        T visitUnknown();
+
+        T visitUnknown(String unknownType);
     }
 }

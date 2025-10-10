@@ -3,20 +3,71 @@
  */
 package com.mavenagi.resources.knowledge.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum KnowledgeBaseType {
-    API("API");
+public final class KnowledgeBaseType {
+    public static final KnowledgeBaseType API = new KnowledgeBaseType(Value.API, "API");
 
-    private final String value;
+    private final Value value;
 
-    KnowledgeBaseType(String value) {
+    private final String string;
+
+    KnowledgeBaseType(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof KnowledgeBaseType && this.string.equals(((KnowledgeBaseType) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case API:
+                return visitor.visitApi();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static KnowledgeBaseType valueOf(String value) {
+        switch (value) {
+            case "API":
+                return API;
+            default:
+                return new KnowledgeBaseType(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        API,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitApi();
+
+        T visitUnknown(String unknownType);
     }
 }

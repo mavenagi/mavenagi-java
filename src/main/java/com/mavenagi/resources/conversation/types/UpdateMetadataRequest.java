@@ -116,12 +116,16 @@ public final class UpdateMetadataRequest {
         @JsonSetter(value = "values", nulls = Nulls.SKIP)
         public Builder values(Map<String, String> values) {
             this.values.clear();
-            this.values.putAll(values);
+            if (values != null) {
+                this.values.putAll(values);
+            }
             return this;
         }
 
         public Builder putAllValues(Map<String, String> values) {
-            this.values.putAll(values);
+            if (values != null) {
+                this.values.putAll(values);
+            }
             return this;
         }
 

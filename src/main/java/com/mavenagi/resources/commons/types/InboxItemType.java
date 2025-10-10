@@ -3,22 +3,83 @@
  */
 package com.mavenagi.resources.commons.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum InboxItemType {
-    DUPLICATE_DOCUMENT("DUPLICATE_DOCUMENT"),
+public final class InboxItemType {
+    public static final InboxItemType DUPLICATE_DOCUMENT =
+            new InboxItemType(Value.DUPLICATE_DOCUMENT, "DUPLICATE_DOCUMENT");
 
-    MISSING_KNOWLEDGE("MISSING_KNOWLEDGE");
+    public static final InboxItemType MISSING_KNOWLEDGE =
+            new InboxItemType(Value.MISSING_KNOWLEDGE, "MISSING_KNOWLEDGE");
 
-    private final String value;
+    private final Value value;
 
-    InboxItemType(String value) {
+    private final String string;
+
+    InboxItemType(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof InboxItemType && this.string.equals(((InboxItemType) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case DUPLICATE_DOCUMENT:
+                return visitor.visitDuplicateDocument();
+            case MISSING_KNOWLEDGE:
+                return visitor.visitMissingKnowledge();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static InboxItemType valueOf(String value) {
+        switch (value) {
+            case "DUPLICATE_DOCUMENT":
+                return DUPLICATE_DOCUMENT;
+            case "MISSING_KNOWLEDGE":
+                return MISSING_KNOWLEDGE;
+            default:
+                return new InboxItemType(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        DUPLICATE_DOCUMENT,
+
+        MISSING_KNOWLEDGE,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitDuplicateDocument();
+
+        T visitMissingKnowledge();
+
+        T visitUnknown(String unknownType);
     }
 }

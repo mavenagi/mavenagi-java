@@ -3,24 +3,94 @@
  */
 package com.mavenagi.resources.commons.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum UserMessageResponseState {
-    NOT_ASKED("NOT_ASKED"),
+public final class UserMessageResponseState {
+    public static final UserMessageResponseState NOT_ASKED = new UserMessageResponseState(Value.NOT_ASKED, "NOT_ASKED");
 
-    LLM_ENABLED("LLM_ENABLED"),
+    public static final UserMessageResponseState LLM_DISABLED =
+            new UserMessageResponseState(Value.LLM_DISABLED, "LLM_DISABLED");
 
-    LLM_DISABLED("LLM_DISABLED");
+    public static final UserMessageResponseState LLM_ENABLED =
+            new UserMessageResponseState(Value.LLM_ENABLED, "LLM_ENABLED");
 
-    private final String value;
+    private final Value value;
 
-    UserMessageResponseState(String value) {
+    private final String string;
+
+    UserMessageResponseState(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof UserMessageResponseState
+                        && this.string.equals(((UserMessageResponseState) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case NOT_ASKED:
+                return visitor.visitNotAsked();
+            case LLM_DISABLED:
+                return visitor.visitLlmDisabled();
+            case LLM_ENABLED:
+                return visitor.visitLlmEnabled();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static UserMessageResponseState valueOf(String value) {
+        switch (value) {
+            case "NOT_ASKED":
+                return NOT_ASKED;
+            case "LLM_DISABLED":
+                return LLM_DISABLED;
+            case "LLM_ENABLED":
+                return LLM_ENABLED;
+            default:
+                return new UserMessageResponseState(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        NOT_ASKED,
+
+        LLM_ENABLED,
+
+        LLM_DISABLED,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitNotAsked();
+
+        T visitLlmEnabled();
+
+        T visitLlmDisabled();
+
+        T visitUnknown(String unknownType);
     }
 }

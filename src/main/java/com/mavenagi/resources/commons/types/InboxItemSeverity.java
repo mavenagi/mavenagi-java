@@ -3,24 +3,91 @@
  */
 package com.mavenagi.resources.commons.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum InboxItemSeverity {
-    LOW("LOW"),
+public final class InboxItemSeverity {
+    public static final InboxItemSeverity LOW = new InboxItemSeverity(Value.LOW, "LOW");
 
-    MEDIUM("MEDIUM"),
+    public static final InboxItemSeverity HIGH = new InboxItemSeverity(Value.HIGH, "HIGH");
 
-    HIGH("HIGH");
+    public static final InboxItemSeverity MEDIUM = new InboxItemSeverity(Value.MEDIUM, "MEDIUM");
 
-    private final String value;
+    private final Value value;
 
-    InboxItemSeverity(String value) {
+    private final String string;
+
+    InboxItemSeverity(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof InboxItemSeverity && this.string.equals(((InboxItemSeverity) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case LOW:
+                return visitor.visitLow();
+            case HIGH:
+                return visitor.visitHigh();
+            case MEDIUM:
+                return visitor.visitMedium();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static InboxItemSeverity valueOf(String value) {
+        switch (value) {
+            case "LOW":
+                return LOW;
+            case "HIGH":
+                return HIGH;
+            case "MEDIUM":
+                return MEDIUM;
+            default:
+                return new InboxItemSeverity(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        LOW,
+
+        MEDIUM,
+
+        HIGH,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitLow();
+
+        T visitMedium();
+
+        T visitHigh();
+
+        T visitUnknown(String unknownType);
     }
 }

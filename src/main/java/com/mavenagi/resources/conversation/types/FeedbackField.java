@@ -3,26 +3,101 @@
  */
 package com.mavenagi.resources.conversation.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum FeedbackField {
-    TYPE("Type"),
+public final class FeedbackField {
+    public static final FeedbackField CREATED_BY = new FeedbackField(Value.CREATED_BY, "CreatedBy");
 
-    CREATED_BY("CreatedBy"),
+    public static final FeedbackField APP = new FeedbackField(Value.APP, "App");
 
-    CREATED_AT("CreatedAt"),
+    public static final FeedbackField CREATED_AT = new FeedbackField(Value.CREATED_AT, "CreatedAt");
 
-    APP("App");
+    public static final FeedbackField TYPE = new FeedbackField(Value.TYPE, "Type");
 
-    private final String value;
+    private final Value value;
 
-    FeedbackField(String value) {
+    private final String string;
+
+    FeedbackField(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof FeedbackField && this.string.equals(((FeedbackField) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case CREATED_BY:
+                return visitor.visitCreatedBy();
+            case APP:
+                return visitor.visitApp();
+            case CREATED_AT:
+                return visitor.visitCreatedAt();
+            case TYPE:
+                return visitor.visitType();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static FeedbackField valueOf(String value) {
+        switch (value) {
+            case "CreatedBy":
+                return CREATED_BY;
+            case "App":
+                return APP;
+            case "CreatedAt":
+                return CREATED_AT;
+            case "Type":
+                return TYPE;
+            default:
+                return new FeedbackField(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        TYPE,
+
+        CREATED_BY,
+
+        CREATED_AT,
+
+        APP,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitType();
+
+        T visitCreatedBy();
+
+        T visitCreatedAt();
+
+        T visitApp();
+
+        T visitUnknown(String unknownType);
     }
 }

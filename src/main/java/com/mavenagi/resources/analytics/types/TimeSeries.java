@@ -137,7 +137,9 @@ public final class TimeSeries {
          */
         @java.lang.Override
         public _FinalStage addAllData(List<TimeDataPoint> data) {
-            this.data.addAll(data);
+            if (data != null) {
+                this.data.addAll(data);
+            }
             return this;
         }
 
@@ -158,7 +160,9 @@ public final class TimeSeries {
         @JsonSetter(value = "data", nulls = Nulls.SKIP)
         public _FinalStage data(List<TimeDataPoint> data) {
             this.data.clear();
-            this.data.addAll(data);
+            if (data != null) {
+                this.data.addAll(data);
+            }
             return this;
         }
 

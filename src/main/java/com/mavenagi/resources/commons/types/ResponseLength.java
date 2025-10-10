@@ -3,24 +3,91 @@
  */
 package com.mavenagi.resources.commons.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum ResponseLength {
-    SHORT("SHORT"),
+public final class ResponseLength {
+    public static final ResponseLength LONG = new ResponseLength(Value.LONG, "LONG");
 
-    MEDIUM("MEDIUM"),
+    public static final ResponseLength SHORT = new ResponseLength(Value.SHORT, "SHORT");
 
-    LONG("LONG");
+    public static final ResponseLength MEDIUM = new ResponseLength(Value.MEDIUM, "MEDIUM");
 
-    private final String value;
+    private final Value value;
 
-    ResponseLength(String value) {
+    private final String string;
+
+    ResponseLength(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof ResponseLength && this.string.equals(((ResponseLength) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case LONG:
+                return visitor.visitLong();
+            case SHORT:
+                return visitor.visitShort();
+            case MEDIUM:
+                return visitor.visitMedium();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static ResponseLength valueOf(String value) {
+        switch (value) {
+            case "LONG":
+                return LONG;
+            case "SHORT":
+                return SHORT;
+            case "MEDIUM":
+                return MEDIUM;
+            default:
+                return new ResponseLength(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        SHORT,
+
+        MEDIUM,
+
+        LONG,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitShort();
+
+        T visitMedium();
+
+        T visitLong();
+
+        T visitUnknown(String unknownType);
     }
 }

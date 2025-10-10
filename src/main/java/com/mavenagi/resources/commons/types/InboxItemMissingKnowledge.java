@@ -324,7 +324,9 @@ public final class InboxItemMissingKnowledge implements IInboxItemBase {
          */
         @java.lang.Override
         public _FinalStage addAllConversations(List<ConversationInformation> conversations) {
-            this.conversations.addAll(conversations);
+            if (conversations != null) {
+                this.conversations.addAll(conversations);
+            }
             return this;
         }
 
@@ -345,7 +347,9 @@ public final class InboxItemMissingKnowledge implements IInboxItemBase {
         @JsonSetter(value = "conversations", nulls = Nulls.SKIP)
         public _FinalStage conversations(List<ConversationInformation> conversations) {
             this.conversations.clear();
-            this.conversations.addAll(conversations);
+            if (conversations != null) {
+                this.conversations.addAll(conversations);
+            }
             return this;
         }
 

@@ -3,20 +3,71 @@
  */
 package com.mavenagi.resources.commons.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum PreconditionOperator {
-    NOT("NOT");
+public final class PreconditionOperator {
+    public static final PreconditionOperator NOT = new PreconditionOperator(Value.NOT, "NOT");
 
-    private final String value;
+    private final Value value;
 
-    PreconditionOperator(String value) {
+    private final String string;
+
+    PreconditionOperator(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof PreconditionOperator && this.string.equals(((PreconditionOperator) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case NOT:
+                return visitor.visitNot();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static PreconditionOperator valueOf(String value) {
+        switch (value) {
+            case "NOT":
+                return NOT;
+            default:
+                return new PreconditionOperator(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        NOT,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitNot();
+
+        T visitUnknown(String unknownType);
     }
 }

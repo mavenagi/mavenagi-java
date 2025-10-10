@@ -3,22 +3,80 @@
  */
 package com.mavenagi.resources.triggers.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum TriggerField {
-    CREATED_AT("CreatedAt"),
+public final class TriggerField {
+    public static final TriggerField CREATED_AT = new TriggerField(Value.CREATED_AT, "CreatedAt");
 
-    ENABLED("Enabled");
+    public static final TriggerField ENABLED = new TriggerField(Value.ENABLED, "Enabled");
 
-    private final String value;
+    private final Value value;
 
-    TriggerField(String value) {
+    private final String string;
+
+    TriggerField(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other) || (other instanceof TriggerField && this.string.equals(((TriggerField) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case CREATED_AT:
+                return visitor.visitCreatedAt();
+            case ENABLED:
+                return visitor.visitEnabled();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static TriggerField valueOf(String value) {
+        switch (value) {
+            case "CreatedAt":
+                return CREATED_AT;
+            case "Enabled":
+                return ENABLED;
+            default:
+                return new TriggerField(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        CREATED_AT,
+
+        ENABLED,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitCreatedAt();
+
+        T visitEnabled();
+
+        T visitUnknown(String unknownType);
     }
 }

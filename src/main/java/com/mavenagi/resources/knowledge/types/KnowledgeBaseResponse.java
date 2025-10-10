@@ -429,7 +429,9 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
          */
         @java.lang.Override
         public _FinalStage addAllTags(Set<String> tags) {
-            this.tags.addAll(tags);
+            if (tags != null) {
+                this.tags.addAll(tags);
+            }
             return this;
         }
 
@@ -450,7 +452,9 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
         @JsonSetter(value = "tags", nulls = Nulls.SKIP)
         public _FinalStage tags(Set<String> tags) {
             this.tags.clear();
-            this.tags.addAll(tags);
+            if (tags != null) {
+                this.tags.addAll(tags);
+            }
             return this;
         }
 
@@ -470,7 +474,9 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
          */
         @java.lang.Override
         public _FinalStage putAllMetadata(Map<String, String> metadata) {
-            this.metadata.putAll(metadata);
+            if (metadata != null) {
+                this.metadata.putAll(metadata);
+            }
             return this;
         }
 
@@ -481,7 +487,9 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
         @JsonSetter(value = "metadata", nulls = Nulls.SKIP)
         public _FinalStage metadata(Map<String, String> metadata) {
             this.metadata.clear();
-            this.metadata.putAll(metadata);
+            if (metadata != null) {
+                this.metadata.putAll(metadata);
+            }
             return this;
         }
 

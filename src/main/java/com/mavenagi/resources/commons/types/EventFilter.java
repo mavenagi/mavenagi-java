@@ -38,6 +38,10 @@ public final class EventFilter {
 
     private final Optional<List<String>> agentUserIds;
 
+    private final Optional<List<FeedbackType>> legacyFeedbackTypes;
+
+    private final Optional<Boolean> hasEventText;
+
     private final Map<String, Object> additionalProperties;
 
     private EventFilter(
@@ -49,6 +53,8 @@ public final class EventFilter {
             Optional<List<UserEventName>> userEventNames,
             Optional<List<SystemEventName>> systemEventNames,
             Optional<List<String>> agentUserIds,
+            Optional<List<FeedbackType>> legacyFeedbackTypes,
+            Optional<Boolean> hasEventText,
             Map<String, Object> additionalProperties) {
         this.search = search;
         this.createdAfter = createdAfter;
@@ -58,6 +64,8 @@ public final class EventFilter {
         this.userEventNames = userEventNames;
         this.systemEventNames = systemEventNames;
         this.agentUserIds = agentUserIds;
+        this.legacyFeedbackTypes = legacyFeedbackTypes;
+        this.hasEventText = hasEventText;
         this.additionalProperties = additionalProperties;
     }
 
@@ -101,6 +109,16 @@ public final class EventFilter {
         return agentUserIds;
     }
 
+    @JsonProperty("legacyFeedbackTypes")
+    public Optional<List<FeedbackType>> getLegacyFeedbackTypes() {
+        return legacyFeedbackTypes;
+    }
+
+    @JsonProperty("hasEventText")
+    public Optional<Boolean> getHasEventText() {
+        return hasEventText;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -120,7 +138,9 @@ public final class EventFilter {
                 && eventTypes.equals(other.eventTypes)
                 && userEventNames.equals(other.userEventNames)
                 && systemEventNames.equals(other.systemEventNames)
-                && agentUserIds.equals(other.agentUserIds);
+                && agentUserIds.equals(other.agentUserIds)
+                && legacyFeedbackTypes.equals(other.legacyFeedbackTypes)
+                && hasEventText.equals(other.hasEventText);
     }
 
     @java.lang.Override
@@ -133,7 +153,9 @@ public final class EventFilter {
                 this.eventTypes,
                 this.userEventNames,
                 this.systemEventNames,
-                this.agentUserIds);
+                this.agentUserIds,
+                this.legacyFeedbackTypes,
+                this.hasEventText);
     }
 
     @java.lang.Override
@@ -163,6 +185,10 @@ public final class EventFilter {
 
         private Optional<List<String>> agentUserIds = Optional.empty();
 
+        private Optional<List<FeedbackType>> legacyFeedbackTypes = Optional.empty();
+
+        private Optional<Boolean> hasEventText = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -177,6 +203,8 @@ public final class EventFilter {
             userEventNames(other.getUserEventNames());
             systemEventNames(other.getSystemEventNames());
             agentUserIds(other.getAgentUserIds());
+            legacyFeedbackTypes(other.getLegacyFeedbackTypes());
+            hasEventText(other.getHasEventText());
             return this;
         }
 
@@ -268,6 +296,28 @@ public final class EventFilter {
             return this;
         }
 
+        @JsonSetter(value = "legacyFeedbackTypes", nulls = Nulls.SKIP)
+        public Builder legacyFeedbackTypes(Optional<List<FeedbackType>> legacyFeedbackTypes) {
+            this.legacyFeedbackTypes = legacyFeedbackTypes;
+            return this;
+        }
+
+        public Builder legacyFeedbackTypes(List<FeedbackType> legacyFeedbackTypes) {
+            this.legacyFeedbackTypes = Optional.ofNullable(legacyFeedbackTypes);
+            return this;
+        }
+
+        @JsonSetter(value = "hasEventText", nulls = Nulls.SKIP)
+        public Builder hasEventText(Optional<Boolean> hasEventText) {
+            this.hasEventText = hasEventText;
+            return this;
+        }
+
+        public Builder hasEventText(Boolean hasEventText) {
+            this.hasEventText = Optional.ofNullable(hasEventText);
+            return this;
+        }
+
         public EventFilter build() {
             return new EventFilter(
                     search,
@@ -278,6 +328,8 @@ public final class EventFilter {
                     userEventNames,
                     systemEventNames,
                     agentUserIds,
+                    legacyFeedbackTypes,
+                    hasEventText,
                     additionalProperties);
         }
     }

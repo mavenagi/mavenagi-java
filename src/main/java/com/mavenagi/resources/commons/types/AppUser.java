@@ -102,7 +102,9 @@ public final class AppUser implements IAppUser {
         @JsonSetter(value = "identifiers", nulls = Nulls.SKIP)
         public Builder identifiers(Set<AppUserIdentifier> identifiers) {
             this.identifiers.clear();
-            this.identifiers.addAll(identifiers);
+            if (identifiers != null) {
+                this.identifiers.addAll(identifiers);
+            }
             return this;
         }
 
@@ -112,19 +114,25 @@ public final class AppUser implements IAppUser {
         }
 
         public Builder addAllIdentifiers(Set<AppUserIdentifier> identifiers) {
-            this.identifiers.addAll(identifiers);
+            if (identifiers != null) {
+                this.identifiers.addAll(identifiers);
+            }
             return this;
         }
 
         @JsonSetter(value = "data", nulls = Nulls.SKIP)
         public Builder data(Map<String, UserData> data) {
             this.data.clear();
-            this.data.putAll(data);
+            if (data != null) {
+                this.data.putAll(data);
+            }
             return this;
         }
 
         public Builder putAllData(Map<String, UserData> data) {
-            this.data.putAll(data);
+            if (data != null) {
+                this.data.putAll(data);
+            }
             return this;
         }
 

@@ -3,22 +3,84 @@
  */
 package com.mavenagi.resources.commons.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum BotConversationMessageType {
-    BOT_RESPONSE("BOT_RESPONSE"),
+public final class BotConversationMessageType {
+    public static final BotConversationMessageType BOT_RESPONSE =
+            new BotConversationMessageType(Value.BOT_RESPONSE, "BOT_RESPONSE");
 
-    BOT_SUGGESTION("BOT_SUGGESTION");
+    public static final BotConversationMessageType BOT_SUGGESTION =
+            new BotConversationMessageType(Value.BOT_SUGGESTION, "BOT_SUGGESTION");
 
-    private final String value;
+    private final Value value;
 
-    BotConversationMessageType(String value) {
+    private final String string;
+
+    BotConversationMessageType(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof BotConversationMessageType
+                        && this.string.equals(((BotConversationMessageType) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case BOT_RESPONSE:
+                return visitor.visitBotResponse();
+            case BOT_SUGGESTION:
+                return visitor.visitBotSuggestion();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static BotConversationMessageType valueOf(String value) {
+        switch (value) {
+            case "BOT_RESPONSE":
+                return BOT_RESPONSE;
+            case "BOT_SUGGESTION":
+                return BOT_SUGGESTION;
+            default:
+                return new BotConversationMessageType(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        BOT_RESPONSE,
+
+        BOT_SUGGESTION,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitBotResponse();
+
+        T visitBotSuggestion();
+
+        T visitUnknown(String unknownType);
     }
 }

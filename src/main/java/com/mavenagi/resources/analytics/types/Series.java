@@ -141,7 +141,9 @@ public final class Series {
          */
         @java.lang.Override
         public _FinalStage addAllData(List<LabeledPoint> data) {
-            this.data.addAll(data);
+            if (data != null) {
+                this.data.addAll(data);
+            }
             return this;
         }
 
@@ -162,7 +164,9 @@ public final class Series {
         @JsonSetter(value = "data", nulls = Nulls.SKIP)
         public _FinalStage data(List<LabeledPoint> data) {
             this.data.clear();
-            this.data.addAll(data);
+            if (data != null) {
+                this.data.addAll(data);
+            }
             return this;
         }
 

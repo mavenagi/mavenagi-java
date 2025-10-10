@@ -3,70 +3,341 @@
  */
 package com.mavenagi.resources.conversation.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum ConversationField {
-    CATEGORY("Category"),
+public final class ConversationField {
+    public static final ConversationField ACTIONS = new ConversationField(Value.ACTIONS, "Actions");
 
-    FIRST_RESPONSE_TIME("FirstResponseTime"),
+    public static final ConversationField USER_MESSAGE_COUNT =
+            new ConversationField(Value.USER_MESSAGE_COUNT, "UserMessageCount");
 
-    HANDLE_TIME("HandleTime"),
+    public static final ConversationField FIRST_RESPONSE_TIME =
+            new ConversationField(Value.FIRST_RESPONSE_TIME, "FirstResponseTime");
 
-    HUMAN_AGENTS("HumanAgents"),
+    public static final ConversationField HUMAN_AGENTS_WITH_INSERTS =
+            new ConversationField(Value.HUMAN_AGENTS_WITH_INSERTS, "HumanAgentsWithInserts");
 
-    HUMAN_AGENTS_WITH_INSERTS("HumanAgentsWithInserts"),
+    public static final ConversationField RESOLVED_BY_MAVEN =
+            new ConversationField(Value.RESOLVED_BY_MAVEN, "ResolvedByMaven");
 
-    APP("App"),
+    public static final ConversationField TAGS = new ConversationField(Value.TAGS, "Tags");
 
-    SENTIMENT("Sentiment"),
+    public static final ConversationField THUMBS_UP_COUNT =
+            new ConversationField(Value.THUMBS_UP_COUNT, "ThumbsUpCount");
 
-    QUALITY_REASON("QualityReason"),
+    public static final ConversationField INBOX_ITEMS = new ConversationField(Value.INBOX_ITEMS, "InboxItems");
 
-    RESOLUTION_STATUS("ResolutionStatus"),
+    public static final ConversationField CREATED_AT = new ConversationField(Value.CREATED_AT, "CreatedAt");
 
-    RESOLVED_BY_MAVEN("ResolvedByMaven"),
+    public static final ConversationField INSERT_COUNT = new ConversationField(Value.INSERT_COUNT, "InsertCount");
 
-    QUALITY("Quality"),
+    public static final ConversationField RESPONSE_LENGTH =
+            new ConversationField(Value.RESPONSE_LENGTH, "ResponseLength");
 
-    USERS("Users"),
+    public static final ConversationField LANGUAGES = new ConversationField(Value.LANGUAGES, "Languages");
 
-    RESPONSE_LENGTH("ResponseLength"),
+    public static final ConversationField QUALITY_REASON = new ConversationField(Value.QUALITY_REASON, "QualityReason");
 
-    THUMBS_UP_COUNT("ThumbsUpCount"),
+    public static final ConversationField USERS = new ConversationField(Value.USERS, "Users");
 
-    THUMBS_DOWN_COUNT("ThumbsDownCount"),
+    public static final ConversationField SENTIMENT = new ConversationField(Value.SENTIMENT, "Sentiment");
 
-    INSERT_COUNT("InsertCount"),
+    public static final ConversationField ORGANIZATION_ID =
+            new ConversationField(Value.ORGANIZATION_ID, "OrganizationId");
 
-    TAGS("Tags"),
+    public static final ConversationField CATEGORY = new ConversationField(Value.CATEGORY, "Category");
 
-    USER_MESSAGE_COUNT("UserMessageCount"),
+    public static final ConversationField THUMBS_DOWN_COUNT =
+            new ConversationField(Value.THUMBS_DOWN_COUNT, "ThumbsDownCount");
 
-    LANGUAGES("Languages"),
+    public static final ConversationField QUALITY = new ConversationField(Value.QUALITY, "Quality");
 
-    ACTIONS("Actions"),
+    public static final ConversationField INCOMPLETE_ACTIONS =
+            new ConversationField(Value.INCOMPLETE_ACTIONS, "IncompleteActions");
 
-    INCOMPLETE_ACTIONS("IncompleteActions"),
+    public static final ConversationField HANDLE_TIME = new ConversationField(Value.HANDLE_TIME, "HandleTime");
 
-    SOURCES("Sources"),
+    public static final ConversationField APP = new ConversationField(Value.APP, "App");
 
-    CREATED_AT("CreatedAt"),
+    public static final ConversationField AGENT_ID = new ConversationField(Value.AGENT_ID, "AgentId");
 
-    PREDICTED_NPS("PredictedNPS"),
+    public static final ConversationField SOURCES = new ConversationField(Value.SOURCES, "Sources");
 
-    ORGANIZATION_ID("OrganizationId"),
+    public static final ConversationField PREDICTED_NPS = new ConversationField(Value.PREDICTED_NPS, "PredictedNPS");
 
-    AGENT_ID("AgentId");
+    public static final ConversationField RESOLUTION_STATUS =
+            new ConversationField(Value.RESOLUTION_STATUS, "ResolutionStatus");
 
-    private final String value;
+    public static final ConversationField HUMAN_AGENTS = new ConversationField(Value.HUMAN_AGENTS, "HumanAgents");
 
-    ConversationField(String value) {
+    private final Value value;
+
+    private final String string;
+
+    ConversationField(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof ConversationField && this.string.equals(((ConversationField) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case ACTIONS:
+                return visitor.visitActions();
+            case USER_MESSAGE_COUNT:
+                return visitor.visitUserMessageCount();
+            case FIRST_RESPONSE_TIME:
+                return visitor.visitFirstResponseTime();
+            case HUMAN_AGENTS_WITH_INSERTS:
+                return visitor.visitHumanAgentsWithInserts();
+            case RESOLVED_BY_MAVEN:
+                return visitor.visitResolvedByMaven();
+            case TAGS:
+                return visitor.visitTags();
+            case THUMBS_UP_COUNT:
+                return visitor.visitThumbsUpCount();
+            case INBOX_ITEMS:
+                return visitor.visitInboxItems();
+            case CREATED_AT:
+                return visitor.visitCreatedAt();
+            case INSERT_COUNT:
+                return visitor.visitInsertCount();
+            case RESPONSE_LENGTH:
+                return visitor.visitResponseLength();
+            case LANGUAGES:
+                return visitor.visitLanguages();
+            case QUALITY_REASON:
+                return visitor.visitQualityReason();
+            case USERS:
+                return visitor.visitUsers();
+            case SENTIMENT:
+                return visitor.visitSentiment();
+            case ORGANIZATION_ID:
+                return visitor.visitOrganizationId();
+            case CATEGORY:
+                return visitor.visitCategory();
+            case THUMBS_DOWN_COUNT:
+                return visitor.visitThumbsDownCount();
+            case QUALITY:
+                return visitor.visitQuality();
+            case INCOMPLETE_ACTIONS:
+                return visitor.visitIncompleteActions();
+            case HANDLE_TIME:
+                return visitor.visitHandleTime();
+            case APP:
+                return visitor.visitApp();
+            case AGENT_ID:
+                return visitor.visitAgentId();
+            case SOURCES:
+                return visitor.visitSources();
+            case PREDICTED_NPS:
+                return visitor.visitPredictedNps();
+            case RESOLUTION_STATUS:
+                return visitor.visitResolutionStatus();
+            case HUMAN_AGENTS:
+                return visitor.visitHumanAgents();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static ConversationField valueOf(String value) {
+        switch (value) {
+            case "Actions":
+                return ACTIONS;
+            case "UserMessageCount":
+                return USER_MESSAGE_COUNT;
+            case "FirstResponseTime":
+                return FIRST_RESPONSE_TIME;
+            case "HumanAgentsWithInserts":
+                return HUMAN_AGENTS_WITH_INSERTS;
+            case "ResolvedByMaven":
+                return RESOLVED_BY_MAVEN;
+            case "Tags":
+                return TAGS;
+            case "ThumbsUpCount":
+                return THUMBS_UP_COUNT;
+            case "InboxItems":
+                return INBOX_ITEMS;
+            case "CreatedAt":
+                return CREATED_AT;
+            case "InsertCount":
+                return INSERT_COUNT;
+            case "ResponseLength":
+                return RESPONSE_LENGTH;
+            case "Languages":
+                return LANGUAGES;
+            case "QualityReason":
+                return QUALITY_REASON;
+            case "Users":
+                return USERS;
+            case "Sentiment":
+                return SENTIMENT;
+            case "OrganizationId":
+                return ORGANIZATION_ID;
+            case "Category":
+                return CATEGORY;
+            case "ThumbsDownCount":
+                return THUMBS_DOWN_COUNT;
+            case "Quality":
+                return QUALITY;
+            case "IncompleteActions":
+                return INCOMPLETE_ACTIONS;
+            case "HandleTime":
+                return HANDLE_TIME;
+            case "App":
+                return APP;
+            case "AgentId":
+                return AGENT_ID;
+            case "Sources":
+                return SOURCES;
+            case "PredictedNPS":
+                return PREDICTED_NPS;
+            case "ResolutionStatus":
+                return RESOLUTION_STATUS;
+            case "HumanAgents":
+                return HUMAN_AGENTS;
+            default:
+                return new ConversationField(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        CATEGORY,
+
+        FIRST_RESPONSE_TIME,
+
+        HANDLE_TIME,
+
+        HUMAN_AGENTS,
+
+        HUMAN_AGENTS_WITH_INSERTS,
+
+        APP,
+
+        SENTIMENT,
+
+        QUALITY_REASON,
+
+        RESOLUTION_STATUS,
+
+        RESOLVED_BY_MAVEN,
+
+        QUALITY,
+
+        USERS,
+
+        RESPONSE_LENGTH,
+
+        THUMBS_UP_COUNT,
+
+        THUMBS_DOWN_COUNT,
+
+        INSERT_COUNT,
+
+        TAGS,
+
+        USER_MESSAGE_COUNT,
+
+        LANGUAGES,
+
+        ACTIONS,
+
+        INCOMPLETE_ACTIONS,
+
+        SOURCES,
+
+        CREATED_AT,
+
+        PREDICTED_NPS,
+
+        ORGANIZATION_ID,
+
+        AGENT_ID,
+
+        INBOX_ITEMS,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitCategory();
+
+        T visitFirstResponseTime();
+
+        T visitHandleTime();
+
+        T visitHumanAgents();
+
+        T visitHumanAgentsWithInserts();
+
+        T visitApp();
+
+        T visitSentiment();
+
+        T visitQualityReason();
+
+        T visitResolutionStatus();
+
+        T visitResolvedByMaven();
+
+        T visitQuality();
+
+        T visitUsers();
+
+        T visitResponseLength();
+
+        T visitThumbsUpCount();
+
+        T visitThumbsDownCount();
+
+        T visitInsertCount();
+
+        T visitTags();
+
+        T visitUserMessageCount();
+
+        T visitLanguages();
+
+        T visitActions();
+
+        T visitIncompleteActions();
+
+        T visitSources();
+
+        T visitCreatedAt();
+
+        T visitPredictedNps();
+
+        T visitOrganizationId();
+
+        T visitAgentId();
+
+        T visitInboxItems();
+
+        T visitUnknown(String unknownType);
     }
 }

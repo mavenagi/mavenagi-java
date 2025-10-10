@@ -382,7 +382,9 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
          */
         @java.lang.Override
         public _FinalStage putAllMetadata(Map<String, String> metadata) {
-            this.metadata.putAll(metadata);
+            if (metadata != null) {
+                this.metadata.putAll(metadata);
+            }
             return this;
         }
 
@@ -393,7 +395,9 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
         @JsonSetter(value = "metadata", nulls = Nulls.SKIP)
         public _FinalStage metadata(Map<String, String> metadata) {
             this.metadata.clear();
-            this.metadata.putAll(metadata);
+            if (metadata != null) {
+                this.metadata.putAll(metadata);
+            }
             return this;
         }
 

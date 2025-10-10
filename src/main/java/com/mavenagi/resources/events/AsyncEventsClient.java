@@ -9,6 +9,7 @@ import com.mavenagi.resources.commons.types.EventRequest;
 import com.mavenagi.resources.commons.types.EventResponse;
 import com.mavenagi.resources.commons.types.EventsSearchRequest;
 import com.mavenagi.resources.commons.types.EventsSearchResponse;
+import com.mavenagi.resources.events.requests.EventGetRequest;
 import java.util.concurrent.CompletableFuture;
 
 public class AsyncEventsClient {
@@ -61,5 +62,20 @@ public class AsyncEventsClient {
      */
     public CompletableFuture<EventsSearchResponse> search(EventsSearchRequest request, RequestOptions requestOptions) {
         return this.rawClient.search(request, requestOptions).thenApply(response -> response.body());
+    }
+
+    /**
+     * Retrieve details of a specific Event item by its ID.
+     */
+    public CompletableFuture<EventResponse> get(String eventId, EventGetRequest request) {
+        return this.rawClient.get(eventId, request).thenApply(response -> response.body());
+    }
+
+    /**
+     * Retrieve details of a specific Event item by its ID.
+     */
+    public CompletableFuture<EventResponse> get(
+            String eventId, EventGetRequest request, RequestOptions requestOptions) {
+        return this.rawClient.get(eventId, request, requestOptions).thenApply(response -> response.body());
     }
 }

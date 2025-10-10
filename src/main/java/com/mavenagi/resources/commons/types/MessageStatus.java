@@ -3,30 +3,121 @@
  */
 package com.mavenagi.resources.commons.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum MessageStatus {
-    SENDING("SENDING"),
+public final class MessageStatus {
+    public static final MessageStatus CANCELED = new MessageStatus(Value.CANCELED, "CANCELED");
 
-    SENT("SENT"),
+    public static final MessageStatus SENDING = new MessageStatus(Value.SENDING, "SENDING");
 
-    REJECTED("REJECTED"),
+    public static final MessageStatus REJECTED = new MessageStatus(Value.REJECTED, "REJECTED");
 
-    CANCELED("CANCELED"),
+    public static final MessageStatus SENT = new MessageStatus(Value.SENT, "SENT");
 
-    FAILED("FAILED"),
+    public static final MessageStatus FAILED = new MessageStatus(Value.FAILED, "FAILED");
 
-    UNKNOWN("UNKNOWN");
+    public static final MessageStatus UNKNOWN = new MessageStatus(Value.UNKNOWN, "UNKNOWN");
 
-    private final String value;
+    private final Value value;
 
-    MessageStatus(String value) {
+    private final String string;
+
+    MessageStatus(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof MessageStatus && this.string.equals(((MessageStatus) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case CANCELED:
+                return visitor.visitCanceled();
+            case SENDING:
+                return visitor.visitSending();
+            case REJECTED:
+                return visitor.visitRejected();
+            case SENT:
+                return visitor.visitSent();
+            case FAILED:
+                return visitor.visitFailed();
+            case UNKNOWN:
+                return visitor.visitUnknown();
+            case _UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static MessageStatus valueOf(String value) {
+        switch (value) {
+            case "CANCELED":
+                return CANCELED;
+            case "SENDING":
+                return SENDING;
+            case "REJECTED":
+                return REJECTED;
+            case "SENT":
+                return SENT;
+            case "FAILED":
+                return FAILED;
+            case "UNKNOWN":
+                return UNKNOWN;
+            default:
+                return new MessageStatus(Value._UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        SENDING,
+
+        SENT,
+
+        REJECTED,
+
+        CANCELED,
+
+        FAILED,
+
+        UNKNOWN,
+
+        _UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitSending();
+
+        T visitSent();
+
+        T visitRejected();
+
+        T visitCanceled();
+
+        T visitFailed();
+
+        T visitUnknown();
+
+        T visitUnknown(String unknownType);
     }
 }

@@ -305,7 +305,9 @@ public final class Agent {
          */
         @java.lang.Override
         public _FinalStage addAllEnabledPiiCategories(Set<PiiCategory> enabledPiiCategories) {
-            this.enabledPiiCategories.addAll(enabledPiiCategories);
+            if (enabledPiiCategories != null) {
+                this.enabledPiiCategories.addAll(enabledPiiCategories);
+            }
             return this;
         }
 
@@ -336,7 +338,9 @@ public final class Agent {
         @JsonSetter(value = "enabledPiiCategories", nulls = Nulls.SKIP)
         public _FinalStage enabledPiiCategories(Set<PiiCategory> enabledPiiCategories) {
             this.enabledPiiCategories.clear();
-            this.enabledPiiCategories.addAll(enabledPiiCategories);
+            if (enabledPiiCategories != null) {
+                this.enabledPiiCategories.addAll(enabledPiiCategories);
+            }
             return this;
         }
 

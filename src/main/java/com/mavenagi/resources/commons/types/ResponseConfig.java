@@ -200,7 +200,9 @@ public final class ResponseConfig {
          */
         @java.lang.Override
         public _FinalStage addAllCapabilities(List<Capability> capabilities) {
-            this.capabilities.addAll(capabilities);
+            if (capabilities != null) {
+                this.capabilities.addAll(capabilities);
+            }
             return this;
         }
 
@@ -237,7 +239,9 @@ public final class ResponseConfig {
         @JsonSetter(value = "capabilities", nulls = Nulls.SKIP)
         public _FinalStage capabilities(List<Capability> capabilities) {
             this.capabilities.clear();
-            this.capabilities.addAll(capabilities);
+            if (capabilities != null) {
+                this.capabilities.addAll(capabilities);
+            }
             return this;
         }
 

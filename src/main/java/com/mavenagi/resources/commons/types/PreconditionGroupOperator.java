@@ -3,22 +3,82 @@
  */
 package com.mavenagi.resources.commons.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum PreconditionGroupOperator {
-    AND("AND"),
+public final class PreconditionGroupOperator {
+    public static final PreconditionGroupOperator AND = new PreconditionGroupOperator(Value.AND, "AND");
 
-    OR("OR");
+    public static final PreconditionGroupOperator OR = new PreconditionGroupOperator(Value.OR, "OR");
 
-    private final String value;
+    private final Value value;
 
-    PreconditionGroupOperator(String value) {
+    private final String string;
+
+    PreconditionGroupOperator(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof PreconditionGroupOperator
+                        && this.string.equals(((PreconditionGroupOperator) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case AND:
+                return visitor.visitAnd();
+            case OR:
+                return visitor.visitOr();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static PreconditionGroupOperator valueOf(String value) {
+        switch (value) {
+            case "AND":
+                return AND;
+            case "OR":
+                return OR;
+            default:
+                return new PreconditionGroupOperator(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        AND,
+
+        OR,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitAnd();
+
+        T visitOr();
+
+        T visitUnknown(String unknownType);
     }
 }

@@ -80,12 +80,16 @@ public final class ContextInfo {
         @JsonSetter(value = "additionalData", nulls = Nulls.SKIP)
         public Builder additionalData(Map<String, String> additionalData) {
             this.additionalData.clear();
-            this.additionalData.putAll(additionalData);
+            if (additionalData != null) {
+                this.additionalData.putAll(additionalData);
+            }
             return this;
         }
 
         public Builder putAllAdditionalData(Map<String, String> additionalData) {
-            this.additionalData.putAll(additionalData);
+            if (additionalData != null) {
+                this.additionalData.putAll(additionalData);
+            }
             return this;
         }
 

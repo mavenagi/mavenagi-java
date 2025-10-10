@@ -88,7 +88,9 @@ public final class KnowledgeBaseVersionsListResponse {
         @JsonSetter(value = "knowledgeBaseVersions", nulls = Nulls.SKIP)
         public Builder knowledgeBaseVersions(List<KnowledgeBaseVersion> knowledgeBaseVersions) {
             this.knowledgeBaseVersions.clear();
-            this.knowledgeBaseVersions.addAll(knowledgeBaseVersions);
+            if (knowledgeBaseVersions != null) {
+                this.knowledgeBaseVersions.addAll(knowledgeBaseVersions);
+            }
             return this;
         }
 
@@ -98,7 +100,9 @@ public final class KnowledgeBaseVersionsListResponse {
         }
 
         public Builder addAllKnowledgeBaseVersions(List<KnowledgeBaseVersion> knowledgeBaseVersions) {
-            this.knowledgeBaseVersions.addAll(knowledgeBaseVersions);
+            if (knowledgeBaseVersions != null) {
+                this.knowledgeBaseVersions.addAll(knowledgeBaseVersions);
+            }
             return this;
         }
 

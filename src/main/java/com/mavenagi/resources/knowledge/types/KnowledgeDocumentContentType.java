@@ -3,22 +3,83 @@
  */
 package com.mavenagi.resources.knowledge.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum KnowledgeDocumentContentType {
-    HTML("HTML"),
+public final class KnowledgeDocumentContentType {
+    public static final KnowledgeDocumentContentType MARKDOWN =
+            new KnowledgeDocumentContentType(Value.MARKDOWN, "MARKDOWN");
 
-    MARKDOWN("MARKDOWN");
+    public static final KnowledgeDocumentContentType HTML = new KnowledgeDocumentContentType(Value.HTML, "HTML");
 
-    private final String value;
+    private final Value value;
 
-    KnowledgeDocumentContentType(String value) {
+    private final String string;
+
+    KnowledgeDocumentContentType(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof KnowledgeDocumentContentType
+                        && this.string.equals(((KnowledgeDocumentContentType) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case MARKDOWN:
+                return visitor.visitMarkdown();
+            case HTML:
+                return visitor.visitHtml();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static KnowledgeDocumentContentType valueOf(String value) {
+        switch (value) {
+            case "MARKDOWN":
+                return MARKDOWN;
+            case "HTML":
+                return HTML;
+            default:
+                return new KnowledgeDocumentContentType(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        HTML,
+
+        MARKDOWN,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitHtml();
+
+        T visitMarkdown();
+
+        T visitUnknown(String unknownType);
     }
 }

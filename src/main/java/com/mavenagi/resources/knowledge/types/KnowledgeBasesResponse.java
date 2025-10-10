@@ -251,7 +251,9 @@ public final class KnowledgeBasesResponse implements IPage {
          */
         @java.lang.Override
         public _FinalStage addAllKnowledgeBases(List<KnowledgeBaseResponse> knowledgeBases) {
-            this.knowledgeBases.addAll(knowledgeBases);
+            if (knowledgeBases != null) {
+                this.knowledgeBases.addAll(knowledgeBases);
+            }
             return this;
         }
 
@@ -272,7 +274,9 @@ public final class KnowledgeBasesResponse implements IPage {
         @JsonSetter(value = "knowledgeBases", nulls = Nulls.SKIP)
         public _FinalStage knowledgeBases(List<KnowledgeBaseResponse> knowledgeBases) {
             this.knowledgeBases.clear();
-            this.knowledgeBases.addAll(knowledgeBases);
+            if (knowledgeBases != null) {
+                this.knowledgeBases.addAll(knowledgeBases);
+            }
             return this;
         }
 

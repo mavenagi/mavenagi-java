@@ -3,20 +3,70 @@
  */
 package com.mavenagi.resources.commons.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum EventField {
-    CREATED_AT("CREATED_AT");
+public final class EventField {
+    public static final EventField CREATED_AT = new EventField(Value.CREATED_AT, "CREATED_AT");
 
-    private final String value;
+    private final Value value;
 
-    EventField(String value) {
+    private final String string;
+
+    EventField(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other) || (other instanceof EventField && this.string.equals(((EventField) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case CREATED_AT:
+                return visitor.visitCreatedAt();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static EventField valueOf(String value) {
+        switch (value) {
+            case "CREATED_AT":
+                return CREATED_AT;
+            default:
+                return new EventField(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        CREATED_AT,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitCreatedAt();
+
+        T visitUnknown(String unknownType);
     }
 }

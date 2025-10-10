@@ -3,24 +3,91 @@
  */
 package com.mavenagi.resources.commons.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum LlmInclusionStatus {
-    ALWAYS("ALWAYS"),
+public final class LlmInclusionStatus {
+    public static final LlmInclusionStatus NEVER = new LlmInclusionStatus(Value.NEVER, "NEVER");
 
-    WHEN_RELEVANT("WHEN_RELEVANT"),
+    public static final LlmInclusionStatus ALWAYS = new LlmInclusionStatus(Value.ALWAYS, "ALWAYS");
 
-    NEVER("NEVER");
+    public static final LlmInclusionStatus WHEN_RELEVANT = new LlmInclusionStatus(Value.WHEN_RELEVANT, "WHEN_RELEVANT");
 
-    private final String value;
+    private final Value value;
 
-    LlmInclusionStatus(String value) {
+    private final String string;
+
+    LlmInclusionStatus(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof LlmInclusionStatus && this.string.equals(((LlmInclusionStatus) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case NEVER:
+                return visitor.visitNever();
+            case ALWAYS:
+                return visitor.visitAlways();
+            case WHEN_RELEVANT:
+                return visitor.visitWhenRelevant();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static LlmInclusionStatus valueOf(String value) {
+        switch (value) {
+            case "NEVER":
+                return NEVER;
+            case "ALWAYS":
+                return ALWAYS;
+            case "WHEN_RELEVANT":
+                return WHEN_RELEVANT;
+            default:
+                return new LlmInclusionStatus(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        ALWAYS,
+
+        WHEN_RELEVANT,
+
+        NEVER,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitAlways();
+
+        T visitWhenRelevant();
+
+        T visitNever();
+
+        T visitUnknown(String unknownType);
     }
 }

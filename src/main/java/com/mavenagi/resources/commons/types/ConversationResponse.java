@@ -54,6 +54,8 @@ public final class ConversationResponse implements IBaseConversationResponse {
 
     private final boolean llmEnabled;
 
+    private final Optional<SimulationContext> simulationContext;
+
     private final List<ConversationMessageResponse> messages;
 
     private final List<AttachmentResponse> attachments;
@@ -75,6 +77,7 @@ public final class ConversationResponse implements IBaseConversationResponse {
             boolean deleted,
             boolean open,
             boolean llmEnabled,
+            Optional<SimulationContext> simulationContext,
             List<ConversationMessageResponse> messages,
             List<AttachmentResponse> attachments,
             Map<String, Object> additionalProperties) {
@@ -92,6 +95,7 @@ public final class ConversationResponse implements IBaseConversationResponse {
         this.deleted = deleted;
         this.open = open;
         this.llmEnabled = llmEnabled;
+        this.simulationContext = simulationContext;
         this.messages = messages;
         this.attachments = attachments;
         this.additionalProperties = additionalProperties;
@@ -227,6 +231,16 @@ public final class ConversationResponse implements IBaseConversationResponse {
     }
 
     /**
+     * @return Additional context used for simulation runs. When present, this conversation is treated as a simulation.
+     * Simulation conversations are excluded from normal search results unless explicitly included via the <code>simulationFilter</code> field.
+     */
+    @JsonProperty("simulationContext")
+    @java.lang.Override
+    public Optional<SimulationContext> getSimulationContext() {
+        return simulationContext;
+    }
+
+    /**
      * @return The messages in the conversation
      */
     @JsonProperty("messages")
@@ -269,6 +283,7 @@ public final class ConversationResponse implements IBaseConversationResponse {
                 && deleted == other.deleted
                 && open == other.open
                 && llmEnabled == other.llmEnabled
+                && simulationContext.equals(other.simulationContext)
                 && messages.equals(other.messages)
                 && attachments.equals(other.attachments);
     }
@@ -290,6 +305,7 @@ public final class ConversationResponse implements IBaseConversationResponse {
                 this.deleted,
                 this.open,
                 this.llmEnabled,
+                this.simulationContext,
                 this.messages,
                 this.attachments);
     }
@@ -412,6 +428,14 @@ public final class ConversationResponse implements IBaseConversationResponse {
         _FinalStage allMetadata(String key, Map<String, String> value);
 
         /**
+         * <p>Additional context used for simulation runs. When present, this conversation is treated as a simulation.
+         * Simulation conversations are excluded from normal search results unless explicitly included via the <code>simulationFilter</code> field.</p>
+         */
+        _FinalStage simulationContext(Optional<SimulationContext> simulationContext);
+
+        _FinalStage simulationContext(SimulationContext simulationContext);
+
+        /**
          * <p>The messages in the conversation</p>
          */
         _FinalStage messages(List<ConversationMessageResponse> messages);
@@ -456,6 +480,8 @@ public final class ConversationResponse implements IBaseConversationResponse {
 
         private List<ConversationMessageResponse> messages = new ArrayList<>();
 
+        private Optional<SimulationContext> simulationContext = Optional.empty();
+
         private Map<String, Map<String, String>> allMetadata = new LinkedHashMap<>();
 
         private Optional<Map<String, String>> metadata = Optional.empty();
@@ -493,6 +519,7 @@ public final class ConversationResponse implements IBaseConversationResponse {
             deleted(other.getDeleted());
             open(other.getOpen());
             llmEnabled(other.getLlmEnabled());
+            simulationContext(other.getSimulationContext());
             messages(other.getMessages());
             attachments(other.getAttachments());
             return this;
@@ -583,7 +610,9 @@ public final class ConversationResponse implements IBaseConversationResponse {
          */
         @java.lang.Override
         public _FinalStage addAllAttachments(List<AttachmentResponse> attachments) {
-            this.attachments.addAll(attachments);
+            if (attachments != null) {
+                this.attachments.addAll(attachments);
+            }
             return this;
         }
 
@@ -606,7 +635,9 @@ public final class ConversationResponse implements IBaseConversationResponse {
         @JsonSetter(value = "attachments", nulls = Nulls.SKIP)
         public _FinalStage attachments(List<AttachmentResponse> attachments) {
             this.attachments.clear();
-            this.attachments.addAll(attachments);
+            if (attachments != null) {
+                this.attachments.addAll(attachments);
+            }
             return this;
         }
 
@@ -616,7 +647,9 @@ public final class ConversationResponse implements IBaseConversationResponse {
          */
         @java.lang.Override
         public _FinalStage addAllMessages(List<ConversationMessageResponse> messages) {
-            this.messages.addAll(messages);
+            if (messages != null) {
+                this.messages.addAll(messages);
+            }
             return this;
         }
 
@@ -637,7 +670,31 @@ public final class ConversationResponse implements IBaseConversationResponse {
         @JsonSetter(value = "messages", nulls = Nulls.SKIP)
         public _FinalStage messages(List<ConversationMessageResponse> messages) {
             this.messages.clear();
-            this.messages.addAll(messages);
+            if (messages != null) {
+                this.messages.addAll(messages);
+            }
+            return this;
+        }
+
+        /**
+         * <p>Additional context used for simulation runs. When present, this conversation is treated as a simulation.
+         * Simulation conversations are excluded from normal search results unless explicitly included via the <code>simulationFilter</code> field.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage simulationContext(SimulationContext simulationContext) {
+            this.simulationContext = Optional.ofNullable(simulationContext);
+            return this;
+        }
+
+        /**
+         * <p>Additional context used for simulation runs. When present, this conversation is treated as a simulation.
+         * Simulation conversations are excluded from normal search results unless explicitly included via the <code>simulationFilter</code> field.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "simulationContext", nulls = Nulls.SKIP)
+        public _FinalStage simulationContext(Optional<SimulationContext> simulationContext) {
+            this.simulationContext = simulationContext;
             return this;
         }
 
@@ -657,7 +714,9 @@ public final class ConversationResponse implements IBaseConversationResponse {
          */
         @java.lang.Override
         public _FinalStage putAllAllMetadata(Map<String, Map<String, String>> allMetadata) {
-            this.allMetadata.putAll(allMetadata);
+            if (allMetadata != null) {
+                this.allMetadata.putAll(allMetadata);
+            }
             return this;
         }
 
@@ -668,7 +727,9 @@ public final class ConversationResponse implements IBaseConversationResponse {
         @JsonSetter(value = "allMetadata", nulls = Nulls.SKIP)
         public _FinalStage allMetadata(Map<String, Map<String, String>> allMetadata) {
             this.allMetadata.clear();
-            this.allMetadata.putAll(allMetadata);
+            if (allMetadata != null) {
+                this.allMetadata.putAll(allMetadata);
+            }
             return this;
         }
 
@@ -829,6 +890,7 @@ public final class ConversationResponse implements IBaseConversationResponse {
                     deleted,
                     open,
                     llmEnabled,
+                    simulationContext,
                     messages,
                     attachments,
                     additionalProperties);

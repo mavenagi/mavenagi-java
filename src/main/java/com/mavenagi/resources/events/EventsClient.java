@@ -9,6 +9,7 @@ import com.mavenagi.resources.commons.types.EventRequest;
 import com.mavenagi.resources.commons.types.EventResponse;
 import com.mavenagi.resources.commons.types.EventsSearchRequest;
 import com.mavenagi.resources.commons.types.EventsSearchResponse;
+import com.mavenagi.resources.events.requests.EventGetRequest;
 
 public class EventsClient {
     protected final ClientOptions clientOptions;
@@ -60,5 +61,19 @@ public class EventsClient {
      */
     public EventsSearchResponse search(EventsSearchRequest request, RequestOptions requestOptions) {
         return this.rawClient.search(request, requestOptions).body();
+    }
+
+    /**
+     * Retrieve details of a specific Event item by its ID.
+     */
+    public EventResponse get(String eventId, EventGetRequest request) {
+        return this.rawClient.get(eventId, request).body();
+    }
+
+    /**
+     * Retrieve details of a specific Event item by its ID.
+     */
+    public EventResponse get(String eventId, EventGetRequest request, RequestOptions requestOptions) {
+        return this.rawClient.get(eventId, request, requestOptions).body();
     }
 }

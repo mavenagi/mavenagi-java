@@ -185,7 +185,9 @@ public final class ApplyFixesRequest {
          */
         @java.lang.Override
         public _FinalStage addAllFixReferenceIds(List<String> fixReferenceIds) {
-            this.fixReferenceIds.addAll(fixReferenceIds);
+            if (fixReferenceIds != null) {
+                this.fixReferenceIds.addAll(fixReferenceIds);
+            }
             return this;
         }
 
@@ -206,7 +208,9 @@ public final class ApplyFixesRequest {
         @JsonSetter(value = "fixReferenceIds", nulls = Nulls.SKIP)
         public _FinalStage fixReferenceIds(List<String> fixReferenceIds) {
             this.fixReferenceIds.clear();
-            this.fixReferenceIds.addAll(fixReferenceIds);
+            if (fixReferenceIds != null) {
+                this.fixReferenceIds.addAll(fixReferenceIds);
+            }
             return this;
         }
 

@@ -3,28 +3,111 @@
  */
 package com.mavenagi.resources.commons.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum InboxItemStatus {
-    OPEN("OPEN"),
+public final class InboxItemStatus {
+    public static final InboxItemStatus USER_RESOLVED = new InboxItemStatus(Value.USER_RESOLVED, "USER_RESOLVED");
 
-    USER_RESOLVED("USER_RESOLVED"),
+    public static final InboxItemStatus IGNORED = new InboxItemStatus(Value.IGNORED, "IGNORED");
 
-    SYSTEM_RESOLVED("SYSTEM_RESOLVED"),
+    public static final InboxItemStatus SYSTEM_RESOLVED = new InboxItemStatus(Value.SYSTEM_RESOLVED, "SYSTEM_RESOLVED");
 
-    REGRESSED("REGRESSED"),
+    public static final InboxItemStatus OPEN = new InboxItemStatus(Value.OPEN, "OPEN");
 
-    IGNORED("IGNORED");
+    public static final InboxItemStatus REGRESSED = new InboxItemStatus(Value.REGRESSED, "REGRESSED");
 
-    private final String value;
+    private final Value value;
 
-    InboxItemStatus(String value) {
+    private final String string;
+
+    InboxItemStatus(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof InboxItemStatus && this.string.equals(((InboxItemStatus) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case USER_RESOLVED:
+                return visitor.visitUserResolved();
+            case IGNORED:
+                return visitor.visitIgnored();
+            case SYSTEM_RESOLVED:
+                return visitor.visitSystemResolved();
+            case OPEN:
+                return visitor.visitOpen();
+            case REGRESSED:
+                return visitor.visitRegressed();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static InboxItemStatus valueOf(String value) {
+        switch (value) {
+            case "USER_RESOLVED":
+                return USER_RESOLVED;
+            case "IGNORED":
+                return IGNORED;
+            case "SYSTEM_RESOLVED":
+                return SYSTEM_RESOLVED;
+            case "OPEN":
+                return OPEN;
+            case "REGRESSED":
+                return REGRESSED;
+            default:
+                return new InboxItemStatus(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        OPEN,
+
+        USER_RESOLVED,
+
+        SYSTEM_RESOLVED,
+
+        REGRESSED,
+
+        IGNORED,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitOpen();
+
+        T visitUserResolved();
+
+        T visitSystemResolved();
+
+        T visitRegressed();
+
+        T visitIgnored();
+
+        T visitUnknown(String unknownType);
     }
 }

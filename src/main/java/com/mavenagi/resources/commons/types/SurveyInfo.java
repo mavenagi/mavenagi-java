@@ -16,25 +16,25 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = SurveyInfo.Builder.class)
 public final class SurveyInfo {
-    private final String surveyQuestion;
+    private final Optional<String> surveyQuestion;
 
     private final Optional<String> surveyAnswer;
 
     private final Map<String, Object> additionalProperties;
 
-    private SurveyInfo(String surveyQuestion, Optional<String> surveyAnswer, Map<String, Object> additionalProperties) {
+    private SurveyInfo(
+            Optional<String> surveyQuestion, Optional<String> surveyAnswer, Map<String, Object> additionalProperties) {
         this.surveyQuestion = surveyQuestion;
         this.surveyAnswer = surveyAnswer;
         this.additionalProperties = additionalProperties;
     }
 
     @JsonProperty("surveyQuestion")
-    public String getSurveyQuestion() {
+    public Optional<String> getSurveyQuestion() {
         return surveyQuestion;
     }
 
@@ -68,27 +68,13 @@ public final class SurveyInfo {
         return ObjectMappers.stringify(this);
     }
 
-    public static SurveyQuestionStage builder() {
+    public static Builder builder() {
         return new Builder();
     }
 
-    public interface SurveyQuestionStage {
-        _FinalStage surveyQuestion(@NotNull String surveyQuestion);
-
-        Builder from(SurveyInfo other);
-    }
-
-    public interface _FinalStage {
-        SurveyInfo build();
-
-        _FinalStage surveyAnswer(Optional<String> surveyAnswer);
-
-        _FinalStage surveyAnswer(String surveyAnswer);
-    }
-
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements SurveyQuestionStage, _FinalStage {
-        private String surveyQuestion;
+    public static final class Builder {
+        private Optional<String> surveyQuestion = Optional.empty();
 
         private Optional<String> surveyAnswer = Optional.empty();
 
@@ -97,34 +83,34 @@ public final class SurveyInfo {
 
         private Builder() {}
 
-        @java.lang.Override
         public Builder from(SurveyInfo other) {
             surveyQuestion(other.getSurveyQuestion());
             surveyAnswer(other.getSurveyAnswer());
             return this;
         }
 
-        @java.lang.Override
-        @JsonSetter("surveyQuestion")
-        public _FinalStage surveyQuestion(@NotNull String surveyQuestion) {
-            this.surveyQuestion = Objects.requireNonNull(surveyQuestion, "surveyQuestion must not be null");
+        @JsonSetter(value = "surveyQuestion", nulls = Nulls.SKIP)
+        public Builder surveyQuestion(Optional<String> surveyQuestion) {
+            this.surveyQuestion = surveyQuestion;
             return this;
         }
 
-        @java.lang.Override
-        public _FinalStage surveyAnswer(String surveyAnswer) {
-            this.surveyAnswer = Optional.ofNullable(surveyAnswer);
+        public Builder surveyQuestion(String surveyQuestion) {
+            this.surveyQuestion = Optional.ofNullable(surveyQuestion);
             return this;
         }
 
-        @java.lang.Override
         @JsonSetter(value = "surveyAnswer", nulls = Nulls.SKIP)
-        public _FinalStage surveyAnswer(Optional<String> surveyAnswer) {
+        public Builder surveyAnswer(Optional<String> surveyAnswer) {
             this.surveyAnswer = surveyAnswer;
             return this;
         }
 
-        @java.lang.Override
+        public Builder surveyAnswer(String surveyAnswer) {
+            this.surveyAnswer = Optional.ofNullable(surveyAnswer);
+            return this;
+        }
+
         public SurveyInfo build() {
             return new SurveyInfo(surveyQuestion, surveyAnswer, additionalProperties);
         }

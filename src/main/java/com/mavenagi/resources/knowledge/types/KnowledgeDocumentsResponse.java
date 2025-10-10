@@ -251,7 +251,9 @@ public final class KnowledgeDocumentsResponse implements IPage {
          */
         @java.lang.Override
         public _FinalStage addAllKnowledgeDocuments(List<KnowledgeDocumentSearchResponse> knowledgeDocuments) {
-            this.knowledgeDocuments.addAll(knowledgeDocuments);
+            if (knowledgeDocuments != null) {
+                this.knowledgeDocuments.addAll(knowledgeDocuments);
+            }
             return this;
         }
 
@@ -272,7 +274,9 @@ public final class KnowledgeDocumentsResponse implements IPage {
         @JsonSetter(value = "knowledgeDocuments", nulls = Nulls.SKIP)
         public _FinalStage knowledgeDocuments(List<KnowledgeDocumentSearchResponse> knowledgeDocuments) {
             this.knowledgeDocuments.clear();
-            this.knowledgeDocuments.addAll(knowledgeDocuments);
+            if (knowledgeDocuments != null) {
+                this.knowledgeDocuments.addAll(knowledgeDocuments);
+            }
             return this;
         }
 

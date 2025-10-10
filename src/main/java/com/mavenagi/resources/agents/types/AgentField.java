@@ -3,22 +3,80 @@
  */
 package com.mavenagi.resources.agents.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum AgentField {
-    CREATED_AT("CREATED_AT"),
+public final class AgentField {
+    public static final AgentField ENVIRONMENT = new AgentField(Value.ENVIRONMENT, "ENVIRONMENT");
 
-    ENVIRONMENT("ENVIRONMENT");
+    public static final AgentField CREATED_AT = new AgentField(Value.CREATED_AT, "CREATED_AT");
 
-    private final String value;
+    private final Value value;
 
-    AgentField(String value) {
+    private final String string;
+
+    AgentField(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other) || (other instanceof AgentField && this.string.equals(((AgentField) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case ENVIRONMENT:
+                return visitor.visitEnvironment();
+            case CREATED_AT:
+                return visitor.visitCreatedAt();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static AgentField valueOf(String value) {
+        switch (value) {
+            case "ENVIRONMENT":
+                return ENVIRONMENT;
+            case "CREATED_AT":
+                return CREATED_AT;
+            default:
+                return new AgentField(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        CREATED_AT,
+
+        ENVIRONMENT,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitCreatedAt();
+
+        T visitEnvironment();
+
+        T visitUnknown(String unknownType);
     }
 }

@@ -3,26 +3,100 @@
  */
 package com.mavenagi.resources.commons.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum FeedbackType {
-    THUMBS_UP("THUMBS_UP"),
+public final class FeedbackType {
+    public static final FeedbackType INSERT = new FeedbackType(Value.INSERT, "INSERT");
 
-    THUMBS_DOWN("THUMBS_DOWN"),
+    public static final FeedbackType THUMBS_DOWN = new FeedbackType(Value.THUMBS_DOWN, "THUMBS_DOWN");
 
-    INSERT("INSERT"),
+    public static final FeedbackType HANDOFF = new FeedbackType(Value.HANDOFF, "HANDOFF");
 
-    HANDOFF("HANDOFF");
+    public static final FeedbackType THUMBS_UP = new FeedbackType(Value.THUMBS_UP, "THUMBS_UP");
 
-    private final String value;
+    private final Value value;
 
-    FeedbackType(String value) {
+    private final String string;
+
+    FeedbackType(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other) || (other instanceof FeedbackType && this.string.equals(((FeedbackType) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case INSERT:
+                return visitor.visitInsert();
+            case THUMBS_DOWN:
+                return visitor.visitThumbsDown();
+            case HANDOFF:
+                return visitor.visitHandoff();
+            case THUMBS_UP:
+                return visitor.visitThumbsUp();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static FeedbackType valueOf(String value) {
+        switch (value) {
+            case "INSERT":
+                return INSERT;
+            case "THUMBS_DOWN":
+                return THUMBS_DOWN;
+            case "HANDOFF":
+                return HANDOFF;
+            case "THUMBS_UP":
+                return THUMBS_UP;
+            default:
+                return new FeedbackType(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        THUMBS_UP,
+
+        THUMBS_DOWN,
+
+        INSERT,
+
+        HANDOFF,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitThumbsUp();
+
+        T visitThumbsDown();
+
+        T visitInsert();
+
+        T visitHandoff();
+
+        T visitUnknown(String unknownType);
     }
 }

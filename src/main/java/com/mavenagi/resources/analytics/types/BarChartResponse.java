@@ -91,7 +91,9 @@ public final class BarChartResponse {
         @JsonSetter(value = "series", nulls = Nulls.SKIP)
         public Builder series(List<Series> series) {
             this.series.clear();
-            this.series.addAll(series);
+            if (series != null) {
+                this.series.addAll(series);
+            }
             return this;
         }
 
@@ -101,7 +103,9 @@ public final class BarChartResponse {
         }
 
         public Builder addAllSeries(List<Series> series) {
-            this.series.addAll(series);
+            if (series != null) {
+                this.series.addAll(series);
+            }
             return this;
         }
 

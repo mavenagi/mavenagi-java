@@ -7,6 +7,8 @@ import com.mavenagi.core.ClientOptions;
 import com.mavenagi.core.RequestOptions;
 import com.mavenagi.resources.agentcapabilities.types.AgentCapability;
 import com.mavenagi.resources.agentcapabilities.types.AgentCapabilityListRequest;
+import com.mavenagi.resources.agentcapabilities.types.ExecuteCapabilityRequest;
+import com.mavenagi.resources.agentcapabilities.types.ExecuteCapabilityResponse;
 import com.mavenagi.resources.agentcapabilities.types.ListAgentCapabilitiesResponse;
 import com.mavenagi.resources.agentcapabilities.types.PatchAgentCapabilityRequest;
 
@@ -71,6 +73,34 @@ public class AgentCapabilitiesClient {
             RequestOptions requestOptions) {
         return this.rawClient
                 .patch(integrationId, capabilityId, request, requestOptions)
+                .body();
+    }
+
+    /**
+     * Execute an action capability.
+     */
+    public ExecuteCapabilityResponse execute(String integrationId, String capabilityId) {
+        return this.rawClient.execute(integrationId, capabilityId).body();
+    }
+
+    /**
+     * Execute an action capability.
+     */
+    public ExecuteCapabilityResponse execute(
+            String integrationId, String capabilityId, ExecuteCapabilityRequest request) {
+        return this.rawClient.execute(integrationId, capabilityId, request).body();
+    }
+
+    /**
+     * Execute an action capability.
+     */
+    public ExecuteCapabilityResponse execute(
+            String integrationId,
+            String capabilityId,
+            ExecuteCapabilityRequest request,
+            RequestOptions requestOptions) {
+        return this.rawClient
+                .execute(integrationId, capabilityId, request, requestOptions)
                 .body();
     }
 }

@@ -91,7 +91,9 @@ public final class DateHistogramResponse {
         @JsonSetter(value = "timeSeries", nulls = Nulls.SKIP)
         public Builder timeSeries(List<TimeSeries> timeSeries) {
             this.timeSeries.clear();
-            this.timeSeries.addAll(timeSeries);
+            if (timeSeries != null) {
+                this.timeSeries.addAll(timeSeries);
+            }
             return this;
         }
 
@@ -101,7 +103,9 @@ public final class DateHistogramResponse {
         }
 
         public Builder addAllTimeSeries(List<TimeSeries> timeSeries) {
-            this.timeSeries.addAll(timeSeries);
+            if (timeSeries != null) {
+                this.timeSeries.addAll(timeSeries);
+            }
             return this;
         }
 

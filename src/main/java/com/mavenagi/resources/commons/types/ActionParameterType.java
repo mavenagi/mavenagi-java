@@ -3,30 +3,171 @@
  */
 package com.mavenagi.resources.commons.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum ActionParameterType {
-    STRING("STRING"),
+public final class ActionParameterType {
+    public static final ActionParameterType FILE = new ActionParameterType(Value.FILE, "FILE");
 
-    BOOLEAN("BOOLEAN"),
+    public static final ActionParameterType MULTILINE = new ActionParameterType(Value.MULTILINE, "MULTILINE");
 
-    NUMBER("NUMBER"),
+    public static final ActionParameterType DATE = new ActionParameterType(Value.DATE, "DATE");
 
-    SCHEMA("SCHEMA"),
+    public static final ActionParameterType SCHEMA = new ActionParameterType(Value.SCHEMA, "SCHEMA");
 
-    FILE("FILE"),
+    public static final ActionParameterType TIME = new ActionParameterType(Value.TIME, "TIME");
 
-    OAUTH("OAUTH");
+    public static final ActionParameterType NUMBER = new ActionParameterType(Value.NUMBER, "NUMBER");
 
-    private final String value;
+    public static final ActionParameterType STRING = new ActionParameterType(Value.STRING, "STRING");
 
-    ActionParameterType(String value) {
+    public static final ActionParameterType DATETIME = new ActionParameterType(Value.DATETIME, "DATETIME");
+
+    public static final ActionParameterType OAUTH = new ActionParameterType(Value.OAUTH, "OAUTH");
+
+    public static final ActionParameterType BOOLEAN = new ActionParameterType(Value.BOOLEAN, "BOOLEAN");
+
+    public static final ActionParameterType EMAIL = new ActionParameterType(Value.EMAIL, "EMAIL");
+
+    private final Value value;
+
+    private final String string;
+
+    ActionParameterType(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof ActionParameterType && this.string.equals(((ActionParameterType) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case FILE:
+                return visitor.visitFile();
+            case MULTILINE:
+                return visitor.visitMultiline();
+            case DATE:
+                return visitor.visitDate();
+            case SCHEMA:
+                return visitor.visitSchema();
+            case TIME:
+                return visitor.visitTime();
+            case NUMBER:
+                return visitor.visitNumber();
+            case STRING:
+                return visitor.visitString();
+            case DATETIME:
+                return visitor.visitDatetime();
+            case OAUTH:
+                return visitor.visitOauth();
+            case BOOLEAN:
+                return visitor.visitBoolean();
+            case EMAIL:
+                return visitor.visitEmail();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static ActionParameterType valueOf(String value) {
+        switch (value) {
+            case "FILE":
+                return FILE;
+            case "MULTILINE":
+                return MULTILINE;
+            case "DATE":
+                return DATE;
+            case "SCHEMA":
+                return SCHEMA;
+            case "TIME":
+                return TIME;
+            case "NUMBER":
+                return NUMBER;
+            case "STRING":
+                return STRING;
+            case "DATETIME":
+                return DATETIME;
+            case "OAUTH":
+                return OAUTH;
+            case "BOOLEAN":
+                return BOOLEAN;
+            case "EMAIL":
+                return EMAIL;
+            default:
+                return new ActionParameterType(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        STRING,
+
+        MULTILINE,
+
+        BOOLEAN,
+
+        NUMBER,
+
+        DATETIME,
+
+        DATE,
+
+        TIME,
+
+        EMAIL,
+
+        SCHEMA,
+
+        FILE,
+
+        OAUTH,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitString();
+
+        T visitMultiline();
+
+        T visitBoolean();
+
+        T visitNumber();
+
+        T visitDatetime();
+
+        T visitDate();
+
+        T visitTime();
+
+        T visitEmail();
+
+        T visitSchema();
+
+        T visitFile();
+
+        T visitOauth();
+
+        T visitUnknown(String unknownType);
     }
 }

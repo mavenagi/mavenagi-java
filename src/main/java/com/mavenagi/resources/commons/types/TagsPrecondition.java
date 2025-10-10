@@ -118,7 +118,9 @@ public final class TagsPrecondition implements IPreconditionBase {
         @JsonSetter(value = "tags", nulls = Nulls.SKIP)
         public Builder tags(Set<String> tags) {
             this.tags.clear();
-            this.tags.addAll(tags);
+            if (tags != null) {
+                this.tags.addAll(tags);
+            }
             return this;
         }
 
@@ -128,7 +130,9 @@ public final class TagsPrecondition implements IPreconditionBase {
         }
 
         public Builder addAllTags(Set<String> tags) {
-            this.tags.addAll(tags);
+            if (tags != null) {
+                this.tags.addAll(tags);
+            }
             return this;
         }
 

@@ -3,22 +3,83 @@
  */
 package com.mavenagi.resources.commons.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum AppUserIdentifyingPropertyType {
-    EMAIL("EMAIL"),
+public final class AppUserIdentifyingPropertyType {
+    public static final AppUserIdentifyingPropertyType PHONE_NUMBER =
+            new AppUserIdentifyingPropertyType(Value.PHONE_NUMBER, "PHONE_NUMBER");
 
-    PHONE_NUMBER("PHONE_NUMBER");
+    public static final AppUserIdentifyingPropertyType EMAIL = new AppUserIdentifyingPropertyType(Value.EMAIL, "EMAIL");
 
-    private final String value;
+    private final Value value;
 
-    AppUserIdentifyingPropertyType(String value) {
+    private final String string;
+
+    AppUserIdentifyingPropertyType(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof AppUserIdentifyingPropertyType
+                        && this.string.equals(((AppUserIdentifyingPropertyType) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case PHONE_NUMBER:
+                return visitor.visitPhoneNumber();
+            case EMAIL:
+                return visitor.visitEmail();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static AppUserIdentifyingPropertyType valueOf(String value) {
+        switch (value) {
+            case "PHONE_NUMBER":
+                return PHONE_NUMBER;
+            case "EMAIL":
+                return EMAIL;
+            default:
+                return new AppUserIdentifyingPropertyType(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        EMAIL,
+
+        PHONE_NUMBER,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitEmail();
+
+        T visitPhoneNumber();
+
+        T visitUnknown(String unknownType);
     }
 }

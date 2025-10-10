@@ -60,16 +60,16 @@ public class AsyncUsersClient {
      * Get an agent user by its supplied ID.
      * <p>Agent users are a merged view of the users created by individual apps.</p>
      */
-    public CompletableFuture<AgentUser> getAgentUser(String userId) {
-        return this.rawClient.getAgentUser(userId).thenApply(response -> response.body());
+    public CompletableFuture<AgentUser> getAgentUser(String agentUserId) {
+        return this.rawClient.getAgentUser(agentUserId).thenApply(response -> response.body());
     }
 
     /**
      * Get an agent user by its supplied ID.
      * <p>Agent users are a merged view of the users created by individual apps.</p>
      */
-    public CompletableFuture<AgentUser> getAgentUser(String userId, RequestOptions requestOptions) {
-        return this.rawClient.getAgentUser(userId, requestOptions).thenApply(response -> response.body());
+    public CompletableFuture<AgentUser> getAgentUser(String agentUserId, RequestOptions requestOptions) {
+        return this.rawClient.getAgentUser(agentUserId, requestOptions).thenApply(response -> response.body());
     }
 
     /**

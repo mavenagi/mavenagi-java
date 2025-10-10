@@ -252,7 +252,9 @@ public final class ActionsResponse implements IPage {
          */
         @java.lang.Override
         public _FinalStage addAllActions(List<ActionResponse> actions) {
-            this.actions.addAll(actions);
+            if (actions != null) {
+                this.actions.addAll(actions);
+            }
             return this;
         }
 
@@ -273,7 +275,9 @@ public final class ActionsResponse implements IPage {
         @JsonSetter(value = "actions", nulls = Nulls.SKIP)
         public _FinalStage actions(List<ActionResponse> actions) {
             this.actions.clear();
-            this.actions.addAll(actions);
+            if (actions != null) {
+                this.actions.addAll(actions);
+            }
             return this;
         }
 

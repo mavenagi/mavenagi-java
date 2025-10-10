@@ -119,7 +119,9 @@ public final class PreconditionGroup {
 
         @java.lang.Override
         public _FinalStage addAllPreconditions(List<Precondition> preconditions) {
-            this.preconditions.addAll(preconditions);
+            if (preconditions != null) {
+                this.preconditions.addAll(preconditions);
+            }
             return this;
         }
 
@@ -133,7 +135,9 @@ public final class PreconditionGroup {
         @JsonSetter(value = "preconditions", nulls = Nulls.SKIP)
         public _FinalStage preconditions(List<Precondition> preconditions) {
             this.preconditions.clear();
-            this.preconditions.addAll(preconditions);
+            if (preconditions != null) {
+                this.preconditions.addAll(preconditions);
+            }
             return this;
         }
 

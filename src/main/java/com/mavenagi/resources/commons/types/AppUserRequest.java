@@ -163,7 +163,9 @@ public final class AppUserRequest implements IAppUser {
 
         @java.lang.Override
         public _FinalStage putAllData(Map<String, UserData> data) {
-            this.data.putAll(data);
+            if (data != null) {
+                this.data.putAll(data);
+            }
             return this;
         }
 
@@ -171,7 +173,9 @@ public final class AppUserRequest implements IAppUser {
         @JsonSetter(value = "data", nulls = Nulls.SKIP)
         public _FinalStage data(Map<String, UserData> data) {
             this.data.clear();
-            this.data.putAll(data);
+            if (data != null) {
+                this.data.putAll(data);
+            }
             return this;
         }
 
@@ -181,7 +185,9 @@ public final class AppUserRequest implements IAppUser {
          */
         @java.lang.Override
         public _FinalStage addAllIdentifiers(Set<AppUserIdentifier> identifiers) {
-            this.identifiers.addAll(identifiers);
+            if (identifiers != null) {
+                this.identifiers.addAll(identifiers);
+            }
             return this;
         }
 
@@ -202,7 +208,9 @@ public final class AppUserRequest implements IAppUser {
         @JsonSetter(value = "identifiers", nulls = Nulls.SKIP)
         public _FinalStage identifiers(Set<AppUserIdentifier> identifiers) {
             this.identifiers.clear();
-            this.identifiers.addAll(identifiers);
+            if (identifiers != null) {
+                this.identifiers.addAll(identifiers);
+            }
             return this;
         }
 

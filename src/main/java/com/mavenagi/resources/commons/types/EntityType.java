@@ -3,48 +3,222 @@
  */
 package com.mavenagi.resources.commons.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum EntityType {
-    AGENT("AGENT"),
+public final class EntityType {
+    public static final EntityType AGENT = new EntityType(Value.AGENT, "AGENT");
 
-    CONVERSATION("CONVERSATION"),
+    public static final EntityType ACTION = new EntityType(Value.ACTION, "ACTION");
 
-    CONVERSATION_MESSAGE("CONVERSATION_MESSAGE"),
+    public static final EntityType USER = new EntityType(Value.USER, "USER");
 
-    KNOWLEDGE_BASE("KNOWLEDGE_BASE"),
+    public static final EntityType KNOWLEDGE_BASE = new EntityType(Value.KNOWLEDGE_BASE, "KNOWLEDGE_BASE");
 
-    KNOWLEDGE_BASE_VERSION("KNOWLEDGE_BASE_VERSION"),
+    public static final EntityType CONVERSATION = new EntityType(Value.CONVERSATION, "CONVERSATION");
 
-    KNOWLEDGE_DOCUMENT("KNOWLEDGE_DOCUMENT"),
+    public static final EntityType EVENT_TRIGGER = new EntityType(Value.EVENT_TRIGGER, "EVENT_TRIGGER");
 
-    ACTION("ACTION"),
+    public static final EntityType CONVERSATION_MESSAGE =
+            new EntityType(Value.CONVERSATION_MESSAGE, "CONVERSATION_MESSAGE");
 
-    USER("USER"),
+    public static final EntityType CUSTOMER = new EntityType(Value.CUSTOMER, "CUSTOMER");
 
-    EVENT("EVENT"),
+    public static final EntityType KNOWLEDGE_BASE_VERSION =
+            new EntityType(Value.KNOWLEDGE_BASE_VERSION, "KNOWLEDGE_BASE_VERSION");
 
-    EVENT_TRIGGER("EVENT_TRIGGER"),
+    public static final EntityType SEGMENT = new EntityType(Value.SEGMENT, "SEGMENT");
 
-    USER_PROFILE("USER_PROFILE"),
+    public static final EntityType USER_PROFILE = new EntityType(Value.USER_PROFILE, "USER_PROFILE");
 
-    FEEDBACK("FEEDBACK"),
+    public static final EntityType KNOWLEDGE_DOCUMENT = new EntityType(Value.KNOWLEDGE_DOCUMENT, "KNOWLEDGE_DOCUMENT");
 
-    INBOX_ITEM("INBOX_ITEM"),
+    public static final EntityType EVENT = new EntityType(Value.EVENT, "EVENT");
 
-    INBOX_ITEM_FIX("INBOX_ITEM_FIX"),
+    public static final EntityType FEEDBACK = new EntityType(Value.FEEDBACK, "FEEDBACK");
 
-    SEGMENT("SEGMENT");
+    public static final EntityType INBOX_ITEM = new EntityType(Value.INBOX_ITEM, "INBOX_ITEM");
 
-    private final String value;
+    public static final EntityType INBOX_ITEM_FIX = new EntityType(Value.INBOX_ITEM_FIX, "INBOX_ITEM_FIX");
 
-    EntityType(String value) {
+    private final Value value;
+
+    private final String string;
+
+    EntityType(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other) || (other instanceof EntityType && this.string.equals(((EntityType) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case AGENT:
+                return visitor.visitAgent();
+            case ACTION:
+                return visitor.visitAction();
+            case USER:
+                return visitor.visitUser();
+            case KNOWLEDGE_BASE:
+                return visitor.visitKnowledgeBase();
+            case CONVERSATION:
+                return visitor.visitConversation();
+            case EVENT_TRIGGER:
+                return visitor.visitEventTrigger();
+            case CONVERSATION_MESSAGE:
+                return visitor.visitConversationMessage();
+            case CUSTOMER:
+                return visitor.visitCustomer();
+            case KNOWLEDGE_BASE_VERSION:
+                return visitor.visitKnowledgeBaseVersion();
+            case SEGMENT:
+                return visitor.visitSegment();
+            case USER_PROFILE:
+                return visitor.visitUserProfile();
+            case KNOWLEDGE_DOCUMENT:
+                return visitor.visitKnowledgeDocument();
+            case EVENT:
+                return visitor.visitEvent();
+            case FEEDBACK:
+                return visitor.visitFeedback();
+            case INBOX_ITEM:
+                return visitor.visitInboxItem();
+            case INBOX_ITEM_FIX:
+                return visitor.visitInboxItemFix();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static EntityType valueOf(String value) {
+        switch (value) {
+            case "AGENT":
+                return AGENT;
+            case "ACTION":
+                return ACTION;
+            case "USER":
+                return USER;
+            case "KNOWLEDGE_BASE":
+                return KNOWLEDGE_BASE;
+            case "CONVERSATION":
+                return CONVERSATION;
+            case "EVENT_TRIGGER":
+                return EVENT_TRIGGER;
+            case "CONVERSATION_MESSAGE":
+                return CONVERSATION_MESSAGE;
+            case "CUSTOMER":
+                return CUSTOMER;
+            case "KNOWLEDGE_BASE_VERSION":
+                return KNOWLEDGE_BASE_VERSION;
+            case "SEGMENT":
+                return SEGMENT;
+            case "USER_PROFILE":
+                return USER_PROFILE;
+            case "KNOWLEDGE_DOCUMENT":
+                return KNOWLEDGE_DOCUMENT;
+            case "EVENT":
+                return EVENT;
+            case "FEEDBACK":
+                return FEEDBACK;
+            case "INBOX_ITEM":
+                return INBOX_ITEM;
+            case "INBOX_ITEM_FIX":
+                return INBOX_ITEM_FIX;
+            default:
+                return new EntityType(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        AGENT,
+
+        CONVERSATION,
+
+        CONVERSATION_MESSAGE,
+
+        KNOWLEDGE_BASE,
+
+        KNOWLEDGE_BASE_VERSION,
+
+        KNOWLEDGE_DOCUMENT,
+
+        ACTION,
+
+        USER,
+
+        EVENT,
+
+        EVENT_TRIGGER,
+
+        USER_PROFILE,
+
+        FEEDBACK,
+
+        INBOX_ITEM,
+
+        INBOX_ITEM_FIX,
+
+        SEGMENT,
+
+        CUSTOMER,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitAgent();
+
+        T visitConversation();
+
+        T visitConversationMessage();
+
+        T visitKnowledgeBase();
+
+        T visitKnowledgeBaseVersion();
+
+        T visitKnowledgeDocument();
+
+        T visitAction();
+
+        T visitUser();
+
+        T visitEvent();
+
+        T visitEventTrigger();
+
+        T visitUserProfile();
+
+        T visitFeedback();
+
+        T visitInboxItem();
+
+        T visitInboxItemFix();
+
+        T visitSegment();
+
+        T visitCustomer();
+
+        T visitUnknown(String unknownType);
     }
 }

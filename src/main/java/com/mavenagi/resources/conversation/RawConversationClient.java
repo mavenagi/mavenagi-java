@@ -35,7 +35,6 @@ import com.mavenagi.resources.conversation.types.ConversationsSearchRequest;
 import com.mavenagi.resources.conversation.types.DeliverMessageRequest;
 import com.mavenagi.resources.conversation.types.DeliverMessageResponse;
 import com.mavenagi.resources.conversation.types.FeedbackRequest;
-import com.mavenagi.resources.conversation.types.GenerateMavenSuggestionsRequest;
 import com.mavenagi.resources.conversation.types.ObjectStreamResponse;
 import com.mavenagi.resources.conversation.types.StreamResponse;
 import com.mavenagi.resources.conversation.types.SubmitActionFormRequest;
@@ -301,6 +300,8 @@ public class RawConversationClient {
      * Wipes a conversation of all user data.
      * The conversation ID will still exist and non-user specific data will still be retained.
      * Attempts to modify or add messages to the conversation will throw an error.
+     * <p>Simulation conversations will no longer be visible in search results nor metrics.
+     * Non-simulation conversations will remain visible - they can not be fully removed from the system.</p>
      * <p>&lt;Warning&gt;This is a destructive operation and cannot be undone. &lt;br/&gt;&lt;br/&gt;
      * The exact fields cleared include: the conversation subject, userRequest, agentResponse.
      * As well as the text response, followup questions, and backend LLM prompt of all messages.&lt;/Warning&gt;</p>
@@ -313,6 +314,8 @@ public class RawConversationClient {
      * Wipes a conversation of all user data.
      * The conversation ID will still exist and non-user specific data will still be retained.
      * Attempts to modify or add messages to the conversation will throw an error.
+     * <p>Simulation conversations will no longer be visible in search results nor metrics.
+     * Non-simulation conversations will remain visible - they can not be fully removed from the system.</p>
      * <p>&lt;Warning&gt;This is a destructive operation and cannot be undone. &lt;br/&gt;&lt;br/&gt;
      * The exact fields cleared include: the conversation subject, userRequest, agentResponse.
      * As well as the text response, followup questions, and backend LLM prompt of all messages.&lt;/Warning&gt;</p>
@@ -596,76 +599,6 @@ public class RawConversationClient {
             if (response.isSuccessful()) {
                 return new MavenAGIHttpResponse<>(
                         Stream.fromSse(StreamResponse.class, new ResponseBodyReader(response)), response);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            try {
-                switch (response.code()) {
-                    case 400:
-                        throw new BadRequestError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
-                    case 404:
-                        throw new NotFoundError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
-                    case 500:
-                        throw new ServerError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
-                }
-            } catch (JsonProcessingException ignored) {
-                // unable to map error response, throwing generic error
-            }
-            throw new MavenAGIApiException(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
-                    response);
-        } catch (IOException e) {
-            throw new MavenAGIException("Network error executing HTTP request", e);
-        }
-    }
-
-    /**
-     * This method is deprecated and will be removed in a future release. Use either <code>ask</code> or <code>askStream</code> instead.
-     */
-    public MavenAGIHttpResponse<ConversationResponse> generateMavenSuggestions(
-            String conversationId, GenerateMavenSuggestionsRequest request) {
-        return generateMavenSuggestions(conversationId, request, null);
-    }
-
-    /**
-     * This method is deprecated and will be removed in a future release. Use either <code>ask</code> or <code>askStream</code> instead.
-     */
-    public MavenAGIHttpResponse<ConversationResponse> generateMavenSuggestions(
-            String conversationId, GenerateMavenSuggestionsRequest request, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("v1/conversations")
-                .addPathSegment(conversationId)
-                .addPathSegments("generate_maven_suggestions")
-                .build();
-        RequestBody body;
-        try {
-            body = RequestBody.create(
-                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
-        } catch (JsonProcessingException e) {
-            throw new MavenAGIException("Failed to serialize request", e);
-        }
-        Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
-                .method("POST", body)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
-                .addHeader("Accept", "application/json")
-                .build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return new MavenAGIHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), ConversationResponse.class),
-                        response);
             }
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {

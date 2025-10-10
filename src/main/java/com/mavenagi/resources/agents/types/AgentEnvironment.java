@@ -3,24 +3,91 @@
  */
 package com.mavenagi.resources.agents.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum AgentEnvironment {
-    DEMO("DEMO"),
+public final class AgentEnvironment {
+    public static final AgentEnvironment DEMO = new AgentEnvironment(Value.DEMO, "DEMO");
 
-    STAGING("STAGING"),
+    public static final AgentEnvironment PRODUCTION = new AgentEnvironment(Value.PRODUCTION, "PRODUCTION");
 
-    PRODUCTION("PRODUCTION");
+    public static final AgentEnvironment STAGING = new AgentEnvironment(Value.STAGING, "STAGING");
 
-    private final String value;
+    private final Value value;
 
-    AgentEnvironment(String value) {
+    private final String string;
+
+    AgentEnvironment(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof AgentEnvironment && this.string.equals(((AgentEnvironment) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case DEMO:
+                return visitor.visitDemo();
+            case PRODUCTION:
+                return visitor.visitProduction();
+            case STAGING:
+                return visitor.visitStaging();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static AgentEnvironment valueOf(String value) {
+        switch (value) {
+            case "DEMO":
+                return DEMO;
+            case "PRODUCTION":
+                return PRODUCTION;
+            case "STAGING":
+                return STAGING;
+            default:
+                return new AgentEnvironment(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        DEMO,
+
+        STAGING,
+
+        PRODUCTION,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitDemo();
+
+        T visitStaging();
+
+        T visitProduction();
+
+        T visitUnknown(String unknownType);
     }
 }

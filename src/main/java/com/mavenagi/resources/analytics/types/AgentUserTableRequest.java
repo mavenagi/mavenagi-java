@@ -191,7 +191,9 @@ public final class AgentUserTableRequest implements IAgentUserAnalyticsRequest {
         @JsonSetter(value = "columnDefinitions", nulls = Nulls.SKIP)
         public Builder columnDefinitions(List<AgentUserColumnDefinition> columnDefinitions) {
             this.columnDefinitions.clear();
-            this.columnDefinitions.addAll(columnDefinitions);
+            if (columnDefinitions != null) {
+                this.columnDefinitions.addAll(columnDefinitions);
+            }
             return this;
         }
 
@@ -201,7 +203,9 @@ public final class AgentUserTableRequest implements IAgentUserAnalyticsRequest {
         }
 
         public Builder addAllColumnDefinitions(List<AgentUserColumnDefinition> columnDefinitions) {
-            this.columnDefinitions.addAll(columnDefinitions);
+            if (columnDefinitions != null) {
+                this.columnDefinitions.addAll(columnDefinitions);
+            }
             return this;
         }
 

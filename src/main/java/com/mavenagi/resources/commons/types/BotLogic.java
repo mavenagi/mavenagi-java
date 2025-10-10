@@ -81,7 +81,9 @@ public final class BotLogic {
         @JsonSetter(value = "items", nulls = Nulls.SKIP)
         public Builder items(List<BotLogicItem> items) {
             this.items.clear();
-            this.items.addAll(items);
+            if (items != null) {
+                this.items.addAll(items);
+            }
             return this;
         }
 
@@ -91,7 +93,9 @@ public final class BotLogic {
         }
 
         public Builder addAllItems(List<BotLogicItem> items) {
-            this.items.addAll(items);
+            if (items != null) {
+                this.items.addAll(items);
+            }
             return this;
         }
 

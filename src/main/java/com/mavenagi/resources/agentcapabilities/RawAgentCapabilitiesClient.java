@@ -13,6 +13,8 @@ import com.mavenagi.core.ObjectMappers;
 import com.mavenagi.core.RequestOptions;
 import com.mavenagi.resources.agentcapabilities.types.AgentCapability;
 import com.mavenagi.resources.agentcapabilities.types.AgentCapabilityListRequest;
+import com.mavenagi.resources.agentcapabilities.types.ExecuteCapabilityRequest;
+import com.mavenagi.resources.agentcapabilities.types.ExecuteCapabilityResponse;
 import com.mavenagi.resources.agentcapabilities.types.ListAgentCapabilitiesResponse;
 import com.mavenagi.resources.agentcapabilities.types.PatchAgentCapabilityRequest;
 import com.mavenagi.resources.commons.errors.BadRequestError;
@@ -214,6 +216,90 @@ public class RawAgentCapabilitiesClient {
             if (response.isSuccessful()) {
                 return new MavenAGIHttpResponse<>(
                         ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), AgentCapability.class), response);
+            }
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            try {
+                switch (response.code()) {
+                    case 400:
+                        throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                    case 500:
+                        throw new ServerError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            throw new MavenAGIApiException(
+                    "Error with status code " + response.code(),
+                    response.code(),
+                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                    response);
+        } catch (IOException e) {
+            throw new MavenAGIException("Network error executing HTTP request", e);
+        }
+    }
+
+    /**
+     * Execute an action capability.
+     */
+    public MavenAGIHttpResponse<ExecuteCapabilityResponse> execute(String integrationId, String capabilityId) {
+        return execute(
+                integrationId, capabilityId, ExecuteCapabilityRequest.builder().build());
+    }
+
+    /**
+     * Execute an action capability.
+     */
+    public MavenAGIHttpResponse<ExecuteCapabilityResponse> execute(
+            String integrationId, String capabilityId, ExecuteCapabilityRequest request) {
+        return execute(integrationId, capabilityId, request, null);
+    }
+
+    /**
+     * Execute an action capability.
+     */
+    public MavenAGIHttpResponse<ExecuteCapabilityResponse> execute(
+            String integrationId,
+            String capabilityId,
+            ExecuteCapabilityRequest request,
+            RequestOptions requestOptions) {
+        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("v1")
+                .addPathSegments("integrations")
+                .addPathSegment(integrationId)
+                .addPathSegments("capabilities")
+                .addPathSegment(capabilityId)
+                .addPathSegments("execute")
+                .build();
+        RequestBody body;
+        try {
+            body = RequestBody.create(
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
+        } catch (JsonProcessingException e) {
+            throw new MavenAGIException("Failed to serialize request", e);
+        }
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl)
+                .method("POST", body)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
+                .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            if (response.isSuccessful()) {
+                return new MavenAGIHttpResponse<>(
+                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), ExecuteCapabilityResponse.class),
+                        response);
             }
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {

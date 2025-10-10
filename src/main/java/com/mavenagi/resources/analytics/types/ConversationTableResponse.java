@@ -105,7 +105,9 @@ public final class ConversationTableResponse implements ITableResponseBase {
         @JsonSetter(value = "headers", nulls = Nulls.SKIP)
         public Builder headers(List<String> headers) {
             this.headers.clear();
-            this.headers.addAll(headers);
+            if (headers != null) {
+                this.headers.addAll(headers);
+            }
             return this;
         }
 
@@ -115,7 +117,9 @@ public final class ConversationTableResponse implements ITableResponseBase {
         }
 
         public Builder addAllHeaders(List<String> headers) {
-            this.headers.addAll(headers);
+            if (headers != null) {
+                this.headers.addAll(headers);
+            }
             return this;
         }
 
@@ -127,7 +131,9 @@ public final class ConversationTableResponse implements ITableResponseBase {
         @JsonSetter(value = "rows", nulls = Nulls.SKIP)
         public Builder rows(List<ConversationRow> rows) {
             this.rows.clear();
-            this.rows.addAll(rows);
+            if (rows != null) {
+                this.rows.addAll(rows);
+            }
             return this;
         }
 
@@ -137,7 +143,9 @@ public final class ConversationTableResponse implements ITableResponseBase {
         }
 
         public Builder addAllRows(List<ConversationRow> rows) {
-            this.rows.addAll(rows);
+            if (rows != null) {
+                this.rows.addAll(rows);
+            }
             return this;
         }
 

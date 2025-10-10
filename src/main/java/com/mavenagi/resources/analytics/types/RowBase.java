@@ -87,12 +87,16 @@ public final class RowBase implements IRowBase {
         @JsonSetter(value = "data", nulls = Nulls.SKIP)
         public Builder data(Map<String, CellData> data) {
             this.data.clear();
-            this.data.putAll(data);
+            if (data != null) {
+                this.data.putAll(data);
+            }
             return this;
         }
 
         public Builder putAllData(Map<String, CellData> data) {
-            this.data.putAll(data);
+            if (data != null) {
+                this.data.putAll(data);
+            }
             return this;
         }
 

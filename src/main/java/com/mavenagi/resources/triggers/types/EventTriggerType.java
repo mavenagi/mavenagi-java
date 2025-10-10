@@ -3,26 +3,104 @@
  */
 package com.mavenagi.resources.triggers.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum EventTriggerType {
-    CONVERSATION_CREATED("CONVERSATION_CREATED"),
+public final class EventTriggerType {
+    public static final EventTriggerType FEEDBACK_CREATED =
+            new EventTriggerType(Value.FEEDBACK_CREATED, "FEEDBACK_CREATED");
 
-    FEEDBACK_CREATED("FEEDBACK_CREATED"),
+    public static final EventTriggerType CONVERSATION_CREATED =
+            new EventTriggerType(Value.CONVERSATION_CREATED, "CONVERSATION_CREATED");
 
-    INBOX_ITEM_CREATED("INBOX_ITEM_CREATED"),
+    public static final EventTriggerType INBOX_ITEM_CREATED =
+            new EventTriggerType(Value.INBOX_ITEM_CREATED, "INBOX_ITEM_CREATED");
 
-    EVENT_CREATED("EVENT_CREATED");
+    public static final EventTriggerType EVENT_CREATED = new EventTriggerType(Value.EVENT_CREATED, "EVENT_CREATED");
 
-    private final String value;
+    private final Value value;
 
-    EventTriggerType(String value) {
+    private final String string;
+
+    EventTriggerType(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof EventTriggerType && this.string.equals(((EventTriggerType) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case FEEDBACK_CREATED:
+                return visitor.visitFeedbackCreated();
+            case CONVERSATION_CREATED:
+                return visitor.visitConversationCreated();
+            case INBOX_ITEM_CREATED:
+                return visitor.visitInboxItemCreated();
+            case EVENT_CREATED:
+                return visitor.visitEventCreated();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static EventTriggerType valueOf(String value) {
+        switch (value) {
+            case "FEEDBACK_CREATED":
+                return FEEDBACK_CREATED;
+            case "CONVERSATION_CREATED":
+                return CONVERSATION_CREATED;
+            case "INBOX_ITEM_CREATED":
+                return INBOX_ITEM_CREATED;
+            case "EVENT_CREATED":
+                return EVENT_CREATED;
+            default:
+                return new EventTriggerType(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        CONVERSATION_CREATED,
+
+        FEEDBACK_CREATED,
+
+        INBOX_ITEM_CREATED,
+
+        EVENT_CREATED,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitConversationCreated();
+
+        T visitFeedbackCreated();
+
+        T visitInboxItemCreated();
+
+        T visitEventCreated();
+
+        T visitUnknown(String unknownType);
     }
 }

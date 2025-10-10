@@ -3,22 +3,80 @@
  */
 package com.mavenagi.resources.segments.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum SegmentField {
-    CREATED_AT("CreatedAt"),
+public final class SegmentField {
+    public static final SegmentField NAME = new SegmentField(Value.NAME, "Name");
 
-    NAME("Name");
+    public static final SegmentField CREATED_AT = new SegmentField(Value.CREATED_AT, "CreatedAt");
 
-    private final String value;
+    private final Value value;
 
-    SegmentField(String value) {
+    private final String string;
+
+    SegmentField(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other) || (other instanceof SegmentField && this.string.equals(((SegmentField) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case NAME:
+                return visitor.visitName();
+            case CREATED_AT:
+                return visitor.visitCreatedAt();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static SegmentField valueOf(String value) {
+        switch (value) {
+            case "Name":
+                return NAME;
+            case "CreatedAt":
+                return CREATED_AT;
+            default:
+                return new SegmentField(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        CREATED_AT,
+
+        NAME,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitCreatedAt();
+
+        T visitName();
+
+        T visitUnknown(String unknownType);
     }
 }

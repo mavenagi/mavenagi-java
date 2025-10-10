@@ -3,32 +3,139 @@
  */
 package com.mavenagi.resources.conversation.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum NumericConversationField {
-    THUMBS_UP_COUNT("ThumbsUpCount"),
+public final class NumericConversationField {
+    public static final NumericConversationField THUMBS_DOWN_COUNT =
+            new NumericConversationField(Value.THUMBS_DOWN_COUNT, "ThumbsDownCount");
 
-    THUMBS_DOWN_COUNT("ThumbsDownCount"),
+    public static final NumericConversationField THUMBS_UP_COUNT =
+            new NumericConversationField(Value.THUMBS_UP_COUNT, "ThumbsUpCount");
 
-    INSERT_COUNT("InsertCount"),
+    public static final NumericConversationField USER_MESSAGE_COUNT =
+            new NumericConversationField(Value.USER_MESSAGE_COUNT, "UserMessageCount");
 
-    USER_MESSAGE_COUNT("UserMessageCount"),
+    public static final NumericConversationField HANDLE_TIME =
+            new NumericConversationField(Value.HANDLE_TIME, "HandleTime");
 
-    HANDLE_TIME("HandleTime"),
+    public static final NumericConversationField FIRST_RESPONSE_TIME =
+            new NumericConversationField(Value.FIRST_RESPONSE_TIME, "FirstResponseTime");
 
-    FIRST_RESPONSE_TIME("FirstResponseTime"),
+    public static final NumericConversationField INSERT_COUNT =
+            new NumericConversationField(Value.INSERT_COUNT, "InsertCount");
 
-    PREDICTED_NPS("PredictedNPS");
+    public static final NumericConversationField PREDICTED_NPS =
+            new NumericConversationField(Value.PREDICTED_NPS, "PredictedNPS");
 
-    private final String value;
+    private final Value value;
 
-    NumericConversationField(String value) {
+    private final String string;
+
+    NumericConversationField(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof NumericConversationField
+                        && this.string.equals(((NumericConversationField) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case THUMBS_DOWN_COUNT:
+                return visitor.visitThumbsDownCount();
+            case THUMBS_UP_COUNT:
+                return visitor.visitThumbsUpCount();
+            case USER_MESSAGE_COUNT:
+                return visitor.visitUserMessageCount();
+            case HANDLE_TIME:
+                return visitor.visitHandleTime();
+            case FIRST_RESPONSE_TIME:
+                return visitor.visitFirstResponseTime();
+            case INSERT_COUNT:
+                return visitor.visitInsertCount();
+            case PREDICTED_NPS:
+                return visitor.visitPredictedNps();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static NumericConversationField valueOf(String value) {
+        switch (value) {
+            case "ThumbsDownCount":
+                return THUMBS_DOWN_COUNT;
+            case "ThumbsUpCount":
+                return THUMBS_UP_COUNT;
+            case "UserMessageCount":
+                return USER_MESSAGE_COUNT;
+            case "HandleTime":
+                return HANDLE_TIME;
+            case "FirstResponseTime":
+                return FIRST_RESPONSE_TIME;
+            case "InsertCount":
+                return INSERT_COUNT;
+            case "PredictedNPS":
+                return PREDICTED_NPS;
+            default:
+                return new NumericConversationField(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        THUMBS_UP_COUNT,
+
+        THUMBS_DOWN_COUNT,
+
+        INSERT_COUNT,
+
+        USER_MESSAGE_COUNT,
+
+        HANDLE_TIME,
+
+        FIRST_RESPONSE_TIME,
+
+        PREDICTED_NPS,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitThumbsUpCount();
+
+        T visitThumbsDownCount();
+
+        T visitInsertCount();
+
+        T visitUserMessageCount();
+
+        T visitHandleTime();
+
+        T visitFirstResponseTime();
+
+        T visitPredictedNps();
+
+        T visitUnknown(String unknownType);
     }
 }

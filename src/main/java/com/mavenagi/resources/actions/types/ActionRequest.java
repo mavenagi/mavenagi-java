@@ -356,7 +356,9 @@ public final class ActionRequest implements IActionBase {
          */
         @java.lang.Override
         public _FinalStage addAllUserFormParameters(List<ActionParameter> userFormParameters) {
-            this.userFormParameters.addAll(userFormParameters);
+            if (userFormParameters != null) {
+                this.userFormParameters.addAll(userFormParameters);
+            }
             return this;
         }
 
@@ -377,7 +379,9 @@ public final class ActionRequest implements IActionBase {
         @JsonSetter(value = "userFormParameters", nulls = Nulls.SKIP)
         public _FinalStage userFormParameters(List<ActionParameter> userFormParameters) {
             this.userFormParameters.clear();
-            this.userFormParameters.addAll(userFormParameters);
+            if (userFormParameters != null) {
+                this.userFormParameters.addAll(userFormParameters);
+            }
             return this;
         }
 

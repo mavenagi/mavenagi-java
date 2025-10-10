@@ -95,7 +95,9 @@ public final class BotLogicKnowledgeItem {
         @JsonSetter(value = "knowledgeReviewed", nulls = Nulls.SKIP)
         public Builder knowledgeReviewed(List<BotLogicKnowledgeDetail> knowledgeReviewed) {
             this.knowledgeReviewed.clear();
-            this.knowledgeReviewed.addAll(knowledgeReviewed);
+            if (knowledgeReviewed != null) {
+                this.knowledgeReviewed.addAll(knowledgeReviewed);
+            }
             return this;
         }
 
@@ -105,14 +107,18 @@ public final class BotLogicKnowledgeItem {
         }
 
         public Builder addAllKnowledgeReviewed(List<BotLogicKnowledgeDetail> knowledgeReviewed) {
-            this.knowledgeReviewed.addAll(knowledgeReviewed);
+            if (knowledgeReviewed != null) {
+                this.knowledgeReviewed.addAll(knowledgeReviewed);
+            }
             return this;
         }
 
         @JsonSetter(value = "knowledgeUtilized", nulls = Nulls.SKIP)
         public Builder knowledgeUtilized(List<BotLogicKnowledgeDetail> knowledgeUtilized) {
             this.knowledgeUtilized.clear();
-            this.knowledgeUtilized.addAll(knowledgeUtilized);
+            if (knowledgeUtilized != null) {
+                this.knowledgeUtilized.addAll(knowledgeUtilized);
+            }
             return this;
         }
 
@@ -122,7 +128,9 @@ public final class BotLogicKnowledgeItem {
         }
 
         public Builder addAllKnowledgeUtilized(List<BotLogicKnowledgeDetail> knowledgeUtilized) {
-            this.knowledgeUtilized.addAll(knowledgeUtilized);
+            if (knowledgeUtilized != null) {
+                this.knowledgeUtilized.addAll(knowledgeUtilized);
+            }
             return this;
         }
 

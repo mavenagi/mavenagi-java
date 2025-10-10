@@ -3,132 +3,666 @@
  */
 package com.mavenagi.resources.agents.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum PiiCategory {
-    NAME("Name"),
+public final class PiiCategory {
+    public static final PiiCategory AU_TAX_FILE_NUMBER = new PiiCategory(Value.AU_TAX_FILE_NUMBER, "AuTaxFileNumber");
 
-    EMAIL("Email"),
+    public static final PiiCategory UK_NATIONAL_HEALTH_NUMBER =
+            new PiiCategory(Value.UK_NATIONAL_HEALTH_NUMBER, "UkNationalHealthNumber");
 
-    PHONE_NUMBER("PhoneNumber"),
+    public static final PiiCategory FR_DRIVERS_LICENSE_NUMBER =
+            new PiiCategory(Value.FR_DRIVERS_LICENSE_NUMBER, "FrDriversLicenseNumber");
 
-    STREET_ADDRESS("StreetAddress"),
+    public static final PiiCategory EU_DEBIT_CARD_NUMBER =
+            new PiiCategory(Value.EU_DEBIT_CARD_NUMBER, "EuDebitCardNumber");
 
-    CREDIT_CARD_NUMBER("CreditCardNumber"),
+    public static final PiiCategory NZ_SOCIAL_WELFARE_NUMBER =
+            new PiiCategory(Value.NZ_SOCIAL_WELFARE_NUMBER, "NzSocialWelfareNumber");
 
-    US_BANK_ACCOUNT_NUMBER("UsBankAccountNumber"),
+    public static final PiiCategory EU_NATIONAL_IDENTIFICATION_NUMBER =
+            new PiiCategory(Value.EU_NATIONAL_IDENTIFICATION_NUMBER, "EuNationalIdentificationNumber");
 
-    US_SOCIAL_SECURITY_NUMBER("UsSocialSecurityNumber"),
+    public static final PiiCategory UK_UNIQUE_TAXPAYER_NUMBER =
+            new PiiCategory(Value.UK_UNIQUE_TAXPAYER_NUMBER, "UkUniqueTaxpayerNumber");
 
-    US_UK_PASSPORT_NUMBER("UsUkPassportNumber"),
+    public static final PiiCategory URL = new PiiCategory(Value.URL, "Url");
 
-    US_DRIVERS_LICENSE_NUMBER("UsDriversLicenseNumber"),
+    public static final PiiCategory FR_HEALTH_INSURANCE_NUMBER =
+            new PiiCategory(Value.FR_HEALTH_INSURANCE_NUMBER, "FrHealthInsuranceNumber");
 
-    US_INDIVIDUAL_TAXPAYER_IDENTIFICATION("UsIndividualTaxpayerIdentification"),
+    public static final PiiCategory EMAIL = new PiiCategory(Value.EMAIL, "Email");
 
-    DATE("Date"),
+    public static final PiiCategory NZ_MINISTRY_OF_HEALTH_NUMBER =
+            new PiiCategory(Value.NZ_MINISTRY_OF_HEALTH_NUMBER, "NzMinistryOfHealthNumber");
 
-    IP_ADDRESS("IpAddress"),
+    public static final PiiCategory US_BANK_ACCOUNT_NUMBER =
+            new PiiCategory(Value.US_BANK_ACCOUNT_NUMBER, "UsBankAccountNumber");
 
-    URL("Url"),
+    public static final PiiCategory US_UK_PASSPORT_NUMBER =
+            new PiiCategory(Value.US_UK_PASSPORT_NUMBER, "UsUkPassportNumber");
 
-    ABA_ROUTING_NUMBER("AbaRoutingNumber"),
+    public static final PiiCategory AU_BUSINESS_NUMBER = new PiiCategory(Value.AU_BUSINESS_NUMBER, "AuBusinessNumber");
 
-    AGE("Age"),
+    public static final PiiCategory US_SOCIAL_SECURITY_NUMBER =
+            new PiiCategory(Value.US_SOCIAL_SECURITY_NUMBER, "UsSocialSecurityNumber");
 
-    SWIFT_CODE("SwiftCode"),
+    public static final PiiCategory AU_DRIVERS_LICENSE_NUMBER =
+            new PiiCategory(Value.AU_DRIVERS_LICENSE_NUMBER, "AuDriversLicenseNumber");
 
-    AU_BANK_ACCOUNT_NUMBER("AuBankAccountNumber"),
+    public static final PiiCategory ES_TAX_IDENTIFICATION_NUMBER =
+            new PiiCategory(Value.ES_TAX_IDENTIFICATION_NUMBER, "EsTaxIdentificationNumber");
 
-    AU_BUSINESS_NUMBER("AuBusinessNumber"),
+    public static final PiiCategory FR_PASSPORT_NUMBER = new PiiCategory(Value.FR_PASSPORT_NUMBER, "FrPassportNumber");
 
-    AU_COMPANY_NUMBER("AuCompanyNumber"),
+    public static final PiiCategory AU_BANK_ACCOUNT_NUMBER =
+            new PiiCategory(Value.AU_BANK_ACCOUNT_NUMBER, "AuBankAccountNumber");
 
-    AU_DRIVERS_LICENSE_NUMBER("AuDriversLicenseNumber"),
+    public static final PiiCategory CA_DRIVERS_LICENSE_NUMBER =
+            new PiiCategory(Value.CA_DRIVERS_LICENSE_NUMBER, "CaDriversLicenseNumber");
 
-    AU_MEDICAL_ACCOUNT_NUMBER("AuMedicalAccountNumber"),
+    public static final PiiCategory UK_NATIONAL_INSURANCE_NUMBER =
+            new PiiCategory(Value.UK_NATIONAL_INSURANCE_NUMBER, "UkNationalInsuranceNumber");
 
-    AU_PASSPORT_NUMBER("AuPassportNumber"),
+    public static final PiiCategory NZ_INLAND_REVENUE_NUMBER =
+            new PiiCategory(Value.NZ_INLAND_REVENUE_NUMBER, "NzInlandRevenueNumber");
 
-    AU_TAX_FILE_NUMBER("AuTaxFileNumber"),
+    public static final PiiCategory UK_DRIVERS_LICENSE_NUMBER =
+            new PiiCategory(Value.UK_DRIVERS_LICENSE_NUMBER, "UkDriversLicenseNumber");
 
-    CA_BANK_ACCOUNT_NUMBER("CaBankAccountNumber"),
+    public static final PiiCategory EU_GPS_COORDINATES = new PiiCategory(Value.EU_GPS_COORDINATES, "EuGpsCoordinates");
 
-    CA_DRIVERS_LICENSE_NUMBER("CaDriversLicenseNumber"),
+    public static final PiiCategory CREDIT_CARD_NUMBER = new PiiCategory(Value.CREDIT_CARD_NUMBER, "CreditCardNumber");
 
-    CA_HEALTH_SERVICE_NUMBER("CaHealthServiceNumber"),
+    public static final PiiCategory EU_DRIVERS_LICENSE_NUMBER =
+            new PiiCategory(Value.EU_DRIVERS_LICENSE_NUMBER, "EuDriversLicenseNumber");
 
-    CA_PASSPORT_NUMBER("CaPassportNumber"),
+    public static final PiiCategory NZ_DRIVERS_LICENSE_NUMBER =
+            new PiiCategory(Value.NZ_DRIVERS_LICENSE_NUMBER, "NzDriversLicenseNumber");
 
-    CA_PERSONAL_HEALTH_IDENTIFICATION("CaPersonalHealthIdentification"),
+    public static final PiiCategory FR_NATIONAL_ID = new PiiCategory(Value.FR_NATIONAL_ID, "FrNationalId");
 
-    CA_SOCIAL_INSURANCE_NUMBER("CaSocialInsuranceNumber"),
+    public static final PiiCategory US_DRIVERS_LICENSE_NUMBER =
+            new PiiCategory(Value.US_DRIVERS_LICENSE_NUMBER, "UsDriversLicenseNumber");
 
-    ES_DNI("EsDni"),
+    public static final PiiCategory CA_BANK_ACCOUNT_NUMBER =
+            new PiiCategory(Value.CA_BANK_ACCOUNT_NUMBER, "CaBankAccountNumber");
 
-    ES_SOCIAL_SECURITY_NUMBER("EsSocialSecurityNumber"),
+    public static final PiiCategory AU_MEDICAL_ACCOUNT_NUMBER =
+            new PiiCategory(Value.AU_MEDICAL_ACCOUNT_NUMBER, "AuMedicalAccountNumber");
 
-    ES_TAX_IDENTIFICATION_NUMBER("EsTaxIdentificationNumber"),
+    public static final PiiCategory EU_PASSPORT_NUMBER = new PiiCategory(Value.EU_PASSPORT_NUMBER, "EuPassportNumber");
 
-    EU_DEBIT_CARD_NUMBER("EuDebitCardNumber"),
+    public static final PiiCategory SWIFT_CODE = new PiiCategory(Value.SWIFT_CODE, "SwiftCode");
 
-    EU_DRIVERS_LICENSE_NUMBER("EuDriversLicenseNumber"),
+    public static final PiiCategory EU_TAX_IDENTIFICATION_NUMBER =
+            new PiiCategory(Value.EU_TAX_IDENTIFICATION_NUMBER, "EuTaxIdentificationNumber");
 
-    EU_GPS_COORDINATES("EuGpsCoordinates"),
+    public static final PiiCategory FR_VALUE_ADDED_TAX_NUMBER =
+            new PiiCategory(Value.FR_VALUE_ADDED_TAX_NUMBER, "FrValueAddedTaxNumber");
 
-    EU_NATIONAL_IDENTIFICATION_NUMBER("EuNationalIdentificationNumber"),
+    public static final PiiCategory CA_HEALTH_SERVICE_NUMBER =
+            new PiiCategory(Value.CA_HEALTH_SERVICE_NUMBER, "CaHealthServiceNumber");
 
-    EU_PASSPORT_NUMBER("EuPassportNumber"),
+    public static final PiiCategory CA_PERSONAL_HEALTH_IDENTIFICATION =
+            new PiiCategory(Value.CA_PERSONAL_HEALTH_IDENTIFICATION, "CaPersonalHealthIdentification");
 
-    EU_SOCIAL_SECURITY_NUMBER("EuSocialSecurityNumber"),
+    public static final PiiCategory ES_SOCIAL_SECURITY_NUMBER =
+            new PiiCategory(Value.ES_SOCIAL_SECURITY_NUMBER, "EsSocialSecurityNumber");
 
-    EU_TAX_IDENTIFICATION_NUMBER("EuTaxIdentificationNumber"),
+    public static final PiiCategory NZ_BANK_ACCOUNT_NUMBER =
+            new PiiCategory(Value.NZ_BANK_ACCOUNT_NUMBER, "NzBankAccountNumber");
 
-    FR_DRIVERS_LICENSE_NUMBER("FrDriversLicenseNumber"),
+    public static final PiiCategory NAME = new PiiCategory(Value.NAME, "Name");
 
-    FR_HEALTH_INSURANCE_NUMBER("FrHealthInsuranceNumber"),
+    public static final PiiCategory IP_ADDRESS = new PiiCategory(Value.IP_ADDRESS, "IpAddress");
 
-    FR_NATIONAL_ID("FrNationalId"),
+    public static final PiiCategory AU_COMPANY_NUMBER = new PiiCategory(Value.AU_COMPANY_NUMBER, "AuCompanyNumber");
 
-    FR_PASSPORT_NUMBER("FrPassportNumber"),
+    public static final PiiCategory PHONE_NUMBER = new PiiCategory(Value.PHONE_NUMBER, "PhoneNumber");
 
-    FR_SOCIAL_SECURITY_NUMBER("FrSocialSecurityNumber"),
+    public static final PiiCategory EU_SOCIAL_SECURITY_NUMBER =
+            new PiiCategory(Value.EU_SOCIAL_SECURITY_NUMBER, "EuSocialSecurityNumber");
 
-    FR_TAX_IDENTIFICATION_NUMBER("FrTaxIdentificationNumber"),
+    public static final PiiCategory DATE = new PiiCategory(Value.DATE, "Date");
 
-    FR_VALUE_ADDED_TAX_NUMBER("FrValueAddedTaxNumber"),
+    public static final PiiCategory ES_DNI = new PiiCategory(Value.ES_DNI, "EsDni");
 
-    INTERNATIONAL_BANKING_ACCOUNT_NUMBER("InternationalBankingAccountNumber"),
+    public static final PiiCategory UK_ELECTORAL_ROLL_NUMBER =
+            new PiiCategory(Value.UK_ELECTORAL_ROLL_NUMBER, "UkElectoralRollNumber");
 
-    NZ_BANK_ACCOUNT_NUMBER("NzBankAccountNumber"),
+    public static final PiiCategory FR_SOCIAL_SECURITY_NUMBER =
+            new PiiCategory(Value.FR_SOCIAL_SECURITY_NUMBER, "FrSocialSecurityNumber");
 
-    NZ_DRIVERS_LICENSE_NUMBER("NzDriversLicenseNumber"),
+    public static final PiiCategory CA_SOCIAL_INSURANCE_NUMBER =
+            new PiiCategory(Value.CA_SOCIAL_INSURANCE_NUMBER, "CaSocialInsuranceNumber");
 
-    NZ_INLAND_REVENUE_NUMBER("NzInlandRevenueNumber"),
+    public static final PiiCategory STREET_ADDRESS = new PiiCategory(Value.STREET_ADDRESS, "StreetAddress");
 
-    NZ_MINISTRY_OF_HEALTH_NUMBER("NzMinistryOfHealthNumber"),
+    public static final PiiCategory INTERNATIONAL_BANKING_ACCOUNT_NUMBER =
+            new PiiCategory(Value.INTERNATIONAL_BANKING_ACCOUNT_NUMBER, "InternationalBankingAccountNumber");
 
-    NZ_SOCIAL_WELFARE_NUMBER("NzSocialWelfareNumber"),
+    public static final PiiCategory FR_TAX_IDENTIFICATION_NUMBER =
+            new PiiCategory(Value.FR_TAX_IDENTIFICATION_NUMBER, "FrTaxIdentificationNumber");
 
-    UK_DRIVERS_LICENSE_NUMBER("UkDriversLicenseNumber"),
+    public static final PiiCategory CA_PASSPORT_NUMBER = new PiiCategory(Value.CA_PASSPORT_NUMBER, "CaPassportNumber");
 
-    UK_ELECTORAL_ROLL_NUMBER("UkElectoralRollNumber"),
+    public static final PiiCategory US_INDIVIDUAL_TAXPAYER_IDENTIFICATION =
+            new PiiCategory(Value.US_INDIVIDUAL_TAXPAYER_IDENTIFICATION, "UsIndividualTaxpayerIdentification");
 
-    UK_NATIONAL_HEALTH_NUMBER("UkNationalHealthNumber"),
+    public static final PiiCategory AGE = new PiiCategory(Value.AGE, "Age");
 
-    UK_NATIONAL_INSURANCE_NUMBER("UkNationalInsuranceNumber"),
+    public static final PiiCategory AU_PASSPORT_NUMBER = new PiiCategory(Value.AU_PASSPORT_NUMBER, "AuPassportNumber");
 
-    UK_UNIQUE_TAXPAYER_NUMBER("UkUniqueTaxpayerNumber");
+    public static final PiiCategory ABA_ROUTING_NUMBER = new PiiCategory(Value.ABA_ROUTING_NUMBER, "AbaRoutingNumber");
 
-    private final String value;
+    private final Value value;
 
-    PiiCategory(String value) {
+    private final String string;
+
+    PiiCategory(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other) || (other instanceof PiiCategory && this.string.equals(((PiiCategory) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case AU_TAX_FILE_NUMBER:
+                return visitor.visitAuTaxFileNumber();
+            case UK_NATIONAL_HEALTH_NUMBER:
+                return visitor.visitUkNationalHealthNumber();
+            case FR_DRIVERS_LICENSE_NUMBER:
+                return visitor.visitFrDriversLicenseNumber();
+            case EU_DEBIT_CARD_NUMBER:
+                return visitor.visitEuDebitCardNumber();
+            case NZ_SOCIAL_WELFARE_NUMBER:
+                return visitor.visitNzSocialWelfareNumber();
+            case EU_NATIONAL_IDENTIFICATION_NUMBER:
+                return visitor.visitEuNationalIdentificationNumber();
+            case UK_UNIQUE_TAXPAYER_NUMBER:
+                return visitor.visitUkUniqueTaxpayerNumber();
+            case URL:
+                return visitor.visitUrl();
+            case FR_HEALTH_INSURANCE_NUMBER:
+                return visitor.visitFrHealthInsuranceNumber();
+            case EMAIL:
+                return visitor.visitEmail();
+            case NZ_MINISTRY_OF_HEALTH_NUMBER:
+                return visitor.visitNzMinistryOfHealthNumber();
+            case US_BANK_ACCOUNT_NUMBER:
+                return visitor.visitUsBankAccountNumber();
+            case US_UK_PASSPORT_NUMBER:
+                return visitor.visitUsUkPassportNumber();
+            case AU_BUSINESS_NUMBER:
+                return visitor.visitAuBusinessNumber();
+            case US_SOCIAL_SECURITY_NUMBER:
+                return visitor.visitUsSocialSecurityNumber();
+            case AU_DRIVERS_LICENSE_NUMBER:
+                return visitor.visitAuDriversLicenseNumber();
+            case ES_TAX_IDENTIFICATION_NUMBER:
+                return visitor.visitEsTaxIdentificationNumber();
+            case FR_PASSPORT_NUMBER:
+                return visitor.visitFrPassportNumber();
+            case AU_BANK_ACCOUNT_NUMBER:
+                return visitor.visitAuBankAccountNumber();
+            case CA_DRIVERS_LICENSE_NUMBER:
+                return visitor.visitCaDriversLicenseNumber();
+            case UK_NATIONAL_INSURANCE_NUMBER:
+                return visitor.visitUkNationalInsuranceNumber();
+            case NZ_INLAND_REVENUE_NUMBER:
+                return visitor.visitNzInlandRevenueNumber();
+            case UK_DRIVERS_LICENSE_NUMBER:
+                return visitor.visitUkDriversLicenseNumber();
+            case EU_GPS_COORDINATES:
+                return visitor.visitEuGpsCoordinates();
+            case CREDIT_CARD_NUMBER:
+                return visitor.visitCreditCardNumber();
+            case EU_DRIVERS_LICENSE_NUMBER:
+                return visitor.visitEuDriversLicenseNumber();
+            case NZ_DRIVERS_LICENSE_NUMBER:
+                return visitor.visitNzDriversLicenseNumber();
+            case FR_NATIONAL_ID:
+                return visitor.visitFrNationalId();
+            case US_DRIVERS_LICENSE_NUMBER:
+                return visitor.visitUsDriversLicenseNumber();
+            case CA_BANK_ACCOUNT_NUMBER:
+                return visitor.visitCaBankAccountNumber();
+            case AU_MEDICAL_ACCOUNT_NUMBER:
+                return visitor.visitAuMedicalAccountNumber();
+            case EU_PASSPORT_NUMBER:
+                return visitor.visitEuPassportNumber();
+            case SWIFT_CODE:
+                return visitor.visitSwiftCode();
+            case EU_TAX_IDENTIFICATION_NUMBER:
+                return visitor.visitEuTaxIdentificationNumber();
+            case FR_VALUE_ADDED_TAX_NUMBER:
+                return visitor.visitFrValueAddedTaxNumber();
+            case CA_HEALTH_SERVICE_NUMBER:
+                return visitor.visitCaHealthServiceNumber();
+            case CA_PERSONAL_HEALTH_IDENTIFICATION:
+                return visitor.visitCaPersonalHealthIdentification();
+            case ES_SOCIAL_SECURITY_NUMBER:
+                return visitor.visitEsSocialSecurityNumber();
+            case NZ_BANK_ACCOUNT_NUMBER:
+                return visitor.visitNzBankAccountNumber();
+            case NAME:
+                return visitor.visitName();
+            case IP_ADDRESS:
+                return visitor.visitIpAddress();
+            case AU_COMPANY_NUMBER:
+                return visitor.visitAuCompanyNumber();
+            case PHONE_NUMBER:
+                return visitor.visitPhoneNumber();
+            case EU_SOCIAL_SECURITY_NUMBER:
+                return visitor.visitEuSocialSecurityNumber();
+            case DATE:
+                return visitor.visitDate();
+            case ES_DNI:
+                return visitor.visitEsDni();
+            case UK_ELECTORAL_ROLL_NUMBER:
+                return visitor.visitUkElectoralRollNumber();
+            case FR_SOCIAL_SECURITY_NUMBER:
+                return visitor.visitFrSocialSecurityNumber();
+            case CA_SOCIAL_INSURANCE_NUMBER:
+                return visitor.visitCaSocialInsuranceNumber();
+            case STREET_ADDRESS:
+                return visitor.visitStreetAddress();
+            case INTERNATIONAL_BANKING_ACCOUNT_NUMBER:
+                return visitor.visitInternationalBankingAccountNumber();
+            case FR_TAX_IDENTIFICATION_NUMBER:
+                return visitor.visitFrTaxIdentificationNumber();
+            case CA_PASSPORT_NUMBER:
+                return visitor.visitCaPassportNumber();
+            case US_INDIVIDUAL_TAXPAYER_IDENTIFICATION:
+                return visitor.visitUsIndividualTaxpayerIdentification();
+            case AGE:
+                return visitor.visitAge();
+            case AU_PASSPORT_NUMBER:
+                return visitor.visitAuPassportNumber();
+            case ABA_ROUTING_NUMBER:
+                return visitor.visitAbaRoutingNumber();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static PiiCategory valueOf(String value) {
+        switch (value) {
+            case "AuTaxFileNumber":
+                return AU_TAX_FILE_NUMBER;
+            case "UkNationalHealthNumber":
+                return UK_NATIONAL_HEALTH_NUMBER;
+            case "FrDriversLicenseNumber":
+                return FR_DRIVERS_LICENSE_NUMBER;
+            case "EuDebitCardNumber":
+                return EU_DEBIT_CARD_NUMBER;
+            case "NzSocialWelfareNumber":
+                return NZ_SOCIAL_WELFARE_NUMBER;
+            case "EuNationalIdentificationNumber":
+                return EU_NATIONAL_IDENTIFICATION_NUMBER;
+            case "UkUniqueTaxpayerNumber":
+                return UK_UNIQUE_TAXPAYER_NUMBER;
+            case "Url":
+                return URL;
+            case "FrHealthInsuranceNumber":
+                return FR_HEALTH_INSURANCE_NUMBER;
+            case "Email":
+                return EMAIL;
+            case "NzMinistryOfHealthNumber":
+                return NZ_MINISTRY_OF_HEALTH_NUMBER;
+            case "UsBankAccountNumber":
+                return US_BANK_ACCOUNT_NUMBER;
+            case "UsUkPassportNumber":
+                return US_UK_PASSPORT_NUMBER;
+            case "AuBusinessNumber":
+                return AU_BUSINESS_NUMBER;
+            case "UsSocialSecurityNumber":
+                return US_SOCIAL_SECURITY_NUMBER;
+            case "AuDriversLicenseNumber":
+                return AU_DRIVERS_LICENSE_NUMBER;
+            case "EsTaxIdentificationNumber":
+                return ES_TAX_IDENTIFICATION_NUMBER;
+            case "FrPassportNumber":
+                return FR_PASSPORT_NUMBER;
+            case "AuBankAccountNumber":
+                return AU_BANK_ACCOUNT_NUMBER;
+            case "CaDriversLicenseNumber":
+                return CA_DRIVERS_LICENSE_NUMBER;
+            case "UkNationalInsuranceNumber":
+                return UK_NATIONAL_INSURANCE_NUMBER;
+            case "NzInlandRevenueNumber":
+                return NZ_INLAND_REVENUE_NUMBER;
+            case "UkDriversLicenseNumber":
+                return UK_DRIVERS_LICENSE_NUMBER;
+            case "EuGpsCoordinates":
+                return EU_GPS_COORDINATES;
+            case "CreditCardNumber":
+                return CREDIT_CARD_NUMBER;
+            case "EuDriversLicenseNumber":
+                return EU_DRIVERS_LICENSE_NUMBER;
+            case "NzDriversLicenseNumber":
+                return NZ_DRIVERS_LICENSE_NUMBER;
+            case "FrNationalId":
+                return FR_NATIONAL_ID;
+            case "UsDriversLicenseNumber":
+                return US_DRIVERS_LICENSE_NUMBER;
+            case "CaBankAccountNumber":
+                return CA_BANK_ACCOUNT_NUMBER;
+            case "AuMedicalAccountNumber":
+                return AU_MEDICAL_ACCOUNT_NUMBER;
+            case "EuPassportNumber":
+                return EU_PASSPORT_NUMBER;
+            case "SwiftCode":
+                return SWIFT_CODE;
+            case "EuTaxIdentificationNumber":
+                return EU_TAX_IDENTIFICATION_NUMBER;
+            case "FrValueAddedTaxNumber":
+                return FR_VALUE_ADDED_TAX_NUMBER;
+            case "CaHealthServiceNumber":
+                return CA_HEALTH_SERVICE_NUMBER;
+            case "CaPersonalHealthIdentification":
+                return CA_PERSONAL_HEALTH_IDENTIFICATION;
+            case "EsSocialSecurityNumber":
+                return ES_SOCIAL_SECURITY_NUMBER;
+            case "NzBankAccountNumber":
+                return NZ_BANK_ACCOUNT_NUMBER;
+            case "Name":
+                return NAME;
+            case "IpAddress":
+                return IP_ADDRESS;
+            case "AuCompanyNumber":
+                return AU_COMPANY_NUMBER;
+            case "PhoneNumber":
+                return PHONE_NUMBER;
+            case "EuSocialSecurityNumber":
+                return EU_SOCIAL_SECURITY_NUMBER;
+            case "Date":
+                return DATE;
+            case "EsDni":
+                return ES_DNI;
+            case "UkElectoralRollNumber":
+                return UK_ELECTORAL_ROLL_NUMBER;
+            case "FrSocialSecurityNumber":
+                return FR_SOCIAL_SECURITY_NUMBER;
+            case "CaSocialInsuranceNumber":
+                return CA_SOCIAL_INSURANCE_NUMBER;
+            case "StreetAddress":
+                return STREET_ADDRESS;
+            case "InternationalBankingAccountNumber":
+                return INTERNATIONAL_BANKING_ACCOUNT_NUMBER;
+            case "FrTaxIdentificationNumber":
+                return FR_TAX_IDENTIFICATION_NUMBER;
+            case "CaPassportNumber":
+                return CA_PASSPORT_NUMBER;
+            case "UsIndividualTaxpayerIdentification":
+                return US_INDIVIDUAL_TAXPAYER_IDENTIFICATION;
+            case "Age":
+                return AGE;
+            case "AuPassportNumber":
+                return AU_PASSPORT_NUMBER;
+            case "AbaRoutingNumber":
+                return ABA_ROUTING_NUMBER;
+            default:
+                return new PiiCategory(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        NAME,
+
+        EMAIL,
+
+        PHONE_NUMBER,
+
+        STREET_ADDRESS,
+
+        CREDIT_CARD_NUMBER,
+
+        US_BANK_ACCOUNT_NUMBER,
+
+        US_SOCIAL_SECURITY_NUMBER,
+
+        US_UK_PASSPORT_NUMBER,
+
+        US_DRIVERS_LICENSE_NUMBER,
+
+        US_INDIVIDUAL_TAXPAYER_IDENTIFICATION,
+
+        DATE,
+
+        IP_ADDRESS,
+
+        URL,
+
+        ABA_ROUTING_NUMBER,
+
+        AGE,
+
+        SWIFT_CODE,
+
+        AU_BANK_ACCOUNT_NUMBER,
+
+        AU_BUSINESS_NUMBER,
+
+        AU_COMPANY_NUMBER,
+
+        AU_DRIVERS_LICENSE_NUMBER,
+
+        AU_MEDICAL_ACCOUNT_NUMBER,
+
+        AU_PASSPORT_NUMBER,
+
+        AU_TAX_FILE_NUMBER,
+
+        CA_BANK_ACCOUNT_NUMBER,
+
+        CA_DRIVERS_LICENSE_NUMBER,
+
+        CA_HEALTH_SERVICE_NUMBER,
+
+        CA_PASSPORT_NUMBER,
+
+        CA_PERSONAL_HEALTH_IDENTIFICATION,
+
+        CA_SOCIAL_INSURANCE_NUMBER,
+
+        ES_DNI,
+
+        ES_SOCIAL_SECURITY_NUMBER,
+
+        ES_TAX_IDENTIFICATION_NUMBER,
+
+        EU_DEBIT_CARD_NUMBER,
+
+        EU_DRIVERS_LICENSE_NUMBER,
+
+        EU_GPS_COORDINATES,
+
+        EU_NATIONAL_IDENTIFICATION_NUMBER,
+
+        EU_PASSPORT_NUMBER,
+
+        EU_SOCIAL_SECURITY_NUMBER,
+
+        EU_TAX_IDENTIFICATION_NUMBER,
+
+        FR_DRIVERS_LICENSE_NUMBER,
+
+        FR_HEALTH_INSURANCE_NUMBER,
+
+        FR_NATIONAL_ID,
+
+        FR_PASSPORT_NUMBER,
+
+        FR_SOCIAL_SECURITY_NUMBER,
+
+        FR_TAX_IDENTIFICATION_NUMBER,
+
+        FR_VALUE_ADDED_TAX_NUMBER,
+
+        INTERNATIONAL_BANKING_ACCOUNT_NUMBER,
+
+        NZ_BANK_ACCOUNT_NUMBER,
+
+        NZ_DRIVERS_LICENSE_NUMBER,
+
+        NZ_INLAND_REVENUE_NUMBER,
+
+        NZ_MINISTRY_OF_HEALTH_NUMBER,
+
+        NZ_SOCIAL_WELFARE_NUMBER,
+
+        UK_DRIVERS_LICENSE_NUMBER,
+
+        UK_ELECTORAL_ROLL_NUMBER,
+
+        UK_NATIONAL_HEALTH_NUMBER,
+
+        UK_NATIONAL_INSURANCE_NUMBER,
+
+        UK_UNIQUE_TAXPAYER_NUMBER,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitName();
+
+        T visitEmail();
+
+        T visitPhoneNumber();
+
+        T visitStreetAddress();
+
+        T visitCreditCardNumber();
+
+        T visitUsBankAccountNumber();
+
+        T visitUsSocialSecurityNumber();
+
+        T visitUsUkPassportNumber();
+
+        T visitUsDriversLicenseNumber();
+
+        T visitUsIndividualTaxpayerIdentification();
+
+        T visitDate();
+
+        T visitIpAddress();
+
+        T visitUrl();
+
+        T visitAbaRoutingNumber();
+
+        T visitAge();
+
+        T visitSwiftCode();
+
+        T visitAuBankAccountNumber();
+
+        T visitAuBusinessNumber();
+
+        T visitAuCompanyNumber();
+
+        T visitAuDriversLicenseNumber();
+
+        T visitAuMedicalAccountNumber();
+
+        T visitAuPassportNumber();
+
+        T visitAuTaxFileNumber();
+
+        T visitCaBankAccountNumber();
+
+        T visitCaDriversLicenseNumber();
+
+        T visitCaHealthServiceNumber();
+
+        T visitCaPassportNumber();
+
+        T visitCaPersonalHealthIdentification();
+
+        T visitCaSocialInsuranceNumber();
+
+        T visitEsDni();
+
+        T visitEsSocialSecurityNumber();
+
+        T visitEsTaxIdentificationNumber();
+
+        T visitEuDebitCardNumber();
+
+        T visitEuDriversLicenseNumber();
+
+        T visitEuGpsCoordinates();
+
+        T visitEuNationalIdentificationNumber();
+
+        T visitEuPassportNumber();
+
+        T visitEuSocialSecurityNumber();
+
+        T visitEuTaxIdentificationNumber();
+
+        T visitFrDriversLicenseNumber();
+
+        T visitFrHealthInsuranceNumber();
+
+        T visitFrNationalId();
+
+        T visitFrPassportNumber();
+
+        T visitFrSocialSecurityNumber();
+
+        T visitFrTaxIdentificationNumber();
+
+        T visitFrValueAddedTaxNumber();
+
+        T visitInternationalBankingAccountNumber();
+
+        T visitNzBankAccountNumber();
+
+        T visitNzDriversLicenseNumber();
+
+        T visitNzInlandRevenueNumber();
+
+        T visitNzMinistryOfHealthNumber();
+
+        T visitNzSocialWelfareNumber();
+
+        T visitUkDriversLicenseNumber();
+
+        T visitUkElectoralRollNumber();
+
+        T visitUkNationalHealthNumber();
+
+        T visitUkNationalInsuranceNumber();
+
+        T visitUkUniqueTaxpayerNumber();
+
+        T visitUnknown(String unknownType);
     }
 }

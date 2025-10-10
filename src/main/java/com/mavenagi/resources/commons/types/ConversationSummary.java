@@ -32,6 +32,8 @@ public final class ConversationSummary {
 
     private final int thumbsDownCount;
 
+    private final int handoffCount;
+
     private final int userMessageCount;
 
     private final Optional<Long> handleTime;
@@ -52,6 +54,7 @@ public final class ConversationSummary {
             int insertCount,
             int thumbsUpCount,
             int thumbsDownCount,
+            int handoffCount,
             int userMessageCount,
             Optional<Long> handleTime,
             Optional<Long> humanAgentResponseDelay,
@@ -64,6 +67,7 @@ public final class ConversationSummary {
         this.insertCount = insertCount;
         this.thumbsUpCount = thumbsUpCount;
         this.thumbsDownCount = thumbsDownCount;
+        this.handoffCount = handoffCount;
         this.userMessageCount = userMessageCount;
         this.handleTime = handleTime;
         this.humanAgentResponseDelay = humanAgentResponseDelay;
@@ -111,6 +115,14 @@ public final class ConversationSummary {
     @JsonProperty("thumbsDownCount")
     public int getThumbsDownCount() {
         return thumbsDownCount;
+    }
+
+    /**
+     * @return The number of bot response messages that failed and returned the Agent's system fallback message.
+     */
+    @JsonProperty("handoffCount")
+    public int getHandoffCount() {
+        return handoffCount;
     }
 
     /**
@@ -182,6 +194,7 @@ public final class ConversationSummary {
                 && insertCount == other.insertCount
                 && thumbsUpCount == other.thumbsUpCount
                 && thumbsDownCount == other.thumbsDownCount
+                && handoffCount == other.handoffCount
                 && userMessageCount == other.userMessageCount
                 && handleTime.equals(other.handleTime)
                 && humanAgentResponseDelay.equals(other.humanAgentResponseDelay)
@@ -198,6 +211,7 @@ public final class ConversationSummary {
                 this.insertCount,
                 this.thumbsUpCount,
                 this.thumbsDownCount,
+                this.handoffCount,
                 this.userMessageCount,
                 this.handleTime,
                 this.humanAgentResponseDelay,
@@ -235,7 +249,14 @@ public final class ConversationSummary {
         /**
          * <p>The number of thumbs down events on messages in the conversation.</p>
          */
-        UserMessageCountStage thumbsDownCount(int thumbsDownCount);
+        HandoffCountStage thumbsDownCount(int thumbsDownCount);
+    }
+
+    public interface HandoffCountStage {
+        /**
+         * <p>The number of bot response messages that failed and returned the Agent's system fallback message.</p>
+         */
+        UserMessageCountStage handoffCount(int handoffCount);
     }
 
     public interface UserMessageCountStage {
@@ -314,12 +335,19 @@ public final class ConversationSummary {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
-            implements InsertCountStage, ThumbsUpCountStage, ThumbsDownCountStage, UserMessageCountStage, _FinalStage {
+            implements InsertCountStage,
+                    ThumbsUpCountStage,
+                    ThumbsDownCountStage,
+                    HandoffCountStage,
+                    UserMessageCountStage,
+                    _FinalStage {
         private int insertCount;
 
         private int thumbsUpCount;
 
         private int thumbsDownCount;
+
+        private int handoffCount;
 
         private int userMessageCount;
 
@@ -349,6 +377,7 @@ public final class ConversationSummary {
             insertCount(other.getInsertCount());
             thumbsUpCount(other.getThumbsUpCount());
             thumbsDownCount(other.getThumbsDownCount());
+            handoffCount(other.getHandoffCount());
             userMessageCount(other.getUserMessageCount());
             handleTime(other.getHandleTime());
             humanAgentResponseDelay(other.getHumanAgentResponseDelay());
@@ -389,8 +418,20 @@ public final class ConversationSummary {
          */
         @java.lang.Override
         @JsonSetter("thumbsDownCount")
-        public UserMessageCountStage thumbsDownCount(int thumbsDownCount) {
+        public HandoffCountStage thumbsDownCount(int thumbsDownCount) {
             this.thumbsDownCount = thumbsDownCount;
+            return this;
+        }
+
+        /**
+         * <p>The number of bot response messages that failed and returned the Agent's system fallback message.</p>
+         * <p>The number of bot response messages that failed and returned the Agent's system fallback message.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("handoffCount")
+        public UserMessageCountStage handoffCount(int handoffCount) {
+            this.handoffCount = handoffCount;
             return this;
         }
 
@@ -412,7 +453,9 @@ public final class ConversationSummary {
          */
         @java.lang.Override
         public _FinalStage addAllUsers(List<String> users) {
-            this.users.addAll(users);
+            if (users != null) {
+                this.users.addAll(users);
+            }
             return this;
         }
 
@@ -433,7 +476,9 @@ public final class ConversationSummary {
         @JsonSetter(value = "users", nulls = Nulls.SKIP)
         public _FinalStage users(List<String> users) {
             this.users.clear();
-            this.users.addAll(users);
+            if (users != null) {
+                this.users.addAll(users);
+            }
             return this;
         }
 
@@ -443,7 +488,9 @@ public final class ConversationSummary {
          */
         @java.lang.Override
         public _FinalStage addAllHumanAgentsWithInserts(List<String> humanAgentsWithInserts) {
-            this.humanAgentsWithInserts.addAll(humanAgentsWithInserts);
+            if (humanAgentsWithInserts != null) {
+                this.humanAgentsWithInserts.addAll(humanAgentsWithInserts);
+            }
             return this;
         }
 
@@ -464,7 +511,9 @@ public final class ConversationSummary {
         @JsonSetter(value = "humanAgentsWithInserts", nulls = Nulls.SKIP)
         public _FinalStage humanAgentsWithInserts(List<String> humanAgentsWithInserts) {
             this.humanAgentsWithInserts.clear();
-            this.humanAgentsWithInserts.addAll(humanAgentsWithInserts);
+            if (humanAgentsWithInserts != null) {
+                this.humanAgentsWithInserts.addAll(humanAgentsWithInserts);
+            }
             return this;
         }
 
@@ -474,7 +523,9 @@ public final class ConversationSummary {
          */
         @java.lang.Override
         public _FinalStage addAllHumanAgents(List<String> humanAgents) {
-            this.humanAgents.addAll(humanAgents);
+            if (humanAgents != null) {
+                this.humanAgents.addAll(humanAgents);
+            }
             return this;
         }
 
@@ -495,7 +546,9 @@ public final class ConversationSummary {
         @JsonSetter(value = "humanAgents", nulls = Nulls.SKIP)
         public _FinalStage humanAgents(List<String> humanAgents) {
             this.humanAgents.clear();
-            this.humanAgents.addAll(humanAgents);
+            if (humanAgents != null) {
+                this.humanAgents.addAll(humanAgents);
+            }
             return this;
         }
 
@@ -553,7 +606,9 @@ public final class ConversationSummary {
          */
         @java.lang.Override
         public _FinalStage addAllIncompleteActionIds(List<EntityIdWithoutAgent> incompleteActionIds) {
-            this.incompleteActionIds.addAll(incompleteActionIds);
+            if (incompleteActionIds != null) {
+                this.incompleteActionIds.addAll(incompleteActionIds);
+            }
             return this;
         }
 
@@ -574,7 +629,9 @@ public final class ConversationSummary {
         @JsonSetter(value = "incompleteActionIds", nulls = Nulls.SKIP)
         public _FinalStage incompleteActionIds(List<EntityIdWithoutAgent> incompleteActionIds) {
             this.incompleteActionIds.clear();
-            this.incompleteActionIds.addAll(incompleteActionIds);
+            if (incompleteActionIds != null) {
+                this.incompleteActionIds.addAll(incompleteActionIds);
+            }
             return this;
         }
 
@@ -584,7 +641,9 @@ public final class ConversationSummary {
          */
         @java.lang.Override
         public _FinalStage addAllActionIds(List<EntityIdWithoutAgent> actionIds) {
-            this.actionIds.addAll(actionIds);
+            if (actionIds != null) {
+                this.actionIds.addAll(actionIds);
+            }
             return this;
         }
 
@@ -605,7 +664,9 @@ public final class ConversationSummary {
         @JsonSetter(value = "actionIds", nulls = Nulls.SKIP)
         public _FinalStage actionIds(List<EntityIdWithoutAgent> actionIds) {
             this.actionIds.clear();
-            this.actionIds.addAll(actionIds);
+            if (actionIds != null) {
+                this.actionIds.addAll(actionIds);
+            }
             return this;
         }
 
@@ -617,6 +678,7 @@ public final class ConversationSummary {
                     insertCount,
                     thumbsUpCount,
                     thumbsDownCount,
+                    handoffCount,
                     userMessageCount,
                     handleTime,
                     humanAgentResponseDelay,

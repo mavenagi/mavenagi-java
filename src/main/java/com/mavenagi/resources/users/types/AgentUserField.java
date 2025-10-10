@@ -3,22 +3,81 @@
  */
 package com.mavenagi.resources.users.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum AgentUserField {
-    CREATED_AT("CreatedAt"),
+public final class AgentUserField {
+    public static final AgentUserField UPDATED_AT = new AgentUserField(Value.UPDATED_AT, "UpdatedAt");
 
-    UPDATED_AT("UpdatedAt");
+    public static final AgentUserField CREATED_AT = new AgentUserField(Value.CREATED_AT, "CreatedAt");
 
-    private final String value;
+    private final Value value;
 
-    AgentUserField(String value) {
+    private final String string;
+
+    AgentUserField(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof AgentUserField && this.string.equals(((AgentUserField) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case UPDATED_AT:
+                return visitor.visitUpdatedAt();
+            case CREATED_AT:
+                return visitor.visitCreatedAt();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static AgentUserField valueOf(String value) {
+        switch (value) {
+            case "UpdatedAt":
+                return UPDATED_AT;
+            case "CreatedAt":
+                return CREATED_AT;
+            default:
+                return new AgentUserField(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        CREATED_AT,
+
+        UPDATED_AT,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitCreatedAt();
+
+        T visitUpdatedAt();
+
+        T visitUnknown(String unknownType);
     }
 }

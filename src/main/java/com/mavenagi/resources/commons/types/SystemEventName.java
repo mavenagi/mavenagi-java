@@ -3,24 +3,91 @@
  */
 package com.mavenagi.resources.commons.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum SystemEventName {
-    APP_INSTALLED("APP_INSTALLED"),
+public final class SystemEventName {
+    public static final SystemEventName APP_UPDATED = new SystemEventName(Value.APP_UPDATED, "APP_UPDATED");
 
-    APP_UNINSTALLED("APP_UNINSTALLED"),
+    public static final SystemEventName APP_UNINSTALLED = new SystemEventName(Value.APP_UNINSTALLED, "APP_UNINSTALLED");
 
-    APP_UPDATED("APP_UPDATED");
+    public static final SystemEventName APP_INSTALLED = new SystemEventName(Value.APP_INSTALLED, "APP_INSTALLED");
 
-    private final String value;
+    private final Value value;
 
-    SystemEventName(String value) {
+    private final String string;
+
+    SystemEventName(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof SystemEventName && this.string.equals(((SystemEventName) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case APP_UPDATED:
+                return visitor.visitAppUpdated();
+            case APP_UNINSTALLED:
+                return visitor.visitAppUninstalled();
+            case APP_INSTALLED:
+                return visitor.visitAppInstalled();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static SystemEventName valueOf(String value) {
+        switch (value) {
+            case "APP_UPDATED":
+                return APP_UPDATED;
+            case "APP_UNINSTALLED":
+                return APP_UNINSTALLED;
+            case "APP_INSTALLED":
+                return APP_INSTALLED;
+            default:
+                return new SystemEventName(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        APP_INSTALLED,
+
+        APP_UNINSTALLED,
+
+        APP_UPDATED,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitAppInstalled();
+
+        T visitAppUninstalled();
+
+        T visitAppUpdated();
+
+        T visitUnknown(String unknownType);
     }
 }

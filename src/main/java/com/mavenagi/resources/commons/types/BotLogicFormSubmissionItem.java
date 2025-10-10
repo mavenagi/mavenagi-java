@@ -216,7 +216,9 @@ public final class BotLogicFormSubmissionItem implements IBotLogicActionExecuted
 
         @java.lang.Override
         public _FinalStage putAllActionParameters(Map<String, ActionExecutionParamValue> actionParameters) {
-            this.actionParameters.putAll(actionParameters);
+            if (actionParameters != null) {
+                this.actionParameters.putAll(actionParameters);
+            }
             return this;
         }
 
@@ -224,7 +226,9 @@ public final class BotLogicFormSubmissionItem implements IBotLogicActionExecuted
         @JsonSetter(value = "actionParameters", nulls = Nulls.SKIP)
         public _FinalStage actionParameters(Map<String, ActionExecutionParamValue> actionParameters) {
             this.actionParameters.clear();
-            this.actionParameters.putAll(actionParameters);
+            if (actionParameters != null) {
+                this.actionParameters.putAll(actionParameters);
+            }
             return this;
         }
 

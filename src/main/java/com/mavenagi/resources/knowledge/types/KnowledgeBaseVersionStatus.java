@@ -3,24 +3,94 @@
  */
 package com.mavenagi.resources.knowledge.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum KnowledgeBaseVersionStatus {
-    SUCCEEDED("SUCCEEDED"),
+public final class KnowledgeBaseVersionStatus {
+    public static final KnowledgeBaseVersionStatus IN_PROGRESS =
+            new KnowledgeBaseVersionStatus(Value.IN_PROGRESS, "IN_PROGRESS");
 
-    FAILED("FAILED"),
+    public static final KnowledgeBaseVersionStatus SUCCEEDED =
+            new KnowledgeBaseVersionStatus(Value.SUCCEEDED, "SUCCEEDED");
 
-    IN_PROGRESS("IN_PROGRESS");
+    public static final KnowledgeBaseVersionStatus FAILED = new KnowledgeBaseVersionStatus(Value.FAILED, "FAILED");
 
-    private final String value;
+    private final Value value;
 
-    KnowledgeBaseVersionStatus(String value) {
+    private final String string;
+
+    KnowledgeBaseVersionStatus(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof KnowledgeBaseVersionStatus
+                        && this.string.equals(((KnowledgeBaseVersionStatus) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case IN_PROGRESS:
+                return visitor.visitInProgress();
+            case SUCCEEDED:
+                return visitor.visitSucceeded();
+            case FAILED:
+                return visitor.visitFailed();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static KnowledgeBaseVersionStatus valueOf(String value) {
+        switch (value) {
+            case "IN_PROGRESS":
+                return IN_PROGRESS;
+            case "SUCCEEDED":
+                return SUCCEEDED;
+            case "FAILED":
+                return FAILED;
+            default:
+                return new KnowledgeBaseVersionStatus(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        SUCCEEDED,
+
+        FAILED,
+
+        IN_PROGRESS,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitSucceeded();
+
+        T visitFailed();
+
+        T visitInProgress();
+
+        T visitUnknown(String unknownType);
     }
 }

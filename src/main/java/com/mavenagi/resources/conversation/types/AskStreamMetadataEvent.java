@@ -118,7 +118,9 @@ public final class AskStreamMetadataEvent implements IBotResponseMetadata {
         @JsonSetter(value = "followupQuestions", nulls = Nulls.SKIP)
         public Builder followupQuestions(List<String> followupQuestions) {
             this.followupQuestions.clear();
-            this.followupQuestions.addAll(followupQuestions);
+            if (followupQuestions != null) {
+                this.followupQuestions.addAll(followupQuestions);
+            }
             return this;
         }
 
@@ -128,14 +130,18 @@ public final class AskStreamMetadataEvent implements IBotResponseMetadata {
         }
 
         public Builder addAllFollowupQuestions(List<String> followupQuestions) {
-            this.followupQuestions.addAll(followupQuestions);
+            if (followupQuestions != null) {
+                this.followupQuestions.addAll(followupQuestions);
+            }
             return this;
         }
 
         @JsonSetter(value = "sources", nulls = Nulls.SKIP)
         public Builder sources(List<Source> sources) {
             this.sources.clear();
-            this.sources.addAll(sources);
+            if (sources != null) {
+                this.sources.addAll(sources);
+            }
             return this;
         }
 
@@ -145,7 +151,9 @@ public final class AskStreamMetadataEvent implements IBotResponseMetadata {
         }
 
         public Builder addAllSources(List<Source> sources) {
-            this.sources.addAll(sources);
+            if (sources != null) {
+                this.sources.addAll(sources);
+            }
             return this;
         }
 

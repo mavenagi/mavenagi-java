@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
 import com.mavenagi.resources.commons.types.IBasePaginatedRequest;
+import com.mavenagi.resources.commons.types.IBaseSearchRequest;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -20,7 +21,9 @@ import java.util.Optional;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = InboxSearchRequest.Builder.class)
-public final class InboxSearchRequest implements IBasePaginatedRequest {
+public final class InboxSearchRequest implements IBaseSearchRequest, IBasePaginatedRequest {
+    private final Optional<String> sortId;
+
     private final Optional<Integer> page;
 
     private final Optional<Integer> size;
@@ -32,16 +35,27 @@ public final class InboxSearchRequest implements IBasePaginatedRequest {
     private final Map<String, Object> additionalProperties;
 
     private InboxSearchRequest(
+            Optional<String> sortId,
             Optional<Integer> page,
             Optional<Integer> size,
             Optional<Boolean> sortDesc,
             Optional<InboxFilter> filter,
             Map<String, Object> additionalProperties) {
+        this.sortId = sortId;
         this.page = page;
         this.size = size;
         this.sortDesc = sortDesc;
         this.filter = filter;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return The field to sort by, defaults to created timestamp
+     */
+    @JsonProperty("sortId")
+    @java.lang.Override
+    public Optional<String> getSortId() {
+        return sortId;
     }
 
     /**
@@ -88,7 +102,8 @@ public final class InboxSearchRequest implements IBasePaginatedRequest {
     }
 
     private boolean equalTo(InboxSearchRequest other) {
-        return page.equals(other.page)
+        return sortId.equals(other.sortId)
+                && page.equals(other.page)
                 && size.equals(other.size)
                 && sortDesc.equals(other.sortDesc)
                 && filter.equals(other.filter);
@@ -96,7 +111,7 @@ public final class InboxSearchRequest implements IBasePaginatedRequest {
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.page, this.size, this.sortDesc, this.filter);
+        return Objects.hash(this.sortId, this.page, this.size, this.sortDesc, this.filter);
     }
 
     @java.lang.Override
@@ -110,6 +125,8 @@ public final class InboxSearchRequest implements IBasePaginatedRequest {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
+        private Optional<String> sortId = Optional.empty();
+
         private Optional<Integer> page = Optional.empty();
 
         private Optional<Integer> size = Optional.empty();
@@ -124,10 +141,25 @@ public final class InboxSearchRequest implements IBasePaginatedRequest {
         private Builder() {}
 
         public Builder from(InboxSearchRequest other) {
+            sortId(other.getSortId());
             page(other.getPage());
             size(other.getSize());
             sortDesc(other.getSortDesc());
             filter(other.getFilter());
+            return this;
+        }
+
+        /**
+         * <p>The field to sort by, defaults to created timestamp</p>
+         */
+        @JsonSetter(value = "sortId", nulls = Nulls.SKIP)
+        public Builder sortId(Optional<String> sortId) {
+            this.sortId = sortId;
+            return this;
+        }
+
+        public Builder sortId(String sortId) {
+            this.sortId = Optional.ofNullable(sortId);
             return this;
         }
 
@@ -185,7 +217,7 @@ public final class InboxSearchRequest implements IBasePaginatedRequest {
         }
 
         public InboxSearchRequest build() {
-            return new InboxSearchRequest(page, size, sortDesc, filter, additionalProperties);
+            return new InboxSearchRequest(sortId, page, size, sortDesc, filter, additionalProperties);
         }
     }
 }

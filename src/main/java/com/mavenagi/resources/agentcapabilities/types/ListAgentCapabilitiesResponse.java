@@ -265,7 +265,9 @@ public final class ListAgentCapabilitiesResponse implements IPage {
 
         @java.lang.Override
         public _FinalStage addAllData(List<AgentCapability> data) {
-            this.data.addAll(data);
+            if (data != null) {
+                this.data.addAll(data);
+            }
             return this;
         }
 
@@ -279,7 +281,9 @@ public final class ListAgentCapabilitiesResponse implements IPage {
         @JsonSetter(value = "data", nulls = Nulls.SKIP)
         public _FinalStage data(List<AgentCapability> data) {
             this.data.clear();
-            this.data.addAll(data);
+            if (data != null) {
+                this.data.addAll(data);
+            }
             return this;
         }
 

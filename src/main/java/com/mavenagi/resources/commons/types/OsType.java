@@ -3,30 +3,120 @@
  */
 package com.mavenagi.resources.commons.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum OsType {
-    WINDOWS("WINDOWS"),
+public final class OsType {
+    public static final OsType LINUX = new OsType(Value.LINUX, "LINUX");
 
-    MACOS("MACOS"),
+    public static final OsType OTHER = new OsType(Value.OTHER, "OTHER");
 
-    LINUX("LINUX"),
+    public static final OsType IOS = new OsType(Value.IOS, "IOS");
 
-    ANDROID("ANDROID"),
+    public static final OsType ANDROID = new OsType(Value.ANDROID, "ANDROID");
 
-    IOS("IOS"),
+    public static final OsType WINDOWS = new OsType(Value.WINDOWS, "WINDOWS");
 
-    OTHER("OTHER");
+    public static final OsType MACOS = new OsType(Value.MACOS, "MACOS");
 
-    private final String value;
+    private final Value value;
 
-    OsType(String value) {
+    private final String string;
+
+    OsType(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other) || (other instanceof OsType && this.string.equals(((OsType) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case LINUX:
+                return visitor.visitLinux();
+            case OTHER:
+                return visitor.visitOther();
+            case IOS:
+                return visitor.visitIos();
+            case ANDROID:
+                return visitor.visitAndroid();
+            case WINDOWS:
+                return visitor.visitWindows();
+            case MACOS:
+                return visitor.visitMacos();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static OsType valueOf(String value) {
+        switch (value) {
+            case "LINUX":
+                return LINUX;
+            case "OTHER":
+                return OTHER;
+            case "IOS":
+                return IOS;
+            case "ANDROID":
+                return ANDROID;
+            case "WINDOWS":
+                return WINDOWS;
+            case "MACOS":
+                return MACOS;
+            default:
+                return new OsType(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        WINDOWS,
+
+        MACOS,
+
+        LINUX,
+
+        ANDROID,
+
+        IOS,
+
+        OTHER,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitWindows();
+
+        T visitMacos();
+
+        T visitLinux();
+
+        T visitAndroid();
+
+        T visitIos();
+
+        T visitOther();
+
+        T visitUnknown(String unknownType);
     }
 }

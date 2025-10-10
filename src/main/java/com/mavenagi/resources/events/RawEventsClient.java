@@ -10,6 +10,7 @@ import com.mavenagi.core.MavenAGIException;
 import com.mavenagi.core.MavenAGIHttpResponse;
 import com.mavenagi.core.MediaTypes;
 import com.mavenagi.core.ObjectMappers;
+import com.mavenagi.core.QueryStringMapper;
 import com.mavenagi.core.RequestOptions;
 import com.mavenagi.resources.commons.errors.BadRequestError;
 import com.mavenagi.resources.commons.errors.NotFoundError;
@@ -19,6 +20,7 @@ import com.mavenagi.resources.commons.types.EventRequest;
 import com.mavenagi.resources.commons.types.EventResponse;
 import com.mavenagi.resources.commons.types.EventsSearchRequest;
 import com.mavenagi.resources.commons.types.EventsSearchResponse;
+import com.mavenagi.resources.events.requests.EventGetRequest;
 import java.io.IOException;
 import okhttp3.Headers;
 import okhttp3.HttpUrl;
@@ -148,6 +150,65 @@ public class RawEventsClient {
                 return new MavenAGIHttpResponse<>(
                         ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), EventsSearchResponse.class),
                         response);
+            }
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            try {
+                switch (response.code()) {
+                    case 400:
+                        throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                    case 500:
+                        throw new ServerError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            throw new MavenAGIApiException(
+                    "Error with status code " + response.code(),
+                    response.code(),
+                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                    response);
+        } catch (IOException e) {
+            throw new MavenAGIException("Network error executing HTTP request", e);
+        }
+    }
+
+    /**
+     * Retrieve details of a specific Event item by its ID.
+     */
+    public MavenAGIHttpResponse<EventResponse> get(String eventId, EventGetRequest request) {
+        return get(eventId, request, null);
+    }
+
+    /**
+     * Retrieve details of a specific Event item by its ID.
+     */
+    public MavenAGIHttpResponse<EventResponse> get(
+            String eventId, EventGetRequest request, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("v1/events")
+                .addPathSegment(eventId);
+        QueryStringMapper.addQueryParameter(httpUrl, "appId", request.getAppId(), false);
+        Request.Builder _requestBuilder = new Request.Builder()
+                .url(httpUrl.build())
+                .method("GET", null)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Accept", "application/json");
+        Request okhttpRequest = _requestBuilder.build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            if (response.isSuccessful()) {
+                return new MavenAGIHttpResponse<>(
+                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), EventResponse.class), response);
             }
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {

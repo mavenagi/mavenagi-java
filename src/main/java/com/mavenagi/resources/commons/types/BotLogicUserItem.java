@@ -80,12 +80,16 @@ public final class BotLogicUserItem {
         @JsonSetter(value = "userData", nulls = Nulls.SKIP)
         public Builder userData(Map<String, String> userData) {
             this.userData.clear();
-            this.userData.putAll(userData);
+            if (userData != null) {
+                this.userData.putAll(userData);
+            }
             return this;
         }
 
         public Builder putAllUserData(Map<String, String> userData) {
-            this.userData.putAll(userData);
+            if (userData != null) {
+                this.userData.putAll(userData);
+            }
             return this;
         }
 

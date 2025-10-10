@@ -183,7 +183,9 @@ public final class SubmitActionFormRequest {
          */
         @java.lang.Override
         public _FinalStage putAllParameters(Map<String, ActionFormRequestParamValue> parameters) {
-            this.parameters.putAll(parameters);
+            if (parameters != null) {
+                this.parameters.putAll(parameters);
+            }
             return this;
         }
 
@@ -194,7 +196,9 @@ public final class SubmitActionFormRequest {
         @JsonSetter(value = "parameters", nulls = Nulls.SKIP)
         public _FinalStage parameters(Map<String, ActionFormRequestParamValue> parameters) {
             this.parameters.clear();
-            this.parameters.putAll(parameters);
+            if (parameters != null) {
+                this.parameters.putAll(parameters);
+            }
             return this;
         }
 

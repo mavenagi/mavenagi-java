@@ -3,30 +3,120 @@
  */
 package com.mavenagi.resources.commons.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum BrowserType {
-    CHROME("CHROME"),
+public final class BrowserType {
+    public static final BrowserType EDGE = new BrowserType(Value.EDGE, "EDGE");
 
-    FIREFOX("FIREFOX"),
+    public static final BrowserType CHROME = new BrowserType(Value.CHROME, "CHROME");
 
-    SAFARI("SAFARI"),
+    public static final BrowserType OPERA = new BrowserType(Value.OPERA, "OPERA");
 
-    OPERA("OPERA"),
+    public static final BrowserType OTHER = new BrowserType(Value.OTHER, "OTHER");
 
-    EDGE("EDGE"),
+    public static final BrowserType SAFARI = new BrowserType(Value.SAFARI, "SAFARI");
 
-    OTHER("OTHER");
+    public static final BrowserType FIREFOX = new BrowserType(Value.FIREFOX, "FIREFOX");
 
-    private final String value;
+    private final Value value;
 
-    BrowserType(String value) {
+    private final String string;
+
+    BrowserType(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other) || (other instanceof BrowserType && this.string.equals(((BrowserType) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case EDGE:
+                return visitor.visitEdge();
+            case CHROME:
+                return visitor.visitChrome();
+            case OPERA:
+                return visitor.visitOpera();
+            case OTHER:
+                return visitor.visitOther();
+            case SAFARI:
+                return visitor.visitSafari();
+            case FIREFOX:
+                return visitor.visitFirefox();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static BrowserType valueOf(String value) {
+        switch (value) {
+            case "EDGE":
+                return EDGE;
+            case "CHROME":
+                return CHROME;
+            case "OPERA":
+                return OPERA;
+            case "OTHER":
+                return OTHER;
+            case "SAFARI":
+                return SAFARI;
+            case "FIREFOX":
+                return FIREFOX;
+            default:
+                return new BrowserType(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        CHROME,
+
+        FIREFOX,
+
+        SAFARI,
+
+        OPERA,
+
+        EDGE,
+
+        OTHER,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitChrome();
+
+        T visitFirefox();
+
+        T visitSafari();
+
+        T visitOpera();
+
+        T visitEdge();
+
+        T visitOther();
+
+        T visitUnknown(String unknownType);
     }
 }

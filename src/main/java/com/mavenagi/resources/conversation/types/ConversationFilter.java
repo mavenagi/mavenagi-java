@@ -73,6 +73,10 @@ public final class ConversationFilter {
 
     private final Optional<List<EntityIdFilter>> matchedSegmentIds;
 
+    private final Optional<List<EntityIdFilter>> inboxItemIds;
+
+    private final Optional<SimulationFilter> simulationFilter;
+
     private final Map<String, Object> additionalProperties;
 
     private ConversationFilter(
@@ -98,6 +102,8 @@ public final class ConversationFilter {
             Optional<NumberRange> userMessageCount,
             Optional<Boolean> hasAttachment,
             Optional<List<EntityIdFilter>> matchedSegmentIds,
+            Optional<List<EntityIdFilter>> inboxItemIds,
+            Optional<SimulationFilter> simulationFilter,
             Map<String, Object> additionalProperties) {
         this.search = search;
         this.createdAfter = createdAfter;
@@ -121,6 +127,8 @@ public final class ConversationFilter {
         this.userMessageCount = userMessageCount;
         this.hasAttachment = hasAttachment;
         this.matchedSegmentIds = matchedSegmentIds;
+        this.inboxItemIds = inboxItemIds;
+        this.simulationFilter = simulationFilter;
         this.additionalProperties = additionalProperties;
     }
 
@@ -200,7 +208,9 @@ public final class ConversationFilter {
     }
 
     /**
-     * @return Filter by user feedback types received in the conversation
+     * @return Filter by feedback types received in the conversation.
+     * This is a legacy field that maps to Events saved in the system for <code>ThumbsUp</code>, <code>ThumbsDown</code>, and <code>Insert</code>.
+     * The <code>Handoff</code> filter will pass if any bot responses on the conversation returned the system fallback message; there are no corresponding handoff events.
      */
     @JsonProperty("feedback")
     public Optional<List<FeedbackType>> getFeedback() {
@@ -319,6 +329,22 @@ public final class ConversationFilter {
         return matchedSegmentIds;
     }
 
+    /**
+     * @return Filter by inbox item IDs associated with the conversation
+     */
+    @JsonProperty("inboxItemIds")
+    public Optional<List<EntityIdFilter>> getInboxItemIds() {
+        return inboxItemIds;
+    }
+
+    /**
+     * @return Whether to include simulation conversations in search results. Defaults to only non-simulation conversations.
+     */
+    @JsonProperty("simulationFilter")
+    public Optional<SimulationFilter> getSimulationFilter() {
+        return simulationFilter;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -352,7 +378,9 @@ public final class ConversationFilter {
                 && resolvedByMaven.equals(other.resolvedByMaven)
                 && userMessageCount.equals(other.userMessageCount)
                 && hasAttachment.equals(other.hasAttachment)
-                && matchedSegmentIds.equals(other.matchedSegmentIds);
+                && matchedSegmentIds.equals(other.matchedSegmentIds)
+                && inboxItemIds.equals(other.inboxItemIds)
+                && simulationFilter.equals(other.simulationFilter);
     }
 
     @java.lang.Override
@@ -379,7 +407,9 @@ public final class ConversationFilter {
                 this.resolvedByMaven,
                 this.userMessageCount,
                 this.hasAttachment,
-                this.matchedSegmentIds);
+                this.matchedSegmentIds,
+                this.inboxItemIds,
+                this.simulationFilter);
     }
 
     @java.lang.Override
@@ -437,6 +467,10 @@ public final class ConversationFilter {
 
         private Optional<List<EntityIdFilter>> matchedSegmentIds = Optional.empty();
 
+        private Optional<List<EntityIdFilter>> inboxItemIds = Optional.empty();
+
+        private Optional<SimulationFilter> simulationFilter = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -465,6 +499,8 @@ public final class ConversationFilter {
             userMessageCount(other.getUserMessageCount());
             hasAttachment(other.getHasAttachment());
             matchedSegmentIds(other.getMatchedSegmentIds());
+            inboxItemIds(other.getInboxItemIds());
+            simulationFilter(other.getSimulationFilter());
             return this;
         }
 
@@ -586,7 +622,9 @@ public final class ConversationFilter {
         }
 
         /**
-         * <p>Filter by user feedback types received in the conversation</p>
+         * <p>Filter by feedback types received in the conversation.
+         * This is a legacy field that maps to Events saved in the system for <code>ThumbsUp</code>, <code>ThumbsDown</code>, and <code>Insert</code>.
+         * The <code>Handoff</code> filter will pass if any bot responses on the conversation returned the system fallback message; there are no corresponding handoff events.</p>
          */
         @JsonSetter(value = "feedback", nulls = Nulls.SKIP)
         public Builder feedback(Optional<List<FeedbackType>> feedback) {
@@ -795,6 +833,34 @@ public final class ConversationFilter {
             return this;
         }
 
+        /**
+         * <p>Filter by inbox item IDs associated with the conversation</p>
+         */
+        @JsonSetter(value = "inboxItemIds", nulls = Nulls.SKIP)
+        public Builder inboxItemIds(Optional<List<EntityIdFilter>> inboxItemIds) {
+            this.inboxItemIds = inboxItemIds;
+            return this;
+        }
+
+        public Builder inboxItemIds(List<EntityIdFilter> inboxItemIds) {
+            this.inboxItemIds = Optional.ofNullable(inboxItemIds);
+            return this;
+        }
+
+        /**
+         * <p>Whether to include simulation conversations in search results. Defaults to only non-simulation conversations.</p>
+         */
+        @JsonSetter(value = "simulationFilter", nulls = Nulls.SKIP)
+        public Builder simulationFilter(Optional<SimulationFilter> simulationFilter) {
+            this.simulationFilter = simulationFilter;
+            return this;
+        }
+
+        public Builder simulationFilter(SimulationFilter simulationFilter) {
+            this.simulationFilter = Optional.ofNullable(simulationFilter);
+            return this;
+        }
+
         public ConversationFilter build() {
             return new ConversationFilter(
                     search,
@@ -819,6 +885,8 @@ public final class ConversationFilter {
                     userMessageCount,
                     hasAttachment,
                     matchedSegmentIds,
+                    inboxItemIds,
+                    simulationFilter,
                     additionalProperties);
         }
     }

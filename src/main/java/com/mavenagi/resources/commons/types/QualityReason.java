@@ -3,36 +3,156 @@
  */
 package com.mavenagi.resources.commons.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum QualityReason {
-    MISSING_KNOWLEDGE("MISSING_KNOWLEDGE"),
+public final class QualityReason {
+    public static final QualityReason NEEDS_USER_CLARIFICATION =
+            new QualityReason(Value.NEEDS_USER_CLARIFICATION, "NEEDS_USER_CLARIFICATION");
 
-    MISSING_USER_INFORMATION("MISSING_USER_INFORMATION"),
+    public static final QualityReason NO_BOT_REPLIES = new QualityReason(Value.NO_BOT_REPLIES, "NO_BOT_REPLIES");
 
-    MISSING_ACTION("MISSING_ACTION"),
+    public static final QualityReason INTERRUPTED = new QualityReason(Value.INTERRUPTED, "INTERRUPTED");
 
-    NEEDS_USER_CLARIFICATION("NEEDS_USER_CLARIFICATION"),
+    public static final QualityReason UNSUPPORTED_USER_BEHAVIOR =
+            new QualityReason(Value.UNSUPPORTED_USER_BEHAVIOR, "UNSUPPORTED_USER_BEHAVIOR");
 
-    UNSUPPORTED_FORMAT("UNSUPPORTED_FORMAT"),
+    public static final QualityReason MISSING_USER_INFORMATION =
+            new QualityReason(Value.MISSING_USER_INFORMATION, "MISSING_USER_INFORMATION");
 
-    INTERRUPTED("INTERRUPTED"),
+    public static final QualityReason MISSING_ACTION = new QualityReason(Value.MISSING_ACTION, "MISSING_ACTION");
 
-    UNSUPPORTED_USER_BEHAVIOR("UNSUPPORTED_USER_BEHAVIOR"),
+    public static final QualityReason MISSING_KNOWLEDGE =
+            new QualityReason(Value.MISSING_KNOWLEDGE, "MISSING_KNOWLEDGE");
 
-    UNKNOWN("UNKNOWN"),
+    public static final QualityReason UNKNOWN = new QualityReason(Value.UNKNOWN, "UNKNOWN");
 
-    NO_BOT_REPLIES("NO_BOT_REPLIES");
+    public static final QualityReason UNSUPPORTED_FORMAT =
+            new QualityReason(Value.UNSUPPORTED_FORMAT, "UNSUPPORTED_FORMAT");
 
-    private final String value;
+    private final Value value;
 
-    QualityReason(String value) {
+    private final String string;
+
+    QualityReason(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof QualityReason && this.string.equals(((QualityReason) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case NEEDS_USER_CLARIFICATION:
+                return visitor.visitNeedsUserClarification();
+            case NO_BOT_REPLIES:
+                return visitor.visitNoBotReplies();
+            case INTERRUPTED:
+                return visitor.visitInterrupted();
+            case UNSUPPORTED_USER_BEHAVIOR:
+                return visitor.visitUnsupportedUserBehavior();
+            case MISSING_USER_INFORMATION:
+                return visitor.visitMissingUserInformation();
+            case MISSING_ACTION:
+                return visitor.visitMissingAction();
+            case MISSING_KNOWLEDGE:
+                return visitor.visitMissingKnowledge();
+            case UNKNOWN:
+                return visitor.visitUnknown();
+            case UNSUPPORTED_FORMAT:
+                return visitor.visitUnsupportedFormat();
+            case _UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static QualityReason valueOf(String value) {
+        switch (value) {
+            case "NEEDS_USER_CLARIFICATION":
+                return NEEDS_USER_CLARIFICATION;
+            case "NO_BOT_REPLIES":
+                return NO_BOT_REPLIES;
+            case "INTERRUPTED":
+                return INTERRUPTED;
+            case "UNSUPPORTED_USER_BEHAVIOR":
+                return UNSUPPORTED_USER_BEHAVIOR;
+            case "MISSING_USER_INFORMATION":
+                return MISSING_USER_INFORMATION;
+            case "MISSING_ACTION":
+                return MISSING_ACTION;
+            case "MISSING_KNOWLEDGE":
+                return MISSING_KNOWLEDGE;
+            case "UNKNOWN":
+                return UNKNOWN;
+            case "UNSUPPORTED_FORMAT":
+                return UNSUPPORTED_FORMAT;
+            default:
+                return new QualityReason(Value._UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        MISSING_KNOWLEDGE,
+
+        MISSING_USER_INFORMATION,
+
+        MISSING_ACTION,
+
+        NEEDS_USER_CLARIFICATION,
+
+        UNSUPPORTED_FORMAT,
+
+        INTERRUPTED,
+
+        UNSUPPORTED_USER_BEHAVIOR,
+
+        UNKNOWN,
+
+        NO_BOT_REPLIES,
+
+        _UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitMissingKnowledge();
+
+        T visitMissingUserInformation();
+
+        T visitMissingAction();
+
+        T visitNeedsUserClarification();
+
+        T visitUnsupportedFormat();
+
+        T visitInterrupted();
+
+        T visitUnsupportedUserBehavior();
+
+        T visitUnknown();
+
+        T visitNoBotReplies();
+
+        T visitUnknown(String unknownType);
     }
 }

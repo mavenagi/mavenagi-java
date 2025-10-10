@@ -3,26 +3,104 @@
  */
 package com.mavenagi.resources.knowledge.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum KnowledgeBaseRefreshFrequency {
-    NONE("NONE"),
+public final class KnowledgeBaseRefreshFrequency {
+    public static final KnowledgeBaseRefreshFrequency DAILY = new KnowledgeBaseRefreshFrequency(Value.DAILY, "DAILY");
 
-    DAILY("DAILY"),
+    public static final KnowledgeBaseRefreshFrequency MONTHLY =
+            new KnowledgeBaseRefreshFrequency(Value.MONTHLY, "MONTHLY");
 
-    WEEKLY("WEEKLY"),
+    public static final KnowledgeBaseRefreshFrequency NONE = new KnowledgeBaseRefreshFrequency(Value.NONE, "NONE");
 
-    MONTHLY("MONTHLY");
+    public static final KnowledgeBaseRefreshFrequency WEEKLY =
+            new KnowledgeBaseRefreshFrequency(Value.WEEKLY, "WEEKLY");
 
-    private final String value;
+    private final Value value;
 
-    KnowledgeBaseRefreshFrequency(String value) {
+    private final String string;
+
+    KnowledgeBaseRefreshFrequency(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof KnowledgeBaseRefreshFrequency
+                        && this.string.equals(((KnowledgeBaseRefreshFrequency) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case DAILY:
+                return visitor.visitDaily();
+            case MONTHLY:
+                return visitor.visitMonthly();
+            case NONE:
+                return visitor.visitNone();
+            case WEEKLY:
+                return visitor.visitWeekly();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static KnowledgeBaseRefreshFrequency valueOf(String value) {
+        switch (value) {
+            case "DAILY":
+                return DAILY;
+            case "MONTHLY":
+                return MONTHLY;
+            case "NONE":
+                return NONE;
+            case "WEEKLY":
+                return WEEKLY;
+            default:
+                return new KnowledgeBaseRefreshFrequency(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        NONE,
+
+        DAILY,
+
+        WEEKLY,
+
+        MONTHLY,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitNone();
+
+        T visitDaily();
+
+        T visitWeekly();
+
+        T visitMonthly();
+
+        T visitUnknown(String unknownType);
     }
 }

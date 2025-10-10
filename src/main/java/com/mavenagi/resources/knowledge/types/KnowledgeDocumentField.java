@@ -3,26 +3,102 @@
  */
 package com.mavenagi.resources.knowledge.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum KnowledgeDocumentField {
-    TITLE("Title"),
+public final class KnowledgeDocumentField {
+    public static final KnowledgeDocumentField UPDATED_AT = new KnowledgeDocumentField(Value.UPDATED_AT, "UpdatedAt");
 
-    CREATED_AT("CreatedAt"),
+    public static final KnowledgeDocumentField LANGUAGE = new KnowledgeDocumentField(Value.LANGUAGE, "Language");
 
-    UPDATED_AT("UpdatedAt"),
+    public static final KnowledgeDocumentField TITLE = new KnowledgeDocumentField(Value.TITLE, "Title");
 
-    LANGUAGE("Language");
+    public static final KnowledgeDocumentField CREATED_AT = new KnowledgeDocumentField(Value.CREATED_AT, "CreatedAt");
 
-    private final String value;
+    private final Value value;
 
-    KnowledgeDocumentField(String value) {
+    private final String string;
+
+    KnowledgeDocumentField(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof KnowledgeDocumentField
+                        && this.string.equals(((KnowledgeDocumentField) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case UPDATED_AT:
+                return visitor.visitUpdatedAt();
+            case LANGUAGE:
+                return visitor.visitLanguage();
+            case TITLE:
+                return visitor.visitTitle();
+            case CREATED_AT:
+                return visitor.visitCreatedAt();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static KnowledgeDocumentField valueOf(String value) {
+        switch (value) {
+            case "UpdatedAt":
+                return UPDATED_AT;
+            case "Language":
+                return LANGUAGE;
+            case "Title":
+                return TITLE;
+            case "CreatedAt":
+                return CREATED_AT;
+            default:
+                return new KnowledgeDocumentField(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        TITLE,
+
+        CREATED_AT,
+
+        UPDATED_AT,
+
+        LANGUAGE,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitTitle();
+
+        T visitCreatedAt();
+
+        T visitUpdatedAt();
+
+        T visitLanguage();
+
+        T visitUnknown(String unknownType);
     }
 }

@@ -3,26 +3,101 @@
  */
 package com.mavenagi.resources.commons.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum AttachmentStatus {
-    PENDING("PENDING"),
+public final class AttachmentStatus {
+    public static final AttachmentStatus PROCESSING = new AttachmentStatus(Value.PROCESSING, "PROCESSING");
 
-    PROCESSING("PROCESSING"),
+    public static final AttachmentStatus ACCEPTED = new AttachmentStatus(Value.ACCEPTED, "ACCEPTED");
 
-    ACCEPTED("ACCEPTED"),
+    public static final AttachmentStatus REJECTED = new AttachmentStatus(Value.REJECTED, "REJECTED");
 
-    REJECTED("REJECTED");
+    public static final AttachmentStatus PENDING = new AttachmentStatus(Value.PENDING, "PENDING");
 
-    private final String value;
+    private final Value value;
 
-    AttachmentStatus(String value) {
+    private final String string;
+
+    AttachmentStatus(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof AttachmentStatus && this.string.equals(((AttachmentStatus) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case PROCESSING:
+                return visitor.visitProcessing();
+            case ACCEPTED:
+                return visitor.visitAccepted();
+            case REJECTED:
+                return visitor.visitRejected();
+            case PENDING:
+                return visitor.visitPending();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static AttachmentStatus valueOf(String value) {
+        switch (value) {
+            case "PROCESSING":
+                return PROCESSING;
+            case "ACCEPTED":
+                return ACCEPTED;
+            case "REJECTED":
+                return REJECTED;
+            case "PENDING":
+                return PENDING;
+            default:
+                return new AttachmentStatus(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        PENDING,
+
+        PROCESSING,
+
+        ACCEPTED,
+
+        REJECTED,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitPending();
+
+        T visitProcessing();
+
+        T visitAccepted();
+
+        T visitRejected();
+
+        T visitUnknown(String unknownType);
     }
 }

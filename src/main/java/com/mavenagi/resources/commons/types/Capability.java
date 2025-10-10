@@ -3,30 +3,121 @@
  */
 package com.mavenagi.resources.commons.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum Capability {
-    MARKDOWN("MARKDOWN"),
+public final class Capability {
+    public static final Capability IMAGES = new Capability(Value.IMAGES, "IMAGES");
 
-    FORMS("FORMS"),
+    public static final Capability FORMS = new Capability(Value.FORMS, "FORMS");
 
-    IMAGES("IMAGES"),
+    public static final Capability MARKDOWN = new Capability(Value.MARKDOWN, "MARKDOWN");
 
-    CHARTS_HIGHCHARTS_TS("CHARTS_HIGHCHARTS_TS"),
+    public static final Capability CHARTS_HIGHCHARTS_TS =
+            new Capability(Value.CHARTS_HIGHCHARTS_TS, "CHARTS_HIGHCHARTS_TS");
 
-    ASYNC("ASYNC"),
+    public static final Capability ASYNC = new Capability(Value.ASYNC, "ASYNC");
 
-    OAUTH_BUTTONS("OAUTH_BUTTONS");
+    public static final Capability OAUTH_BUTTONS = new Capability(Value.OAUTH_BUTTONS, "OAUTH_BUTTONS");
 
-    private final String value;
+    private final Value value;
 
-    Capability(String value) {
+    private final String string;
+
+    Capability(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other) || (other instanceof Capability && this.string.equals(((Capability) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case IMAGES:
+                return visitor.visitImages();
+            case FORMS:
+                return visitor.visitForms();
+            case MARKDOWN:
+                return visitor.visitMarkdown();
+            case CHARTS_HIGHCHARTS_TS:
+                return visitor.visitChartsHighchartsTs();
+            case ASYNC:
+                return visitor.visitAsync();
+            case OAUTH_BUTTONS:
+                return visitor.visitOauthButtons();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static Capability valueOf(String value) {
+        switch (value) {
+            case "IMAGES":
+                return IMAGES;
+            case "FORMS":
+                return FORMS;
+            case "MARKDOWN":
+                return MARKDOWN;
+            case "CHARTS_HIGHCHARTS_TS":
+                return CHARTS_HIGHCHARTS_TS;
+            case "ASYNC":
+                return ASYNC;
+            case "OAUTH_BUTTONS":
+                return OAUTH_BUTTONS;
+            default:
+                return new Capability(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        MARKDOWN,
+
+        FORMS,
+
+        IMAGES,
+
+        CHARTS_HIGHCHARTS_TS,
+
+        ASYNC,
+
+        OAUTH_BUTTONS,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitMarkdown();
+
+        T visitForms();
+
+        T visitImages();
+
+        T visitChartsHighchartsTs();
+
+        T visitAsync();
+
+        T visitOauthButtons();
+
+        T visitUnknown(String unknownType);
     }
 }

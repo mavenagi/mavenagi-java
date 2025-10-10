@@ -95,7 +95,9 @@ public final class BotLogicActionItem {
         @JsonSetter(value = "actionsReviewed", nulls = Nulls.SKIP)
         public Builder actionsReviewed(List<BotLogicActionReviewedDetail> actionsReviewed) {
             this.actionsReviewed.clear();
-            this.actionsReviewed.addAll(actionsReviewed);
+            if (actionsReviewed != null) {
+                this.actionsReviewed.addAll(actionsReviewed);
+            }
             return this;
         }
 
@@ -105,14 +107,18 @@ public final class BotLogicActionItem {
         }
 
         public Builder addAllActionsReviewed(List<BotLogicActionReviewedDetail> actionsReviewed) {
-            this.actionsReviewed.addAll(actionsReviewed);
+            if (actionsReviewed != null) {
+                this.actionsReviewed.addAll(actionsReviewed);
+            }
             return this;
         }
 
         @JsonSetter(value = "actionsExecuted", nulls = Nulls.SKIP)
         public Builder actionsExecuted(List<BotLogicActionExecutedDetail> actionsExecuted) {
             this.actionsExecuted.clear();
-            this.actionsExecuted.addAll(actionsExecuted);
+            if (actionsExecuted != null) {
+                this.actionsExecuted.addAll(actionsExecuted);
+            }
             return this;
         }
 
@@ -122,7 +128,9 @@ public final class BotLogicActionItem {
         }
 
         public Builder addAllActionsExecuted(List<BotLogicActionExecutedDetail> actionsExecuted) {
-            this.actionsExecuted.addAll(actionsExecuted);
+            if (actionsExecuted != null) {
+                this.actionsExecuted.addAll(actionsExecuted);
+            }
             return this;
         }
 

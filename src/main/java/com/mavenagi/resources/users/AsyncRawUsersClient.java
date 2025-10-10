@@ -145,8 +145,8 @@ public class AsyncRawUsersClient {
      * Get an agent user by its supplied ID.
      * <p>Agent users are a merged view of the users created by individual apps.</p>
      */
-    public CompletableFuture<MavenAGIHttpResponse<AgentUser>> getAgentUser(String userId) {
-        return getAgentUser(userId, null);
+    public CompletableFuture<MavenAGIHttpResponse<AgentUser>> getAgentUser(String agentUserId) {
+        return getAgentUser(agentUserId, null);
     }
 
     /**
@@ -154,12 +154,12 @@ public class AsyncRawUsersClient {
      * <p>Agent users are a merged view of the users created by individual apps.</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<AgentUser>> getAgentUser(
-            String userId, RequestOptions requestOptions) {
+            String agentUserId, RequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("v1")
                 .addPathSegments("agentusers")
-                .addPathSegment(userId)
+                .addPathSegment(agentUserId)
                 .build();
         Request okhttpRequest = new Request.Builder()
                 .url(httpUrl)

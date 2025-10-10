@@ -81,7 +81,9 @@ public final class BotLogicSegmentsItem {
         @JsonSetter(value = "matchingSegmentIds", nulls = Nulls.SKIP)
         public Builder matchingSegmentIds(List<EntityId> matchingSegmentIds) {
             this.matchingSegmentIds.clear();
-            this.matchingSegmentIds.addAll(matchingSegmentIds);
+            if (matchingSegmentIds != null) {
+                this.matchingSegmentIds.addAll(matchingSegmentIds);
+            }
             return this;
         }
 
@@ -91,7 +93,9 @@ public final class BotLogicSegmentsItem {
         }
 
         public Builder addAllMatchingSegmentIds(List<EntityId> matchingSegmentIds) {
-            this.matchingSegmentIds.addAll(matchingSegmentIds);
+            if (matchingSegmentIds != null) {
+                this.matchingSegmentIds.addAll(matchingSegmentIds);
+            }
             return this;
         }
 

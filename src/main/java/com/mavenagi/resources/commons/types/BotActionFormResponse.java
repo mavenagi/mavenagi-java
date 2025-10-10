@@ -251,7 +251,9 @@ public final class BotActionFormResponse implements IBotActionFormResponse {
          */
         @java.lang.Override
         public _FinalStage addAllFields(List<ActionFormField> fields) {
-            this.fields.addAll(fields);
+            if (fields != null) {
+                this.fields.addAll(fields);
+            }
             return this;
         }
 
@@ -272,7 +274,9 @@ public final class BotActionFormResponse implements IBotActionFormResponse {
         @JsonSetter(value = "fields", nulls = Nulls.SKIP)
         public _FinalStage fields(List<ActionFormField> fields) {
             this.fields.clear();
-            this.fields.addAll(fields);
+            if (fields != null) {
+                this.fields.addAll(fields);
+            }
             return this;
         }
 

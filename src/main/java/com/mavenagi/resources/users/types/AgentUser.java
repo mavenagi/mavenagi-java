@@ -269,7 +269,9 @@ public final class AgentUser {
          */
         @java.lang.Override
         public _FinalStage addAllUsers(List<AppUserSummary> users) {
-            this.users.addAll(users);
+            if (users != null) {
+                this.users.addAll(users);
+            }
             return this;
         }
 
@@ -292,7 +294,9 @@ public final class AgentUser {
         @JsonSetter(value = "users", nulls = Nulls.SKIP)
         public _FinalStage users(List<AppUserSummary> users) {
             this.users.clear();
-            this.users.addAll(users);
+            if (users != null) {
+                this.users.addAll(users);
+            }
             return this;
         }
 
@@ -324,7 +328,9 @@ public final class AgentUser {
          */
         @java.lang.Override
         public _FinalStage addAllIdentifiers(Set<AppUserIdentifier> identifiers) {
-            this.identifiers.addAll(identifiers);
+            if (identifiers != null) {
+                this.identifiers.addAll(identifiers);
+            }
             return this;
         }
 
@@ -345,7 +351,9 @@ public final class AgentUser {
         @JsonSetter(value = "identifiers", nulls = Nulls.SKIP)
         public _FinalStage identifiers(Set<AppUserIdentifier> identifiers) {
             this.identifiers.clear();
-            this.identifiers.addAll(identifiers);
+            if (identifiers != null) {
+                this.identifiers.addAll(identifiers);
+            }
             return this;
         }
 

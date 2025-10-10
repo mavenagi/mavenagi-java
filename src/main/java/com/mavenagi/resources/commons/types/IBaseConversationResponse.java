@@ -36,4 +36,6 @@ public interface IBaseConversationResponse {
     boolean getOpen();
 
     boolean getLlmEnabled();
+
+    Optional<SimulationContext> getSimulationContext();
 }

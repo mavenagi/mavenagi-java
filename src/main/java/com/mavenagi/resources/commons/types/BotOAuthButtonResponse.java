@@ -9,11 +9,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
@@ -21,11 +23,11 @@ import org.jetbrains.annotations.NotNull;
 public final class BotOAuthButtonResponse implements IBotOAuthButtonResponse {
     private final String buttonName;
 
-    private final String url;
+    private final Optional<String> url;
 
     private final Map<String, Object> additionalProperties;
 
-    private BotOAuthButtonResponse(String buttonName, String url, Map<String, Object> additionalProperties) {
+    private BotOAuthButtonResponse(String buttonName, Optional<String> url, Map<String, Object> additionalProperties) {
         this.buttonName = buttonName;
         this.url = url;
         this.additionalProperties = additionalProperties;
@@ -41,11 +43,11 @@ public final class BotOAuthButtonResponse implements IBotOAuthButtonResponse {
     }
 
     /**
-     * @return The OAuth authorization URL to open when the button is clicked.
+     * @return The OAuth authorization URL to open when the button is clicked. Will only be provided on ask responses.
      */
     @JsonProperty("url")
     @java.lang.Override
-    public String getUrl() {
+    public Optional<String> getUrl() {
         return url;
     }
 
@@ -82,27 +84,27 @@ public final class BotOAuthButtonResponse implements IBotOAuthButtonResponse {
         /**
          * <p>Text that should be displayed to the user on the button.</p>
          */
-        UrlStage buttonName(@NotNull String buttonName);
+        _FinalStage buttonName(@NotNull String buttonName);
 
         Builder from(BotOAuthButtonResponse other);
     }
 
-    public interface UrlStage {
-        /**
-         * <p>The OAuth authorization URL to open when the button is clicked.</p>
-         */
-        _FinalStage url(@NotNull String url);
-    }
-
     public interface _FinalStage {
         BotOAuthButtonResponse build();
+
+        /**
+         * <p>The OAuth authorization URL to open when the button is clicked. Will only be provided on ask responses.</p>
+         */
+        _FinalStage url(Optional<String> url);
+
+        _FinalStage url(String url);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements ButtonNameStage, UrlStage, _FinalStage {
+    public static final class Builder implements ButtonNameStage, _FinalStage {
         private String buttonName;
 
-        private String url;
+        private Optional<String> url = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -123,20 +125,28 @@ public final class BotOAuthButtonResponse implements IBotOAuthButtonResponse {
          */
         @java.lang.Override
         @JsonSetter("buttonName")
-        public UrlStage buttonName(@NotNull String buttonName) {
+        public _FinalStage buttonName(@NotNull String buttonName) {
             this.buttonName = Objects.requireNonNull(buttonName, "buttonName must not be null");
             return this;
         }
 
         /**
-         * <p>The OAuth authorization URL to open when the button is clicked.</p>
-         * <p>The OAuth authorization URL to open when the button is clicked.</p>
+         * <p>The OAuth authorization URL to open when the button is clicked. Will only be provided on ask responses.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        @JsonSetter("url")
-        public _FinalStage url(@NotNull String url) {
-            this.url = Objects.requireNonNull(url, "url must not be null");
+        public _FinalStage url(String url) {
+            this.url = Optional.ofNullable(url);
+            return this;
+        }
+
+        /**
+         * <p>The OAuth authorization URL to open when the button is clicked. Will only be provided on ask responses.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "url", nulls = Nulls.SKIP)
+        public _FinalStage url(Optional<String> url) {
+            this.url = url;
             return this;
         }
 

@@ -58,16 +58,16 @@ public class UsersClient {
      * Get an agent user by its supplied ID.
      * <p>Agent users are a merged view of the users created by individual apps.</p>
      */
-    public AgentUser getAgentUser(String userId) {
-        return this.rawClient.getAgentUser(userId).body();
+    public AgentUser getAgentUser(String agentUserId) {
+        return this.rawClient.getAgentUser(agentUserId).body();
     }
 
     /**
      * Get an agent user by its supplied ID.
      * <p>Agent users are a merged view of the users created by individual apps.</p>
      */
-    public AgentUser getAgentUser(String userId, RequestOptions requestOptions) {
-        return this.rawClient.getAgentUser(userId, requestOptions).body();
+    public AgentUser getAgentUser(String agentUserId, RequestOptions requestOptions) {
+        return this.rawClient.getAgentUser(agentUserId, requestOptions).body();
     }
 
     /**

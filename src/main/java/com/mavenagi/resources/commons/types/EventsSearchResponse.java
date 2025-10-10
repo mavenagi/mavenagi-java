@@ -250,7 +250,9 @@ public final class EventsSearchResponse implements IPage {
          */
         @java.lang.Override
         public _FinalStage addAllEvents(List<EventResponse> events) {
-            this.events.addAll(events);
+            if (events != null) {
+                this.events.addAll(events);
+            }
             return this;
         }
 
@@ -271,7 +273,9 @@ public final class EventsSearchResponse implements IPage {
         @JsonSetter(value = "events", nulls = Nulls.SKIP)
         public _FinalStage events(List<EventResponse> events) {
             this.events.clear();
-            this.events.addAll(events);
+            if (events != null) {
+                this.events.addAll(events);
+            }
             return this;
         }
 

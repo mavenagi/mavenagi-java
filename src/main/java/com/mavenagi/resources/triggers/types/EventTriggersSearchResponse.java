@@ -241,7 +241,9 @@ public final class EventTriggersSearchResponse implements IPage {
 
         @java.lang.Override
         public _FinalStage addAllTriggers(List<EventTriggerResponse> triggers) {
-            this.triggers.addAll(triggers);
+            if (triggers != null) {
+                this.triggers.addAll(triggers);
+            }
             return this;
         }
 
@@ -255,7 +257,9 @@ public final class EventTriggersSearchResponse implements IPage {
         @JsonSetter(value = "triggers", nulls = Nulls.SKIP)
         public _FinalStage triggers(List<EventTriggerResponse> triggers) {
             this.triggers.clear();
-            this.triggers.addAll(triggers);
+            if (triggers != null) {
+                this.triggers.addAll(triggers);
+            }
             return this;
         }
 

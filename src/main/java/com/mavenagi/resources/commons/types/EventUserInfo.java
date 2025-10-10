@@ -22,16 +22,25 @@ import java.util.Optional;
 public final class EventUserInfo {
     private final Optional<EntityId> id;
 
+    private final Optional<String> userDisplayName;
+
     private final Map<String, Object> additionalProperties;
 
-    private EventUserInfo(Optional<EntityId> id, Map<String, Object> additionalProperties) {
+    private EventUserInfo(
+            Optional<EntityId> id, Optional<String> userDisplayName, Map<String, Object> additionalProperties) {
         this.id = id;
+        this.userDisplayName = userDisplayName;
         this.additionalProperties = additionalProperties;
     }
 
     @JsonProperty("id")
     public Optional<EntityId> getId() {
         return id;
+    }
+
+    @JsonProperty("userDisplayName")
+    public Optional<String> getUserDisplayName() {
+        return userDisplayName;
     }
 
     @java.lang.Override
@@ -46,12 +55,12 @@ public final class EventUserInfo {
     }
 
     private boolean equalTo(EventUserInfo other) {
-        return id.equals(other.id);
+        return id.equals(other.id) && userDisplayName.equals(other.userDisplayName);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.id);
+        return Objects.hash(this.id, this.userDisplayName);
     }
 
     @java.lang.Override
@@ -67,6 +76,8 @@ public final class EventUserInfo {
     public static final class Builder {
         private Optional<EntityId> id = Optional.empty();
 
+        private Optional<String> userDisplayName = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -74,6 +85,7 @@ public final class EventUserInfo {
 
         public Builder from(EventUserInfo other) {
             id(other.getId());
+            userDisplayName(other.getUserDisplayName());
             return this;
         }
 
@@ -88,8 +100,19 @@ public final class EventUserInfo {
             return this;
         }
 
+        @JsonSetter(value = "userDisplayName", nulls = Nulls.SKIP)
+        public Builder userDisplayName(Optional<String> userDisplayName) {
+            this.userDisplayName = userDisplayName;
+            return this;
+        }
+
+        public Builder userDisplayName(String userDisplayName) {
+            this.userDisplayName = Optional.ofNullable(userDisplayName);
+            return this;
+        }
+
         public EventUserInfo build() {
-            return new EventUserInfo(id, additionalProperties);
+            return new EventUserInfo(id, userDisplayName, additionalProperties);
         }
     }
 }

@@ -3,24 +3,94 @@
  */
 package com.mavenagi.resources.commons.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum UserConversationMessageType {
-    USER("USER"),
+public final class UserConversationMessageType {
+    public static final UserConversationMessageType EXTERNAL_SYSTEM =
+            new UserConversationMessageType(Value.EXTERNAL_SYSTEM, "EXTERNAL_SYSTEM");
 
-    HUMAN_AGENT("HUMAN_AGENT"),
+    public static final UserConversationMessageType USER = new UserConversationMessageType(Value.USER, "USER");
 
-    EXTERNAL_SYSTEM("EXTERNAL_SYSTEM");
+    public static final UserConversationMessageType HUMAN_AGENT =
+            new UserConversationMessageType(Value.HUMAN_AGENT, "HUMAN_AGENT");
 
-    private final String value;
+    private final Value value;
 
-    UserConversationMessageType(String value) {
+    private final String string;
+
+    UserConversationMessageType(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof UserConversationMessageType
+                        && this.string.equals(((UserConversationMessageType) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case EXTERNAL_SYSTEM:
+                return visitor.visitExternalSystem();
+            case USER:
+                return visitor.visitUser();
+            case HUMAN_AGENT:
+                return visitor.visitHumanAgent();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static UserConversationMessageType valueOf(String value) {
+        switch (value) {
+            case "EXTERNAL_SYSTEM":
+                return EXTERNAL_SYSTEM;
+            case "USER":
+                return USER;
+            case "HUMAN_AGENT":
+                return HUMAN_AGENT;
+            default:
+                return new UserConversationMessageType(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        USER,
+
+        HUMAN_AGENT,
+
+        EXTERNAL_SYSTEM,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitUser();
+
+        T visitHumanAgent();
+
+        T visitExternalSystem();
+
+        T visitUnknown(String unknownType);
     }
 }

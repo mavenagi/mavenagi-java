@@ -388,7 +388,9 @@ public final class InboxItemDuplicateDocuments implements IInboxItemBase {
          */
         @java.lang.Override
         public _FinalStage addAllDocuments(List<DocumentInformation> documents) {
-            this.documents.addAll(documents);
+            if (documents != null) {
+                this.documents.addAll(documents);
+            }
             return this;
         }
 
@@ -409,7 +411,9 @@ public final class InboxItemDuplicateDocuments implements IInboxItemBase {
         @JsonSetter(value = "documents", nulls = Nulls.SKIP)
         public _FinalStage documents(List<DocumentInformation> documents) {
             this.documents.clear();
-            this.documents.addAll(documents);
+            if (documents != null) {
+                this.documents.addAll(documents);
+            }
             return this;
         }
 
@@ -419,7 +423,9 @@ public final class InboxItemDuplicateDocuments implements IInboxItemBase {
          */
         @java.lang.Override
         public _FinalStage addAllOtherFixes(List<InboxItemFixDeactivateDocument> otherFixes) {
-            this.otherFixes.addAll(otherFixes);
+            if (otherFixes != null) {
+                this.otherFixes.addAll(otherFixes);
+            }
             return this;
         }
 
@@ -440,7 +446,9 @@ public final class InboxItemDuplicateDocuments implements IInboxItemBase {
         @JsonSetter(value = "otherFixes", nulls = Nulls.SKIP)
         public _FinalStage otherFixes(List<InboxItemFixDeactivateDocument> otherFixes) {
             this.otherFixes.clear();
-            this.otherFixes.addAll(otherFixes);
+            if (otherFixes != null) {
+                this.otherFixes.addAll(otherFixes);
+            }
             return this;
         }
 
@@ -450,7 +458,9 @@ public final class InboxItemDuplicateDocuments implements IInboxItemBase {
          */
         @java.lang.Override
         public _FinalStage addAllRecommendedFixes(List<InboxItemFixDeactivateDocument> recommendedFixes) {
-            this.recommendedFixes.addAll(recommendedFixes);
+            if (recommendedFixes != null) {
+                this.recommendedFixes.addAll(recommendedFixes);
+            }
             return this;
         }
 
@@ -471,7 +481,9 @@ public final class InboxItemDuplicateDocuments implements IInboxItemBase {
         @JsonSetter(value = "recommendedFixes", nulls = Nulls.SKIP)
         public _FinalStage recommendedFixes(List<InboxItemFixDeactivateDocument> recommendedFixes) {
             this.recommendedFixes.clear();
-            this.recommendedFixes.addAll(recommendedFixes);
+            if (recommendedFixes != null) {
+                this.recommendedFixes.addAll(recommendedFixes);
+            }
             return this;
         }
 

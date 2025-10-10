@@ -3,24 +3,92 @@
  */
 package com.mavenagi.resources.commons.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum VisibilityType {
-    VISIBLE("VISIBLE"),
+public final class VisibilityType {
+    public static final VisibilityType PARTIALLY_VISIBLE =
+            new VisibilityType(Value.PARTIALLY_VISIBLE, "PARTIALLY_VISIBLE");
 
-    PARTIALLY_VISIBLE("PARTIALLY_VISIBLE"),
+    public static final VisibilityType VISIBLE = new VisibilityType(Value.VISIBLE, "VISIBLE");
 
-    HIDDEN("HIDDEN");
+    public static final VisibilityType HIDDEN = new VisibilityType(Value.HIDDEN, "HIDDEN");
 
-    private final String value;
+    private final Value value;
 
-    VisibilityType(String value) {
+    private final String string;
+
+    VisibilityType(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof VisibilityType && this.string.equals(((VisibilityType) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case PARTIALLY_VISIBLE:
+                return visitor.visitPartiallyVisible();
+            case VISIBLE:
+                return visitor.visitVisible();
+            case HIDDEN:
+                return visitor.visitHidden();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static VisibilityType valueOf(String value) {
+        switch (value) {
+            case "PARTIALLY_VISIBLE":
+                return PARTIALLY_VISIBLE;
+            case "VISIBLE":
+                return VISIBLE;
+            case "HIDDEN":
+                return HIDDEN;
+            default:
+                return new VisibilityType(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        VISIBLE,
+
+        PARTIALLY_VISIBLE,
+
+        HIDDEN,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitVisible();
+
+        T visitPartiallyVisible();
+
+        T visitHidden();
+
+        T visitUnknown(String unknownType);
     }
 }

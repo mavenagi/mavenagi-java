@@ -3,28 +3,110 @@
  */
 package com.mavenagi.resources.analytics.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum TimeInterval {
-    HOUR("HOUR"),
+public final class TimeInterval {
+    public static final TimeInterval WEEK = new TimeInterval(Value.WEEK, "WEEK");
 
-    DAY("DAY"),
+    public static final TimeInterval HOUR = new TimeInterval(Value.HOUR, "HOUR");
 
-    WEEK("WEEK"),
+    public static final TimeInterval MONTH = new TimeInterval(Value.MONTH, "MONTH");
 
-    MONTH("MONTH"),
+    public static final TimeInterval YEAR = new TimeInterval(Value.YEAR, "YEAR");
 
-    YEAR("YEAR");
+    public static final TimeInterval DAY = new TimeInterval(Value.DAY, "DAY");
 
-    private final String value;
+    private final Value value;
 
-    TimeInterval(String value) {
+    private final String string;
+
+    TimeInterval(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other) || (other instanceof TimeInterval && this.string.equals(((TimeInterval) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case WEEK:
+                return visitor.visitWeek();
+            case HOUR:
+                return visitor.visitHour();
+            case MONTH:
+                return visitor.visitMonth();
+            case YEAR:
+                return visitor.visitYear();
+            case DAY:
+                return visitor.visitDay();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static TimeInterval valueOf(String value) {
+        switch (value) {
+            case "WEEK":
+                return WEEK;
+            case "HOUR":
+                return HOUR;
+            case "MONTH":
+                return MONTH;
+            case "YEAR":
+                return YEAR;
+            case "DAY":
+                return DAY;
+            default:
+                return new TimeInterval(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        HOUR,
+
+        DAY,
+
+        WEEK,
+
+        MONTH,
+
+        YEAR,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitHour();
+
+        T visitDay();
+
+        T visitWeek();
+
+        T visitMonth();
+
+        T visitYear();
+
+        T visitUnknown(String unknownType);
     }
 }

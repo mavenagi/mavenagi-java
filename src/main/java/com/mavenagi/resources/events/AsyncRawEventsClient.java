@@ -10,6 +10,7 @@ import com.mavenagi.core.MavenAGIException;
 import com.mavenagi.core.MavenAGIHttpResponse;
 import com.mavenagi.core.MediaTypes;
 import com.mavenagi.core.ObjectMappers;
+import com.mavenagi.core.QueryStringMapper;
 import com.mavenagi.core.RequestOptions;
 import com.mavenagi.resources.commons.errors.BadRequestError;
 import com.mavenagi.resources.commons.errors.NotFoundError;
@@ -19,6 +20,7 @@ import com.mavenagi.resources.commons.types.EventRequest;
 import com.mavenagi.resources.commons.types.EventResponse;
 import com.mavenagi.resources.commons.types.EventsSearchRequest;
 import com.mavenagi.resources.commons.types.EventsSearchResponse;
+import com.mavenagi.resources.events.requests.EventGetRequest;
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 import okhttp3.Call;
@@ -175,6 +177,85 @@ public class AsyncRawEventsClient {
                     if (response.isSuccessful()) {
                         future.complete(new MavenAGIHttpResponse<>(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), EventsSearchResponse.class),
+                                response));
+                        return;
+                    }
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+                    try {
+                        switch (response.code()) {
+                            case 400:
+                                future.completeExceptionally(new BadRequestError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
+                                        response));
+                                return;
+                            case 404:
+                                future.completeExceptionally(new NotFoundError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
+                                        response));
+                                return;
+                            case 500:
+                                future.completeExceptionally(new ServerError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
+                                        response));
+                                return;
+                        }
+                    } catch (JsonProcessingException ignored) {
+                        // unable to map error response, throwing generic error
+                    }
+                    future.completeExceptionally(new MavenAGIApiException(
+                            "Error with status code " + response.code(),
+                            response.code(),
+                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                            response));
+                    return;
+                } catch (IOException e) {
+                    future.completeExceptionally(new MavenAGIException("Network error executing HTTP request", e));
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                future.completeExceptionally(new MavenAGIException("Network error executing HTTP request", e));
+            }
+        });
+        return future;
+    }
+
+    /**
+     * Retrieve details of a specific Event item by its ID.
+     */
+    public CompletableFuture<MavenAGIHttpResponse<EventResponse>> get(String eventId, EventGetRequest request) {
+        return get(eventId, request, null);
+    }
+
+    /**
+     * Retrieve details of a specific Event item by its ID.
+     */
+    public CompletableFuture<MavenAGIHttpResponse<EventResponse>> get(
+            String eventId, EventGetRequest request, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("v1/events")
+                .addPathSegment(eventId);
+        QueryStringMapper.addQueryParameter(httpUrl, "appId", request.getAppId(), false);
+        Request.Builder _requestBuilder = new Request.Builder()
+                .url(httpUrl.build())
+                .method("GET", null)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Accept", "application/json");
+        Request okhttpRequest = _requestBuilder.build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        CompletableFuture<MavenAGIHttpResponse<EventResponse>> future = new CompletableFuture<>();
+        client.newCall(okhttpRequest).enqueue(new Callback() {
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                try (ResponseBody responseBody = response.body()) {
+                    if (response.isSuccessful()) {
+                        future.complete(new MavenAGIHttpResponse<>(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), EventResponse.class),
                                 response));
                         return;
                     }

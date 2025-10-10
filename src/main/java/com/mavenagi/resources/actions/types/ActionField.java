@@ -3,28 +3,112 @@
  */
 package com.mavenagi.resources.actions.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum ActionField {
-    APP_ID("AppId"),
+public final class ActionField {
+    public static final ActionField NAME = new ActionField(Value.NAME, "Name");
 
-    NAME("Name"),
+    public static final ActionField USER_INTERACTION_REQUIRED =
+            new ActionField(Value.USER_INTERACTION_REQUIRED, "UserInteractionRequired");
 
-    LLM_INCLUSION_STATUS("LlmInclusionStatus"),
+    public static final ActionField LLM_INCLUSION_STATUS =
+            new ActionField(Value.LLM_INCLUSION_STATUS, "LlmInclusionStatus");
 
-    USER_INTERACTION_REQUIRED("UserInteractionRequired"),
+    public static final ActionField CREATED_AT = new ActionField(Value.CREATED_AT, "CreatedAt");
 
-    CREATED_AT("CreatedAt");
+    public static final ActionField APP_ID = new ActionField(Value.APP_ID, "AppId");
 
-    private final String value;
+    private final Value value;
 
-    ActionField(String value) {
+    private final String string;
+
+    ActionField(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other) || (other instanceof ActionField && this.string.equals(((ActionField) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case NAME:
+                return visitor.visitName();
+            case USER_INTERACTION_REQUIRED:
+                return visitor.visitUserInteractionRequired();
+            case LLM_INCLUSION_STATUS:
+                return visitor.visitLlmInclusionStatus();
+            case CREATED_AT:
+                return visitor.visitCreatedAt();
+            case APP_ID:
+                return visitor.visitAppId();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static ActionField valueOf(String value) {
+        switch (value) {
+            case "Name":
+                return NAME;
+            case "UserInteractionRequired":
+                return USER_INTERACTION_REQUIRED;
+            case "LlmInclusionStatus":
+                return LLM_INCLUSION_STATUS;
+            case "CreatedAt":
+                return CREATED_AT;
+            case "AppId":
+                return APP_ID;
+            default:
+                return new ActionField(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        APP_ID,
+
+        NAME,
+
+        LLM_INCLUSION_STATUS,
+
+        USER_INTERACTION_REQUIRED,
+
+        CREATED_AT,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitAppId();
+
+        T visitName();
+
+        T visitLlmInclusionStatus();
+
+        T visitUserInteractionRequired();
+
+        T visitCreatedAt();
+
+        T visitUnknown(String unknownType);
     }
 }

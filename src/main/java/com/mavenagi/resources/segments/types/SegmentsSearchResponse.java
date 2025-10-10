@@ -241,7 +241,9 @@ public final class SegmentsSearchResponse implements IPage {
 
         @java.lang.Override
         public _FinalStage addAllSegments(List<SegmentResponse> segments) {
-            this.segments.addAll(segments);
+            if (segments != null) {
+                this.segments.addAll(segments);
+            }
             return this;
         }
 
@@ -255,7 +257,9 @@ public final class SegmentsSearchResponse implements IPage {
         @JsonSetter(value = "segments", nulls = Nulls.SKIP)
         public _FinalStage segments(List<SegmentResponse> segments) {
             this.segments.clear();
-            this.segments.addAll(segments);
+            if (segments != null) {
+                this.segments.addAll(segments);
+            }
             return this;
         }
 

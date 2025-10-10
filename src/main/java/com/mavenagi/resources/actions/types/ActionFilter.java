@@ -24,6 +24,8 @@ import java.util.Optional;
 public final class ActionFilter {
     private final Optional<String> instructions;
 
+    private final Optional<String> name;
+
     private final Optional<List<LlmInclusionStatus>> llmInclusionStatuses;
 
     private final Optional<List<String>> appIds;
@@ -34,11 +36,13 @@ public final class ActionFilter {
 
     private ActionFilter(
             Optional<String> instructions,
+            Optional<String> name,
             Optional<List<LlmInclusionStatus>> llmInclusionStatuses,
             Optional<List<String>> appIds,
             Optional<Boolean> userInteractionRequired,
             Map<String, Object> additionalProperties) {
         this.instructions = instructions;
+        this.name = name;
         this.llmInclusionStatuses = llmInclusionStatuses;
         this.appIds = appIds;
         this.userInteractionRequired = userInteractionRequired;
@@ -51,6 +55,14 @@ public final class ActionFilter {
     @JsonProperty("instructions")
     public Optional<String> getInstructions() {
         return instructions;
+    }
+
+    /**
+     * @return Filter by action name
+     */
+    @JsonProperty("name")
+    public Optional<String> getName() {
+        return name;
     }
 
     /**
@@ -90,6 +102,7 @@ public final class ActionFilter {
 
     private boolean equalTo(ActionFilter other) {
         return instructions.equals(other.instructions)
+                && name.equals(other.name)
                 && llmInclusionStatuses.equals(other.llmInclusionStatuses)
                 && appIds.equals(other.appIds)
                 && userInteractionRequired.equals(other.userInteractionRequired);
@@ -97,7 +110,8 @@ public final class ActionFilter {
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.instructions, this.llmInclusionStatuses, this.appIds, this.userInteractionRequired);
+        return Objects.hash(
+                this.instructions, this.name, this.llmInclusionStatuses, this.appIds, this.userInteractionRequired);
     }
 
     @java.lang.Override
@@ -113,6 +127,8 @@ public final class ActionFilter {
     public static final class Builder {
         private Optional<String> instructions = Optional.empty();
 
+        private Optional<String> name = Optional.empty();
+
         private Optional<List<LlmInclusionStatus>> llmInclusionStatuses = Optional.empty();
 
         private Optional<List<String>> appIds = Optional.empty();
@@ -126,6 +142,7 @@ public final class ActionFilter {
 
         public Builder from(ActionFilter other) {
             instructions(other.getInstructions());
+            name(other.getName());
             llmInclusionStatuses(other.getLlmInclusionStatuses());
             appIds(other.getAppIds());
             userInteractionRequired(other.getUserInteractionRequired());
@@ -143,6 +160,20 @@ public final class ActionFilter {
 
         public Builder instructions(String instructions) {
             this.instructions = Optional.ofNullable(instructions);
+            return this;
+        }
+
+        /**
+         * <p>Filter by action name</p>
+         */
+        @JsonSetter(value = "name", nulls = Nulls.SKIP)
+        public Builder name(Optional<String> name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder name(String name) {
+            this.name = Optional.ofNullable(name);
             return this;
         }
 
@@ -190,7 +221,7 @@ public final class ActionFilter {
 
         public ActionFilter build() {
             return new ActionFilter(
-                    instructions, llmInclusionStatuses, appIds, userInteractionRequired, additionalProperties);
+                    instructions, name, llmInclusionStatuses, appIds, userInteractionRequired, additionalProperties);
         }
     }
 }

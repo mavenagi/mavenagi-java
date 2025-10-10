@@ -3,26 +3,100 @@
  */
 package com.mavenagi.resources.commons.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum DeviceType {
-    DESKTOP("DESKTOP"),
+public final class DeviceType {
+    public static final DeviceType TABLET = new DeviceType(Value.TABLET, "TABLET");
 
-    MOBILE("MOBILE"),
+    public static final DeviceType OTHER = new DeviceType(Value.OTHER, "OTHER");
 
-    TABLET("TABLET"),
+    public static final DeviceType DESKTOP = new DeviceType(Value.DESKTOP, "DESKTOP");
 
-    OTHER("OTHER");
+    public static final DeviceType MOBILE = new DeviceType(Value.MOBILE, "MOBILE");
 
-    private final String value;
+    private final Value value;
 
-    DeviceType(String value) {
+    private final String string;
+
+    DeviceType(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other) || (other instanceof DeviceType && this.string.equals(((DeviceType) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case TABLET:
+                return visitor.visitTablet();
+            case OTHER:
+                return visitor.visitOther();
+            case DESKTOP:
+                return visitor.visitDesktop();
+            case MOBILE:
+                return visitor.visitMobile();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static DeviceType valueOf(String value) {
+        switch (value) {
+            case "TABLET":
+                return TABLET;
+            case "OTHER":
+                return OTHER;
+            case "DESKTOP":
+                return DESKTOP;
+            case "MOBILE":
+                return MOBILE;
+            default:
+                return new DeviceType(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        DESKTOP,
+
+        MOBILE,
+
+        TABLET,
+
+        OTHER,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitDesktop();
+
+        T visitMobile();
+
+        T visitTablet();
+
+        T visitOther();
+
+        T visitUnknown(String unknownType);
     }
 }

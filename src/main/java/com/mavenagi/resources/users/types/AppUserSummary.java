@@ -179,7 +179,9 @@ public final class AppUserSummary {
          */
         @java.lang.Override
         public _FinalStage putAllVisibleData(Map<String, String> visibleData) {
-            this.visibleData.putAll(visibleData);
+            if (visibleData != null) {
+                this.visibleData.putAll(visibleData);
+            }
             return this;
         }
 
@@ -190,7 +192,9 @@ public final class AppUserSummary {
         @JsonSetter(value = "visibleData", nulls = Nulls.SKIP)
         public _FinalStage visibleData(Map<String, String> visibleData) {
             this.visibleData.clear();
-            this.visibleData.putAll(visibleData);
+            if (visibleData != null) {
+                this.visibleData.putAll(visibleData);
+            }
             return this;
         }
 
@@ -200,7 +204,9 @@ public final class AppUserSummary {
          */
         @java.lang.Override
         public _FinalStage addAllIdentifiers(Set<AppUserIdentifier> identifiers) {
-            this.identifiers.addAll(identifiers);
+            if (identifiers != null) {
+                this.identifiers.addAll(identifiers);
+            }
             return this;
         }
 
@@ -221,7 +227,9 @@ public final class AppUserSummary {
         @JsonSetter(value = "identifiers", nulls = Nulls.SKIP)
         public _FinalStage identifiers(Set<AppUserIdentifier> identifiers) {
             this.identifiers.clear();
-            this.identifiers.addAll(identifiers);
+            if (identifiers != null) {
+                this.identifiers.addAll(identifiers);
+            }
             return this;
         }
 

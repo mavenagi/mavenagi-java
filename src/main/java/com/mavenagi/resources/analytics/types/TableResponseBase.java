@@ -88,7 +88,9 @@ public final class TableResponseBase implements ITableResponseBase {
         @JsonSetter(value = "headers", nulls = Nulls.SKIP)
         public Builder headers(List<String> headers) {
             this.headers.clear();
-            this.headers.addAll(headers);
+            if (headers != null) {
+                this.headers.addAll(headers);
+            }
             return this;
         }
 
@@ -98,7 +100,9 @@ public final class TableResponseBase implements ITableResponseBase {
         }
 
         public Builder addAllHeaders(List<String> headers) {
-            this.headers.addAll(headers);
+            if (headers != null) {
+                this.headers.addAll(headers);
+            }
             return this;
         }
 

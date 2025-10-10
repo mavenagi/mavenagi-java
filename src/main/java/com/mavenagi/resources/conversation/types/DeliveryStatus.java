@@ -3,24 +3,91 @@
  */
 package com.mavenagi.resources.conversation.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum DeliveryStatus {
-    DELIVERED("DELIVERED"),
+public final class DeliveryStatus {
+    public static final DeliveryStatus QUEUED = new DeliveryStatus(Value.QUEUED, "QUEUED");
 
-    FAILED("FAILED"),
+    public static final DeliveryStatus DELIVERED = new DeliveryStatus(Value.DELIVERED, "DELIVERED");
 
-    QUEUED("QUEUED");
+    public static final DeliveryStatus FAILED = new DeliveryStatus(Value.FAILED, "FAILED");
 
-    private final String value;
+    private final Value value;
 
-    DeliveryStatus(String value) {
+    private final String string;
+
+    DeliveryStatus(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof DeliveryStatus && this.string.equals(((DeliveryStatus) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case QUEUED:
+                return visitor.visitQueued();
+            case DELIVERED:
+                return visitor.visitDelivered();
+            case FAILED:
+                return visitor.visitFailed();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static DeliveryStatus valueOf(String value) {
+        switch (value) {
+            case "QUEUED":
+                return QUEUED;
+            case "DELIVERED":
+                return DELIVERED;
+            case "FAILED":
+                return FAILED;
+            default:
+                return new DeliveryStatus(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        DELIVERED,
+
+        FAILED,
+
+        QUEUED,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitDelivered();
+
+        T visitFailed();
+
+        T visitQueued();
+
+        T visitUnknown(String unknownType);
     }
 }

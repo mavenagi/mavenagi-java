@@ -5,6 +5,10 @@
 
 The Mavenagi Java library provides convenient access to the Mavenagi APIs from Java.
 
+## Reference
+
+A full reference for this library is available [here](https://github.com/mavenagi/mavenagi-java/blob/HEAD/./reference.md).
+
 ## Usage
 
 Instantiate and use the client with the following:
@@ -138,6 +142,32 @@ client.actions().search(
 );
 ```
 
+### Custom Headers
+
+The SDK allows you to add custom headers to requests. You can configure headers at the client level or at the request level.
+
+```java
+import com.mavenagi.MavenAGI;
+import com.mavenagi.core.RequestOptions;
+
+// Client level
+MavenAGI client = MavenAGI
+    .builder()
+    .addHeader("X-Custom-Header", "custom-value")
+    .addHeader("X-Request-Id", "abc-123")
+    .build();
+;
+
+// Request level
+client.actions().search(
+    ...,
+    RequestOptions
+        .builder()
+        .addHeader("X-Request-Header", "request-value")
+        .build()
+);
+```
+
 ## Contributing
 
 While we value open-source contributions to this SDK, this library is generated programmatically.
@@ -167,6 +197,6 @@ Add the dependency in your `pom.xml` file:
 <dependency>
   <groupId>com.mavenagi</groupId>
   <artifactId>mavenagi-java</artifactId>
-  <version>1.2.3</version>
+  <version>1.2.4</version>
 </dependency>
 ```

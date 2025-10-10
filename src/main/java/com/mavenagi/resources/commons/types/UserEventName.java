@@ -3,28 +3,111 @@
  */
 package com.mavenagi.resources.commons.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum UserEventName {
-    BUTTON_CLICKED("BUTTON_CLICKED"),
+public final class UserEventName {
+    public static final UserEventName CHAT_OPENED = new UserEventName(Value.CHAT_OPENED, "CHAT_OPENED");
 
-    LINK_CLICKED("LINK_CLICKED"),
+    public static final UserEventName TEXT_INSERTED = new UserEventName(Value.TEXT_INSERTED, "TEXT_INSERTED");
 
-    CHAT_OPENED("CHAT_OPENED"),
+    public static final UserEventName BUTTON_CLICKED = new UserEventName(Value.BUTTON_CLICKED, "BUTTON_CLICKED");
 
-    CHAT_CLOSED("CHAT_CLOSED"),
+    public static final UserEventName CHAT_CLOSED = new UserEventName(Value.CHAT_CLOSED, "CHAT_CLOSED");
 
-    TEXT_INSERTED("TEXT_INSERTED");
+    public static final UserEventName LINK_CLICKED = new UserEventName(Value.LINK_CLICKED, "LINK_CLICKED");
 
-    private final String value;
+    private final Value value;
 
-    UserEventName(String value) {
+    private final String string;
+
+    UserEventName(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof UserEventName && this.string.equals(((UserEventName) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case CHAT_OPENED:
+                return visitor.visitChatOpened();
+            case TEXT_INSERTED:
+                return visitor.visitTextInserted();
+            case BUTTON_CLICKED:
+                return visitor.visitButtonClicked();
+            case CHAT_CLOSED:
+                return visitor.visitChatClosed();
+            case LINK_CLICKED:
+                return visitor.visitLinkClicked();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static UserEventName valueOf(String value) {
+        switch (value) {
+            case "CHAT_OPENED":
+                return CHAT_OPENED;
+            case "TEXT_INSERTED":
+                return TEXT_INSERTED;
+            case "BUTTON_CLICKED":
+                return BUTTON_CLICKED;
+            case "CHAT_CLOSED":
+                return CHAT_CLOSED;
+            case "LINK_CLICKED":
+                return LINK_CLICKED;
+            default:
+                return new UserEventName(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        BUTTON_CLICKED,
+
+        LINK_CLICKED,
+
+        CHAT_OPENED,
+
+        CHAT_CLOSED,
+
+        TEXT_INSERTED,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitButtonClicked();
+
+        T visitLinkClicked();
+
+        T visitChatOpened();
+
+        T visitChatClosed();
+
+        T visitTextInserted();
+
+        T visitUnknown(String unknownType);
     }
 }

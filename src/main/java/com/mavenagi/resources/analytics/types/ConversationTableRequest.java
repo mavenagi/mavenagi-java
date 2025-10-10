@@ -210,7 +210,9 @@ public final class ConversationTableRequest implements IConversationAnalyticsReq
         @JsonSetter(value = "fieldGroupings", nulls = Nulls.SKIP)
         public Builder fieldGroupings(List<ConversationGroupBy> fieldGroupings) {
             this.fieldGroupings.clear();
-            this.fieldGroupings.addAll(fieldGroupings);
+            if (fieldGroupings != null) {
+                this.fieldGroupings.addAll(fieldGroupings);
+            }
             return this;
         }
 
@@ -220,7 +222,9 @@ public final class ConversationTableRequest implements IConversationAnalyticsReq
         }
 
         public Builder addAllFieldGroupings(List<ConversationGroupBy> fieldGroupings) {
-            this.fieldGroupings.addAll(fieldGroupings);
+            if (fieldGroupings != null) {
+                this.fieldGroupings.addAll(fieldGroupings);
+            }
             return this;
         }
 
@@ -230,7 +234,9 @@ public final class ConversationTableRequest implements IConversationAnalyticsReq
         @JsonSetter(value = "columnDefinitions", nulls = Nulls.SKIP)
         public Builder columnDefinitions(List<ConversationColumnDefinition> columnDefinitions) {
             this.columnDefinitions.clear();
-            this.columnDefinitions.addAll(columnDefinitions);
+            if (columnDefinitions != null) {
+                this.columnDefinitions.addAll(columnDefinitions);
+            }
             return this;
         }
 
@@ -240,7 +246,9 @@ public final class ConversationTableRequest implements IConversationAnalyticsReq
         }
 
         public Builder addAllColumnDefinitions(List<ConversationColumnDefinition> columnDefinitions) {
-            this.columnDefinitions.addAll(columnDefinitions);
+            if (columnDefinitions != null) {
+                this.columnDefinitions.addAll(columnDefinitions);
+            }
             return this;
         }
 

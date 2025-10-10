@@ -185,7 +185,9 @@ public final class AppSettings {
          */
         @java.lang.Override
         public _FinalStage putAllSettings(Map<String, Object> settings) {
-            this.settings.putAll(settings);
+            if (settings != null) {
+                this.settings.putAll(settings);
+            }
             return this;
         }
 
@@ -196,7 +198,9 @@ public final class AppSettings {
         @JsonSetter(value = "settings", nulls = Nulls.SKIP)
         public _FinalStage settings(Map<String, Object> settings) {
             this.settings.clear();
-            this.settings.putAll(settings);
+            if (settings != null) {
+                this.settings.putAll(settings);
+            }
             return this;
         }
 

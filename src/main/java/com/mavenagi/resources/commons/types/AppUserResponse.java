@@ -29,6 +29,8 @@ public final class AppUserResponse implements IAppUser {
 
     private final EntityId userId;
 
+    private final String agentUserId;
+
     private final Map<String, Map<String, String>> allUserData;
 
     private final Map<String, String> defaultUserData;
@@ -39,12 +41,14 @@ public final class AppUserResponse implements IAppUser {
             Set<AppUserIdentifier> identifiers,
             Map<String, UserData> data,
             EntityId userId,
+            String agentUserId,
             Map<String, Map<String, String>> allUserData,
             Map<String, String> defaultUserData,
             Map<String, Object> additionalProperties) {
         this.identifiers = identifiers;
         this.data = data;
         this.userId = userId;
+        this.agentUserId = agentUserId;
         this.allUserData = allUserData;
         this.defaultUserData = defaultUserData;
         this.additionalProperties = additionalProperties;
@@ -71,6 +75,14 @@ public final class AppUserResponse implements IAppUser {
     @JsonProperty("userId")
     public EntityId getUserId() {
         return userId;
+    }
+
+    /**
+     * @return The ID of the agent user (merged view) that this app user is associated with
+     */
+    @JsonProperty("agentUserId")
+    public String getAgentUserId() {
+        return agentUserId;
     }
 
     /**
@@ -104,13 +116,15 @@ public final class AppUserResponse implements IAppUser {
         return identifiers.equals(other.identifiers)
                 && data.equals(other.data)
                 && userId.equals(other.userId)
+                && agentUserId.equals(other.agentUserId)
                 && allUserData.equals(other.allUserData)
                 && defaultUserData.equals(other.defaultUserData);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.identifiers, this.data, this.userId, this.allUserData, this.defaultUserData);
+        return Objects.hash(
+                this.identifiers, this.data, this.userId, this.agentUserId, this.allUserData, this.defaultUserData);
     }
 
     @java.lang.Override
@@ -126,9 +140,16 @@ public final class AppUserResponse implements IAppUser {
         /**
          * <p>ID that uniquely identifies this user</p>
          */
-        _FinalStage userId(@NotNull EntityId userId);
+        AgentUserIdStage userId(@NotNull EntityId userId);
 
         Builder from(AppUserResponse other);
+    }
+
+    public interface AgentUserIdStage {
+        /**
+         * <p>The ID of the agent user (merged view) that this app user is associated with</p>
+         */
+        _FinalStage agentUserId(@NotNull String agentUserId);
     }
 
     public interface _FinalStage {
@@ -169,8 +190,10 @@ public final class AppUserResponse implements IAppUser {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements UserIdStage, _FinalStage {
+    public static final class Builder implements UserIdStage, AgentUserIdStage, _FinalStage {
         private EntityId userId;
+
+        private String agentUserId;
 
         private Map<String, String> defaultUserData = new LinkedHashMap<>();
 
@@ -190,6 +213,7 @@ public final class AppUserResponse implements IAppUser {
             identifiers(other.getIdentifiers());
             data(other.getData());
             userId(other.getUserId());
+            agentUserId(other.getAgentUserId());
             allUserData(other.getAllUserData());
             defaultUserData(other.getDefaultUserData());
             return this;
@@ -202,8 +226,20 @@ public final class AppUserResponse implements IAppUser {
          */
         @java.lang.Override
         @JsonSetter("userId")
-        public _FinalStage userId(@NotNull EntityId userId) {
+        public AgentUserIdStage userId(@NotNull EntityId userId) {
             this.userId = Objects.requireNonNull(userId, "userId must not be null");
+            return this;
+        }
+
+        /**
+         * <p>The ID of the agent user (merged view) that this app user is associated with</p>
+         * <p>The ID of the agent user (merged view) that this app user is associated with</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("agentUserId")
+        public _FinalStage agentUserId(@NotNull String agentUserId) {
+            this.agentUserId = Objects.requireNonNull(agentUserId, "agentUserId must not be null");
             return this;
         }
 
@@ -223,7 +259,9 @@ public final class AppUserResponse implements IAppUser {
          */
         @java.lang.Override
         public _FinalStage putAllDefaultUserData(Map<String, String> defaultUserData) {
-            this.defaultUserData.putAll(defaultUserData);
+            if (defaultUserData != null) {
+                this.defaultUserData.putAll(defaultUserData);
+            }
             return this;
         }
 
@@ -234,7 +272,9 @@ public final class AppUserResponse implements IAppUser {
         @JsonSetter(value = "defaultUserData", nulls = Nulls.SKIP)
         public _FinalStage defaultUserData(Map<String, String> defaultUserData) {
             this.defaultUserData.clear();
-            this.defaultUserData.putAll(defaultUserData);
+            if (defaultUserData != null) {
+                this.defaultUserData.putAll(defaultUserData);
+            }
             return this;
         }
 
@@ -254,7 +294,9 @@ public final class AppUserResponse implements IAppUser {
          */
         @java.lang.Override
         public _FinalStage putAllAllUserData(Map<String, Map<String, String>> allUserData) {
-            this.allUserData.putAll(allUserData);
+            if (allUserData != null) {
+                this.allUserData.putAll(allUserData);
+            }
             return this;
         }
 
@@ -265,7 +307,9 @@ public final class AppUserResponse implements IAppUser {
         @JsonSetter(value = "allUserData", nulls = Nulls.SKIP)
         public _FinalStage allUserData(Map<String, Map<String, String>> allUserData) {
             this.allUserData.clear();
-            this.allUserData.putAll(allUserData);
+            if (allUserData != null) {
+                this.allUserData.putAll(allUserData);
+            }
             return this;
         }
 
@@ -277,7 +321,9 @@ public final class AppUserResponse implements IAppUser {
 
         @java.lang.Override
         public _FinalStage putAllData(Map<String, UserData> data) {
-            this.data.putAll(data);
+            if (data != null) {
+                this.data.putAll(data);
+            }
             return this;
         }
 
@@ -285,7 +331,9 @@ public final class AppUserResponse implements IAppUser {
         @JsonSetter(value = "data", nulls = Nulls.SKIP)
         public _FinalStage data(Map<String, UserData> data) {
             this.data.clear();
-            this.data.putAll(data);
+            if (data != null) {
+                this.data.putAll(data);
+            }
             return this;
         }
 
@@ -295,7 +343,9 @@ public final class AppUserResponse implements IAppUser {
          */
         @java.lang.Override
         public _FinalStage addAllIdentifiers(Set<AppUserIdentifier> identifiers) {
-            this.identifiers.addAll(identifiers);
+            if (identifiers != null) {
+                this.identifiers.addAll(identifiers);
+            }
             return this;
         }
 
@@ -316,13 +366,16 @@ public final class AppUserResponse implements IAppUser {
         @JsonSetter(value = "identifiers", nulls = Nulls.SKIP)
         public _FinalStage identifiers(Set<AppUserIdentifier> identifiers) {
             this.identifiers.clear();
-            this.identifiers.addAll(identifiers);
+            if (identifiers != null) {
+                this.identifiers.addAll(identifiers);
+            }
             return this;
         }
 
         @java.lang.Override
         public AppUserResponse build() {
-            return new AppUserResponse(identifiers, data, userId, allUserData, defaultUserData, additionalProperties);
+            return new AppUserResponse(
+                    identifiers, data, userId, agentUserId, allUserData, defaultUserData, additionalProperties);
         }
     }
 }

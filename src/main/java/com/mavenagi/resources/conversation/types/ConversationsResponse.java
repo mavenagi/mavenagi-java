@@ -252,7 +252,9 @@ public final class ConversationsResponse implements IPage {
          */
         @java.lang.Override
         public _FinalStage addAllConversations(List<ConversationPreview> conversations) {
-            this.conversations.addAll(conversations);
+            if (conversations != null) {
+                this.conversations.addAll(conversations);
+            }
             return this;
         }
 
@@ -273,7 +275,9 @@ public final class ConversationsResponse implements IPage {
         @JsonSetter(value = "conversations", nulls = Nulls.SKIP)
         public _FinalStage conversations(List<ConversationPreview> conversations) {
             this.conversations.clear();
-            this.conversations.addAll(conversations);
+            if (conversations != null) {
+                this.conversations.addAll(conversations);
+            }
             return this;
         }
 

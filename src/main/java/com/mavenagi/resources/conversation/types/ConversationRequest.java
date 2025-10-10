@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
 import com.mavenagi.resources.commons.types.EntityIdBase;
 import com.mavenagi.resources.commons.types.ResponseConfig;
+import com.mavenagi.resources.commons.types.SimulationContext;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,6 +29,8 @@ import org.jetbrains.annotations.NotNull;
 @JsonDeserialize(builder = ConversationRequest.Builder.class)
 public final class ConversationRequest {
     private final EntityIdBase conversationId;
+
+    private final Optional<SimulationContext> simulationContext;
 
     private final Optional<ResponseConfig> responseConfig;
 
@@ -49,6 +52,7 @@ public final class ConversationRequest {
 
     private ConversationRequest(
             EntityIdBase conversationId,
+            Optional<SimulationContext> simulationContext,
             Optional<ResponseConfig> responseConfig,
             Optional<String> subject,
             Optional<String> url,
@@ -59,6 +63,7 @@ public final class ConversationRequest {
             List<ConversationMessageRequest> messages,
             Map<String, Object> additionalProperties) {
         this.conversationId = conversationId;
+        this.simulationContext = simulationContext;
         this.responseConfig = responseConfig;
         this.subject = subject;
         this.url = url;
@@ -76,6 +81,16 @@ public final class ConversationRequest {
     @JsonProperty("conversationId")
     public EntityIdBase getConversationId() {
         return conversationId;
+    }
+
+    /**
+     * @return Additional context used for simulation runs. When provided, this conversation will be treated as a simulation and
+     * may only be created by apps with the appropriate permission. Simulation conversations are excluded from normal
+     * search results unless explicitly included via the <code>simulationFilter</code> field.
+     */
+    @JsonProperty("simulationContext")
+    public Optional<SimulationContext> getSimulationContext() {
+        return simulationContext;
     }
 
     /**
@@ -155,6 +170,7 @@ public final class ConversationRequest {
 
     private boolean equalTo(ConversationRequest other) {
         return conversationId.equals(other.conversationId)
+                && simulationContext.equals(other.simulationContext)
                 && responseConfig.equals(other.responseConfig)
                 && subject.equals(other.subject)
                 && url.equals(other.url)
@@ -169,6 +185,7 @@ public final class ConversationRequest {
     public int hashCode() {
         return Objects.hash(
                 this.conversationId,
+                this.simulationContext,
                 this.responseConfig,
                 this.subject,
                 this.url,
@@ -199,6 +216,15 @@ public final class ConversationRequest {
 
     public interface _FinalStage {
         ConversationRequest build();
+
+        /**
+         * <p>Additional context used for simulation runs. When provided, this conversation will be treated as a simulation and
+         * may only be created by apps with the appropriate permission. Simulation conversations are excluded from normal
+         * search results unless explicitly included via the <code>simulationFilter</code> field.</p>
+         */
+        _FinalStage simulationContext(Optional<SimulationContext> simulationContext);
+
+        _FinalStage simulationContext(SimulationContext simulationContext);
 
         /**
          * <p>Optional configurations for responses to this conversation</p>
@@ -279,6 +305,8 @@ public final class ConversationRequest {
 
         private Optional<ResponseConfig> responseConfig = Optional.empty();
 
+        private Optional<SimulationContext> simulationContext = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -287,6 +315,7 @@ public final class ConversationRequest {
         @java.lang.Override
         public Builder from(ConversationRequest other) {
             conversationId(other.getConversationId());
+            simulationContext(other.getSimulationContext());
             responseConfig(other.getResponseConfig());
             subject(other.getSubject());
             url(other.getUrl());
@@ -316,7 +345,9 @@ public final class ConversationRequest {
          */
         @java.lang.Override
         public _FinalStage addAllMessages(List<ConversationMessageRequest> messages) {
-            this.messages.addAll(messages);
+            if (messages != null) {
+                this.messages.addAll(messages);
+            }
             return this;
         }
 
@@ -337,7 +368,9 @@ public final class ConversationRequest {
         @JsonSetter(value = "messages", nulls = Nulls.SKIP)
         public _FinalStage messages(List<ConversationMessageRequest> messages) {
             this.messages.clear();
-            this.messages.addAll(messages);
+            if (messages != null) {
+                this.messages.addAll(messages);
+            }
             return this;
         }
 
@@ -481,10 +514,35 @@ public final class ConversationRequest {
             return this;
         }
 
+        /**
+         * <p>Additional context used for simulation runs. When provided, this conversation will be treated as a simulation and
+         * may only be created by apps with the appropriate permission. Simulation conversations are excluded from normal
+         * search results unless explicitly included via the <code>simulationFilter</code> field.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage simulationContext(SimulationContext simulationContext) {
+            this.simulationContext = Optional.ofNullable(simulationContext);
+            return this;
+        }
+
+        /**
+         * <p>Additional context used for simulation runs. When provided, this conversation will be treated as a simulation and
+         * may only be created by apps with the appropriate permission. Simulation conversations are excluded from normal
+         * search results unless explicitly included via the <code>simulationFilter</code> field.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "simulationContext", nulls = Nulls.SKIP)
+        public _FinalStage simulationContext(Optional<SimulationContext> simulationContext) {
+            this.simulationContext = simulationContext;
+            return this;
+        }
+
         @java.lang.Override
         public ConversationRequest build() {
             return new ConversationRequest(
                     conversationId,
+                    simulationContext,
                     responseConfig,
                     subject,
                     url,

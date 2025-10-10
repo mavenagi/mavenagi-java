@@ -251,7 +251,9 @@ public final class AgentUserSearchResponse implements IPage {
          */
         @java.lang.Override
         public _FinalStage addAllAgentUsers(List<AgentUser> agentUsers) {
-            this.agentUsers.addAll(agentUsers);
+            if (agentUsers != null) {
+                this.agentUsers.addAll(agentUsers);
+            }
             return this;
         }
 
@@ -272,7 +274,9 @@ public final class AgentUserSearchResponse implements IPage {
         @JsonSetter(value = "agentUsers", nulls = Nulls.SKIP)
         public _FinalStage agentUsers(List<AgentUser> agentUsers) {
             this.agentUsers.clear();
-            this.agentUsers.addAll(agentUsers);
+            if (agentUsers != null) {
+                this.agentUsers.addAll(agentUsers);
+            }
             return this;
         }
 

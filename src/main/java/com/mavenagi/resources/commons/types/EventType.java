@@ -3,22 +3,80 @@
  */
 package com.mavenagi.resources.commons.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum EventType {
-    USER("USER"),
+public final class EventType {
+    public static final EventType USER = new EventType(Value.USER, "USER");
 
-    SYSTEM("SYSTEM");
+    public static final EventType SYSTEM = new EventType(Value.SYSTEM, "SYSTEM");
 
-    private final String value;
+    private final Value value;
 
-    EventType(String value) {
+    private final String string;
+
+    EventType(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other) || (other instanceof EventType && this.string.equals(((EventType) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case USER:
+                return visitor.visitUser();
+            case SYSTEM:
+                return visitor.visitSystem();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static EventType valueOf(String value) {
+        switch (value) {
+            case "USER":
+                return USER;
+            case "SYSTEM":
+                return SYSTEM;
+            default:
+                return new EventType(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        USER,
+
+        SYSTEM,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitUser();
+
+        T visitSystem();
+
+        T visitUnknown(String unknownType);
     }
 }

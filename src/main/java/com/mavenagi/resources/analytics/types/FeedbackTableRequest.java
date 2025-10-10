@@ -214,7 +214,9 @@ public final class FeedbackTableRequest implements IFeedbackAnalyticsRequest {
         @JsonSetter(value = "fieldGroupings", nulls = Nulls.SKIP)
         public Builder fieldGroupings(List<FeedbackGroupBy> fieldGroupings) {
             this.fieldGroupings.clear();
-            this.fieldGroupings.addAll(fieldGroupings);
+            if (fieldGroupings != null) {
+                this.fieldGroupings.addAll(fieldGroupings);
+            }
             return this;
         }
 
@@ -224,7 +226,9 @@ public final class FeedbackTableRequest implements IFeedbackAnalyticsRequest {
         }
 
         public Builder addAllFieldGroupings(List<FeedbackGroupBy> fieldGroupings) {
-            this.fieldGroupings.addAll(fieldGroupings);
+            if (fieldGroupings != null) {
+                this.fieldGroupings.addAll(fieldGroupings);
+            }
             return this;
         }
 
@@ -236,7 +240,9 @@ public final class FeedbackTableRequest implements IFeedbackAnalyticsRequest {
         @JsonSetter(value = "columnDefinitions", nulls = Nulls.SKIP)
         public Builder columnDefinitions(List<FeedbackColumnDefinition> columnDefinitions) {
             this.columnDefinitions.clear();
-            this.columnDefinitions.addAll(columnDefinitions);
+            if (columnDefinitions != null) {
+                this.columnDefinitions.addAll(columnDefinitions);
+            }
             return this;
         }
 
@@ -246,7 +252,9 @@ public final class FeedbackTableRequest implements IFeedbackAnalyticsRequest {
         }
 
         public Builder addAllColumnDefinitions(List<FeedbackColumnDefinition> columnDefinitions) {
-            this.columnDefinitions.addAll(columnDefinitions);
+            if (columnDefinitions != null) {
+                this.columnDefinitions.addAll(columnDefinitions);
+            }
             return this;
         }
 

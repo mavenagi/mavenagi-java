@@ -106,12 +106,16 @@ public final class FeedbackRow implements IRowBase {
         @JsonSetter(value = "data", nulls = Nulls.SKIP)
         public Builder data(Map<String, CellData> data) {
             this.data.clear();
-            this.data.putAll(data);
+            if (data != null) {
+                this.data.putAll(data);
+            }
             return this;
         }
 
         public Builder putAllData(Map<String, CellData> data) {
-            this.data.putAll(data);
+            if (data != null) {
+                this.data.putAll(data);
+            }
             return this;
         }
 
@@ -127,12 +131,16 @@ public final class FeedbackRow implements IRowBase {
         @JsonSetter(value = "identifier", nulls = Nulls.SKIP)
         public Builder identifier(Map<FeedbackField, FieldValue> identifier) {
             this.identifier.clear();
-            this.identifier.putAll(identifier);
+            if (identifier != null) {
+                this.identifier.putAll(identifier);
+            }
             return this;
         }
 
         public Builder putAllIdentifier(Map<FeedbackField, FieldValue> identifier) {
-            this.identifier.putAll(identifier);
+            if (identifier != null) {
+                this.identifier.putAll(identifier);
+            }
             return this;
         }
 

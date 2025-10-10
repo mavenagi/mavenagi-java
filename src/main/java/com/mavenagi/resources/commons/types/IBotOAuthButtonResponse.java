@@ -3,8 +3,10 @@
  */
 package com.mavenagi.resources.commons.types;
 
+import java.util.Optional;
+
 public interface IBotOAuthButtonResponse {
     String getButtonName();
 
-    String getUrl();
+    Optional<String> getUrl();
 }

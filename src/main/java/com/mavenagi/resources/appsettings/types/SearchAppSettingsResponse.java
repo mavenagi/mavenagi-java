@@ -81,7 +81,9 @@ public final class SearchAppSettingsResponse {
         @JsonSetter(value = "results", nulls = Nulls.SKIP)
         public Builder results(List<AppSettings> results) {
             this.results.clear();
-            this.results.addAll(results);
+            if (results != null) {
+                this.results.addAll(results);
+            }
             return this;
         }
 
@@ -91,7 +93,9 @@ public final class SearchAppSettingsResponse {
         }
 
         public Builder addAllResults(List<AppSettings> results) {
-            this.results.addAll(results);
+            if (results != null) {
+                this.results.addAll(results);
+            }
             return this;
         }
 
