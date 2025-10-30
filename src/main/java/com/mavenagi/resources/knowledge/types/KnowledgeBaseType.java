@@ -9,6 +9,14 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public final class KnowledgeBaseType {
     public static final KnowledgeBaseType API = new KnowledgeBaseType(Value.API, "API");
 
+    public static final KnowledgeBaseType URL = new KnowledgeBaseType(Value.URL, "URL");
+
+    public static final KnowledgeBaseType LEGACY = new KnowledgeBaseType(Value.LEGACY, "LEGACY");
+
+    public static final KnowledgeBaseType MANUAL = new KnowledgeBaseType(Value.MANUAL, "MANUAL");
+
+    public static final KnowledgeBaseType RSS = new KnowledgeBaseType(Value.RSS, "RSS");
+
     private final Value value;
 
     private final String string;
@@ -43,6 +51,14 @@ public final class KnowledgeBaseType {
         switch (value) {
             case API:
                 return visitor.visitApi();
+            case URL:
+                return visitor.visitUrl();
+            case LEGACY:
+                return visitor.visitLegacy();
+            case MANUAL:
+                return visitor.visitManual();
+            case RSS:
+                return visitor.visitRss();
             case UNKNOWN:
             default:
                 return visitor.visitUnknown(string);
@@ -54,6 +70,14 @@ public final class KnowledgeBaseType {
         switch (value) {
             case "API":
                 return API;
+            case "URL":
+                return URL;
+            case "LEGACY":
+                return LEGACY;
+            case "MANUAL":
+                return MANUAL;
+            case "RSS":
+                return RSS;
             default:
                 return new KnowledgeBaseType(Value.UNKNOWN, value);
         }
@@ -62,11 +86,27 @@ public final class KnowledgeBaseType {
     public enum Value {
         API,
 
+        URL,
+
+        MANUAL,
+
+        RSS,
+
+        LEGACY,
+
         UNKNOWN
     }
 
     public interface Visitor<T> {
         T visitApi();
+
+        T visitUrl();
+
+        T visitManual();
+
+        T visitRss();
+
+        T visitLegacy();
 
         T visitUnknown(String unknownType);
     }

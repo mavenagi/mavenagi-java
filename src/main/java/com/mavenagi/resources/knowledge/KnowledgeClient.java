@@ -10,6 +10,7 @@ import com.mavenagi.resources.knowledge.requests.KnowledgeBasePatchRequest;
 import com.mavenagi.resources.knowledge.requests.KnowledgeBaseVersionsListRequest;
 import com.mavenagi.resources.knowledge.requests.KnowledgeDocumentGetRequest;
 import com.mavenagi.resources.knowledge.types.FinalizeKnowledgeBaseVersionRequest;
+import com.mavenagi.resources.knowledge.types.KnowledgeBaseRefreshRequest;
 import com.mavenagi.resources.knowledge.types.KnowledgeBaseRequest;
 import com.mavenagi.resources.knowledge.types.KnowledgeBaseResponse;
 import com.mavenagi.resources.knowledge.types.KnowledgeBaseSearchRequest;
@@ -102,6 +103,36 @@ public class KnowledgeClient {
             String knowledgeBaseReferenceId, KnowledgeBaseGetRequest request, RequestOptions requestOptions) {
         return this.rawClient
                 .getKnowledgeBase(knowledgeBaseReferenceId, request, requestOptions)
+                .body();
+    }
+
+    /**
+     * Request that a knowledge base refresh itself.
+     * <p>Knowledge bases refresh on a schedule determined by the <code>refreshFrequency</code> field.
+     * They can also be refreshed on demand by calling this endpoint.</p>
+     */
+    public void refreshKnowledgeBase(String knowledgeBaseReferenceId) {
+        this.rawClient.refreshKnowledgeBase(knowledgeBaseReferenceId).body();
+    }
+
+    /**
+     * Request that a knowledge base refresh itself.
+     * <p>Knowledge bases refresh on a schedule determined by the <code>refreshFrequency</code> field.
+     * They can also be refreshed on demand by calling this endpoint.</p>
+     */
+    public void refreshKnowledgeBase(String knowledgeBaseReferenceId, KnowledgeBaseRefreshRequest request) {
+        this.rawClient.refreshKnowledgeBase(knowledgeBaseReferenceId, request).body();
+    }
+
+    /**
+     * Request that a knowledge base refresh itself.
+     * <p>Knowledge bases refresh on a schedule determined by the <code>refreshFrequency</code> field.
+     * They can also be refreshed on demand by calling this endpoint.</p>
+     */
+    public void refreshKnowledgeBase(
+            String knowledgeBaseReferenceId, KnowledgeBaseRefreshRequest request, RequestOptions requestOptions) {
+        this.rawClient
+                .refreshKnowledgeBase(knowledgeBaseReferenceId, request, requestOptions)
                 .body();
     }
 

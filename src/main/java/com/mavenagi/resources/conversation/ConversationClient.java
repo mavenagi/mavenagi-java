@@ -25,6 +25,7 @@ import com.mavenagi.resources.conversation.types.ObjectStreamResponse;
 import com.mavenagi.resources.conversation.types.StreamResponse;
 import com.mavenagi.resources.conversation.types.SubmitActionFormRequest;
 import com.mavenagi.resources.conversation.types.UpdateMetadataRequest;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
@@ -315,14 +316,20 @@ public class ConversationClient {
     }
 
     /**
-     * Submit a filled out action form
+     * Submit a filled out action form.
+     * Action forms can not be submitted more than once, attempting to do so will result in an error.
+     * <p>Additionally, form submission is only allowed when the form is the last message in the conversation.
+     * Forms should be disabled in surface UI if a conversation continues and they remain unsubmitted.</p>
      */
     public ConversationResponse submitActionForm(String conversationId, SubmitActionFormRequest request) {
         return this.rawClient.submitActionForm(conversationId, request).body();
     }
 
     /**
-     * Submit a filled out action form
+     * Submit a filled out action form.
+     * Action forms can not be submitted more than once, attempting to do so will result in an error.
+     * <p>Additionally, form submission is only allowed when the form is the last message in the conversation.
+     * Forms should be disabled in surface UI if a conversation continues and they remain unsubmitted.</p>
      */
     public ConversationResponse submitActionForm(
             String conversationId, SubmitActionFormRequest request, RequestOptions requestOptions) {
@@ -396,6 +403,36 @@ public class ConversationClient {
      */
     public ConversationsResponse search(ConversationsSearchRequest request, RequestOptions requestOptions) {
         return this.rawClient.search(request, requestOptions).body();
+    }
+
+    /**
+     * Export conversations to a CSV file.
+     * <p>This will output a summary of each conversation that matches the supplied filter. A maximum of 10,000 conversations can be exported at a time.</p>
+     * <p>For most use cases it is recommended to use the <code>search</code> API instead and convert the JSON response to your desired format.
+     * The CSV format may change over time and should not be relied upon by code consumers.</p>
+     */
+    public InputStream export() {
+        return this.rawClient.export().body();
+    }
+
+    /**
+     * Export conversations to a CSV file.
+     * <p>This will output a summary of each conversation that matches the supplied filter. A maximum of 10,000 conversations can be exported at a time.</p>
+     * <p>For most use cases it is recommended to use the <code>search</code> API instead and convert the JSON response to your desired format.
+     * The CSV format may change over time and should not be relied upon by code consumers.</p>
+     */
+    public InputStream export(ConversationsSearchRequest request) {
+        return this.rawClient.export(request).body();
+    }
+
+    /**
+     * Export conversations to a CSV file.
+     * <p>This will output a summary of each conversation that matches the supplied filter. A maximum of 10,000 conversations can be exported at a time.</p>
+     * <p>For most use cases it is recommended to use the <code>search</code> API instead and convert the JSON response to your desired format.
+     * The CSV format may change over time and should not be relied upon by code consumers.</p>
+     */
+    public InputStream export(ConversationsSearchRequest request, RequestOptions requestOptions) {
+        return this.rawClient.export(request, requestOptions).body();
     }
 
     /**

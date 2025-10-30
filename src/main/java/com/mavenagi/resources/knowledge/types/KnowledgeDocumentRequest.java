@@ -24,8 +24,6 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = KnowledgeDocumentRequest.Builder.class)
 public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
-    private final String title;
-
     private final Optional<String> url;
 
     private final Optional<String> language;
@@ -42,6 +40,8 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
 
     private final KnowledgeDocumentContentType contentType;
 
+    private final String title;
+
     private final String content;
 
     private final Optional<Map<String, String>> metadata;
@@ -49,7 +49,6 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
     private final Map<String, Object> additionalProperties;
 
     private KnowledgeDocumentRequest(
-            String title,
             Optional<String> url,
             Optional<String> language,
             Optional<OffsetDateTime> createdAt,
@@ -58,10 +57,10 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
             EntityIdBase knowledgeDocumentId,
             Optional<EntityIdWithoutAgent> versionId,
             KnowledgeDocumentContentType contentType,
+            String title,
             String content,
             Optional<Map<String, String>> metadata,
             Map<String, Object> additionalProperties) {
-        this.title = title;
         this.url = url;
         this.language = language;
         this.createdAt = createdAt;
@@ -70,18 +69,10 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
         this.knowledgeDocumentId = knowledgeDocumentId;
         this.versionId = versionId;
         this.contentType = contentType;
+        this.title = title;
         this.content = content;
         this.metadata = metadata;
         this.additionalProperties = additionalProperties;
-    }
-
-    /**
-     * @return The title of the document. Will be shown as part of answers.
-     */
-    @JsonProperty("title")
-    @java.lang.Override
-    public String getTitle() {
-        return title;
     }
 
     /**
@@ -151,6 +142,14 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
     }
 
     /**
+     * @return The title of the document. Will be shown as part of answers.
+     */
+    @JsonProperty("title")
+    public String getTitle() {
+        return title;
+    }
+
+    /**
      * @return The content of the document. Not shown directly to users. May be provided in HTML or markdown. HTML will be converted to markdown automatically. Images are not currently supported and will be ignored.
      */
     @JsonProperty("content")
@@ -178,8 +177,7 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
     }
 
     private boolean equalTo(KnowledgeDocumentRequest other) {
-        return title.equals(other.title)
-                && url.equals(other.url)
+        return url.equals(other.url)
                 && language.equals(other.language)
                 && createdAt.equals(other.createdAt)
                 && updatedAt.equals(other.updatedAt)
@@ -187,6 +185,7 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
                 && knowledgeDocumentId.equals(other.knowledgeDocumentId)
                 && versionId.equals(other.versionId)
                 && contentType.equals(other.contentType)
+                && title.equals(other.title)
                 && content.equals(other.content)
                 && metadata.equals(other.metadata);
     }
@@ -194,7 +193,6 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.title,
                 this.url,
                 this.language,
                 this.createdAt,
@@ -203,6 +201,7 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
                 this.knowledgeDocumentId,
                 this.versionId,
                 this.contentType,
+                this.title,
                 this.content,
                 this.metadata);
     }
@@ -212,17 +211,8 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
         return ObjectMappers.stringify(this);
     }
 
-    public static TitleStage builder() {
+    public static KnowledgeDocumentIdStage builder() {
         return new Builder();
-    }
-
-    public interface TitleStage {
-        /**
-         * <p>The title of the document. Will be shown as part of answers.</p>
-         */
-        KnowledgeDocumentIdStage title(@NotNull String title);
-
-        Builder from(KnowledgeDocumentRequest other);
     }
 
     public interface KnowledgeDocumentIdStage {
@@ -230,10 +220,19 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
          * <p>ID that uniquely identifies this knowledge document within its knowledge base</p>
          */
         ContentTypeStage knowledgeDocumentId(@NotNull EntityIdBase knowledgeDocumentId);
+
+        Builder from(KnowledgeDocumentRequest other);
     }
 
     public interface ContentTypeStage {
-        ContentStage contentType(@NotNull KnowledgeDocumentContentType contentType);
+        TitleStage contentType(@NotNull KnowledgeDocumentContentType contentType);
+    }
+
+    public interface TitleStage {
+        /**
+         * <p>The title of the document. Will be shown as part of answers.</p>
+         */
+        ContentStage title(@NotNull String title);
     }
 
     public interface ContentStage {
@@ -298,12 +297,12 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
-            implements TitleStage, KnowledgeDocumentIdStage, ContentTypeStage, ContentStage, _FinalStage {
-        private String title;
-
+            implements KnowledgeDocumentIdStage, ContentTypeStage, TitleStage, ContentStage, _FinalStage {
         private EntityIdBase knowledgeDocumentId;
 
         private KnowledgeDocumentContentType contentType;
+
+        private String title;
 
         private String content;
 
@@ -328,7 +327,6 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
 
         @java.lang.Override
         public Builder from(KnowledgeDocumentRequest other) {
-            title(other.getTitle());
             url(other.getUrl());
             language(other.getLanguage());
             createdAt(other.getCreatedAt());
@@ -337,20 +335,9 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
             knowledgeDocumentId(other.getKnowledgeDocumentId());
             versionId(other.getVersionId());
             contentType(other.getContentType());
+            title(other.getTitle());
             content(other.getContent());
             metadata(other.getMetadata());
-            return this;
-        }
-
-        /**
-         * <p>The title of the document. Will be shown as part of answers.</p>
-         * <p>The title of the document. Will be shown as part of answers.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("title")
-        public KnowledgeDocumentIdStage title(@NotNull String title) {
-            this.title = Objects.requireNonNull(title, "title must not be null");
             return this;
         }
 
@@ -369,8 +356,20 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
 
         @java.lang.Override
         @JsonSetter("contentType")
-        public ContentStage contentType(@NotNull KnowledgeDocumentContentType contentType) {
+        public TitleStage contentType(@NotNull KnowledgeDocumentContentType contentType) {
             this.contentType = Objects.requireNonNull(contentType, "contentType must not be null");
+            return this;
+        }
+
+        /**
+         * <p>The title of the document. Will be shown as part of answers.</p>
+         * <p>The title of the document. Will be shown as part of answers.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("title")
+        public ContentStage title(@NotNull String title) {
+            this.title = Objects.requireNonNull(title, "title must not be null");
             return this;
         }
 
@@ -529,7 +528,6 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
         @java.lang.Override
         public KnowledgeDocumentRequest build() {
             return new KnowledgeDocumentRequest(
-                    title,
                     url,
                     language,
                     createdAt,
@@ -538,6 +536,7 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
                     knowledgeDocumentId,
                     versionId,
                     contentType,
+                    title,
                     content,
                     metadata,
                     additionalProperties);

@@ -17,13 +17,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BaseKnowledgeDocument.Builder.class)
 public final class BaseKnowledgeDocument implements IBaseKnowledgeDocument {
-    private final String title;
-
     private final Optional<String> url;
 
     private final Optional<String> language;
@@ -37,29 +34,18 @@ public final class BaseKnowledgeDocument implements IBaseKnowledgeDocument {
     private final Map<String, Object> additionalProperties;
 
     private BaseKnowledgeDocument(
-            String title,
             Optional<String> url,
             Optional<String> language,
             Optional<OffsetDateTime> createdAt,
             Optional<OffsetDateTime> updatedAt,
             Optional<String> author,
             Map<String, Object> additionalProperties) {
-        this.title = title;
         this.url = url;
         this.language = language;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.author = author;
         this.additionalProperties = additionalProperties;
-    }
-
-    /**
-     * @return The title of the document. Will be shown as part of answers.
-     */
-    @JsonProperty("title")
-    @java.lang.Override
-    public String getTitle() {
-        return title;
     }
 
     /**
@@ -119,8 +105,7 @@ public final class BaseKnowledgeDocument implements IBaseKnowledgeDocument {
     }
 
     private boolean equalTo(BaseKnowledgeDocument other) {
-        return title.equals(other.title)
-                && url.equals(other.url)
+        return url.equals(other.url)
                 && language.equals(other.language)
                 && createdAt.equals(other.createdAt)
                 && updatedAt.equals(other.updatedAt)
@@ -129,7 +114,7 @@ public final class BaseKnowledgeDocument implements IBaseKnowledgeDocument {
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.title, this.url, this.language, this.createdAt, this.updatedAt, this.author);
+        return Objects.hash(this.url, this.language, this.createdAt, this.updatedAt, this.author);
     }
 
     @java.lang.Override
@@ -137,80 +122,28 @@ public final class BaseKnowledgeDocument implements IBaseKnowledgeDocument {
         return ObjectMappers.stringify(this);
     }
 
-    public static TitleStage builder() {
+    public static Builder builder() {
         return new Builder();
     }
 
-    public interface TitleStage {
-        /**
-         * <p>The title of the document. Will be shown as part of answers.</p>
-         */
-        _FinalStage title(@NotNull String title);
-
-        Builder from(BaseKnowledgeDocument other);
-    }
-
-    public interface _FinalStage {
-        BaseKnowledgeDocument build();
-
-        /**
-         * <p>The URL of the document. Should be visible to end users. Will be shown as part of answers. Not used for crawling.</p>
-         */
-        _FinalStage url(Optional<String> url);
-
-        _FinalStage url(String url);
-
-        /**
-         * <p>The document language. Must be a valid ISO 639-1 language code.</p>
-         */
-        _FinalStage language(Optional<String> language);
-
-        _FinalStage language(String language);
-
-        /**
-         * <p>The time at which this document was created.</p>
-         */
-        _FinalStage createdAt(Optional<OffsetDateTime> createdAt);
-
-        _FinalStage createdAt(OffsetDateTime createdAt);
-
-        /**
-         * <p>The time at which this document was last modified.</p>
-         */
-        _FinalStage updatedAt(Optional<OffsetDateTime> updatedAt);
-
-        _FinalStage updatedAt(OffsetDateTime updatedAt);
-
-        /**
-         * <p>The name of the author who created this document.</p>
-         */
-        _FinalStage author(Optional<String> author);
-
-        _FinalStage author(String author);
-    }
-
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements TitleStage, _FinalStage {
-        private String title;
-
-        private Optional<String> author = Optional.empty();
-
-        private Optional<OffsetDateTime> updatedAt = Optional.empty();
-
-        private Optional<OffsetDateTime> createdAt = Optional.empty();
+    public static final class Builder {
+        private Optional<String> url = Optional.empty();
 
         private Optional<String> language = Optional.empty();
 
-        private Optional<String> url = Optional.empty();
+        private Optional<OffsetDateTime> createdAt = Optional.empty();
+
+        private Optional<OffsetDateTime> updatedAt = Optional.empty();
+
+        private Optional<String> author = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
 
-        @java.lang.Override
         public Builder from(BaseKnowledgeDocument other) {
-            title(other.getTitle());
             url(other.getUrl());
             language(other.getLanguage());
             createdAt(other.getCreatedAt());
@@ -220,120 +153,77 @@ public final class BaseKnowledgeDocument implements IBaseKnowledgeDocument {
         }
 
         /**
-         * <p>The title of the document. Will be shown as part of answers.</p>
-         * <p>The title of the document. Will be shown as part of answers.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("title")
-        public _FinalStage title(@NotNull String title) {
-            this.title = Objects.requireNonNull(title, "title must not be null");
-            return this;
-        }
-
-        /**
-         * <p>The name of the author who created this document.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage author(String author) {
-            this.author = Optional.ofNullable(author);
-            return this;
-        }
-
-        /**
-         * <p>The name of the author who created this document.</p>
-         */
-        @java.lang.Override
-        @JsonSetter(value = "author", nulls = Nulls.SKIP)
-        public _FinalStage author(Optional<String> author) {
-            this.author = author;
-            return this;
-        }
-
-        /**
-         * <p>The time at which this document was last modified.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage updatedAt(OffsetDateTime updatedAt) {
-            this.updatedAt = Optional.ofNullable(updatedAt);
-            return this;
-        }
-
-        /**
-         * <p>The time at which this document was last modified.</p>
-         */
-        @java.lang.Override
-        @JsonSetter(value = "updatedAt", nulls = Nulls.SKIP)
-        public _FinalStage updatedAt(Optional<OffsetDateTime> updatedAt) {
-            this.updatedAt = updatedAt;
-            return this;
-        }
-
-        /**
-         * <p>The time at which this document was created.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage createdAt(OffsetDateTime createdAt) {
-            this.createdAt = Optional.ofNullable(createdAt);
-            return this;
-        }
-
-        /**
-         * <p>The time at which this document was created.</p>
-         */
-        @java.lang.Override
-        @JsonSetter(value = "createdAt", nulls = Nulls.SKIP)
-        public _FinalStage createdAt(Optional<OffsetDateTime> createdAt) {
-            this.createdAt = createdAt;
-            return this;
-        }
-
-        /**
-         * <p>The document language. Must be a valid ISO 639-1 language code.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage language(String language) {
-            this.language = Optional.ofNullable(language);
-            return this;
-        }
-
-        /**
-         * <p>The document language. Must be a valid ISO 639-1 language code.</p>
-         */
-        @java.lang.Override
-        @JsonSetter(value = "language", nulls = Nulls.SKIP)
-        public _FinalStage language(Optional<String> language) {
-            this.language = language;
-            return this;
-        }
-
-        /**
          * <p>The URL of the document. Should be visible to end users. Will be shown as part of answers. Not used for crawling.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
          */
-        @java.lang.Override
-        public _FinalStage url(String url) {
+        @JsonSetter(value = "url", nulls = Nulls.SKIP)
+        public Builder url(Optional<String> url) {
+            this.url = url;
+            return this;
+        }
+
+        public Builder url(String url) {
             this.url = Optional.ofNullable(url);
             return this;
         }
 
         /**
-         * <p>The URL of the document. Should be visible to end users. Will be shown as part of answers. Not used for crawling.</p>
+         * <p>The document language. Must be a valid ISO 639-1 language code.</p>
          */
-        @java.lang.Override
-        @JsonSetter(value = "url", nulls = Nulls.SKIP)
-        public _FinalStage url(Optional<String> url) {
-            this.url = url;
+        @JsonSetter(value = "language", nulls = Nulls.SKIP)
+        public Builder language(Optional<String> language) {
+            this.language = language;
             return this;
         }
 
-        @java.lang.Override
+        public Builder language(String language) {
+            this.language = Optional.ofNullable(language);
+            return this;
+        }
+
+        /**
+         * <p>The time at which this document was created.</p>
+         */
+        @JsonSetter(value = "createdAt", nulls = Nulls.SKIP)
+        public Builder createdAt(Optional<OffsetDateTime> createdAt) {
+            this.createdAt = createdAt;
+            return this;
+        }
+
+        public Builder createdAt(OffsetDateTime createdAt) {
+            this.createdAt = Optional.ofNullable(createdAt);
+            return this;
+        }
+
+        /**
+         * <p>The time at which this document was last modified.</p>
+         */
+        @JsonSetter(value = "updatedAt", nulls = Nulls.SKIP)
+        public Builder updatedAt(Optional<OffsetDateTime> updatedAt) {
+            this.updatedAt = updatedAt;
+            return this;
+        }
+
+        public Builder updatedAt(OffsetDateTime updatedAt) {
+            this.updatedAt = Optional.ofNullable(updatedAt);
+            return this;
+        }
+
+        /**
+         * <p>The name of the author who created this document.</p>
+         */
+        @JsonSetter(value = "author", nulls = Nulls.SKIP)
+        public Builder author(Optional<String> author) {
+            this.author = author;
+            return this;
+        }
+
+        public Builder author(String author) {
+            this.author = Optional.ofNullable(author);
+            return this;
+        }
+
         public BaseKnowledgeDocument build() {
-            return new BaseKnowledgeDocument(title, url, language, createdAt, updatedAt, author, additionalProperties);
+            return new BaseKnowledgeDocument(url, language, createdAt, updatedAt, author, additionalProperties);
         }
     }
 }

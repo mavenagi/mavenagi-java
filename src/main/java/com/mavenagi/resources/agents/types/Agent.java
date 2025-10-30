@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 
@@ -36,6 +37,10 @@ public final class Agent {
 
     private final Set<PiiCategory> enabledPiiCategories;
 
+    private final Optional<String> systemFallbackMessage;
+
+    private final AgentPrompting prompting;
+
     private final Map<String, Object> additionalProperties;
 
     private Agent(
@@ -45,6 +50,8 @@ public final class Agent {
             AgentEnvironment environment,
             String defaultTimezone,
             Set<PiiCategory> enabledPiiCategories,
+            Optional<String> systemFallbackMessage,
+            AgentPrompting prompting,
             Map<String, Object> additionalProperties) {
         this.agentId = agentId;
         this.name = name;
@@ -52,6 +59,8 @@ public final class Agent {
         this.environment = environment;
         this.defaultTimezone = defaultTimezone;
         this.enabledPiiCategories = enabledPiiCategories;
+        this.systemFallbackMessage = systemFallbackMessage;
+        this.prompting = prompting;
         this.additionalProperties = additionalProperties;
     }
 
@@ -108,6 +117,23 @@ public final class Agent {
         return enabledPiiCategories;
     }
 
+    /**
+     * @return Text shown to end users when the system encounters an error while generating a bot response message.
+     * <p>This text is also used when a content safety violation is detected, unless <code>contentSafetyViolationPromptText</code> is set.</p>
+     */
+    @JsonProperty("systemFallbackMessage")
+    public Optional<String> getSystemFallbackMessage() {
+        return systemFallbackMessage;
+    }
+
+    /**
+     * @return Agent prompting settings.
+     */
+    @JsonProperty("prompting")
+    public AgentPrompting getPrompting() {
+        return prompting;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -125,7 +151,9 @@ public final class Agent {
                 && createdAt.equals(other.createdAt)
                 && environment.equals(other.environment)
                 && defaultTimezone.equals(other.defaultTimezone)
-                && enabledPiiCategories.equals(other.enabledPiiCategories);
+                && enabledPiiCategories.equals(other.enabledPiiCategories)
+                && systemFallbackMessage.equals(other.systemFallbackMessage)
+                && prompting.equals(other.prompting);
     }
 
     @java.lang.Override
@@ -136,7 +164,9 @@ public final class Agent {
                 this.createdAt,
                 this.environment,
                 this.defaultTimezone,
-                this.enabledPiiCategories);
+                this.enabledPiiCategories,
+                this.systemFallbackMessage,
+                this.prompting);
     }
 
     @java.lang.Override
@@ -182,7 +212,14 @@ public final class Agent {
         /**
          * <p>The agent's default timezone. This is used when a timezone is not set on a conversation.</p>
          */
-        _FinalStage defaultTimezone(@NotNull String defaultTimezone);
+        PromptingStage defaultTimezone(@NotNull String defaultTimezone);
+    }
+
+    public interface PromptingStage {
+        /**
+         * <p>Agent prompting settings.</p>
+         */
+        _FinalStage prompting(@NotNull AgentPrompting prompting);
     }
 
     public interface _FinalStage {
@@ -201,11 +238,25 @@ public final class Agent {
         _FinalStage addEnabledPiiCategories(PiiCategory enabledPiiCategories);
 
         _FinalStage addAllEnabledPiiCategories(Set<PiiCategory> enabledPiiCategories);
+
+        /**
+         * <p>Text shown to end users when the system encounters an error while generating a bot response message.</p>
+         * <p>This text is also used when a content safety violation is detected, unless <code>contentSafetyViolationPromptText</code> is set.</p>
+         */
+        _FinalStage systemFallbackMessage(Optional<String> systemFallbackMessage);
+
+        _FinalStage systemFallbackMessage(String systemFallbackMessage);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
-            implements AgentIdStage, NameStage, CreatedAtStage, EnvironmentStage, DefaultTimezoneStage, _FinalStage {
+            implements AgentIdStage,
+                    NameStage,
+                    CreatedAtStage,
+                    EnvironmentStage,
+                    DefaultTimezoneStage,
+                    PromptingStage,
+                    _FinalStage {
         private EntityId agentId;
 
         private String name;
@@ -215,6 +266,10 @@ public final class Agent {
         private AgentEnvironment environment;
 
         private String defaultTimezone;
+
+        private AgentPrompting prompting;
+
+        private Optional<String> systemFallbackMessage = Optional.empty();
 
         private Set<PiiCategory> enabledPiiCategories = new LinkedHashSet<>();
 
@@ -231,6 +286,8 @@ public final class Agent {
             environment(other.getEnvironment());
             defaultTimezone(other.getDefaultTimezone());
             enabledPiiCategories(other.getEnabledPiiCategories());
+            systemFallbackMessage(other.getSystemFallbackMessage());
+            prompting(other.getPrompting());
             return this;
         }
 
@@ -289,8 +346,42 @@ public final class Agent {
          */
         @java.lang.Override
         @JsonSetter("defaultTimezone")
-        public _FinalStage defaultTimezone(@NotNull String defaultTimezone) {
+        public PromptingStage defaultTimezone(@NotNull String defaultTimezone) {
             this.defaultTimezone = Objects.requireNonNull(defaultTimezone, "defaultTimezone must not be null");
+            return this;
+        }
+
+        /**
+         * <p>Agent prompting settings.</p>
+         * <p>Agent prompting settings.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("prompting")
+        public _FinalStage prompting(@NotNull AgentPrompting prompting) {
+            this.prompting = Objects.requireNonNull(prompting, "prompting must not be null");
+            return this;
+        }
+
+        /**
+         * <p>Text shown to end users when the system encounters an error while generating a bot response message.</p>
+         * <p>This text is also used when a content safety violation is detected, unless <code>contentSafetyViolationPromptText</code> is set.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage systemFallbackMessage(String systemFallbackMessage) {
+            this.systemFallbackMessage = Optional.ofNullable(systemFallbackMessage);
+            return this;
+        }
+
+        /**
+         * <p>Text shown to end users when the system encounters an error while generating a bot response message.</p>
+         * <p>This text is also used when a content safety violation is detected, unless <code>contentSafetyViolationPromptText</code> is set.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "systemFallbackMessage", nulls = Nulls.SKIP)
+        public _FinalStage systemFallbackMessage(Optional<String> systemFallbackMessage) {
+            this.systemFallbackMessage = systemFallbackMessage;
             return this;
         }
 
@@ -347,7 +438,15 @@ public final class Agent {
         @java.lang.Override
         public Agent build() {
             return new Agent(
-                    agentId, name, createdAt, environment, defaultTimezone, enabledPiiCategories, additionalProperties);
+                    agentId,
+                    name,
+                    createdAt,
+                    environment,
+                    defaultTimezone,
+                    enabledPiiCategories,
+                    systemFallbackMessage,
+                    prompting,
+                    additionalProperties);
         }
     }
 }

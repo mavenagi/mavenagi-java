@@ -79,6 +79,17 @@ public final class ConversationDateHistogramRequest implements IConversationAnal
 
     /**
      * @return Groups data before applying calculations, forming a separate time series for each group.
+     * <p><strong>Series Name Formats by Field:</strong></p>
+     * <ul>
+     * <li><code>Sources</code>: Document title (e.g., &quot;Product Documentation&quot;)</li>
+     * <li><code>Actions</code>: &quot;Action Name - App Name&quot; (e.g., &quot;Create Ticket - Freshdesk&quot;)</li>
+     * <li><code>IncompleteActions</code>: &quot;Action Name - App Name&quot; (e.g., &quot;Search Documents - Zendesk&quot;)</li>
+     * <li><code>Users</code>: User identifier value (e.g., &quot;user@example.com&quot;)</li>
+     * <li><code>InboxItems</code>: Inbox item title</li>
+     * <li><code>HumanAgents</code>: Human agent display name</li>
+     * <li><code>HumanAgentsWithInserts</code>: Human agent display name (for agents who made inserts)</li>
+     * <li>Other fields: Field value as stored (e.g., &quot;GOOD&quot;, &quot;NEEDS_IMPROVEMENT&quot; for Quality)</li>
+     * </ul>
      */
     @JsonProperty("groupBy")
     public Optional<ConversationGroupBy> getGroupBy() {
@@ -163,6 +174,17 @@ public final class ConversationDateHistogramRequest implements IConversationAnal
 
         /**
          * <p>Groups data before applying calculations, forming a separate time series for each group.</p>
+         * <p><strong>Series Name Formats by Field:</strong></p>
+         * <ul>
+         * <li><code>Sources</code>: Document title (e.g., &quot;Product Documentation&quot;)</li>
+         * <li><code>Actions</code>: &quot;Action Name - App Name&quot; (e.g., &quot;Create Ticket - Freshdesk&quot;)</li>
+         * <li><code>IncompleteActions</code>: &quot;Action Name - App Name&quot; (e.g., &quot;Search Documents - Zendesk&quot;)</li>
+         * <li><code>Users</code>: User identifier value (e.g., &quot;user@example.com&quot;)</li>
+         * <li><code>InboxItems</code>: Inbox item title</li>
+         * <li><code>HumanAgents</code>: Human agent display name</li>
+         * <li><code>HumanAgentsWithInserts</code>: Human agent display name (for agents who made inserts)</li>
+         * <li>Other fields: Field value as stored (e.g., &quot;GOOD&quot;, &quot;NEEDS_IMPROVEMENT&quot; for Quality)</li>
+         * </ul>
          */
         _FinalStage groupBy(Optional<ConversationGroupBy> groupBy);
 
@@ -222,6 +244,17 @@ public final class ConversationDateHistogramRequest implements IConversationAnal
 
         /**
          * <p>Groups data before applying calculations, forming a separate time series for each group.</p>
+         * <p><strong>Series Name Formats by Field:</strong></p>
+         * <ul>
+         * <li><code>Sources</code>: Document title (e.g., &quot;Product Documentation&quot;)</li>
+         * <li><code>Actions</code>: &quot;Action Name - App Name&quot; (e.g., &quot;Create Ticket - Freshdesk&quot;)</li>
+         * <li><code>IncompleteActions</code>: &quot;Action Name - App Name&quot; (e.g., &quot;Search Documents - Zendesk&quot;)</li>
+         * <li><code>Users</code>: User identifier value (e.g., &quot;user@example.com&quot;)</li>
+         * <li><code>InboxItems</code>: Inbox item title</li>
+         * <li><code>HumanAgents</code>: Human agent display name</li>
+         * <li><code>HumanAgentsWithInserts</code>: Human agent display name (for agents who made inserts)</li>
+         * <li>Other fields: Field value as stored (e.g., &quot;GOOD&quot;, &quot;NEEDS_IMPROVEMENT&quot; for Quality)</li>
+         * </ul>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -232,6 +265,17 @@ public final class ConversationDateHistogramRequest implements IConversationAnal
 
         /**
          * <p>Groups data before applying calculations, forming a separate time series for each group.</p>
+         * <p><strong>Series Name Formats by Field:</strong></p>
+         * <ul>
+         * <li><code>Sources</code>: Document title (e.g., &quot;Product Documentation&quot;)</li>
+         * <li><code>Actions</code>: &quot;Action Name - App Name&quot; (e.g., &quot;Create Ticket - Freshdesk&quot;)</li>
+         * <li><code>IncompleteActions</code>: &quot;Action Name - App Name&quot; (e.g., &quot;Search Documents - Zendesk&quot;)</li>
+         * <li><code>Users</code>: User identifier value (e.g., &quot;user@example.com&quot;)</li>
+         * <li><code>InboxItems</code>: Inbox item title</li>
+         * <li><code>HumanAgents</code>: Human agent display name</li>
+         * <li><code>HumanAgentsWithInserts</code>: Human agent display name (for agents who made inserts)</li>
+         * <li>Other fields: Field value as stored (e.g., &quot;GOOD&quot;, &quot;NEEDS_IMPROVEMENT&quot; for Quality)</li>
+         * </ul>
          */
         @java.lang.Override
         @JsonSetter(value = "groupBy", nulls = Nulls.SKIP)

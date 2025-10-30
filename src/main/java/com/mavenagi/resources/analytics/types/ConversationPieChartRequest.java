@@ -67,6 +67,17 @@ public final class ConversationPieChartRequest implements IConversationAnalytics
 
     /**
      * @return Field used to group data into slices for the pie chart.
+     * <p><strong>Series Name Formats by Field:</strong></p>
+     * <ul>
+     * <li><code>Sources</code>: Document title (e.g., &quot;Product Documentation&quot;)</li>
+     * <li><code>Actions</code>: &quot;Action Name - App Name&quot; (e.g., &quot;Create Ticket - Freshdesk&quot;)</li>
+     * <li><code>IncompleteActions</code>: &quot;Action Name - App Name&quot; (e.g., &quot;Search Documents - Zendesk&quot;)</li>
+     * <li><code>Users</code>: User identifier value (e.g., &quot;user@example.com&quot;)</li>
+     * <li><code>InboxItems</code>: Inbox item title</li>
+     * <li><code>HumanAgents</code>: Human agent display name</li>
+     * <li><code>HumanAgentsWithInserts</code>: Human agent display name (for agents who made inserts)</li>
+     * <li>Other fields: Field value as stored (e.g., &quot;GOOD&quot;, &quot;NEEDS_IMPROVEMENT&quot; for Quality)</li>
+     * </ul>
      */
     @JsonProperty("groupBy")
     public ConversationGroupBy getGroupBy() {
@@ -116,6 +127,17 @@ public final class ConversationPieChartRequest implements IConversationAnalytics
     public interface GroupByStage {
         /**
          * <p>Field used to group data into slices for the pie chart.</p>
+         * <p><strong>Series Name Formats by Field:</strong></p>
+         * <ul>
+         * <li><code>Sources</code>: Document title (e.g., &quot;Product Documentation&quot;)</li>
+         * <li><code>Actions</code>: &quot;Action Name - App Name&quot; (e.g., &quot;Create Ticket - Freshdesk&quot;)</li>
+         * <li><code>IncompleteActions</code>: &quot;Action Name - App Name&quot; (e.g., &quot;Search Documents - Zendesk&quot;)</li>
+         * <li><code>Users</code>: User identifier value (e.g., &quot;user@example.com&quot;)</li>
+         * <li><code>InboxItems</code>: Inbox item title</li>
+         * <li><code>HumanAgents</code>: Human agent display name</li>
+         * <li><code>HumanAgentsWithInserts</code>: Human agent display name (for agents who made inserts)</li>
+         * <li>Other fields: Field value as stored (e.g., &quot;GOOD&quot;, &quot;NEEDS_IMPROVEMENT&quot; for Quality)</li>
+         * </ul>
          */
         MetricStage groupBy(@NotNull ConversationGroupBy groupBy);
 
@@ -175,7 +197,29 @@ public final class ConversationPieChartRequest implements IConversationAnalytics
 
         /**
          * <p>Field used to group data into slices for the pie chart.</p>
+         * <p><strong>Series Name Formats by Field:</strong></p>
+         * <ul>
+         * <li><code>Sources</code>: Document title (e.g., &quot;Product Documentation&quot;)</li>
+         * <li><code>Actions</code>: &quot;Action Name - App Name&quot; (e.g., &quot;Create Ticket - Freshdesk&quot;)</li>
+         * <li><code>IncompleteActions</code>: &quot;Action Name - App Name&quot; (e.g., &quot;Search Documents - Zendesk&quot;)</li>
+         * <li><code>Users</code>: User identifier value (e.g., &quot;user@example.com&quot;)</li>
+         * <li><code>InboxItems</code>: Inbox item title</li>
+         * <li><code>HumanAgents</code>: Human agent display name</li>
+         * <li><code>HumanAgentsWithInserts</code>: Human agent display name (for agents who made inserts)</li>
+         * <li>Other fields: Field value as stored (e.g., &quot;GOOD&quot;, &quot;NEEDS_IMPROVEMENT&quot; for Quality)</li>
+         * </ul>
          * <p>Field used to group data into slices for the pie chart.</p>
+         * <p><strong>Series Name Formats by Field:</strong></p>
+         * <ul>
+         * <li><code>Sources</code>: Document title (e.g., &quot;Product Documentation&quot;)</li>
+         * <li><code>Actions</code>: &quot;Action Name - App Name&quot; (e.g., &quot;Create Ticket - Freshdesk&quot;)</li>
+         * <li><code>IncompleteActions</code>: &quot;Action Name - App Name&quot; (e.g., &quot;Search Documents - Zendesk&quot;)</li>
+         * <li><code>Users</code>: User identifier value (e.g., &quot;user@example.com&quot;)</li>
+         * <li><code>InboxItems</code>: Inbox item title</li>
+         * <li><code>HumanAgents</code>: Human agent display name</li>
+         * <li><code>HumanAgentsWithInserts</code>: Human agent display name (for agents who made inserts)</li>
+         * <li>Other fields: Field value as stored (e.g., &quot;GOOD&quot;, &quot;NEEDS_IMPROVEMENT&quot; for Quality)</li>
+         * </ul>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override

@@ -11,6 +11,8 @@ public final class KnowledgeBaseField {
 
     public static final KnowledgeBaseField TITLE = new KnowledgeBaseField(Value.TITLE, "Title");
 
+    public static final KnowledgeBaseField CREATED_AT = new KnowledgeBaseField(Value.CREATED_AT, "CreatedAt");
+
     private final Value value;
 
     private final String string;
@@ -47,6 +49,8 @@ public final class KnowledgeBaseField {
                 return visitor.visitUpdatedAt();
             case TITLE:
                 return visitor.visitTitle();
+            case CREATED_AT:
+                return visitor.visitCreatedAt();
             case UNKNOWN:
             default:
                 return visitor.visitUnknown(string);
@@ -60,6 +64,8 @@ public final class KnowledgeBaseField {
                 return UPDATED_AT;
             case "Title":
                 return TITLE;
+            case "CreatedAt":
+                return CREATED_AT;
             default:
                 return new KnowledgeBaseField(Value.UNKNOWN, value);
         }
@@ -68,6 +74,8 @@ public final class KnowledgeBaseField {
     public enum Value {
         TITLE,
 
+        CREATED_AT,
+
         UPDATED_AT,
 
         UNKNOWN
@@ -75,6 +83,8 @@ public final class KnowledgeBaseField {
 
     public interface Visitor<T> {
         T visitTitle();
+
+        T visitCreatedAt();
 
         T visitUpdatedAt();
 

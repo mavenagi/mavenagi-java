@@ -10,6 +10,7 @@ import com.mavenagi.resources.commons.types.EventResponse;
 import com.mavenagi.resources.commons.types.EventsSearchRequest;
 import com.mavenagi.resources.commons.types.EventsSearchResponse;
 import com.mavenagi.resources.events.requests.EventGetRequest;
+import java.io.InputStream;
 
 public class EventsClient {
     protected final ClientOptions clientOptions;
@@ -75,5 +76,29 @@ public class EventsClient {
      */
     public EventResponse get(String eventId, EventGetRequest request, RequestOptions requestOptions) {
         return this.rawClient.get(eventId, request, requestOptions).body();
+    }
+
+    /**
+     * Export events to a CSV file.
+     * <p>This will output a summary of each event that matches the supplied filter. A maximum of 10,000 events can be exported at a time. For most use cases it is recommended to use the search API instead and convert the JSON response to your desired format. The CSV format may change over time and should not be relied upon by code consumers.</p>
+     */
+    public InputStream export() {
+        return this.rawClient.export().body();
+    }
+
+    /**
+     * Export events to a CSV file.
+     * <p>This will output a summary of each event that matches the supplied filter. A maximum of 10,000 events can be exported at a time. For most use cases it is recommended to use the search API instead and convert the JSON response to your desired format. The CSV format may change over time and should not be relied upon by code consumers.</p>
+     */
+    public InputStream export(EventsSearchRequest request) {
+        return this.rawClient.export(request).body();
+    }
+
+    /**
+     * Export events to a CSV file.
+     * <p>This will output a summary of each event that matches the supplied filter. A maximum of 10,000 events can be exported at a time. For most use cases it is recommended to use the search API instead and convert the JSON response to your desired format. The CSV format may change over time and should not be relied upon by code consumers.</p>
+     */
+    public InputStream export(EventsSearchRequest request, RequestOptions requestOptions) {
+        return this.rawClient.export(request, requestOptions).body();
     }
 }

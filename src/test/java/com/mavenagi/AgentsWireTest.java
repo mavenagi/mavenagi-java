@@ -4,9 +4,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mavenagi.MavenAGI;
 import com.mavenagi.core.ObjectMappers;
+import com.mavenagi.resources.agents.requests.AgentPatchRequest;
 import com.mavenagi.resources.agents.types.Agent;
 import com.mavenagi.resources.agents.types.AgentEnvironment;
-import com.mavenagi.resources.agents.types.AgentPatchRequest;
 import com.mavenagi.resources.agents.types.AgentsSearchRequest;
 import com.mavenagi.resources.agents.types.AgentsSearchResponse;
 import com.mavenagi.resources.agents.types.CreateAgentRequest;
@@ -40,7 +40,7 @@ public class AgentsWireTest {
     public void testSearch() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"agents\":[{\"agentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"name\":\"name\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"environment\":\"DEMO\",\"defaultTimezone\":\"defaultTimezone\",\"enabledPiiCategories\":[\"Name\"]},{\"agentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"name\":\"name\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"environment\":\"DEMO\",\"defaultTimezone\":\"defaultTimezone\",\"enabledPiiCategories\":[\"Name\"]}],\"number\":1,\"size\":1,\"totalElements\":1000000,\"totalPages\":1}"));
+            .setBody("{\"agents\":[{\"agentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"name\":\"name\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"environment\":\"DEMO\",\"defaultTimezone\":\"defaultTimezone\",\"enabledPiiCategories\":[\"Name\"],\"systemFallbackMessage\":\"systemFallbackMessage\",\"prompting\":{\"persona\":\"CASUAL_BUDDY\",\"additionalPromptText\":\"additionalPromptText\",\"categoryGenerationPromptText\":\"categoryGenerationPromptText\",\"contentSafetyViolationResponsePromptText\":\"contentSafetyViolationResponsePromptText\",\"rejectQuestionsWithoutKnowledge\":true}},{\"agentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"name\":\"name\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"environment\":\"DEMO\",\"defaultTimezone\":\"defaultTimezone\",\"enabledPiiCategories\":[\"Name\"],\"systemFallbackMessage\":\"systemFallbackMessage\",\"prompting\":{\"persona\":\"CASUAL_BUDDY\",\"additionalPromptText\":\"additionalPromptText\",\"categoryGenerationPromptText\":\"categoryGenerationPromptText\",\"contentSafetyViolationResponsePromptText\":\"contentSafetyViolationResponsePromptText\",\"rejectQuestionsWithoutKnowledge\":true}}],\"number\":1,\"size\":1,\"totalElements\":1000000,\"totalPages\":1}"));
         AgentsSearchResponse response = client.agents().search(
             AgentsSearchRequest
                 .builder()
@@ -96,7 +96,15 @@ public class AgentsWireTest {
             + "      \"defaultTimezone\": \"defaultTimezone\",\n"
             + "      \"enabledPiiCategories\": [\n"
             + "        \"Name\"\n"
-            + "      ]\n"
+            + "      ],\n"
+            + "      \"systemFallbackMessage\": \"systemFallbackMessage\",\n"
+            + "      \"prompting\": {\n"
+            + "        \"persona\": \"CASUAL_BUDDY\",\n"
+            + "        \"additionalPromptText\": \"additionalPromptText\",\n"
+            + "        \"categoryGenerationPromptText\": \"categoryGenerationPromptText\",\n"
+            + "        \"contentSafetyViolationResponsePromptText\": \"contentSafetyViolationResponsePromptText\",\n"
+            + "        \"rejectQuestionsWithoutKnowledge\": true\n"
+            + "      }\n"
             + "    },\n"
             + "    {\n"
             + "      \"agentId\": {\n"
@@ -112,7 +120,15 @@ public class AgentsWireTest {
             + "      \"defaultTimezone\": \"defaultTimezone\",\n"
             + "      \"enabledPiiCategories\": [\n"
             + "        \"Name\"\n"
-            + "      ]\n"
+            + "      ],\n"
+            + "      \"systemFallbackMessage\": \"systemFallbackMessage\",\n"
+            + "      \"prompting\": {\n"
+            + "        \"persona\": \"CASUAL_BUDDY\",\n"
+            + "        \"additionalPromptText\": \"additionalPromptText\",\n"
+            + "        \"categoryGenerationPromptText\": \"categoryGenerationPromptText\",\n"
+            + "        \"contentSafetyViolationResponsePromptText\": \"contentSafetyViolationResponsePromptText\",\n"
+            + "        \"rejectQuestionsWithoutKnowledge\": true\n"
+            + "      }\n"
             + "    }\n"
             + "  ],\n"
             + "  \"number\": 1,\n"
@@ -147,7 +163,7 @@ public class AgentsWireTest {
     public void testList() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("[{\"agentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"name\":\"name\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"environment\":\"DEMO\",\"defaultTimezone\":\"defaultTimezone\",\"enabledPiiCategories\":[\"Name\"]},{\"agentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"name\":\"name\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"environment\":\"DEMO\",\"defaultTimezone\":\"defaultTimezone\",\"enabledPiiCategories\":[\"Name\"]}]"));
+            .setBody("[{\"agentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"name\":\"name\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"environment\":\"DEMO\",\"defaultTimezone\":\"defaultTimezone\",\"enabledPiiCategories\":[\"Name\"],\"systemFallbackMessage\":\"systemFallbackMessage\",\"prompting\":{\"persona\":\"CASUAL_BUDDY\",\"additionalPromptText\":\"additionalPromptText\",\"categoryGenerationPromptText\":\"categoryGenerationPromptText\",\"contentSafetyViolationResponsePromptText\":\"contentSafetyViolationResponsePromptText\",\"rejectQuestionsWithoutKnowledge\":true}},{\"agentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"name\":\"name\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"environment\":\"DEMO\",\"defaultTimezone\":\"defaultTimezone\",\"enabledPiiCategories\":[\"Name\"],\"systemFallbackMessage\":\"systemFallbackMessage\",\"prompting\":{\"persona\":\"CASUAL_BUDDY\",\"additionalPromptText\":\"additionalPromptText\",\"categoryGenerationPromptText\":\"categoryGenerationPromptText\",\"contentSafetyViolationResponsePromptText\":\"contentSafetyViolationResponsePromptText\",\"rejectQuestionsWithoutKnowledge\":true}}]"));
         List<Agent> response = client.agents().list("organizationReferenceId");
         RecordedRequest request = server.takeRequest();
         Assertions.assertNotNull(request);
@@ -172,7 +188,15 @@ public class AgentsWireTest {
             + "    \"defaultTimezone\": \"defaultTimezone\",\n"
             + "    \"enabledPiiCategories\": [\n"
             + "      \"Name\"\n"
-            + "    ]\n"
+            + "    ],\n"
+            + "    \"systemFallbackMessage\": \"systemFallbackMessage\",\n"
+            + "    \"prompting\": {\n"
+            + "      \"persona\": \"CASUAL_BUDDY\",\n"
+            + "      \"additionalPromptText\": \"additionalPromptText\",\n"
+            + "      \"categoryGenerationPromptText\": \"categoryGenerationPromptText\",\n"
+            + "      \"contentSafetyViolationResponsePromptText\": \"contentSafetyViolationResponsePromptText\",\n"
+            + "      \"rejectQuestionsWithoutKnowledge\": true\n"
+            + "    }\n"
             + "  },\n"
             + "  {\n"
             + "    \"agentId\": {\n"
@@ -188,7 +212,15 @@ public class AgentsWireTest {
             + "    \"defaultTimezone\": \"defaultTimezone\",\n"
             + "    \"enabledPiiCategories\": [\n"
             + "      \"Name\"\n"
-            + "    ]\n"
+            + "    ],\n"
+            + "    \"systemFallbackMessage\": \"systemFallbackMessage\",\n"
+            + "    \"prompting\": {\n"
+            + "      \"persona\": \"CASUAL_BUDDY\",\n"
+            + "      \"additionalPromptText\": \"additionalPromptText\",\n"
+            + "      \"categoryGenerationPromptText\": \"categoryGenerationPromptText\",\n"
+            + "      \"contentSafetyViolationResponsePromptText\": \"contentSafetyViolationResponsePromptText\",\n"
+            + "      \"rejectQuestionsWithoutKnowledge\": true\n"
+            + "    }\n"
             + "  }\n"
             + "]";
         JsonNode actualResponseNode = objectMapper.readTree(actualResponseJson);
@@ -218,7 +250,7 @@ public class AgentsWireTest {
     public void testCreate() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"agentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"name\":\"name\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"environment\":\"DEMO\",\"defaultTimezone\":\"defaultTimezone\",\"enabledPiiCategories\":[\"Name\"]}"));
+            .setBody("{\"agentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"name\":\"name\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"environment\":\"DEMO\",\"defaultTimezone\":\"defaultTimezone\",\"enabledPiiCategories\":[\"Name\"],\"systemFallbackMessage\":\"systemFallbackMessage\",\"prompting\":{\"persona\":\"CASUAL_BUDDY\",\"additionalPromptText\":\"additionalPromptText\",\"categoryGenerationPromptText\":\"categoryGenerationPromptText\",\"contentSafetyViolationResponsePromptText\":\"contentSafetyViolationResponsePromptText\",\"rejectQuestionsWithoutKnowledge\":true}}"));
         Agent response = client.agents().create(
             "organizationReferenceId",
             "agentReferenceId",
@@ -279,7 +311,15 @@ public class AgentsWireTest {
             + "  \"defaultTimezone\": \"defaultTimezone\",\n"
             + "  \"enabledPiiCategories\": [\n"
             + "    \"Name\"\n"
-            + "  ]\n"
+            + "  ],\n"
+            + "  \"systemFallbackMessage\": \"systemFallbackMessage\",\n"
+            + "  \"prompting\": {\n"
+            + "    \"persona\": \"CASUAL_BUDDY\",\n"
+            + "    \"additionalPromptText\": \"additionalPromptText\",\n"
+            + "    \"categoryGenerationPromptText\": \"categoryGenerationPromptText\",\n"
+            + "    \"contentSafetyViolationResponsePromptText\": \"contentSafetyViolationResponsePromptText\",\n"
+            + "    \"rejectQuestionsWithoutKnowledge\": true\n"
+            + "  }\n"
             + "}";
         JsonNode actualResponseNode = objectMapper.readTree(actualResponseJson);
         JsonNode expectedResponseNode = objectMapper.readTree(expectedResponseBody);
@@ -308,7 +348,7 @@ public class AgentsWireTest {
     public void testGet() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"agentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"name\":\"name\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"environment\":\"DEMO\",\"defaultTimezone\":\"defaultTimezone\",\"enabledPiiCategories\":[\"Name\"]}"));
+            .setBody("{\"agentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"name\":\"name\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"environment\":\"DEMO\",\"defaultTimezone\":\"defaultTimezone\",\"enabledPiiCategories\":[\"Name\"],\"systemFallbackMessage\":\"systemFallbackMessage\",\"prompting\":{\"persona\":\"CASUAL_BUDDY\",\"additionalPromptText\":\"additionalPromptText\",\"categoryGenerationPromptText\":\"categoryGenerationPromptText\",\"contentSafetyViolationResponsePromptText\":\"contentSafetyViolationResponsePromptText\",\"rejectQuestionsWithoutKnowledge\":true}}"));
         Agent response = client.agents().get("organizationReferenceId", "agentReferenceId");
         RecordedRequest request = server.takeRequest();
         Assertions.assertNotNull(request);
@@ -332,7 +372,15 @@ public class AgentsWireTest {
             + "  \"defaultTimezone\": \"defaultTimezone\",\n"
             + "  \"enabledPiiCategories\": [\n"
             + "    \"Name\"\n"
-            + "  ]\n"
+            + "  ],\n"
+            + "  \"systemFallbackMessage\": \"systemFallbackMessage\",\n"
+            + "  \"prompting\": {\n"
+            + "    \"persona\": \"CASUAL_BUDDY\",\n"
+            + "    \"additionalPromptText\": \"additionalPromptText\",\n"
+            + "    \"categoryGenerationPromptText\": \"categoryGenerationPromptText\",\n"
+            + "    \"contentSafetyViolationResponsePromptText\": \"contentSafetyViolationResponsePromptText\",\n"
+            + "    \"rejectQuestionsWithoutKnowledge\": true\n"
+            + "  }\n"
             + "}";
         JsonNode actualResponseNode = objectMapper.readTree(actualResponseJson);
         JsonNode expectedResponseNode = objectMapper.readTree(expectedResponseBody);
@@ -361,7 +409,7 @@ public class AgentsWireTest {
     public void testPatch() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"agentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"name\":\"name\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"environment\":\"DEMO\",\"defaultTimezone\":\"defaultTimezone\",\"enabledPiiCategories\":[\"Name\"]}"));
+            .setBody("{\"agentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"name\":\"name\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"environment\":\"DEMO\",\"defaultTimezone\":\"defaultTimezone\",\"enabledPiiCategories\":[\"Name\"],\"systemFallbackMessage\":\"systemFallbackMessage\",\"prompting\":{\"persona\":\"CASUAL_BUDDY\",\"additionalPromptText\":\"additionalPromptText\",\"categoryGenerationPromptText\":\"categoryGenerationPromptText\",\"contentSafetyViolationResponsePromptText\":\"contentSafetyViolationResponsePromptText\",\"rejectQuestionsWithoutKnowledge\":true}}"));
         Agent response = client.agents().patch(
             "organizationReferenceId",
             "agentReferenceId",
@@ -417,7 +465,15 @@ public class AgentsWireTest {
             + "  \"defaultTimezone\": \"defaultTimezone\",\n"
             + "  \"enabledPiiCategories\": [\n"
             + "    \"Name\"\n"
-            + "  ]\n"
+            + "  ],\n"
+            + "  \"systemFallbackMessage\": \"systemFallbackMessage\",\n"
+            + "  \"prompting\": {\n"
+            + "    \"persona\": \"CASUAL_BUDDY\",\n"
+            + "    \"additionalPromptText\": \"additionalPromptText\",\n"
+            + "    \"categoryGenerationPromptText\": \"categoryGenerationPromptText\",\n"
+            + "    \"contentSafetyViolationResponsePromptText\": \"contentSafetyViolationResponsePromptText\",\n"
+            + "    \"rejectQuestionsWithoutKnowledge\": true\n"
+            + "  }\n"
             + "}";
         JsonNode actualResponseNode = objectMapper.readTree(actualResponseJson);
         JsonNode expectedResponseNode = objectMapper.readTree(expectedResponseBody);

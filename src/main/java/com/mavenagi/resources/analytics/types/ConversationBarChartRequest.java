@@ -72,6 +72,17 @@ public final class ConversationBarChartRequest implements IConversationAnalytics
     /**
      * @return Determines how data is grouped along the x-axis. Each unique value forms a separate bar.
      * The name of the bar is derived from the grouping field's value or range.
+     * <p><strong>Label Formats by Field:</strong></p>
+     * <ul>
+     * <li><code>Sources</code>: Document title (e.g., &quot;Product Documentation&quot;)</li>
+     * <li><code>Actions</code>: &quot;Action Name - App Name&quot; (e.g., &quot;Create Ticket - Freshdesk&quot;)</li>
+     * <li><code>IncompleteActions</code>: &quot;Action Name - App Name&quot; (e.g., &quot;Search Documents - Zendesk&quot;)</li>
+     * <li><code>Users</code>: User identifier value (e.g., &quot;user@example.com&quot;)</li>
+     * <li><code>InboxItems</code>: Inbox item title</li>
+     * <li><code>HumanAgents</code>: Human agent display name</li>
+     * <li><code>HumanAgentsWithInserts</code>: Human agent display name (for agents who made inserts)</li>
+     * <li>Other fields: Field value as stored (e.g., &quot;GOOD&quot;, &quot;NEEDS_IMPROVEMENT&quot; for Quality)</li>
+     * </ul>
      */
     @JsonProperty("barDefinition")
     public ConversationGroupBy getBarDefinition() {
@@ -89,6 +100,17 @@ public final class ConversationBarChartRequest implements IConversationAnalytics
     /**
      * @return Optionally defines vertical grouping within each bar, producing multiple series.
      * If omitted, a single series is generated.
+     * <p><strong>Series Name Formats by Field:</strong></p>
+     * <ul>
+     * <li><code>Sources</code>: Document title (e.g., &quot;Product Documentation&quot;)</li>
+     * <li><code>Actions</code>: &quot;Action Name - App Name&quot; (e.g., &quot;Create Ticket - Freshdesk&quot;)</li>
+     * <li><code>IncompleteActions</code>: &quot;Action Name - App Name&quot; (e.g., &quot;Search Documents - Zendesk&quot;)</li>
+     * <li><code>Users</code>: User identifier value (e.g., &quot;user@example.com&quot;)</li>
+     * <li><code>InboxItems</code>: Inbox item title</li>
+     * <li><code>HumanAgents</code>: Human agent display name</li>
+     * <li><code>HumanAgentsWithInserts</code>: Human agent display name (for agents who made inserts)</li>
+     * <li>Other fields: Field value as stored (e.g., &quot;GOOD&quot;, &quot;NEEDS_IMPROVEMENT&quot; for Quality)</li>
+     * </ul>
      */
     @JsonProperty("verticalGrouping")
     public Optional<ConversationGroupBy> getVerticalGrouping() {
@@ -133,6 +155,17 @@ public final class ConversationBarChartRequest implements IConversationAnalytics
         /**
          * <p>Determines how data is grouped along the x-axis. Each unique value forms a separate bar.
          * The name of the bar is derived from the grouping field's value or range.</p>
+         * <p><strong>Label Formats by Field:</strong></p>
+         * <ul>
+         * <li><code>Sources</code>: Document title (e.g., &quot;Product Documentation&quot;)</li>
+         * <li><code>Actions</code>: &quot;Action Name - App Name&quot; (e.g., &quot;Create Ticket - Freshdesk&quot;)</li>
+         * <li><code>IncompleteActions</code>: &quot;Action Name - App Name&quot; (e.g., &quot;Search Documents - Zendesk&quot;)</li>
+         * <li><code>Users</code>: User identifier value (e.g., &quot;user@example.com&quot;)</li>
+         * <li><code>InboxItems</code>: Inbox item title</li>
+         * <li><code>HumanAgents</code>: Human agent display name</li>
+         * <li><code>HumanAgentsWithInserts</code>: Human agent display name (for agents who made inserts)</li>
+         * <li>Other fields: Field value as stored (e.g., &quot;GOOD&quot;, &quot;NEEDS_IMPROVEMENT&quot; for Quality)</li>
+         * </ul>
          */
         MetricStage barDefinition(@NotNull ConversationGroupBy barDefinition);
 
@@ -168,6 +201,17 @@ public final class ConversationBarChartRequest implements IConversationAnalytics
         /**
          * <p>Optionally defines vertical grouping within each bar, producing multiple series.
          * If omitted, a single series is generated.</p>
+         * <p><strong>Series Name Formats by Field:</strong></p>
+         * <ul>
+         * <li><code>Sources</code>: Document title (e.g., &quot;Product Documentation&quot;)</li>
+         * <li><code>Actions</code>: &quot;Action Name - App Name&quot; (e.g., &quot;Create Ticket - Freshdesk&quot;)</li>
+         * <li><code>IncompleteActions</code>: &quot;Action Name - App Name&quot; (e.g., &quot;Search Documents - Zendesk&quot;)</li>
+         * <li><code>Users</code>: User identifier value (e.g., &quot;user@example.com&quot;)</li>
+         * <li><code>InboxItems</code>: Inbox item title</li>
+         * <li><code>HumanAgents</code>: Human agent display name</li>
+         * <li><code>HumanAgentsWithInserts</code>: Human agent display name (for agents who made inserts)</li>
+         * <li>Other fields: Field value as stored (e.g., &quot;GOOD&quot;, &quot;NEEDS_IMPROVEMENT&quot; for Quality)</li>
+         * </ul>
          */
         _FinalStage verticalGrouping(Optional<ConversationGroupBy> verticalGrouping);
 
@@ -204,8 +248,30 @@ public final class ConversationBarChartRequest implements IConversationAnalytics
         /**
          * <p>Determines how data is grouped along the x-axis. Each unique value forms a separate bar.
          * The name of the bar is derived from the grouping field's value or range.</p>
+         * <p><strong>Label Formats by Field:</strong></p>
+         * <ul>
+         * <li><code>Sources</code>: Document title (e.g., &quot;Product Documentation&quot;)</li>
+         * <li><code>Actions</code>: &quot;Action Name - App Name&quot; (e.g., &quot;Create Ticket - Freshdesk&quot;)</li>
+         * <li><code>IncompleteActions</code>: &quot;Action Name - App Name&quot; (e.g., &quot;Search Documents - Zendesk&quot;)</li>
+         * <li><code>Users</code>: User identifier value (e.g., &quot;user@example.com&quot;)</li>
+         * <li><code>InboxItems</code>: Inbox item title</li>
+         * <li><code>HumanAgents</code>: Human agent display name</li>
+         * <li><code>HumanAgentsWithInserts</code>: Human agent display name (for agents who made inserts)</li>
+         * <li>Other fields: Field value as stored (e.g., &quot;GOOD&quot;, &quot;NEEDS_IMPROVEMENT&quot; for Quality)</li>
+         * </ul>
          * <p>Determines how data is grouped along the x-axis. Each unique value forms a separate bar.
          * The name of the bar is derived from the grouping field's value or range.</p>
+         * <p><strong>Label Formats by Field:</strong></p>
+         * <ul>
+         * <li><code>Sources</code>: Document title (e.g., &quot;Product Documentation&quot;)</li>
+         * <li><code>Actions</code>: &quot;Action Name - App Name&quot; (e.g., &quot;Create Ticket - Freshdesk&quot;)</li>
+         * <li><code>IncompleteActions</code>: &quot;Action Name - App Name&quot; (e.g., &quot;Search Documents - Zendesk&quot;)</li>
+         * <li><code>Users</code>: User identifier value (e.g., &quot;user@example.com&quot;)</li>
+         * <li><code>InboxItems</code>: Inbox item title</li>
+         * <li><code>HumanAgents</code>: Human agent display name</li>
+         * <li><code>HumanAgentsWithInserts</code>: Human agent display name (for agents who made inserts)</li>
+         * <li>Other fields: Field value as stored (e.g., &quot;GOOD&quot;, &quot;NEEDS_IMPROVEMENT&quot; for Quality)</li>
+         * </ul>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -230,6 +296,17 @@ public final class ConversationBarChartRequest implements IConversationAnalytics
         /**
          * <p>Optionally defines vertical grouping within each bar, producing multiple series.
          * If omitted, a single series is generated.</p>
+         * <p><strong>Series Name Formats by Field:</strong></p>
+         * <ul>
+         * <li><code>Sources</code>: Document title (e.g., &quot;Product Documentation&quot;)</li>
+         * <li><code>Actions</code>: &quot;Action Name - App Name&quot; (e.g., &quot;Create Ticket - Freshdesk&quot;)</li>
+         * <li><code>IncompleteActions</code>: &quot;Action Name - App Name&quot; (e.g., &quot;Search Documents - Zendesk&quot;)</li>
+         * <li><code>Users</code>: User identifier value (e.g., &quot;user@example.com&quot;)</li>
+         * <li><code>InboxItems</code>: Inbox item title</li>
+         * <li><code>HumanAgents</code>: Human agent display name</li>
+         * <li><code>HumanAgentsWithInserts</code>: Human agent display name (for agents who made inserts)</li>
+         * <li>Other fields: Field value as stored (e.g., &quot;GOOD&quot;, &quot;NEEDS_IMPROVEMENT&quot; for Quality)</li>
+         * </ul>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -241,6 +318,17 @@ public final class ConversationBarChartRequest implements IConversationAnalytics
         /**
          * <p>Optionally defines vertical grouping within each bar, producing multiple series.
          * If omitted, a single series is generated.</p>
+         * <p><strong>Series Name Formats by Field:</strong></p>
+         * <ul>
+         * <li><code>Sources</code>: Document title (e.g., &quot;Product Documentation&quot;)</li>
+         * <li><code>Actions</code>: &quot;Action Name - App Name&quot; (e.g., &quot;Create Ticket - Freshdesk&quot;)</li>
+         * <li><code>IncompleteActions</code>: &quot;Action Name - App Name&quot; (e.g., &quot;Search Documents - Zendesk&quot;)</li>
+         * <li><code>Users</code>: User identifier value (e.g., &quot;user@example.com&quot;)</li>
+         * <li><code>InboxItems</code>: Inbox item title</li>
+         * <li><code>HumanAgents</code>: Human agent display name</li>
+         * <li><code>HumanAgentsWithInserts</code>: Human agent display name (for agents who made inserts)</li>
+         * <li>Other fields: Field value as stored (e.g., &quot;GOOD&quot;, &quot;NEEDS_IMPROVEMENT&quot; for Quality)</li>
+         * </ul>
          */
         @java.lang.Override
         @JsonSetter(value = "verticalGrouping", nulls = Nulls.SKIP)

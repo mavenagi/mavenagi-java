@@ -237,9 +237,21 @@ All other fields will overwrite the existing value on the action only if provide
 
 ```java
 client.actions().patch(
-    "actionReferenceId",
+    "get-balance",
     ActionPatchRequest
         .builder()
+        .instructions("Use this action when the user asks about their account balance or remaining credits.")
+        .llmInclusionStatus(LlmInclusionStatus.WHEN_RELEVANT)
+        .segmentId(
+            EntityId
+                .builder()
+                .referenceId("premium-users")
+                .appId("my-billing-system")
+                .organizationId("acme")
+                .agentId("support")
+                .type(EntityType.SEGMENT)
+                .build()
+        )
         .build()
 );
 ```
@@ -935,7 +947,79 @@ client.agents().patch(
 <dl>
 <dd>
 
-**request:** `AgentPatchRequest` 
+**name:** `Optional<String>` — The name of the agent.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**environment:** `Optional<AgentEnvironment>` — The environment of the agent.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**defaultTimezone:** `Optional<String>` — The agent's default timezone. This is used when a timezone is not set on a conversation.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**enabledPiiCategories:** `Optional<Set<PiiCategory>>` — The PII categories that are enabled for the agent.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**systemFallbackMessage:** `Optional<String>` — The system fallback message.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**persona:** `Optional<LlmPersona>` — The overall persona of the agent.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**additionalPromptText:** `Optional<String>` — Additional text directly appended to the prompt.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**categoryGenerationPromptText:** `Optional<String>` — LLM prompt for category generation.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**contentSafetyViolationResponsePromptText:** `Optional<String>` — LLM prompt for generating a response when the user's question has been detected as unsafe.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**rejectQuestionsWithoutKnowledge:** `Optional<Boolean>` — Return the system fallback message on all questions that have no relevant knowledge bases or actions.
     
 </dd>
 </dl>
@@ -2582,7 +2666,11 @@ client.conversation().createFeedback(
 <dl>
 <dd>
 
-Submit a filled out action form
+Submit a filled out action form. 
+Action forms can not be submitted more than once, attempting to do so will result in an error.
+
+Additionally, form submission is only allowed when the form is the last message in the conversation. 
+Forms should be disabled in surface UI if a conversation continues and they remain unsubmitted.
 </dd>
 </dl>
 </dd>
@@ -2821,6 +2909,69 @@ Search conversations
 
 ```java
 client.conversation().search(
+    ConversationsSearchRequest
+        .builder()
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `ConversationsSearchRequest` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.conversation.export(request) -> InputStream</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Export conversations to a CSV file. 
+
+This will output a summary of each conversation that matches the supplied filter. A maximum of 10,000 conversations can be exported at a time.
+
+For most use cases it is recommended to use the `search` API instead and convert the JSON response to your desired format. 
+The CSV format may change over time and should not be relied upon by code consumers.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.conversation().export(
     ConversationsSearchRequest
         .builder()
         .build()
@@ -3137,6 +3288,66 @@ client.events().get(
 <dd>
 
 **appId:** `String` — The App ID of the Event to retrieve
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.events.export(request) -> InputStream</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Export events to a CSV file.
+
+This will output a summary of each event that matches the supplied filter. A maximum of 10,000 events can be exported at a time. For most use cases it is recommended to use the search API instead and convert the JSON response to your desired format. The CSV format may change over time and should not be relied upon by code consumers.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.events().export(
+    EventsSearchRequest
+        .builder()
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `EventsSearchRequest` 
     
 </dd>
 </dl>
@@ -3673,6 +3884,77 @@ client.knowledge().getKnowledgeBase(
 </dl>
 </details>
 
+<details><summary><code>client.knowledge.refreshKnowledgeBase(knowledgeBaseReferenceId, request)</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Request that a knowledge base refresh itself.
+
+Knowledge bases refresh on a schedule determined by the `refreshFrequency` field.
+They can also be refreshed on demand by calling this endpoint.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.knowledge().refreshKnowledgeBase(
+    "help-center",
+    KnowledgeBaseRefreshRequest
+        .builder()
+        .appId("readme")
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**knowledgeBaseReferenceId:** `String` — The reference ID of the knowledge base to refresh. All other entity ID fields are inferred from the request.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `KnowledgeBaseRefreshRequest` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.knowledge.patchKnowledgeBase(knowledgeBaseReferenceId, request) -> KnowledgeBaseResponse</code></summary>
 <dl>
 <dd>
@@ -3704,9 +3986,25 @@ All other fields will overwrite the existing value on the knowledge base only if
 
 ```java
 client.knowledge().patchKnowledgeBase(
-    "knowledgeBaseReferenceId",
+    "help-center",
     KnowledgeBasePatchRequest
         .builder()
+        .name("Updated Help Center")
+        .tags(
+            new HashSet<String>(
+                Arrays.asList("tag1", "tag2", "tag3")
+            )
+        )
+        .segmentId(
+            EntityId
+                .builder()
+                .referenceId("premium-users")
+                .appId("readme")
+                .organizationId("acme")
+                .agentId("support")
+                .type(EntityType.SEGMENT)
+                .build()
+        )
         .build()
 );
 ```

@@ -15,6 +15,7 @@ import com.mavenagi.core.ObjectMappers;
 import com.mavenagi.resources.commons.types.EntityId;
 import com.mavenagi.resources.commons.types.LlmInclusionStatus;
 import com.mavenagi.resources.commons.types.Precondition;
+import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -31,9 +32,15 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
 
     private final Optional<Precondition> precondition;
 
+    private final OffsetDateTime createdAt;
+
+    private final OffsetDateTime updatedAt;
+
     private final EntityId knowledgeBaseId;
 
     private final Optional<EntityId> activeVersionId;
+
+    private final KnowledgeBaseVersionStatus mostRecentVersionStatus;
 
     private final KnowledgeBaseType type;
 
@@ -52,8 +59,11 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
     private KnowledgeBaseResponse(
             String name,
             Optional<Precondition> precondition,
+            OffsetDateTime createdAt,
+            OffsetDateTime updatedAt,
             EntityId knowledgeBaseId,
             Optional<EntityId> activeVersionId,
+            KnowledgeBaseVersionStatus mostRecentVersionStatus,
             KnowledgeBaseType type,
             Map<String, String> metadata,
             Set<String> tags,
@@ -63,8 +73,11 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
             Map<String, Object> additionalProperties) {
         this.name = name;
         this.precondition = precondition;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
         this.knowledgeBaseId = knowledgeBaseId;
         this.activeVersionId = activeVersionId;
+        this.mostRecentVersionStatus = mostRecentVersionStatus;
         this.type = type;
         this.metadata = metadata;
         this.tags = tags;
@@ -93,6 +106,22 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
     }
 
     /**
+     * @return The date and time when the knowledge base was created.
+     */
+    @JsonProperty("createdAt")
+    public OffsetDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    /**
+     * @return The date and time when the knowledge base was last updated.
+     */
+    @JsonProperty("updatedAt")
+    public OffsetDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    /**
      * @return ID that uniquely identifies this knowledge base
      */
     @JsonProperty("knowledgeBaseId")
@@ -106,6 +135,16 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
     @JsonProperty("activeVersionId")
     public Optional<EntityId> getActiveVersionId() {
         return activeVersionId;
+    }
+
+    /**
+     * @return The status of the most recent version of the knowledge base.
+     * The <code>activeVersionId</code> will only be populated if this status is <code>SUCCEEDED</code>.
+     * Use the <code>listKnowledgeBaseVersions</code> endpoint to get the full list of versions.
+     */
+    @JsonProperty("mostRecentVersionStatus")
+    public KnowledgeBaseVersionStatus getMostRecentVersionStatus() {
+        return mostRecentVersionStatus;
     }
 
     /**
@@ -172,8 +211,11 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
     private boolean equalTo(KnowledgeBaseResponse other) {
         return name.equals(other.name)
                 && precondition.equals(other.precondition)
+                && createdAt.equals(other.createdAt)
+                && updatedAt.equals(other.updatedAt)
                 && knowledgeBaseId.equals(other.knowledgeBaseId)
                 && activeVersionId.equals(other.activeVersionId)
+                && mostRecentVersionStatus.equals(other.mostRecentVersionStatus)
                 && type.equals(other.type)
                 && metadata.equals(other.metadata)
                 && tags.equals(other.tags)
@@ -187,8 +229,11 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
         return Objects.hash(
                 this.name,
                 this.precondition,
+                this.createdAt,
+                this.updatedAt,
                 this.knowledgeBaseId,
                 this.activeVersionId,
+                this.mostRecentVersionStatus,
                 this.type,
                 this.metadata,
                 this.tags,
@@ -210,16 +255,39 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
         /**
          * <p>The name of the knowledge base</p>
          */
-        KnowledgeBaseIdStage name(@NotNull String name);
+        CreatedAtStage name(@NotNull String name);
 
         Builder from(KnowledgeBaseResponse other);
+    }
+
+    public interface CreatedAtStage {
+        /**
+         * <p>The date and time when the knowledge base was created.</p>
+         */
+        UpdatedAtStage createdAt(@NotNull OffsetDateTime createdAt);
+    }
+
+    public interface UpdatedAtStage {
+        /**
+         * <p>The date and time when the knowledge base was last updated.</p>
+         */
+        KnowledgeBaseIdStage updatedAt(@NotNull OffsetDateTime updatedAt);
     }
 
     public interface KnowledgeBaseIdStage {
         /**
          * <p>ID that uniquely identifies this knowledge base</p>
          */
-        TypeStage knowledgeBaseId(@NotNull EntityId knowledgeBaseId);
+        MostRecentVersionStatusStage knowledgeBaseId(@NotNull EntityId knowledgeBaseId);
+    }
+
+    public interface MostRecentVersionStatusStage {
+        /**
+         * <p>The status of the most recent version of the knowledge base.
+         * The <code>activeVersionId</code> will only be populated if this status is <code>SUCCEEDED</code>.
+         * Use the <code>listKnowledgeBaseVersions</code> endpoint to get the full list of versions.</p>
+         */
+        TypeStage mostRecentVersionStatus(@NotNull KnowledgeBaseVersionStatus mostRecentVersionStatus);
     }
 
     public interface TypeStage {
@@ -290,10 +358,23 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
-            implements NameStage, KnowledgeBaseIdStage, TypeStage, RefreshFrequencyStage, _FinalStage {
+            implements NameStage,
+                    CreatedAtStage,
+                    UpdatedAtStage,
+                    KnowledgeBaseIdStage,
+                    MostRecentVersionStatusStage,
+                    TypeStage,
+                    RefreshFrequencyStage,
+                    _FinalStage {
         private String name;
 
+        private OffsetDateTime createdAt;
+
+        private OffsetDateTime updatedAt;
+
         private EntityId knowledgeBaseId;
+
+        private KnowledgeBaseVersionStatus mostRecentVersionStatus;
 
         private KnowledgeBaseType type;
 
@@ -320,8 +401,11 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
         public Builder from(KnowledgeBaseResponse other) {
             name(other.getName());
             precondition(other.getPrecondition());
+            createdAt(other.getCreatedAt());
+            updatedAt(other.getUpdatedAt());
             knowledgeBaseId(other.getKnowledgeBaseId());
             activeVersionId(other.getActiveVersionId());
+            mostRecentVersionStatus(other.getMostRecentVersionStatus());
             type(other.getType());
             metadata(other.getMetadata());
             tags(other.getTags());
@@ -338,8 +422,32 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
          */
         @java.lang.Override
         @JsonSetter("name")
-        public KnowledgeBaseIdStage name(@NotNull String name) {
+        public CreatedAtStage name(@NotNull String name) {
             this.name = Objects.requireNonNull(name, "name must not be null");
+            return this;
+        }
+
+        /**
+         * <p>The date and time when the knowledge base was created.</p>
+         * <p>The date and time when the knowledge base was created.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("createdAt")
+        public UpdatedAtStage createdAt(@NotNull OffsetDateTime createdAt) {
+            this.createdAt = Objects.requireNonNull(createdAt, "createdAt must not be null");
+            return this;
+        }
+
+        /**
+         * <p>The date and time when the knowledge base was last updated.</p>
+         * <p>The date and time when the knowledge base was last updated.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("updatedAt")
+        public KnowledgeBaseIdStage updatedAt(@NotNull OffsetDateTime updatedAt) {
+            this.updatedAt = Objects.requireNonNull(updatedAt, "updatedAt must not be null");
             return this;
         }
 
@@ -350,8 +458,25 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
          */
         @java.lang.Override
         @JsonSetter("knowledgeBaseId")
-        public TypeStage knowledgeBaseId(@NotNull EntityId knowledgeBaseId) {
+        public MostRecentVersionStatusStage knowledgeBaseId(@NotNull EntityId knowledgeBaseId) {
             this.knowledgeBaseId = Objects.requireNonNull(knowledgeBaseId, "knowledgeBaseId must not be null");
+            return this;
+        }
+
+        /**
+         * <p>The status of the most recent version of the knowledge base.
+         * The <code>activeVersionId</code> will only be populated if this status is <code>SUCCEEDED</code>.
+         * Use the <code>listKnowledgeBaseVersions</code> endpoint to get the full list of versions.</p>
+         * <p>The status of the most recent version of the knowledge base.
+         * The <code>activeVersionId</code> will only be populated if this status is <code>SUCCEEDED</code>.
+         * Use the <code>listKnowledgeBaseVersions</code> endpoint to get the full list of versions.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("mostRecentVersionStatus")
+        public TypeStage mostRecentVersionStatus(@NotNull KnowledgeBaseVersionStatus mostRecentVersionStatus) {
+            this.mostRecentVersionStatus =
+                    Objects.requireNonNull(mostRecentVersionStatus, "mostRecentVersionStatus must not be null");
             return this;
         }
 
@@ -538,8 +663,11 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
             return new KnowledgeBaseResponse(
                     name,
                     precondition,
+                    createdAt,
+                    updatedAt,
                     knowledgeBaseId,
                     activeVersionId,
+                    mostRecentVersionStatus,
                     type,
                     metadata,
                     tags,

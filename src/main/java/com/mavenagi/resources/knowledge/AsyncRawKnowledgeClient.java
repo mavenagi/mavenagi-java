@@ -21,6 +21,7 @@ import com.mavenagi.resources.knowledge.requests.KnowledgeBasePatchRequest;
 import com.mavenagi.resources.knowledge.requests.KnowledgeBaseVersionsListRequest;
 import com.mavenagi.resources.knowledge.requests.KnowledgeDocumentGetRequest;
 import com.mavenagi.resources.knowledge.types.FinalizeKnowledgeBaseVersionRequest;
+import com.mavenagi.resources.knowledge.types.KnowledgeBaseRefreshRequest;
 import com.mavenagi.resources.knowledge.types.KnowledgeBaseRequest;
 import com.mavenagi.resources.knowledge.types.KnowledgeBaseResponse;
 import com.mavenagi.resources.knowledge.types.KnowledgeBaseSearchRequest;
@@ -286,6 +287,107 @@ public class AsyncRawKnowledgeClient {
                         future.complete(new MavenAGIHttpResponse<>(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), KnowledgeBaseResponse.class),
                                 response));
+                        return;
+                    }
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+                    try {
+                        switch (response.code()) {
+                            case 400:
+                                future.completeExceptionally(new BadRequestError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
+                                        response));
+                                return;
+                            case 404:
+                                future.completeExceptionally(new NotFoundError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
+                                        response));
+                                return;
+                            case 500:
+                                future.completeExceptionally(new ServerError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
+                                        response));
+                                return;
+                        }
+                    } catch (JsonProcessingException ignored) {
+                        // unable to map error response, throwing generic error
+                    }
+                    future.completeExceptionally(new MavenAGIApiException(
+                            "Error with status code " + response.code(),
+                            response.code(),
+                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                            response));
+                    return;
+                } catch (IOException e) {
+                    future.completeExceptionally(new MavenAGIException("Network error executing HTTP request", e));
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                future.completeExceptionally(new MavenAGIException("Network error executing HTTP request", e));
+            }
+        });
+        return future;
+    }
+
+    /**
+     * Request that a knowledge base refresh itself.
+     * <p>Knowledge bases refresh on a schedule determined by the <code>refreshFrequency</code> field.
+     * They can also be refreshed on demand by calling this endpoint.</p>
+     */
+    public CompletableFuture<MavenAGIHttpResponse<Void>> refreshKnowledgeBase(String knowledgeBaseReferenceId) {
+        return refreshKnowledgeBase(
+                knowledgeBaseReferenceId, KnowledgeBaseRefreshRequest.builder().build());
+    }
+
+    /**
+     * Request that a knowledge base refresh itself.
+     * <p>Knowledge bases refresh on a schedule determined by the <code>refreshFrequency</code> field.
+     * They can also be refreshed on demand by calling this endpoint.</p>
+     */
+    public CompletableFuture<MavenAGIHttpResponse<Void>> refreshKnowledgeBase(
+            String knowledgeBaseReferenceId, KnowledgeBaseRefreshRequest request) {
+        return refreshKnowledgeBase(knowledgeBaseReferenceId, request, null);
+    }
+
+    /**
+     * Request that a knowledge base refresh itself.
+     * <p>Knowledge bases refresh on a schedule determined by the <code>refreshFrequency</code> field.
+     * They can also be refreshed on demand by calling this endpoint.</p>
+     */
+    public CompletableFuture<MavenAGIHttpResponse<Void>> refreshKnowledgeBase(
+            String knowledgeBaseReferenceId, KnowledgeBaseRefreshRequest request, RequestOptions requestOptions) {
+        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("v1/knowledge")
+                .addPathSegment(knowledgeBaseReferenceId)
+                .addPathSegments("refresh")
+                .build();
+        RequestBody body;
+        try {
+            body = RequestBody.create(
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
+        } catch (JsonProcessingException e) {
+            throw new MavenAGIException("Failed to serialize request", e);
+        }
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl)
+                .method("POST", body)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
+                .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        CompletableFuture<MavenAGIHttpResponse<Void>> future = new CompletableFuture<>();
+        client.newCall(okhttpRequest).enqueue(new Callback() {
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                try (ResponseBody responseBody = response.body()) {
+                    if (response.isSuccessful()) {
+                        future.complete(new MavenAGIHttpResponse<>(null, response));
                         return;
                     }
                     String responseBodyString = responseBody != null ? responseBody.string() : "{}";

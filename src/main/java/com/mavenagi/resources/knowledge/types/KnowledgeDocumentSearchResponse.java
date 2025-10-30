@@ -27,7 +27,7 @@ public final class KnowledgeDocumentSearchResponse implements IKnowledgeDocument
 
     private final Optional<EntityId> knowledgeBaseVersionId;
 
-    private final String title;
+    private final Optional<String> title;
 
     private final Optional<String> url;
 
@@ -44,7 +44,7 @@ public final class KnowledgeDocumentSearchResponse implements IKnowledgeDocument
     private KnowledgeDocumentSearchResponse(
             EntityId knowledgeDocumentId,
             Optional<EntityId> knowledgeBaseVersionId,
-            String title,
+            Optional<String> title,
             Optional<String> url,
             Optional<String> language,
             Optional<OffsetDateTime> createdAt,
@@ -82,11 +82,11 @@ public final class KnowledgeDocumentSearchResponse implements IKnowledgeDocument
     }
 
     /**
-     * @return The title of the document. Will be shown as part of answers.
+     * @return The title of the document. Will be shown as part of answers. May be missing on legacy documents.
      */
     @JsonProperty("title")
     @java.lang.Override
-    public String getTitle() {
+    public Optional<String> getTitle() {
         return title;
     }
 
@@ -183,16 +183,9 @@ public final class KnowledgeDocumentSearchResponse implements IKnowledgeDocument
         /**
          * <p>ID that uniquely identifies this knowledge document within its knowledge base</p>
          */
-        TitleStage knowledgeDocumentId(@NotNull EntityId knowledgeDocumentId);
+        _FinalStage knowledgeDocumentId(@NotNull EntityId knowledgeDocumentId);
 
         Builder from(KnowledgeDocumentSearchResponse other);
-    }
-
-    public interface TitleStage {
-        /**
-         * <p>The title of the document. Will be shown as part of answers.</p>
-         */
-        _FinalStage title(@NotNull String title);
     }
 
     public interface _FinalStage {
@@ -205,6 +198,13 @@ public final class KnowledgeDocumentSearchResponse implements IKnowledgeDocument
         _FinalStage knowledgeBaseVersionId(Optional<EntityId> knowledgeBaseVersionId);
 
         _FinalStage knowledgeBaseVersionId(EntityId knowledgeBaseVersionId);
+
+        /**
+         * <p>The title of the document. Will be shown as part of answers. May be missing on legacy documents.</p>
+         */
+        _FinalStage title(Optional<String> title);
+
+        _FinalStage title(String title);
 
         /**
          * <p>The URL of the document. Should be visible to end users. Will be shown as part of answers. Not used for crawling.</p>
@@ -243,10 +243,8 @@ public final class KnowledgeDocumentSearchResponse implements IKnowledgeDocument
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements KnowledgeDocumentIdStage, TitleStage, _FinalStage {
+    public static final class Builder implements KnowledgeDocumentIdStage, _FinalStage {
         private EntityId knowledgeDocumentId;
-
-        private String title;
 
         private Optional<String> author = Optional.empty();
 
@@ -257,6 +255,8 @@ public final class KnowledgeDocumentSearchResponse implements IKnowledgeDocument
         private Optional<String> language = Optional.empty();
 
         private Optional<String> url = Optional.empty();
+
+        private Optional<String> title = Optional.empty();
 
         private Optional<EntityId> knowledgeBaseVersionId = Optional.empty();
 
@@ -285,21 +285,9 @@ public final class KnowledgeDocumentSearchResponse implements IKnowledgeDocument
          */
         @java.lang.Override
         @JsonSetter("knowledgeDocumentId")
-        public TitleStage knowledgeDocumentId(@NotNull EntityId knowledgeDocumentId) {
+        public _FinalStage knowledgeDocumentId(@NotNull EntityId knowledgeDocumentId) {
             this.knowledgeDocumentId =
                     Objects.requireNonNull(knowledgeDocumentId, "knowledgeDocumentId must not be null");
-            return this;
-        }
-
-        /**
-         * <p>The title of the document. Will be shown as part of answers.</p>
-         * <p>The title of the document. Will be shown as part of answers.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("title")
-        public _FinalStage title(@NotNull String title) {
-            this.title = Objects.requireNonNull(title, "title must not be null");
             return this;
         }
 
@@ -400,6 +388,26 @@ public final class KnowledgeDocumentSearchResponse implements IKnowledgeDocument
         @JsonSetter(value = "url", nulls = Nulls.SKIP)
         public _FinalStage url(Optional<String> url) {
             this.url = url;
+            return this;
+        }
+
+        /**
+         * <p>The title of the document. Will be shown as part of answers. May be missing on legacy documents.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage title(String title) {
+            this.title = Optional.ofNullable(title);
+            return this;
+        }
+
+        /**
+         * <p>The title of the document. Will be shown as part of answers. May be missing on legacy documents.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "title", nulls = Nulls.SKIP)
+        public _FinalStage title(Optional<String> title) {
+            this.title = title;
             return this;
         }
 

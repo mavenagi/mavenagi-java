@@ -11,7 +11,10 @@ import com.mavenagi.resources.actions.types.ActionsResponse;
 import com.mavenagi.resources.actions.types.ActionsSearchRequest;
 import com.mavenagi.resources.commons.types.ActionParameter;
 import com.mavenagi.resources.commons.types.ActionResponse;
+import com.mavenagi.resources.commons.types.EntityId;
 import com.mavenagi.resources.commons.types.EntityIdBase;
+import com.mavenagi.resources.commons.types.EntityType;
+import com.mavenagi.resources.commons.types.LlmInclusionStatus;
 import com.mavenagi.resources.commons.types.MetadataPrecondition;
 import com.mavenagi.resources.commons.types.Precondition;
 import com.mavenagi.resources.commons.types.PreconditionGroup;
@@ -343,7 +346,7 @@ public class ActionsWireTest {
     public void testCreateOrUpdate() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"actionId\":{\"referenceId\":\"get-balance\",\"appId\":\"my-billing-system\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"ACTION\"},\"name\":\"Get the user's balance\",\"description\":\"This action calls an API to get the user's current balance.\",\"instructions\":\"This action calls an API to get the user's current balance.\",\"llmInclusionStatus\":\"WHEN_RELEVANT\",\"userInteractionRequired\":false,\"userFormParameters\":[],\"precondition\":{\"preconditionType\":\"group\",\"operator\":\"AND\",\"preconditions\":[{\"preconditionType\":\"user\",\"key\":\"userKey\"},{\"preconditionType\":\"user\",\"key\":\"userKey2\"}]},\"language\":\"en\",\"deleted\":false}"));
+            .setBody("{\"actionId\":{\"referenceId\":\"get-balance\",\"appId\":\"my-billing-system\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"ACTION\"},\"name\":\"Get the user's balance\",\"description\":\"This action calls an API to get the user's current balance.\",\"instructions\":\"This action calls an API to get the user's current balance.\",\"llmInclusionStatus\":\"WHEN_RELEVANT\",\"userInteractionRequired\":false,\"userFormParameters\":[],\"precondition\":{\"preconditionType\":\"group\",\"operator\":\"AND\",\"preconditions\":[{\"preconditionType\":\"user\",\"key\":\"userKey\"},{\"preconditionType\":\"user\",\"key\":\"userKey2\"}]},\"segmentId\":{\"referenceId\":\"premium-users\",\"appId\":\"my-billing-system\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"SEGMENT\"},\"language\":\"en\",\"deleted\":false}"));
         ActionResponse response = client.actions().createOrUpdate(
             ActionRequest
                 .builder()
@@ -471,6 +474,13 @@ public class ActionsWireTest {
             + "      }\n"
             + "    ]\n"
             + "  },\n"
+            + "  \"segmentId\": {\n"
+            + "    \"referenceId\": \"premium-users\",\n"
+            + "    \"appId\": \"my-billing-system\",\n"
+            + "    \"organizationId\": \"acme\",\n"
+            + "    \"agentId\": \"support\",\n"
+            + "    \"type\": \"SEGMENT\"\n"
+            + "  },\n"
             + "  \"language\": \"en\",\n"
             + "  \"deleted\": false\n"
             + "}";
@@ -501,7 +511,7 @@ public class ActionsWireTest {
     public void testGet() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"actionId\":{\"referenceId\":\"get-balance\",\"appId\":\"my-billing-system\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"ACTION\"},\"name\":\"Get the user's balance\",\"description\":\"This action calls an API to get the user's current balance.\",\"instructions\":\"This action calls an API to get the user's current balance.\",\"llmInclusionStatus\":\"WHEN_RELEVANT\",\"userInteractionRequired\":false,\"userFormParameters\":[],\"precondition\":{\"preconditionType\":\"group\",\"operator\":\"AND\",\"preconditions\":[{\"preconditionType\":\"user\",\"key\":\"userKey\"},{\"preconditionType\":\"user\",\"key\":\"userKey2\"}]},\"language\":\"en\",\"deleted\":false}"));
+            .setBody("{\"actionId\":{\"referenceId\":\"get-balance\",\"appId\":\"my-billing-system\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"ACTION\"},\"name\":\"Get the user's balance\",\"description\":\"This action calls an API to get the user's current balance.\",\"instructions\":\"This action calls an API to get the user's current balance.\",\"llmInclusionStatus\":\"WHEN_RELEVANT\",\"userInteractionRequired\":false,\"userFormParameters\":[],\"precondition\":{\"preconditionType\":\"group\",\"operator\":\"AND\",\"preconditions\":[{\"preconditionType\":\"user\",\"key\":\"userKey\"},{\"preconditionType\":\"user\",\"key\":\"userKey2\"}]},\"segmentId\":{\"referenceId\":\"premium-users\",\"appId\":\"my-billing-system\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"SEGMENT\"},\"language\":\"en\",\"deleted\":false}"));
         ActionResponse response = client.actions().get(
             "get-balance",
             ActionGetRequest
@@ -544,6 +554,13 @@ public class ActionsWireTest {
             + "      }\n"
             + "    ]\n"
             + "  },\n"
+            + "  \"segmentId\": {\n"
+            + "    \"referenceId\": \"premium-users\",\n"
+            + "    \"appId\": \"my-billing-system\",\n"
+            + "    \"organizationId\": \"acme\",\n"
+            + "    \"agentId\": \"support\",\n"
+            + "    \"type\": \"SEGMENT\"\n"
+            + "  },\n"
             + "  \"language\": \"en\",\n"
             + "  \"deleted\": false\n"
             + "}";
@@ -574,11 +591,23 @@ public class ActionsWireTest {
     public void testPatch() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"actionId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"instructions\":\"instructions\",\"llmInclusionStatus\":\"ALWAYS\",\"segmentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"preconditionExplanation\":\"preconditionExplanation\",\"deleted\":true,\"name\":\"name\",\"description\":\"description\",\"userInteractionRequired\":true,\"buttonName\":\"buttonName\",\"precondition\":{\"preconditionType\":\"user\",\"key\":\"key\",\"value\":\"value\",\"operator\":\"NOT\"},\"userFormParameters\":[{\"id\":\"id\",\"label\":\"label\",\"description\":\"description\",\"required\":true,\"hidden\":true,\"type\":\"STRING\",\"enumOptions\":[{\"label\":\"label\",\"value\":{\"key\":\"value\"}},{\"label\":\"label\",\"value\":{\"key\":\"value\"}}],\"schema\":\"schema\",\"oauthConfiguration\":{\"authorizationUrl\":\"authorizationUrl\",\"tokenUrl\":\"tokenUrl\",\"clientId\":\"clientId\",\"clientSecret\":\"clientSecret\",\"scopes\":[\"scopes\",\"scopes\"],\"extraAuthParams\":{\"extraAuthParams\":\"extraAuthParams\"},\"extraTokenParams\":{\"extraTokenParams\":\"extraTokenParams\"}}},{\"id\":\"id\",\"label\":\"label\",\"description\":\"description\",\"required\":true,\"hidden\":true,\"type\":\"STRING\",\"enumOptions\":[{\"label\":\"label\",\"value\":{\"key\":\"value\"}},{\"label\":\"label\",\"value\":{\"key\":\"value\"}}],\"schema\":\"schema\",\"oauthConfiguration\":{\"authorizationUrl\":\"authorizationUrl\",\"tokenUrl\":\"tokenUrl\",\"clientId\":\"clientId\",\"clientSecret\":\"clientSecret\",\"scopes\":[\"scopes\",\"scopes\"],\"extraAuthParams\":{\"extraAuthParams\":\"extraAuthParams\"},\"extraTokenParams\":{\"extraTokenParams\":\"extraTokenParams\"}}}],\"language\":\"language\"}"));
+            .setBody("{\"actionId\":{\"referenceId\":\"get-balance\",\"appId\":\"my-billing-system\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"ACTION\"},\"name\":\"Get the user's balance\",\"description\":\"This action calls an API to get the user's current balance.\",\"instructions\":\"This action calls an API to get the user's current balance.\",\"llmInclusionStatus\":\"WHEN_RELEVANT\",\"userInteractionRequired\":false,\"userFormParameters\":[],\"precondition\":{\"preconditionType\":\"group\",\"operator\":\"AND\",\"preconditions\":[{\"preconditionType\":\"user\",\"key\":\"userKey\"},{\"preconditionType\":\"user\",\"key\":\"userKey2\"}]},\"segmentId\":{\"referenceId\":\"premium-users\",\"appId\":\"my-billing-system\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"SEGMENT\"},\"language\":\"en\",\"deleted\":false}"));
         ActionResponse response = client.actions().patch(
-            "actionReferenceId",
+            "get-balance",
             ActionPatchRequest
                 .builder()
+                .instructions("Use this action when the user asks about their account balance or remaining credits.")
+                .llmInclusionStatus(LlmInclusionStatus.WHEN_RELEVANT)
+                .segmentId(
+                    EntityId
+                        .builder()
+                        .referenceId("premium-users")
+                        .appId("my-billing-system")
+                        .organizationId("acme")
+                        .agentId("support")
+                        .type(EntityType.SEGMENT)
+                        .build()
+                )
                 .build()
         );
         RecordedRequest request = server.takeRequest();
@@ -587,7 +616,17 @@ public class ActionsWireTest {
         // Validate request body
         String actualRequestBody = request.getBody().readUtf8();
         String expectedRequestBody = ""
-            + "{}";
+            + "{\n"
+            + "  \"instructions\": \"Use this action when the user asks about their account balance or remaining credits.\",\n"
+            + "  \"llmInclusionStatus\": \"WHEN_RELEVANT\",\n"
+            + "  \"segmentId\": {\n"
+            + "    \"referenceId\": \"premium-users\",\n"
+            + "    \"appId\": \"my-billing-system\",\n"
+            + "    \"organizationId\": \"acme\",\n"
+            + "    \"agentId\": \"support\",\n"
+            + "    \"type\": \"SEGMENT\"\n"
+            + "  }\n"
+            + "}";
         JsonNode actualJson = objectMapper.readTree(actualRequestBody);
         JsonNode expectedJson = objectMapper.readTree(expectedRequestBody);
         Assertions.assertEquals(expectedJson, actualJson, "Request body structure does not match expected");
@@ -617,114 +656,41 @@ public class ActionsWireTest {
         String expectedResponseBody = ""
             + "{\n"
             + "  \"actionId\": {\n"
-            + "    \"organizationId\": \"organizationId\",\n"
-            + "    \"agentId\": \"agentId\",\n"
-            + "    \"type\": \"AGENT\",\n"
-            + "    \"appId\": \"appId\",\n"
-            + "    \"referenceId\": \"referenceId\"\n"
+            + "    \"referenceId\": \"get-balance\",\n"
+            + "    \"appId\": \"my-billing-system\",\n"
+            + "    \"organizationId\": \"acme\",\n"
+            + "    \"agentId\": \"support\",\n"
+            + "    \"type\": \"ACTION\"\n"
             + "  },\n"
-            + "  \"instructions\": \"instructions\",\n"
-            + "  \"llmInclusionStatus\": \"ALWAYS\",\n"
-            + "  \"segmentId\": {\n"
-            + "    \"organizationId\": \"organizationId\",\n"
-            + "    \"agentId\": \"agentId\",\n"
-            + "    \"type\": \"AGENT\",\n"
-            + "    \"appId\": \"appId\",\n"
-            + "    \"referenceId\": \"referenceId\"\n"
-            + "  },\n"
-            + "  \"preconditionExplanation\": \"preconditionExplanation\",\n"
-            + "  \"deleted\": true,\n"
-            + "  \"name\": \"name\",\n"
-            + "  \"description\": \"description\",\n"
-            + "  \"userInteractionRequired\": true,\n"
-            + "  \"buttonName\": \"buttonName\",\n"
+            + "  \"name\": \"Get the user's balance\",\n"
+            + "  \"description\": \"This action calls an API to get the user's current balance.\",\n"
+            + "  \"instructions\": \"This action calls an API to get the user's current balance.\",\n"
+            + "  \"llmInclusionStatus\": \"WHEN_RELEVANT\",\n"
+            + "  \"userInteractionRequired\": false,\n"
+            + "  \"userFormParameters\": [],\n"
             + "  \"precondition\": {\n"
-            + "    \"preconditionType\": \"user\",\n"
-            + "    \"key\": \"key\",\n"
-            + "    \"value\": \"value\",\n"
-            + "    \"operator\": \"NOT\"\n"
+            + "    \"preconditionType\": \"group\",\n"
+            + "    \"operator\": \"AND\",\n"
+            + "    \"preconditions\": [\n"
+            + "      {\n"
+            + "        \"preconditionType\": \"user\",\n"
+            + "        \"key\": \"userKey\"\n"
+            + "      },\n"
+            + "      {\n"
+            + "        \"preconditionType\": \"user\",\n"
+            + "        \"key\": \"userKey2\"\n"
+            + "      }\n"
+            + "    ]\n"
             + "  },\n"
-            + "  \"userFormParameters\": [\n"
-            + "    {\n"
-            + "      \"id\": \"id\",\n"
-            + "      \"label\": \"label\",\n"
-            + "      \"description\": \"description\",\n"
-            + "      \"required\": true,\n"
-            + "      \"hidden\": true,\n"
-            + "      \"type\": \"STRING\",\n"
-            + "      \"enumOptions\": [\n"
-            + "        {\n"
-            + "          \"label\": \"label\",\n"
-            + "          \"value\": {\n"
-            + "            \"key\": \"value\"\n"
-            + "          }\n"
-            + "        },\n"
-            + "        {\n"
-            + "          \"label\": \"label\",\n"
-            + "          \"value\": {\n"
-            + "            \"key\": \"value\"\n"
-            + "          }\n"
-            + "        }\n"
-            + "      ],\n"
-            + "      \"schema\": \"schema\",\n"
-            + "      \"oauthConfiguration\": {\n"
-            + "        \"authorizationUrl\": \"authorizationUrl\",\n"
-            + "        \"tokenUrl\": \"tokenUrl\",\n"
-            + "        \"clientId\": \"clientId\",\n"
-            + "        \"clientSecret\": \"clientSecret\",\n"
-            + "        \"scopes\": [\n"
-            + "          \"scopes\",\n"
-            + "          \"scopes\"\n"
-            + "        ],\n"
-            + "        \"extraAuthParams\": {\n"
-            + "          \"extraAuthParams\": \"extraAuthParams\"\n"
-            + "        },\n"
-            + "        \"extraTokenParams\": {\n"
-            + "          \"extraTokenParams\": \"extraTokenParams\"\n"
-            + "        }\n"
-            + "      }\n"
-            + "    },\n"
-            + "    {\n"
-            + "      \"id\": \"id\",\n"
-            + "      \"label\": \"label\",\n"
-            + "      \"description\": \"description\",\n"
-            + "      \"required\": true,\n"
-            + "      \"hidden\": true,\n"
-            + "      \"type\": \"STRING\",\n"
-            + "      \"enumOptions\": [\n"
-            + "        {\n"
-            + "          \"label\": \"label\",\n"
-            + "          \"value\": {\n"
-            + "            \"key\": \"value\"\n"
-            + "          }\n"
-            + "        },\n"
-            + "        {\n"
-            + "          \"label\": \"label\",\n"
-            + "          \"value\": {\n"
-            + "            \"key\": \"value\"\n"
-            + "          }\n"
-            + "        }\n"
-            + "      ],\n"
-            + "      \"schema\": \"schema\",\n"
-            + "      \"oauthConfiguration\": {\n"
-            + "        \"authorizationUrl\": \"authorizationUrl\",\n"
-            + "        \"tokenUrl\": \"tokenUrl\",\n"
-            + "        \"clientId\": \"clientId\",\n"
-            + "        \"clientSecret\": \"clientSecret\",\n"
-            + "        \"scopes\": [\n"
-            + "          \"scopes\",\n"
-            + "          \"scopes\"\n"
-            + "        ],\n"
-            + "        \"extraAuthParams\": {\n"
-            + "          \"extraAuthParams\": \"extraAuthParams\"\n"
-            + "        },\n"
-            + "        \"extraTokenParams\": {\n"
-            + "          \"extraTokenParams\": \"extraTokenParams\"\n"
-            + "        }\n"
-            + "      }\n"
-            + "    }\n"
-            + "  ],\n"
-            + "  \"language\": \"language\"\n"
+            + "  \"segmentId\": {\n"
+            + "    \"referenceId\": \"premium-users\",\n"
+            + "    \"appId\": \"my-billing-system\",\n"
+            + "    \"organizationId\": \"acme\",\n"
+            + "    \"agentId\": \"support\",\n"
+            + "    \"type\": \"SEGMENT\"\n"
+            + "  },\n"
+            + "  \"language\": \"en\",\n"
+            + "  \"deleted\": false\n"
             + "}";
         JsonNode actualResponseNode = objectMapper.readTree(actualResponseJson);
         JsonNode expectedResponseNode = objectMapper.readTree(expectedResponseBody);

@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
+import com.mavenagi.resources.commons.types.LlmInclusionStatus;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -32,6 +33,10 @@ public final class KnowledgeBaseFilter {
 
     private final Optional<List<String>> appIds;
 
+    private final Optional<List<KnowledgeBaseVersionStatus>> mostRecentVersionStatus;
+
+    private final Optional<LlmInclusionStatus> llmInclusionStatus;
+
     private final Map<String, Object> additionalProperties;
 
     private KnowledgeBaseFilter(
@@ -40,12 +45,16 @@ public final class KnowledgeBaseFilter {
             Optional<OffsetDateTime> createdAfter,
             Optional<OffsetDateTime> createdBefore,
             Optional<List<String>> appIds,
+            Optional<List<KnowledgeBaseVersionStatus>> mostRecentVersionStatus,
+            Optional<LlmInclusionStatus> llmInclusionStatus,
             Map<String, Object> additionalProperties) {
         this.search = search;
         this.title = title;
         this.createdAfter = createdAfter;
         this.createdBefore = createdBefore;
         this.appIds = appIds;
+        this.mostRecentVersionStatus = mostRecentVersionStatus;
+        this.llmInclusionStatus = llmInclusionStatus;
         this.additionalProperties = additionalProperties;
     }
 
@@ -100,6 +109,22 @@ public final class KnowledgeBaseFilter {
         return appIds;
     }
 
+    /**
+     * @return Filter knowledge bases by the most recent version status
+     */
+    @JsonProperty("mostRecentVersionStatus")
+    public Optional<List<KnowledgeBaseVersionStatus>> getMostRecentVersionStatus() {
+        return mostRecentVersionStatus;
+    }
+
+    /**
+     * @return Filter knowledge bases by the LLM inclusion status
+     */
+    @JsonProperty("llmInclusionStatus")
+    public Optional<LlmInclusionStatus> getLlmInclusionStatus() {
+        return llmInclusionStatus;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -116,12 +141,21 @@ public final class KnowledgeBaseFilter {
                 && title.equals(other.title)
                 && createdAfter.equals(other.createdAfter)
                 && createdBefore.equals(other.createdBefore)
-                && appIds.equals(other.appIds);
+                && appIds.equals(other.appIds)
+                && mostRecentVersionStatus.equals(other.mostRecentVersionStatus)
+                && llmInclusionStatus.equals(other.llmInclusionStatus);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.search, this.title, this.createdAfter, this.createdBefore, this.appIds);
+        return Objects.hash(
+                this.search,
+                this.title,
+                this.createdAfter,
+                this.createdBefore,
+                this.appIds,
+                this.mostRecentVersionStatus,
+                this.llmInclusionStatus);
     }
 
     @java.lang.Override
@@ -145,6 +179,10 @@ public final class KnowledgeBaseFilter {
 
         private Optional<List<String>> appIds = Optional.empty();
 
+        private Optional<List<KnowledgeBaseVersionStatus>> mostRecentVersionStatus = Optional.empty();
+
+        private Optional<LlmInclusionStatus> llmInclusionStatus = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -156,6 +194,8 @@ public final class KnowledgeBaseFilter {
             createdAfter(other.getCreatedAfter());
             createdBefore(other.getCreatedBefore());
             appIds(other.getAppIds());
+            mostRecentVersionStatus(other.getMostRecentVersionStatus());
+            llmInclusionStatus(other.getLlmInclusionStatus());
             return this;
         }
 
@@ -240,8 +280,44 @@ public final class KnowledgeBaseFilter {
             return this;
         }
 
+        /**
+         * <p>Filter knowledge bases by the most recent version status</p>
+         */
+        @JsonSetter(value = "mostRecentVersionStatus", nulls = Nulls.SKIP)
+        public Builder mostRecentVersionStatus(Optional<List<KnowledgeBaseVersionStatus>> mostRecentVersionStatus) {
+            this.mostRecentVersionStatus = mostRecentVersionStatus;
+            return this;
+        }
+
+        public Builder mostRecentVersionStatus(List<KnowledgeBaseVersionStatus> mostRecentVersionStatus) {
+            this.mostRecentVersionStatus = Optional.ofNullable(mostRecentVersionStatus);
+            return this;
+        }
+
+        /**
+         * <p>Filter knowledge bases by the LLM inclusion status</p>
+         */
+        @JsonSetter(value = "llmInclusionStatus", nulls = Nulls.SKIP)
+        public Builder llmInclusionStatus(Optional<LlmInclusionStatus> llmInclusionStatus) {
+            this.llmInclusionStatus = llmInclusionStatus;
+            return this;
+        }
+
+        public Builder llmInclusionStatus(LlmInclusionStatus llmInclusionStatus) {
+            this.llmInclusionStatus = Optional.ofNullable(llmInclusionStatus);
+            return this;
+        }
+
         public KnowledgeBaseFilter build() {
-            return new KnowledgeBaseFilter(search, title, createdAfter, createdBefore, appIds, additionalProperties);
+            return new KnowledgeBaseFilter(
+                    search,
+                    title,
+                    createdAfter,
+                    createdBefore,
+                    appIds,
+                    mostRecentVersionStatus,
+                    llmInclusionStatus,
+                    additionalProperties);
         }
     }
 }

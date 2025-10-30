@@ -10,4 +10,6 @@ public interface IKnowledgeDocumentSearchResponse extends IBaseKnowledgeDocument
     EntityId getKnowledgeDocumentId();
 
     Optional<EntityId> getKnowledgeBaseVersionId();
+
+    Optional<String> getTitle();
 }

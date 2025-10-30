@@ -5,8 +5,8 @@ package com.mavenagi.resources.agents;
 
 import com.mavenagi.core.ClientOptions;
 import com.mavenagi.core.RequestOptions;
+import com.mavenagi.resources.agents.requests.AgentPatchRequest;
 import com.mavenagi.resources.agents.types.Agent;
-import com.mavenagi.resources.agents.types.AgentPatchRequest;
 import com.mavenagi.resources.agents.types.AgentsSearchRequest;
 import com.mavenagi.resources.agents.types.AgentsSearchResponse;
 import com.mavenagi.resources.agents.types.CreateAgentRequest;

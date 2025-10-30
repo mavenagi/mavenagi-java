@@ -21,6 +21,8 @@ import java.util.Set;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = SimulationContext.Builder.class)
 public final class SimulationContext {
+    private final Optional<String> additionalPromptText;
+
     private final Optional<LlmPersona> persona;
 
     private final Optional<Set<EntityId>> availableKnowledgeBases;
@@ -28,12 +30,24 @@ public final class SimulationContext {
     private final Map<String, Object> additionalProperties;
 
     private SimulationContext(
+            Optional<String> additionalPromptText,
             Optional<LlmPersona> persona,
             Optional<Set<EntityId>> availableKnowledgeBases,
             Map<String, Object> additionalProperties) {
+        this.additionalPromptText = additionalPromptText;
         this.persona = persona;
         this.availableKnowledgeBases = availableKnowledgeBases;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return If provided, overrides the agent's default additional prompt text during the simulation.
+     * Note that this field is provided for backwards compatibility and will be removed in a future release.
+     * Instead please use the <code>availableKnowledgeBases</code> field to include a knowledge base with a document <code>llmInclusionStatus</code> set to <code>ALWAYS</code>.
+     */
+    @JsonProperty("additionalPromptText")
+    public Optional<String> getAdditionalPromptText() {
+        return additionalPromptText;
     }
 
     /**
@@ -64,12 +78,14 @@ public final class SimulationContext {
     }
 
     private boolean equalTo(SimulationContext other) {
-        return persona.equals(other.persona) && availableKnowledgeBases.equals(other.availableKnowledgeBases);
+        return additionalPromptText.equals(other.additionalPromptText)
+                && persona.equals(other.persona)
+                && availableKnowledgeBases.equals(other.availableKnowledgeBases);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.persona, this.availableKnowledgeBases);
+        return Objects.hash(this.additionalPromptText, this.persona, this.availableKnowledgeBases);
     }
 
     @java.lang.Override
@@ -83,6 +99,8 @@ public final class SimulationContext {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
+        private Optional<String> additionalPromptText = Optional.empty();
+
         private Optional<LlmPersona> persona = Optional.empty();
 
         private Optional<Set<EntityId>> availableKnowledgeBases = Optional.empty();
@@ -93,8 +111,25 @@ public final class SimulationContext {
         private Builder() {}
 
         public Builder from(SimulationContext other) {
+            additionalPromptText(other.getAdditionalPromptText());
             persona(other.getPersona());
             availableKnowledgeBases(other.getAvailableKnowledgeBases());
+            return this;
+        }
+
+        /**
+         * <p>If provided, overrides the agent's default additional prompt text during the simulation.
+         * Note that this field is provided for backwards compatibility and will be removed in a future release.
+         * Instead please use the <code>availableKnowledgeBases</code> field to include a knowledge base with a document <code>llmInclusionStatus</code> set to <code>ALWAYS</code>.</p>
+         */
+        @JsonSetter(value = "additionalPromptText", nulls = Nulls.SKIP)
+        public Builder additionalPromptText(Optional<String> additionalPromptText) {
+            this.additionalPromptText = additionalPromptText;
+            return this;
+        }
+
+        public Builder additionalPromptText(String additionalPromptText) {
+            this.additionalPromptText = Optional.ofNullable(additionalPromptText);
             return this;
         }
 
@@ -127,7 +162,7 @@ public final class SimulationContext {
         }
 
         public SimulationContext build() {
-            return new SimulationContext(persona, availableKnowledgeBases, additionalProperties);
+            return new SimulationContext(additionalPromptText, persona, availableKnowledgeBases, additionalProperties);
         }
     }
 }

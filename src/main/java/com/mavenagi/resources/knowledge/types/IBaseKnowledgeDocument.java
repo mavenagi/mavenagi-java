@@ -7,8 +7,6 @@ import java.time.OffsetDateTime;
 import java.util.Optional;
 
 public interface IBaseKnowledgeDocument {
-    String getTitle();
-
     Optional<String> getUrl();
 
     Optional<String> getLanguage();
