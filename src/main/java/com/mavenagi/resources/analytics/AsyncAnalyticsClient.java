@@ -13,6 +13,7 @@ import com.mavenagi.resources.analytics.types.ConversationTableRequest;
 import com.mavenagi.resources.analytics.types.ConversationTableResponse;
 import com.mavenagi.resources.analytics.types.FeedbackTableRequest;
 import com.mavenagi.resources.analytics.types.FeedbackTableResponse;
+import java.io.InputStream;
 import java.util.concurrent.CompletableFuture;
 
 public class AsyncAnalyticsClient {
@@ -60,6 +61,23 @@ public class AsyncAnalyticsClient {
     public CompletableFuture<ChartResponse> getConversationChart(
             ConversationChartRequest request, RequestOptions requestOptions) {
         return this.rawClient.getConversationChart(request, requestOptions).thenApply(response -> response.body());
+    }
+
+    /**
+     * Export the conversation analytics table to a CSV file.
+     * <p>This outputs the current table view defined by the request. For most programmatic use cases, prefer <code>getConversationTable</code> and format client-side. The CSV format may change and should not be relied upon by code consumers. A maximum of 10,000 rows can be exported at a time.</p>
+     */
+    public CompletableFuture<InputStream> exportConversationTable(ConversationTableRequest request) {
+        return this.rawClient.exportConversationTable(request).thenApply(response -> response.body());
+    }
+
+    /**
+     * Export the conversation analytics table to a CSV file.
+     * <p>This outputs the current table view defined by the request. For most programmatic use cases, prefer <code>getConversationTable</code> and format client-side. The CSV format may change and should not be relied upon by code consumers. A maximum of 10,000 rows can be exported at a time.</p>
+     */
+    public CompletableFuture<InputStream> exportConversationTable(
+            ConversationTableRequest request, RequestOptions requestOptions) {
+        return this.rawClient.exportConversationTable(request, requestOptions).thenApply(response -> response.body());
     }
 
     /**

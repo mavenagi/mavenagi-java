@@ -46,6 +46,10 @@ public final class ConversationSummary {
 
     private final List<String> users;
 
+    private final Optional<String> lastUserMessage;
+
+    private final Optional<String> lastBotMessage;
+
     private final Map<String, Object> additionalProperties;
 
     private ConversationSummary(
@@ -61,6 +65,8 @@ public final class ConversationSummary {
             List<String> humanAgents,
             List<String> humanAgentsWithInserts,
             List<String> users,
+            Optional<String> lastUserMessage,
+            Optional<String> lastBotMessage,
             Map<String, Object> additionalProperties) {
         this.actionIds = actionIds;
         this.incompleteActionIds = incompleteActionIds;
@@ -74,6 +80,8 @@ public final class ConversationSummary {
         this.humanAgents = humanAgents;
         this.humanAgentsWithInserts = humanAgentsWithInserts;
         this.users = users;
+        this.lastUserMessage = lastUserMessage;
+        this.lastBotMessage = lastBotMessage;
         this.additionalProperties = additionalProperties;
     }
 
@@ -177,6 +185,22 @@ public final class ConversationSummary {
         return users;
     }
 
+    /**
+     * @return The text of the last user message in the conversation.
+     */
+    @JsonProperty("lastUserMessage")
+    public Optional<String> getLastUserMessage() {
+        return lastUserMessage;
+    }
+
+    /**
+     * @return The text of the last bot message in the conversation.
+     */
+    @JsonProperty("lastBotMessage")
+    public Optional<String> getLastBotMessage() {
+        return lastBotMessage;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -200,7 +224,9 @@ public final class ConversationSummary {
                 && humanAgentResponseDelay.equals(other.humanAgentResponseDelay)
                 && humanAgents.equals(other.humanAgents)
                 && humanAgentsWithInserts.equals(other.humanAgentsWithInserts)
-                && users.equals(other.users);
+                && users.equals(other.users)
+                && lastUserMessage.equals(other.lastUserMessage)
+                && lastBotMessage.equals(other.lastBotMessage);
     }
 
     @java.lang.Override
@@ -217,7 +243,9 @@ public final class ConversationSummary {
                 this.humanAgentResponseDelay,
                 this.humanAgents,
                 this.humanAgentsWithInserts,
-                this.users);
+                this.users,
+                this.lastUserMessage,
+                this.lastBotMessage);
     }
 
     @java.lang.Override
@@ -331,6 +359,20 @@ public final class ConversationSummary {
         _FinalStage addUsers(String users);
 
         _FinalStage addAllUsers(List<String> users);
+
+        /**
+         * <p>The text of the last user message in the conversation.</p>
+         */
+        _FinalStage lastUserMessage(Optional<String> lastUserMessage);
+
+        _FinalStage lastUserMessage(String lastUserMessage);
+
+        /**
+         * <p>The text of the last bot message in the conversation.</p>
+         */
+        _FinalStage lastBotMessage(Optional<String> lastBotMessage);
+
+        _FinalStage lastBotMessage(String lastBotMessage);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -350,6 +392,10 @@ public final class ConversationSummary {
         private int handoffCount;
 
         private int userMessageCount;
+
+        private Optional<String> lastBotMessage = Optional.empty();
+
+        private Optional<String> lastUserMessage = Optional.empty();
 
         private List<String> users = new ArrayList<>();
 
@@ -384,6 +430,8 @@ public final class ConversationSummary {
             humanAgents(other.getHumanAgents());
             humanAgentsWithInserts(other.getHumanAgentsWithInserts());
             users(other.getUsers());
+            lastUserMessage(other.getLastUserMessage());
+            lastBotMessage(other.getLastBotMessage());
             return this;
         }
 
@@ -444,6 +492,46 @@ public final class ConversationSummary {
         @JsonSetter("userMessageCount")
         public _FinalStage userMessageCount(int userMessageCount) {
             this.userMessageCount = userMessageCount;
+            return this;
+        }
+
+        /**
+         * <p>The text of the last bot message in the conversation.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage lastBotMessage(String lastBotMessage) {
+            this.lastBotMessage = Optional.ofNullable(lastBotMessage);
+            return this;
+        }
+
+        /**
+         * <p>The text of the last bot message in the conversation.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "lastBotMessage", nulls = Nulls.SKIP)
+        public _FinalStage lastBotMessage(Optional<String> lastBotMessage) {
+            this.lastBotMessage = lastBotMessage;
+            return this;
+        }
+
+        /**
+         * <p>The text of the last user message in the conversation.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage lastUserMessage(String lastUserMessage) {
+            this.lastUserMessage = Optional.ofNullable(lastUserMessage);
+            return this;
+        }
+
+        /**
+         * <p>The text of the last user message in the conversation.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "lastUserMessage", nulls = Nulls.SKIP)
+        public _FinalStage lastUserMessage(Optional<String> lastUserMessage) {
+            this.lastUserMessage = lastUserMessage;
             return this;
         }
 
@@ -685,6 +773,8 @@ public final class ConversationSummary {
                     humanAgents,
                     humanAgentsWithInserts,
                     users,
+                    lastUserMessage,
+                    lastBotMessage,
                     additionalProperties);
         }
     }

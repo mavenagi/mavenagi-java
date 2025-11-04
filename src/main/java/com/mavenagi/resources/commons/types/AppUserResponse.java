@@ -15,6 +15,7 @@ import com.mavenagi.core.ObjectMappers;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -35,6 +36,8 @@ public final class AppUserResponse implements IAppUser {
 
     private final Map<String, String> defaultUserData;
 
+    private final Map<String, List<UserDataWithReference>> agentUserData;
+
     private final Map<String, Object> additionalProperties;
 
     private AppUserResponse(
@@ -44,6 +47,7 @@ public final class AppUserResponse implements IAppUser {
             String agentUserId,
             Map<String, Map<String, String>> allUserData,
             Map<String, String> defaultUserData,
+            Map<String, List<UserDataWithReference>> agentUserData,
             Map<String, Object> additionalProperties) {
         this.identifiers = identifiers;
         this.data = data;
@@ -51,6 +55,7 @@ public final class AppUserResponse implements IAppUser {
         this.agentUserId = agentUserId;
         this.allUserData = allUserData;
         this.defaultUserData = defaultUserData;
+        this.agentUserData = agentUserData;
         this.additionalProperties = additionalProperties;
     }
 
@@ -101,6 +106,14 @@ public final class AppUserResponse implements IAppUser {
         return defaultUserData;
     }
 
+    /**
+     * @return All user data for this user, including reverse indexable user data
+     */
+    @JsonProperty("agentUserData")
+    public Map<String, List<UserDataWithReference>> getAgentUserData() {
+        return agentUserData;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -118,13 +131,20 @@ public final class AppUserResponse implements IAppUser {
                 && userId.equals(other.userId)
                 && agentUserId.equals(other.agentUserId)
                 && allUserData.equals(other.allUserData)
-                && defaultUserData.equals(other.defaultUserData);
+                && defaultUserData.equals(other.defaultUserData)
+                && agentUserData.equals(other.agentUserData);
     }
 
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.identifiers, this.data, this.userId, this.agentUserId, this.allUserData, this.defaultUserData);
+                this.identifiers,
+                this.data,
+                this.userId,
+                this.agentUserId,
+                this.allUserData,
+                this.defaultUserData,
+                this.agentUserData);
     }
 
     @java.lang.Override
@@ -187,6 +207,15 @@ public final class AppUserResponse implements IAppUser {
         _FinalStage putAllDefaultUserData(Map<String, String> defaultUserData);
 
         _FinalStage defaultUserData(String key, String value);
+
+        /**
+         * <p>All user data for this user, including reverse indexable user data</p>
+         */
+        _FinalStage agentUserData(Map<String, List<UserDataWithReference>> agentUserData);
+
+        _FinalStage putAllAgentUserData(Map<String, List<UserDataWithReference>> agentUserData);
+
+        _FinalStage agentUserData(String key, List<UserDataWithReference> value);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -194,6 +223,8 @@ public final class AppUserResponse implements IAppUser {
         private EntityId userId;
 
         private String agentUserId;
+
+        private Map<String, List<UserDataWithReference>> agentUserData = new LinkedHashMap<>();
 
         private Map<String, String> defaultUserData = new LinkedHashMap<>();
 
@@ -216,6 +247,7 @@ public final class AppUserResponse implements IAppUser {
             agentUserId(other.getAgentUserId());
             allUserData(other.getAllUserData());
             defaultUserData(other.getDefaultUserData());
+            agentUserData(other.getAgentUserData());
             return this;
         }
 
@@ -240,6 +272,41 @@ public final class AppUserResponse implements IAppUser {
         @JsonSetter("agentUserId")
         public _FinalStage agentUserId(@NotNull String agentUserId) {
             this.agentUserId = Objects.requireNonNull(agentUserId, "agentUserId must not be null");
+            return this;
+        }
+
+        /**
+         * <p>All user data for this user, including reverse indexable user data</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage agentUserData(String key, List<UserDataWithReference> value) {
+            this.agentUserData.put(key, value);
+            return this;
+        }
+
+        /**
+         * <p>All user data for this user, including reverse indexable user data</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage putAllAgentUserData(Map<String, List<UserDataWithReference>> agentUserData) {
+            if (agentUserData != null) {
+                this.agentUserData.putAll(agentUserData);
+            }
+            return this;
+        }
+
+        /**
+         * <p>All user data for this user, including reverse indexable user data</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "agentUserData", nulls = Nulls.SKIP)
+        public _FinalStage agentUserData(Map<String, List<UserDataWithReference>> agentUserData) {
+            this.agentUserData.clear();
+            if (agentUserData != null) {
+                this.agentUserData.putAll(agentUserData);
+            }
             return this;
         }
 
@@ -375,7 +442,14 @@ public final class AppUserResponse implements IAppUser {
         @java.lang.Override
         public AppUserResponse build() {
             return new AppUserResponse(
-                    identifiers, data, userId, agentUserId, allUserData, defaultUserData, additionalProperties);
+                    identifiers,
+                    data,
+                    userId,
+                    agentUserId,
+                    allUserData,
+                    defaultUserData,
+                    agentUserData,
+                    additionalProperties);
         }
     }
 }

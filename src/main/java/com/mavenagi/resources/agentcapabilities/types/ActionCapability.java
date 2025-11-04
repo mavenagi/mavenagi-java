@@ -145,11 +145,8 @@ public final class ActionCapability implements IAgentCapabilityBase {
     /**
      * @return When user interaction is required, the name of the button that is shown to the end user to confirm execution of the action. Defaults to &quot;Submit&quot; if not supplied.
      */
-    @JsonIgnore
+    @JsonProperty("buttonName")
     public Optional<String> getButtonName() {
-        if (buttonName == null) {
-            return Optional.empty();
-        }
         return buttonName;
     }
 
@@ -188,12 +185,6 @@ public final class ActionCapability implements IAgentCapabilityBase {
     @JsonProperty("description")
     private Optional<String> _getDescription() {
         return description;
-    }
-
-    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
-    @JsonProperty("buttonName")
-    private Optional<String> _getButtonName() {
-        return buttonName;
     }
 
     @java.lang.Override
@@ -304,8 +295,6 @@ public final class ActionCapability implements IAgentCapabilityBase {
         _FinalStage buttonName(Optional<String> buttonName);
 
         _FinalStage buttonName(String buttonName);
-
-        _FinalStage buttonName(Nullable<String> buttonName);
 
         /**
          * <p>The parameters that the action uses as input. An action will only be executed when all of the required parameters are provided. Parameter values may be inferred from the user's conversation by the LLM.</p>
@@ -532,22 +521,6 @@ public final class ActionCapability implements IAgentCapabilityBase {
             this.userFormParameters.clear();
             if (userFormParameters != null) {
                 this.userFormParameters.addAll(userFormParameters);
-            }
-            return this;
-        }
-
-        /**
-         * <p>When user interaction is required, the name of the button that is shown to the end user to confirm execution of the action. Defaults to &quot;Submit&quot; if not supplied.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage buttonName(Nullable<String> buttonName) {
-            if (buttonName.isNull()) {
-                this.buttonName = null;
-            } else if (buttonName.isEmpty()) {
-                this.buttonName = Optional.empty();
-            } else {
-                this.buttonName = Optional.of(buttonName.get());
             }
             return this;
         }

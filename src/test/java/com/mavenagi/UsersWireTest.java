@@ -305,7 +305,7 @@ public class UsersWireTest {
     public void testCreateOrUpdate() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"userId\":{\"referenceId\":\"user-0\",\"appId\":\"myapp\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"USER_PROFILE\"},\"agentUserId\":\"aus_1234567890\",\"identifiers\":[{\"value\":\"joe@myapp.com\",\"type\":\"EMAIL\"}],\"data\":{\"name\":{\"value\":\"Joe\",\"visibility\":\"VISIBLE\"}},\"allUserData\":{\"myapp\":{\"name\":\"Joe\"}},\"defaultUserData\":{\"name\":\"Joe\"}}"));
+            .setBody("{\"userId\":{\"referenceId\":\"user-0\",\"appId\":\"myapp\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"USER_PROFILE\"},\"agentUserId\":\"aus_1234567890\",\"identifiers\":[{\"value\":\"joe@myapp.com\",\"type\":\"EMAIL\"}],\"data\":{\"name\":{\"value\":\"Joe\",\"visibility\":\"VISIBLE\"}},\"allUserData\":{\"myapp\":{\"name\":\"Joe\"}},\"defaultUserData\":{\"name\":\"Joe\"},\"agentUserData\":{\"name\":[{\"value\":\"Joe\",\"visibility\":\"VISIBLE\",\"userId\":{\"appId\":\"myapp\",\"referenceId\":\"user0\"}}]}}"));
         AppUserResponse response = client.users().createOrUpdate(
             AppUserRequest
                 .builder()
@@ -415,6 +415,18 @@ public class UsersWireTest {
             + "  },\n"
             + "  \"defaultUserData\": {\n"
             + "    \"name\": \"Joe\"\n"
+            + "  },\n"
+            + "  \"agentUserData\": {\n"
+            + "    \"name\": [\n"
+            + "      {\n"
+            + "        \"value\": \"Joe\",\n"
+            + "        \"visibility\": \"VISIBLE\",\n"
+            + "        \"userId\": {\n"
+            + "          \"appId\": \"myapp\",\n"
+            + "          \"referenceId\": \"user0\"\n"
+            + "        }\n"
+            + "      }\n"
+            + "    ]\n"
             + "  }\n"
             + "}";
         JsonNode actualResponseNode = objectMapper.readTree(actualResponseJson);
@@ -444,7 +456,7 @@ public class UsersWireTest {
     public void testGet() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"userId\":{\"referenceId\":\"user-0\",\"appId\":\"myapp\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"USER_PROFILE\"},\"agentUserId\":\"aus_1234567890\",\"identifiers\":[{\"value\":\"joe@myapp.com\",\"type\":\"EMAIL\"}],\"data\":{\"name\":{\"value\":\"Joe\",\"visibility\":\"VISIBLE\"}},\"allUserData\":{\"myapp\":{\"name\":\"Joe\"}},\"defaultUserData\":{\"name\":\"Joe\"}}"));
+            .setBody("{\"userId\":{\"referenceId\":\"user-0\",\"appId\":\"myapp\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"USER_PROFILE\"},\"agentUserId\":\"aus_1234567890\",\"identifiers\":[{\"value\":\"joe@myapp.com\",\"type\":\"EMAIL\"}],\"data\":{\"name\":{\"value\":\"Joe\",\"visibility\":\"VISIBLE\"}},\"allUserData\":{\"myapp\":{\"name\":\"Joe\"}},\"defaultUserData\":{\"name\":\"Joe\"},\"agentUserData\":{\"name\":[{\"value\":\"Joe\",\"visibility\":\"VISIBLE\",\"userId\":{\"appId\":\"myapp\",\"referenceId\":\"user0\"}}]}}"));
         AppUserResponse response = client.users().get(
             "user-0",
             UserGetRequest
@@ -487,6 +499,18 @@ public class UsersWireTest {
             + "  },\n"
             + "  \"defaultUserData\": {\n"
             + "    \"name\": \"Joe\"\n"
+            + "  },\n"
+            + "  \"agentUserData\": {\n"
+            + "    \"name\": [\n"
+            + "      {\n"
+            + "        \"value\": \"Joe\",\n"
+            + "        \"visibility\": \"VISIBLE\",\n"
+            + "        \"userId\": {\n"
+            + "          \"appId\": \"myapp\",\n"
+            + "          \"referenceId\": \"user0\"\n"
+            + "        }\n"
+            + "      }\n"
+            + "    ]\n"
             + "  }\n"
             + "}";
         JsonNode actualResponseNode = objectMapper.readTree(actualResponseJson);

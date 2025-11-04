@@ -17,17 +17,21 @@ import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonDeserialize(builder = UserData.Builder.class)
-public final class UserData implements IUserData {
+@JsonDeserialize(builder = UserDataWithReference.Builder.class)
+public final class UserDataWithReference implements IUserData {
     private final String value;
 
     private final VisibilityType visibility;
 
+    private final EntityIdFilter userId;
+
     private final Map<String, Object> additionalProperties;
 
-    private UserData(String value, VisibilityType visibility, Map<String, Object> additionalProperties) {
+    private UserDataWithReference(
+            String value, VisibilityType visibility, EntityIdFilter userId, Map<String, Object> additionalProperties) {
         this.value = value;
         this.visibility = visibility;
+        this.userId = userId;
         this.additionalProperties = additionalProperties;
     }
 
@@ -49,10 +53,18 @@ public final class UserData implements IUserData {
         return visibility;
     }
 
+    /**
+     * @return Reverse index containing appId and referenceId data that identifies this app user
+     */
+    @JsonProperty("userId")
+    public EntityIdFilter getUserId() {
+        return userId;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
-        return other instanceof UserData && equalTo((UserData) other);
+        return other instanceof UserDataWithReference && equalTo((UserDataWithReference) other);
     }
 
     @JsonAnyGetter
@@ -60,13 +72,13 @@ public final class UserData implements IUserData {
         return this.additionalProperties;
     }
 
-    private boolean equalTo(UserData other) {
-        return value.equals(other.value) && visibility.equals(other.visibility);
+    private boolean equalTo(UserDataWithReference other) {
+        return value.equals(other.value) && visibility.equals(other.visibility) && userId.equals(other.userId);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.value, this.visibility);
+        return Objects.hash(this.value, this.visibility, this.userId);
     }
 
     @java.lang.Override
@@ -84,25 +96,34 @@ public final class UserData implements IUserData {
          */
         VisibilityStage value(@NotNull String value);
 
-        Builder from(UserData other);
+        Builder from(UserDataWithReference other);
     }
 
     public interface VisibilityStage {
         /**
          * <p>The visibility of the user metadata</p>
          */
-        _FinalStage visibility(@NotNull VisibilityType visibility);
+        UserIdStage visibility(@NotNull VisibilityType visibility);
+    }
+
+    public interface UserIdStage {
+        /**
+         * <p>Reverse index containing appId and referenceId data that identifies this app user</p>
+         */
+        _FinalStage userId(@NotNull EntityIdFilter userId);
     }
 
     public interface _FinalStage {
-        UserData build();
+        UserDataWithReference build();
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements ValueStage, VisibilityStage, _FinalStage {
+    public static final class Builder implements ValueStage, VisibilityStage, UserIdStage, _FinalStage {
         private String value;
 
         private VisibilityType visibility;
+
+        private EntityIdFilter userId;
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -110,9 +131,10 @@ public final class UserData implements IUserData {
         private Builder() {}
 
         @java.lang.Override
-        public Builder from(UserData other) {
+        public Builder from(UserDataWithReference other) {
             value(other.getValue());
             visibility(other.getVisibility());
+            userId(other.getUserId());
             return this;
         }
 
@@ -135,14 +157,26 @@ public final class UserData implements IUserData {
          */
         @java.lang.Override
         @JsonSetter("visibility")
-        public _FinalStage visibility(@NotNull VisibilityType visibility) {
+        public UserIdStage visibility(@NotNull VisibilityType visibility) {
             this.visibility = Objects.requireNonNull(visibility, "visibility must not be null");
             return this;
         }
 
+        /**
+         * <p>Reverse index containing appId and referenceId data that identifies this app user</p>
+         * <p>Reverse index containing appId and referenceId data that identifies this app user</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
-        public UserData build() {
-            return new UserData(value, visibility, additionalProperties);
+        @JsonSetter("userId")
+        public _FinalStage userId(@NotNull EntityIdFilter userId) {
+            this.userId = Objects.requireNonNull(userId, "userId must not be null");
+            return this;
+        }
+
+        @java.lang.Override
+        public UserDataWithReference build() {
+            return new UserDataWithReference(value, visibility, userId, additionalProperties);
         }
     }
 }

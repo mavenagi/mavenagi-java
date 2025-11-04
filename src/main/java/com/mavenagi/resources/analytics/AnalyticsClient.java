@@ -13,6 +13,7 @@ import com.mavenagi.resources.analytics.types.ConversationTableRequest;
 import com.mavenagi.resources.analytics.types.ConversationTableResponse;
 import com.mavenagi.resources.analytics.types.FeedbackTableRequest;
 import com.mavenagi.resources.analytics.types.FeedbackTableResponse;
+import java.io.InputStream;
 
 public class AnalyticsClient {
     protected final ClientOptions clientOptions;
@@ -58,6 +59,22 @@ public class AnalyticsClient {
      */
     public ChartResponse getConversationChart(ConversationChartRequest request, RequestOptions requestOptions) {
         return this.rawClient.getConversationChart(request, requestOptions).body();
+    }
+
+    /**
+     * Export the conversation analytics table to a CSV file.
+     * <p>This outputs the current table view defined by the request. For most programmatic use cases, prefer <code>getConversationTable</code> and format client-side. The CSV format may change and should not be relied upon by code consumers. A maximum of 10,000 rows can be exported at a time.</p>
+     */
+    public InputStream exportConversationTable(ConversationTableRequest request) {
+        return this.rawClient.exportConversationTable(request).body();
+    }
+
+    /**
+     * Export the conversation analytics table to a CSV file.
+     * <p>This outputs the current table view defined by the request. For most programmatic use cases, prefer <code>getConversationTable</code> and format client-side. The CSV format may change and should not be relied upon by code consumers. A maximum of 10,000 rows can be exported at a time.</p>
+     */
+    public InputStream exportConversationTable(ConversationTableRequest request, RequestOptions requestOptions) {
+        return this.rawClient.exportConversationTable(request, requestOptions).body();
     }
 
     /**

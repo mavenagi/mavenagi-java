@@ -1298,6 +1298,104 @@ client.analytics().getConversationChart(
 </dl>
 </details>
 
+<details><summary><code>client.analytics.exportConversationTable(request) -> InputStream</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Export the conversation analytics table to a CSV file.
+
+This outputs the current table view defined by the request. For most programmatic use cases, prefer `getConversationTable` and format client-side. The CSV format may change and should not be relied upon by code consumers. A maximum of 10,000 rows can be exported at a time.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```java
+client.analytics().exportConversationTable(
+    ConversationTableRequest
+        .builder()
+        .fieldGroupings(
+            Arrays.asList(
+                ConversationGroupBy
+                    .builder()
+                    .field(ConversationField.CATEGORY)
+                    .build(),
+                ConversationGroupBy
+                    .builder()
+                    .field(ConversationField.CATEGORY)
+                    .build()
+            )
+        )
+        .columnDefinitions(
+            Arrays.asList(
+                ConversationColumnDefinition
+                    .builder()
+                    .metric(
+                        ConversationMetric.count(
+                            ConversationCount
+                                .builder()
+                                .build()
+                        )
+                    )
+                    .header("header")
+                    .build(),
+                ConversationColumnDefinition
+                    .builder()
+                    .metric(
+                        ConversationMetric.count(
+                            ConversationCount
+                                .builder()
+                                .build()
+                        )
+                    )
+                    .header("header")
+                    .build()
+            )
+        )
+        .build()
+);
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `ConversationTableRequest` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.analytics.getFeedbackTable(request) -> FeedbackTableResponse</code></summary>
 <dl>
 <dd>
