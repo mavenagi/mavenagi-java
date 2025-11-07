@@ -3,17 +3,12 @@
  */
 package com.mavenagi.resources.knowledge.types;
 
-import java.time.OffsetDateTime;
 import java.util.Optional;
 
 public interface IBaseKnowledgeDocument {
     Optional<String> getUrl();
 
     Optional<String> getLanguage();
-
-    Optional<OffsetDateTime> getCreatedAt();
-
-    Optional<OffsetDateTime> getUpdatedAt();
 
     Optional<String> getAuthor();
 }

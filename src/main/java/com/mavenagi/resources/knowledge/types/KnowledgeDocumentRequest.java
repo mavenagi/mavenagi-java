@@ -28,10 +28,6 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
 
     private final Optional<String> language;
 
-    private final Optional<OffsetDateTime> createdAt;
-
-    private final Optional<OffsetDateTime> updatedAt;
-
     private final Optional<String> author;
 
     private final EntityIdBase knowledgeDocumentId;
@@ -46,13 +42,15 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
 
     private final Optional<Map<String, String>> metadata;
 
+    private final Optional<OffsetDateTime> createdAt;
+
+    private final Optional<OffsetDateTime> updatedAt;
+
     private final Map<String, Object> additionalProperties;
 
     private KnowledgeDocumentRequest(
             Optional<String> url,
             Optional<String> language,
-            Optional<OffsetDateTime> createdAt,
-            Optional<OffsetDateTime> updatedAt,
             Optional<String> author,
             EntityIdBase knowledgeDocumentId,
             Optional<EntityIdWithoutAgent> versionId,
@@ -60,11 +58,11 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
             String title,
             String content,
             Optional<Map<String, String>> metadata,
+            Optional<OffsetDateTime> createdAt,
+            Optional<OffsetDateTime> updatedAt,
             Map<String, Object> additionalProperties) {
         this.url = url;
         this.language = language;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
         this.author = author;
         this.knowledgeDocumentId = knowledgeDocumentId;
         this.versionId = versionId;
@@ -72,6 +70,8 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
         this.title = title;
         this.content = content;
         this.metadata = metadata;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
         this.additionalProperties = additionalProperties;
     }
 
@@ -91,24 +91,6 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
     @java.lang.Override
     public Optional<String> getLanguage() {
         return language;
-    }
-
-    /**
-     * @return The time at which this document was created.
-     */
-    @JsonProperty("createdAt")
-    @java.lang.Override
-    public Optional<OffsetDateTime> getCreatedAt() {
-        return createdAt;
-    }
-
-    /**
-     * @return The time at which this document was last modified.
-     */
-    @JsonProperty("updatedAt")
-    @java.lang.Override
-    public Optional<OffsetDateTime> getUpdatedAt() {
-        return updatedAt;
     }
 
     /**
@@ -165,6 +147,22 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
         return metadata;
     }
 
+    /**
+     * @return The time at which this document was created.
+     */
+    @JsonProperty("createdAt")
+    public Optional<OffsetDateTime> getCreatedAt() {
+        return createdAt;
+    }
+
+    /**
+     * @return The time at which this document was last modified.
+     */
+    @JsonProperty("updatedAt")
+    public Optional<OffsetDateTime> getUpdatedAt() {
+        return updatedAt;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -179,15 +177,15 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
     private boolean equalTo(KnowledgeDocumentRequest other) {
         return url.equals(other.url)
                 && language.equals(other.language)
-                && createdAt.equals(other.createdAt)
-                && updatedAt.equals(other.updatedAt)
                 && author.equals(other.author)
                 && knowledgeDocumentId.equals(other.knowledgeDocumentId)
                 && versionId.equals(other.versionId)
                 && contentType.equals(other.contentType)
                 && title.equals(other.title)
                 && content.equals(other.content)
-                && metadata.equals(other.metadata);
+                && metadata.equals(other.metadata)
+                && createdAt.equals(other.createdAt)
+                && updatedAt.equals(other.updatedAt);
     }
 
     @java.lang.Override
@@ -195,15 +193,15 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
         return Objects.hash(
                 this.url,
                 this.language,
-                this.createdAt,
-                this.updatedAt,
                 this.author,
                 this.knowledgeDocumentId,
                 this.versionId,
                 this.contentType,
                 this.title,
                 this.content,
-                this.metadata);
+                this.metadata,
+                this.createdAt,
+                this.updatedAt);
     }
 
     @java.lang.Override
@@ -260,20 +258,6 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
         _FinalStage language(String language);
 
         /**
-         * <p>The time at which this document was created.</p>
-         */
-        _FinalStage createdAt(Optional<OffsetDateTime> createdAt);
-
-        _FinalStage createdAt(OffsetDateTime createdAt);
-
-        /**
-         * <p>The time at which this document was last modified.</p>
-         */
-        _FinalStage updatedAt(Optional<OffsetDateTime> updatedAt);
-
-        _FinalStage updatedAt(OffsetDateTime updatedAt);
-
-        /**
          * <p>The name of the author who created this document.</p>
          */
         _FinalStage author(Optional<String> author);
@@ -293,6 +277,20 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
         _FinalStage metadata(Optional<Map<String, String>> metadata);
 
         _FinalStage metadata(Map<String, String> metadata);
+
+        /**
+         * <p>The time at which this document was created.</p>
+         */
+        _FinalStage createdAt(Optional<OffsetDateTime> createdAt);
+
+        _FinalStage createdAt(OffsetDateTime createdAt);
+
+        /**
+         * <p>The time at which this document was last modified.</p>
+         */
+        _FinalStage updatedAt(Optional<OffsetDateTime> updatedAt);
+
+        _FinalStage updatedAt(OffsetDateTime updatedAt);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -306,15 +304,15 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
 
         private String content;
 
+        private Optional<OffsetDateTime> updatedAt = Optional.empty();
+
+        private Optional<OffsetDateTime> createdAt = Optional.empty();
+
         private Optional<Map<String, String>> metadata = Optional.empty();
 
         private Optional<EntityIdWithoutAgent> versionId = Optional.empty();
 
         private Optional<String> author = Optional.empty();
-
-        private Optional<OffsetDateTime> updatedAt = Optional.empty();
-
-        private Optional<OffsetDateTime> createdAt = Optional.empty();
 
         private Optional<String> language = Optional.empty();
 
@@ -329,8 +327,6 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
         public Builder from(KnowledgeDocumentRequest other) {
             url(other.getUrl());
             language(other.getLanguage());
-            createdAt(other.getCreatedAt());
-            updatedAt(other.getUpdatedAt());
             author(other.getAuthor());
             knowledgeDocumentId(other.getKnowledgeDocumentId());
             versionId(other.getVersionId());
@@ -338,6 +334,8 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
             title(other.getTitle());
             content(other.getContent());
             metadata(other.getMetadata());
+            createdAt(other.getCreatedAt());
+            updatedAt(other.getUpdatedAt());
             return this;
         }
 
@@ -382,6 +380,46 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
         @JsonSetter("content")
         public _FinalStage content(@NotNull String content) {
             this.content = Objects.requireNonNull(content, "content must not be null");
+            return this;
+        }
+
+        /**
+         * <p>The time at which this document was last modified.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage updatedAt(OffsetDateTime updatedAt) {
+            this.updatedAt = Optional.ofNullable(updatedAt);
+            return this;
+        }
+
+        /**
+         * <p>The time at which this document was last modified.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "updatedAt", nulls = Nulls.SKIP)
+        public _FinalStage updatedAt(Optional<OffsetDateTime> updatedAt) {
+            this.updatedAt = updatedAt;
+            return this;
+        }
+
+        /**
+         * <p>The time at which this document was created.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage createdAt(OffsetDateTime createdAt) {
+            this.createdAt = Optional.ofNullable(createdAt);
+            return this;
+        }
+
+        /**
+         * <p>The time at which this document was created.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "createdAt", nulls = Nulls.SKIP)
+        public _FinalStage createdAt(Optional<OffsetDateTime> createdAt) {
+            this.createdAt = createdAt;
             return this;
         }
 
@@ -446,46 +484,6 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
         }
 
         /**
-         * <p>The time at which this document was last modified.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage updatedAt(OffsetDateTime updatedAt) {
-            this.updatedAt = Optional.ofNullable(updatedAt);
-            return this;
-        }
-
-        /**
-         * <p>The time at which this document was last modified.</p>
-         */
-        @java.lang.Override
-        @JsonSetter(value = "updatedAt", nulls = Nulls.SKIP)
-        public _FinalStage updatedAt(Optional<OffsetDateTime> updatedAt) {
-            this.updatedAt = updatedAt;
-            return this;
-        }
-
-        /**
-         * <p>The time at which this document was created.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage createdAt(OffsetDateTime createdAt) {
-            this.createdAt = Optional.ofNullable(createdAt);
-            return this;
-        }
-
-        /**
-         * <p>The time at which this document was created.</p>
-         */
-        @java.lang.Override
-        @JsonSetter(value = "createdAt", nulls = Nulls.SKIP)
-        public _FinalStage createdAt(Optional<OffsetDateTime> createdAt) {
-            this.createdAt = createdAt;
-            return this;
-        }
-
-        /**
          * <p>The document language. Must be a valid ISO 639-1 language code.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -530,8 +528,6 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
             return new KnowledgeDocumentRequest(
                     url,
                     language,
-                    createdAt,
-                    updatedAt,
                     author,
                     knowledgeDocumentId,
                     versionId,
@@ -539,6 +535,8 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
                     title,
                     content,
                     metadata,
+                    createdAt,
+                    updatedAt,
                     additionalProperties);
         }
     }

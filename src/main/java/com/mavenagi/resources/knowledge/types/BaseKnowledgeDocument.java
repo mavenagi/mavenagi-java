@@ -12,7 +12,6 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
-import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -25,10 +24,6 @@ public final class BaseKnowledgeDocument implements IBaseKnowledgeDocument {
 
     private final Optional<String> language;
 
-    private final Optional<OffsetDateTime> createdAt;
-
-    private final Optional<OffsetDateTime> updatedAt;
-
     private final Optional<String> author;
 
     private final Map<String, Object> additionalProperties;
@@ -36,14 +31,10 @@ public final class BaseKnowledgeDocument implements IBaseKnowledgeDocument {
     private BaseKnowledgeDocument(
             Optional<String> url,
             Optional<String> language,
-            Optional<OffsetDateTime> createdAt,
-            Optional<OffsetDateTime> updatedAt,
             Optional<String> author,
             Map<String, Object> additionalProperties) {
         this.url = url;
         this.language = language;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
         this.author = author;
         this.additionalProperties = additionalProperties;
     }
@@ -67,24 +58,6 @@ public final class BaseKnowledgeDocument implements IBaseKnowledgeDocument {
     }
 
     /**
-     * @return The time at which this document was created.
-     */
-    @JsonProperty("createdAt")
-    @java.lang.Override
-    public Optional<OffsetDateTime> getCreatedAt() {
-        return createdAt;
-    }
-
-    /**
-     * @return The time at which this document was last modified.
-     */
-    @JsonProperty("updatedAt")
-    @java.lang.Override
-    public Optional<OffsetDateTime> getUpdatedAt() {
-        return updatedAt;
-    }
-
-    /**
      * @return The name of the author who created this document.
      */
     @JsonProperty("author")
@@ -105,16 +78,12 @@ public final class BaseKnowledgeDocument implements IBaseKnowledgeDocument {
     }
 
     private boolean equalTo(BaseKnowledgeDocument other) {
-        return url.equals(other.url)
-                && language.equals(other.language)
-                && createdAt.equals(other.createdAt)
-                && updatedAt.equals(other.updatedAt)
-                && author.equals(other.author);
+        return url.equals(other.url) && language.equals(other.language) && author.equals(other.author);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.url, this.language, this.createdAt, this.updatedAt, this.author);
+        return Objects.hash(this.url, this.language, this.author);
     }
 
     @java.lang.Override
@@ -132,10 +101,6 @@ public final class BaseKnowledgeDocument implements IBaseKnowledgeDocument {
 
         private Optional<String> language = Optional.empty();
 
-        private Optional<OffsetDateTime> createdAt = Optional.empty();
-
-        private Optional<OffsetDateTime> updatedAt = Optional.empty();
-
         private Optional<String> author = Optional.empty();
 
         @JsonAnySetter
@@ -146,8 +111,6 @@ public final class BaseKnowledgeDocument implements IBaseKnowledgeDocument {
         public Builder from(BaseKnowledgeDocument other) {
             url(other.getUrl());
             language(other.getLanguage());
-            createdAt(other.getCreatedAt());
-            updatedAt(other.getUpdatedAt());
             author(other.getAuthor());
             return this;
         }
@@ -181,34 +144,6 @@ public final class BaseKnowledgeDocument implements IBaseKnowledgeDocument {
         }
 
         /**
-         * <p>The time at which this document was created.</p>
-         */
-        @JsonSetter(value = "createdAt", nulls = Nulls.SKIP)
-        public Builder createdAt(Optional<OffsetDateTime> createdAt) {
-            this.createdAt = createdAt;
-            return this;
-        }
-
-        public Builder createdAt(OffsetDateTime createdAt) {
-            this.createdAt = Optional.ofNullable(createdAt);
-            return this;
-        }
-
-        /**
-         * <p>The time at which this document was last modified.</p>
-         */
-        @JsonSetter(value = "updatedAt", nulls = Nulls.SKIP)
-        public Builder updatedAt(Optional<OffsetDateTime> updatedAt) {
-            this.updatedAt = updatedAt;
-            return this;
-        }
-
-        public Builder updatedAt(OffsetDateTime updatedAt) {
-            this.updatedAt = Optional.ofNullable(updatedAt);
-            return this;
-        }
-
-        /**
          * <p>The name of the author who created this document.</p>
          */
         @JsonSetter(value = "author", nulls = Nulls.SKIP)
@@ -223,7 +158,7 @@ public final class BaseKnowledgeDocument implements IBaseKnowledgeDocument {
         }
 
         public BaseKnowledgeDocument build() {
-            return new BaseKnowledgeDocument(url, language, createdAt, updatedAt, author, additionalProperties);
+            return new BaseKnowledgeDocument(url, language, author, additionalProperties);
         }
     }
 }

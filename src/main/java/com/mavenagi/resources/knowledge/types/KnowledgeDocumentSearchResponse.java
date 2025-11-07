@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
 import com.mavenagi.resources.commons.types.EntityId;
+import com.mavenagi.resources.commons.types.LlmInclusionStatus;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,13 +30,15 @@ public final class KnowledgeDocumentSearchResponse implements IKnowledgeDocument
 
     private final Optional<String> title;
 
+    private final LlmInclusionStatus llmInclusionStatus;
+
+    private final OffsetDateTime createdAt;
+
+    private final OffsetDateTime updatedAt;
+
     private final Optional<String> url;
 
     private final Optional<String> language;
-
-    private final Optional<OffsetDateTime> createdAt;
-
-    private final Optional<OffsetDateTime> updatedAt;
 
     private final Optional<String> author;
 
@@ -45,19 +48,21 @@ public final class KnowledgeDocumentSearchResponse implements IKnowledgeDocument
             EntityId knowledgeDocumentId,
             Optional<EntityId> knowledgeBaseVersionId,
             Optional<String> title,
+            LlmInclusionStatus llmInclusionStatus,
+            OffsetDateTime createdAt,
+            OffsetDateTime updatedAt,
             Optional<String> url,
             Optional<String> language,
-            Optional<OffsetDateTime> createdAt,
-            Optional<OffsetDateTime> updatedAt,
             Optional<String> author,
             Map<String, Object> additionalProperties) {
         this.knowledgeDocumentId = knowledgeDocumentId;
         this.knowledgeBaseVersionId = knowledgeBaseVersionId;
         this.title = title;
-        this.url = url;
-        this.language = language;
+        this.llmInclusionStatus = llmInclusionStatus;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.url = url;
+        this.language = language;
         this.author = author;
         this.additionalProperties = additionalProperties;
     }
@@ -91,6 +96,33 @@ public final class KnowledgeDocumentSearchResponse implements IKnowledgeDocument
     }
 
     /**
+     * @return Whether the document is included in the agent's knowledge.
+     */
+    @JsonProperty("llmInclusionStatus")
+    @java.lang.Override
+    public LlmInclusionStatus getLlmInclusionStatus() {
+        return llmInclusionStatus;
+    }
+
+    /**
+     * @return The time at which this document was created.
+     */
+    @JsonProperty("createdAt")
+    @java.lang.Override
+    public OffsetDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    /**
+     * @return The time at which this document was last modified.
+     */
+    @JsonProperty("updatedAt")
+    @java.lang.Override
+    public OffsetDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    /**
      * @return The URL of the document. Should be visible to end users. Will be shown as part of answers. Not used for crawling.
      */
     @JsonProperty("url")
@@ -106,24 +138,6 @@ public final class KnowledgeDocumentSearchResponse implements IKnowledgeDocument
     @java.lang.Override
     public Optional<String> getLanguage() {
         return language;
-    }
-
-    /**
-     * @return The time at which this document was created.
-     */
-    @JsonProperty("createdAt")
-    @java.lang.Override
-    public Optional<OffsetDateTime> getCreatedAt() {
-        return createdAt;
-    }
-
-    /**
-     * @return The time at which this document was last modified.
-     */
-    @JsonProperty("updatedAt")
-    @java.lang.Override
-    public Optional<OffsetDateTime> getUpdatedAt() {
-        return updatedAt;
     }
 
     /**
@@ -150,10 +164,11 @@ public final class KnowledgeDocumentSearchResponse implements IKnowledgeDocument
         return knowledgeDocumentId.equals(other.knowledgeDocumentId)
                 && knowledgeBaseVersionId.equals(other.knowledgeBaseVersionId)
                 && title.equals(other.title)
-                && url.equals(other.url)
-                && language.equals(other.language)
+                && llmInclusionStatus.equals(other.llmInclusionStatus)
                 && createdAt.equals(other.createdAt)
                 && updatedAt.equals(other.updatedAt)
+                && url.equals(other.url)
+                && language.equals(other.language)
                 && author.equals(other.author);
     }
 
@@ -163,10 +178,11 @@ public final class KnowledgeDocumentSearchResponse implements IKnowledgeDocument
                 this.knowledgeDocumentId,
                 this.knowledgeBaseVersionId,
                 this.title,
-                this.url,
-                this.language,
+                this.llmInclusionStatus,
                 this.createdAt,
                 this.updatedAt,
+                this.url,
+                this.language,
                 this.author);
     }
 
@@ -183,9 +199,30 @@ public final class KnowledgeDocumentSearchResponse implements IKnowledgeDocument
         /**
          * <p>ID that uniquely identifies this knowledge document within its knowledge base</p>
          */
-        _FinalStage knowledgeDocumentId(@NotNull EntityId knowledgeDocumentId);
+        LlmInclusionStatusStage knowledgeDocumentId(@NotNull EntityId knowledgeDocumentId);
 
         Builder from(KnowledgeDocumentSearchResponse other);
+    }
+
+    public interface LlmInclusionStatusStage {
+        /**
+         * <p>Whether the document is included in the agent's knowledge.</p>
+         */
+        CreatedAtStage llmInclusionStatus(@NotNull LlmInclusionStatus llmInclusionStatus);
+    }
+
+    public interface CreatedAtStage {
+        /**
+         * <p>The time at which this document was created.</p>
+         */
+        UpdatedAtStage createdAt(@NotNull OffsetDateTime createdAt);
+    }
+
+    public interface UpdatedAtStage {
+        /**
+         * <p>The time at which this document was last modified.</p>
+         */
+        _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt);
     }
 
     public interface _FinalStage {
@@ -221,20 +258,6 @@ public final class KnowledgeDocumentSearchResponse implements IKnowledgeDocument
         _FinalStage language(String language);
 
         /**
-         * <p>The time at which this document was created.</p>
-         */
-        _FinalStage createdAt(Optional<OffsetDateTime> createdAt);
-
-        _FinalStage createdAt(OffsetDateTime createdAt);
-
-        /**
-         * <p>The time at which this document was last modified.</p>
-         */
-        _FinalStage updatedAt(Optional<OffsetDateTime> updatedAt);
-
-        _FinalStage updatedAt(OffsetDateTime updatedAt);
-
-        /**
          * <p>The name of the author who created this document.</p>
          */
         _FinalStage author(Optional<String> author);
@@ -243,14 +266,17 @@ public final class KnowledgeDocumentSearchResponse implements IKnowledgeDocument
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements KnowledgeDocumentIdStage, _FinalStage {
+    public static final class Builder
+            implements KnowledgeDocumentIdStage, LlmInclusionStatusStage, CreatedAtStage, UpdatedAtStage, _FinalStage {
         private EntityId knowledgeDocumentId;
 
+        private LlmInclusionStatus llmInclusionStatus;
+
+        private OffsetDateTime createdAt;
+
+        private OffsetDateTime updatedAt;
+
         private Optional<String> author = Optional.empty();
-
-        private Optional<OffsetDateTime> updatedAt = Optional.empty();
-
-        private Optional<OffsetDateTime> createdAt = Optional.empty();
 
         private Optional<String> language = Optional.empty();
 
@@ -270,10 +296,11 @@ public final class KnowledgeDocumentSearchResponse implements IKnowledgeDocument
             knowledgeDocumentId(other.getKnowledgeDocumentId());
             knowledgeBaseVersionId(other.getKnowledgeBaseVersionId());
             title(other.getTitle());
-            url(other.getUrl());
-            language(other.getLanguage());
+            llmInclusionStatus(other.getLlmInclusionStatus());
             createdAt(other.getCreatedAt());
             updatedAt(other.getUpdatedAt());
+            url(other.getUrl());
+            language(other.getLanguage());
             author(other.getAuthor());
             return this;
         }
@@ -285,9 +312,45 @@ public final class KnowledgeDocumentSearchResponse implements IKnowledgeDocument
          */
         @java.lang.Override
         @JsonSetter("knowledgeDocumentId")
-        public _FinalStage knowledgeDocumentId(@NotNull EntityId knowledgeDocumentId) {
+        public LlmInclusionStatusStage knowledgeDocumentId(@NotNull EntityId knowledgeDocumentId) {
             this.knowledgeDocumentId =
                     Objects.requireNonNull(knowledgeDocumentId, "knowledgeDocumentId must not be null");
+            return this;
+        }
+
+        /**
+         * <p>Whether the document is included in the agent's knowledge.</p>
+         * <p>Whether the document is included in the agent's knowledge.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("llmInclusionStatus")
+        public CreatedAtStage llmInclusionStatus(@NotNull LlmInclusionStatus llmInclusionStatus) {
+            this.llmInclusionStatus = Objects.requireNonNull(llmInclusionStatus, "llmInclusionStatus must not be null");
+            return this;
+        }
+
+        /**
+         * <p>The time at which this document was created.</p>
+         * <p>The time at which this document was created.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("createdAt")
+        public UpdatedAtStage createdAt(@NotNull OffsetDateTime createdAt) {
+            this.createdAt = Objects.requireNonNull(createdAt, "createdAt must not be null");
+            return this;
+        }
+
+        /**
+         * <p>The time at which this document was last modified.</p>
+         * <p>The time at which this document was last modified.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("updatedAt")
+        public _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt) {
+            this.updatedAt = Objects.requireNonNull(updatedAt, "updatedAt must not be null");
             return this;
         }
 
@@ -308,46 +371,6 @@ public final class KnowledgeDocumentSearchResponse implements IKnowledgeDocument
         @JsonSetter(value = "author", nulls = Nulls.SKIP)
         public _FinalStage author(Optional<String> author) {
             this.author = author;
-            return this;
-        }
-
-        /**
-         * <p>The time at which this document was last modified.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage updatedAt(OffsetDateTime updatedAt) {
-            this.updatedAt = Optional.ofNullable(updatedAt);
-            return this;
-        }
-
-        /**
-         * <p>The time at which this document was last modified.</p>
-         */
-        @java.lang.Override
-        @JsonSetter(value = "updatedAt", nulls = Nulls.SKIP)
-        public _FinalStage updatedAt(Optional<OffsetDateTime> updatedAt) {
-            this.updatedAt = updatedAt;
-            return this;
-        }
-
-        /**
-         * <p>The time at which this document was created.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage createdAt(OffsetDateTime createdAt) {
-            this.createdAt = Optional.ofNullable(createdAt);
-            return this;
-        }
-
-        /**
-         * <p>The time at which this document was created.</p>
-         */
-        @java.lang.Override
-        @JsonSetter(value = "createdAt", nulls = Nulls.SKIP)
-        public _FinalStage createdAt(Optional<OffsetDateTime> createdAt) {
-            this.createdAt = createdAt;
             return this;
         }
 
@@ -439,10 +462,11 @@ public final class KnowledgeDocumentSearchResponse implements IKnowledgeDocument
                     knowledgeDocumentId,
                     knowledgeBaseVersionId,
                     title,
-                    url,
-                    language,
+                    llmInclusionStatus,
                     createdAt,
                     updatedAt,
+                    url,
+                    language,
                     author,
                     additionalProperties);
         }

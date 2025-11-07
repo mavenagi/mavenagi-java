@@ -48,7 +48,7 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
 
     private final Set<String> tags;
 
-    private final Optional<LlmInclusionStatus> llmInclusionStatus;
+    private final LlmInclusionStatus llmInclusionStatus;
 
     private final KnowledgeBaseRefreshFrequency refreshFrequency;
 
@@ -67,7 +67,7 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
             KnowledgeBaseType type,
             Map<String, String> metadata,
             Set<String> tags,
-            Optional<LlmInclusionStatus> llmInclusionStatus,
+            LlmInclusionStatus llmInclusionStatus,
             KnowledgeBaseRefreshFrequency refreshFrequency,
             Optional<EntityId> segmentId,
             Map<String, Object> additionalProperties) {
@@ -175,7 +175,7 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
      * @return Determines whether documents in the knowledge base are sent to the LLM as part of a conversation.
      */
     @JsonProperty("llmInclusionStatus")
-    public Optional<LlmInclusionStatus> getLlmInclusionStatus() {
+    public LlmInclusionStatus getLlmInclusionStatus() {
         return llmInclusionStatus;
     }
 
@@ -294,7 +294,14 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
         /**
          * <p>The type of the knowledge base. Can not be changed once created.</p>
          */
-        RefreshFrequencyStage type(@NotNull KnowledgeBaseType type);
+        LlmInclusionStatusStage type(@NotNull KnowledgeBaseType type);
+    }
+
+    public interface LlmInclusionStatusStage {
+        /**
+         * <p>Determines whether documents in the knowledge base are sent to the LLM as part of a conversation.</p>
+         */
+        RefreshFrequencyStage llmInclusionStatus(@NotNull LlmInclusionStatus llmInclusionStatus);
     }
 
     public interface RefreshFrequencyStage {
@@ -340,13 +347,6 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
         _FinalStage addAllTags(Set<String> tags);
 
         /**
-         * <p>Determines whether documents in the knowledge base are sent to the LLM as part of a conversation.</p>
-         */
-        _FinalStage llmInclusionStatus(Optional<LlmInclusionStatus> llmInclusionStatus);
-
-        _FinalStage llmInclusionStatus(LlmInclusionStatus llmInclusionStatus);
-
-        /**
          * <p>The IDs of the segment that must be matched for the knowledge base to be relevant to a conversation.
          * Segments are replacing inline preconditions - a Knowledge Base may not have both an inline precondition and a segment.
          * Inline precondition support will be removed in a future release.</p>
@@ -364,6 +364,7 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
                     KnowledgeBaseIdStage,
                     MostRecentVersionStatusStage,
                     TypeStage,
+                    LlmInclusionStatusStage,
                     RefreshFrequencyStage,
                     _FinalStage {
         private String name;
@@ -378,11 +379,11 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
 
         private KnowledgeBaseType type;
 
+        private LlmInclusionStatus llmInclusionStatus;
+
         private KnowledgeBaseRefreshFrequency refreshFrequency;
 
         private Optional<EntityId> segmentId = Optional.empty();
-
-        private Optional<LlmInclusionStatus> llmInclusionStatus = Optional.empty();
 
         private Set<String> tags = new LinkedHashSet<>();
 
@@ -487,8 +488,20 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
          */
         @java.lang.Override
         @JsonSetter("type")
-        public RefreshFrequencyStage type(@NotNull KnowledgeBaseType type) {
+        public LlmInclusionStatusStage type(@NotNull KnowledgeBaseType type) {
             this.type = Objects.requireNonNull(type, "type must not be null");
+            return this;
+        }
+
+        /**
+         * <p>Determines whether documents in the knowledge base are sent to the LLM as part of a conversation.</p>
+         * <p>Determines whether documents in the knowledge base are sent to the LLM as part of a conversation.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("llmInclusionStatus")
+        public RefreshFrequencyStage llmInclusionStatus(@NotNull LlmInclusionStatus llmInclusionStatus) {
+            this.llmInclusionStatus = Objects.requireNonNull(llmInclusionStatus, "llmInclusionStatus must not be null");
             return this;
         }
 
@@ -525,26 +538,6 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
         @JsonSetter(value = "segmentId", nulls = Nulls.SKIP)
         public _FinalStage segmentId(Optional<EntityId> segmentId) {
             this.segmentId = segmentId;
-            return this;
-        }
-
-        /**
-         * <p>Determines whether documents in the knowledge base are sent to the LLM as part of a conversation.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage llmInclusionStatus(LlmInclusionStatus llmInclusionStatus) {
-            this.llmInclusionStatus = Optional.ofNullable(llmInclusionStatus);
-            return this;
-        }
-
-        /**
-         * <p>Determines whether documents in the knowledge base are sent to the LLM as part of a conversation.</p>
-         */
-        @java.lang.Override
-        @JsonSetter(value = "llmInclusionStatus", nulls = Nulls.SKIP)
-        public _FinalStage llmInclusionStatus(Optional<LlmInclusionStatus> llmInclusionStatus) {
-            this.llmInclusionStatus = llmInclusionStatus;
             return this;
         }
 

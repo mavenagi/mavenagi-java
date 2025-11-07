@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
 import com.mavenagi.resources.commons.types.EntityId;
+import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -30,6 +31,10 @@ public final class KnowledgeBaseVersion implements IKnowledgeBaseVersionRequest 
 
     private final Optional<String> errorMessage;
 
+    private final OffsetDateTime createdAt;
+
+    private final OffsetDateTime updatedAt;
+
     private final Map<String, Object> additionalProperties;
 
     private KnowledgeBaseVersion(
@@ -37,11 +42,15 @@ public final class KnowledgeBaseVersion implements IKnowledgeBaseVersionRequest 
             EntityId versionId,
             KnowledgeBaseVersionStatus status,
             Optional<String> errorMessage,
+            OffsetDateTime createdAt,
+            OffsetDateTime updatedAt,
             Map<String, Object> additionalProperties) {
         this.type = type;
         this.versionId = versionId;
         this.status = status;
         this.errorMessage = errorMessage;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
         this.additionalProperties = additionalProperties;
     }
 
@@ -78,6 +87,22 @@ public final class KnowledgeBaseVersion implements IKnowledgeBaseVersionRequest 
         return errorMessage;
     }
 
+    /**
+     * @return The date and time the knowledge base version was created.
+     */
+    @JsonProperty("createdAt")
+    public OffsetDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    /**
+     * @return The date and time the knowledge base version was last updated.
+     */
+    @JsonProperty("updatedAt")
+    public OffsetDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -93,12 +118,14 @@ public final class KnowledgeBaseVersion implements IKnowledgeBaseVersionRequest 
         return type.equals(other.type)
                 && versionId.equals(other.versionId)
                 && status.equals(other.status)
-                && errorMessage.equals(other.errorMessage);
+                && errorMessage.equals(other.errorMessage)
+                && createdAt.equals(other.createdAt)
+                && updatedAt.equals(other.updatedAt);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.type, this.versionId, this.status, this.errorMessage);
+        return Objects.hash(this.type, this.versionId, this.status, this.errorMessage, this.createdAt, this.updatedAt);
     }
 
     @java.lang.Override
@@ -130,7 +157,21 @@ public final class KnowledgeBaseVersion implements IKnowledgeBaseVersionRequest 
         /**
          * <p>The status of the knowledge base version</p>
          */
-        _FinalStage status(@NotNull KnowledgeBaseVersionStatus status);
+        CreatedAtStage status(@NotNull KnowledgeBaseVersionStatus status);
+    }
+
+    public interface CreatedAtStage {
+        /**
+         * <p>The date and time the knowledge base version was created.</p>
+         */
+        UpdatedAtStage createdAt(@NotNull OffsetDateTime createdAt);
+    }
+
+    public interface UpdatedAtStage {
+        /**
+         * <p>The date and time the knowledge base version was last updated.</p>
+         */
+        _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt);
     }
 
     public interface _FinalStage {
@@ -145,12 +186,17 @@ public final class KnowledgeBaseVersion implements IKnowledgeBaseVersionRequest 
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements TypeStage, VersionIdStage, StatusStage, _FinalStage {
+    public static final class Builder
+            implements TypeStage, VersionIdStage, StatusStage, CreatedAtStage, UpdatedAtStage, _FinalStage {
         private KnowledgeBaseVersionType type;
 
         private EntityId versionId;
 
         private KnowledgeBaseVersionStatus status;
+
+        private OffsetDateTime createdAt;
+
+        private OffsetDateTime updatedAt;
 
         private Optional<String> errorMessage = Optional.empty();
 
@@ -165,6 +211,8 @@ public final class KnowledgeBaseVersion implements IKnowledgeBaseVersionRequest 
             versionId(other.getVersionId());
             status(other.getStatus());
             errorMessage(other.getErrorMessage());
+            createdAt(other.getCreatedAt());
+            updatedAt(other.getUpdatedAt());
             return this;
         }
 
@@ -199,8 +247,32 @@ public final class KnowledgeBaseVersion implements IKnowledgeBaseVersionRequest 
          */
         @java.lang.Override
         @JsonSetter("status")
-        public _FinalStage status(@NotNull KnowledgeBaseVersionStatus status) {
+        public CreatedAtStage status(@NotNull KnowledgeBaseVersionStatus status) {
             this.status = Objects.requireNonNull(status, "status must not be null");
+            return this;
+        }
+
+        /**
+         * <p>The date and time the knowledge base version was created.</p>
+         * <p>The date and time the knowledge base version was created.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("createdAt")
+        public UpdatedAtStage createdAt(@NotNull OffsetDateTime createdAt) {
+            this.createdAt = Objects.requireNonNull(createdAt, "createdAt must not be null");
+            return this;
+        }
+
+        /**
+         * <p>The date and time the knowledge base version was last updated.</p>
+         * <p>The date and time the knowledge base version was last updated.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("updatedAt")
+        public _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt) {
+            this.updatedAt = Objects.requireNonNull(updatedAt, "updatedAt must not be null");
             return this;
         }
 
@@ -226,7 +298,8 @@ public final class KnowledgeBaseVersion implements IKnowledgeBaseVersionRequest 
 
         @java.lang.Override
         public KnowledgeBaseVersion build() {
-            return new KnowledgeBaseVersion(type, versionId, status, errorMessage, additionalProperties);
+            return new KnowledgeBaseVersion(
+                    type, versionId, status, errorMessage, createdAt, updatedAt, additionalProperties);
         }
     }
 }

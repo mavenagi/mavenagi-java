@@ -24,6 +24,7 @@ import com.mavenagi.resources.commons.types.ErrorMessage;
 import com.mavenagi.resources.commons.types.Feedback;
 import com.mavenagi.resources.conversation.requests.ConversationDeleteRequest;
 import com.mavenagi.resources.conversation.requests.ConversationGetRequest;
+import com.mavenagi.resources.conversation.requests.SimulationImportRequest;
 import com.mavenagi.resources.conversation.types.AskObjectRequest;
 import com.mavenagi.resources.conversation.types.AskRequest;
 import com.mavenagi.resources.conversation.types.CategorizationResponse;
@@ -40,8 +41,10 @@ import com.mavenagi.resources.conversation.types.ObjectStreamResponse;
 import com.mavenagi.resources.conversation.types.StreamResponse;
 import com.mavenagi.resources.conversation.types.SubmitActionFormRequest;
 import com.mavenagi.resources.conversation.types.UpdateMetadataRequest;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -49,6 +52,8 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Headers;
 import okhttp3.HttpUrl;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -1490,6 +1495,105 @@ public class AsyncRawConversationClient {
                     ResponseBody responseBody = response.body();
                     if (response.isSuccessful()) {
                         future.complete(new MavenAGIHttpResponse<>(new ResponseBodyInputStream(response), response));
+                        return;
+                    }
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+                    try {
+                        switch (response.code()) {
+                            case 400:
+                                future.completeExceptionally(new BadRequestError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
+                                        response));
+                                return;
+                            case 404:
+                                future.completeExceptionally(new NotFoundError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
+                                        response));
+                                return;
+                            case 500:
+                                future.completeExceptionally(new ServerError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
+                                        response));
+                                return;
+                        }
+                    } catch (JsonProcessingException ignored) {
+                        // unable to map error response, throwing generic error
+                    }
+                    future.completeExceptionally(new MavenAGIApiException(
+                            "Error with status code " + response.code(),
+                            response.code(),
+                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                            response));
+                    return;
+                } catch (IOException e) {
+                    future.completeExceptionally(new MavenAGIException("Network error executing HTTP request", e));
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                future.completeExceptionally(new MavenAGIException("Network error executing HTTP request", e));
+            }
+        });
+        return future;
+    }
+
+    /**
+     * Import simulation conversations from a CSV file.
+     * <p>This CSV format is very simple and only allows for one column: <code>question</code>. A header containing this column is required.
+     * Each row will generate one simulation conversation, using the provided response config, if present.</p>
+     * <p>This API is offered for backwards compatibility.
+     * Most API callers should create simulations programmatically to allow for more flexibility.</p>
+     */
+    public CompletableFuture<MavenAGIHttpResponse<Void>> importSimulations(File file, SimulationImportRequest request) {
+        return importSimulations(file, request, null);
+    }
+
+    /**
+     * Import simulation conversations from a CSV file.
+     * <p>This CSV format is very simple and only allows for one column: <code>question</code>. A header containing this column is required.
+     * Each row will generate one simulation conversation, using the provided response config, if present.</p>
+     * <p>This API is offered for backwards compatibility.
+     * Most API callers should create simulations programmatically to allow for more flexibility.</p>
+     */
+    public CompletableFuture<MavenAGIHttpResponse<Void>> importSimulations(
+            File file, SimulationImportRequest request, RequestOptions requestOptions) {
+        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("v1/conversations")
+                .addPathSegments("import_simulations")
+                .build();
+        MultipartBody.Builder body = new MultipartBody.Builder().setType(MultipartBody.FORM);
+        try {
+            String fileMimeType = Files.probeContentType(file.toPath());
+            MediaType fileMimeTypeMediaType = fileMimeType != null ? MediaType.parse(fileMimeType) : null;
+            body.addFormDataPart("file", file.getName(), RequestBody.create(file, fileMimeTypeMediaType));
+            if (request.getResponseConfig().isPresent()) {
+                body.addFormDataPart(
+                        "responseConfig",
+                        ObjectMappers.JSON_MAPPER.writeValueAsString(
+                                request.getResponseConfig().get()));
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        Request.Builder _requestBuilder = new Request.Builder()
+                .url(httpUrl)
+                .method("POST", body.build())
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Accept", "application/json");
+        Request okhttpRequest = _requestBuilder.build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        CompletableFuture<MavenAGIHttpResponse<Void>> future = new CompletableFuture<>();
+        client.newCall(okhttpRequest).enqueue(new Callback() {
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                try (ResponseBody responseBody = response.body()) {
+                    if (response.isSuccessful()) {
+                        future.complete(new MavenAGIHttpResponse<>(null, response));
                         return;
                     }
                     String responseBodyString = responseBody != null ? responseBody.string() : "{}";

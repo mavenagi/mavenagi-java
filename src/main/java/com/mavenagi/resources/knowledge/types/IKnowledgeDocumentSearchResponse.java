@@ -4,6 +4,8 @@
 package com.mavenagi.resources.knowledge.types;
 
 import com.mavenagi.resources.commons.types.EntityId;
+import com.mavenagi.resources.commons.types.LlmInclusionStatus;
+import java.time.OffsetDateTime;
 import java.util.Optional;
 
 public interface IKnowledgeDocumentSearchResponse extends IBaseKnowledgeDocument {
@@ -12,4 +14,10 @@ public interface IKnowledgeDocumentSearchResponse extends IBaseKnowledgeDocument
     Optional<EntityId> getKnowledgeBaseVersionId();
 
     Optional<String> getTitle();
+
+    LlmInclusionStatus getLlmInclusionStatus();
+
+    OffsetDateTime getCreatedAt();
+
+    OffsetDateTime getUpdatedAt();
 }

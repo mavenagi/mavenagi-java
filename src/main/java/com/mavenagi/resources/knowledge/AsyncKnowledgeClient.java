@@ -9,6 +9,7 @@ import com.mavenagi.resources.knowledge.requests.KnowledgeBaseGetRequest;
 import com.mavenagi.resources.knowledge.requests.KnowledgeBasePatchRequest;
 import com.mavenagi.resources.knowledge.requests.KnowledgeBaseVersionsListRequest;
 import com.mavenagi.resources.knowledge.requests.KnowledgeDocumentGetRequest;
+import com.mavenagi.resources.knowledge.requests.KnowledgeDocumentPatchRequest;
 import com.mavenagi.resources.knowledge.types.FinalizeKnowledgeBaseVersionRequest;
 import com.mavenagi.resources.knowledge.types.KnowledgeBaseRefreshRequest;
 import com.mavenagi.resources.knowledge.types.KnowledgeBaseRequest;
@@ -359,6 +360,50 @@ public class AsyncKnowledgeClient {
         return this.rawClient
                 .getKnowledgeDocument(
                         knowledgeBaseVersionReferenceId, knowledgeDocumentReferenceId, request, requestOptions)
+                .thenApply(response -> response.body());
+    }
+
+    /**
+     * Update mutable knowledge document fields that can be set independently of a knowledge base version.
+     * <p>For any changes in document content see the <code>createKnowledgeBaseVersion</code> and <code>createKnowledgeDocument</code> endpoints.</p>
+     * <p>The <code>knowledgeBaseAppId</code> field can be provided to update a knowledge document in a knowledge base owned by a different app.
+     * All other fields will overwrite the existing value on the knowledge document only if provided.</p>
+     */
+    public CompletableFuture<KnowledgeDocumentResponse> patchKnowledgeDocument(
+            String knowledgeBaseReferenceId, String knowledgeDocumentReferenceId) {
+        return this.rawClient
+                .patchKnowledgeDocument(knowledgeBaseReferenceId, knowledgeDocumentReferenceId)
+                .thenApply(response -> response.body());
+    }
+
+    /**
+     * Update mutable knowledge document fields that can be set independently of a knowledge base version.
+     * <p>For any changes in document content see the <code>createKnowledgeBaseVersion</code> and <code>createKnowledgeDocument</code> endpoints.</p>
+     * <p>The <code>knowledgeBaseAppId</code> field can be provided to update a knowledge document in a knowledge base owned by a different app.
+     * All other fields will overwrite the existing value on the knowledge document only if provided.</p>
+     */
+    public CompletableFuture<KnowledgeDocumentResponse> patchKnowledgeDocument(
+            String knowledgeBaseReferenceId,
+            String knowledgeDocumentReferenceId,
+            KnowledgeDocumentPatchRequest request) {
+        return this.rawClient
+                .patchKnowledgeDocument(knowledgeBaseReferenceId, knowledgeDocumentReferenceId, request)
+                .thenApply(response -> response.body());
+    }
+
+    /**
+     * Update mutable knowledge document fields that can be set independently of a knowledge base version.
+     * <p>For any changes in document content see the <code>createKnowledgeBaseVersion</code> and <code>createKnowledgeDocument</code> endpoints.</p>
+     * <p>The <code>knowledgeBaseAppId</code> field can be provided to update a knowledge document in a knowledge base owned by a different app.
+     * All other fields will overwrite the existing value on the knowledge document only if provided.</p>
+     */
+    public CompletableFuture<KnowledgeDocumentResponse> patchKnowledgeDocument(
+            String knowledgeBaseReferenceId,
+            String knowledgeDocumentReferenceId,
+            KnowledgeDocumentPatchRequest request,
+            RequestOptions requestOptions) {
+        return this.rawClient
+                .patchKnowledgeDocument(knowledgeBaseReferenceId, knowledgeDocumentReferenceId, request, requestOptions)
                 .thenApply(response -> response.body());
     }
 }

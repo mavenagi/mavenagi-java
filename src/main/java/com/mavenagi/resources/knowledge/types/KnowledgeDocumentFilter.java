@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
 import com.mavenagi.resources.commons.types.EntityIdWithoutAgent;
+import com.mavenagi.resources.commons.types.LlmInclusionStatus;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +28,8 @@ public final class KnowledgeDocumentFilter {
 
     private final Optional<String> title;
 
+    private final Optional<String> url;
+
     private final Optional<OffsetDateTime> createdAfter;
 
     private final Optional<OffsetDateTime> createdBefore;
@@ -35,22 +38,28 @@ public final class KnowledgeDocumentFilter {
 
     private final Optional<EntityIdWithoutAgent> knowledgeBaseVersionId;
 
+    private final Optional<List<LlmInclusionStatus>> llmInclusionStatus;
+
     private final Map<String, Object> additionalProperties;
 
     private KnowledgeDocumentFilter(
             Optional<String> search,
             Optional<String> title,
+            Optional<String> url,
             Optional<OffsetDateTime> createdAfter,
             Optional<OffsetDateTime> createdBefore,
             Optional<List<String>> appIds,
             Optional<EntityIdWithoutAgent> knowledgeBaseVersionId,
+            Optional<List<LlmInclusionStatus>> llmInclusionStatus,
             Map<String, Object> additionalProperties) {
         this.search = search;
         this.title = title;
+        this.url = url;
         this.createdAfter = createdAfter;
         this.createdBefore = createdBefore;
         this.appIds = appIds;
         this.knowledgeBaseVersionId = knowledgeBaseVersionId;
+        this.llmInclusionStatus = llmInclusionStatus;
         this.additionalProperties = additionalProperties;
     }
 
@@ -79,6 +88,14 @@ public final class KnowledgeDocumentFilter {
     @JsonProperty("title")
     public Optional<String> getTitle() {
         return title;
+    }
+
+    /**
+     * @return Filter by url
+     */
+    @JsonProperty("url")
+    public Optional<String> getUrl() {
+        return url;
     }
 
     /**
@@ -114,6 +131,14 @@ public final class KnowledgeDocumentFilter {
         return knowledgeBaseVersionId;
     }
 
+    /**
+     * @return Filter by the LLM inclusion status
+     */
+    @JsonProperty("llmInclusionStatus")
+    public Optional<List<LlmInclusionStatus>> getLlmInclusionStatus() {
+        return llmInclusionStatus;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -128,10 +153,12 @@ public final class KnowledgeDocumentFilter {
     private boolean equalTo(KnowledgeDocumentFilter other) {
         return search.equals(other.search)
                 && title.equals(other.title)
+                && url.equals(other.url)
                 && createdAfter.equals(other.createdAfter)
                 && createdBefore.equals(other.createdBefore)
                 && appIds.equals(other.appIds)
-                && knowledgeBaseVersionId.equals(other.knowledgeBaseVersionId);
+                && knowledgeBaseVersionId.equals(other.knowledgeBaseVersionId)
+                && llmInclusionStatus.equals(other.llmInclusionStatus);
     }
 
     @java.lang.Override
@@ -139,10 +166,12 @@ public final class KnowledgeDocumentFilter {
         return Objects.hash(
                 this.search,
                 this.title,
+                this.url,
                 this.createdAfter,
                 this.createdBefore,
                 this.appIds,
-                this.knowledgeBaseVersionId);
+                this.knowledgeBaseVersionId,
+                this.llmInclusionStatus);
     }
 
     @java.lang.Override
@@ -160,6 +189,8 @@ public final class KnowledgeDocumentFilter {
 
         private Optional<String> title = Optional.empty();
 
+        private Optional<String> url = Optional.empty();
+
         private Optional<OffsetDateTime> createdAfter = Optional.empty();
 
         private Optional<OffsetDateTime> createdBefore = Optional.empty();
@@ -167,6 +198,8 @@ public final class KnowledgeDocumentFilter {
         private Optional<List<String>> appIds = Optional.empty();
 
         private Optional<EntityIdWithoutAgent> knowledgeBaseVersionId = Optional.empty();
+
+        private Optional<List<LlmInclusionStatus>> llmInclusionStatus = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -176,10 +209,12 @@ public final class KnowledgeDocumentFilter {
         public Builder from(KnowledgeDocumentFilter other) {
             search(other.getSearch());
             title(other.getTitle());
+            url(other.getUrl());
             createdAfter(other.getCreatedAfter());
             createdBefore(other.getCreatedBefore());
             appIds(other.getAppIds());
             knowledgeBaseVersionId(other.getKnowledgeBaseVersionId());
+            llmInclusionStatus(other.getLlmInclusionStatus());
             return this;
         }
 
@@ -219,6 +254,20 @@ public final class KnowledgeDocumentFilter {
 
         public Builder title(String title) {
             this.title = Optional.ofNullable(title);
+            return this;
+        }
+
+        /**
+         * <p>Filter by url</p>
+         */
+        @JsonSetter(value = "url", nulls = Nulls.SKIP)
+        public Builder url(Optional<String> url) {
+            this.url = url;
+            return this;
+        }
+
+        public Builder url(String url) {
+            this.url = Optional.ofNullable(url);
             return this;
         }
 
@@ -279,9 +328,31 @@ public final class KnowledgeDocumentFilter {
             return this;
         }
 
+        /**
+         * <p>Filter by the LLM inclusion status</p>
+         */
+        @JsonSetter(value = "llmInclusionStatus", nulls = Nulls.SKIP)
+        public Builder llmInclusionStatus(Optional<List<LlmInclusionStatus>> llmInclusionStatus) {
+            this.llmInclusionStatus = llmInclusionStatus;
+            return this;
+        }
+
+        public Builder llmInclusionStatus(List<LlmInclusionStatus> llmInclusionStatus) {
+            this.llmInclusionStatus = Optional.ofNullable(llmInclusionStatus);
+            return this;
+        }
+
         public KnowledgeDocumentFilter build() {
             return new KnowledgeDocumentFilter(
-                    search, title, createdAfter, createdBefore, appIds, knowledgeBaseVersionId, additionalProperties);
+                    search,
+                    title,
+                    url,
+                    createdAfter,
+                    createdBefore,
+                    appIds,
+                    knowledgeBaseVersionId,
+                    llmInclusionStatus,
+                    additionalProperties);
         }
     }
 }

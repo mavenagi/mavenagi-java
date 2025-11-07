@@ -9,6 +9,7 @@ import com.mavenagi.resources.commons.types.ConversationResponse;
 import com.mavenagi.resources.commons.types.Feedback;
 import com.mavenagi.resources.conversation.requests.ConversationDeleteRequest;
 import com.mavenagi.resources.conversation.requests.ConversationGetRequest;
+import com.mavenagi.resources.conversation.requests.SimulationImportRequest;
 import com.mavenagi.resources.conversation.types.AskObjectRequest;
 import com.mavenagi.resources.conversation.types.AskRequest;
 import com.mavenagi.resources.conversation.types.CategorizationResponse;
@@ -25,6 +26,7 @@ import com.mavenagi.resources.conversation.types.ObjectStreamResponse;
 import com.mavenagi.resources.conversation.types.StreamResponse;
 import com.mavenagi.resources.conversation.types.SubmitActionFormRequest;
 import com.mavenagi.resources.conversation.types.UpdateMetadataRequest;
+import java.io.File;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
@@ -443,6 +445,29 @@ public class AsyncConversationClient {
      */
     public CompletableFuture<InputStream> export(ConversationsSearchRequest request, RequestOptions requestOptions) {
         return this.rawClient.export(request, requestOptions).thenApply(response -> response.body());
+    }
+
+    /**
+     * Import simulation conversations from a CSV file.
+     * <p>This CSV format is very simple and only allows for one column: <code>question</code>. A header containing this column is required.
+     * Each row will generate one simulation conversation, using the provided response config, if present.</p>
+     * <p>This API is offered for backwards compatibility.
+     * Most API callers should create simulations programmatically to allow for more flexibility.</p>
+     */
+    public CompletableFuture<Void> importSimulations(File file, SimulationImportRequest request) {
+        return this.rawClient.importSimulations(file, request).thenApply(response -> response.body());
+    }
+
+    /**
+     * Import simulation conversations from a CSV file.
+     * <p>This CSV format is very simple and only allows for one column: <code>question</code>. A header containing this column is required.
+     * Each row will generate one simulation conversation, using the provided response config, if present.</p>
+     * <p>This API is offered for backwards compatibility.
+     * Most API callers should create simulations programmatically to allow for more flexibility.</p>
+     */
+    public CompletableFuture<Void> importSimulations(
+            File file, SimulationImportRequest request, RequestOptions requestOptions) {
+        return this.rawClient.importSimulations(file, request, requestOptions).thenApply(response -> response.body());
     }
 
     /**

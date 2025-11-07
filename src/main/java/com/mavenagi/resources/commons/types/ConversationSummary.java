@@ -46,6 +46,8 @@ public final class ConversationSummary {
 
     private final List<String> users;
 
+    private final List<String> userIdentifiers;
+
     private final Optional<String> lastUserMessage;
 
     private final Optional<String> lastBotMessage;
@@ -65,6 +67,7 @@ public final class ConversationSummary {
             List<String> humanAgents,
             List<String> humanAgentsWithInserts,
             List<String> users,
+            List<String> userIdentifiers,
             Optional<String> lastUserMessage,
             Optional<String> lastBotMessage,
             Map<String, Object> additionalProperties) {
@@ -80,6 +83,7 @@ public final class ConversationSummary {
         this.humanAgents = humanAgents;
         this.humanAgentsWithInserts = humanAgentsWithInserts;
         this.users = users;
+        this.userIdentifiers = userIdentifiers;
         this.lastUserMessage = lastUserMessage;
         this.lastBotMessage = lastBotMessage;
         this.additionalProperties = additionalProperties;
@@ -186,6 +190,14 @@ public final class ConversationSummary {
     }
 
     /**
+     * @return The user identifiers (typically email addresses or phone numbers) of all users that have a message of type <code>USER</code> on the conversation.
+     */
+    @JsonProperty("userIdentifiers")
+    public List<String> getUserIdentifiers() {
+        return userIdentifiers;
+    }
+
+    /**
      * @return The text of the last user message in the conversation.
      */
     @JsonProperty("lastUserMessage")
@@ -225,6 +237,7 @@ public final class ConversationSummary {
                 && humanAgents.equals(other.humanAgents)
                 && humanAgentsWithInserts.equals(other.humanAgentsWithInserts)
                 && users.equals(other.users)
+                && userIdentifiers.equals(other.userIdentifiers)
                 && lastUserMessage.equals(other.lastUserMessage)
                 && lastBotMessage.equals(other.lastBotMessage);
     }
@@ -244,6 +257,7 @@ public final class ConversationSummary {
                 this.humanAgents,
                 this.humanAgentsWithInserts,
                 this.users,
+                this.userIdentifiers,
                 this.lastUserMessage,
                 this.lastBotMessage);
     }
@@ -361,6 +375,15 @@ public final class ConversationSummary {
         _FinalStage addAllUsers(List<String> users);
 
         /**
+         * <p>The user identifiers (typically email addresses or phone numbers) of all users that have a message of type <code>USER</code> on the conversation.</p>
+         */
+        _FinalStage userIdentifiers(List<String> userIdentifiers);
+
+        _FinalStage addUserIdentifiers(String userIdentifiers);
+
+        _FinalStage addAllUserIdentifiers(List<String> userIdentifiers);
+
+        /**
          * <p>The text of the last user message in the conversation.</p>
          */
         _FinalStage lastUserMessage(Optional<String> lastUserMessage);
@@ -397,6 +420,8 @@ public final class ConversationSummary {
 
         private Optional<String> lastUserMessage = Optional.empty();
 
+        private List<String> userIdentifiers = new ArrayList<>();
+
         private List<String> users = new ArrayList<>();
 
         private List<String> humanAgentsWithInserts = new ArrayList<>();
@@ -430,6 +455,7 @@ public final class ConversationSummary {
             humanAgents(other.getHumanAgents());
             humanAgentsWithInserts(other.getHumanAgentsWithInserts());
             users(other.getUsers());
+            userIdentifiers(other.getUserIdentifiers());
             lastUserMessage(other.getLastUserMessage());
             lastBotMessage(other.getLastBotMessage());
             return this;
@@ -532,6 +558,41 @@ public final class ConversationSummary {
         @JsonSetter(value = "lastUserMessage", nulls = Nulls.SKIP)
         public _FinalStage lastUserMessage(Optional<String> lastUserMessage) {
             this.lastUserMessage = lastUserMessage;
+            return this;
+        }
+
+        /**
+         * <p>The user identifiers (typically email addresses or phone numbers) of all users that have a message of type <code>USER</code> on the conversation.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage addAllUserIdentifiers(List<String> userIdentifiers) {
+            if (userIdentifiers != null) {
+                this.userIdentifiers.addAll(userIdentifiers);
+            }
+            return this;
+        }
+
+        /**
+         * <p>The user identifiers (typically email addresses or phone numbers) of all users that have a message of type <code>USER</code> on the conversation.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage addUserIdentifiers(String userIdentifiers) {
+            this.userIdentifiers.add(userIdentifiers);
+            return this;
+        }
+
+        /**
+         * <p>The user identifiers (typically email addresses or phone numbers) of all users that have a message of type <code>USER</code> on the conversation.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "userIdentifiers", nulls = Nulls.SKIP)
+        public _FinalStage userIdentifiers(List<String> userIdentifiers) {
+            this.userIdentifiers.clear();
+            if (userIdentifiers != null) {
+                this.userIdentifiers.addAll(userIdentifiers);
+            }
             return this;
         }
 
@@ -773,6 +834,7 @@ public final class ConversationSummary {
                     humanAgents,
                     humanAgentsWithInserts,
                     users,
+                    userIdentifiers,
                     lastUserMessage,
                     lastBotMessage,
                     additionalProperties);

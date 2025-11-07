@@ -8,10 +8,12 @@ import com.mavenagi.resources.commons.types.EntityId;
 import com.mavenagi.resources.commons.types.EntityIdBase;
 import com.mavenagi.resources.commons.types.EntityIdWithoutAgent;
 import com.mavenagi.resources.commons.types.EntityType;
+import com.mavenagi.resources.commons.types.LlmInclusionStatus;
 import com.mavenagi.resources.knowledge.requests.KnowledgeBaseGetRequest;
 import com.mavenagi.resources.knowledge.requests.KnowledgeBasePatchRequest;
 import com.mavenagi.resources.knowledge.requests.KnowledgeBaseVersionsListRequest;
 import com.mavenagi.resources.knowledge.requests.KnowledgeDocumentGetRequest;
+import com.mavenagi.resources.knowledge.requests.KnowledgeDocumentPatchRequest;
 import com.mavenagi.resources.knowledge.types.FinalizeKnowledgeBaseVersionRequest;
 import com.mavenagi.resources.knowledge.types.KnowledgeBaseRefreshRequest;
 import com.mavenagi.resources.knowledge.types.KnowledgeBaseRequest;
@@ -594,7 +596,7 @@ public class KnowledgeWireTest {
     public void testCreateKnowledgeBaseVersion() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"versionId\":{\"type\":\"KNOWLEDGE_BASE_VERSION\",\"referenceId\":\"versionId\",\"appId\":\"maven\",\"organizationId\":\"acme\",\"agentId\":\"support\"},\"type\":\"FULL\",\"status\":\"IN_PROGRESS\"}"));
+            .setBody("{\"versionId\":{\"type\":\"KNOWLEDGE_BASE_VERSION\",\"referenceId\":\"versionId\",\"appId\":\"maven\",\"organizationId\":\"acme\",\"agentId\":\"support\"},\"type\":\"FULL\",\"status\":\"IN_PROGRESS\",\"createdAt\":\"2024-01-01T00:00:00Z\",\"updatedAt\":\"2024-02-02T00:00:00Z\"}"));
         KnowledgeBaseVersion response = client.knowledge().createKnowledgeBaseVersion(
             "help-center",
             KnowledgeBaseVersionRequest
@@ -647,7 +649,9 @@ public class KnowledgeWireTest {
             + "    \"agentId\": \"support\"\n"
             + "  },\n"
             + "  \"type\": \"FULL\",\n"
-            + "  \"status\": \"IN_PROGRESS\"\n"
+            + "  \"status\": \"IN_PROGRESS\",\n"
+            + "  \"createdAt\": \"2024-01-01T00:00:00Z\",\n"
+            + "  \"updatedAt\": \"2024-02-02T00:00:00Z\"\n"
             + "}";
         JsonNode actualResponseNode = objectMapper.readTree(actualResponseJson);
         JsonNode expectedResponseNode = objectMapper.readTree(expectedResponseBody);
@@ -676,7 +680,7 @@ public class KnowledgeWireTest {
     public void testFinalizeKnowledgeBaseVersion() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"versionId\":{\"type\":\"KNOWLEDGE_BASE_VERSION\",\"referenceId\":\"versionId\",\"appId\":\"maven\",\"organizationId\":\"acme\",\"agentId\":\"support\"},\"type\":\"FULL\",\"status\":\"IN_PROGRESS\"}"));
+            .setBody("{\"versionId\":{\"type\":\"KNOWLEDGE_BASE_VERSION\",\"referenceId\":\"versionId\",\"appId\":\"maven\",\"organizationId\":\"acme\",\"agentId\":\"support\"},\"type\":\"FULL\",\"status\":\"IN_PROGRESS\",\"createdAt\":\"2024-01-01T00:00:00Z\",\"updatedAt\":\"2024-02-02T00:00:00Z\"}"));
         KnowledgeBaseVersion response = client.knowledge().finalizeKnowledgeBaseVersion(
             "help-center",
             FinalizeKnowledgeBaseVersionRequest
@@ -742,7 +746,9 @@ public class KnowledgeWireTest {
             + "    \"agentId\": \"support\"\n"
             + "  },\n"
             + "  \"type\": \"FULL\",\n"
-            + "  \"status\": \"IN_PROGRESS\"\n"
+            + "  \"status\": \"IN_PROGRESS\",\n"
+            + "  \"createdAt\": \"2024-01-01T00:00:00Z\",\n"
+            + "  \"updatedAt\": \"2024-02-02T00:00:00Z\"\n"
             + "}";
         JsonNode actualResponseNode = objectMapper.readTree(actualResponseJson);
         JsonNode expectedResponseNode = objectMapper.readTree(expectedResponseBody);
@@ -771,7 +777,7 @@ public class KnowledgeWireTest {
     public void testListKnowledgeBaseVersions() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"knowledgeBaseVersions\":[{\"versionId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"status\":\"SUCCEEDED\",\"errorMessage\":\"errorMessage\",\"type\":\"FULL\"},{\"versionId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"status\":\"SUCCEEDED\",\"errorMessage\":\"errorMessage\",\"type\":\"FULL\"}]}"));
+            .setBody("{\"knowledgeBaseVersions\":[{\"versionId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"status\":\"SUCCEEDED\",\"errorMessage\":\"errorMessage\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"type\":\"FULL\"},{\"versionId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"status\":\"SUCCEEDED\",\"errorMessage\":\"errorMessage\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"type\":\"FULL\"}]}"));
         KnowledgeBaseVersionsListResponse response = client.knowledge().listKnowledgeBaseVersions(
             "knowledgeBaseReferenceId",
             KnowledgeBaseVersionsListRequest
@@ -798,6 +804,8 @@ public class KnowledgeWireTest {
             + "      },\n"
             + "      \"status\": \"SUCCEEDED\",\n"
             + "      \"errorMessage\": \"errorMessage\",\n"
+            + "      \"createdAt\": \"2024-01-15T09:30:00Z\",\n"
+            + "      \"updatedAt\": \"2024-01-15T09:30:00Z\",\n"
             + "      \"type\": \"FULL\"\n"
             + "    },\n"
             + "    {\n"
@@ -810,6 +818,8 @@ public class KnowledgeWireTest {
             + "      },\n"
             + "      \"status\": \"SUCCEEDED\",\n"
             + "      \"errorMessage\": \"errorMessage\",\n"
+            + "      \"createdAt\": \"2024-01-15T09:30:00Z\",\n"
+            + "      \"updatedAt\": \"2024-01-15T09:30:00Z\",\n"
             + "      \"type\": \"FULL\"\n"
             + "    }\n"
             + "  ]\n"
@@ -841,7 +851,7 @@ public class KnowledgeWireTest {
     public void testSearchKnowledgeDocuments() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"knowledgeDocuments\":[{\"knowledgeDocumentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"knowledgeBaseVersionId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"title\":\"title\",\"url\":\"url\",\"language\":\"language\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"author\":\"author\"},{\"knowledgeDocumentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"knowledgeBaseVersionId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"title\":\"title\",\"url\":\"url\",\"language\":\"language\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"author\":\"author\"}],\"number\":1,\"size\":1,\"totalElements\":1000000,\"totalPages\":1}"));
+            .setBody("{\"knowledgeDocuments\":[{\"knowledgeDocumentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"knowledgeBaseVersionId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"title\":\"title\",\"llmInclusionStatus\":\"ALWAYS\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"url\":\"url\",\"language\":\"language\",\"author\":\"author\"},{\"knowledgeDocumentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"knowledgeBaseVersionId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"title\":\"title\",\"llmInclusionStatus\":\"ALWAYS\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"url\":\"url\",\"language\":\"language\",\"author\":\"author\"}],\"number\":1,\"size\":1,\"totalElements\":1000000,\"totalPages\":1}"));
         KnowledgeDocumentsResponse response = client.knowledge().searchKnowledgeDocuments(
             KnowledgeDocumentSearchRequest
                 .builder()
@@ -899,10 +909,11 @@ public class KnowledgeWireTest {
             + "        \"referenceId\": \"referenceId\"\n"
             + "      },\n"
             + "      \"title\": \"title\",\n"
-            + "      \"url\": \"url\",\n"
-            + "      \"language\": \"language\",\n"
+            + "      \"llmInclusionStatus\": \"ALWAYS\",\n"
             + "      \"createdAt\": \"2024-01-15T09:30:00Z\",\n"
             + "      \"updatedAt\": \"2024-01-15T09:30:00Z\",\n"
+            + "      \"url\": \"url\",\n"
+            + "      \"language\": \"language\",\n"
             + "      \"author\": \"author\"\n"
             + "    },\n"
             + "    {\n"
@@ -921,10 +932,11 @@ public class KnowledgeWireTest {
             + "        \"referenceId\": \"referenceId\"\n"
             + "      },\n"
             + "      \"title\": \"title\",\n"
-            + "      \"url\": \"url\",\n"
-            + "      \"language\": \"language\",\n"
+            + "      \"llmInclusionStatus\": \"ALWAYS\",\n"
             + "      \"createdAt\": \"2024-01-15T09:30:00Z\",\n"
             + "      \"updatedAt\": \"2024-01-15T09:30:00Z\",\n"
+            + "      \"url\": \"url\",\n"
+            + "      \"language\": \"language\",\n"
             + "      \"author\": \"author\"\n"
             + "    }\n"
             + "  ],\n"
@@ -960,7 +972,7 @@ public class KnowledgeWireTest {
     public void testCreateKnowledgeDocument() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"knowledgeDocumentId\":{\"referenceId\":\"getting-started\",\"appId\":\"readme\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"KNOWLEDGE_DOCUMENT\"},\"knowledgeBaseVersionId\":{\"referenceId\":\"versionId\",\"appId\":\"maven\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"KNOWLEDGE_BASE_VERSION\"},\"content\":\"## Getting started This is a getting started guide for the help center.\",\"title\":\"Getting started\",\"metadata\":{\"category\":\"getting-started\"}}"));
+            .setBody("{\"knowledgeDocumentId\":{\"referenceId\":\"getting-started\",\"appId\":\"readme\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"KNOWLEDGE_DOCUMENT\"},\"knowledgeBaseVersionId\":{\"referenceId\":\"versionId\",\"appId\":\"maven\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"KNOWLEDGE_BASE_VERSION\"},\"content\":\"## Getting started This is a getting started guide for the help center.\",\"title\":\"Getting started\",\"metadata\":{\"category\":\"getting-started\"},\"createdAt\":\"2024-01-01T00:00:00Z\",\"updatedAt\":\"2024-02-02T00:00:00Z\",\"llmInclusionStatus\":\"WHEN_RELEVANT\"}"));
         KnowledgeDocumentResponse response = client.knowledge().createKnowledgeDocument(
             "help-center",
             KnowledgeDocumentRequest
@@ -1057,7 +1069,10 @@ public class KnowledgeWireTest {
             + "  \"title\": \"Getting started\",\n"
             + "  \"metadata\": {\n"
             + "    \"category\": \"getting-started\"\n"
-            + "  }\n"
+            + "  },\n"
+            + "  \"createdAt\": \"2024-01-01T00:00:00Z\",\n"
+            + "  \"updatedAt\": \"2024-02-02T00:00:00Z\",\n"
+            + "  \"llmInclusionStatus\": \"WHEN_RELEVANT\"\n"
             + "}";
         JsonNode actualResponseNode = objectMapper.readTree(actualResponseJson);
         JsonNode expectedResponseNode = objectMapper.readTree(expectedResponseBody);
@@ -1142,7 +1157,7 @@ public class KnowledgeWireTest {
     public void testGetKnowledgeDocument() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"content\":\"content\",\"metadata\":{\"metadata\":\"metadata\"},\"knowledgeDocumentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"knowledgeBaseVersionId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"title\":\"title\",\"url\":\"url\",\"language\":\"language\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"author\":\"author\"}"));
+            .setBody("{\"content\":\"content\",\"metadata\":{\"metadata\":\"metadata\"},\"knowledgeDocumentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"knowledgeBaseVersionId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"title\":\"title\",\"llmInclusionStatus\":\"ALWAYS\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"url\":\"url\",\"language\":\"language\",\"author\":\"author\"}"));
         KnowledgeDocumentResponse response = client.knowledge().getKnowledgeDocument(
             "knowledgeBaseVersionReferenceId",
             "knowledgeDocumentReferenceId",
@@ -1179,11 +1194,108 @@ public class KnowledgeWireTest {
             + "    \"referenceId\": \"referenceId\"\n"
             + "  },\n"
             + "  \"title\": \"title\",\n"
-            + "  \"url\": \"url\",\n"
-            + "  \"language\": \"language\",\n"
+            + "  \"llmInclusionStatus\": \"ALWAYS\",\n"
             + "  \"createdAt\": \"2024-01-15T09:30:00Z\",\n"
             + "  \"updatedAt\": \"2024-01-15T09:30:00Z\",\n"
+            + "  \"url\": \"url\",\n"
+            + "  \"language\": \"language\",\n"
             + "  \"author\": \"author\"\n"
+            + "}";
+        JsonNode actualResponseNode = objectMapper.readTree(actualResponseJson);
+        JsonNode expectedResponseNode = objectMapper.readTree(expectedResponseBody);
+        Assertions.assertEquals(expectedResponseNode, actualResponseNode, "Response body structure does not match expected");
+        if (actualResponseNode.has("type") || actualResponseNode.has("_type") || actualResponseNode.has("kind")) {
+            String discriminator = null;
+            if (actualResponseNode.has("type")) discriminator = actualResponseNode.get("type").asText();
+            else if (actualResponseNode.has("_type")) discriminator = actualResponseNode.get("_type").asText();
+            else if (actualResponseNode.has("kind")) discriminator = actualResponseNode.get("kind").asText();
+            Assertions.assertNotNull(discriminator, "Union type should have a discriminator field");
+            Assertions.assertFalse(discriminator.isEmpty(), "Union discriminator should not be empty");
+        }
+        
+        if (!actualResponseNode.isNull()) {
+            Assertions.assertTrue(actualResponseNode.isObject() || actualResponseNode.isArray() || actualResponseNode.isValueNode(), "response should be a valid JSON value");
+        }
+        
+        if (actualResponseNode.isArray()) {
+            Assertions.assertTrue(actualResponseNode.size() >= 0, "Array should have valid size");
+        }
+        if (actualResponseNode.isObject()) {
+            Assertions.assertTrue(actualResponseNode.size() >= 0, "Object should have valid field count");
+        }
+    }
+    @Test
+    public void testPatchKnowledgeDocument() throws Exception {
+        server.enqueue(new MockResponse()
+            .setResponseCode(200)
+            .setBody("{\"knowledgeDocumentId\":{\"referenceId\":\"getting-started\",\"appId\":\"readme\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"KNOWLEDGE_DOCUMENT\"},\"knowledgeBaseVersionId\":{\"referenceId\":\"versionId\",\"appId\":\"maven\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"KNOWLEDGE_BASE_VERSION\"},\"content\":\"## Getting started This is a getting started guide for the help center.\",\"title\":\"Getting started\",\"metadata\":{\"category\":\"getting-started\"},\"createdAt\":\"2024-01-01T00:00:00Z\",\"updatedAt\":\"2024-02-02T00:00:00Z\",\"llmInclusionStatus\":\"WHEN_RELEVANT\"}"));
+        KnowledgeDocumentResponse response = client.knowledge().patchKnowledgeDocument(
+            "help-center",
+            "how-it-works",
+            KnowledgeDocumentPatchRequest
+                .builder()
+                .llmInclusionStatus(LlmInclusionStatus.ALWAYS)
+                .build()
+        );
+        RecordedRequest request = server.takeRequest();
+        Assertions.assertNotNull(request);
+        Assertions.assertEquals("PATCH", request.getMethod());
+        // Validate request body
+        String actualRequestBody = request.getBody().readUtf8();
+        String expectedRequestBody = ""
+            + "{\n"
+            + "  \"llmInclusionStatus\": \"ALWAYS\"\n"
+            + "}";
+        JsonNode actualJson = objectMapper.readTree(actualRequestBody);
+        JsonNode expectedJson = objectMapper.readTree(expectedRequestBody);
+        Assertions.assertEquals(expectedJson, actualJson, "Request body structure does not match expected");
+        if (actualJson.has("type") || actualJson.has("_type") || actualJson.has("kind")) {
+            String discriminator = null;
+            if (actualJson.has("type")) discriminator = actualJson.get("type").asText();
+            else if (actualJson.has("_type")) discriminator = actualJson.get("_type").asText();
+            else if (actualJson.has("kind")) discriminator = actualJson.get("kind").asText();
+            Assertions.assertNotNull(discriminator, "Union type should have a discriminator field");
+            Assertions.assertFalse(discriminator.isEmpty(), "Union discriminator should not be empty");
+        }
+        
+        if (!actualJson.isNull()) {
+            Assertions.assertTrue(actualJson.isObject() || actualJson.isArray() || actualJson.isValueNode(), "request should be a valid JSON value");
+        }
+        
+        if (actualJson.isArray()) {
+            Assertions.assertTrue(actualJson.size() >= 0, "Array should have valid size");
+        }
+        if (actualJson.isObject()) {
+            Assertions.assertTrue(actualJson.size() >= 0, "Object should have valid field count");
+        }
+        
+        // Validate response body
+        Assertions.assertNotNull(response, "Response should not be null");
+        String actualResponseJson = objectMapper.writeValueAsString(response);
+        String expectedResponseBody = ""
+            + "{\n"
+            + "  \"knowledgeDocumentId\": {\n"
+            + "    \"referenceId\": \"getting-started\",\n"
+            + "    \"appId\": \"readme\",\n"
+            + "    \"organizationId\": \"acme\",\n"
+            + "    \"agentId\": \"support\",\n"
+            + "    \"type\": \"KNOWLEDGE_DOCUMENT\"\n"
+            + "  },\n"
+            + "  \"knowledgeBaseVersionId\": {\n"
+            + "    \"referenceId\": \"versionId\",\n"
+            + "    \"appId\": \"maven\",\n"
+            + "    \"organizationId\": \"acme\",\n"
+            + "    \"agentId\": \"support\",\n"
+            + "    \"type\": \"KNOWLEDGE_BASE_VERSION\"\n"
+            + "  },\n"
+            + "  \"content\": \"## Getting started This is a getting started guide for the help center.\",\n"
+            + "  \"title\": \"Getting started\",\n"
+            + "  \"metadata\": {\n"
+            + "    \"category\": \"getting-started\"\n"
+            + "  },\n"
+            + "  \"createdAt\": \"2024-01-01T00:00:00Z\",\n"
+            + "  \"updatedAt\": \"2024-02-02T00:00:00Z\",\n"
+            + "  \"llmInclusionStatus\": \"WHEN_RELEVANT\"\n"
             + "}";
         JsonNode actualResponseNode = objectMapper.readTree(actualResponseJson);
         JsonNode expectedResponseNode = objectMapper.readTree(expectedResponseBody);
