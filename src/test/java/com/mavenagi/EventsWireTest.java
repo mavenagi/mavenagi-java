@@ -42,7 +42,7 @@ public class EventsWireTest {
     public void testCreate() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"eventType\":\"userEvent\",\"id\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"eventName\":\"BUTTON_CLICKED\",\"userInfo\":{\"id\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"userDisplayName\":\"userDisplayName\"},\"feedbackInfo\":[{\"rating\":1.1,\"thumbUp\":true,\"survey\":{\"surveyQuestion\":\"surveyQuestion\",\"surveyAnswer\":\"surveyAnswer\"}},{\"rating\":1.1,\"thumbUp\":true,\"survey\":{\"surveyQuestion\":\"surveyQuestion\",\"surveyAnswer\":\"surveyAnswer\"}}],\"pageInfo\":{\"pageName\":\"pageName\",\"pageUrl\":\"pageUrl\",\"pageTitle\":\"pageTitle\",\"linkUrl\":\"linkUrl\",\"elementId\":\"elementId\"},\"timestamp\":\"2024-01-15T09:30:00Z\",\"references\":[{\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"scopeEntityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"}}],\"sourceInfo\":{\"type\":\"WEB\",\"deviceInfo\":{\"type\":\"DESKTOP\",\"name\":\"name\",\"version\":\"version\",\"osInfo\":{\"type\":\"WINDOWS\",\"name\":\"name\",\"version\":\"version\"}},\"browserInfo\":{\"type\":\"CHROME\",\"name\":\"name\",\"version\":\"version\",\"userAgent\":\"userAgent\"},\"geoInfo\":{\"city\":\"city\",\"state\":\"state\",\"country\":\"country\",\"region\":\"region\",\"latitude\":1.1,\"longitude\":1.1},\"ipInfo\":{\"ip\":\"ip\"},\"languageInfo\":{\"code\":\"code\"}},\"sessionInfo\":{\"id\":\"id\",\"start\":\"2024-01-15T09:30:00Z\",\"end\":\"2024-01-15T09:30:00Z\",\"duration\":1000000},\"contextInfo\":{\"additionalData\":{\"additionalData\":\"additionalData\"}}}"));
+            .setBody("{\"eventType\":\"userEvent\",\"id\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"eventName\":\"BUTTON_CLICKED\",\"userInfo\":{\"id\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"userDisplayName\":\"userDisplayName\"},\"feedbackInfo\":[{\"rating\":1.1,\"thumbUp\":true,\"survey\":{\"surveyQuestion\":\"surveyQuestion\",\"surveyAnswer\":\"surveyAnswer\"}},{\"rating\":1.1,\"thumbUp\":true,\"survey\":{\"surveyQuestion\":\"surveyQuestion\",\"surveyAnswer\":\"surveyAnswer\"}}],\"pageInfo\":{\"pageName\":\"pageName\",\"pageUrl\":\"pageUrl\",\"pageTitle\":\"pageTitle\",\"linkUrl\":\"linkUrl\",\"elementId\":\"elementId\"},\"timestamp\":\"2024-01-15T09:30:00Z\",\"references\":[{\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"scopeEntityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}}],\"sourceInfo\":{\"type\":\"WEB\",\"deviceInfo\":{\"type\":\"DESKTOP\",\"name\":\"name\",\"version\":\"version\",\"osInfo\":{\"type\":\"WINDOWS\",\"name\":\"name\",\"version\":\"version\"}},\"browserInfo\":{\"type\":\"CHROME\",\"name\":\"name\",\"version\":\"version\",\"userAgent\":\"userAgent\"},\"geoInfo\":{\"city\":\"city\",\"state\":\"state\",\"country\":\"country\",\"region\":\"region\",\"latitude\":1.1,\"longitude\":1.1},\"ipInfo\":{\"ip\":\"ip\"},\"languageInfo\":{\"code\":\"code\"}},\"sessionInfo\":{\"id\":\"id\",\"start\":\"2024-01-15T09:30:00Z\",\"end\":\"2024-01-15T09:30:00Z\",\"duration\":1000000},\"contextInfo\":{\"additionalData\":{\"additionalData\":\"additionalData\"}}}"));
         EventResponse response = client.events().create(
             EventRequest.userEvent(
                 NovelUserEvent
@@ -50,7 +50,7 @@ public class EventsWireTest {
                     .id(
                         EntityIdBase
                             .builder()
-                            .referenceId("referenceId")
+                            .referenceId("x")
                             .build()
                     )
                     .eventName(UserEventName.BUTTON_CLICKED)
@@ -60,7 +60,7 @@ public class EventsWireTest {
                             .id(
                                 EntityIdBase
                                     .builder()
-                                    .referenceId("referenceId")
+                                    .referenceId("x")
                                     .build()
                             )
                             .build()
@@ -77,12 +77,12 @@ public class EventsWireTest {
             + "{\n"
             + "  \"eventType\": \"userEvent\",\n"
             + "  \"id\": {\n"
-            + "    \"referenceId\": \"referenceId\"\n"
+            + "    \"referenceId\": \"x\"\n"
             + "  },\n"
             + "  \"eventName\": \"BUTTON_CLICKED\",\n"
             + "  \"userInfo\": {\n"
             + "    \"id\": {\n"
-            + "      \"referenceId\": \"referenceId\"\n"
+            + "      \"referenceId\": \"x\"\n"
             + "    }\n"
             + "  }\n"
             + "}";
@@ -120,7 +120,7 @@ public class EventsWireTest {
             + "    \"agentId\": \"agentId\",\n"
             + "    \"type\": \"AGENT\",\n"
             + "    \"appId\": \"appId\",\n"
-            + "    \"referenceId\": \"referenceId\"\n"
+            + "    \"referenceId\": \"x\"\n"
             + "  },\n"
             + "  \"eventName\": \"BUTTON_CLICKED\",\n"
             + "  \"userInfo\": {\n"
@@ -129,7 +129,7 @@ public class EventsWireTest {
             + "      \"agentId\": \"agentId\",\n"
             + "      \"type\": \"AGENT\",\n"
             + "      \"appId\": \"appId\",\n"
-            + "      \"referenceId\": \"referenceId\"\n"
+            + "      \"referenceId\": \"x\"\n"
             + "    },\n"
             + "    \"userDisplayName\": \"userDisplayName\"\n"
             + "  },\n"
@@ -166,14 +166,14 @@ public class EventsWireTest {
             + "        \"agentId\": \"agentId\",\n"
             + "        \"type\": \"AGENT\",\n"
             + "        \"appId\": \"appId\",\n"
-            + "        \"referenceId\": \"referenceId\"\n"
+            + "        \"referenceId\": \"x\"\n"
             + "      },\n"
             + "      \"scopeEntityId\": {\n"
             + "        \"organizationId\": \"organizationId\",\n"
             + "        \"agentId\": \"agentId\",\n"
             + "        \"type\": \"AGENT\",\n"
             + "        \"appId\": \"appId\",\n"
-            + "        \"referenceId\": \"referenceId\"\n"
+            + "        \"referenceId\": \"x\"\n"
             + "      }\n"
             + "    }\n"
             + "  ],\n"
@@ -249,7 +249,7 @@ public class EventsWireTest {
     public void testSearch() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"events\":[{\"eventType\":\"userEvent\",\"id\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"eventName\":\"BUTTON_CLICKED\",\"userInfo\":{\"id\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"userDisplayName\":\"userDisplayName\"},\"feedbackInfo\":[{\"rating\":1.1,\"thumbUp\":true,\"survey\":{\"surveyQuestion\":\"surveyQuestion\",\"surveyAnswer\":\"surveyAnswer\"}},{\"rating\":1.1,\"thumbUp\":true,\"survey\":{\"surveyQuestion\":\"surveyQuestion\",\"surveyAnswer\":\"surveyAnswer\"}}],\"pageInfo\":{\"pageName\":\"pageName\",\"pageUrl\":\"pageUrl\",\"pageTitle\":\"pageTitle\",\"linkUrl\":\"linkUrl\",\"elementId\":\"elementId\"},\"timestamp\":\"2024-01-15T09:30:00Z\",\"references\":[{\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"scopeEntityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"}}],\"sourceInfo\":{\"type\":\"WEB\",\"deviceInfo\":{\"type\":\"DESKTOP\",\"name\":\"name\",\"version\":\"version\",\"osInfo\":{\"type\":\"WINDOWS\",\"name\":\"name\",\"version\":\"version\"}},\"browserInfo\":{\"type\":\"CHROME\",\"name\":\"name\",\"version\":\"version\",\"userAgent\":\"userAgent\"},\"geoInfo\":{\"city\":\"city\",\"state\":\"state\",\"country\":\"country\",\"region\":\"region\",\"latitude\":1.1,\"longitude\":1.1},\"ipInfo\":{\"ip\":\"ip\"},\"languageInfo\":{\"code\":\"code\"}},\"sessionInfo\":{\"id\":\"id\",\"start\":\"2024-01-15T09:30:00Z\",\"end\":\"2024-01-15T09:30:00Z\",\"duration\":1000000},\"contextInfo\":{\"additionalData\":{\"additionalData\":\"additionalData\"}}},{\"eventType\":\"userEvent\",\"id\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"eventName\":\"BUTTON_CLICKED\",\"userInfo\":{\"id\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"userDisplayName\":\"userDisplayName\"},\"feedbackInfo\":[{\"rating\":1.1,\"thumbUp\":true,\"survey\":{\"surveyQuestion\":\"surveyQuestion\",\"surveyAnswer\":\"surveyAnswer\"}},{\"rating\":1.1,\"thumbUp\":true,\"survey\":{\"surveyQuestion\":\"surveyQuestion\",\"surveyAnswer\":\"surveyAnswer\"}}],\"pageInfo\":{\"pageName\":\"pageName\",\"pageUrl\":\"pageUrl\",\"pageTitle\":\"pageTitle\",\"linkUrl\":\"linkUrl\",\"elementId\":\"elementId\"},\"timestamp\":\"2024-01-15T09:30:00Z\",\"references\":[{\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"scopeEntityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"}}],\"sourceInfo\":{\"type\":\"WEB\",\"deviceInfo\":{\"type\":\"DESKTOP\",\"name\":\"name\",\"version\":\"version\",\"osInfo\":{\"type\":\"WINDOWS\",\"name\":\"name\",\"version\":\"version\"}},\"browserInfo\":{\"type\":\"CHROME\",\"name\":\"name\",\"version\":\"version\",\"userAgent\":\"userAgent\"},\"geoInfo\":{\"city\":\"city\",\"state\":\"state\",\"country\":\"country\",\"region\":\"region\",\"latitude\":1.1,\"longitude\":1.1},\"ipInfo\":{\"ip\":\"ip\"},\"languageInfo\":{\"code\":\"code\"}},\"sessionInfo\":{\"id\":\"id\",\"start\":\"2024-01-15T09:30:00Z\",\"end\":\"2024-01-15T09:30:00Z\",\"duration\":1000000},\"contextInfo\":{\"additionalData\":{\"additionalData\":\"additionalData\"}}}],\"number\":1,\"size\":1,\"totalElements\":1000000,\"totalPages\":1}"));
+            .setBody("{\"events\":[{\"eventType\":\"userEvent\",\"id\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"eventName\":\"BUTTON_CLICKED\",\"userInfo\":{\"id\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"userDisplayName\":\"userDisplayName\"},\"feedbackInfo\":[{\"rating\":1.1,\"thumbUp\":true,\"survey\":{\"surveyQuestion\":\"surveyQuestion\",\"surveyAnswer\":\"surveyAnswer\"}},{\"rating\":1.1,\"thumbUp\":true,\"survey\":{\"surveyQuestion\":\"surveyQuestion\",\"surveyAnswer\":\"surveyAnswer\"}}],\"pageInfo\":{\"pageName\":\"pageName\",\"pageUrl\":\"pageUrl\",\"pageTitle\":\"pageTitle\",\"linkUrl\":\"linkUrl\",\"elementId\":\"elementId\"},\"timestamp\":\"2024-01-15T09:30:00Z\",\"references\":[{\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"scopeEntityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}}],\"sourceInfo\":{\"type\":\"WEB\",\"deviceInfo\":{\"type\":\"DESKTOP\",\"name\":\"name\",\"version\":\"version\",\"osInfo\":{\"type\":\"WINDOWS\",\"name\":\"name\",\"version\":\"version\"}},\"browserInfo\":{\"type\":\"CHROME\",\"name\":\"name\",\"version\":\"version\",\"userAgent\":\"userAgent\"},\"geoInfo\":{\"city\":\"city\",\"state\":\"state\",\"country\":\"country\",\"region\":\"region\",\"latitude\":1.1,\"longitude\":1.1},\"ipInfo\":{\"ip\":\"ip\"},\"languageInfo\":{\"code\":\"code\"}},\"sessionInfo\":{\"id\":\"id\",\"start\":\"2024-01-15T09:30:00Z\",\"end\":\"2024-01-15T09:30:00Z\",\"duration\":1000000},\"contextInfo\":{\"additionalData\":{\"additionalData\":\"additionalData\"}}},{\"eventType\":\"userEvent\",\"id\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"eventName\":\"BUTTON_CLICKED\",\"userInfo\":{\"id\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"userDisplayName\":\"userDisplayName\"},\"feedbackInfo\":[{\"rating\":1.1,\"thumbUp\":true,\"survey\":{\"surveyQuestion\":\"surveyQuestion\",\"surveyAnswer\":\"surveyAnswer\"}},{\"rating\":1.1,\"thumbUp\":true,\"survey\":{\"surveyQuestion\":\"surveyQuestion\",\"surveyAnswer\":\"surveyAnswer\"}}],\"pageInfo\":{\"pageName\":\"pageName\",\"pageUrl\":\"pageUrl\",\"pageTitle\":\"pageTitle\",\"linkUrl\":\"linkUrl\",\"elementId\":\"elementId\"},\"timestamp\":\"2024-01-15T09:30:00Z\",\"references\":[{\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"scopeEntityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}}],\"sourceInfo\":{\"type\":\"WEB\",\"deviceInfo\":{\"type\":\"DESKTOP\",\"name\":\"name\",\"version\":\"version\",\"osInfo\":{\"type\":\"WINDOWS\",\"name\":\"name\",\"version\":\"version\"}},\"browserInfo\":{\"type\":\"CHROME\",\"name\":\"name\",\"version\":\"version\",\"userAgent\":\"userAgent\"},\"geoInfo\":{\"city\":\"city\",\"state\":\"state\",\"country\":\"country\",\"region\":\"region\",\"latitude\":1.1,\"longitude\":1.1},\"ipInfo\":{\"ip\":\"ip\"},\"languageInfo\":{\"code\":\"code\"}},\"sessionInfo\":{\"id\":\"id\",\"start\":\"2024-01-15T09:30:00Z\",\"end\":\"2024-01-15T09:30:00Z\",\"duration\":1000000},\"contextInfo\":{\"additionalData\":{\"additionalData\":\"additionalData\"}}}],\"number\":1,\"size\":1,\"totalElements\":1000000,\"totalPages\":1}"));
         EventsSearchResponse response = client.events().search(
             EventsSearchRequest
                 .builder()
@@ -298,7 +298,7 @@ public class EventsWireTest {
             + "        \"agentId\": \"agentId\",\n"
             + "        \"type\": \"AGENT\",\n"
             + "        \"appId\": \"appId\",\n"
-            + "        \"referenceId\": \"referenceId\"\n"
+            + "        \"referenceId\": \"x\"\n"
             + "      },\n"
             + "      \"eventName\": \"BUTTON_CLICKED\",\n"
             + "      \"userInfo\": {\n"
@@ -307,7 +307,7 @@ public class EventsWireTest {
             + "          \"agentId\": \"agentId\",\n"
             + "          \"type\": \"AGENT\",\n"
             + "          \"appId\": \"appId\",\n"
-            + "          \"referenceId\": \"referenceId\"\n"
+            + "          \"referenceId\": \"x\"\n"
             + "        },\n"
             + "        \"userDisplayName\": \"userDisplayName\"\n"
             + "      },\n"
@@ -344,14 +344,14 @@ public class EventsWireTest {
             + "            \"agentId\": \"agentId\",\n"
             + "            \"type\": \"AGENT\",\n"
             + "            \"appId\": \"appId\",\n"
-            + "            \"referenceId\": \"referenceId\"\n"
+            + "            \"referenceId\": \"x\"\n"
             + "          },\n"
             + "          \"scopeEntityId\": {\n"
             + "            \"organizationId\": \"organizationId\",\n"
             + "            \"agentId\": \"agentId\",\n"
             + "            \"type\": \"AGENT\",\n"
             + "            \"appId\": \"appId\",\n"
-            + "            \"referenceId\": \"referenceId\"\n"
+            + "            \"referenceId\": \"x\"\n"
             + "          }\n"
             + "        }\n"
             + "      ],\n"
@@ -407,7 +407,7 @@ public class EventsWireTest {
             + "        \"agentId\": \"agentId\",\n"
             + "        \"type\": \"AGENT\",\n"
             + "        \"appId\": \"appId\",\n"
-            + "        \"referenceId\": \"referenceId\"\n"
+            + "        \"referenceId\": \"x\"\n"
             + "      },\n"
             + "      \"eventName\": \"BUTTON_CLICKED\",\n"
             + "      \"userInfo\": {\n"
@@ -416,7 +416,7 @@ public class EventsWireTest {
             + "          \"agentId\": \"agentId\",\n"
             + "          \"type\": \"AGENT\",\n"
             + "          \"appId\": \"appId\",\n"
-            + "          \"referenceId\": \"referenceId\"\n"
+            + "          \"referenceId\": \"x\"\n"
             + "        },\n"
             + "        \"userDisplayName\": \"userDisplayName\"\n"
             + "      },\n"
@@ -453,14 +453,14 @@ public class EventsWireTest {
             + "            \"agentId\": \"agentId\",\n"
             + "            \"type\": \"AGENT\",\n"
             + "            \"appId\": \"appId\",\n"
-            + "            \"referenceId\": \"referenceId\"\n"
+            + "            \"referenceId\": \"x\"\n"
             + "          },\n"
             + "          \"scopeEntityId\": {\n"
             + "            \"organizationId\": \"organizationId\",\n"
             + "            \"agentId\": \"agentId\",\n"
             + "            \"type\": \"AGENT\",\n"
             + "            \"appId\": \"appId\",\n"
-            + "            \"referenceId\": \"referenceId\"\n"
+            + "            \"referenceId\": \"x\"\n"
             + "          }\n"
             + "        }\n"
             + "      ],\n"
@@ -542,7 +542,7 @@ public class EventsWireTest {
     public void testGet() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"eventType\":\"userEvent\",\"id\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"eventName\":\"BUTTON_CLICKED\",\"userInfo\":{\"id\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"userDisplayName\":\"userDisplayName\"},\"feedbackInfo\":[{\"rating\":1.1,\"thumbUp\":true,\"survey\":{\"surveyQuestion\":\"surveyQuestion\",\"surveyAnswer\":\"surveyAnswer\"}},{\"rating\":1.1,\"thumbUp\":true,\"survey\":{\"surveyQuestion\":\"surveyQuestion\",\"surveyAnswer\":\"surveyAnswer\"}}],\"pageInfo\":{\"pageName\":\"pageName\",\"pageUrl\":\"pageUrl\",\"pageTitle\":\"pageTitle\",\"linkUrl\":\"linkUrl\",\"elementId\":\"elementId\"},\"timestamp\":\"2024-01-15T09:30:00Z\",\"references\":[{\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"scopeEntityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"}}],\"sourceInfo\":{\"type\":\"WEB\",\"deviceInfo\":{\"type\":\"DESKTOP\",\"name\":\"name\",\"version\":\"version\",\"osInfo\":{\"type\":\"WINDOWS\",\"name\":\"name\",\"version\":\"version\"}},\"browserInfo\":{\"type\":\"CHROME\",\"name\":\"name\",\"version\":\"version\",\"userAgent\":\"userAgent\"},\"geoInfo\":{\"city\":\"city\",\"state\":\"state\",\"country\":\"country\",\"region\":\"region\",\"latitude\":1.1,\"longitude\":1.1},\"ipInfo\":{\"ip\":\"ip\"},\"languageInfo\":{\"code\":\"code\"}},\"sessionInfo\":{\"id\":\"id\",\"start\":\"2024-01-15T09:30:00Z\",\"end\":\"2024-01-15T09:30:00Z\",\"duration\":1000000},\"contextInfo\":{\"additionalData\":{\"additionalData\":\"additionalData\"}}}"));
+            .setBody("{\"eventType\":\"userEvent\",\"id\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"eventName\":\"BUTTON_CLICKED\",\"userInfo\":{\"id\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"userDisplayName\":\"userDisplayName\"},\"feedbackInfo\":[{\"rating\":1.1,\"thumbUp\":true,\"survey\":{\"surveyQuestion\":\"surveyQuestion\",\"surveyAnswer\":\"surveyAnswer\"}},{\"rating\":1.1,\"thumbUp\":true,\"survey\":{\"surveyQuestion\":\"surveyQuestion\",\"surveyAnswer\":\"surveyAnswer\"}}],\"pageInfo\":{\"pageName\":\"pageName\",\"pageUrl\":\"pageUrl\",\"pageTitle\":\"pageTitle\",\"linkUrl\":\"linkUrl\",\"elementId\":\"elementId\"},\"timestamp\":\"2024-01-15T09:30:00Z\",\"references\":[{\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"scopeEntityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}}],\"sourceInfo\":{\"type\":\"WEB\",\"deviceInfo\":{\"type\":\"DESKTOP\",\"name\":\"name\",\"version\":\"version\",\"osInfo\":{\"type\":\"WINDOWS\",\"name\":\"name\",\"version\":\"version\"}},\"browserInfo\":{\"type\":\"CHROME\",\"name\":\"name\",\"version\":\"version\",\"userAgent\":\"userAgent\"},\"geoInfo\":{\"city\":\"city\",\"state\":\"state\",\"country\":\"country\",\"region\":\"region\",\"latitude\":1.1,\"longitude\":1.1},\"ipInfo\":{\"ip\":\"ip\"},\"languageInfo\":{\"code\":\"code\"}},\"sessionInfo\":{\"id\":\"id\",\"start\":\"2024-01-15T09:30:00Z\",\"end\":\"2024-01-15T09:30:00Z\",\"duration\":1000000},\"contextInfo\":{\"additionalData\":{\"additionalData\":\"additionalData\"}}}"));
         EventResponse response = client.events().get(
             "eventId",
             EventGetRequest
@@ -565,7 +565,7 @@ public class EventsWireTest {
             + "    \"agentId\": \"agentId\",\n"
             + "    \"type\": \"AGENT\",\n"
             + "    \"appId\": \"appId\",\n"
-            + "    \"referenceId\": \"referenceId\"\n"
+            + "    \"referenceId\": \"x\"\n"
             + "  },\n"
             + "  \"eventName\": \"BUTTON_CLICKED\",\n"
             + "  \"userInfo\": {\n"
@@ -574,7 +574,7 @@ public class EventsWireTest {
             + "      \"agentId\": \"agentId\",\n"
             + "      \"type\": \"AGENT\",\n"
             + "      \"appId\": \"appId\",\n"
-            + "      \"referenceId\": \"referenceId\"\n"
+            + "      \"referenceId\": \"x\"\n"
             + "    },\n"
             + "    \"userDisplayName\": \"userDisplayName\"\n"
             + "  },\n"
@@ -611,14 +611,14 @@ public class EventsWireTest {
             + "        \"agentId\": \"agentId\",\n"
             + "        \"type\": \"AGENT\",\n"
             + "        \"appId\": \"appId\",\n"
-            + "        \"referenceId\": \"referenceId\"\n"
+            + "        \"referenceId\": \"x\"\n"
             + "      },\n"
             + "      \"scopeEntityId\": {\n"
             + "        \"organizationId\": \"organizationId\",\n"
             + "        \"agentId\": \"agentId\",\n"
             + "        \"type\": \"AGENT\",\n"
             + "        \"appId\": \"appId\",\n"
-            + "        \"referenceId\": \"referenceId\"\n"
+            + "        \"referenceId\": \"x\"\n"
             + "      }\n"
             + "    }\n"
             + "  ],\n"

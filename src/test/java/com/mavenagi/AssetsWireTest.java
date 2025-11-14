@@ -36,7 +36,7 @@ public class AssetsWireTest {
     public void testInitiateUpload() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"assetId\":{\"referenceId\":\"referenceId\"},\"uploadUrl\":\"uploadUrl\",\"expiresAt\":\"2024-01-15T09:30:00Z\"}"));
+            .setBody("{\"assetId\":{\"referenceId\":\"x\"},\"uploadUrl\":\"uploadUrl\",\"expiresAt\":\"2024-01-15T09:30:00Z\"}"));
         InitiateAssetUploadResponse response = client.assets().initiateUpload(
             InitiateAssetUploadRequest
                 .builder()
@@ -81,7 +81,7 @@ public class AssetsWireTest {
         String expectedResponseBody = ""
             + "{\n"
             + "  \"assetId\": {\n"
-            + "    \"referenceId\": \"referenceId\"\n"
+            + "    \"referenceId\": \"x\"\n"
             + "  },\n"
             + "  \"uploadUrl\": \"uploadUrl\",\n"
             + "  \"expiresAt\": \"2024-01-15T09:30:00Z\"\n"

@@ -41,7 +41,7 @@ public class TriggersWireTest {
     public void testSearch() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"triggers\":[{\"triggerId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"enabled\":true,\"description\":\"description\",\"type\":\"CONVERSATION_CREATED\"},{\"triggerId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"enabled\":true,\"description\":\"description\",\"type\":\"CONVERSATION_CREATED\"}],\"number\":1,\"size\":1,\"totalElements\":1000000,\"totalPages\":1}"));
+            .setBody("{\"triggers\":[{\"triggerId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"enabled\":true,\"description\":\"description\",\"type\":\"CONVERSATION_CREATED\"},{\"triggerId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"enabled\":true,\"description\":\"description\",\"type\":\"CONVERSATION_CREATED\"}],\"number\":1,\"size\":1,\"totalElements\":1000000,\"totalPages\":1}"));
         EventTriggersSearchResponse response = client.triggers().search(
             EventTriggersSearchRequest
                 .builder()
@@ -89,7 +89,7 @@ public class TriggersWireTest {
             + "        \"agentId\": \"agentId\",\n"
             + "        \"type\": \"AGENT\",\n"
             + "        \"appId\": \"appId\",\n"
-            + "        \"referenceId\": \"referenceId\"\n"
+            + "        \"referenceId\": \"x\"\n"
             + "      },\n"
             + "      \"enabled\": true,\n"
             + "      \"description\": \"description\",\n"
@@ -101,7 +101,7 @@ public class TriggersWireTest {
             + "        \"agentId\": \"agentId\",\n"
             + "        \"type\": \"AGENT\",\n"
             + "        \"appId\": \"appId\",\n"
-            + "        \"referenceId\": \"referenceId\"\n"
+            + "        \"referenceId\": \"x\"\n"
             + "      },\n"
             + "      \"enabled\": true,\n"
             + "      \"description\": \"description\",\n"
@@ -292,7 +292,7 @@ public class TriggersWireTest {
     public void testPartialUpdate() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"triggerId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"enabled\":true,\"description\":\"description\",\"type\":\"CONVERSATION_CREATED\"}"));
+            .setBody("{\"triggerId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"enabled\":true,\"description\":\"description\",\"type\":\"CONVERSATION_CREATED\"}"));
         EventTriggerResponse response = client.triggers().partialUpdate(
             "triggerReferenceId",
             PartialUpdateRequest
@@ -344,7 +344,7 @@ public class TriggersWireTest {
             + "    \"agentId\": \"agentId\",\n"
             + "    \"type\": \"AGENT\",\n"
             + "    \"appId\": \"appId\",\n"
-            + "    \"referenceId\": \"referenceId\"\n"
+            + "    \"referenceId\": \"x\"\n"
             + "  },\n"
             + "  \"enabled\": true,\n"
             + "  \"description\": \"description\",\n"

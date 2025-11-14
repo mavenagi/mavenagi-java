@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
+import com.mavenagi.resources.commons.types.AttachmentResponse;
 import com.mavenagi.resources.commons.types.EntityId;
 import com.mavenagi.resources.commons.types.LlmInclusionStatus;
 import java.time.OffsetDateTime;
@@ -43,7 +44,11 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
 
     private final Optional<String> author;
 
+    private final Optional<KnowledgeDocumentStatus> processingStatus;
+
     private final String content;
+
+    private final Optional<AttachmentResponse> asset;
 
     private final Map<String, String> metadata;
 
@@ -59,7 +64,9 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
             Optional<String> url,
             Optional<String> language,
             Optional<String> author,
+            Optional<KnowledgeDocumentStatus> processingStatus,
             String content,
+            Optional<AttachmentResponse> asset,
             Map<String, String> metadata,
             Map<String, Object> additionalProperties) {
         this.knowledgeDocumentId = knowledgeDocumentId;
@@ -71,7 +78,9 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
         this.url = url;
         this.language = language;
         this.author = author;
+        this.processingStatus = processingStatus;
         this.content = content;
+        this.asset = asset;
         this.metadata = metadata;
         this.additionalProperties = additionalProperties;
     }
@@ -159,11 +168,27 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
     }
 
     /**
+     * @return The current processing status of the knowledge document
+     */
+    @JsonProperty("processingStatus")
+    public Optional<KnowledgeDocumentStatus> getProcessingStatus() {
+        return processingStatus;
+    }
+
+    /**
      * @return The content of the document in markdown format. Not shown directly to users.
      */
     @JsonProperty("content")
     public String getContent() {
         return content;
+    }
+
+    /**
+     * @return If the document is associated with an asset, this will contain the asset metadata
+     */
+    @JsonProperty("asset")
+    public Optional<AttachmentResponse> getAsset() {
+        return asset;
     }
 
     /**
@@ -195,7 +220,9 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
                 && url.equals(other.url)
                 && language.equals(other.language)
                 && author.equals(other.author)
+                && processingStatus.equals(other.processingStatus)
                 && content.equals(other.content)
+                && asset.equals(other.asset)
                 && metadata.equals(other.metadata);
     }
 
@@ -211,7 +238,9 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
                 this.url,
                 this.language,
                 this.author,
+                this.processingStatus,
                 this.content,
+                this.asset,
                 this.metadata);
     }
 
@@ -301,6 +330,20 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
         _FinalStage author(String author);
 
         /**
+         * <p>The current processing status of the knowledge document</p>
+         */
+        _FinalStage processingStatus(Optional<KnowledgeDocumentStatus> processingStatus);
+
+        _FinalStage processingStatus(KnowledgeDocumentStatus processingStatus);
+
+        /**
+         * <p>If the document is associated with an asset, this will contain the asset metadata</p>
+         */
+        _FinalStage asset(Optional<AttachmentResponse> asset);
+
+        _FinalStage asset(AttachmentResponse asset);
+
+        /**
          * <p>Metadata for the knowledge document.</p>
          */
         _FinalStage metadata(Map<String, String> metadata);
@@ -330,6 +373,10 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
 
         private Map<String, String> metadata = new LinkedHashMap<>();
 
+        private Optional<AttachmentResponse> asset = Optional.empty();
+
+        private Optional<KnowledgeDocumentStatus> processingStatus = Optional.empty();
+
         private Optional<String> author = Optional.empty();
 
         private Optional<String> language = Optional.empty();
@@ -356,7 +403,9 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
             url(other.getUrl());
             language(other.getLanguage());
             author(other.getAuthor());
+            processingStatus(other.getProcessingStatus());
             content(other.getContent());
+            asset(other.getAsset());
             metadata(other.getMetadata());
             return this;
         }
@@ -454,6 +503,46 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
             if (metadata != null) {
                 this.metadata.putAll(metadata);
             }
+            return this;
+        }
+
+        /**
+         * <p>If the document is associated with an asset, this will contain the asset metadata</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage asset(AttachmentResponse asset) {
+            this.asset = Optional.ofNullable(asset);
+            return this;
+        }
+
+        /**
+         * <p>If the document is associated with an asset, this will contain the asset metadata</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "asset", nulls = Nulls.SKIP)
+        public _FinalStage asset(Optional<AttachmentResponse> asset) {
+            this.asset = asset;
+            return this;
+        }
+
+        /**
+         * <p>The current processing status of the knowledge document</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage processingStatus(KnowledgeDocumentStatus processingStatus) {
+            this.processingStatus = Optional.ofNullable(processingStatus);
+            return this;
+        }
+
+        /**
+         * <p>The current processing status of the knowledge document</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "processingStatus", nulls = Nulls.SKIP)
+        public _FinalStage processingStatus(Optional<KnowledgeDocumentStatus> processingStatus) {
+            this.processingStatus = processingStatus;
             return this;
         }
 
@@ -571,7 +660,9 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
                     url,
                     language,
                     author,
+                    processingStatus,
                     content,
+                    asset,
                     metadata,
                     additionalProperties);
         }

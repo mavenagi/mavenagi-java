@@ -62,14 +62,14 @@ public class ConversationWireTest {
     public void testInitialize() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"messages\":[{\"type\":\"user\",\"conversationMessageId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"language\":\"language\",\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"agentUserId\":\"agentUserId\",\"userDisplayName\":\"userDisplayName\",\"status\":\"SENDING\",\"responseState\":\"NOT_ASKED\",\"userId\":{\"referenceId\":\"referenceId\"},\"text\":\"text\",\"userMessageType\":\"USER\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\"},{\"type\":\"user\",\"conversationMessageId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"language\":\"language\",\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"agentUserId\":\"agentUserId\",\"userDisplayName\":\"userDisplayName\",\"status\":\"SENDING\",\"responseState\":\"NOT_ASKED\",\"userId\":{\"referenceId\":\"referenceId\"},\"text\":\"text\",\"userMessageType\":\"USER\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\"}],\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"responseConfig\":{\"capabilities\":[\"MARKDOWN\",\"MARKDOWN\"],\"isCopilot\":true,\"responseLength\":\"SHORT\"},\"subject\":\"subject\",\"url\":\"url\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"tags\":[\"tags\"],\"metadata\":{\"metadata\":\"metadata\"},\"allMetadata\":{\"allMetadata\":{\"allMetadata\":\"allMetadata\"}},\"conversationId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"analysis\":{\"userRequest\":\"userRequest\",\"agentResponse\":\"agentResponse\",\"resolutionStatus\":\"resolutionStatus\",\"category\":\"category\",\"sentiment\":\"POSITIVE\",\"quality\":\"GOOD\",\"qualityReason\":\"MISSING_KNOWLEDGE\",\"resolvedByMaven\":true,\"primaryLanguage\":\"primaryLanguage\",\"predictedNps\":1.1},\"summary\":{\"actionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"}],\"incompleteActionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"}],\"insertCount\":1,\"thumbsUpCount\":1,\"thumbsDownCount\":1,\"handoffCount\":1,\"userMessageCount\":1,\"handleTime\":1000000,\"humanAgentResponseDelay\":1000000,\"humanAgents\":[\"humanAgents\",\"humanAgents\"],\"humanAgentsWithInserts\":[\"humanAgentsWithInserts\",\"humanAgentsWithInserts\"],\"users\":[\"users\",\"users\"],\"userIdentifiers\":[\"userIdentifiers\",\"userIdentifiers\"],\"lastUserMessage\":\"lastUserMessage\",\"lastBotMessage\":\"lastBotMessage\"},\"deleted\":true,\"open\":true,\"llmEnabled\":true,\"simulationContext\":{\"additionalPromptText\":\"additionalPromptText\",\"persona\":\"CASUAL_BUDDY\",\"availableKnowledgeBases\":[{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"}]}}"));
+            .setBody("{\"messages\":[{\"type\":\"user\",\"conversationMessageId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"language\":\"language\",\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"agentUserId\":\"agentUserId\",\"userDisplayName\":\"userDisplayName\",\"status\":\"SENDING\",\"responseState\":\"NOT_ASKED\",\"userId\":{\"referenceId\":\"x\"},\"text\":\"text\",\"userMessageType\":\"USER\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\"},{\"type\":\"user\",\"conversationMessageId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"language\":\"language\",\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"agentUserId\":\"agentUserId\",\"userDisplayName\":\"userDisplayName\",\"status\":\"SENDING\",\"responseState\":\"NOT_ASKED\",\"userId\":{\"referenceId\":\"x\"},\"text\":\"text\",\"userMessageType\":\"USER\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\"}],\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"responseConfig\":{\"capabilities\":[\"MARKDOWN\",\"MARKDOWN\"],\"isCopilot\":true,\"responseLength\":\"SHORT\"},\"subject\":\"subject\",\"url\":\"url\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"tags\":[\"tags\"],\"metadata\":{\"metadata\":\"metadata\"},\"allMetadata\":{\"allMetadata\":{\"allMetadata\":\"allMetadata\"}},\"conversationId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"analysis\":{\"userRequest\":\"userRequest\",\"agentResponse\":\"agentResponse\",\"resolutionStatus\":\"resolutionStatus\",\"category\":\"category\",\"sentiment\":\"POSITIVE\",\"quality\":\"GOOD\",\"qualityReason\":\"MISSING_KNOWLEDGE\",\"resolvedByMaven\":true,\"primaryLanguage\":\"primaryLanguage\",\"predictedNps\":1.1},\"summary\":{\"actionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"incompleteActionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"insertCount\":1,\"thumbsUpCount\":1,\"thumbsDownCount\":1,\"handoffCount\":1,\"userMessageCount\":1,\"handleTime\":1000000,\"humanAgentResponseDelay\":1000000,\"humanAgents\":[\"humanAgents\",\"humanAgents\"],\"humanAgentsWithInserts\":[\"humanAgentsWithInserts\",\"humanAgentsWithInserts\"],\"users\":[\"users\",\"users\"],\"userIdentifiers\":[\"userIdentifiers\",\"userIdentifiers\"],\"lastUserMessage\":\"lastUserMessage\",\"lastBotMessage\":\"lastBotMessage\"},\"deleted\":true,\"open\":true,\"llmEnabled\":true,\"simulationContext\":{\"additionalPromptText\":\"additionalPromptText\",\"persona\":\"CASUAL_BUDDY\",\"availableKnowledgeBases\":[{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}]}}"));
         ConversationResponse response = client.conversation().initialize(
             ConversationRequest
                 .builder()
                 .conversationId(
                     EntityIdBase
                         .builder()
-                        .referenceId("referenceId")
+                        .referenceId("x")
                         .build()
                 )
                 .messages(
@@ -79,13 +79,13 @@ public class ConversationWireTest {
                             .conversationMessageId(
                                 EntityIdBase
                                     .builder()
-                                    .referenceId("referenceId")
+                                    .referenceId("x")
                                     .build()
                             )
                             .userId(
                                 EntityIdBase
                                     .builder()
-                                    .referenceId("referenceId")
+                                    .referenceId("x")
                                     .build()
                             )
                             .text("text")
@@ -96,13 +96,13 @@ public class ConversationWireTest {
                             .conversationMessageId(
                                 EntityIdBase
                                     .builder()
-                                    .referenceId("referenceId")
+                                    .referenceId("x")
                                     .build()
                             )
                             .userId(
                                 EntityIdBase
                                     .builder()
-                                    .referenceId("referenceId")
+                                    .referenceId("x")
                                     .build()
                             )
                             .text("text")
@@ -120,25 +120,25 @@ public class ConversationWireTest {
         String expectedRequestBody = ""
             + "{\n"
             + "  \"conversationId\": {\n"
-            + "    \"referenceId\": \"referenceId\"\n"
+            + "    \"referenceId\": \"x\"\n"
             + "  },\n"
             + "  \"messages\": [\n"
             + "    {\n"
             + "      \"conversationMessageId\": {\n"
-            + "        \"referenceId\": \"referenceId\"\n"
+            + "        \"referenceId\": \"x\"\n"
             + "      },\n"
             + "      \"userId\": {\n"
-            + "        \"referenceId\": \"referenceId\"\n"
+            + "        \"referenceId\": \"x\"\n"
             + "      },\n"
             + "      \"text\": \"text\",\n"
             + "      \"userMessageType\": \"USER\"\n"
             + "    },\n"
             + "    {\n"
             + "      \"conversationMessageId\": {\n"
-            + "        \"referenceId\": \"referenceId\"\n"
+            + "        \"referenceId\": \"x\"\n"
             + "      },\n"
             + "      \"userId\": {\n"
-            + "        \"referenceId\": \"referenceId\"\n"
+            + "        \"referenceId\": \"x\"\n"
             + "      },\n"
             + "      \"text\": \"text\",\n"
             + "      \"userMessageType\": \"USER\"\n"
@@ -181,7 +181,7 @@ public class ConversationWireTest {
             + "        \"agentId\": \"agentId\",\n"
             + "        \"type\": \"AGENT\",\n"
             + "        \"appId\": \"appId\",\n"
-            + "        \"referenceId\": \"referenceId\"\n"
+            + "        \"referenceId\": \"x\"\n"
             + "      },\n"
             + "      \"language\": \"language\",\n"
             + "      \"attachments\": [\n"
@@ -205,7 +205,7 @@ public class ConversationWireTest {
             + "      \"status\": \"SENDING\",\n"
             + "      \"responseState\": \"NOT_ASKED\",\n"
             + "      \"userId\": {\n"
-            + "        \"referenceId\": \"referenceId\"\n"
+            + "        \"referenceId\": \"x\"\n"
             + "      },\n"
             + "      \"text\": \"text\",\n"
             + "      \"userMessageType\": \"USER\",\n"
@@ -219,7 +219,7 @@ public class ConversationWireTest {
             + "        \"agentId\": \"agentId\",\n"
             + "        \"type\": \"AGENT\",\n"
             + "        \"appId\": \"appId\",\n"
-            + "        \"referenceId\": \"referenceId\"\n"
+            + "        \"referenceId\": \"x\"\n"
             + "      },\n"
             + "      \"language\": \"language\",\n"
             + "      \"attachments\": [\n"
@@ -243,7 +243,7 @@ public class ConversationWireTest {
             + "      \"status\": \"SENDING\",\n"
             + "      \"responseState\": \"NOT_ASKED\",\n"
             + "      \"userId\": {\n"
-            + "        \"referenceId\": \"referenceId\"\n"
+            + "        \"referenceId\": \"x\"\n"
             + "      },\n"
             + "      \"text\": \"text\",\n"
             + "      \"userMessageType\": \"USER\",\n"
@@ -295,7 +295,7 @@ public class ConversationWireTest {
             + "    \"agentId\": \"agentId\",\n"
             + "    \"type\": \"AGENT\",\n"
             + "    \"appId\": \"appId\",\n"
-            + "    \"referenceId\": \"referenceId\"\n"
+            + "    \"referenceId\": \"x\"\n"
             + "  },\n"
             + "  \"analysis\": {\n"
             + "    \"userRequest\": \"userRequest\",\n"
@@ -314,24 +314,24 @@ public class ConversationWireTest {
             + "      {\n"
             + "        \"type\": \"AGENT\",\n"
             + "        \"appId\": \"appId\",\n"
-            + "        \"referenceId\": \"referenceId\"\n"
+            + "        \"referenceId\": \"x\"\n"
             + "      },\n"
             + "      {\n"
             + "        \"type\": \"AGENT\",\n"
             + "        \"appId\": \"appId\",\n"
-            + "        \"referenceId\": \"referenceId\"\n"
+            + "        \"referenceId\": \"x\"\n"
             + "      }\n"
             + "    ],\n"
             + "    \"incompleteActionIds\": [\n"
             + "      {\n"
             + "        \"type\": \"AGENT\",\n"
             + "        \"appId\": \"appId\",\n"
-            + "        \"referenceId\": \"referenceId\"\n"
+            + "        \"referenceId\": \"x\"\n"
             + "      },\n"
             + "      {\n"
             + "        \"type\": \"AGENT\",\n"
             + "        \"appId\": \"appId\",\n"
-            + "        \"referenceId\": \"referenceId\"\n"
+            + "        \"referenceId\": \"x\"\n"
             + "      }\n"
             + "    ],\n"
             + "    \"insertCount\": 1,\n"
@@ -372,7 +372,7 @@ public class ConversationWireTest {
             + "        \"agentId\": \"agentId\",\n"
             + "        \"type\": \"AGENT\",\n"
             + "        \"appId\": \"appId\",\n"
-            + "        \"referenceId\": \"referenceId\"\n"
+            + "        \"referenceId\": \"x\"\n"
             + "      }\n"
             + "    ]\n"
             + "  }\n"
@@ -558,7 +558,7 @@ public class ConversationWireTest {
     public void testGet() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"messages\":[{\"type\":\"user\",\"conversationMessageId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"language\":\"language\",\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"agentUserId\":\"agentUserId\",\"userDisplayName\":\"userDisplayName\",\"status\":\"SENDING\",\"responseState\":\"NOT_ASKED\",\"userId\":{\"referenceId\":\"referenceId\"},\"text\":\"text\",\"userMessageType\":\"USER\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\"},{\"type\":\"user\",\"conversationMessageId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"language\":\"language\",\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"agentUserId\":\"agentUserId\",\"userDisplayName\":\"userDisplayName\",\"status\":\"SENDING\",\"responseState\":\"NOT_ASKED\",\"userId\":{\"referenceId\":\"referenceId\"},\"text\":\"text\",\"userMessageType\":\"USER\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\"}],\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"responseConfig\":{\"capabilities\":[\"MARKDOWN\",\"MARKDOWN\"],\"isCopilot\":true,\"responseLength\":\"SHORT\"},\"subject\":\"subject\",\"url\":\"url\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"tags\":[\"tags\"],\"metadata\":{\"metadata\":\"metadata\"},\"allMetadata\":{\"allMetadata\":{\"allMetadata\":\"allMetadata\"}},\"conversationId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"analysis\":{\"userRequest\":\"userRequest\",\"agentResponse\":\"agentResponse\",\"resolutionStatus\":\"resolutionStatus\",\"category\":\"category\",\"sentiment\":\"POSITIVE\",\"quality\":\"GOOD\",\"qualityReason\":\"MISSING_KNOWLEDGE\",\"resolvedByMaven\":true,\"primaryLanguage\":\"primaryLanguage\",\"predictedNps\":1.1},\"summary\":{\"actionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"}],\"incompleteActionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"}],\"insertCount\":1,\"thumbsUpCount\":1,\"thumbsDownCount\":1,\"handoffCount\":1,\"userMessageCount\":1,\"handleTime\":1000000,\"humanAgentResponseDelay\":1000000,\"humanAgents\":[\"humanAgents\",\"humanAgents\"],\"humanAgentsWithInserts\":[\"humanAgentsWithInserts\",\"humanAgentsWithInserts\"],\"users\":[\"users\",\"users\"],\"userIdentifiers\":[\"userIdentifiers\",\"userIdentifiers\"],\"lastUserMessage\":\"lastUserMessage\",\"lastBotMessage\":\"lastBotMessage\"},\"deleted\":true,\"open\":true,\"llmEnabled\":true,\"simulationContext\":{\"additionalPromptText\":\"additionalPromptText\",\"persona\":\"CASUAL_BUDDY\",\"availableKnowledgeBases\":[{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"}]}}"));
+            .setBody("{\"messages\":[{\"type\":\"user\",\"conversationMessageId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"language\":\"language\",\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"agentUserId\":\"agentUserId\",\"userDisplayName\":\"userDisplayName\",\"status\":\"SENDING\",\"responseState\":\"NOT_ASKED\",\"userId\":{\"referenceId\":\"x\"},\"text\":\"text\",\"userMessageType\":\"USER\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\"},{\"type\":\"user\",\"conversationMessageId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"language\":\"language\",\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"agentUserId\":\"agentUserId\",\"userDisplayName\":\"userDisplayName\",\"status\":\"SENDING\",\"responseState\":\"NOT_ASKED\",\"userId\":{\"referenceId\":\"x\"},\"text\":\"text\",\"userMessageType\":\"USER\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\"}],\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"responseConfig\":{\"capabilities\":[\"MARKDOWN\",\"MARKDOWN\"],\"isCopilot\":true,\"responseLength\":\"SHORT\"},\"subject\":\"subject\",\"url\":\"url\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"tags\":[\"tags\"],\"metadata\":{\"metadata\":\"metadata\"},\"allMetadata\":{\"allMetadata\":{\"allMetadata\":\"allMetadata\"}},\"conversationId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"analysis\":{\"userRequest\":\"userRequest\",\"agentResponse\":\"agentResponse\",\"resolutionStatus\":\"resolutionStatus\",\"category\":\"category\",\"sentiment\":\"POSITIVE\",\"quality\":\"GOOD\",\"qualityReason\":\"MISSING_KNOWLEDGE\",\"resolvedByMaven\":true,\"primaryLanguage\":\"primaryLanguage\",\"predictedNps\":1.1},\"summary\":{\"actionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"incompleteActionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"insertCount\":1,\"thumbsUpCount\":1,\"thumbsDownCount\":1,\"handoffCount\":1,\"userMessageCount\":1,\"handleTime\":1000000,\"humanAgentResponseDelay\":1000000,\"humanAgents\":[\"humanAgents\",\"humanAgents\"],\"humanAgentsWithInserts\":[\"humanAgentsWithInserts\",\"humanAgentsWithInserts\"],\"users\":[\"users\",\"users\"],\"userIdentifiers\":[\"userIdentifiers\",\"userIdentifiers\"],\"lastUserMessage\":\"lastUserMessage\",\"lastBotMessage\":\"lastBotMessage\"},\"deleted\":true,\"open\":true,\"llmEnabled\":true,\"simulationContext\":{\"additionalPromptText\":\"additionalPromptText\",\"persona\":\"CASUAL_BUDDY\",\"availableKnowledgeBases\":[{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}]}}"));
         ConversationResponse response = client.conversation().get(
             "conversationId",
             ConversationGetRequest
@@ -582,7 +582,7 @@ public class ConversationWireTest {
             + "        \"agentId\": \"agentId\",\n"
             + "        \"type\": \"AGENT\",\n"
             + "        \"appId\": \"appId\",\n"
-            + "        \"referenceId\": \"referenceId\"\n"
+            + "        \"referenceId\": \"x\"\n"
             + "      },\n"
             + "      \"language\": \"language\",\n"
             + "      \"attachments\": [\n"
@@ -606,7 +606,7 @@ public class ConversationWireTest {
             + "      \"status\": \"SENDING\",\n"
             + "      \"responseState\": \"NOT_ASKED\",\n"
             + "      \"userId\": {\n"
-            + "        \"referenceId\": \"referenceId\"\n"
+            + "        \"referenceId\": \"x\"\n"
             + "      },\n"
             + "      \"text\": \"text\",\n"
             + "      \"userMessageType\": \"USER\",\n"
@@ -620,7 +620,7 @@ public class ConversationWireTest {
             + "        \"agentId\": \"agentId\",\n"
             + "        \"type\": \"AGENT\",\n"
             + "        \"appId\": \"appId\",\n"
-            + "        \"referenceId\": \"referenceId\"\n"
+            + "        \"referenceId\": \"x\"\n"
             + "      },\n"
             + "      \"language\": \"language\",\n"
             + "      \"attachments\": [\n"
@@ -644,7 +644,7 @@ public class ConversationWireTest {
             + "      \"status\": \"SENDING\",\n"
             + "      \"responseState\": \"NOT_ASKED\",\n"
             + "      \"userId\": {\n"
-            + "        \"referenceId\": \"referenceId\"\n"
+            + "        \"referenceId\": \"x\"\n"
             + "      },\n"
             + "      \"text\": \"text\",\n"
             + "      \"userMessageType\": \"USER\",\n"
@@ -696,7 +696,7 @@ public class ConversationWireTest {
             + "    \"agentId\": \"agentId\",\n"
             + "    \"type\": \"AGENT\",\n"
             + "    \"appId\": \"appId\",\n"
-            + "    \"referenceId\": \"referenceId\"\n"
+            + "    \"referenceId\": \"x\"\n"
             + "  },\n"
             + "  \"analysis\": {\n"
             + "    \"userRequest\": \"userRequest\",\n"
@@ -715,24 +715,24 @@ public class ConversationWireTest {
             + "      {\n"
             + "        \"type\": \"AGENT\",\n"
             + "        \"appId\": \"appId\",\n"
-            + "        \"referenceId\": \"referenceId\"\n"
+            + "        \"referenceId\": \"x\"\n"
             + "      },\n"
             + "      {\n"
             + "        \"type\": \"AGENT\",\n"
             + "        \"appId\": \"appId\",\n"
-            + "        \"referenceId\": \"referenceId\"\n"
+            + "        \"referenceId\": \"x\"\n"
             + "      }\n"
             + "    ],\n"
             + "    \"incompleteActionIds\": [\n"
             + "      {\n"
             + "        \"type\": \"AGENT\",\n"
             + "        \"appId\": \"appId\",\n"
-            + "        \"referenceId\": \"referenceId\"\n"
+            + "        \"referenceId\": \"x\"\n"
             + "      },\n"
             + "      {\n"
             + "        \"type\": \"AGENT\",\n"
             + "        \"appId\": \"appId\",\n"
-            + "        \"referenceId\": \"referenceId\"\n"
+            + "        \"referenceId\": \"x\"\n"
             + "      }\n"
             + "    ],\n"
             + "    \"insertCount\": 1,\n"
@@ -773,7 +773,7 @@ public class ConversationWireTest {
             + "        \"agentId\": \"agentId\",\n"
             + "        \"type\": \"AGENT\",\n"
             + "        \"appId\": \"appId\",\n"
-            + "        \"referenceId\": \"referenceId\"\n"
+            + "        \"referenceId\": \"x\"\n"
             + "      }\n"
             + "    ]\n"
             + "  }\n"
@@ -821,7 +821,7 @@ public class ConversationWireTest {
     public void testAppendNewMessages() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"messages\":[{\"type\":\"user\",\"conversationMessageId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"language\":\"language\",\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"agentUserId\":\"agentUserId\",\"userDisplayName\":\"userDisplayName\",\"status\":\"SENDING\",\"responseState\":\"NOT_ASKED\",\"userId\":{\"referenceId\":\"referenceId\"},\"text\":\"text\",\"userMessageType\":\"USER\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\"},{\"type\":\"user\",\"conversationMessageId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"language\":\"language\",\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"agentUserId\":\"agentUserId\",\"userDisplayName\":\"userDisplayName\",\"status\":\"SENDING\",\"responseState\":\"NOT_ASKED\",\"userId\":{\"referenceId\":\"referenceId\"},\"text\":\"text\",\"userMessageType\":\"USER\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\"}],\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"responseConfig\":{\"capabilities\":[\"MARKDOWN\",\"MARKDOWN\"],\"isCopilot\":true,\"responseLength\":\"SHORT\"},\"subject\":\"subject\",\"url\":\"url\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"tags\":[\"tags\"],\"metadata\":{\"metadata\":\"metadata\"},\"allMetadata\":{\"allMetadata\":{\"allMetadata\":\"allMetadata\"}},\"conversationId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"analysis\":{\"userRequest\":\"userRequest\",\"agentResponse\":\"agentResponse\",\"resolutionStatus\":\"resolutionStatus\",\"category\":\"category\",\"sentiment\":\"POSITIVE\",\"quality\":\"GOOD\",\"qualityReason\":\"MISSING_KNOWLEDGE\",\"resolvedByMaven\":true,\"primaryLanguage\":\"primaryLanguage\",\"predictedNps\":1.1},\"summary\":{\"actionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"}],\"incompleteActionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"}],\"insertCount\":1,\"thumbsUpCount\":1,\"thumbsDownCount\":1,\"handoffCount\":1,\"userMessageCount\":1,\"handleTime\":1000000,\"humanAgentResponseDelay\":1000000,\"humanAgents\":[\"humanAgents\",\"humanAgents\"],\"humanAgentsWithInserts\":[\"humanAgentsWithInserts\",\"humanAgentsWithInserts\"],\"users\":[\"users\",\"users\"],\"userIdentifiers\":[\"userIdentifiers\",\"userIdentifiers\"],\"lastUserMessage\":\"lastUserMessage\",\"lastBotMessage\":\"lastBotMessage\"},\"deleted\":true,\"open\":true,\"llmEnabled\":true,\"simulationContext\":{\"additionalPromptText\":\"additionalPromptText\",\"persona\":\"CASUAL_BUDDY\",\"availableKnowledgeBases\":[{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"}]}}"));
+            .setBody("{\"messages\":[{\"type\":\"user\",\"conversationMessageId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"language\":\"language\",\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"agentUserId\":\"agentUserId\",\"userDisplayName\":\"userDisplayName\",\"status\":\"SENDING\",\"responseState\":\"NOT_ASKED\",\"userId\":{\"referenceId\":\"x\"},\"text\":\"text\",\"userMessageType\":\"USER\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\"},{\"type\":\"user\",\"conversationMessageId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"language\":\"language\",\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"agentUserId\":\"agentUserId\",\"userDisplayName\":\"userDisplayName\",\"status\":\"SENDING\",\"responseState\":\"NOT_ASKED\",\"userId\":{\"referenceId\":\"x\"},\"text\":\"text\",\"userMessageType\":\"USER\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\"}],\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"responseConfig\":{\"capabilities\":[\"MARKDOWN\",\"MARKDOWN\"],\"isCopilot\":true,\"responseLength\":\"SHORT\"},\"subject\":\"subject\",\"url\":\"url\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"tags\":[\"tags\"],\"metadata\":{\"metadata\":\"metadata\"},\"allMetadata\":{\"allMetadata\":{\"allMetadata\":\"allMetadata\"}},\"conversationId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"analysis\":{\"userRequest\":\"userRequest\",\"agentResponse\":\"agentResponse\",\"resolutionStatus\":\"resolutionStatus\",\"category\":\"category\",\"sentiment\":\"POSITIVE\",\"quality\":\"GOOD\",\"qualityReason\":\"MISSING_KNOWLEDGE\",\"resolvedByMaven\":true,\"primaryLanguage\":\"primaryLanguage\",\"predictedNps\":1.1},\"summary\":{\"actionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"incompleteActionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"insertCount\":1,\"thumbsUpCount\":1,\"thumbsDownCount\":1,\"handoffCount\":1,\"userMessageCount\":1,\"handleTime\":1000000,\"humanAgentResponseDelay\":1000000,\"humanAgents\":[\"humanAgents\",\"humanAgents\"],\"humanAgentsWithInserts\":[\"humanAgentsWithInserts\",\"humanAgentsWithInserts\"],\"users\":[\"users\",\"users\"],\"userIdentifiers\":[\"userIdentifiers\",\"userIdentifiers\"],\"lastUserMessage\":\"lastUserMessage\",\"lastBotMessage\":\"lastBotMessage\"},\"deleted\":true,\"open\":true,\"llmEnabled\":true,\"simulationContext\":{\"additionalPromptText\":\"additionalPromptText\",\"persona\":\"CASUAL_BUDDY\",\"availableKnowledgeBases\":[{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}]}}"));
         ConversationResponse response = client.conversation().appendNewMessages(
             "conversationId",
             Arrays.asList(
@@ -830,13 +830,13 @@ public class ConversationWireTest {
                     .conversationMessageId(
                         EntityIdBase
                             .builder()
-                            .referenceId("referenceId")
+                            .referenceId("x")
                             .build()
                     )
                     .userId(
                         EntityIdBase
                             .builder()
-                            .referenceId("referenceId")
+                            .referenceId("x")
                             .build()
                     )
                     .text("text")
@@ -847,13 +847,13 @@ public class ConversationWireTest {
                     .conversationMessageId(
                         EntityIdBase
                             .builder()
-                            .referenceId("referenceId")
+                            .referenceId("x")
                             .build()
                     )
                     .userId(
                         EntityIdBase
                             .builder()
-                            .referenceId("referenceId")
+                            .referenceId("x")
                             .build()
                     )
                     .text("text")
@@ -870,20 +870,20 @@ public class ConversationWireTest {
             + "[\n"
             + "  {\n"
             + "    \"conversationMessageId\": {\n"
-            + "      \"referenceId\": \"referenceId\"\n"
+            + "      \"referenceId\": \"x\"\n"
             + "    },\n"
             + "    \"userId\": {\n"
-            + "      \"referenceId\": \"referenceId\"\n"
+            + "      \"referenceId\": \"x\"\n"
             + "    },\n"
             + "    \"text\": \"text\",\n"
             + "    \"userMessageType\": \"USER\"\n"
             + "  },\n"
             + "  {\n"
             + "    \"conversationMessageId\": {\n"
-            + "      \"referenceId\": \"referenceId\"\n"
+            + "      \"referenceId\": \"x\"\n"
             + "    },\n"
             + "    \"userId\": {\n"
-            + "      \"referenceId\": \"referenceId\"\n"
+            + "      \"referenceId\": \"x\"\n"
             + "    },\n"
             + "    \"text\": \"text\",\n"
             + "    \"userMessageType\": \"USER\"\n"
@@ -925,7 +925,7 @@ public class ConversationWireTest {
             + "        \"agentId\": \"agentId\",\n"
             + "        \"type\": \"AGENT\",\n"
             + "        \"appId\": \"appId\",\n"
-            + "        \"referenceId\": \"referenceId\"\n"
+            + "        \"referenceId\": \"x\"\n"
             + "      },\n"
             + "      \"language\": \"language\",\n"
             + "      \"attachments\": [\n"
@@ -949,7 +949,7 @@ public class ConversationWireTest {
             + "      \"status\": \"SENDING\",\n"
             + "      \"responseState\": \"NOT_ASKED\",\n"
             + "      \"userId\": {\n"
-            + "        \"referenceId\": \"referenceId\"\n"
+            + "        \"referenceId\": \"x\"\n"
             + "      },\n"
             + "      \"text\": \"text\",\n"
             + "      \"userMessageType\": \"USER\",\n"
@@ -963,7 +963,7 @@ public class ConversationWireTest {
             + "        \"agentId\": \"agentId\",\n"
             + "        \"type\": \"AGENT\",\n"
             + "        \"appId\": \"appId\",\n"
-            + "        \"referenceId\": \"referenceId\"\n"
+            + "        \"referenceId\": \"x\"\n"
             + "      },\n"
             + "      \"language\": \"language\",\n"
             + "      \"attachments\": [\n"
@@ -987,7 +987,7 @@ public class ConversationWireTest {
             + "      \"status\": \"SENDING\",\n"
             + "      \"responseState\": \"NOT_ASKED\",\n"
             + "      \"userId\": {\n"
-            + "        \"referenceId\": \"referenceId\"\n"
+            + "        \"referenceId\": \"x\"\n"
             + "      },\n"
             + "      \"text\": \"text\",\n"
             + "      \"userMessageType\": \"USER\",\n"
@@ -1039,7 +1039,7 @@ public class ConversationWireTest {
             + "    \"agentId\": \"agentId\",\n"
             + "    \"type\": \"AGENT\",\n"
             + "    \"appId\": \"appId\",\n"
-            + "    \"referenceId\": \"referenceId\"\n"
+            + "    \"referenceId\": \"x\"\n"
             + "  },\n"
             + "  \"analysis\": {\n"
             + "    \"userRequest\": \"userRequest\",\n"
@@ -1058,24 +1058,24 @@ public class ConversationWireTest {
             + "      {\n"
             + "        \"type\": \"AGENT\",\n"
             + "        \"appId\": \"appId\",\n"
-            + "        \"referenceId\": \"referenceId\"\n"
+            + "        \"referenceId\": \"x\"\n"
             + "      },\n"
             + "      {\n"
             + "        \"type\": \"AGENT\",\n"
             + "        \"appId\": \"appId\",\n"
-            + "        \"referenceId\": \"referenceId\"\n"
+            + "        \"referenceId\": \"x\"\n"
             + "      }\n"
             + "    ],\n"
             + "    \"incompleteActionIds\": [\n"
             + "      {\n"
             + "        \"type\": \"AGENT\",\n"
             + "        \"appId\": \"appId\",\n"
-            + "        \"referenceId\": \"referenceId\"\n"
+            + "        \"referenceId\": \"x\"\n"
             + "      },\n"
             + "      {\n"
             + "        \"type\": \"AGENT\",\n"
             + "        \"appId\": \"appId\",\n"
-            + "        \"referenceId\": \"referenceId\"\n"
+            + "        \"referenceId\": \"x\"\n"
             + "      }\n"
             + "    ],\n"
             + "    \"insertCount\": 1,\n"
@@ -1116,7 +1116,7 @@ public class ConversationWireTest {
             + "        \"agentId\": \"agentId\",\n"
             + "        \"type\": \"AGENT\",\n"
             + "        \"appId\": \"appId\",\n"
-            + "        \"referenceId\": \"referenceId\"\n"
+            + "        \"referenceId\": \"x\"\n"
             + "      }\n"
             + "    ]\n"
             + "  }\n"
@@ -1529,7 +1529,7 @@ public class ConversationWireTest {
     public void testSubmitActionForm() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"messages\":[{\"type\":\"user\",\"conversationMessageId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"language\":\"language\",\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"agentUserId\":\"agentUserId\",\"userDisplayName\":\"userDisplayName\",\"status\":\"SENDING\",\"responseState\":\"NOT_ASKED\",\"userId\":{\"referenceId\":\"referenceId\"},\"text\":\"text\",\"userMessageType\":\"USER\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\"},{\"type\":\"user\",\"conversationMessageId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"language\":\"language\",\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"agentUserId\":\"agentUserId\",\"userDisplayName\":\"userDisplayName\",\"status\":\"SENDING\",\"responseState\":\"NOT_ASKED\",\"userId\":{\"referenceId\":\"referenceId\"},\"text\":\"text\",\"userMessageType\":\"USER\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\"}],\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"responseConfig\":{\"capabilities\":[\"MARKDOWN\",\"MARKDOWN\"],\"isCopilot\":true,\"responseLength\":\"SHORT\"},\"subject\":\"subject\",\"url\":\"url\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"tags\":[\"tags\"],\"metadata\":{\"metadata\":\"metadata\"},\"allMetadata\":{\"allMetadata\":{\"allMetadata\":\"allMetadata\"}},\"conversationId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"analysis\":{\"userRequest\":\"userRequest\",\"agentResponse\":\"agentResponse\",\"resolutionStatus\":\"resolutionStatus\",\"category\":\"category\",\"sentiment\":\"POSITIVE\",\"quality\":\"GOOD\",\"qualityReason\":\"MISSING_KNOWLEDGE\",\"resolvedByMaven\":true,\"primaryLanguage\":\"primaryLanguage\",\"predictedNps\":1.1},\"summary\":{\"actionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"}],\"incompleteActionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"}],\"insertCount\":1,\"thumbsUpCount\":1,\"thumbsDownCount\":1,\"handoffCount\":1,\"userMessageCount\":1,\"handleTime\":1000000,\"humanAgentResponseDelay\":1000000,\"humanAgents\":[\"humanAgents\",\"humanAgents\"],\"humanAgentsWithInserts\":[\"humanAgentsWithInserts\",\"humanAgentsWithInserts\"],\"users\":[\"users\",\"users\"],\"userIdentifiers\":[\"userIdentifiers\",\"userIdentifiers\"],\"lastUserMessage\":\"lastUserMessage\",\"lastBotMessage\":\"lastBotMessage\"},\"deleted\":true,\"open\":true,\"llmEnabled\":true,\"simulationContext\":{\"additionalPromptText\":\"additionalPromptText\",\"persona\":\"CASUAL_BUDDY\",\"availableKnowledgeBases\":[{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"}]}}"));
+            .setBody("{\"messages\":[{\"type\":\"user\",\"conversationMessageId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"language\":\"language\",\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"agentUserId\":\"agentUserId\",\"userDisplayName\":\"userDisplayName\",\"status\":\"SENDING\",\"responseState\":\"NOT_ASKED\",\"userId\":{\"referenceId\":\"x\"},\"text\":\"text\",\"userMessageType\":\"USER\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\"},{\"type\":\"user\",\"conversationMessageId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"language\":\"language\",\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"agentUserId\":\"agentUserId\",\"userDisplayName\":\"userDisplayName\",\"status\":\"SENDING\",\"responseState\":\"NOT_ASKED\",\"userId\":{\"referenceId\":\"x\"},\"text\":\"text\",\"userMessageType\":\"USER\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\"}],\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"responseConfig\":{\"capabilities\":[\"MARKDOWN\",\"MARKDOWN\"],\"isCopilot\":true,\"responseLength\":\"SHORT\"},\"subject\":\"subject\",\"url\":\"url\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"tags\":[\"tags\"],\"metadata\":{\"metadata\":\"metadata\"},\"allMetadata\":{\"allMetadata\":{\"allMetadata\":\"allMetadata\"}},\"conversationId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"analysis\":{\"userRequest\":\"userRequest\",\"agentResponse\":\"agentResponse\",\"resolutionStatus\":\"resolutionStatus\",\"category\":\"category\",\"sentiment\":\"POSITIVE\",\"quality\":\"GOOD\",\"qualityReason\":\"MISSING_KNOWLEDGE\",\"resolvedByMaven\":true,\"primaryLanguage\":\"primaryLanguage\",\"predictedNps\":1.1},\"summary\":{\"actionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"incompleteActionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"insertCount\":1,\"thumbsUpCount\":1,\"thumbsDownCount\":1,\"handoffCount\":1,\"userMessageCount\":1,\"handleTime\":1000000,\"humanAgentResponseDelay\":1000000,\"humanAgents\":[\"humanAgents\",\"humanAgents\"],\"humanAgentsWithInserts\":[\"humanAgentsWithInserts\",\"humanAgentsWithInserts\"],\"users\":[\"users\",\"users\"],\"userIdentifiers\":[\"userIdentifiers\",\"userIdentifiers\"],\"lastUserMessage\":\"lastUserMessage\",\"lastBotMessage\":\"lastBotMessage\"},\"deleted\":true,\"open\":true,\"llmEnabled\":true,\"simulationContext\":{\"additionalPromptText\":\"additionalPromptText\",\"persona\":\"CASUAL_BUDDY\",\"availableKnowledgeBases\":[{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}]}}"));
         ConversationResponse response = client.conversation().submitActionForm(
             "conversationId",
             SubmitActionFormRequest
@@ -1594,7 +1594,7 @@ public class ConversationWireTest {
             + "        \"agentId\": \"agentId\",\n"
             + "        \"type\": \"AGENT\",\n"
             + "        \"appId\": \"appId\",\n"
-            + "        \"referenceId\": \"referenceId\"\n"
+            + "        \"referenceId\": \"x\"\n"
             + "      },\n"
             + "      \"language\": \"language\",\n"
             + "      \"attachments\": [\n"
@@ -1618,7 +1618,7 @@ public class ConversationWireTest {
             + "      \"status\": \"SENDING\",\n"
             + "      \"responseState\": \"NOT_ASKED\",\n"
             + "      \"userId\": {\n"
-            + "        \"referenceId\": \"referenceId\"\n"
+            + "        \"referenceId\": \"x\"\n"
             + "      },\n"
             + "      \"text\": \"text\",\n"
             + "      \"userMessageType\": \"USER\",\n"
@@ -1632,7 +1632,7 @@ public class ConversationWireTest {
             + "        \"agentId\": \"agentId\",\n"
             + "        \"type\": \"AGENT\",\n"
             + "        \"appId\": \"appId\",\n"
-            + "        \"referenceId\": \"referenceId\"\n"
+            + "        \"referenceId\": \"x\"\n"
             + "      },\n"
             + "      \"language\": \"language\",\n"
             + "      \"attachments\": [\n"
@@ -1656,7 +1656,7 @@ public class ConversationWireTest {
             + "      \"status\": \"SENDING\",\n"
             + "      \"responseState\": \"NOT_ASKED\",\n"
             + "      \"userId\": {\n"
-            + "        \"referenceId\": \"referenceId\"\n"
+            + "        \"referenceId\": \"x\"\n"
             + "      },\n"
             + "      \"text\": \"text\",\n"
             + "      \"userMessageType\": \"USER\",\n"
@@ -1708,7 +1708,7 @@ public class ConversationWireTest {
             + "    \"agentId\": \"agentId\",\n"
             + "    \"type\": \"AGENT\",\n"
             + "    \"appId\": \"appId\",\n"
-            + "    \"referenceId\": \"referenceId\"\n"
+            + "    \"referenceId\": \"x\"\n"
             + "  },\n"
             + "  \"analysis\": {\n"
             + "    \"userRequest\": \"userRequest\",\n"
@@ -1727,24 +1727,24 @@ public class ConversationWireTest {
             + "      {\n"
             + "        \"type\": \"AGENT\",\n"
             + "        \"appId\": \"appId\",\n"
-            + "        \"referenceId\": \"referenceId\"\n"
+            + "        \"referenceId\": \"x\"\n"
             + "      },\n"
             + "      {\n"
             + "        \"type\": \"AGENT\",\n"
             + "        \"appId\": \"appId\",\n"
-            + "        \"referenceId\": \"referenceId\"\n"
+            + "        \"referenceId\": \"x\"\n"
             + "      }\n"
             + "    ],\n"
             + "    \"incompleteActionIds\": [\n"
             + "      {\n"
             + "        \"type\": \"AGENT\",\n"
             + "        \"appId\": \"appId\",\n"
-            + "        \"referenceId\": \"referenceId\"\n"
+            + "        \"referenceId\": \"x\"\n"
             + "      },\n"
             + "      {\n"
             + "        \"type\": \"AGENT\",\n"
             + "        \"appId\": \"appId\",\n"
-            + "        \"referenceId\": \"referenceId\"\n"
+            + "        \"referenceId\": \"x\"\n"
             + "      }\n"
             + "    ],\n"
             + "    \"insertCount\": 1,\n"
@@ -1785,7 +1785,7 @@ public class ConversationWireTest {
             + "        \"agentId\": \"agentId\",\n"
             + "        \"type\": \"AGENT\",\n"
             + "        \"appId\": \"appId\",\n"
-            + "        \"referenceId\": \"referenceId\"\n"
+            + "        \"referenceId\": \"x\"\n"
             + "      }\n"
             + "    ]\n"
             + "  }\n"
@@ -1979,7 +1979,7 @@ public class ConversationWireTest {
     public void testSearch() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"conversations\":[{\"responseConfig\":{\"capabilities\":[\"MARKDOWN\",\"MARKDOWN\"],\"isCopilot\":true,\"responseLength\":\"SHORT\"},\"subject\":\"subject\",\"url\":\"url\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"tags\":[\"tags\"],\"metadata\":{\"metadata\":\"metadata\"},\"allMetadata\":{\"allMetadata\":{\"allMetadata\":\"allMetadata\"}},\"conversationId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"analysis\":{\"userRequest\":\"userRequest\",\"agentResponse\":\"agentResponse\",\"resolutionStatus\":\"resolutionStatus\",\"category\":\"category\",\"sentiment\":\"POSITIVE\",\"quality\":\"GOOD\",\"qualityReason\":\"MISSING_KNOWLEDGE\",\"resolvedByMaven\":true,\"primaryLanguage\":\"primaryLanguage\",\"predictedNps\":1.1},\"summary\":{\"actionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"}],\"incompleteActionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"}],\"insertCount\":1,\"thumbsUpCount\":1,\"thumbsDownCount\":1,\"handoffCount\":1,\"userMessageCount\":1,\"handleTime\":1000000,\"humanAgentResponseDelay\":1000000,\"humanAgents\":[\"humanAgents\",\"humanAgents\"],\"humanAgentsWithInserts\":[\"humanAgentsWithInserts\",\"humanAgentsWithInserts\"],\"users\":[\"users\",\"users\"],\"userIdentifiers\":[\"userIdentifiers\",\"userIdentifiers\"],\"lastUserMessage\":\"lastUserMessage\",\"lastBotMessage\":\"lastBotMessage\"},\"deleted\":true,\"open\":true,\"llmEnabled\":true,\"simulationContext\":{\"additionalPromptText\":\"additionalPromptText\",\"persona\":\"CASUAL_BUDDY\",\"availableKnowledgeBases\":[{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"}]}},{\"responseConfig\":{\"capabilities\":[\"MARKDOWN\",\"MARKDOWN\"],\"isCopilot\":true,\"responseLength\":\"SHORT\"},\"subject\":\"subject\",\"url\":\"url\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"tags\":[\"tags\"],\"metadata\":{\"metadata\":\"metadata\"},\"allMetadata\":{\"allMetadata\":{\"allMetadata\":\"allMetadata\"}},\"conversationId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"analysis\":{\"userRequest\":\"userRequest\",\"agentResponse\":\"agentResponse\",\"resolutionStatus\":\"resolutionStatus\",\"category\":\"category\",\"sentiment\":\"POSITIVE\",\"quality\":\"GOOD\",\"qualityReason\":\"MISSING_KNOWLEDGE\",\"resolvedByMaven\":true,\"primaryLanguage\":\"primaryLanguage\",\"predictedNps\":1.1},\"summary\":{\"actionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"}],\"incompleteActionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"}],\"insertCount\":1,\"thumbsUpCount\":1,\"thumbsDownCount\":1,\"handoffCount\":1,\"userMessageCount\":1,\"handleTime\":1000000,\"humanAgentResponseDelay\":1000000,\"humanAgents\":[\"humanAgents\",\"humanAgents\"],\"humanAgentsWithInserts\":[\"humanAgentsWithInserts\",\"humanAgentsWithInserts\"],\"users\":[\"users\",\"users\"],\"userIdentifiers\":[\"userIdentifiers\",\"userIdentifiers\"],\"lastUserMessage\":\"lastUserMessage\",\"lastBotMessage\":\"lastBotMessage\"},\"deleted\":true,\"open\":true,\"llmEnabled\":true,\"simulationContext\":{\"additionalPromptText\":\"additionalPromptText\",\"persona\":\"CASUAL_BUDDY\",\"availableKnowledgeBases\":[{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"}]}}],\"number\":1,\"size\":1,\"totalElements\":1000000,\"totalPages\":1}"));
+            .setBody("{\"conversations\":[{\"responseConfig\":{\"capabilities\":[\"MARKDOWN\",\"MARKDOWN\"],\"isCopilot\":true,\"responseLength\":\"SHORT\"},\"subject\":\"subject\",\"url\":\"url\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"tags\":[\"tags\"],\"metadata\":{\"metadata\":\"metadata\"},\"allMetadata\":{\"allMetadata\":{\"allMetadata\":\"allMetadata\"}},\"conversationId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"analysis\":{\"userRequest\":\"userRequest\",\"agentResponse\":\"agentResponse\",\"resolutionStatus\":\"resolutionStatus\",\"category\":\"category\",\"sentiment\":\"POSITIVE\",\"quality\":\"GOOD\",\"qualityReason\":\"MISSING_KNOWLEDGE\",\"resolvedByMaven\":true,\"primaryLanguage\":\"primaryLanguage\",\"predictedNps\":1.1},\"summary\":{\"actionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"incompleteActionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"insertCount\":1,\"thumbsUpCount\":1,\"thumbsDownCount\":1,\"handoffCount\":1,\"userMessageCount\":1,\"handleTime\":1000000,\"humanAgentResponseDelay\":1000000,\"humanAgents\":[\"humanAgents\",\"humanAgents\"],\"humanAgentsWithInserts\":[\"humanAgentsWithInserts\",\"humanAgentsWithInserts\"],\"users\":[\"users\",\"users\"],\"userIdentifiers\":[\"userIdentifiers\",\"userIdentifiers\"],\"lastUserMessage\":\"lastUserMessage\",\"lastBotMessage\":\"lastBotMessage\"},\"deleted\":true,\"open\":true,\"llmEnabled\":true,\"simulationContext\":{\"additionalPromptText\":\"additionalPromptText\",\"persona\":\"CASUAL_BUDDY\",\"availableKnowledgeBases\":[{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}]}},{\"responseConfig\":{\"capabilities\":[\"MARKDOWN\",\"MARKDOWN\"],\"isCopilot\":true,\"responseLength\":\"SHORT\"},\"subject\":\"subject\",\"url\":\"url\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"tags\":[\"tags\"],\"metadata\":{\"metadata\":\"metadata\"},\"allMetadata\":{\"allMetadata\":{\"allMetadata\":\"allMetadata\"}},\"conversationId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"analysis\":{\"userRequest\":\"userRequest\",\"agentResponse\":\"agentResponse\",\"resolutionStatus\":\"resolutionStatus\",\"category\":\"category\",\"sentiment\":\"POSITIVE\",\"quality\":\"GOOD\",\"qualityReason\":\"MISSING_KNOWLEDGE\",\"resolvedByMaven\":true,\"primaryLanguage\":\"primaryLanguage\",\"predictedNps\":1.1},\"summary\":{\"actionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"incompleteActionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"insertCount\":1,\"thumbsUpCount\":1,\"thumbsDownCount\":1,\"handoffCount\":1,\"userMessageCount\":1,\"handleTime\":1000000,\"humanAgentResponseDelay\":1000000,\"humanAgents\":[\"humanAgents\",\"humanAgents\"],\"humanAgentsWithInserts\":[\"humanAgentsWithInserts\",\"humanAgentsWithInserts\"],\"users\":[\"users\",\"users\"],\"userIdentifiers\":[\"userIdentifiers\",\"userIdentifiers\"],\"lastUserMessage\":\"lastUserMessage\",\"lastBotMessage\":\"lastBotMessage\"},\"deleted\":true,\"open\":true,\"llmEnabled\":true,\"simulationContext\":{\"additionalPromptText\":\"additionalPromptText\",\"persona\":\"CASUAL_BUDDY\",\"availableKnowledgeBases\":[{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}]}}],\"number\":1,\"size\":1,\"totalElements\":1000000,\"totalPages\":1}"));
         ConversationsResponse response = client.conversation().search(
             ConversationsSearchRequest
                 .builder()
@@ -2050,7 +2050,7 @@ public class ConversationWireTest {
             + "        \"agentId\": \"agentId\",\n"
             + "        \"type\": \"AGENT\",\n"
             + "        \"appId\": \"appId\",\n"
-            + "        \"referenceId\": \"referenceId\"\n"
+            + "        \"referenceId\": \"x\"\n"
             + "      },\n"
             + "      \"analysis\": {\n"
             + "        \"userRequest\": \"userRequest\",\n"
@@ -2069,24 +2069,24 @@ public class ConversationWireTest {
             + "          {\n"
             + "            \"type\": \"AGENT\",\n"
             + "            \"appId\": \"appId\",\n"
-            + "            \"referenceId\": \"referenceId\"\n"
+            + "            \"referenceId\": \"x\"\n"
             + "          },\n"
             + "          {\n"
             + "            \"type\": \"AGENT\",\n"
             + "            \"appId\": \"appId\",\n"
-            + "            \"referenceId\": \"referenceId\"\n"
+            + "            \"referenceId\": \"x\"\n"
             + "          }\n"
             + "        ],\n"
             + "        \"incompleteActionIds\": [\n"
             + "          {\n"
             + "            \"type\": \"AGENT\",\n"
             + "            \"appId\": \"appId\",\n"
-            + "            \"referenceId\": \"referenceId\"\n"
+            + "            \"referenceId\": \"x\"\n"
             + "          },\n"
             + "          {\n"
             + "            \"type\": \"AGENT\",\n"
             + "            \"appId\": \"appId\",\n"
-            + "            \"referenceId\": \"referenceId\"\n"
+            + "            \"referenceId\": \"x\"\n"
             + "          }\n"
             + "        ],\n"
             + "        \"insertCount\": 1,\n"
@@ -2127,7 +2127,7 @@ public class ConversationWireTest {
             + "            \"agentId\": \"agentId\",\n"
             + "            \"type\": \"AGENT\",\n"
             + "            \"appId\": \"appId\",\n"
-            + "            \"referenceId\": \"referenceId\"\n"
+            + "            \"referenceId\": \"x\"\n"
             + "          }\n"
             + "        ]\n"
             + "      }\n"
@@ -2161,7 +2161,7 @@ public class ConversationWireTest {
             + "        \"agentId\": \"agentId\",\n"
             + "        \"type\": \"AGENT\",\n"
             + "        \"appId\": \"appId\",\n"
-            + "        \"referenceId\": \"referenceId\"\n"
+            + "        \"referenceId\": \"x\"\n"
             + "      },\n"
             + "      \"analysis\": {\n"
             + "        \"userRequest\": \"userRequest\",\n"
@@ -2180,24 +2180,24 @@ public class ConversationWireTest {
             + "          {\n"
             + "            \"type\": \"AGENT\",\n"
             + "            \"appId\": \"appId\",\n"
-            + "            \"referenceId\": \"referenceId\"\n"
+            + "            \"referenceId\": \"x\"\n"
             + "          },\n"
             + "          {\n"
             + "            \"type\": \"AGENT\",\n"
             + "            \"appId\": \"appId\",\n"
-            + "            \"referenceId\": \"referenceId\"\n"
+            + "            \"referenceId\": \"x\"\n"
             + "          }\n"
             + "        ],\n"
             + "        \"incompleteActionIds\": [\n"
             + "          {\n"
             + "            \"type\": \"AGENT\",\n"
             + "            \"appId\": \"appId\",\n"
-            + "            \"referenceId\": \"referenceId\"\n"
+            + "            \"referenceId\": \"x\"\n"
             + "          },\n"
             + "          {\n"
             + "            \"type\": \"AGENT\",\n"
             + "            \"appId\": \"appId\",\n"
-            + "            \"referenceId\": \"referenceId\"\n"
+            + "            \"referenceId\": \"x\"\n"
             + "          }\n"
             + "        ],\n"
             + "        \"insertCount\": 1,\n"
@@ -2238,7 +2238,7 @@ public class ConversationWireTest {
             + "            \"agentId\": \"agentId\",\n"
             + "            \"type\": \"AGENT\",\n"
             + "            \"appId\": \"appId\",\n"
-            + "            \"referenceId\": \"referenceId\"\n"
+            + "            \"referenceId\": \"x\"\n"
             + "          }\n"
             + "        ]\n"
             + "      }\n"
@@ -2286,7 +2286,7 @@ public class ConversationWireTest {
                             .builder()
                             .type(EntityType.AGENT)
                             .appId("appId")
-                            .referenceId("referenceId")
+                            .referenceId("x")
                             .build()
                     )
                     .message(
@@ -2295,13 +2295,13 @@ public class ConversationWireTest {
                             .conversationMessageId(
                                 EntityIdBase
                                     .builder()
-                                    .referenceId("referenceId")
+                                    .referenceId("x")
                                     .build()
                             )
                             .userId(
                                 EntityIdBase
                                     .builder()
-                                    .referenceId("referenceId")
+                                    .referenceId("x")
                                     .build()
                             )
                             .text("text")
@@ -2322,14 +2322,14 @@ public class ConversationWireTest {
             + "  \"userId\": {\n"
             + "    \"type\": \"AGENT\",\n"
             + "    \"appId\": \"appId\",\n"
-            + "    \"referenceId\": \"referenceId\"\n"
+            + "    \"referenceId\": \"x\"\n"
             + "  },\n"
             + "  \"message\": {\n"
             + "    \"conversationMessageId\": {\n"
-            + "      \"referenceId\": \"referenceId\"\n"
+            + "      \"referenceId\": \"x\"\n"
             + "    },\n"
             + "    \"userId\": {\n"
-            + "      \"referenceId\": \"referenceId\"\n"
+            + "      \"referenceId\": \"x\"\n"
             + "    },\n"
             + "    \"text\": \"text\",\n"
             + "    \"userMessageType\": \"USER\"\n"

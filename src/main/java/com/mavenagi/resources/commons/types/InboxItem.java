@@ -34,12 +34,20 @@ public final class InboxItem {
         return new InboxItem(new MissingKnowledgeValue(value));
     }
 
+    public static InboxItem custom(InboxItemCustom value) {
+        return new InboxItem(new CustomValue(value));
+    }
+
     public boolean isDuplicateDocuments() {
         return value instanceof DuplicateDocumentsValue;
     }
 
     public boolean isMissingKnowledge() {
         return value instanceof MissingKnowledgeValue;
+    }
+
+    public boolean isCustom() {
+        return value instanceof CustomValue;
     }
 
     public boolean _isUnknown() {
@@ -56,6 +64,13 @@ public final class InboxItem {
     public Optional<InboxItemMissingKnowledge> getMissingKnowledge() {
         if (isMissingKnowledge()) {
             return Optional.of(((MissingKnowledgeValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<InboxItemCustom> getCustom() {
+        if (isCustom()) {
+            return Optional.of(((CustomValue) value).value);
         }
         return Optional.empty();
     }
@@ -77,11 +92,17 @@ public final class InboxItem {
 
         T visitMissingKnowledge(InboxItemMissingKnowledge missingKnowledge);
 
+        T visitCustom(InboxItemCustom custom);
+
         T _visitUnknown(Object unknownType);
     }
 
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", visible = true, defaultImpl = _UnknownValue.class)
-    @JsonSubTypes({@JsonSubTypes.Type(DuplicateDocumentsValue.class), @JsonSubTypes.Type(MissingKnowledgeValue.class)})
+    @JsonSubTypes({
+        @JsonSubTypes.Type(DuplicateDocumentsValue.class),
+        @JsonSubTypes.Type(MissingKnowledgeValue.class),
+        @JsonSubTypes.Type(CustomValue.class)
+    })
     @JsonIgnoreProperties(ignoreUnknown = true)
     private interface Value {
         <T> T visit(Visitor<T> visitor);
@@ -151,6 +172,45 @@ public final class InboxItem {
         }
 
         private boolean equalTo(MissingKnowledgeValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "InboxItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("custom")
+    @JsonIgnoreProperties("type")
+    private static final class CustomValue implements Value {
+        @JsonUnwrapped
+        private InboxItemCustom value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private CustomValue() {}
+
+        private CustomValue(InboxItemCustom value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitCustom(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof CustomValue && equalTo((CustomValue) other);
+        }
+
+        private boolean equalTo(CustomValue other) {
             return value.equals(other.value);
         }
 

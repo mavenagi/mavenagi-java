@@ -48,7 +48,7 @@ public class UsersWireTest {
     public void testSearch() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"agentUsers\":[{\"id\":\"id\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"identifiers\":[{\"value\":\"value\",\"type\":\"EMAIL\"}],\"defaultName\":\"defaultName\",\"users\":[{\"userId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"identifiers\":[{\"value\":\"value\",\"type\":\"EMAIL\"}],\"visibleData\":{\"visibleData\":\"visibleData\"}},{\"userId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"identifiers\":[{\"value\":\"value\",\"type\":\"EMAIL\"}],\"visibleData\":{\"visibleData\":\"visibleData\"}}]},{\"id\":\"id\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"identifiers\":[{\"value\":\"value\",\"type\":\"EMAIL\"}],\"defaultName\":\"defaultName\",\"users\":[{\"userId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"identifiers\":[{\"value\":\"value\",\"type\":\"EMAIL\"}],\"visibleData\":{\"visibleData\":\"visibleData\"}},{\"userId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"identifiers\":[{\"value\":\"value\",\"type\":\"EMAIL\"}],\"visibleData\":{\"visibleData\":\"visibleData\"}}]}],\"number\":1,\"size\":1,\"totalElements\":1000000,\"totalPages\":1}"));
+            .setBody("{\"agentUsers\":[{\"id\":\"id\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"identifiers\":[{\"value\":\"value\",\"type\":\"EMAIL\"}],\"defaultName\":\"defaultName\",\"users\":[{\"userId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"identifiers\":[{\"value\":\"value\",\"type\":\"EMAIL\"}],\"visibleData\":{\"visibleData\":\"visibleData\"}},{\"userId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"identifiers\":[{\"value\":\"value\",\"type\":\"EMAIL\"}],\"visibleData\":{\"visibleData\":\"visibleData\"}}]},{\"id\":\"id\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"identifiers\":[{\"value\":\"value\",\"type\":\"EMAIL\"}],\"defaultName\":\"defaultName\",\"users\":[{\"userId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"identifiers\":[{\"value\":\"value\",\"type\":\"EMAIL\"}],\"visibleData\":{\"visibleData\":\"visibleData\"}},{\"userId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"identifiers\":[{\"value\":\"value\",\"type\":\"EMAIL\"}],\"visibleData\":{\"visibleData\":\"visibleData\"}}]}],\"number\":1,\"size\":1,\"totalElements\":1000000,\"totalPages\":1}"));
         AgentUserSearchResponse response = client.users().search(
             AgentUserSearchRequest
                 .builder()
@@ -108,7 +108,7 @@ public class UsersWireTest {
             + "            \"agentId\": \"agentId\",\n"
             + "            \"type\": \"AGENT\",\n"
             + "            \"appId\": \"appId\",\n"
-            + "            \"referenceId\": \"referenceId\"\n"
+            + "            \"referenceId\": \"x\"\n"
             + "          },\n"
             + "          \"identifiers\": [\n"
             + "            {\n"
@@ -126,7 +126,7 @@ public class UsersWireTest {
             + "            \"agentId\": \"agentId\",\n"
             + "            \"type\": \"AGENT\",\n"
             + "            \"appId\": \"appId\",\n"
-            + "            \"referenceId\": \"referenceId\"\n"
+            + "            \"referenceId\": \"x\"\n"
             + "          },\n"
             + "          \"identifiers\": [\n"
             + "            {\n"
@@ -158,7 +158,7 @@ public class UsersWireTest {
             + "            \"agentId\": \"agentId\",\n"
             + "            \"type\": \"AGENT\",\n"
             + "            \"appId\": \"appId\",\n"
-            + "            \"referenceId\": \"referenceId\"\n"
+            + "            \"referenceId\": \"x\"\n"
             + "          },\n"
             + "          \"identifiers\": [\n"
             + "            {\n"
@@ -176,7 +176,7 @@ public class UsersWireTest {
             + "            \"agentId\": \"agentId\",\n"
             + "            \"type\": \"AGENT\",\n"
             + "            \"appId\": \"appId\",\n"
-            + "            \"referenceId\": \"referenceId\"\n"
+            + "            \"referenceId\": \"x\"\n"
             + "          },\n"
             + "          \"identifiers\": [\n"
             + "            {\n"

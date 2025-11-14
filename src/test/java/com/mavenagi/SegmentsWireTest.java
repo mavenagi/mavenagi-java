@@ -45,7 +45,7 @@ public class SegmentsWireTest {
     public void testSearch() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"segments\":[{\"segmentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"status\":\"ACTIVE\",\"name\":\"name\",\"precondition\":{\"preconditionType\":\"user\",\"key\":\"key\",\"value\":\"value\",\"operator\":\"NOT\"}},{\"segmentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"status\":\"ACTIVE\",\"name\":\"name\",\"precondition\":{\"preconditionType\":\"user\",\"key\":\"key\",\"value\":\"value\",\"operator\":\"NOT\"}}],\"number\":1,\"size\":1,\"totalElements\":1000000,\"totalPages\":1}"));
+            .setBody("{\"segments\":[{\"segmentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"status\":\"ACTIVE\",\"name\":\"name\",\"precondition\":{\"preconditionType\":\"user\",\"key\":\"key\",\"value\":\"value\",\"operator\":\"NOT\"}},{\"segmentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"status\":\"ACTIVE\",\"name\":\"name\",\"precondition\":{\"preconditionType\":\"user\",\"key\":\"key\",\"value\":\"value\",\"operator\":\"NOT\"}}],\"number\":1,\"size\":1,\"totalElements\":1000000,\"totalPages\":1}"));
         SegmentsSearchResponse response = client.segments().search(
             SegmentsSearchRequest
                 .builder()
@@ -93,7 +93,7 @@ public class SegmentsWireTest {
             + "        \"agentId\": \"agentId\",\n"
             + "        \"type\": \"AGENT\",\n"
             + "        \"appId\": \"appId\",\n"
-            + "        \"referenceId\": \"referenceId\"\n"
+            + "        \"referenceId\": \"x\"\n"
             + "      },\n"
             + "      \"status\": \"ACTIVE\",\n"
             + "      \"name\": \"name\",\n"
@@ -110,7 +110,7 @@ public class SegmentsWireTest {
             + "        \"agentId\": \"agentId\",\n"
             + "        \"type\": \"AGENT\",\n"
             + "        \"appId\": \"appId\",\n"
-            + "        \"referenceId\": \"referenceId\"\n"
+            + "        \"referenceId\": \"x\"\n"
             + "      },\n"
             + "      \"status\": \"ACTIVE\",\n"
             + "      \"name\": \"name\",\n"
@@ -363,7 +363,7 @@ public class SegmentsWireTest {
     public void testPatch() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"segmentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"referenceId\"},\"status\":\"ACTIVE\",\"name\":\"name\",\"precondition\":{\"preconditionType\":\"user\",\"key\":\"key\",\"value\":\"value\",\"operator\":\"NOT\"}}"));
+            .setBody("{\"segmentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"status\":\"ACTIVE\",\"name\":\"name\",\"precondition\":{\"preconditionType\":\"user\",\"key\":\"key\",\"value\":\"value\",\"operator\":\"NOT\"}}"));
         SegmentResponse response = client.segments().patch(
             "segmentReferenceId",
             SegmentPatchRequest
@@ -410,7 +410,7 @@ public class SegmentsWireTest {
             + "    \"agentId\": \"agentId\",\n"
             + "    \"type\": \"AGENT\",\n"
             + "    \"appId\": \"appId\",\n"
-            + "    \"referenceId\": \"referenceId\"\n"
+            + "    \"referenceId\": \"x\"\n"
             + "  },\n"
             + "  \"status\": \"ACTIVE\",\n"
             + "  \"name\": \"name\",\n"

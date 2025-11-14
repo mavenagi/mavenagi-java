@@ -25,6 +25,8 @@ public final class AgentUserFilter {
 
     private final Optional<List<String>> identifiers;
 
+    private final Optional<String> displayName;
+
     private final Optional<Boolean> isAnonymous;
 
     private final Map<String, Object> additionalProperties;
@@ -32,10 +34,12 @@ public final class AgentUserFilter {
     private AgentUserFilter(
             Optional<String> search,
             Optional<List<String>> identifiers,
+            Optional<String> displayName,
             Optional<Boolean> isAnonymous,
             Map<String, Object> additionalProperties) {
         this.search = search;
         this.identifiers = identifiers;
+        this.displayName = displayName;
         this.isAnonymous = isAnonymous;
         this.additionalProperties = additionalProperties;
     }
@@ -55,6 +59,15 @@ public final class AgentUserFilter {
     @JsonProperty("identifiers")
     public Optional<List<String>> getIdentifiers() {
         return identifiers;
+    }
+
+    /**
+     * @return Full-text search query for matching agent users by display name.
+     * When you search with this parameter, you're performing a full-text search across the user display names.
+     */
+    @JsonProperty("displayName")
+    public Optional<String> getDisplayName() {
+        return displayName;
     }
 
     /**
@@ -80,12 +93,13 @@ public final class AgentUserFilter {
     private boolean equalTo(AgentUserFilter other) {
         return search.equals(other.search)
                 && identifiers.equals(other.identifiers)
+                && displayName.equals(other.displayName)
                 && isAnonymous.equals(other.isAnonymous);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.search, this.identifiers, this.isAnonymous);
+        return Objects.hash(this.search, this.identifiers, this.displayName, this.isAnonymous);
     }
 
     @java.lang.Override
@@ -103,6 +117,8 @@ public final class AgentUserFilter {
 
         private Optional<List<String>> identifiers = Optional.empty();
 
+        private Optional<String> displayName = Optional.empty();
+
         private Optional<Boolean> isAnonymous = Optional.empty();
 
         @JsonAnySetter
@@ -113,6 +129,7 @@ public final class AgentUserFilter {
         public Builder from(AgentUserFilter other) {
             search(other.getSearch());
             identifiers(other.getIdentifiers());
+            displayName(other.getDisplayName());
             isAnonymous(other.getIsAnonymous());
             return this;
         }
@@ -147,6 +164,21 @@ public final class AgentUserFilter {
         }
 
         /**
+         * <p>Full-text search query for matching agent users by display name.
+         * When you search with this parameter, you're performing a full-text search across the user display names.</p>
+         */
+        @JsonSetter(value = "displayName", nulls = Nulls.SKIP)
+        public Builder displayName(Optional<String> displayName) {
+            this.displayName = displayName;
+            return this;
+        }
+
+        public Builder displayName(String displayName) {
+            this.displayName = Optional.ofNullable(displayName);
+            return this;
+        }
+
+        /**
          * <p>Filter by anonymous users. When true, only anonymous users are returned.
          * When false, only non-anonymous users are returned. An anonymous user is one without any identifiers or name data.</p>
          */
@@ -162,7 +194,7 @@ public final class AgentUserFilter {
         }
 
         public AgentUserFilter build() {
-            return new AgentUserFilter(search, identifiers, isAnonymous, additionalProperties);
+            return new AgentUserFilter(search, identifiers, displayName, isAnonymous, additionalProperties);
         }
     }
 }

@@ -54,7 +54,17 @@ public final class EntityIdWithoutAgent implements IEntityIdWithoutAgent, IEntit
     }
 
     /**
-     * @return Externally supplied ID to uniquely identify this object. Is globally unique when combined with all other entityId fields (type, appId, organizationId, agentId)
+     * @return Externally supplied ID to uniquely identify this object. Is globally unique when combined with all other entityId fields (type, appId, organizationId, agentId).
+     * <p>Must be less than 192 characters and contain only:</p>
+     * <ul>
+     * <li>alphanumeric characters (<code>a-z</code>, <code>A-Z</code>, <code>0-9</code>)</li>
+     * <li>hyphens (<code>-</code>)</li>
+     * <li>underscores (<code>_</code>)</li>
+     * <li>plus signs (<code>+</code>)</li>
+     * <li>periods (<code>.</code>)</li>
+     * <li>at symbol (<code>@</code>)</li>
+     * <li>pipe symbol (<code>|</code>)</li>
+     * </ul>
      */
     @JsonProperty("referenceId")
     @java.lang.Override
@@ -109,7 +119,17 @@ public final class EntityIdWithoutAgent implements IEntityIdWithoutAgent, IEntit
 
     public interface ReferenceIdStage {
         /**
-         * <p>Externally supplied ID to uniquely identify this object. Is globally unique when combined with all other entityId fields (type, appId, organizationId, agentId)</p>
+         * <p>Externally supplied ID to uniquely identify this object. Is globally unique when combined with all other entityId fields (type, appId, organizationId, agentId).</p>
+         * <p>Must be less than 192 characters and contain only:</p>
+         * <ul>
+         * <li>alphanumeric characters (<code>a-z</code>, <code>A-Z</code>, <code>0-9</code>)</li>
+         * <li>hyphens (<code>-</code>)</li>
+         * <li>underscores (<code>_</code>)</li>
+         * <li>plus signs (<code>+</code>)</li>
+         * <li>periods (<code>.</code>)</li>
+         * <li>at symbol (<code>@</code>)</li>
+         * <li>pipe symbol (<code>|</code>)</li>
+         * </ul>
          */
         _FinalStage referenceId(@NotNull String referenceId);
     }
@@ -164,8 +184,28 @@ public final class EntityIdWithoutAgent implements IEntityIdWithoutAgent, IEntit
         }
 
         /**
-         * <p>Externally supplied ID to uniquely identify this object. Is globally unique when combined with all other entityId fields (type, appId, organizationId, agentId)</p>
-         * <p>Externally supplied ID to uniquely identify this object. Is globally unique when combined with all other entityId fields (type, appId, organizationId, agentId)</p>
+         * <p>Externally supplied ID to uniquely identify this object. Is globally unique when combined with all other entityId fields (type, appId, organizationId, agentId).</p>
+         * <p>Must be less than 192 characters and contain only:</p>
+         * <ul>
+         * <li>alphanumeric characters (<code>a-z</code>, <code>A-Z</code>, <code>0-9</code>)</li>
+         * <li>hyphens (<code>-</code>)</li>
+         * <li>underscores (<code>_</code>)</li>
+         * <li>plus signs (<code>+</code>)</li>
+         * <li>periods (<code>.</code>)</li>
+         * <li>at symbol (<code>@</code>)</li>
+         * <li>pipe symbol (<code>|</code>)</li>
+         * </ul>
+         * <p>Externally supplied ID to uniquely identify this object. Is globally unique when combined with all other entityId fields (type, appId, organizationId, agentId).</p>
+         * <p>Must be less than 192 characters and contain only:</p>
+         * <ul>
+         * <li>alphanumeric characters (<code>a-z</code>, <code>A-Z</code>, <code>0-9</code>)</li>
+         * <li>hyphens (<code>-</code>)</li>
+         * <li>underscores (<code>_</code>)</li>
+         * <li>plus signs (<code>+</code>)</li>
+         * <li>periods (<code>.</code>)</li>
+         * <li>at symbol (<code>@</code>)</li>
+         * <li>pipe symbol (<code>|</code>)</li>
+         * </ul>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override

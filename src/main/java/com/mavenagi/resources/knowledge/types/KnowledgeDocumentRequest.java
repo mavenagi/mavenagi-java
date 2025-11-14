@@ -38,7 +38,9 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
 
     private final String title;
 
-    private final String content;
+    private final Optional<EntityIdBase> assetId;
+
+    private final Optional<String> content;
 
     private final Optional<Map<String, String>> metadata;
 
@@ -56,7 +58,8 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
             Optional<EntityIdWithoutAgent> versionId,
             KnowledgeDocumentContentType contentType,
             String title,
-            String content,
+            Optional<EntityIdBase> assetId,
+            Optional<String> content,
             Optional<Map<String, String>> metadata,
             Optional<OffsetDateTime> createdAt,
             Optional<OffsetDateTime> updatedAt,
@@ -68,6 +71,7 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
         this.versionId = versionId;
         this.contentType = contentType;
         this.title = title;
+        this.assetId = assetId;
         this.content = content;
         this.metadata = metadata;
         this.createdAt = createdAt;
@@ -118,6 +122,9 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
         return versionId;
     }
 
+    /**
+     * @return Type of knowledge document content, if content is provided. This does not need to be set if content is not provided
+     */
     @JsonProperty("contentType")
     public KnowledgeDocumentContentType getContentType() {
         return contentType;
@@ -132,10 +139,18 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
     }
 
     /**
-     * @return The content of the document. Not shown directly to users. May be provided in HTML or markdown. HTML will be converted to markdown automatically. Images are not currently supported and will be ignored.
+     * @return ID of the asset associated with this document. Either this or content is required, but not both
+     */
+    @JsonProperty("assetId")
+    public Optional<EntityIdBase> getAssetId() {
+        return assetId;
+    }
+
+    /**
+     * @return The content of the document. Not shown directly to users. May be provided in HTML or markdown. HTML will be converted to markdown automatically. Images are not currently supported and will be ignored. Either this or assetId is required, but not both
      */
     @JsonProperty("content")
-    public String getContent() {
+    public Optional<String> getContent() {
         return content;
     }
 
@@ -182,6 +197,7 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
                 && versionId.equals(other.versionId)
                 && contentType.equals(other.contentType)
                 && title.equals(other.title)
+                && assetId.equals(other.assetId)
                 && content.equals(other.content)
                 && metadata.equals(other.metadata)
                 && createdAt.equals(other.createdAt)
@@ -198,6 +214,7 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
                 this.versionId,
                 this.contentType,
                 this.title,
+                this.assetId,
                 this.content,
                 this.metadata,
                 this.createdAt,
@@ -223,6 +240,9 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
     }
 
     public interface ContentTypeStage {
+        /**
+         * <p>Type of knowledge document content, if content is provided. This does not need to be set if content is not provided</p>
+         */
         TitleStage contentType(@NotNull KnowledgeDocumentContentType contentType);
     }
 
@@ -230,14 +250,7 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
         /**
          * <p>The title of the document. Will be shown as part of answers.</p>
          */
-        ContentStage title(@NotNull String title);
-    }
-
-    public interface ContentStage {
-        /**
-         * <p>The content of the document. Not shown directly to users. May be provided in HTML or markdown. HTML will be converted to markdown automatically. Images are not currently supported and will be ignored.</p>
-         */
-        _FinalStage content(@NotNull String content);
+        _FinalStage title(@NotNull String title);
     }
 
     public interface _FinalStage {
@@ -272,6 +285,20 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
         _FinalStage versionId(EntityIdWithoutAgent versionId);
 
         /**
+         * <p>ID of the asset associated with this document. Either this or content is required, but not both</p>
+         */
+        _FinalStage assetId(Optional<EntityIdBase> assetId);
+
+        _FinalStage assetId(EntityIdBase assetId);
+
+        /**
+         * <p>The content of the document. Not shown directly to users. May be provided in HTML or markdown. HTML will be converted to markdown automatically. Images are not currently supported and will be ignored. Either this or assetId is required, but not both</p>
+         */
+        _FinalStage content(Optional<String> content);
+
+        _FinalStage content(String content);
+
+        /**
          * <p>Metadata for the knowledge document.</p>
          */
         _FinalStage metadata(Optional<Map<String, String>> metadata);
@@ -294,21 +321,22 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder
-            implements KnowledgeDocumentIdStage, ContentTypeStage, TitleStage, ContentStage, _FinalStage {
+    public static final class Builder implements KnowledgeDocumentIdStage, ContentTypeStage, TitleStage, _FinalStage {
         private EntityIdBase knowledgeDocumentId;
 
         private KnowledgeDocumentContentType contentType;
 
         private String title;
 
-        private String content;
-
         private Optional<OffsetDateTime> updatedAt = Optional.empty();
 
         private Optional<OffsetDateTime> createdAt = Optional.empty();
 
         private Optional<Map<String, String>> metadata = Optional.empty();
+
+        private Optional<String> content = Optional.empty();
+
+        private Optional<EntityIdBase> assetId = Optional.empty();
 
         private Optional<EntityIdWithoutAgent> versionId = Optional.empty();
 
@@ -332,6 +360,7 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
             versionId(other.getVersionId());
             contentType(other.getContentType());
             title(other.getTitle());
+            assetId(other.getAssetId());
             content(other.getContent());
             metadata(other.getMetadata());
             createdAt(other.getCreatedAt());
@@ -352,6 +381,11 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
             return this;
         }
 
+        /**
+         * <p>Type of knowledge document content, if content is provided. This does not need to be set if content is not provided</p>
+         * <p>Type of knowledge document content, if content is provided. This does not need to be set if content is not provided</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
         @JsonSetter("contentType")
         public TitleStage contentType(@NotNull KnowledgeDocumentContentType contentType) {
@@ -366,20 +400,8 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
          */
         @java.lang.Override
         @JsonSetter("title")
-        public ContentStage title(@NotNull String title) {
+        public _FinalStage title(@NotNull String title) {
             this.title = Objects.requireNonNull(title, "title must not be null");
-            return this;
-        }
-
-        /**
-         * <p>The content of the document. Not shown directly to users. May be provided in HTML or markdown. HTML will be converted to markdown automatically. Images are not currently supported and will be ignored.</p>
-         * <p>The content of the document. Not shown directly to users. May be provided in HTML or markdown. HTML will be converted to markdown automatically. Images are not currently supported and will be ignored.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("content")
-        public _FinalStage content(@NotNull String content) {
-            this.content = Objects.requireNonNull(content, "content must not be null");
             return this;
         }
 
@@ -440,6 +462,46 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
         @JsonSetter(value = "metadata", nulls = Nulls.SKIP)
         public _FinalStage metadata(Optional<Map<String, String>> metadata) {
             this.metadata = metadata;
+            return this;
+        }
+
+        /**
+         * <p>The content of the document. Not shown directly to users. May be provided in HTML or markdown. HTML will be converted to markdown automatically. Images are not currently supported and will be ignored. Either this or assetId is required, but not both</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage content(String content) {
+            this.content = Optional.ofNullable(content);
+            return this;
+        }
+
+        /**
+         * <p>The content of the document. Not shown directly to users. May be provided in HTML or markdown. HTML will be converted to markdown automatically. Images are not currently supported and will be ignored. Either this or assetId is required, but not both</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "content", nulls = Nulls.SKIP)
+        public _FinalStage content(Optional<String> content) {
+            this.content = content;
+            return this;
+        }
+
+        /**
+         * <p>ID of the asset associated with this document. Either this or content is required, but not both</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage assetId(EntityIdBase assetId) {
+            this.assetId = Optional.ofNullable(assetId);
+            return this;
+        }
+
+        /**
+         * <p>ID of the asset associated with this document. Either this or content is required, but not both</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "assetId", nulls = Nulls.SKIP)
+        public _FinalStage assetId(Optional<EntityIdBase> assetId) {
+            this.assetId = assetId;
             return this;
         }
 
@@ -533,6 +595,7 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
                     versionId,
                     contentType,
                     title,
+                    assetId,
                     content,
                     metadata,
                     createdAt,

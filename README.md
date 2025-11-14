@@ -5,6 +5,21 @@
 
 The Mavenagi Java library provides convenient access to the Mavenagi APIs from Java.
 
+## Table of Contents
+
+- [Reference](#reference)
+- [Usage](#usage)
+- [Environments](#environments)
+- [Base Url](#base-url)
+- [Exception Handling](#exception-handling)
+- [Advanced](#advanced)
+  - [Custom Client](#custom-client)
+  - [Retries](#retries)
+  - [Timeouts](#timeouts)
+  - [Custom Headers](#custom-headers)
+- [Contributing](#contributing)
+- [Installation](#installation)
+
 ## Reference
 
 A full reference for this library is available [here](https://github.com/mavenagi/mavenagi-java/blob/HEAD/./reference.md).
@@ -197,6 +212,6 @@ Add the dependency in your `pom.xml` file:
 <dependency>
   <groupId>com.mavenagi</groupId>
   <artifactId>mavenagi-java</artifactId>
-  <version>1.2.7</version>
+  <version>1.2.8</version>
 </dependency>
 ```

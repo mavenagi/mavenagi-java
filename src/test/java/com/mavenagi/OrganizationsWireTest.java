@@ -53,7 +53,7 @@ public class OrganizationsWireTest {
     public void testCreate() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"organizationId\":{\"referenceId\":\"referenceId\"},\"name\":\"name\",\"defaultLanguage\":\"defaultLanguage\"}"));
+            .setBody("{\"organizationId\":{\"referenceId\":\"x\"},\"name\":\"name\",\"defaultLanguage\":\"defaultLanguage\"}"));
         Organization response = client.organizations().create(
             "organizationReferenceId",
             CreateOrganizationRequest
@@ -101,7 +101,7 @@ public class OrganizationsWireTest {
         String expectedResponseBody = ""
             + "{\n"
             + "  \"organizationId\": {\n"
-            + "    \"referenceId\": \"referenceId\"\n"
+            + "    \"referenceId\": \"x\"\n"
             + "  },\n"
             + "  \"name\": \"name\",\n"
             + "  \"defaultLanguage\": \"defaultLanguage\"\n"
@@ -133,7 +133,7 @@ public class OrganizationsWireTest {
     public void testGet() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"organizationId\":{\"referenceId\":\"referenceId\"},\"name\":\"name\",\"defaultLanguage\":\"defaultLanguage\"}"));
+            .setBody("{\"organizationId\":{\"referenceId\":\"x\"},\"name\":\"name\",\"defaultLanguage\":\"defaultLanguage\"}"));
         Organization response = client.organizations().get("organizationReferenceId");
         RecordedRequest request = server.takeRequest();
         Assertions.assertNotNull(request);
@@ -145,7 +145,7 @@ public class OrganizationsWireTest {
         String expectedResponseBody = ""
             + "{\n"
             + "  \"organizationId\": {\n"
-            + "    \"referenceId\": \"referenceId\"\n"
+            + "    \"referenceId\": \"x\"\n"
             + "  },\n"
             + "  \"name\": \"name\",\n"
             + "  \"defaultLanguage\": \"defaultLanguage\"\n"
@@ -177,7 +177,7 @@ public class OrganizationsWireTest {
     public void testPatch() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"organizationId\":{\"referenceId\":\"referenceId\"},\"name\":\"name\",\"defaultLanguage\":\"defaultLanguage\"}"));
+            .setBody("{\"organizationId\":{\"referenceId\":\"x\"},\"name\":\"name\",\"defaultLanguage\":\"defaultLanguage\"}"));
         Organization response = client.organizations().patch(
             "organizationReferenceId",
             OrganizationPatchRequest
@@ -220,7 +220,7 @@ public class OrganizationsWireTest {
         String expectedResponseBody = ""
             + "{\n"
             + "  \"organizationId\": {\n"
-            + "    \"referenceId\": \"referenceId\"\n"
+            + "    \"referenceId\": \"x\"\n"
             + "  },\n"
             + "  \"name\": \"name\",\n"
             + "  \"defaultLanguage\": \"defaultLanguage\"\n"
