@@ -28,9 +28,13 @@ public final class KnowledgeDocumentSearchResponse implements IKnowledgeDocument
 
     private final Optional<EntityId> knowledgeBaseVersionId;
 
+    private final EntityId knowledgeBaseId;
+
     private final Optional<String> title;
 
     private final LlmInclusionStatus llmInclusionStatus;
+
+    private final LlmInclusionStatus knowledgeBaseLlmInclusionStatus;
 
     private final OffsetDateTime createdAt;
 
@@ -47,8 +51,10 @@ public final class KnowledgeDocumentSearchResponse implements IKnowledgeDocument
     private KnowledgeDocumentSearchResponse(
             EntityId knowledgeDocumentId,
             Optional<EntityId> knowledgeBaseVersionId,
+            EntityId knowledgeBaseId,
             Optional<String> title,
             LlmInclusionStatus llmInclusionStatus,
+            LlmInclusionStatus knowledgeBaseLlmInclusionStatus,
             OffsetDateTime createdAt,
             OffsetDateTime updatedAt,
             Optional<String> url,
@@ -57,8 +63,10 @@ public final class KnowledgeDocumentSearchResponse implements IKnowledgeDocument
             Map<String, Object> additionalProperties) {
         this.knowledgeDocumentId = knowledgeDocumentId;
         this.knowledgeBaseVersionId = knowledgeBaseVersionId;
+        this.knowledgeBaseId = knowledgeBaseId;
         this.title = title;
         this.llmInclusionStatus = llmInclusionStatus;
+        this.knowledgeBaseLlmInclusionStatus = knowledgeBaseLlmInclusionStatus;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.url = url;
@@ -87,6 +95,15 @@ public final class KnowledgeDocumentSearchResponse implements IKnowledgeDocument
     }
 
     /**
+     * @return ID that uniquely identifies the knowledge base that contains this document.
+     */
+    @JsonProperty("knowledgeBaseId")
+    @java.lang.Override
+    public EntityId getKnowledgeBaseId() {
+        return knowledgeBaseId;
+    }
+
+    /**
      * @return The title of the document. Will be shown as part of answers. May be missing on legacy documents.
      */
     @JsonProperty("title")
@@ -102,6 +119,15 @@ public final class KnowledgeDocumentSearchResponse implements IKnowledgeDocument
     @java.lang.Override
     public LlmInclusionStatus getLlmInclusionStatus() {
         return llmInclusionStatus;
+    }
+
+    /**
+     * @return Whether the knowledge base is included in the agent's knowledge.
+     */
+    @JsonProperty("knowledgeBaseLlmInclusionStatus")
+    @java.lang.Override
+    public LlmInclusionStatus getKnowledgeBaseLlmInclusionStatus() {
+        return knowledgeBaseLlmInclusionStatus;
     }
 
     /**
@@ -163,8 +189,10 @@ public final class KnowledgeDocumentSearchResponse implements IKnowledgeDocument
     private boolean equalTo(KnowledgeDocumentSearchResponse other) {
         return knowledgeDocumentId.equals(other.knowledgeDocumentId)
                 && knowledgeBaseVersionId.equals(other.knowledgeBaseVersionId)
+                && knowledgeBaseId.equals(other.knowledgeBaseId)
                 && title.equals(other.title)
                 && llmInclusionStatus.equals(other.llmInclusionStatus)
+                && knowledgeBaseLlmInclusionStatus.equals(other.knowledgeBaseLlmInclusionStatus)
                 && createdAt.equals(other.createdAt)
                 && updatedAt.equals(other.updatedAt)
                 && url.equals(other.url)
@@ -177,8 +205,10 @@ public final class KnowledgeDocumentSearchResponse implements IKnowledgeDocument
         return Objects.hash(
                 this.knowledgeDocumentId,
                 this.knowledgeBaseVersionId,
+                this.knowledgeBaseId,
                 this.title,
                 this.llmInclusionStatus,
+                this.knowledgeBaseLlmInclusionStatus,
                 this.createdAt,
                 this.updatedAt,
                 this.url,
@@ -199,16 +229,30 @@ public final class KnowledgeDocumentSearchResponse implements IKnowledgeDocument
         /**
          * <p>ID that uniquely identifies this knowledge document within its knowledge base</p>
          */
-        LlmInclusionStatusStage knowledgeDocumentId(@NotNull EntityId knowledgeDocumentId);
+        KnowledgeBaseIdStage knowledgeDocumentId(@NotNull EntityId knowledgeDocumentId);
 
         Builder from(KnowledgeDocumentSearchResponse other);
+    }
+
+    public interface KnowledgeBaseIdStage {
+        /**
+         * <p>ID that uniquely identifies the knowledge base that contains this document.</p>
+         */
+        LlmInclusionStatusStage knowledgeBaseId(@NotNull EntityId knowledgeBaseId);
     }
 
     public interface LlmInclusionStatusStage {
         /**
          * <p>Whether the document is included in the agent's knowledge.</p>
          */
-        CreatedAtStage llmInclusionStatus(@NotNull LlmInclusionStatus llmInclusionStatus);
+        KnowledgeBaseLlmInclusionStatusStage llmInclusionStatus(@NotNull LlmInclusionStatus llmInclusionStatus);
+    }
+
+    public interface KnowledgeBaseLlmInclusionStatusStage {
+        /**
+         * <p>Whether the knowledge base is included in the agent's knowledge.</p>
+         */
+        CreatedAtStage knowledgeBaseLlmInclusionStatus(@NotNull LlmInclusionStatus knowledgeBaseLlmInclusionStatus);
     }
 
     public interface CreatedAtStage {
@@ -267,10 +311,20 @@ public final class KnowledgeDocumentSearchResponse implements IKnowledgeDocument
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
-            implements KnowledgeDocumentIdStage, LlmInclusionStatusStage, CreatedAtStage, UpdatedAtStage, _FinalStage {
+            implements KnowledgeDocumentIdStage,
+                    KnowledgeBaseIdStage,
+                    LlmInclusionStatusStage,
+                    KnowledgeBaseLlmInclusionStatusStage,
+                    CreatedAtStage,
+                    UpdatedAtStage,
+                    _FinalStage {
         private EntityId knowledgeDocumentId;
 
+        private EntityId knowledgeBaseId;
+
         private LlmInclusionStatus llmInclusionStatus;
+
+        private LlmInclusionStatus knowledgeBaseLlmInclusionStatus;
 
         private OffsetDateTime createdAt;
 
@@ -295,8 +349,10 @@ public final class KnowledgeDocumentSearchResponse implements IKnowledgeDocument
         public Builder from(KnowledgeDocumentSearchResponse other) {
             knowledgeDocumentId(other.getKnowledgeDocumentId());
             knowledgeBaseVersionId(other.getKnowledgeBaseVersionId());
+            knowledgeBaseId(other.getKnowledgeBaseId());
             title(other.getTitle());
             llmInclusionStatus(other.getLlmInclusionStatus());
+            knowledgeBaseLlmInclusionStatus(other.getKnowledgeBaseLlmInclusionStatus());
             createdAt(other.getCreatedAt());
             updatedAt(other.getUpdatedAt());
             url(other.getUrl());
@@ -312,9 +368,21 @@ public final class KnowledgeDocumentSearchResponse implements IKnowledgeDocument
          */
         @java.lang.Override
         @JsonSetter("knowledgeDocumentId")
-        public LlmInclusionStatusStage knowledgeDocumentId(@NotNull EntityId knowledgeDocumentId) {
+        public KnowledgeBaseIdStage knowledgeDocumentId(@NotNull EntityId knowledgeDocumentId) {
             this.knowledgeDocumentId =
                     Objects.requireNonNull(knowledgeDocumentId, "knowledgeDocumentId must not be null");
+            return this;
+        }
+
+        /**
+         * <p>ID that uniquely identifies the knowledge base that contains this document.</p>
+         * <p>ID that uniquely identifies the knowledge base that contains this document.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("knowledgeBaseId")
+        public LlmInclusionStatusStage knowledgeBaseId(@NotNull EntityId knowledgeBaseId) {
+            this.knowledgeBaseId = Objects.requireNonNull(knowledgeBaseId, "knowledgeBaseId must not be null");
             return this;
         }
 
@@ -325,8 +393,22 @@ public final class KnowledgeDocumentSearchResponse implements IKnowledgeDocument
          */
         @java.lang.Override
         @JsonSetter("llmInclusionStatus")
-        public CreatedAtStage llmInclusionStatus(@NotNull LlmInclusionStatus llmInclusionStatus) {
+        public KnowledgeBaseLlmInclusionStatusStage llmInclusionStatus(@NotNull LlmInclusionStatus llmInclusionStatus) {
             this.llmInclusionStatus = Objects.requireNonNull(llmInclusionStatus, "llmInclusionStatus must not be null");
+            return this;
+        }
+
+        /**
+         * <p>Whether the knowledge base is included in the agent's knowledge.</p>
+         * <p>Whether the knowledge base is included in the agent's knowledge.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("knowledgeBaseLlmInclusionStatus")
+        public CreatedAtStage knowledgeBaseLlmInclusionStatus(
+                @NotNull LlmInclusionStatus knowledgeBaseLlmInclusionStatus) {
+            this.knowledgeBaseLlmInclusionStatus = Objects.requireNonNull(
+                    knowledgeBaseLlmInclusionStatus, "knowledgeBaseLlmInclusionStatus must not be null");
             return this;
         }
 
@@ -461,8 +543,10 @@ public final class KnowledgeDocumentSearchResponse implements IKnowledgeDocument
             return new KnowledgeDocumentSearchResponse(
                     knowledgeDocumentId,
                     knowledgeBaseVersionId,
+                    knowledgeBaseId,
                     title,
                     llmInclusionStatus,
+                    knowledgeBaseLlmInclusionStatus,
                     createdAt,
                     updatedAt,
                     url,

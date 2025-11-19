@@ -139,7 +139,7 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
     }
 
     /**
-     * @return ID of the asset associated with this document. Either this or content is required, but not both
+     * @return ID of the asset associated with this document. This asset will be transformed into text and set as the content of the document. The following types are supported: <code>application/pdf</code>, <code>text/plain</code>.  Either this or content is required, but not both
      */
     @JsonProperty("assetId")
     public Optional<EntityIdBase> getAssetId() {
@@ -285,7 +285,7 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
         _FinalStage versionId(EntityIdWithoutAgent versionId);
 
         /**
-         * <p>ID of the asset associated with this document. Either this or content is required, but not both</p>
+         * <p>ID of the asset associated with this document. This asset will be transformed into text and set as the content of the document. The following types are supported: <code>application/pdf</code>, <code>text/plain</code>.  Either this or content is required, but not both</p>
          */
         _FinalStage assetId(Optional<EntityIdBase> assetId);
 
@@ -486,7 +486,7 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
         }
 
         /**
-         * <p>ID of the asset associated with this document. Either this or content is required, but not both</p>
+         * <p>ID of the asset associated with this document. This asset will be transformed into text and set as the content of the document. The following types are supported: <code>application/pdf</code>, <code>text/plain</code>.  Either this or content is required, but not both</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -496,7 +496,7 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
         }
 
         /**
-         * <p>ID of the asset associated with this document. Either this or content is required, but not both</p>
+         * <p>ID of the asset associated with this document. This asset will be transformed into text and set as the content of the document. The following types are supported: <code>application/pdf</code>, <code>text/plain</code>.  Either this or content is required, but not both</p>
          */
         @java.lang.Override
         @JsonSetter(value = "assetId", nulls = Nulls.SKIP)

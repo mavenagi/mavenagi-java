@@ -13,9 +13,13 @@ public interface IKnowledgeDocumentSearchResponse extends IBaseKnowledgeDocument
 
     Optional<EntityId> getKnowledgeBaseVersionId();
 
+    EntityId getKnowledgeBaseId();
+
     Optional<String> getTitle();
 
     LlmInclusionStatus getLlmInclusionStatus();
+
+    LlmInclusionStatus getKnowledgeBaseLlmInclusionStatus();
 
     OffsetDateTime getCreatedAt();
 
