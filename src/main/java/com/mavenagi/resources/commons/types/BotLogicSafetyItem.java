@@ -9,27 +9,41 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BotLogicSafetyItem.Builder.class)
 public final class BotLogicSafetyItem {
     private final boolean safetyCheckPassed;
 
+    private final Optional<SafetyCheckReport> report;
+
     private final Map<String, Object> additionalProperties;
 
-    private BotLogicSafetyItem(boolean safetyCheckPassed, Map<String, Object> additionalProperties) {
+    private BotLogicSafetyItem(
+            boolean safetyCheckPassed, Optional<SafetyCheckReport> report, Map<String, Object> additionalProperties) {
         this.safetyCheckPassed = safetyCheckPassed;
+        this.report = report;
         this.additionalProperties = additionalProperties;
     }
 
     @JsonProperty("safetyCheckPassed")
     public boolean getSafetyCheckPassed() {
         return safetyCheckPassed;
+    }
+
+    /**
+     * @return If the safety check failed, this contains more details about the failure.
+     */
+    @JsonProperty("report")
+    public Optional<SafetyCheckReport> getReport() {
+        return report;
     }
 
     @java.lang.Override
@@ -44,12 +58,12 @@ public final class BotLogicSafetyItem {
     }
 
     private boolean equalTo(BotLogicSafetyItem other) {
-        return safetyCheckPassed == other.safetyCheckPassed;
+        return safetyCheckPassed == other.safetyCheckPassed && report.equals(other.report);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.safetyCheckPassed);
+        return Objects.hash(this.safetyCheckPassed, this.report);
     }
 
     @java.lang.Override
@@ -69,11 +83,20 @@ public final class BotLogicSafetyItem {
 
     public interface _FinalStage {
         BotLogicSafetyItem build();
+
+        /**
+         * <p>If the safety check failed, this contains more details about the failure.</p>
+         */
+        _FinalStage report(Optional<SafetyCheckReport> report);
+
+        _FinalStage report(SafetyCheckReport report);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements SafetyCheckPassedStage, _FinalStage {
         private boolean safetyCheckPassed;
+
+        private Optional<SafetyCheckReport> report = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -83,6 +106,7 @@ public final class BotLogicSafetyItem {
         @java.lang.Override
         public Builder from(BotLogicSafetyItem other) {
             safetyCheckPassed(other.getSafetyCheckPassed());
+            report(other.getReport());
             return this;
         }
 
@@ -93,9 +117,29 @@ public final class BotLogicSafetyItem {
             return this;
         }
 
+        /**
+         * <p>If the safety check failed, this contains more details about the failure.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage report(SafetyCheckReport report) {
+            this.report = Optional.ofNullable(report);
+            return this;
+        }
+
+        /**
+         * <p>If the safety check failed, this contains more details about the failure.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "report", nulls = Nulls.SKIP)
+        public _FinalStage report(Optional<SafetyCheckReport> report) {
+            this.report = report;
+            return this;
+        }
+
         @java.lang.Override
         public BotLogicSafetyItem build() {
-            return new BotLogicSafetyItem(safetyCheckPassed, additionalProperties);
+            return new BotLogicSafetyItem(safetyCheckPassed, report, additionalProperties);
         }
     }
 }

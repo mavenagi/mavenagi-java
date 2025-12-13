@@ -11,6 +11,9 @@ import com.mavenagi.resources.analytics.types.ChartResponse;
 import com.mavenagi.resources.analytics.types.ConversationChartRequest;
 import com.mavenagi.resources.analytics.types.ConversationTableRequest;
 import com.mavenagi.resources.analytics.types.ConversationTableResponse;
+import com.mavenagi.resources.analytics.types.EventChartRequest;
+import com.mavenagi.resources.analytics.types.EventTableRequest;
+import com.mavenagi.resources.analytics.types.EventTableResponse;
 import com.mavenagi.resources.analytics.types.FeedbackTableRequest;
 import com.mavenagi.resources.analytics.types.FeedbackTableResponse;
 import java.io.InputStream;
@@ -103,5 +106,33 @@ public class AnalyticsClient {
      */
     public AgentUserTableResponse getAgentUserTable(AgentUserTableRequest request, RequestOptions requestOptions) {
         return this.rawClient.getAgentUserTable(request, requestOptions).body();
+    }
+
+    /**
+     * Retrieves structured event data formatted as a table, allowing users to group, filter,  and define specific metrics to display as columns.
+     */
+    public EventTableResponse getEventTable(EventTableRequest request) {
+        return this.rawClient.getEventTable(request).body();
+    }
+
+    /**
+     * Retrieves structured event data formatted as a table, allowing users to group, filter,  and define specific metrics to display as columns.
+     */
+    public EventTableResponse getEventTable(EventTableRequest request, RequestOptions requestOptions) {
+        return this.rawClient.getEventTable(request, requestOptions).body();
+    }
+
+    /**
+     * Fetches event data visualized in a chart format. Supported chart types include pie chart, date histogram, and stacked bar charts.
+     */
+    public ChartResponse getEventChart(EventChartRequest request) {
+        return this.rawClient.getEventChart(request).body();
+    }
+
+    /**
+     * Fetches event data visualized in a chart format. Supported chart types include pie chart, date histogram, and stacked bar charts.
+     */
+    public ChartResponse getEventChart(EventChartRequest request, RequestOptions requestOptions) {
+        return this.rawClient.getEventChart(request, requestOptions).body();
     }
 }

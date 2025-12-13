@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
@@ -28,16 +29,20 @@ public final class ResponseConfig {
 
     private final ResponseLength responseLength;
 
+    private final Optional<KnowledgeContextFilter> contextFilter;
+
     private final Map<String, Object> additionalProperties;
 
     private ResponseConfig(
             List<Capability> capabilities,
             boolean isCopilot,
             ResponseLength responseLength,
+            Optional<KnowledgeContextFilter> contextFilter,
             Map<String, Object> additionalProperties) {
         this.capabilities = capabilities;
         this.isCopilot = isCopilot;
         this.responseLength = responseLength;
+        this.contextFilter = contextFilter;
         this.additionalProperties = additionalProperties;
     }
 
@@ -73,6 +78,18 @@ public final class ResponseConfig {
         return responseLength;
     }
 
+    /**
+     * @return Filters that restrict the knowledge retrieval candidate pool.
+     * <ul>
+     * <li>entities: specific entities to scope by</li>
+     * <li>entityTypes: entity types to scope by (e.g., AGENT, CUSTOMER)</li>
+     * </ul>
+     */
+    @JsonProperty("contextFilter")
+    public Optional<KnowledgeContextFilter> getContextFilter() {
+        return contextFilter;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -87,12 +104,13 @@ public final class ResponseConfig {
     private boolean equalTo(ResponseConfig other) {
         return capabilities.equals(other.capabilities)
                 && isCopilot == other.isCopilot
-                && responseLength.equals(other.responseLength);
+                && responseLength.equals(other.responseLength)
+                && contextFilter.equals(other.contextFilter);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.capabilities, this.isCopilot, this.responseLength);
+        return Objects.hash(this.capabilities, this.isCopilot, this.responseLength, this.contextFilter);
     }
 
     @java.lang.Override
@@ -139,6 +157,17 @@ public final class ResponseConfig {
         _FinalStage addCapabilities(Capability capabilities);
 
         _FinalStage addAllCapabilities(List<Capability> capabilities);
+
+        /**
+         * <p>Filters that restrict the knowledge retrieval candidate pool.</p>
+         * <ul>
+         * <li>entities: specific entities to scope by</li>
+         * <li>entityTypes: entity types to scope by (e.g., AGENT, CUSTOMER)</li>
+         * </ul>
+         */
+        _FinalStage contextFilter(Optional<KnowledgeContextFilter> contextFilter);
+
+        _FinalStage contextFilter(KnowledgeContextFilter contextFilter);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -146,6 +175,8 @@ public final class ResponseConfig {
         private boolean isCopilot;
 
         private ResponseLength responseLength;
+
+        private Optional<KnowledgeContextFilter> contextFilter = Optional.empty();
 
         private List<Capability> capabilities = new ArrayList<>();
 
@@ -159,6 +190,7 @@ public final class ResponseConfig {
             capabilities(other.getCapabilities());
             isCopilot(other.getIsCopilot());
             responseLength(other.getResponseLength());
+            contextFilter(other.getContextFilter());
             return this;
         }
 
@@ -183,6 +215,34 @@ public final class ResponseConfig {
         @JsonSetter("responseLength")
         public _FinalStage responseLength(@NotNull ResponseLength responseLength) {
             this.responseLength = Objects.requireNonNull(responseLength, "responseLength must not be null");
+            return this;
+        }
+
+        /**
+         * <p>Filters that restrict the knowledge retrieval candidate pool.</p>
+         * <ul>
+         * <li>entities: specific entities to scope by</li>
+         * <li>entityTypes: entity types to scope by (e.g., AGENT, CUSTOMER)</li>
+         * </ul>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage contextFilter(KnowledgeContextFilter contextFilter) {
+            this.contextFilter = Optional.ofNullable(contextFilter);
+            return this;
+        }
+
+        /**
+         * <p>Filters that restrict the knowledge retrieval candidate pool.</p>
+         * <ul>
+         * <li>entities: specific entities to scope by</li>
+         * <li>entityTypes: entity types to scope by (e.g., AGENT, CUSTOMER)</li>
+         * </ul>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "contextFilter", nulls = Nulls.SKIP)
+        public _FinalStage contextFilter(Optional<KnowledgeContextFilter> contextFilter) {
+            this.contextFilter = contextFilter;
             return this;
         }
 
@@ -247,7 +307,7 @@ public final class ResponseConfig {
 
         @java.lang.Override
         public ResponseConfig build() {
-            return new ResponseConfig(capabilities, isCopilot, responseLength, additionalProperties);
+            return new ResponseConfig(capabilities, isCopilot, responseLength, contextFilter, additionalProperties);
         }
     }
 }

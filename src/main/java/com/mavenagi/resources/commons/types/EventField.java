@@ -7,7 +7,40 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public final class EventField {
+    public static final EventField SOURCE_LANGUAGE_CODE =
+            new EventField(Value.SOURCE_LANGUAGE_CODE, "SOURCE_LANGUAGE_CODE");
+
+    public static final EventField SOURCE_GEO_COUNTRY = new EventField(Value.SOURCE_GEO_COUNTRY, "SOURCE_GEO_COUNTRY");
+
+    public static final EventField EVENT_TYPE = new EventField(Value.EVENT_TYPE, "EVENT_TYPE");
+
+    public static final EventField EVENT_NAME = new EventField(Value.EVENT_NAME, "EVENT_NAME");
+
+    public static final EventField SOURCE_BROWSER_TYPE =
+            new EventField(Value.SOURCE_BROWSER_TYPE, "SOURCE_BROWSER_TYPE");
+
+    public static final EventField SOURCE_BROWSER_NAME =
+            new EventField(Value.SOURCE_BROWSER_NAME, "SOURCE_BROWSER_NAME");
+
+    public static final EventField SOURCE_TYPE = new EventField(Value.SOURCE_TYPE, "SOURCE_TYPE");
+
+    public static final EventField APP = new EventField(Value.APP, "APP");
+
+    public static final EventField SOURCE_GEO_CITY = new EventField(Value.SOURCE_GEO_CITY, "SOURCE_GEO_CITY");
+
+    public static final EventField SOURCE_GEO_STATE = new EventField(Value.SOURCE_GEO_STATE, "SOURCE_GEO_STATE");
+
     public static final EventField CREATED_AT = new EventField(Value.CREATED_AT, "CREATED_AT");
+
+    public static final EventField SOURCE_DEVICE_TYPE = new EventField(Value.SOURCE_DEVICE_TYPE, "SOURCE_DEVICE_TYPE");
+
+    public static final EventField SOURCE_DEVICE_NAME = new EventField(Value.SOURCE_DEVICE_NAME, "SOURCE_DEVICE_NAME");
+
+    public static final EventField SESSION_ID = new EventField(Value.SESSION_ID, "SESSION_ID");
+
+    public static final EventField USER_REFERENCE_ID = new EventField(Value.USER_REFERENCE_ID, "USER_REFERENCE_ID");
+
+    public static final EventField AGENT_USER_ID = new EventField(Value.AGENT_USER_ID, "AGENT_USER_ID");
 
     private final Value value;
 
@@ -40,8 +73,38 @@ public final class EventField {
 
     public <T> T visit(Visitor<T> visitor) {
         switch (value) {
+            case SOURCE_LANGUAGE_CODE:
+                return visitor.visitSourceLanguageCode();
+            case SOURCE_GEO_COUNTRY:
+                return visitor.visitSourceGeoCountry();
+            case EVENT_TYPE:
+                return visitor.visitEventType();
+            case EVENT_NAME:
+                return visitor.visitEventName();
+            case SOURCE_BROWSER_TYPE:
+                return visitor.visitSourceBrowserType();
+            case SOURCE_BROWSER_NAME:
+                return visitor.visitSourceBrowserName();
+            case SOURCE_TYPE:
+                return visitor.visitSourceType();
+            case APP:
+                return visitor.visitApp();
+            case SOURCE_GEO_CITY:
+                return visitor.visitSourceGeoCity();
+            case SOURCE_GEO_STATE:
+                return visitor.visitSourceGeoState();
             case CREATED_AT:
                 return visitor.visitCreatedAt();
+            case SOURCE_DEVICE_TYPE:
+                return visitor.visitSourceDeviceType();
+            case SOURCE_DEVICE_NAME:
+                return visitor.visitSourceDeviceName();
+            case SESSION_ID:
+                return visitor.visitSessionId();
+            case USER_REFERENCE_ID:
+                return visitor.visitUserReferenceId();
+            case AGENT_USER_ID:
+                return visitor.visitAgentUserId();
             case UNKNOWN:
             default:
                 return visitor.visitUnknown(string);
@@ -51,8 +114,38 @@ public final class EventField {
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static EventField valueOf(String value) {
         switch (value) {
+            case "SOURCE_LANGUAGE_CODE":
+                return SOURCE_LANGUAGE_CODE;
+            case "SOURCE_GEO_COUNTRY":
+                return SOURCE_GEO_COUNTRY;
+            case "EVENT_TYPE":
+                return EVENT_TYPE;
+            case "EVENT_NAME":
+                return EVENT_NAME;
+            case "SOURCE_BROWSER_TYPE":
+                return SOURCE_BROWSER_TYPE;
+            case "SOURCE_BROWSER_NAME":
+                return SOURCE_BROWSER_NAME;
+            case "SOURCE_TYPE":
+                return SOURCE_TYPE;
+            case "APP":
+                return APP;
+            case "SOURCE_GEO_CITY":
+                return SOURCE_GEO_CITY;
+            case "SOURCE_GEO_STATE":
+                return SOURCE_GEO_STATE;
             case "CREATED_AT":
                 return CREATED_AT;
+            case "SOURCE_DEVICE_TYPE":
+                return SOURCE_DEVICE_TYPE;
+            case "SOURCE_DEVICE_NAME":
+                return SOURCE_DEVICE_NAME;
+            case "SESSION_ID":
+                return SESSION_ID;
+            case "USER_REFERENCE_ID":
+                return USER_REFERENCE_ID;
+            case "AGENT_USER_ID":
+                return AGENT_USER_ID;
             default:
                 return new EventField(Value.UNKNOWN, value);
         }
@@ -61,11 +154,71 @@ public final class EventField {
     public enum Value {
         CREATED_AT,
 
+        EVENT_NAME,
+
+        EVENT_TYPE,
+
+        APP,
+
+        SESSION_ID,
+
+        SOURCE_TYPE,
+
+        SOURCE_LANGUAGE_CODE,
+
+        SOURCE_DEVICE_TYPE,
+
+        SOURCE_DEVICE_NAME,
+
+        SOURCE_BROWSER_TYPE,
+
+        SOURCE_BROWSER_NAME,
+
+        SOURCE_GEO_CITY,
+
+        SOURCE_GEO_STATE,
+
+        SOURCE_GEO_COUNTRY,
+
+        USER_REFERENCE_ID,
+
+        AGENT_USER_ID,
+
         UNKNOWN
     }
 
     public interface Visitor<T> {
         T visitCreatedAt();
+
+        T visitEventName();
+
+        T visitEventType();
+
+        T visitApp();
+
+        T visitSessionId();
+
+        T visitSourceType();
+
+        T visitSourceLanguageCode();
+
+        T visitSourceDeviceType();
+
+        T visitSourceDeviceName();
+
+        T visitSourceBrowserType();
+
+        T visitSourceBrowserName();
+
+        T visitSourceGeoCity();
+
+        T visitSourceGeoState();
+
+        T visitSourceGeoCountry();
+
+        T visitUserReferenceId();
+
+        T visitAgentUserId();
 
         T visitUnknown(String unknownType);
     }

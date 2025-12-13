@@ -10,6 +10,8 @@ public final class InboxItemType {
     public static final InboxItemType DUPLICATE_DOCUMENT =
             new InboxItemType(Value.DUPLICATE_DOCUMENT, "DUPLICATE_DOCUMENT");
 
+    public static final InboxItemType CUSTOM = new InboxItemType(Value.CUSTOM, "CUSTOM");
+
     public static final InboxItemType MISSING_KNOWLEDGE =
             new InboxItemType(Value.MISSING_KNOWLEDGE, "MISSING_KNOWLEDGE");
 
@@ -47,6 +49,8 @@ public final class InboxItemType {
         switch (value) {
             case DUPLICATE_DOCUMENT:
                 return visitor.visitDuplicateDocument();
+            case CUSTOM:
+                return visitor.visitCustom();
             case MISSING_KNOWLEDGE:
                 return visitor.visitMissingKnowledge();
             case UNKNOWN:
@@ -60,6 +64,8 @@ public final class InboxItemType {
         switch (value) {
             case "DUPLICATE_DOCUMENT":
                 return DUPLICATE_DOCUMENT;
+            case "CUSTOM":
+                return CUSTOM;
             case "MISSING_KNOWLEDGE":
                 return MISSING_KNOWLEDGE;
             default:
@@ -72,6 +78,8 @@ public final class InboxItemType {
 
         MISSING_KNOWLEDGE,
 
+        CUSTOM,
+
         UNKNOWN
     }
 
@@ -79,6 +87,8 @@ public final class InboxItemType {
         T visitDuplicateDocument();
 
         T visitMissingKnowledge();
+
+        T visitCustom();
 
         T visitUnknown(String unknownType);
     }

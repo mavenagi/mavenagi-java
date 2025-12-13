@@ -15,12 +15,15 @@ import com.mavenagi.core.ObjectMappers;
 import com.mavenagi.resources.commons.types.AttachmentResponse;
 import com.mavenagi.resources.commons.types.EntityId;
 import com.mavenagi.resources.commons.types.LlmInclusionStatus;
+import com.mavenagi.resources.commons.types.ScopedEntity;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
@@ -56,6 +59,8 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
 
     private final Map<String, String> metadata;
 
+    private final Set<ScopedEntity> relevantEntities;
+
     private final Map<String, Object> additionalProperties;
 
     private KnowledgeDocumentResponse(
@@ -74,6 +79,7 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
             String content,
             Optional<AttachmentResponse> asset,
             Map<String, String> metadata,
+            Set<ScopedEntity> relevantEntities,
             Map<String, Object> additionalProperties) {
         this.knowledgeDocumentId = knowledgeDocumentId;
         this.knowledgeBaseVersionId = knowledgeBaseVersionId;
@@ -90,6 +96,7 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
         this.content = content;
         this.asset = asset;
         this.metadata = metadata;
+        this.relevantEntities = relevantEntities;
         this.additionalProperties = additionalProperties;
     }
 
@@ -225,6 +232,14 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
         return metadata;
     }
 
+    /**
+     * @return Scoped entities this document is associated with for context-based filtering.
+     */
+    @JsonProperty("relevantEntities")
+    public Set<ScopedEntity> getRelevantEntities() {
+        return relevantEntities;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -251,7 +266,8 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
                 && processingStatus.equals(other.processingStatus)
                 && content.equals(other.content)
                 && asset.equals(other.asset)
-                && metadata.equals(other.metadata);
+                && metadata.equals(other.metadata)
+                && relevantEntities.equals(other.relevantEntities);
     }
 
     @java.lang.Override
@@ -271,7 +287,8 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
                 this.processingStatus,
                 this.content,
                 this.asset,
-                this.metadata);
+                this.metadata,
+                this.relevantEntities);
     }
 
     @java.lang.Override
@@ -395,6 +412,15 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
         _FinalStage putAllMetadata(Map<String, String> metadata);
 
         _FinalStage metadata(String key, String value);
+
+        /**
+         * <p>Scoped entities this document is associated with for context-based filtering.</p>
+         */
+        _FinalStage relevantEntities(Set<ScopedEntity> relevantEntities);
+
+        _FinalStage addRelevantEntities(ScopedEntity relevantEntities);
+
+        _FinalStage addAllRelevantEntities(Set<ScopedEntity> relevantEntities);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -420,6 +446,8 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
         private OffsetDateTime updatedAt;
 
         private String content;
+
+        private Set<ScopedEntity> relevantEntities = new LinkedHashSet<>();
 
         private Map<String, String> metadata = new LinkedHashMap<>();
 
@@ -459,6 +487,7 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
             content(other.getContent());
             asset(other.getAsset());
             metadata(other.getMetadata());
+            relevantEntities(other.getRelevantEntities());
             return this;
         }
 
@@ -546,6 +575,41 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
         @JsonSetter("content")
         public _FinalStage content(@NotNull String content) {
             this.content = Objects.requireNonNull(content, "content must not be null");
+            return this;
+        }
+
+        /**
+         * <p>Scoped entities this document is associated with for context-based filtering.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage addAllRelevantEntities(Set<ScopedEntity> relevantEntities) {
+            if (relevantEntities != null) {
+                this.relevantEntities.addAll(relevantEntities);
+            }
+            return this;
+        }
+
+        /**
+         * <p>Scoped entities this document is associated with for context-based filtering.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage addRelevantEntities(ScopedEntity relevantEntities) {
+            this.relevantEntities.add(relevantEntities);
+            return this;
+        }
+
+        /**
+         * <p>Scoped entities this document is associated with for context-based filtering.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "relevantEntities", nulls = Nulls.SKIP)
+        public _FinalStage relevantEntities(Set<ScopedEntity> relevantEntities) {
+            this.relevantEntities.clear();
+            if (relevantEntities != null) {
+                this.relevantEntities.addAll(relevantEntities);
+            }
             return this;
         }
 
@@ -744,6 +808,7 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
                     content,
                     asset,
                     metadata,
+                    relevantEntities,
                     additionalProperties);
         }
     }

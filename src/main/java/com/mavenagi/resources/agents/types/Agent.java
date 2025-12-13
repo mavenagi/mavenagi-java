@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
 import com.mavenagi.resources.commons.types.EntityId;
+import com.mavenagi.resources.commons.types.PiiCategory;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.LinkedHashSet;

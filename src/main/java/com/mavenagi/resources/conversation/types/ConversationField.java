@@ -26,6 +26,8 @@ public final class ConversationField {
     public static final ConversationField THUMBS_UP_COUNT =
             new ConversationField(Value.THUMBS_UP_COUNT, "ThumbsUpCount");
 
+    public static final ConversationField INVOLVED_APPS = new ConversationField(Value.INVOLVED_APPS, "InvolvedApps");
+
     public static final ConversationField INBOX_ITEMS = new ConversationField(Value.INBOX_ITEMS, "InboxItems");
 
     public static final ConversationField CREATED_AT = new ConversationField(Value.CREATED_AT, "CreatedAt");
@@ -65,6 +67,9 @@ public final class ConversationField {
     public static final ConversationField SOURCES = new ConversationField(Value.SOURCES, "Sources");
 
     public static final ConversationField PREDICTED_NPS = new ConversationField(Value.PREDICTED_NPS, "PredictedNPS");
+
+    public static final ConversationField BOT_MESSAGE_COUNT =
+            new ConversationField(Value.BOT_MESSAGE_COUNT, "BotMessageCount");
 
     public static final ConversationField RESOLUTION_STATUS =
             new ConversationField(Value.RESOLUTION_STATUS, "ResolutionStatus");
@@ -117,6 +122,8 @@ public final class ConversationField {
                 return visitor.visitTags();
             case THUMBS_UP_COUNT:
                 return visitor.visitThumbsUpCount();
+            case INVOLVED_APPS:
+                return visitor.visitInvolvedApps();
             case INBOX_ITEMS:
                 return visitor.visitInboxItems();
             case CREATED_AT:
@@ -153,6 +160,8 @@ public final class ConversationField {
                 return visitor.visitSources();
             case PREDICTED_NPS:
                 return visitor.visitPredictedNps();
+            case BOT_MESSAGE_COUNT:
+                return visitor.visitBotMessageCount();
             case RESOLUTION_STATUS:
                 return visitor.visitResolutionStatus();
             case HUMAN_AGENTS:
@@ -180,6 +189,8 @@ public final class ConversationField {
                 return TAGS;
             case "ThumbsUpCount":
                 return THUMBS_UP_COUNT;
+            case "InvolvedApps":
+                return INVOLVED_APPS;
             case "InboxItems":
                 return INBOX_ITEMS;
             case "CreatedAt":
@@ -216,6 +227,8 @@ public final class ConversationField {
                 return SOURCES;
             case "PredictedNPS":
                 return PREDICTED_NPS;
+            case "BotMessageCount":
+                return BOT_MESSAGE_COUNT;
             case "ResolutionStatus":
                 return RESOLUTION_STATUS;
             case "HumanAgents":
@@ -262,6 +275,8 @@ public final class ConversationField {
 
         USER_MESSAGE_COUNT,
 
+        BOT_MESSAGE_COUNT,
+
         LANGUAGES,
 
         ACTIONS,
@@ -279,6 +294,8 @@ public final class ConversationField {
         AGENT_ID,
 
         INBOX_ITEMS,
+
+        INVOLVED_APPS,
 
         UNKNOWN
     }
@@ -320,6 +337,8 @@ public final class ConversationField {
 
         T visitUserMessageCount();
 
+        T visitBotMessageCount();
+
         T visitLanguages();
 
         T visitActions();
@@ -337,6 +356,8 @@ public final class ConversationField {
         T visitAgentId();
 
         T visitInboxItems();
+
+        T visitInvolvedApps();
 
         T visitUnknown(String unknownType);
     }

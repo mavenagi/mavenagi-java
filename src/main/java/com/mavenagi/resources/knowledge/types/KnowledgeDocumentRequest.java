@@ -14,11 +14,13 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
 import com.mavenagi.resources.commons.types.EntityIdBase;
 import com.mavenagi.resources.commons.types.EntityIdWithoutAgent;
+import com.mavenagi.resources.commons.types.ScopedEntity;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
@@ -48,6 +50,8 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
 
     private final Optional<OffsetDateTime> updatedAt;
 
+    private final Optional<Set<ScopedEntity>> relevantEntities;
+
     private final Map<String, Object> additionalProperties;
 
     private KnowledgeDocumentRequest(
@@ -63,6 +67,7 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
             Optional<Map<String, String>> metadata,
             Optional<OffsetDateTime> createdAt,
             Optional<OffsetDateTime> updatedAt,
+            Optional<Set<ScopedEntity>> relevantEntities,
             Map<String, Object> additionalProperties) {
         this.url = url;
         this.language = language;
@@ -76,6 +81,7 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
         this.metadata = metadata;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.relevantEntities = relevantEntities;
         this.additionalProperties = additionalProperties;
     }
 
@@ -178,6 +184,14 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
         return updatedAt;
     }
 
+    /**
+     * @return Scoped entities this document is associated with for context-based filtering. By default, the document is associated with the agent.
+     */
+    @JsonProperty("relevantEntities")
+    public Optional<Set<ScopedEntity>> getRelevantEntities() {
+        return relevantEntities;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -201,7 +215,8 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
                 && content.equals(other.content)
                 && metadata.equals(other.metadata)
                 && createdAt.equals(other.createdAt)
-                && updatedAt.equals(other.updatedAt);
+                && updatedAt.equals(other.updatedAt)
+                && relevantEntities.equals(other.relevantEntities);
     }
 
     @java.lang.Override
@@ -218,7 +233,8 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
                 this.content,
                 this.metadata,
                 this.createdAt,
-                this.updatedAt);
+                this.updatedAt,
+                this.relevantEntities);
     }
 
     @java.lang.Override
@@ -318,6 +334,13 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
         _FinalStage updatedAt(Optional<OffsetDateTime> updatedAt);
 
         _FinalStage updatedAt(OffsetDateTime updatedAt);
+
+        /**
+         * <p>Scoped entities this document is associated with for context-based filtering. By default, the document is associated with the agent.</p>
+         */
+        _FinalStage relevantEntities(Optional<Set<ScopedEntity>> relevantEntities);
+
+        _FinalStage relevantEntities(Set<ScopedEntity> relevantEntities);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -327,6 +350,8 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
         private KnowledgeDocumentContentType contentType;
 
         private String title;
+
+        private Optional<Set<ScopedEntity>> relevantEntities = Optional.empty();
 
         private Optional<OffsetDateTime> updatedAt = Optional.empty();
 
@@ -365,6 +390,7 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
             metadata(other.getMetadata());
             createdAt(other.getCreatedAt());
             updatedAt(other.getUpdatedAt());
+            relevantEntities(other.getRelevantEntities());
             return this;
         }
 
@@ -402,6 +428,26 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
         @JsonSetter("title")
         public _FinalStage title(@NotNull String title) {
             this.title = Objects.requireNonNull(title, "title must not be null");
+            return this;
+        }
+
+        /**
+         * <p>Scoped entities this document is associated with for context-based filtering. By default, the document is associated with the agent.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage relevantEntities(Set<ScopedEntity> relevantEntities) {
+            this.relevantEntities = Optional.ofNullable(relevantEntities);
+            return this;
+        }
+
+        /**
+         * <p>Scoped entities this document is associated with for context-based filtering. By default, the document is associated with the agent.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "relevantEntities", nulls = Nulls.SKIP)
+        public _FinalStage relevantEntities(Optional<Set<ScopedEntity>> relevantEntities) {
+            this.relevantEntities = relevantEntities;
             return this;
         }
 
@@ -600,6 +646,7 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
                     metadata,
                     createdAt,
                     updatedAt,
+                    relevantEntities,
                     additionalProperties);
         }
     }

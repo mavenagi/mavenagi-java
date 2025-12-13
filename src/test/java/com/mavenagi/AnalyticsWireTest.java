@@ -20,6 +20,14 @@ import com.mavenagi.resources.analytics.types.ConversationPercentile;
 import com.mavenagi.resources.analytics.types.ConversationPieChartRequest;
 import com.mavenagi.resources.analytics.types.ConversationTableRequest;
 import com.mavenagi.resources.analytics.types.ConversationTableResponse;
+import com.mavenagi.resources.analytics.types.EventChartRequest;
+import com.mavenagi.resources.analytics.types.EventColumnDefinition;
+import com.mavenagi.resources.analytics.types.EventCount;
+import com.mavenagi.resources.analytics.types.EventGroupBy;
+import com.mavenagi.resources.analytics.types.EventMetric;
+import com.mavenagi.resources.analytics.types.EventPieChartRequest;
+import com.mavenagi.resources.analytics.types.EventTableRequest;
+import com.mavenagi.resources.analytics.types.EventTableResponse;
 import com.mavenagi.resources.analytics.types.FeedbackColumnDefinition;
 import com.mavenagi.resources.analytics.types.FeedbackCount;
 import com.mavenagi.resources.analytics.types.FeedbackGroupBy;
@@ -27,6 +35,9 @@ import com.mavenagi.resources.analytics.types.FeedbackMetric;
 import com.mavenagi.resources.analytics.types.FeedbackTableRequest;
 import com.mavenagi.resources.analytics.types.FeedbackTableResponse;
 import com.mavenagi.resources.analytics.types.TimeInterval;
+import com.mavenagi.resources.commons.types.EventField;
+import com.mavenagi.resources.commons.types.EventFilter;
+import com.mavenagi.resources.commons.types.EventType;
 import com.mavenagi.resources.commons.types.FeedbackType;
 import com.mavenagi.resources.conversation.types.ConversationField;
 import com.mavenagi.resources.conversation.types.ConversationFilter;
@@ -711,6 +722,281 @@ public class AnalyticsWireTest {
             + "      }\n"
             + "    }\n"
             + "  ]\n"
+            + "}";
+        JsonNode actualResponseNode = objectMapper.readTree(actualResponseJson);
+        JsonNode expectedResponseNode = objectMapper.readTree(expectedResponseBody);
+        Assertions.assertEquals(expectedResponseNode, actualResponseNode, "Response body structure does not match expected");
+        if (actualResponseNode.has("type") || actualResponseNode.has("_type") || actualResponseNode.has("kind")) {
+            String discriminator = null;
+            if (actualResponseNode.has("type")) discriminator = actualResponseNode.get("type").asText();
+            else if (actualResponseNode.has("_type")) discriminator = actualResponseNode.get("_type").asText();
+            else if (actualResponseNode.has("kind")) discriminator = actualResponseNode.get("kind").asText();
+            Assertions.assertNotNull(discriminator, "Union type should have a discriminator field");
+            Assertions.assertFalse(discriminator.isEmpty(), "Union discriminator should not be empty");
+        }
+        
+        if (!actualResponseNode.isNull()) {
+            Assertions.assertTrue(actualResponseNode.isObject() || actualResponseNode.isArray() || actualResponseNode.isValueNode(), "response should be a valid JSON value");
+        }
+        
+        if (actualResponseNode.isArray()) {
+            Assertions.assertTrue(actualResponseNode.size() >= 0, "Array should have valid size");
+        }
+        if (actualResponseNode.isObject()) {
+            Assertions.assertTrue(actualResponseNode.size() >= 0, "Object should have valid field count");
+        }
+    }
+    @Test
+    public void testGetEventTable() throws Exception {
+        server.enqueue(new MockResponse()
+            .setResponseCode(200)
+            .setBody("{\"headers\":[\"event_count\"],\"rows\":[{\"identifier\":{\"EVENT_NAME\":{\"type\":\"string\",\"value\":\"CHAT_OPENED\"}},\"data\":{\"event_count\":{\"type\":\"double\",\"value\":50}}},{\"identifier\":{\"EVENT_NAME\":{\"type\":\"string\",\"value\":\"CHAT_CLOSED\"}},\"data\":{\"event_count\":{\"type\":\"double\",\"value\":45}}}]}"));
+        EventTableResponse response = client.analytics().getEventTable(
+            EventTableRequest
+                .builder()
+                .fieldGroupings(
+                    Arrays.asList(
+                        EventGroupBy
+                            .builder()
+                            .field(EventField.EVENT_NAME)
+                            .build()
+                    )
+                )
+                .columnDefinitions(
+                    Arrays.asList(
+                        EventColumnDefinition
+                            .builder()
+                            .header("event_count")
+                            .metric(
+                                EventMetric.count(
+                                    EventCount
+                                        .builder()
+                                        .build()
+                                )
+                            )
+                            .build()
+                    )
+                )
+                .eventFilter(
+                    EventFilter
+                        .builder()
+                        .eventTypes(
+                            Optional.of(
+                                Arrays.asList(EventType.USER)
+                            )
+                        )
+                        .build()
+                )
+                .build()
+        );
+        RecordedRequest request = server.takeRequest();
+        Assertions.assertNotNull(request);
+        Assertions.assertEquals("POST", request.getMethod());
+        // Validate request body
+        String actualRequestBody = request.getBody().readUtf8();
+        String expectedRequestBody = ""
+            + "{\n"
+            + "  \"eventFilter\": {\n"
+            + "    \"eventTypes\": [\n"
+            + "      \"USER\"\n"
+            + "    ]\n"
+            + "  },\n"
+            + "  \"fieldGroupings\": [\n"
+            + "    {\n"
+            + "      \"field\": \"EVENT_NAME\"\n"
+            + "    }\n"
+            + "  ],\n"
+            + "  \"columnDefinitions\": [\n"
+            + "    {\n"
+            + "      \"header\": \"event_count\",\n"
+            + "      \"metric\": {\n"
+            + "        \"type\": \"count\"\n"
+            + "      }\n"
+            + "    }\n"
+            + "  ]\n"
+            + "}";
+        JsonNode actualJson = objectMapper.readTree(actualRequestBody);
+        JsonNode expectedJson = objectMapper.readTree(expectedRequestBody);
+        Assertions.assertEquals(expectedJson, actualJson, "Request body structure does not match expected");
+        if (actualJson.has("type") || actualJson.has("_type") || actualJson.has("kind")) {
+            String discriminator = null;
+            if (actualJson.has("type")) discriminator = actualJson.get("type").asText();
+            else if (actualJson.has("_type")) discriminator = actualJson.get("_type").asText();
+            else if (actualJson.has("kind")) discriminator = actualJson.get("kind").asText();
+            Assertions.assertNotNull(discriminator, "Union type should have a discriminator field");
+            Assertions.assertFalse(discriminator.isEmpty(), "Union discriminator should not be empty");
+        }
+        
+        if (!actualJson.isNull()) {
+            Assertions.assertTrue(actualJson.isObject() || actualJson.isArray() || actualJson.isValueNode(), "request should be a valid JSON value");
+        }
+        
+        if (actualJson.isArray()) {
+            Assertions.assertTrue(actualJson.size() >= 0, "Array should have valid size");
+        }
+        if (actualJson.isObject()) {
+            Assertions.assertTrue(actualJson.size() >= 0, "Object should have valid field count");
+        }
+        
+        // Validate response body
+        Assertions.assertNotNull(response, "Response should not be null");
+        String actualResponseJson = objectMapper.writeValueAsString(response);
+        String expectedResponseBody = ""
+            + "{\n"
+            + "  \"headers\": [\n"
+            + "    \"event_count\"\n"
+            + "  ],\n"
+            + "  \"rows\": [\n"
+            + "    {\n"
+            + "      \"identifier\": {\n"
+            + "        \"EVENT_NAME\": {\n"
+            + "          \"type\": \"string\",\n"
+            + "          \"value\": \"CHAT_OPENED\"\n"
+            + "        }\n"
+            + "      },\n"
+            + "      \"data\": {\n"
+            + "        \"event_count\": {\n"
+            + "          \"type\": \"double\",\n"
+            + "          \"value\": 50\n"
+            + "        }\n"
+            + "      }\n"
+            + "    },\n"
+            + "    {\n"
+            + "      \"identifier\": {\n"
+            + "        \"EVENT_NAME\": {\n"
+            + "          \"type\": \"string\",\n"
+            + "          \"value\": \"CHAT_CLOSED\"\n"
+            + "        }\n"
+            + "      },\n"
+            + "      \"data\": {\n"
+            + "        \"event_count\": {\n"
+            + "          \"type\": \"double\",\n"
+            + "          \"value\": 45\n"
+            + "        }\n"
+            + "      }\n"
+            + "    }\n"
+            + "  ]\n"
+            + "}";
+        JsonNode actualResponseNode = objectMapper.readTree(actualResponseJson);
+        JsonNode expectedResponseNode = objectMapper.readTree(expectedResponseBody);
+        Assertions.assertEquals(expectedResponseNode, actualResponseNode, "Response body structure does not match expected");
+        if (actualResponseNode.has("type") || actualResponseNode.has("_type") || actualResponseNode.has("kind")) {
+            String discriminator = null;
+            if (actualResponseNode.has("type")) discriminator = actualResponseNode.get("type").asText();
+            else if (actualResponseNode.has("_type")) discriminator = actualResponseNode.get("_type").asText();
+            else if (actualResponseNode.has("kind")) discriminator = actualResponseNode.get("kind").asText();
+            Assertions.assertNotNull(discriminator, "Union type should have a discriminator field");
+            Assertions.assertFalse(discriminator.isEmpty(), "Union discriminator should not be empty");
+        }
+        
+        if (!actualResponseNode.isNull()) {
+            Assertions.assertTrue(actualResponseNode.isObject() || actualResponseNode.isArray() || actualResponseNode.isValueNode(), "response should be a valid JSON value");
+        }
+        
+        if (actualResponseNode.isArray()) {
+            Assertions.assertTrue(actualResponseNode.size() >= 0, "Array should have valid size");
+        }
+        if (actualResponseNode.isObject()) {
+            Assertions.assertTrue(actualResponseNode.size() >= 0, "Object should have valid field count");
+        }
+    }
+    @Test
+    public void testGetEventChart() throws Exception {
+        server.enqueue(new MockResponse()
+            .setResponseCode(200)
+            .setBody("{\"type\":\"pieChart\",\"series\":{\"name\":\"Series\",\"data\":[{\"label\":\"Sales\",\"y\":5},{\"label\":\"Support\",\"y\":10}]}}"));
+        ChartResponse response = client.analytics().getEventChart(
+            EventChartRequest.pieChart(
+                EventPieChartRequest
+                    .builder()
+                    .groupBy(
+                        EventGroupBy
+                            .builder()
+                            .field(EventField.EVENT_NAME)
+                            .build()
+                    )
+                    .metric(
+                        EventMetric.count(
+                            EventCount
+                                .builder()
+                                .build()
+                        )
+                    )
+                    .eventFilter(
+                        EventFilter
+                            .builder()
+                            .eventTypes(
+                                Optional.of(
+                                    Arrays.asList(EventType.USER)
+                                )
+                            )
+                            .build()
+                    )
+                    .build()
+            )
+        );
+        RecordedRequest request = server.takeRequest();
+        Assertions.assertNotNull(request);
+        Assertions.assertEquals("POST", request.getMethod());
+        // Validate request body
+        String actualRequestBody = request.getBody().readUtf8();
+        String expectedRequestBody = ""
+            + "{\n"
+            + "  \"type\": \"pieChart\",\n"
+            + "  \"eventFilter\": {\n"
+            + "    \"eventTypes\": [\n"
+            + "      \"USER\"\n"
+            + "    ]\n"
+            + "  },\n"
+            + "  \"groupBy\": {\n"
+            + "    \"field\": \"EVENT_NAME\"\n"
+            + "  },\n"
+            + "  \"metric\": {\n"
+            + "    \"type\": \"count\"\n"
+            + "  }\n"
+            + "}";
+        JsonNode actualJson = objectMapper.readTree(actualRequestBody);
+        JsonNode expectedJson = objectMapper.readTree(expectedRequestBody);
+        Assertions.assertEquals(expectedJson, actualJson, "Request body structure does not match expected");
+        if (actualJson.has("type") || actualJson.has("_type") || actualJson.has("kind")) {
+            String discriminator = null;
+            if (actualJson.has("type")) discriminator = actualJson.get("type").asText();
+            else if (actualJson.has("_type")) discriminator = actualJson.get("_type").asText();
+            else if (actualJson.has("kind")) discriminator = actualJson.get("kind").asText();
+            Assertions.assertNotNull(discriminator, "Union type should have a discriminator field");
+            Assertions.assertFalse(discriminator.isEmpty(), "Union discriminator should not be empty");
+        }
+        
+        if (!actualJson.isNull()) {
+            Assertions.assertTrue(actualJson.isObject() || actualJson.isArray() || actualJson.isValueNode(), "request should be a valid JSON value");
+        }
+        
+        if (actualJson.isArray()) {
+            Assertions.assertTrue(actualJson.size() >= 0, "Array should have valid size");
+        }
+        if (actualJson.isObject()) {
+            Assertions.assertTrue(actualJson.size() >= 0, "Object should have valid field count");
+        }
+        
+        // Validate response body
+        Assertions.assertNotNull(response, "Response should not be null");
+        String actualResponseJson = objectMapper.writeValueAsString(response);
+        String expectedResponseBody = ""
+            + "{\n"
+            + "  \"type\": \"pieChart\",\n"
+            + "  \"series\": {\n"
+            + "    \"name\": \"Series\",\n"
+            + "    \"data\": [\n"
+            + "      {\n"
+            + "        \"label\": \"Sales\",\n"
+            + "        \"y\": 5\n"
+            + "      },\n"
+            + "      {\n"
+            + "        \"label\": \"Support\",\n"
+            + "        \"y\": 10\n"
+            + "      }\n"
+            + "    ]\n"
+            + "  }\n"
             + "}";
         JsonNode actualResponseNode = objectMapper.readTree(actualResponseJson);
         JsonNode expectedResponseNode = objectMapper.readTree(expectedResponseBody);

@@ -62,7 +62,7 @@ public class ConversationWireTest {
     public void testInitialize() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"messages\":[{\"type\":\"user\",\"conversationMessageId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"language\":\"language\",\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"agentUserId\":\"agentUserId\",\"userDisplayName\":\"userDisplayName\",\"status\":\"SENDING\",\"responseState\":\"NOT_ASKED\",\"userId\":{\"referenceId\":\"x\"},\"text\":\"text\",\"userMessageType\":\"USER\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\"},{\"type\":\"user\",\"conversationMessageId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"language\":\"language\",\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"agentUserId\":\"agentUserId\",\"userDisplayName\":\"userDisplayName\",\"status\":\"SENDING\",\"responseState\":\"NOT_ASKED\",\"userId\":{\"referenceId\":\"x\"},\"text\":\"text\",\"userMessageType\":\"USER\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\"}],\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"responseConfig\":{\"capabilities\":[\"MARKDOWN\",\"MARKDOWN\"],\"isCopilot\":true,\"responseLength\":\"SHORT\"},\"subject\":\"subject\",\"url\":\"url\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"tags\":[\"tags\"],\"metadata\":{\"metadata\":\"metadata\"},\"allMetadata\":{\"allMetadata\":{\"allMetadata\":\"allMetadata\"}},\"conversationId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"analysis\":{\"userRequest\":\"userRequest\",\"agentResponse\":\"agentResponse\",\"resolutionStatus\":\"resolutionStatus\",\"category\":\"category\",\"sentiment\":\"POSITIVE\",\"quality\":\"GOOD\",\"qualityReason\":\"MISSING_KNOWLEDGE\",\"resolvedByMaven\":true,\"primaryLanguage\":\"primaryLanguage\",\"predictedNps\":1.1},\"summary\":{\"actionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"incompleteActionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"insertCount\":1,\"thumbsUpCount\":1,\"thumbsDownCount\":1,\"handoffCount\":1,\"userMessageCount\":1,\"handleTime\":1000000,\"humanAgentResponseDelay\":1000000,\"humanAgents\":[\"humanAgents\",\"humanAgents\"],\"humanAgentsWithInserts\":[\"humanAgentsWithInserts\",\"humanAgentsWithInserts\"],\"users\":[\"users\",\"users\"],\"userIdentifiers\":[\"userIdentifiers\",\"userIdentifiers\"],\"lastUserMessage\":\"lastUserMessage\",\"lastBotMessage\":\"lastBotMessage\"},\"deleted\":true,\"open\":true,\"llmEnabled\":true,\"simulationContext\":{\"additionalPromptText\":\"additionalPromptText\",\"persona\":\"CASUAL_BUDDY\",\"availableKnowledgeBases\":[{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}]}}"));
+            .setBody("{\"messages\":[{\"type\":\"user\",\"conversationMessageId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"language\":\"language\",\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"agentUserId\":\"agentUserId\",\"userDisplayName\":\"userDisplayName\",\"status\":\"SENDING\",\"responseState\":\"NOT_ASKED\",\"userId\":{\"referenceId\":\"x\"},\"text\":\"text\",\"userMessageType\":\"USER\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\"},{\"type\":\"user\",\"conversationMessageId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"language\":\"language\",\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"agentUserId\":\"agentUserId\",\"userDisplayName\":\"userDisplayName\",\"status\":\"SENDING\",\"responseState\":\"NOT_ASKED\",\"userId\":{\"referenceId\":\"x\"},\"text\":\"text\",\"userMessageType\":\"USER\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\"}],\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"responseConfig\":{\"capabilities\":[\"MARKDOWN\",\"MARKDOWN\"],\"isCopilot\":true,\"responseLength\":\"SHORT\",\"contextFilter\":{\"scopeType\":\"byEntities\",\"entities\":[{\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"scopeEntityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}}]}},\"subject\":\"subject\",\"url\":\"url\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"tags\":[\"tags\"],\"metadata\":{\"metadata\":\"metadata\"},\"allMetadata\":{\"allMetadata\":{\"allMetadata\":\"allMetadata\"}},\"conversationId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"analysis\":{\"userRequest\":\"userRequest\",\"agentResponse\":\"agentResponse\",\"resolutionStatus\":\"resolutionStatus\",\"category\":\"category\",\"sentiment\":\"POSITIVE\",\"quality\":\"GOOD\",\"qualityReason\":\"MISSING_KNOWLEDGE\",\"resolvedByMaven\":true,\"primaryLanguage\":\"primaryLanguage\",\"predictedNps\":1.1},\"summary\":{\"actionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"incompleteActionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"insertCount\":1,\"thumbsUpCount\":1,\"thumbsDownCount\":1,\"handoffCount\":1,\"userMessageCount\":1,\"botMessageCount\":1,\"handleTime\":1000000,\"humanAgentResponseDelay\":1000000,\"humanAgents\":[\"humanAgents\",\"humanAgents\"],\"humanAgentsWithInserts\":[\"humanAgentsWithInserts\",\"humanAgentsWithInserts\"],\"users\":[\"users\",\"users\"],\"userIdentifiers\":[\"userIdentifiers\",\"userIdentifiers\"],\"lastUserMessage\":\"lastUserMessage\",\"lastBotMessage\":\"lastBotMessage\",\"involvedAppIds\":[\"involvedAppIds\"]},\"deleted\":true,\"open\":true,\"llmEnabled\":true,\"simulationContext\":{\"additionalPromptText\":\"additionalPromptText\",\"persona\":\"CASUAL_BUDDY\",\"availableKnowledgeBases\":[{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}]}}"));
         ConversationResponse response = client.conversation().initialize(
             ConversationRequest
                 .builder()
@@ -273,7 +273,28 @@ public class ConversationWireTest {
             + "      \"MARKDOWN\"\n"
             + "    ],\n"
             + "    \"isCopilot\": true,\n"
-            + "    \"responseLength\": \"SHORT\"\n"
+            + "    \"responseLength\": \"SHORT\",\n"
+            + "    \"contextFilter\": {\n"
+            + "      \"scopeType\": \"byEntities\",\n"
+            + "      \"entities\": [\n"
+            + "        {\n"
+            + "          \"entityId\": {\n"
+            + "            \"organizationId\": \"organizationId\",\n"
+            + "            \"agentId\": \"agentId\",\n"
+            + "            \"type\": \"AGENT\",\n"
+            + "            \"appId\": \"appId\",\n"
+            + "            \"referenceId\": \"x\"\n"
+            + "          },\n"
+            + "          \"scopeEntityId\": {\n"
+            + "            \"organizationId\": \"organizationId\",\n"
+            + "            \"agentId\": \"agentId\",\n"
+            + "            \"type\": \"AGENT\",\n"
+            + "            \"appId\": \"appId\",\n"
+            + "            \"referenceId\": \"x\"\n"
+            + "          }\n"
+            + "        }\n"
+            + "      ]\n"
+            + "    }\n"
             + "  },\n"
             + "  \"subject\": \"subject\",\n"
             + "  \"url\": \"url\",\n"
@@ -339,6 +360,7 @@ public class ConversationWireTest {
             + "    \"thumbsDownCount\": 1,\n"
             + "    \"handoffCount\": 1,\n"
             + "    \"userMessageCount\": 1,\n"
+            + "    \"botMessageCount\": 1,\n"
             + "    \"handleTime\": 1000000,\n"
             + "    \"humanAgentResponseDelay\": 1000000,\n"
             + "    \"humanAgents\": [\n"
@@ -358,7 +380,10 @@ public class ConversationWireTest {
             + "      \"userIdentifiers\"\n"
             + "    ],\n"
             + "    \"lastUserMessage\": \"lastUserMessage\",\n"
-            + "    \"lastBotMessage\": \"lastBotMessage\"\n"
+            + "    \"lastBotMessage\": \"lastBotMessage\",\n"
+            + "    \"involvedAppIds\": [\n"
+            + "      \"involvedAppIds\"\n"
+            + "    ]\n"
             + "  },\n"
             + "  \"deleted\": true,\n"
             + "  \"open\": true,\n"
@@ -404,7 +429,7 @@ public class ConversationWireTest {
     public void testPatch() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"conversationId\":{\"referenceId\":\"conversation-0\",\"appId\":\"myapp\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"CONVERSATION\"},\"deleted\":false,\"open\":false,\"llmEnabled\":true,\"analysis\":{\"resolutionStatus\":\"Resolved\",\"sentiment\":\"POSITIVE\",\"resolvedByMaven\":true},\"summary\":{\"actionIds\":[],\"incompleteActionIds\":[],\"insertCount\":0,\"thumbsUpCount\":0,\"thumbsDownCount\":0,\"handoffCount\":0,\"userMessageCount\":1,\"humanAgents\":[],\"humanAgentsWithInserts\":[],\"users\":[],\"userIdentifiers\":[]},\"metadata\":{},\"allMetadata\":{},\"attachments\":[],\"messages\":[{\"type\":\"user\",\"userMessageType\":\"USER\",\"conversationMessageId\":{\"referenceId\":\"message-0\",\"appId\":\"myapp\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"CONVERSATION_MESSAGE\"},\"status\":\"UNKNOWN\",\"userId\":{\"referenceId\":\"user-0\"},\"text\":\"How do I reset my password?\",\"attachments\":[{\"url\":\"https://example.com/attachment-0\",\"type\":\"image/png\",\"status\":\"ACCEPTED\",\"sizeBytes\":1234}]},{\"type\":\"bot\",\"botMessageType\":\"BOT_RESPONSE\",\"conversationMessageId\":{\"referenceId\":\"message-1\",\"appId\":\"myapp\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"CONVERSATION_MESSAGE\"},\"status\":\"SENT\",\"responses\":[{\"type\":\"text\",\"text\":\"Hi! Go to acme.com/reset-password\"}],\"metadata\":{\"followupQuestions\":[\"What if I did not get the reset email?\"],\"sources\":[]}}]}"));
+            .setBody("{\"conversationId\":{\"referenceId\":\"conversation-0\",\"appId\":\"myapp\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"CONVERSATION\"},\"deleted\":false,\"open\":false,\"llmEnabled\":true,\"analysis\":{\"resolutionStatus\":\"Resolved\",\"sentiment\":\"POSITIVE\",\"resolvedByMaven\":true},\"summary\":{\"actionIds\":[],\"incompleteActionIds\":[],\"insertCount\":0,\"thumbsUpCount\":0,\"thumbsDownCount\":0,\"handoffCount\":0,\"userMessageCount\":1,\"botMessageCount\":1,\"humanAgents\":[],\"humanAgentsWithInserts\":[],\"users\":[],\"userIdentifiers\":[],\"involvedAppIds\":[\"myapp\"]},\"metadata\":{},\"allMetadata\":{},\"attachments\":[],\"messages\":[{\"type\":\"user\",\"userMessageType\":\"USER\",\"conversationMessageId\":{\"referenceId\":\"message-0\",\"appId\":\"myapp\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"CONVERSATION_MESSAGE\"},\"status\":\"UNKNOWN\",\"userId\":{\"referenceId\":\"user-0\"},\"text\":\"How do I reset my password?\",\"attachments\":[{\"url\":\"https://example.com/attachment-0\",\"type\":\"image/png\",\"status\":\"ACCEPTED\",\"sizeBytes\":1234}]},{\"type\":\"bot\",\"botMessageType\":\"BOT_RESPONSE\",\"conversationMessageId\":{\"referenceId\":\"message-1\",\"appId\":\"myapp\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"CONVERSATION_MESSAGE\"},\"status\":\"SENT\",\"responses\":[{\"type\":\"text\",\"text\":\"Hi! Go to acme.com/reset-password\"}],\"metadata\":{\"followupQuestions\":[\"What if I did not get the reset email?\"],\"sources\":[]}}]}"));
         ConversationResponse response = client.conversation().patch(
             "conversation-0",
             ConversationPatchRequest
@@ -472,10 +497,14 @@ public class ConversationWireTest {
             + "    \"thumbsDownCount\": 0,\n"
             + "    \"handoffCount\": 0,\n"
             + "    \"userMessageCount\": 1,\n"
+            + "    \"botMessageCount\": 1,\n"
             + "    \"humanAgents\": [],\n"
             + "    \"humanAgentsWithInserts\": [],\n"
             + "    \"users\": [],\n"
-            + "    \"userIdentifiers\": []\n"
+            + "    \"userIdentifiers\": [],\n"
+            + "    \"involvedAppIds\": [\n"
+            + "      \"myapp\"\n"
+            + "    ]\n"
             + "  },\n"
             + "  \"metadata\": {},\n"
             + "  \"allMetadata\": {},\n"
@@ -558,7 +587,7 @@ public class ConversationWireTest {
     public void testGet() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"messages\":[{\"type\":\"user\",\"conversationMessageId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"language\":\"language\",\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"agentUserId\":\"agentUserId\",\"userDisplayName\":\"userDisplayName\",\"status\":\"SENDING\",\"responseState\":\"NOT_ASKED\",\"userId\":{\"referenceId\":\"x\"},\"text\":\"text\",\"userMessageType\":\"USER\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\"},{\"type\":\"user\",\"conversationMessageId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"language\":\"language\",\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"agentUserId\":\"agentUserId\",\"userDisplayName\":\"userDisplayName\",\"status\":\"SENDING\",\"responseState\":\"NOT_ASKED\",\"userId\":{\"referenceId\":\"x\"},\"text\":\"text\",\"userMessageType\":\"USER\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\"}],\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"responseConfig\":{\"capabilities\":[\"MARKDOWN\",\"MARKDOWN\"],\"isCopilot\":true,\"responseLength\":\"SHORT\"},\"subject\":\"subject\",\"url\":\"url\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"tags\":[\"tags\"],\"metadata\":{\"metadata\":\"metadata\"},\"allMetadata\":{\"allMetadata\":{\"allMetadata\":\"allMetadata\"}},\"conversationId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"analysis\":{\"userRequest\":\"userRequest\",\"agentResponse\":\"agentResponse\",\"resolutionStatus\":\"resolutionStatus\",\"category\":\"category\",\"sentiment\":\"POSITIVE\",\"quality\":\"GOOD\",\"qualityReason\":\"MISSING_KNOWLEDGE\",\"resolvedByMaven\":true,\"primaryLanguage\":\"primaryLanguage\",\"predictedNps\":1.1},\"summary\":{\"actionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"incompleteActionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"insertCount\":1,\"thumbsUpCount\":1,\"thumbsDownCount\":1,\"handoffCount\":1,\"userMessageCount\":1,\"handleTime\":1000000,\"humanAgentResponseDelay\":1000000,\"humanAgents\":[\"humanAgents\",\"humanAgents\"],\"humanAgentsWithInserts\":[\"humanAgentsWithInserts\",\"humanAgentsWithInserts\"],\"users\":[\"users\",\"users\"],\"userIdentifiers\":[\"userIdentifiers\",\"userIdentifiers\"],\"lastUserMessage\":\"lastUserMessage\",\"lastBotMessage\":\"lastBotMessage\"},\"deleted\":true,\"open\":true,\"llmEnabled\":true,\"simulationContext\":{\"additionalPromptText\":\"additionalPromptText\",\"persona\":\"CASUAL_BUDDY\",\"availableKnowledgeBases\":[{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}]}}"));
+            .setBody("{\"messages\":[{\"type\":\"user\",\"conversationMessageId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"language\":\"language\",\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"agentUserId\":\"agentUserId\",\"userDisplayName\":\"userDisplayName\",\"status\":\"SENDING\",\"responseState\":\"NOT_ASKED\",\"userId\":{\"referenceId\":\"x\"},\"text\":\"text\",\"userMessageType\":\"USER\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\"},{\"type\":\"user\",\"conversationMessageId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"language\":\"language\",\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"agentUserId\":\"agentUserId\",\"userDisplayName\":\"userDisplayName\",\"status\":\"SENDING\",\"responseState\":\"NOT_ASKED\",\"userId\":{\"referenceId\":\"x\"},\"text\":\"text\",\"userMessageType\":\"USER\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\"}],\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"responseConfig\":{\"capabilities\":[\"MARKDOWN\",\"MARKDOWN\"],\"isCopilot\":true,\"responseLength\":\"SHORT\",\"contextFilter\":{\"scopeType\":\"byEntities\",\"entities\":[{\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"scopeEntityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}}]}},\"subject\":\"subject\",\"url\":\"url\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"tags\":[\"tags\"],\"metadata\":{\"metadata\":\"metadata\"},\"allMetadata\":{\"allMetadata\":{\"allMetadata\":\"allMetadata\"}},\"conversationId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"analysis\":{\"userRequest\":\"userRequest\",\"agentResponse\":\"agentResponse\",\"resolutionStatus\":\"resolutionStatus\",\"category\":\"category\",\"sentiment\":\"POSITIVE\",\"quality\":\"GOOD\",\"qualityReason\":\"MISSING_KNOWLEDGE\",\"resolvedByMaven\":true,\"primaryLanguage\":\"primaryLanguage\",\"predictedNps\":1.1},\"summary\":{\"actionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"incompleteActionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"insertCount\":1,\"thumbsUpCount\":1,\"thumbsDownCount\":1,\"handoffCount\":1,\"userMessageCount\":1,\"botMessageCount\":1,\"handleTime\":1000000,\"humanAgentResponseDelay\":1000000,\"humanAgents\":[\"humanAgents\",\"humanAgents\"],\"humanAgentsWithInserts\":[\"humanAgentsWithInserts\",\"humanAgentsWithInserts\"],\"users\":[\"users\",\"users\"],\"userIdentifiers\":[\"userIdentifiers\",\"userIdentifiers\"],\"lastUserMessage\":\"lastUserMessage\",\"lastBotMessage\":\"lastBotMessage\",\"involvedAppIds\":[\"involvedAppIds\"]},\"deleted\":true,\"open\":true,\"llmEnabled\":true,\"simulationContext\":{\"additionalPromptText\":\"additionalPromptText\",\"persona\":\"CASUAL_BUDDY\",\"availableKnowledgeBases\":[{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}]}}"));
         ConversationResponse response = client.conversation().get(
             "conversationId",
             ConversationGetRequest
@@ -674,7 +703,28 @@ public class ConversationWireTest {
             + "      \"MARKDOWN\"\n"
             + "    ],\n"
             + "    \"isCopilot\": true,\n"
-            + "    \"responseLength\": \"SHORT\"\n"
+            + "    \"responseLength\": \"SHORT\",\n"
+            + "    \"contextFilter\": {\n"
+            + "      \"scopeType\": \"byEntities\",\n"
+            + "      \"entities\": [\n"
+            + "        {\n"
+            + "          \"entityId\": {\n"
+            + "            \"organizationId\": \"organizationId\",\n"
+            + "            \"agentId\": \"agentId\",\n"
+            + "            \"type\": \"AGENT\",\n"
+            + "            \"appId\": \"appId\",\n"
+            + "            \"referenceId\": \"x\"\n"
+            + "          },\n"
+            + "          \"scopeEntityId\": {\n"
+            + "            \"organizationId\": \"organizationId\",\n"
+            + "            \"agentId\": \"agentId\",\n"
+            + "            \"type\": \"AGENT\",\n"
+            + "            \"appId\": \"appId\",\n"
+            + "            \"referenceId\": \"x\"\n"
+            + "          }\n"
+            + "        }\n"
+            + "      ]\n"
+            + "    }\n"
             + "  },\n"
             + "  \"subject\": \"subject\",\n"
             + "  \"url\": \"url\",\n"
@@ -740,6 +790,7 @@ public class ConversationWireTest {
             + "    \"thumbsDownCount\": 1,\n"
             + "    \"handoffCount\": 1,\n"
             + "    \"userMessageCount\": 1,\n"
+            + "    \"botMessageCount\": 1,\n"
             + "    \"handleTime\": 1000000,\n"
             + "    \"humanAgentResponseDelay\": 1000000,\n"
             + "    \"humanAgents\": [\n"
@@ -759,7 +810,10 @@ public class ConversationWireTest {
             + "      \"userIdentifiers\"\n"
             + "    ],\n"
             + "    \"lastUserMessage\": \"lastUserMessage\",\n"
-            + "    \"lastBotMessage\": \"lastBotMessage\"\n"
+            + "    \"lastBotMessage\": \"lastBotMessage\",\n"
+            + "    \"involvedAppIds\": [\n"
+            + "      \"involvedAppIds\"\n"
+            + "    ]\n"
             + "  },\n"
             + "  \"deleted\": true,\n"
             + "  \"open\": true,\n"
@@ -821,7 +875,7 @@ public class ConversationWireTest {
     public void testAppendNewMessages() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"messages\":[{\"type\":\"user\",\"conversationMessageId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"language\":\"language\",\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"agentUserId\":\"agentUserId\",\"userDisplayName\":\"userDisplayName\",\"status\":\"SENDING\",\"responseState\":\"NOT_ASKED\",\"userId\":{\"referenceId\":\"x\"},\"text\":\"text\",\"userMessageType\":\"USER\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\"},{\"type\":\"user\",\"conversationMessageId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"language\":\"language\",\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"agentUserId\":\"agentUserId\",\"userDisplayName\":\"userDisplayName\",\"status\":\"SENDING\",\"responseState\":\"NOT_ASKED\",\"userId\":{\"referenceId\":\"x\"},\"text\":\"text\",\"userMessageType\":\"USER\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\"}],\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"responseConfig\":{\"capabilities\":[\"MARKDOWN\",\"MARKDOWN\"],\"isCopilot\":true,\"responseLength\":\"SHORT\"},\"subject\":\"subject\",\"url\":\"url\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"tags\":[\"tags\"],\"metadata\":{\"metadata\":\"metadata\"},\"allMetadata\":{\"allMetadata\":{\"allMetadata\":\"allMetadata\"}},\"conversationId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"analysis\":{\"userRequest\":\"userRequest\",\"agentResponse\":\"agentResponse\",\"resolutionStatus\":\"resolutionStatus\",\"category\":\"category\",\"sentiment\":\"POSITIVE\",\"quality\":\"GOOD\",\"qualityReason\":\"MISSING_KNOWLEDGE\",\"resolvedByMaven\":true,\"primaryLanguage\":\"primaryLanguage\",\"predictedNps\":1.1},\"summary\":{\"actionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"incompleteActionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"insertCount\":1,\"thumbsUpCount\":1,\"thumbsDownCount\":1,\"handoffCount\":1,\"userMessageCount\":1,\"handleTime\":1000000,\"humanAgentResponseDelay\":1000000,\"humanAgents\":[\"humanAgents\",\"humanAgents\"],\"humanAgentsWithInserts\":[\"humanAgentsWithInserts\",\"humanAgentsWithInserts\"],\"users\":[\"users\",\"users\"],\"userIdentifiers\":[\"userIdentifiers\",\"userIdentifiers\"],\"lastUserMessage\":\"lastUserMessage\",\"lastBotMessage\":\"lastBotMessage\"},\"deleted\":true,\"open\":true,\"llmEnabled\":true,\"simulationContext\":{\"additionalPromptText\":\"additionalPromptText\",\"persona\":\"CASUAL_BUDDY\",\"availableKnowledgeBases\":[{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}]}}"));
+            .setBody("{\"messages\":[{\"type\":\"user\",\"conversationMessageId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"language\":\"language\",\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"agentUserId\":\"agentUserId\",\"userDisplayName\":\"userDisplayName\",\"status\":\"SENDING\",\"responseState\":\"NOT_ASKED\",\"userId\":{\"referenceId\":\"x\"},\"text\":\"text\",\"userMessageType\":\"USER\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\"},{\"type\":\"user\",\"conversationMessageId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"language\":\"language\",\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"agentUserId\":\"agentUserId\",\"userDisplayName\":\"userDisplayName\",\"status\":\"SENDING\",\"responseState\":\"NOT_ASKED\",\"userId\":{\"referenceId\":\"x\"},\"text\":\"text\",\"userMessageType\":\"USER\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\"}],\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"responseConfig\":{\"capabilities\":[\"MARKDOWN\",\"MARKDOWN\"],\"isCopilot\":true,\"responseLength\":\"SHORT\",\"contextFilter\":{\"scopeType\":\"byEntities\",\"entities\":[{\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"scopeEntityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}}]}},\"subject\":\"subject\",\"url\":\"url\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"tags\":[\"tags\"],\"metadata\":{\"metadata\":\"metadata\"},\"allMetadata\":{\"allMetadata\":{\"allMetadata\":\"allMetadata\"}},\"conversationId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"analysis\":{\"userRequest\":\"userRequest\",\"agentResponse\":\"agentResponse\",\"resolutionStatus\":\"resolutionStatus\",\"category\":\"category\",\"sentiment\":\"POSITIVE\",\"quality\":\"GOOD\",\"qualityReason\":\"MISSING_KNOWLEDGE\",\"resolvedByMaven\":true,\"primaryLanguage\":\"primaryLanguage\",\"predictedNps\":1.1},\"summary\":{\"actionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"incompleteActionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"insertCount\":1,\"thumbsUpCount\":1,\"thumbsDownCount\":1,\"handoffCount\":1,\"userMessageCount\":1,\"botMessageCount\":1,\"handleTime\":1000000,\"humanAgentResponseDelay\":1000000,\"humanAgents\":[\"humanAgents\",\"humanAgents\"],\"humanAgentsWithInserts\":[\"humanAgentsWithInserts\",\"humanAgentsWithInserts\"],\"users\":[\"users\",\"users\"],\"userIdentifiers\":[\"userIdentifiers\",\"userIdentifiers\"],\"lastUserMessage\":\"lastUserMessage\",\"lastBotMessage\":\"lastBotMessage\",\"involvedAppIds\":[\"involvedAppIds\"]},\"deleted\":true,\"open\":true,\"llmEnabled\":true,\"simulationContext\":{\"additionalPromptText\":\"additionalPromptText\",\"persona\":\"CASUAL_BUDDY\",\"availableKnowledgeBases\":[{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}]}}"));
         ConversationResponse response = client.conversation().appendNewMessages(
             "conversationId",
             Arrays.asList(
@@ -1017,7 +1071,28 @@ public class ConversationWireTest {
             + "      \"MARKDOWN\"\n"
             + "    ],\n"
             + "    \"isCopilot\": true,\n"
-            + "    \"responseLength\": \"SHORT\"\n"
+            + "    \"responseLength\": \"SHORT\",\n"
+            + "    \"contextFilter\": {\n"
+            + "      \"scopeType\": \"byEntities\",\n"
+            + "      \"entities\": [\n"
+            + "        {\n"
+            + "          \"entityId\": {\n"
+            + "            \"organizationId\": \"organizationId\",\n"
+            + "            \"agentId\": \"agentId\",\n"
+            + "            \"type\": \"AGENT\",\n"
+            + "            \"appId\": \"appId\",\n"
+            + "            \"referenceId\": \"x\"\n"
+            + "          },\n"
+            + "          \"scopeEntityId\": {\n"
+            + "            \"organizationId\": \"organizationId\",\n"
+            + "            \"agentId\": \"agentId\",\n"
+            + "            \"type\": \"AGENT\",\n"
+            + "            \"appId\": \"appId\",\n"
+            + "            \"referenceId\": \"x\"\n"
+            + "          }\n"
+            + "        }\n"
+            + "      ]\n"
+            + "    }\n"
             + "  },\n"
             + "  \"subject\": \"subject\",\n"
             + "  \"url\": \"url\",\n"
@@ -1083,6 +1158,7 @@ public class ConversationWireTest {
             + "    \"thumbsDownCount\": 1,\n"
             + "    \"handoffCount\": 1,\n"
             + "    \"userMessageCount\": 1,\n"
+            + "    \"botMessageCount\": 1,\n"
             + "    \"handleTime\": 1000000,\n"
             + "    \"humanAgentResponseDelay\": 1000000,\n"
             + "    \"humanAgents\": [\n"
@@ -1102,7 +1178,10 @@ public class ConversationWireTest {
             + "      \"userIdentifiers\"\n"
             + "    ],\n"
             + "    \"lastUserMessage\": \"lastUserMessage\",\n"
-            + "    \"lastBotMessage\": \"lastBotMessage\"\n"
+            + "    \"lastBotMessage\": \"lastBotMessage\",\n"
+            + "    \"involvedAppIds\": [\n"
+            + "      \"involvedAppIds\"\n"
+            + "    ]\n"
             + "  },\n"
             + "  \"deleted\": true,\n"
             + "  \"open\": true,\n"
@@ -1148,7 +1227,7 @@ public class ConversationWireTest {
     public void testAsk() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"conversationId\":{\"referenceId\":\"conversation-0\",\"appId\":\"myapp\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"CONVERSATION\"},\"deleted\":false,\"open\":false,\"llmEnabled\":true,\"analysis\":{\"resolutionStatus\":\"Resolved\",\"sentiment\":\"POSITIVE\",\"resolvedByMaven\":true},\"summary\":{\"actionIds\":[],\"incompleteActionIds\":[],\"insertCount\":0,\"thumbsUpCount\":0,\"thumbsDownCount\":0,\"handoffCount\":0,\"userMessageCount\":1,\"humanAgents\":[],\"humanAgentsWithInserts\":[],\"users\":[],\"userIdentifiers\":[]},\"metadata\":{},\"allMetadata\":{},\"attachments\":[],\"messages\":[{\"type\":\"user\",\"userMessageType\":\"USER\",\"conversationMessageId\":{\"referenceId\":\"message-0\",\"appId\":\"myapp\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"CONVERSATION_MESSAGE\"},\"status\":\"UNKNOWN\",\"userId\":{\"referenceId\":\"user-0\"},\"text\":\"How do I reset my password?\",\"attachments\":[{\"url\":\"https://example.com/attachment-0\",\"type\":\"image/png\",\"status\":\"ACCEPTED\",\"sizeBytes\":1234}]},{\"type\":\"bot\",\"botMessageType\":\"BOT_RESPONSE\",\"conversationMessageId\":{\"referenceId\":\"message-1\",\"appId\":\"myapp\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"CONVERSATION_MESSAGE\"},\"status\":\"SENT\",\"responses\":[{\"type\":\"text\",\"text\":\"Hi! Go to acme.com/reset-password\"}],\"metadata\":{\"followupQuestions\":[\"What if I did not get the reset email?\"],\"sources\":[]}}]}"));
+            .setBody("{\"conversationId\":{\"referenceId\":\"conversation-0\",\"appId\":\"myapp\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"CONVERSATION\"},\"deleted\":false,\"open\":false,\"llmEnabled\":true,\"analysis\":{\"resolutionStatus\":\"Resolved\",\"sentiment\":\"POSITIVE\",\"resolvedByMaven\":true},\"summary\":{\"actionIds\":[],\"incompleteActionIds\":[],\"insertCount\":0,\"thumbsUpCount\":0,\"thumbsDownCount\":0,\"handoffCount\":0,\"userMessageCount\":1,\"botMessageCount\":1,\"humanAgents\":[],\"humanAgentsWithInserts\":[],\"users\":[],\"userIdentifiers\":[],\"involvedAppIds\":[\"myapp\"]},\"metadata\":{},\"allMetadata\":{},\"attachments\":[],\"messages\":[{\"type\":\"user\",\"userMessageType\":\"USER\",\"conversationMessageId\":{\"referenceId\":\"message-0\",\"appId\":\"myapp\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"CONVERSATION_MESSAGE\"},\"status\":\"UNKNOWN\",\"userId\":{\"referenceId\":\"user-0\"},\"text\":\"How do I reset my password?\",\"attachments\":[{\"url\":\"https://example.com/attachment-0\",\"type\":\"image/png\",\"status\":\"ACCEPTED\",\"sizeBytes\":1234}]},{\"type\":\"bot\",\"botMessageType\":\"BOT_RESPONSE\",\"conversationMessageId\":{\"referenceId\":\"message-1\",\"appId\":\"myapp\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"CONVERSATION_MESSAGE\"},\"status\":\"SENT\",\"responses\":[{\"type\":\"text\",\"text\":\"Hi! Go to acme.com/reset-password\"}],\"metadata\":{\"followupQuestions\":[\"What if I did not get the reset email?\"],\"sources\":[]}}]}"));
         ConversationResponse response = client.conversation().ask(
             "conversation-0",
             AskRequest
@@ -1263,10 +1342,14 @@ public class ConversationWireTest {
             + "    \"thumbsDownCount\": 0,\n"
             + "    \"handoffCount\": 0,\n"
             + "    \"userMessageCount\": 1,\n"
+            + "    \"botMessageCount\": 1,\n"
             + "    \"humanAgents\": [],\n"
             + "    \"humanAgentsWithInserts\": [],\n"
             + "    \"users\": [],\n"
-            + "    \"userIdentifiers\": []\n"
+            + "    \"userIdentifiers\": [],\n"
+            + "    \"involvedAppIds\": [\n"
+            + "      \"myapp\"\n"
+            + "    ]\n"
             + "  },\n"
             + "  \"metadata\": {},\n"
             + "  \"allMetadata\": {},\n"
@@ -1529,7 +1612,7 @@ public class ConversationWireTest {
     public void testSubmitActionForm() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"messages\":[{\"type\":\"user\",\"conversationMessageId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"language\":\"language\",\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"agentUserId\":\"agentUserId\",\"userDisplayName\":\"userDisplayName\",\"status\":\"SENDING\",\"responseState\":\"NOT_ASKED\",\"userId\":{\"referenceId\":\"x\"},\"text\":\"text\",\"userMessageType\":\"USER\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\"},{\"type\":\"user\",\"conversationMessageId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"language\":\"language\",\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"agentUserId\":\"agentUserId\",\"userDisplayName\":\"userDisplayName\",\"status\":\"SENDING\",\"responseState\":\"NOT_ASKED\",\"userId\":{\"referenceId\":\"x\"},\"text\":\"text\",\"userMessageType\":\"USER\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\"}],\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"responseConfig\":{\"capabilities\":[\"MARKDOWN\",\"MARKDOWN\"],\"isCopilot\":true,\"responseLength\":\"SHORT\"},\"subject\":\"subject\",\"url\":\"url\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"tags\":[\"tags\"],\"metadata\":{\"metadata\":\"metadata\"},\"allMetadata\":{\"allMetadata\":{\"allMetadata\":\"allMetadata\"}},\"conversationId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"analysis\":{\"userRequest\":\"userRequest\",\"agentResponse\":\"agentResponse\",\"resolutionStatus\":\"resolutionStatus\",\"category\":\"category\",\"sentiment\":\"POSITIVE\",\"quality\":\"GOOD\",\"qualityReason\":\"MISSING_KNOWLEDGE\",\"resolvedByMaven\":true,\"primaryLanguage\":\"primaryLanguage\",\"predictedNps\":1.1},\"summary\":{\"actionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"incompleteActionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"insertCount\":1,\"thumbsUpCount\":1,\"thumbsDownCount\":1,\"handoffCount\":1,\"userMessageCount\":1,\"handleTime\":1000000,\"humanAgentResponseDelay\":1000000,\"humanAgents\":[\"humanAgents\",\"humanAgents\"],\"humanAgentsWithInserts\":[\"humanAgentsWithInserts\",\"humanAgentsWithInserts\"],\"users\":[\"users\",\"users\"],\"userIdentifiers\":[\"userIdentifiers\",\"userIdentifiers\"],\"lastUserMessage\":\"lastUserMessage\",\"lastBotMessage\":\"lastBotMessage\"},\"deleted\":true,\"open\":true,\"llmEnabled\":true,\"simulationContext\":{\"additionalPromptText\":\"additionalPromptText\",\"persona\":\"CASUAL_BUDDY\",\"availableKnowledgeBases\":[{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}]}}"));
+            .setBody("{\"messages\":[{\"type\":\"user\",\"conversationMessageId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"language\":\"language\",\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"agentUserId\":\"agentUserId\",\"userDisplayName\":\"userDisplayName\",\"status\":\"SENDING\",\"responseState\":\"NOT_ASKED\",\"userId\":{\"referenceId\":\"x\"},\"text\":\"text\",\"userMessageType\":\"USER\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\"},{\"type\":\"user\",\"conversationMessageId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"language\":\"language\",\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"agentUserId\":\"agentUserId\",\"userDisplayName\":\"userDisplayName\",\"status\":\"SENDING\",\"responseState\":\"NOT_ASKED\",\"userId\":{\"referenceId\":\"x\"},\"text\":\"text\",\"userMessageType\":\"USER\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\"}],\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"responseConfig\":{\"capabilities\":[\"MARKDOWN\",\"MARKDOWN\"],\"isCopilot\":true,\"responseLength\":\"SHORT\",\"contextFilter\":{\"scopeType\":\"byEntities\",\"entities\":[{\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"scopeEntityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}}]}},\"subject\":\"subject\",\"url\":\"url\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"tags\":[\"tags\"],\"metadata\":{\"metadata\":\"metadata\"},\"allMetadata\":{\"allMetadata\":{\"allMetadata\":\"allMetadata\"}},\"conversationId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"analysis\":{\"userRequest\":\"userRequest\",\"agentResponse\":\"agentResponse\",\"resolutionStatus\":\"resolutionStatus\",\"category\":\"category\",\"sentiment\":\"POSITIVE\",\"quality\":\"GOOD\",\"qualityReason\":\"MISSING_KNOWLEDGE\",\"resolvedByMaven\":true,\"primaryLanguage\":\"primaryLanguage\",\"predictedNps\":1.1},\"summary\":{\"actionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"incompleteActionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"insertCount\":1,\"thumbsUpCount\":1,\"thumbsDownCount\":1,\"handoffCount\":1,\"userMessageCount\":1,\"botMessageCount\":1,\"handleTime\":1000000,\"humanAgentResponseDelay\":1000000,\"humanAgents\":[\"humanAgents\",\"humanAgents\"],\"humanAgentsWithInserts\":[\"humanAgentsWithInserts\",\"humanAgentsWithInserts\"],\"users\":[\"users\",\"users\"],\"userIdentifiers\":[\"userIdentifiers\",\"userIdentifiers\"],\"lastUserMessage\":\"lastUserMessage\",\"lastBotMessage\":\"lastBotMessage\",\"involvedAppIds\":[\"involvedAppIds\"]},\"deleted\":true,\"open\":true,\"llmEnabled\":true,\"simulationContext\":{\"additionalPromptText\":\"additionalPromptText\",\"persona\":\"CASUAL_BUDDY\",\"availableKnowledgeBases\":[{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}]}}"));
         ConversationResponse response = client.conversation().submitActionForm(
             "conversationId",
             SubmitActionFormRequest
@@ -1686,7 +1769,28 @@ public class ConversationWireTest {
             + "      \"MARKDOWN\"\n"
             + "    ],\n"
             + "    \"isCopilot\": true,\n"
-            + "    \"responseLength\": \"SHORT\"\n"
+            + "    \"responseLength\": \"SHORT\",\n"
+            + "    \"contextFilter\": {\n"
+            + "      \"scopeType\": \"byEntities\",\n"
+            + "      \"entities\": [\n"
+            + "        {\n"
+            + "          \"entityId\": {\n"
+            + "            \"organizationId\": \"organizationId\",\n"
+            + "            \"agentId\": \"agentId\",\n"
+            + "            \"type\": \"AGENT\",\n"
+            + "            \"appId\": \"appId\",\n"
+            + "            \"referenceId\": \"x\"\n"
+            + "          },\n"
+            + "          \"scopeEntityId\": {\n"
+            + "            \"organizationId\": \"organizationId\",\n"
+            + "            \"agentId\": \"agentId\",\n"
+            + "            \"type\": \"AGENT\",\n"
+            + "            \"appId\": \"appId\",\n"
+            + "            \"referenceId\": \"x\"\n"
+            + "          }\n"
+            + "        }\n"
+            + "      ]\n"
+            + "    }\n"
             + "  },\n"
             + "  \"subject\": \"subject\",\n"
             + "  \"url\": \"url\",\n"
@@ -1752,6 +1856,7 @@ public class ConversationWireTest {
             + "    \"thumbsDownCount\": 1,\n"
             + "    \"handoffCount\": 1,\n"
             + "    \"userMessageCount\": 1,\n"
+            + "    \"botMessageCount\": 1,\n"
             + "    \"handleTime\": 1000000,\n"
             + "    \"humanAgentResponseDelay\": 1000000,\n"
             + "    \"humanAgents\": [\n"
@@ -1771,7 +1876,10 @@ public class ConversationWireTest {
             + "      \"userIdentifiers\"\n"
             + "    ],\n"
             + "    \"lastUserMessage\": \"lastUserMessage\",\n"
-            + "    \"lastBotMessage\": \"lastBotMessage\"\n"
+            + "    \"lastBotMessage\": \"lastBotMessage\",\n"
+            + "    \"involvedAppIds\": [\n"
+            + "      \"involvedAppIds\"\n"
+            + "    ]\n"
             + "  },\n"
             + "  \"deleted\": true,\n"
             + "  \"open\": true,\n"
@@ -1979,7 +2087,7 @@ public class ConversationWireTest {
     public void testSearch() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"conversations\":[{\"responseConfig\":{\"capabilities\":[\"MARKDOWN\",\"MARKDOWN\"],\"isCopilot\":true,\"responseLength\":\"SHORT\"},\"subject\":\"subject\",\"url\":\"url\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"tags\":[\"tags\"],\"metadata\":{\"metadata\":\"metadata\"},\"allMetadata\":{\"allMetadata\":{\"allMetadata\":\"allMetadata\"}},\"conversationId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"analysis\":{\"userRequest\":\"userRequest\",\"agentResponse\":\"agentResponse\",\"resolutionStatus\":\"resolutionStatus\",\"category\":\"category\",\"sentiment\":\"POSITIVE\",\"quality\":\"GOOD\",\"qualityReason\":\"MISSING_KNOWLEDGE\",\"resolvedByMaven\":true,\"primaryLanguage\":\"primaryLanguage\",\"predictedNps\":1.1},\"summary\":{\"actionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"incompleteActionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"insertCount\":1,\"thumbsUpCount\":1,\"thumbsDownCount\":1,\"handoffCount\":1,\"userMessageCount\":1,\"handleTime\":1000000,\"humanAgentResponseDelay\":1000000,\"humanAgents\":[\"humanAgents\",\"humanAgents\"],\"humanAgentsWithInserts\":[\"humanAgentsWithInserts\",\"humanAgentsWithInserts\"],\"users\":[\"users\",\"users\"],\"userIdentifiers\":[\"userIdentifiers\",\"userIdentifiers\"],\"lastUserMessage\":\"lastUserMessage\",\"lastBotMessage\":\"lastBotMessage\"},\"deleted\":true,\"open\":true,\"llmEnabled\":true,\"simulationContext\":{\"additionalPromptText\":\"additionalPromptText\",\"persona\":\"CASUAL_BUDDY\",\"availableKnowledgeBases\":[{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}]}},{\"responseConfig\":{\"capabilities\":[\"MARKDOWN\",\"MARKDOWN\"],\"isCopilot\":true,\"responseLength\":\"SHORT\"},\"subject\":\"subject\",\"url\":\"url\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"tags\":[\"tags\"],\"metadata\":{\"metadata\":\"metadata\"},\"allMetadata\":{\"allMetadata\":{\"allMetadata\":\"allMetadata\"}},\"conversationId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"analysis\":{\"userRequest\":\"userRequest\",\"agentResponse\":\"agentResponse\",\"resolutionStatus\":\"resolutionStatus\",\"category\":\"category\",\"sentiment\":\"POSITIVE\",\"quality\":\"GOOD\",\"qualityReason\":\"MISSING_KNOWLEDGE\",\"resolvedByMaven\":true,\"primaryLanguage\":\"primaryLanguage\",\"predictedNps\":1.1},\"summary\":{\"actionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"incompleteActionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"insertCount\":1,\"thumbsUpCount\":1,\"thumbsDownCount\":1,\"handoffCount\":1,\"userMessageCount\":1,\"handleTime\":1000000,\"humanAgentResponseDelay\":1000000,\"humanAgents\":[\"humanAgents\",\"humanAgents\"],\"humanAgentsWithInserts\":[\"humanAgentsWithInserts\",\"humanAgentsWithInserts\"],\"users\":[\"users\",\"users\"],\"userIdentifiers\":[\"userIdentifiers\",\"userIdentifiers\"],\"lastUserMessage\":\"lastUserMessage\",\"lastBotMessage\":\"lastBotMessage\"},\"deleted\":true,\"open\":true,\"llmEnabled\":true,\"simulationContext\":{\"additionalPromptText\":\"additionalPromptText\",\"persona\":\"CASUAL_BUDDY\",\"availableKnowledgeBases\":[{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}]}}],\"number\":1,\"size\":1,\"totalElements\":1000000,\"totalPages\":1}"));
+            .setBody("{\"conversations\":[{\"responseConfig\":{\"capabilities\":[\"MARKDOWN\",\"MARKDOWN\"],\"isCopilot\":true,\"responseLength\":\"SHORT\",\"contextFilter\":{\"scopeType\":\"byEntities\",\"entities\":[{\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}}]}},\"subject\":\"subject\",\"url\":\"url\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"tags\":[\"tags\"],\"metadata\":{\"metadata\":\"metadata\"},\"allMetadata\":{\"allMetadata\":{\"allMetadata\":\"allMetadata\"}},\"conversationId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"analysis\":{\"userRequest\":\"userRequest\",\"agentResponse\":\"agentResponse\",\"resolutionStatus\":\"resolutionStatus\",\"category\":\"category\",\"sentiment\":\"POSITIVE\",\"quality\":\"GOOD\",\"qualityReason\":\"MISSING_KNOWLEDGE\",\"resolvedByMaven\":true,\"primaryLanguage\":\"primaryLanguage\",\"predictedNps\":1.1},\"summary\":{\"actionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"incompleteActionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"insertCount\":1,\"thumbsUpCount\":1,\"thumbsDownCount\":1,\"handoffCount\":1,\"userMessageCount\":1,\"botMessageCount\":1,\"handleTime\":1000000,\"humanAgentResponseDelay\":1000000,\"humanAgents\":[\"humanAgents\",\"humanAgents\"],\"humanAgentsWithInserts\":[\"humanAgentsWithInserts\",\"humanAgentsWithInserts\"],\"users\":[\"users\",\"users\"],\"userIdentifiers\":[\"userIdentifiers\",\"userIdentifiers\"],\"lastUserMessage\":\"lastUserMessage\",\"lastBotMessage\":\"lastBotMessage\",\"involvedAppIds\":[\"involvedAppIds\"]},\"deleted\":true,\"open\":true,\"llmEnabled\":true,\"simulationContext\":{\"additionalPromptText\":\"additionalPromptText\",\"persona\":\"CASUAL_BUDDY\",\"availableKnowledgeBases\":[{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}]}},{\"responseConfig\":{\"capabilities\":[\"MARKDOWN\",\"MARKDOWN\"],\"isCopilot\":true,\"responseLength\":\"SHORT\",\"contextFilter\":{\"scopeType\":\"byEntities\",\"entities\":[{\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}}]}},\"subject\":\"subject\",\"url\":\"url\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"tags\":[\"tags\"],\"metadata\":{\"metadata\":\"metadata\"},\"allMetadata\":{\"allMetadata\":{\"allMetadata\":\"allMetadata\"}},\"conversationId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"analysis\":{\"userRequest\":\"userRequest\",\"agentResponse\":\"agentResponse\",\"resolutionStatus\":\"resolutionStatus\",\"category\":\"category\",\"sentiment\":\"POSITIVE\",\"quality\":\"GOOD\",\"qualityReason\":\"MISSING_KNOWLEDGE\",\"resolvedByMaven\":true,\"primaryLanguage\":\"primaryLanguage\",\"predictedNps\":1.1},\"summary\":{\"actionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"incompleteActionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"insertCount\":1,\"thumbsUpCount\":1,\"thumbsDownCount\":1,\"handoffCount\":1,\"userMessageCount\":1,\"botMessageCount\":1,\"handleTime\":1000000,\"humanAgentResponseDelay\":1000000,\"humanAgents\":[\"humanAgents\",\"humanAgents\"],\"humanAgentsWithInserts\":[\"humanAgentsWithInserts\",\"humanAgentsWithInserts\"],\"users\":[\"users\",\"users\"],\"userIdentifiers\":[\"userIdentifiers\",\"userIdentifiers\"],\"lastUserMessage\":\"lastUserMessage\",\"lastBotMessage\":\"lastBotMessage\",\"involvedAppIds\":[\"involvedAppIds\"]},\"deleted\":true,\"open\":true,\"llmEnabled\":true,\"simulationContext\":{\"additionalPromptText\":\"additionalPromptText\",\"persona\":\"CASUAL_BUDDY\",\"availableKnowledgeBases\":[{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}]}}],\"number\":1,\"size\":1,\"totalElements\":1000000,\"totalPages\":1}"));
         ConversationsResponse response = client.conversation().search(
             ConversationsSearchRequest
                 .builder()
@@ -2028,7 +2136,21 @@ public class ConversationWireTest {
             + "          \"MARKDOWN\"\n"
             + "        ],\n"
             + "        \"isCopilot\": true,\n"
-            + "        \"responseLength\": \"SHORT\"\n"
+            + "        \"responseLength\": \"SHORT\",\n"
+            + "        \"contextFilter\": {\n"
+            + "          \"scopeType\": \"byEntities\",\n"
+            + "          \"entities\": [\n"
+            + "            {\n"
+            + "              \"entityId\": {\n"
+            + "                \"organizationId\": \"organizationId\",\n"
+            + "                \"agentId\": \"agentId\",\n"
+            + "                \"type\": \"AGENT\",\n"
+            + "                \"appId\": \"appId\",\n"
+            + "                \"referenceId\": \"x\"\n"
+            + "              }\n"
+            + "            }\n"
+            + "          ]\n"
+            + "        }\n"
             + "      },\n"
             + "      \"subject\": \"subject\",\n"
             + "      \"url\": \"url\",\n"
@@ -2094,6 +2216,7 @@ public class ConversationWireTest {
             + "        \"thumbsDownCount\": 1,\n"
             + "        \"handoffCount\": 1,\n"
             + "        \"userMessageCount\": 1,\n"
+            + "        \"botMessageCount\": 1,\n"
             + "        \"handleTime\": 1000000,\n"
             + "        \"humanAgentResponseDelay\": 1000000,\n"
             + "        \"humanAgents\": [\n"
@@ -2113,7 +2236,10 @@ public class ConversationWireTest {
             + "          \"userIdentifiers\"\n"
             + "        ],\n"
             + "        \"lastUserMessage\": \"lastUserMessage\",\n"
-            + "        \"lastBotMessage\": \"lastBotMessage\"\n"
+            + "        \"lastBotMessage\": \"lastBotMessage\",\n"
+            + "        \"involvedAppIds\": [\n"
+            + "          \"involvedAppIds\"\n"
+            + "        ]\n"
             + "      },\n"
             + "      \"deleted\": true,\n"
             + "      \"open\": true,\n"
@@ -2139,7 +2265,21 @@ public class ConversationWireTest {
             + "          \"MARKDOWN\"\n"
             + "        ],\n"
             + "        \"isCopilot\": true,\n"
-            + "        \"responseLength\": \"SHORT\"\n"
+            + "        \"responseLength\": \"SHORT\",\n"
+            + "        \"contextFilter\": {\n"
+            + "          \"scopeType\": \"byEntities\",\n"
+            + "          \"entities\": [\n"
+            + "            {\n"
+            + "              \"entityId\": {\n"
+            + "                \"organizationId\": \"organizationId\",\n"
+            + "                \"agentId\": \"agentId\",\n"
+            + "                \"type\": \"AGENT\",\n"
+            + "                \"appId\": \"appId\",\n"
+            + "                \"referenceId\": \"x\"\n"
+            + "              }\n"
+            + "            }\n"
+            + "          ]\n"
+            + "        }\n"
             + "      },\n"
             + "      \"subject\": \"subject\",\n"
             + "      \"url\": \"url\",\n"
@@ -2205,6 +2345,7 @@ public class ConversationWireTest {
             + "        \"thumbsDownCount\": 1,\n"
             + "        \"handoffCount\": 1,\n"
             + "        \"userMessageCount\": 1,\n"
+            + "        \"botMessageCount\": 1,\n"
             + "        \"handleTime\": 1000000,\n"
             + "        \"humanAgentResponseDelay\": 1000000,\n"
             + "        \"humanAgents\": [\n"
@@ -2224,7 +2365,10 @@ public class ConversationWireTest {
             + "          \"userIdentifiers\"\n"
             + "        ],\n"
             + "        \"lastUserMessage\": \"lastUserMessage\",\n"
-            + "        \"lastBotMessage\": \"lastBotMessage\"\n"
+            + "        \"lastBotMessage\": \"lastBotMessage\",\n"
+            + "        \"involvedAppIds\": [\n"
+            + "          \"involvedAppIds\"\n"
+            + "        ]\n"
             + "      },\n"
             + "      \"deleted\": true,\n"
             + "      \"open\": true,\n"

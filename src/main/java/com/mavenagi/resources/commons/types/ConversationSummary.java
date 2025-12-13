@@ -14,10 +14,12 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ConversationSummary.Builder.class)
@@ -36,6 +38,8 @@ public final class ConversationSummary {
 
     private final int userMessageCount;
 
+    private final int botMessageCount;
+
     private final Optional<Long> handleTime;
 
     private final Optional<Long> humanAgentResponseDelay;
@@ -52,6 +56,8 @@ public final class ConversationSummary {
 
     private final Optional<String> lastBotMessage;
 
+    private final Set<String> involvedAppIds;
+
     private final Map<String, Object> additionalProperties;
 
     private ConversationSummary(
@@ -62,6 +68,7 @@ public final class ConversationSummary {
             int thumbsDownCount,
             int handoffCount,
             int userMessageCount,
+            int botMessageCount,
             Optional<Long> handleTime,
             Optional<Long> humanAgentResponseDelay,
             List<String> humanAgents,
@@ -70,6 +77,7 @@ public final class ConversationSummary {
             List<String> userIdentifiers,
             Optional<String> lastUserMessage,
             Optional<String> lastBotMessage,
+            Set<String> involvedAppIds,
             Map<String, Object> additionalProperties) {
         this.actionIds = actionIds;
         this.incompleteActionIds = incompleteActionIds;
@@ -78,6 +86,7 @@ public final class ConversationSummary {
         this.thumbsDownCount = thumbsDownCount;
         this.handoffCount = handoffCount;
         this.userMessageCount = userMessageCount;
+        this.botMessageCount = botMessageCount;
         this.handleTime = handleTime;
         this.humanAgentResponseDelay = humanAgentResponseDelay;
         this.humanAgents = humanAgents;
@@ -86,6 +95,7 @@ public final class ConversationSummary {
         this.userIdentifiers = userIdentifiers;
         this.lastUserMessage = lastUserMessage;
         this.lastBotMessage = lastBotMessage;
+        this.involvedAppIds = involvedAppIds;
         this.additionalProperties = additionalProperties;
     }
 
@@ -143,6 +153,14 @@ public final class ConversationSummary {
     @JsonProperty("userMessageCount")
     public int getUserMessageCount() {
         return userMessageCount;
+    }
+
+    /**
+     * @return The number of bot answer messages in the conversation.
+     */
+    @JsonProperty("botMessageCount")
+    public int getBotMessageCount() {
+        return botMessageCount;
     }
 
     /**
@@ -213,6 +231,20 @@ public final class ConversationSummary {
         return lastBotMessage;
     }
 
+    /**
+     * @return The set of app IDs that are involved in this conversation. This includes:
+     * <ul>
+     * <li>The app ID that created the conversation</li>
+     * <li>The app IDs of all messages created in the conversation</li>
+     * <li>The app IDs of all actions selected by the LLM in the conversation (including unsubmitted forms)</li>
+     * <li>The app IDs of all documents referenced by LLM responses in the conversation (does not include document search results not utilized by the LLM)</li>
+     * </ul>
+     */
+    @JsonProperty("involvedAppIds")
+    public Set<String> getInvolvedAppIds() {
+        return involvedAppIds;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -232,6 +264,7 @@ public final class ConversationSummary {
                 && thumbsDownCount == other.thumbsDownCount
                 && handoffCount == other.handoffCount
                 && userMessageCount == other.userMessageCount
+                && botMessageCount == other.botMessageCount
                 && handleTime.equals(other.handleTime)
                 && humanAgentResponseDelay.equals(other.humanAgentResponseDelay)
                 && humanAgents.equals(other.humanAgents)
@@ -239,7 +272,8 @@ public final class ConversationSummary {
                 && users.equals(other.users)
                 && userIdentifiers.equals(other.userIdentifiers)
                 && lastUserMessage.equals(other.lastUserMessage)
-                && lastBotMessage.equals(other.lastBotMessage);
+                && lastBotMessage.equals(other.lastBotMessage)
+                && involvedAppIds.equals(other.involvedAppIds);
     }
 
     @java.lang.Override
@@ -252,6 +286,7 @@ public final class ConversationSummary {
                 this.thumbsDownCount,
                 this.handoffCount,
                 this.userMessageCount,
+                this.botMessageCount,
                 this.handleTime,
                 this.humanAgentResponseDelay,
                 this.humanAgents,
@@ -259,7 +294,8 @@ public final class ConversationSummary {
                 this.users,
                 this.userIdentifiers,
                 this.lastUserMessage,
-                this.lastBotMessage);
+                this.lastBotMessage,
+                this.involvedAppIds);
     }
 
     @java.lang.Override
@@ -305,7 +341,14 @@ public final class ConversationSummary {
         /**
          * <p>The number of messages of type <code>USER</code> in the conversation.</p>
          */
-        _FinalStage userMessageCount(int userMessageCount);
+        BotMessageCountStage userMessageCount(int userMessageCount);
+    }
+
+    public interface BotMessageCountStage {
+        /**
+         * <p>The number of bot answer messages in the conversation.</p>
+         */
+        _FinalStage botMessageCount(int botMessageCount);
     }
 
     public interface _FinalStage {
@@ -396,6 +439,21 @@ public final class ConversationSummary {
         _FinalStage lastBotMessage(Optional<String> lastBotMessage);
 
         _FinalStage lastBotMessage(String lastBotMessage);
+
+        /**
+         * <p>The set of app IDs that are involved in this conversation. This includes:</p>
+         * <ul>
+         * <li>The app ID that created the conversation</li>
+         * <li>The app IDs of all messages created in the conversation</li>
+         * <li>The app IDs of all actions selected by the LLM in the conversation (including unsubmitted forms)</li>
+         * <li>The app IDs of all documents referenced by LLM responses in the conversation (does not include document search results not utilized by the LLM)</li>
+         * </ul>
+         */
+        _FinalStage involvedAppIds(Set<String> involvedAppIds);
+
+        _FinalStage addInvolvedAppIds(String involvedAppIds);
+
+        _FinalStage addAllInvolvedAppIds(Set<String> involvedAppIds);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -405,6 +463,7 @@ public final class ConversationSummary {
                     ThumbsDownCountStage,
                     HandoffCountStage,
                     UserMessageCountStage,
+                    BotMessageCountStage,
                     _FinalStage {
         private int insertCount;
 
@@ -415,6 +474,10 @@ public final class ConversationSummary {
         private int handoffCount;
 
         private int userMessageCount;
+
+        private int botMessageCount;
+
+        private Set<String> involvedAppIds = new LinkedHashSet<>();
 
         private Optional<String> lastBotMessage = Optional.empty();
 
@@ -450,6 +513,7 @@ public final class ConversationSummary {
             thumbsDownCount(other.getThumbsDownCount());
             handoffCount(other.getHandoffCount());
             userMessageCount(other.getUserMessageCount());
+            botMessageCount(other.getBotMessageCount());
             handleTime(other.getHandleTime());
             humanAgentResponseDelay(other.getHumanAgentResponseDelay());
             humanAgents(other.getHumanAgents());
@@ -458,6 +522,7 @@ public final class ConversationSummary {
             userIdentifiers(other.getUserIdentifiers());
             lastUserMessage(other.getLastUserMessage());
             lastBotMessage(other.getLastBotMessage());
+            involvedAppIds(other.getInvolvedAppIds());
             return this;
         }
 
@@ -516,8 +581,73 @@ public final class ConversationSummary {
          */
         @java.lang.Override
         @JsonSetter("userMessageCount")
-        public _FinalStage userMessageCount(int userMessageCount) {
+        public BotMessageCountStage userMessageCount(int userMessageCount) {
             this.userMessageCount = userMessageCount;
+            return this;
+        }
+
+        /**
+         * <p>The number of bot answer messages in the conversation.</p>
+         * <p>The number of bot answer messages in the conversation.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("botMessageCount")
+        public _FinalStage botMessageCount(int botMessageCount) {
+            this.botMessageCount = botMessageCount;
+            return this;
+        }
+
+        /**
+         * <p>The set of app IDs that are involved in this conversation. This includes:</p>
+         * <ul>
+         * <li>The app ID that created the conversation</li>
+         * <li>The app IDs of all messages created in the conversation</li>
+         * <li>The app IDs of all actions selected by the LLM in the conversation (including unsubmitted forms)</li>
+         * <li>The app IDs of all documents referenced by LLM responses in the conversation (does not include document search results not utilized by the LLM)</li>
+         * </ul>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage addAllInvolvedAppIds(Set<String> involvedAppIds) {
+            if (involvedAppIds != null) {
+                this.involvedAppIds.addAll(involvedAppIds);
+            }
+            return this;
+        }
+
+        /**
+         * <p>The set of app IDs that are involved in this conversation. This includes:</p>
+         * <ul>
+         * <li>The app ID that created the conversation</li>
+         * <li>The app IDs of all messages created in the conversation</li>
+         * <li>The app IDs of all actions selected by the LLM in the conversation (including unsubmitted forms)</li>
+         * <li>The app IDs of all documents referenced by LLM responses in the conversation (does not include document search results not utilized by the LLM)</li>
+         * </ul>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage addInvolvedAppIds(String involvedAppIds) {
+            this.involvedAppIds.add(involvedAppIds);
+            return this;
+        }
+
+        /**
+         * <p>The set of app IDs that are involved in this conversation. This includes:</p>
+         * <ul>
+         * <li>The app ID that created the conversation</li>
+         * <li>The app IDs of all messages created in the conversation</li>
+         * <li>The app IDs of all actions selected by the LLM in the conversation (including unsubmitted forms)</li>
+         * <li>The app IDs of all documents referenced by LLM responses in the conversation (does not include document search results not utilized by the LLM)</li>
+         * </ul>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "involvedAppIds", nulls = Nulls.SKIP)
+        public _FinalStage involvedAppIds(Set<String> involvedAppIds) {
+            this.involvedAppIds.clear();
+            if (involvedAppIds != null) {
+                this.involvedAppIds.addAll(involvedAppIds);
+            }
             return this;
         }
 
@@ -829,6 +959,7 @@ public final class ConversationSummary {
                     thumbsDownCount,
                     handoffCount,
                     userMessageCount,
+                    botMessageCount,
                     handleTime,
                     humanAgentResponseDelay,
                     humanAgents,
@@ -837,6 +968,7 @@ public final class ConversationSummary {
                     userIdentifiers,
                     lastUserMessage,
                     lastBotMessage,
+                    involvedAppIds,
                     additionalProperties);
         }
     }

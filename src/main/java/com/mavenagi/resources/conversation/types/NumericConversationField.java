@@ -28,6 +28,9 @@ public final class NumericConversationField {
     public static final NumericConversationField PREDICTED_NPS =
             new NumericConversationField(Value.PREDICTED_NPS, "PredictedNPS");
 
+    public static final NumericConversationField BOT_MESSAGE_COUNT =
+            new NumericConversationField(Value.BOT_MESSAGE_COUNT, "BotMessageCount");
+
     private final Value value;
 
     private final String string;
@@ -75,6 +78,8 @@ public final class NumericConversationField {
                 return visitor.visitInsertCount();
             case PREDICTED_NPS:
                 return visitor.visitPredictedNps();
+            case BOT_MESSAGE_COUNT:
+                return visitor.visitBotMessageCount();
             case UNKNOWN:
             default:
                 return visitor.visitUnknown(string);
@@ -98,6 +103,8 @@ public final class NumericConversationField {
                 return INSERT_COUNT;
             case "PredictedNPS":
                 return PREDICTED_NPS;
+            case "BotMessageCount":
+                return BOT_MESSAGE_COUNT;
             default:
                 return new NumericConversationField(Value.UNKNOWN, value);
         }
@@ -111,6 +118,8 @@ public final class NumericConversationField {
         INSERT_COUNT,
 
         USER_MESSAGE_COUNT,
+
+        BOT_MESSAGE_COUNT,
 
         HANDLE_TIME,
 
@@ -129,6 +138,8 @@ public final class NumericConversationField {
         T visitInsertCount();
 
         T visitUserMessageCount();
+
+        T visitBotMessageCount();
 
         T visitHandleTime();
 
