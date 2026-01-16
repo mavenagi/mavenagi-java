@@ -29,6 +29,8 @@ public final class EntityType {
 
     public static final EntityType SEGMENT = new EntityType(Value.SEGMENT, "SEGMENT");
 
+    public static final EntityType INTELLIGENT_FIELD = new EntityType(Value.INTELLIGENT_FIELD, "INTELLIGENT_FIELD");
+
     public static final EntityType USER_PROFILE = new EntityType(Value.USER_PROFILE, "USER_PROFILE");
 
     public static final EntityType KNOWLEDGE_DOCUMENT = new EntityType(Value.KNOWLEDGE_DOCUMENT, "KNOWLEDGE_DOCUMENT");
@@ -92,6 +94,8 @@ public final class EntityType {
                 return visitor.visitKnowledgeBaseVersion();
             case SEGMENT:
                 return visitor.visitSegment();
+            case INTELLIGENT_FIELD:
+                return visitor.visitIntelligentField();
             case USER_PROFILE:
                 return visitor.visitUserProfile();
             case KNOWLEDGE_DOCUMENT:
@@ -133,6 +137,8 @@ public final class EntityType {
                 return KNOWLEDGE_BASE_VERSION;
             case "SEGMENT":
                 return SEGMENT;
+            case "INTELLIGENT_FIELD":
+                return INTELLIGENT_FIELD;
             case "USER_PROFILE":
                 return USER_PROFILE;
             case "KNOWLEDGE_DOCUMENT":
@@ -183,6 +189,8 @@ public final class EntityType {
 
         CUSTOMER,
 
+        INTELLIGENT_FIELD,
+
         UNKNOWN
     }
 
@@ -218,6 +226,8 @@ public final class EntityType {
         T visitSegment();
 
         T visitCustomer();
+
+        T visitIntelligentField();
 
         T visitUnknown(String unknownType);
     }

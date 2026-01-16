@@ -12,6 +12,8 @@ public final class EventField {
 
     public static final EventField SOURCE_GEO_COUNTRY = new EventField(Value.SOURCE_GEO_COUNTRY, "SOURCE_GEO_COUNTRY");
 
+    public static final EventField TIMESTAMP = new EventField(Value.TIMESTAMP, "TIMESTAMP");
+
     public static final EventField EVENT_TYPE = new EventField(Value.EVENT_TYPE, "EVENT_TYPE");
 
     public static final EventField EVENT_NAME = new EventField(Value.EVENT_NAME, "EVENT_NAME");
@@ -77,6 +79,8 @@ public final class EventField {
                 return visitor.visitSourceLanguageCode();
             case SOURCE_GEO_COUNTRY:
                 return visitor.visitSourceGeoCountry();
+            case TIMESTAMP:
+                return visitor.visitTimestamp();
             case EVENT_TYPE:
                 return visitor.visitEventType();
             case EVENT_NAME:
@@ -118,6 +122,8 @@ public final class EventField {
                 return SOURCE_LANGUAGE_CODE;
             case "SOURCE_GEO_COUNTRY":
                 return SOURCE_GEO_COUNTRY;
+            case "TIMESTAMP":
+                return TIMESTAMP;
             case "EVENT_TYPE":
                 return EVENT_TYPE;
             case "EVENT_NAME":
@@ -184,6 +190,8 @@ public final class EventField {
 
         AGENT_USER_ID,
 
+        TIMESTAMP,
+
         UNKNOWN
     }
 
@@ -219,6 +227,8 @@ public final class EventField {
         T visitUserReferenceId();
 
         T visitAgentUserId();
+
+        T visitTimestamp();
 
         T visitUnknown(String unknownType);
     }

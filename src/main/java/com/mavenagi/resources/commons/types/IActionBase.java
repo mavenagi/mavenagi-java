@@ -3,21 +3,8 @@
  */
 package com.mavenagi.resources.commons.types;
 
-import java.util.List;
-import java.util.Optional;
-
-public interface IActionBase {
+public interface IActionBase extends IActionProperties {
     String getName();
 
     String getDescription();
-
-    boolean getUserInteractionRequired();
-
-    Optional<String> getButtonName();
-
-    Optional<Precondition> getPrecondition();
-
-    List<ActionParameter> getUserFormParameters();
-
-    Optional<String> getLanguage();
 }

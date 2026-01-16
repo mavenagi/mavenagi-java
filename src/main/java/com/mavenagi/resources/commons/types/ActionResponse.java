@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ActionResponse.Builder.class)
-public final class ActionResponse implements IActionBase {
+public final class ActionResponse implements IActionBase, IActionProperties {
     private final String name;
 
     private final String description;

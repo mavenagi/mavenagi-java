@@ -36,6 +36,8 @@ public final class UserEvent implements IEventBaseNoId {
 
     private final EntityId id;
 
+    private final Optional<OffsetDateTime> createdAt;
+
     private final UserEventName eventName;
 
     private final EventUserInfo userInfo;
@@ -53,6 +55,7 @@ public final class UserEvent implements IEventBaseNoId {
             Optional<SessionInfo> sessionInfo,
             Optional<ContextInfo> contextInfo,
             EntityId id,
+            Optional<OffsetDateTime> createdAt,
             UserEventName eventName,
             EventUserInfo userInfo,
             Optional<List<FeedbackInfo>> feedbackInfo,
@@ -64,6 +67,7 @@ public final class UserEvent implements IEventBaseNoId {
         this.sessionInfo = sessionInfo;
         this.contextInfo = contextInfo;
         this.id = id;
+        this.createdAt = createdAt;
         this.eventName = eventName;
         this.userInfo = userInfo;
         this.feedbackInfo = feedbackInfo;
@@ -107,6 +111,14 @@ public final class UserEvent implements IEventBaseNoId {
     @JsonProperty("id")
     public EntityId getId() {
         return id;
+    }
+
+    /**
+     * @return The date and time the event was created
+     */
+    @JsonProperty("createdAt")
+    public Optional<OffsetDateTime> getCreatedAt() {
+        return createdAt;
     }
 
     /**
@@ -159,6 +171,7 @@ public final class UserEvent implements IEventBaseNoId {
                 && sessionInfo.equals(other.sessionInfo)
                 && contextInfo.equals(other.contextInfo)
                 && id.equals(other.id)
+                && createdAt.equals(other.createdAt)
                 && eventName.equals(other.eventName)
                 && userInfo.equals(other.userInfo)
                 && feedbackInfo.equals(other.feedbackInfo)
@@ -174,6 +187,7 @@ public final class UserEvent implements IEventBaseNoId {
                 this.sessionInfo,
                 this.contextInfo,
                 this.id,
+                this.createdAt,
                 this.eventName,
                 this.userInfo,
                 this.feedbackInfo,
@@ -236,6 +250,13 @@ public final class UserEvent implements IEventBaseNoId {
         _FinalStage contextInfo(ContextInfo contextInfo);
 
         /**
+         * <p>The date and time the event was created</p>
+         */
+        _FinalStage createdAt(Optional<OffsetDateTime> createdAt);
+
+        _FinalStage createdAt(OffsetDateTime createdAt);
+
+        /**
          * <p>Information about any feedback associated with the event</p>
          */
         _FinalStage feedbackInfo(Optional<List<FeedbackInfo>> feedbackInfo);
@@ -262,6 +283,8 @@ public final class UserEvent implements IEventBaseNoId {
 
         private Optional<List<FeedbackInfo>> feedbackInfo = Optional.empty();
 
+        private Optional<OffsetDateTime> createdAt = Optional.empty();
+
         private Optional<ContextInfo> contextInfo = Optional.empty();
 
         private Optional<SessionInfo> sessionInfo = Optional.empty();
@@ -285,6 +308,7 @@ public final class UserEvent implements IEventBaseNoId {
             sessionInfo(other.getSessionInfo());
             contextInfo(other.getContextInfo());
             id(other.getId());
+            createdAt(other.getCreatedAt());
             eventName(other.getEventName());
             userInfo(other.getUserInfo());
             feedbackInfo(other.getFeedbackInfo());
@@ -368,6 +392,26 @@ public final class UserEvent implements IEventBaseNoId {
             return this;
         }
 
+        /**
+         * <p>The date and time the event was created</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage createdAt(OffsetDateTime createdAt) {
+            this.createdAt = Optional.ofNullable(createdAt);
+            return this;
+        }
+
+        /**
+         * <p>The date and time the event was created</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "createdAt", nulls = Nulls.SKIP)
+        public _FinalStage createdAt(Optional<OffsetDateTime> createdAt) {
+            this.createdAt = createdAt;
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage contextInfo(ContextInfo contextInfo) {
             this.contextInfo = Optional.ofNullable(contextInfo);
@@ -442,6 +486,7 @@ public final class UserEvent implements IEventBaseNoId {
                     sessionInfo,
                     contextInfo,
                     id,
+                    createdAt,
                     eventName,
                     userInfo,
                     feedbackInfo,

@@ -3,6 +3,8 @@
  */
 package com.mavenagi.resources.triggers.types;
 
+import com.mavenagi.resources.commons.types.EventTriggerType;
+
 public interface IEventTriggerBase {
     String getDescription();
 

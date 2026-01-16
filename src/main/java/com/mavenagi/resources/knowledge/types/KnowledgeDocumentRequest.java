@@ -40,7 +40,7 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
 
     private final String title;
 
-    private final Optional<EntityIdBase> assetId;
+    private final Optional<EntityIdWithoutAgent> assetId;
 
     private final Optional<String> content;
 
@@ -62,7 +62,7 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
             Optional<EntityIdWithoutAgent> versionId,
             KnowledgeDocumentContentType contentType,
             String title,
-            Optional<EntityIdBase> assetId,
+            Optional<EntityIdWithoutAgent> assetId,
             Optional<String> content,
             Optional<Map<String, String>> metadata,
             Optional<OffsetDateTime> createdAt,
@@ -148,7 +148,7 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
      * @return ID of the asset associated with this document. This asset will be transformed into text and set as the content of the document. The following types are supported: <code>application/pdf</code>, <code>text/plain</code>.  Either this or content is required, but not both
      */
     @JsonProperty("assetId")
-    public Optional<EntityIdBase> getAssetId() {
+    public Optional<EntityIdWithoutAgent> getAssetId() {
         return assetId;
     }
 
@@ -303,9 +303,9 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
         /**
          * <p>ID of the asset associated with this document. This asset will be transformed into text and set as the content of the document. The following types are supported: <code>application/pdf</code>, <code>text/plain</code>.  Either this or content is required, but not both</p>
          */
-        _FinalStage assetId(Optional<EntityIdBase> assetId);
+        _FinalStage assetId(Optional<EntityIdWithoutAgent> assetId);
 
-        _FinalStage assetId(EntityIdBase assetId);
+        _FinalStage assetId(EntityIdWithoutAgent assetId);
 
         /**
          * <p>The content of the document. Not shown directly to users. May be provided in HTML or markdown. HTML will be converted to markdown automatically. Images are not currently supported and will be ignored. Either this or assetId is required, but not both</p>
@@ -361,7 +361,7 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
 
         private Optional<String> content = Optional.empty();
 
-        private Optional<EntityIdBase> assetId = Optional.empty();
+        private Optional<EntityIdWithoutAgent> assetId = Optional.empty();
 
         private Optional<EntityIdWithoutAgent> versionId = Optional.empty();
 
@@ -536,7 +536,7 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage assetId(EntityIdBase assetId) {
+        public _FinalStage assetId(EntityIdWithoutAgent assetId) {
             this.assetId = Optional.ofNullable(assetId);
             return this;
         }
@@ -546,7 +546,7 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
          */
         @java.lang.Override
         @JsonSetter(value = "assetId", nulls = Nulls.SKIP)
-        public _FinalStage assetId(Optional<EntityIdBase> assetId) {
+        public _FinalStage assetId(Optional<EntityIdWithoutAgent> assetId) {
             this.assetId = assetId;
             return this;
         }
