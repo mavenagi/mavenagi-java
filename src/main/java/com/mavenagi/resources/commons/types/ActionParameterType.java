@@ -13,6 +13,8 @@ public final class ActionParameterType {
 
     public static final ActionParameterType DATE = new ActionParameterType(Value.DATE, "DATE");
 
+    public static final ActionParameterType PHONE = new ActionParameterType(Value.PHONE, "PHONE");
+
     public static final ActionParameterType SCHEMA = new ActionParameterType(Value.SCHEMA, "SCHEMA");
 
     public static final ActionParameterType TIME = new ActionParameterType(Value.TIME, "TIME");
@@ -67,6 +69,8 @@ public final class ActionParameterType {
                 return visitor.visitMultiline();
             case DATE:
                 return visitor.visitDate();
+            case PHONE:
+                return visitor.visitPhone();
             case SCHEMA:
                 return visitor.visitSchema();
             case TIME:
@@ -98,6 +102,8 @@ public final class ActionParameterType {
                 return MULTILINE;
             case "DATE":
                 return DATE;
+            case "PHONE":
+                return PHONE;
             case "SCHEMA":
                 return SCHEMA;
             case "TIME":
@@ -136,6 +142,8 @@ public final class ActionParameterType {
 
         EMAIL,
 
+        PHONE,
+
         SCHEMA,
 
         FILE,
@@ -161,6 +169,8 @@ public final class ActionParameterType {
         T visitTime();
 
         T visitEmail();
+
+        T visitPhone();
 
         T visitSchema();
 
