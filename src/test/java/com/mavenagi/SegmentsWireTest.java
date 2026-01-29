@@ -45,7 +45,7 @@ public class SegmentsWireTest {
     public void testSearch() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"segments\":[{\"segmentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"status\":\"ACTIVE\",\"name\":\"name\",\"precondition\":{\"preconditionType\":\"user\",\"key\":\"key\",\"value\":\"value\",\"operator\":\"NOT\"}},{\"segmentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"status\":\"ACTIVE\",\"name\":\"name\",\"precondition\":{\"preconditionType\":\"user\",\"key\":\"key\",\"value\":\"value\",\"operator\":\"NOT\"}}],\"number\":1,\"size\":1,\"totalElements\":1000000,\"totalPages\":1}"));
+            .setBody("{\"segments\":[{\"segmentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"status\":\"ACTIVE\",\"name\":\"name\",\"precondition\":{\"preconditionType\":\"user\",\"key\":\"key\",\"value\":\"value\",\"values\":[\"values\",\"values\"],\"operator\":\"NOT\"}},{\"segmentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"status\":\"ACTIVE\",\"name\":\"name\",\"precondition\":{\"preconditionType\":\"user\",\"key\":\"key\",\"value\":\"value\",\"values\":[\"values\",\"values\"],\"operator\":\"NOT\"}}],\"number\":1,\"size\":1,\"totalElements\":1000000,\"totalPages\":1}"));
         SegmentsSearchResponse response = client.segments().search(
             SegmentsSearchRequest
                 .builder()
@@ -95,12 +95,18 @@ public class SegmentsWireTest {
             + "        \"appId\": \"appId\",\n"
             + "        \"referenceId\": \"x\"\n"
             + "      },\n"
+            + "      \"createdAt\": \"2024-01-15T09:30:00Z\",\n"
+            + "      \"updatedAt\": \"2024-01-15T09:30:00Z\",\n"
             + "      \"status\": \"ACTIVE\",\n"
             + "      \"name\": \"name\",\n"
             + "      \"precondition\": {\n"
             + "        \"preconditionType\": \"user\",\n"
             + "        \"key\": \"key\",\n"
             + "        \"value\": \"value\",\n"
+            + "        \"values\": [\n"
+            + "          \"values\",\n"
+            + "          \"values\"\n"
+            + "        ],\n"
             + "        \"operator\": \"NOT\"\n"
             + "      }\n"
             + "    },\n"
@@ -112,12 +118,18 @@ public class SegmentsWireTest {
             + "        \"appId\": \"appId\",\n"
             + "        \"referenceId\": \"x\"\n"
             + "      },\n"
+            + "      \"createdAt\": \"2024-01-15T09:30:00Z\",\n"
+            + "      \"updatedAt\": \"2024-01-15T09:30:00Z\",\n"
             + "      \"status\": \"ACTIVE\",\n"
             + "      \"name\": \"name\",\n"
             + "      \"precondition\": {\n"
             + "        \"preconditionType\": \"user\",\n"
             + "        \"key\": \"key\",\n"
             + "        \"value\": \"value\",\n"
+            + "        \"values\": [\n"
+            + "          \"values\",\n"
+            + "          \"values\"\n"
+            + "        ],\n"
             + "        \"operator\": \"NOT\"\n"
             + "      }\n"
             + "    }\n"
@@ -154,7 +166,7 @@ public class SegmentsWireTest {
     public void testCreateOrUpdate() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"segmentId\":{\"referenceId\":\"admin-users\",\"appId\":\"auth-app\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"SEGMENT\"},\"name\":\"Admin users\",\"status\":\"ACTIVE\",\"precondition\":{\"preconditionType\":\"group\",\"operator\":\"AND\",\"preconditions\":[{\"preconditionType\":\"user\",\"key\":\"userKey\"},{\"preconditionType\":\"user\",\"key\":\"userKey2\"}]}}"));
+            .setBody("{\"segmentId\":{\"referenceId\":\"admin-users\",\"appId\":\"auth-app\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"SEGMENT\"},\"name\":\"Admin users\",\"createdAt\":\"2025-01-01T00:00:00Z\",\"updatedAt\":\"2025-01-15T12:30:00Z\",\"status\":\"ACTIVE\",\"precondition\":{\"preconditionType\":\"group\",\"operator\":\"AND\",\"preconditions\":[{\"preconditionType\":\"user\",\"key\":\"userKey\"},{\"preconditionType\":\"user\",\"key\":\"userKey2\"}]}}"));
         SegmentResponse response = client.segments().createOrUpdate(
             SegmentRequest
                 .builder()
@@ -253,6 +265,8 @@ public class SegmentsWireTest {
             + "    \"type\": \"SEGMENT\"\n"
             + "  },\n"
             + "  \"name\": \"Admin users\",\n"
+            + "  \"createdAt\": \"2025-01-01T00:00:00Z\",\n"
+            + "  \"updatedAt\": \"2025-01-15T12:30:00Z\",\n"
             + "  \"status\": \"ACTIVE\",\n"
             + "  \"precondition\": {\n"
             + "    \"preconditionType\": \"group\",\n"
@@ -296,7 +310,7 @@ public class SegmentsWireTest {
     public void testGet() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"segmentId\":{\"referenceId\":\"admin-users\",\"appId\":\"auth-app\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"SEGMENT\"},\"name\":\"Admin users\",\"status\":\"ACTIVE\",\"precondition\":{\"preconditionType\":\"group\",\"operator\":\"AND\",\"preconditions\":[{\"preconditionType\":\"user\",\"key\":\"userKey\"},{\"preconditionType\":\"user\",\"key\":\"userKey2\"}]}}"));
+            .setBody("{\"segmentId\":{\"referenceId\":\"admin-users\",\"appId\":\"auth-app\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"SEGMENT\"},\"name\":\"Admin users\",\"createdAt\":\"2025-01-01T00:00:00Z\",\"updatedAt\":\"2025-01-15T12:30:00Z\",\"status\":\"ACTIVE\",\"precondition\":{\"preconditionType\":\"group\",\"operator\":\"AND\",\"preconditions\":[{\"preconditionType\":\"user\",\"key\":\"userKey\"},{\"preconditionType\":\"user\",\"key\":\"userKey2\"}]}}"));
         SegmentResponse response = client.segments().get(
             "admin-users",
             SegmentGetRequest
@@ -320,6 +334,8 @@ public class SegmentsWireTest {
             + "    \"type\": \"SEGMENT\"\n"
             + "  },\n"
             + "  \"name\": \"Admin users\",\n"
+            + "  \"createdAt\": \"2025-01-01T00:00:00Z\",\n"
+            + "  \"updatedAt\": \"2025-01-15T12:30:00Z\",\n"
             + "  \"status\": \"ACTIVE\",\n"
             + "  \"precondition\": {\n"
             + "    \"preconditionType\": \"group\",\n"
@@ -363,7 +379,7 @@ public class SegmentsWireTest {
     public void testPatch() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"segmentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"status\":\"ACTIVE\",\"name\":\"name\",\"precondition\":{\"preconditionType\":\"user\",\"key\":\"key\",\"value\":\"value\",\"operator\":\"NOT\"}}"));
+            .setBody("{\"segmentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"status\":\"ACTIVE\",\"name\":\"name\",\"precondition\":{\"preconditionType\":\"user\",\"key\":\"key\",\"value\":\"value\",\"values\":[\"values\",\"values\"],\"operator\":\"NOT\"}}"));
         SegmentResponse response = client.segments().patch(
             "segmentReferenceId",
             SegmentPatchRequest
@@ -412,12 +428,18 @@ public class SegmentsWireTest {
             + "    \"appId\": \"appId\",\n"
             + "    \"referenceId\": \"x\"\n"
             + "  },\n"
+            + "  \"createdAt\": \"2024-01-15T09:30:00Z\",\n"
+            + "  \"updatedAt\": \"2024-01-15T09:30:00Z\",\n"
             + "  \"status\": \"ACTIVE\",\n"
             + "  \"name\": \"name\",\n"
             + "  \"precondition\": {\n"
             + "    \"preconditionType\": \"user\",\n"
             + "    \"key\": \"key\",\n"
             + "    \"value\": \"value\",\n"
+            + "    \"values\": [\n"
+            + "      \"values\",\n"
+            + "      \"values\"\n"
+            + "    ],\n"
             + "    \"operator\": \"NOT\"\n"
             + "  }\n"
             + "}";

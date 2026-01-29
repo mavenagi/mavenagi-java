@@ -13,6 +13,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
 import com.mavenagi.resources.commons.types.EntityId;
 import com.mavenagi.resources.commons.types.Precondition;
+import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -27,6 +28,10 @@ public final class SegmentResponse implements ISegmentBase {
 
     private final EntityId segmentId;
 
+    private final OffsetDateTime createdAt;
+
+    private final OffsetDateTime updatedAt;
+
     private final SegmentStatus status;
 
     private final Map<String, Object> additionalProperties;
@@ -35,11 +40,15 @@ public final class SegmentResponse implements ISegmentBase {
             String name,
             Precondition precondition,
             EntityId segmentId,
+            OffsetDateTime createdAt,
+            OffsetDateTime updatedAt,
             SegmentStatus status,
             Map<String, Object> additionalProperties) {
         this.name = name;
         this.precondition = precondition;
         this.segmentId = segmentId;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
         this.status = status;
         this.additionalProperties = additionalProperties;
     }
@@ -71,6 +80,22 @@ public final class SegmentResponse implements ISegmentBase {
     }
 
     /**
+     * @return The date and time when the segment was created.
+     */
+    @JsonProperty("createdAt")
+    public OffsetDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    /**
+     * @return The date and time when the segment was last updated.
+     */
+    @JsonProperty("updatedAt")
+    public OffsetDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    /**
      * @return Whether or not the segment is in active use. To preserve historical data, segments can not be deleted.
      * <p>Only active segments will be evaluated for matching user questions.</p>
      */
@@ -94,12 +119,14 @@ public final class SegmentResponse implements ISegmentBase {
         return name.equals(other.name)
                 && precondition.equals(other.precondition)
                 && segmentId.equals(other.segmentId)
+                && createdAt.equals(other.createdAt)
+                && updatedAt.equals(other.updatedAt)
                 && status.equals(other.status);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.name, this.precondition, this.segmentId, this.status);
+        return Objects.hash(this.name, this.precondition, this.segmentId, this.createdAt, this.updatedAt, this.status);
     }
 
     @java.lang.Override
@@ -131,7 +158,21 @@ public final class SegmentResponse implements ISegmentBase {
         /**
          * <p>ID that uniquely identifies this segment</p>
          */
-        StatusStage segmentId(@NotNull EntityId segmentId);
+        CreatedAtStage segmentId(@NotNull EntityId segmentId);
+    }
+
+    public interface CreatedAtStage {
+        /**
+         * <p>The date and time when the segment was created.</p>
+         */
+        UpdatedAtStage createdAt(@NotNull OffsetDateTime createdAt);
+    }
+
+    public interface UpdatedAtStage {
+        /**
+         * <p>The date and time when the segment was last updated.</p>
+         */
+        StatusStage updatedAt(@NotNull OffsetDateTime updatedAt);
     }
 
     public interface StatusStage {
@@ -148,12 +189,22 @@ public final class SegmentResponse implements ISegmentBase {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
-            implements NameStage, PreconditionStage, SegmentIdStage, StatusStage, _FinalStage {
+            implements NameStage,
+                    PreconditionStage,
+                    SegmentIdStage,
+                    CreatedAtStage,
+                    UpdatedAtStage,
+                    StatusStage,
+                    _FinalStage {
         private String name;
 
         private Precondition precondition;
 
         private EntityId segmentId;
+
+        private OffsetDateTime createdAt;
+
+        private OffsetDateTime updatedAt;
 
         private SegmentStatus status;
 
@@ -167,6 +218,8 @@ public final class SegmentResponse implements ISegmentBase {
             name(other.getName());
             precondition(other.getPrecondition());
             segmentId(other.getSegmentId());
+            createdAt(other.getCreatedAt());
+            updatedAt(other.getUpdatedAt());
             status(other.getStatus());
             return this;
         }
@@ -202,8 +255,32 @@ public final class SegmentResponse implements ISegmentBase {
          */
         @java.lang.Override
         @JsonSetter("segmentId")
-        public StatusStage segmentId(@NotNull EntityId segmentId) {
+        public CreatedAtStage segmentId(@NotNull EntityId segmentId) {
             this.segmentId = Objects.requireNonNull(segmentId, "segmentId must not be null");
+            return this;
+        }
+
+        /**
+         * <p>The date and time when the segment was created.</p>
+         * <p>The date and time when the segment was created.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("createdAt")
+        public UpdatedAtStage createdAt(@NotNull OffsetDateTime createdAt) {
+            this.createdAt = Objects.requireNonNull(createdAt, "createdAt must not be null");
+            return this;
+        }
+
+        /**
+         * <p>The date and time when the segment was last updated.</p>
+         * <p>The date and time when the segment was last updated.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("updatedAt")
+        public StatusStage updatedAt(@NotNull OffsetDateTime updatedAt) {
+            this.updatedAt = Objects.requireNonNull(updatedAt, "updatedAt must not be null");
             return this;
         }
 
@@ -223,7 +300,8 @@ public final class SegmentResponse implements ISegmentBase {
 
         @java.lang.Override
         public SegmentResponse build() {
-            return new SegmentResponse(name, precondition, segmentId, status, additionalProperties);
+            return new SegmentResponse(
+                    name, precondition, segmentId, createdAt, updatedAt, status, additionalProperties);
         }
     }
 }

@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -27,16 +28,20 @@ public final class MetadataPrecondition implements IPreconditionBase {
 
     private final Optional<String> value;
 
+    private final Optional<List<String>> values;
+
     private final Map<String, Object> additionalProperties;
 
     private MetadataPrecondition(
             Optional<PreconditionOperator> operator,
             String key,
             Optional<String> value,
+            Optional<List<String>> values,
             Map<String, Object> additionalProperties) {
         this.operator = operator;
         this.key = key;
         this.value = value;
+        this.values = values;
         this.additionalProperties = additionalProperties;
     }
 
@@ -58,11 +63,19 @@ public final class MetadataPrecondition implements IPreconditionBase {
     }
 
     /**
-     * @return If set, the value must match the metadata value for the given key
+     * @return Single value for CONTAINS operator or exact match
      */
     @JsonProperty("value")
     public Optional<String> getValue() {
         return value;
+    }
+
+    /**
+     * @return Multiple values for CONTAINS_ANY and CONTAINS_ALL operators
+     */
+    @JsonProperty("values")
+    public Optional<List<String>> getValues() {
+        return values;
     }
 
     @java.lang.Override
@@ -77,12 +90,15 @@ public final class MetadataPrecondition implements IPreconditionBase {
     }
 
     private boolean equalTo(MetadataPrecondition other) {
-        return operator.equals(other.operator) && key.equals(other.key) && value.equals(other.value);
+        return operator.equals(other.operator)
+                && key.equals(other.key)
+                && value.equals(other.value)
+                && values.equals(other.values);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.operator, this.key, this.value);
+        return Objects.hash(this.operator, this.key, this.value, this.values);
     }
 
     @java.lang.Override
@@ -114,16 +130,25 @@ public final class MetadataPrecondition implements IPreconditionBase {
         _FinalStage operator(PreconditionOperator operator);
 
         /**
-         * <p>If set, the value must match the metadata value for the given key</p>
+         * <p>Single value for CONTAINS operator or exact match</p>
          */
         _FinalStage value(Optional<String> value);
 
         _FinalStage value(String value);
+
+        /**
+         * <p>Multiple values for CONTAINS_ANY and CONTAINS_ALL operators</p>
+         */
+        _FinalStage values(Optional<List<String>> values);
+
+        _FinalStage values(List<String> values);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements KeyStage, _FinalStage {
         private String key;
+
+        private Optional<List<String>> values = Optional.empty();
 
         private Optional<String> value = Optional.empty();
 
@@ -139,6 +164,7 @@ public final class MetadataPrecondition implements IPreconditionBase {
             operator(other.getOperator());
             key(other.getKey());
             value(other.getValue());
+            values(other.getValues());
             return this;
         }
 
@@ -155,7 +181,27 @@ public final class MetadataPrecondition implements IPreconditionBase {
         }
 
         /**
-         * <p>If set, the value must match the metadata value for the given key</p>
+         * <p>Multiple values for CONTAINS_ANY and CONTAINS_ALL operators</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage values(List<String> values) {
+            this.values = Optional.ofNullable(values);
+            return this;
+        }
+
+        /**
+         * <p>Multiple values for CONTAINS_ANY and CONTAINS_ALL operators</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "values", nulls = Nulls.SKIP)
+        public _FinalStage values(Optional<List<String>> values) {
+            this.values = values;
+            return this;
+        }
+
+        /**
+         * <p>Single value for CONTAINS operator or exact match</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -165,7 +211,7 @@ public final class MetadataPrecondition implements IPreconditionBase {
         }
 
         /**
-         * <p>If set, the value must match the metadata value for the given key</p>
+         * <p>Single value for CONTAINS operator or exact match</p>
          */
         @java.lang.Override
         @JsonSetter(value = "value", nulls = Nulls.SKIP)
@@ -196,7 +242,7 @@ public final class MetadataPrecondition implements IPreconditionBase {
 
         @java.lang.Override
         public MetadataPrecondition build() {
-            return new MetadataPrecondition(operator, key, value, additionalProperties);
+            return new MetadataPrecondition(operator, key, value, values, additionalProperties);
         }
     }
 }

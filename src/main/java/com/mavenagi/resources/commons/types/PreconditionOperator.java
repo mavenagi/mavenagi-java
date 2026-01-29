@@ -7,7 +7,24 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public final class PreconditionOperator {
+    public static final PreconditionOperator NOT_CONTAINS =
+            new PreconditionOperator(Value.NOT_CONTAINS, "NOT_CONTAINS");
+
+    public static final PreconditionOperator CONTAINS_ANY =
+            new PreconditionOperator(Value.CONTAINS_ANY, "CONTAINS_ANY");
+
+    public static final PreconditionOperator CONTAINS_ALL =
+            new PreconditionOperator(Value.CONTAINS_ALL, "CONTAINS_ALL");
+
+    public static final PreconditionOperator NOT_CONTAINS_ALL =
+            new PreconditionOperator(Value.NOT_CONTAINS_ALL, "NOT_CONTAINS_ALL");
+
     public static final PreconditionOperator NOT = new PreconditionOperator(Value.NOT, "NOT");
+
+    public static final PreconditionOperator CONTAINS = new PreconditionOperator(Value.CONTAINS, "CONTAINS");
+
+    public static final PreconditionOperator NOT_CONTAINS_ANY =
+            new PreconditionOperator(Value.NOT_CONTAINS_ANY, "NOT_CONTAINS_ANY");
 
     private final Value value;
 
@@ -41,8 +58,20 @@ public final class PreconditionOperator {
 
     public <T> T visit(Visitor<T> visitor) {
         switch (value) {
+            case NOT_CONTAINS:
+                return visitor.visitNotContains();
+            case CONTAINS_ANY:
+                return visitor.visitContainsAny();
+            case CONTAINS_ALL:
+                return visitor.visitContainsAll();
+            case NOT_CONTAINS_ALL:
+                return visitor.visitNotContainsAll();
             case NOT:
                 return visitor.visitNot();
+            case CONTAINS:
+                return visitor.visitContains();
+            case NOT_CONTAINS_ANY:
+                return visitor.visitNotContainsAny();
             case UNKNOWN:
             default:
                 return visitor.visitUnknown(string);
@@ -52,8 +81,20 @@ public final class PreconditionOperator {
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static PreconditionOperator valueOf(String value) {
         switch (value) {
+            case "NOT_CONTAINS":
+                return NOT_CONTAINS;
+            case "CONTAINS_ANY":
+                return CONTAINS_ANY;
+            case "CONTAINS_ALL":
+                return CONTAINS_ALL;
+            case "NOT_CONTAINS_ALL":
+                return NOT_CONTAINS_ALL;
             case "NOT":
                 return NOT;
+            case "CONTAINS":
+                return CONTAINS;
+            case "NOT_CONTAINS_ANY":
+                return NOT_CONTAINS_ANY;
             default:
                 return new PreconditionOperator(Value.UNKNOWN, value);
         }
@@ -62,11 +103,35 @@ public final class PreconditionOperator {
     public enum Value {
         NOT,
 
+        CONTAINS,
+
+        NOT_CONTAINS,
+
+        CONTAINS_ANY,
+
+        NOT_CONTAINS_ANY,
+
+        CONTAINS_ALL,
+
+        NOT_CONTAINS_ALL,
+
         UNKNOWN
     }
 
     public interface Visitor<T> {
         T visitNot();
+
+        T visitContains();
+
+        T visitNotContains();
+
+        T visitContainsAny();
+
+        T visitNotContainsAny();
+
+        T visitContainsAll();
+
+        T visitNotContainsAll();
 
         T visitUnknown(String unknownType);
     }

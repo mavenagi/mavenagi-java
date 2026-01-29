@@ -54,6 +54,8 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
 
     private final Optional<EntityId> segmentId;
 
+    private final Optional<String> url;
+
     private final Map<String, Object> additionalProperties;
 
     private KnowledgeBaseResponse(
@@ -70,6 +72,7 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
             LlmInclusionStatus llmInclusionStatus,
             KnowledgeBaseRefreshFrequency refreshFrequency,
             Optional<EntityId> segmentId,
+            Optional<String> url,
             Map<String, Object> additionalProperties) {
         this.name = name;
         this.precondition = precondition;
@@ -84,6 +87,7 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
         this.llmInclusionStatus = llmInclusionStatus;
         this.refreshFrequency = refreshFrequency;
         this.segmentId = segmentId;
+        this.url = url;
         this.additionalProperties = additionalProperties;
     }
 
@@ -197,6 +201,14 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
         return segmentId;
     }
 
+    /**
+     * @return The source URL of URL and RSS knowledge bases that was used for crawl.
+     */
+    @JsonProperty("url")
+    public Optional<String> getUrl() {
+        return url;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -221,7 +233,8 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
                 && tags.equals(other.tags)
                 && llmInclusionStatus.equals(other.llmInclusionStatus)
                 && refreshFrequency.equals(other.refreshFrequency)
-                && segmentId.equals(other.segmentId);
+                && segmentId.equals(other.segmentId)
+                && url.equals(other.url);
     }
 
     @java.lang.Override
@@ -239,7 +252,8 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
                 this.tags,
                 this.llmInclusionStatus,
                 this.refreshFrequency,
-                this.segmentId);
+                this.segmentId,
+                this.url);
     }
 
     @java.lang.Override
@@ -354,6 +368,13 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
         _FinalStage segmentId(Optional<EntityId> segmentId);
 
         _FinalStage segmentId(EntityId segmentId);
+
+        /**
+         * <p>The source URL of URL and RSS knowledge bases that was used for crawl.</p>
+         */
+        _FinalStage url(Optional<String> url);
+
+        _FinalStage url(String url);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -382,6 +403,8 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
         private LlmInclusionStatus llmInclusionStatus;
 
         private KnowledgeBaseRefreshFrequency refreshFrequency;
+
+        private Optional<String> url = Optional.empty();
 
         private Optional<EntityId> segmentId = Optional.empty();
 
@@ -413,6 +436,7 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
             llmInclusionStatus(other.getLlmInclusionStatus());
             refreshFrequency(other.getRefreshFrequency());
             segmentId(other.getSegmentId());
+            url(other.getUrl());
             return this;
         }
 
@@ -514,6 +538,26 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
         @JsonSetter("refreshFrequency")
         public _FinalStage refreshFrequency(@NotNull KnowledgeBaseRefreshFrequency refreshFrequency) {
             this.refreshFrequency = Objects.requireNonNull(refreshFrequency, "refreshFrequency must not be null");
+            return this;
+        }
+
+        /**
+         * <p>The source URL of URL and RSS knowledge bases that was used for crawl.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage url(String url) {
+            this.url = Optional.ofNullable(url);
+            return this;
+        }
+
+        /**
+         * <p>The source URL of URL and RSS knowledge bases that was used for crawl.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "url", nulls = Nulls.SKIP)
+        public _FinalStage url(Optional<String> url) {
+            this.url = url;
             return this;
         }
 
@@ -667,6 +711,7 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
                     llmInclusionStatus,
                     refreshFrequency,
                     segmentId,
+                    url,
                     additionalProperties);
         }
     }
