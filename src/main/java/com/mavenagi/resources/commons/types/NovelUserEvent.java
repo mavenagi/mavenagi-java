@@ -40,6 +40,8 @@ public final class NovelUserEvent implements IEventBaseNoId {
 
     private final EventUserInfoBase userInfo;
 
+    private final Optional<CsatInfo> csatInfo;
+
     private final Optional<List<FeedbackInfo>> feedbackInfo;
 
     private final Optional<PageInfo> pageInfo;
@@ -55,6 +57,7 @@ public final class NovelUserEvent implements IEventBaseNoId {
             EntityIdBase id,
             UserEventName eventName,
             EventUserInfoBase userInfo,
+            Optional<CsatInfo> csatInfo,
             Optional<List<FeedbackInfo>> feedbackInfo,
             Optional<PageInfo> pageInfo,
             Map<String, Object> additionalProperties) {
@@ -66,6 +69,7 @@ public final class NovelUserEvent implements IEventBaseNoId {
         this.id = id;
         this.eventName = eventName;
         this.userInfo = userInfo;
+        this.csatInfo = csatInfo;
         this.feedbackInfo = feedbackInfo;
         this.pageInfo = pageInfo;
         this.additionalProperties = additionalProperties;
@@ -126,6 +130,14 @@ public final class NovelUserEvent implements IEventBaseNoId {
     }
 
     /**
+     * @return Information about any CSAT associated with the event
+     */
+    @JsonProperty("csatInfo")
+    public Optional<CsatInfo> getCsatInfo() {
+        return csatInfo;
+    }
+
+    /**
      * @return Information about any feedback associated with the event
      */
     @JsonProperty("feedbackInfo")
@@ -161,6 +173,7 @@ public final class NovelUserEvent implements IEventBaseNoId {
                 && id.equals(other.id)
                 && eventName.equals(other.eventName)
                 && userInfo.equals(other.userInfo)
+                && csatInfo.equals(other.csatInfo)
                 && feedbackInfo.equals(other.feedbackInfo)
                 && pageInfo.equals(other.pageInfo);
     }
@@ -176,6 +189,7 @@ public final class NovelUserEvent implements IEventBaseNoId {
                 this.id,
                 this.eventName,
                 this.userInfo,
+                this.csatInfo,
                 this.feedbackInfo,
                 this.pageInfo);
     }
@@ -236,6 +250,13 @@ public final class NovelUserEvent implements IEventBaseNoId {
         _FinalStage contextInfo(ContextInfo contextInfo);
 
         /**
+         * <p>Information about any CSAT associated with the event</p>
+         */
+        _FinalStage csatInfo(Optional<CsatInfo> csatInfo);
+
+        _FinalStage csatInfo(CsatInfo csatInfo);
+
+        /**
          * <p>Information about any feedback associated with the event</p>
          */
         _FinalStage feedbackInfo(Optional<List<FeedbackInfo>> feedbackInfo);
@@ -262,6 +283,8 @@ public final class NovelUserEvent implements IEventBaseNoId {
 
         private Optional<List<FeedbackInfo>> feedbackInfo = Optional.empty();
 
+        private Optional<CsatInfo> csatInfo = Optional.empty();
+
         private Optional<ContextInfo> contextInfo = Optional.empty();
 
         private Optional<SessionInfo> sessionInfo = Optional.empty();
@@ -287,6 +310,7 @@ public final class NovelUserEvent implements IEventBaseNoId {
             id(other.getId());
             eventName(other.getEventName());
             userInfo(other.getUserInfo());
+            csatInfo(other.getCsatInfo());
             feedbackInfo(other.getFeedbackInfo());
             pageInfo(other.getPageInfo());
             return this;
@@ -368,6 +392,26 @@ public final class NovelUserEvent implements IEventBaseNoId {
             return this;
         }
 
+        /**
+         * <p>Information about any CSAT associated with the event</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage csatInfo(CsatInfo csatInfo) {
+            this.csatInfo = Optional.ofNullable(csatInfo);
+            return this;
+        }
+
+        /**
+         * <p>Information about any CSAT associated with the event</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "csatInfo", nulls = Nulls.SKIP)
+        public _FinalStage csatInfo(Optional<CsatInfo> csatInfo) {
+            this.csatInfo = csatInfo;
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage contextInfo(ContextInfo contextInfo) {
             this.contextInfo = Optional.ofNullable(contextInfo);
@@ -444,6 +488,7 @@ public final class NovelUserEvent implements IEventBaseNoId {
                     id,
                     eventName,
                     userInfo,
+                    csatInfo,
                     feedbackInfo,
                     pageInfo,
                     additionalProperties);

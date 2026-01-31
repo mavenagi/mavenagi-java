@@ -31,6 +31,8 @@ public final class NumericConversationField {
     public static final NumericConversationField BOT_MESSAGE_COUNT =
             new NumericConversationField(Value.BOT_MESSAGE_COUNT, "BotMessageCount");
 
+    public static final NumericConversationField CSAT = new NumericConversationField(Value.CSAT, "Csat");
+
     private final Value value;
 
     private final String string;
@@ -80,6 +82,8 @@ public final class NumericConversationField {
                 return visitor.visitPredictedNps();
             case BOT_MESSAGE_COUNT:
                 return visitor.visitBotMessageCount();
+            case CSAT:
+                return visitor.visitCsat();
             case UNKNOWN:
             default:
                 return visitor.visitUnknown(string);
@@ -105,6 +109,8 @@ public final class NumericConversationField {
                 return PREDICTED_NPS;
             case "BotMessageCount":
                 return BOT_MESSAGE_COUNT;
+            case "Csat":
+                return CSAT;
             default:
                 return new NumericConversationField(Value.UNKNOWN, value);
         }
@@ -127,6 +133,8 @@ public final class NumericConversationField {
 
         PREDICTED_NPS,
 
+        CSAT,
+
         UNKNOWN
     }
 
@@ -146,6 +154,8 @@ public final class NumericConversationField {
         T visitFirstResponseTime();
 
         T visitPredictedNps();
+
+        T visitCsat();
 
         T visitUnknown(String unknownType);
     }

@@ -23,6 +23,8 @@ public final class ConversationField {
 
     public static final ConversationField TAGS = new ConversationField(Value.TAGS, "Tags");
 
+    public static final ConversationField CSAT = new ConversationField(Value.CSAT, "Csat");
+
     public static final ConversationField THUMBS_UP_COUNT =
             new ConversationField(Value.THUMBS_UP_COUNT, "ThumbsUpCount");
 
@@ -120,6 +122,8 @@ public final class ConversationField {
                 return visitor.visitResolvedByMaven();
             case TAGS:
                 return visitor.visitTags();
+            case CSAT:
+                return visitor.visitCsat();
             case THUMBS_UP_COUNT:
                 return visitor.visitThumbsUpCount();
             case INVOLVED_APPS:
@@ -187,6 +191,8 @@ public final class ConversationField {
                 return RESOLVED_BY_MAVEN;
             case "Tags":
                 return TAGS;
+            case "Csat":
+                return CSAT;
             case "ThumbsUpCount":
                 return THUMBS_UP_COUNT;
             case "InvolvedApps":
@@ -289,6 +295,8 @@ public final class ConversationField {
 
         PREDICTED_NPS,
 
+        CSAT,
+
         ORGANIZATION_ID,
 
         AGENT_ID,
@@ -350,6 +358,8 @@ public final class ConversationField {
         T visitCreatedAt();
 
         T visitPredictedNps();
+
+        T visitCsat();
 
         T visitOrganizationId();
 
