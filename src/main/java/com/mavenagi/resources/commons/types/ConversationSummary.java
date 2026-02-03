@@ -40,6 +40,8 @@ public final class ConversationSummary {
 
     private final int botMessageCount;
 
+    private final Optional<Double> csat;
+
     private final Optional<Long> handleTime;
 
     private final Optional<Long> humanAgentResponseDelay;
@@ -69,6 +71,7 @@ public final class ConversationSummary {
             int handoffCount,
             int userMessageCount,
             int botMessageCount,
+            Optional<Double> csat,
             Optional<Long> handleTime,
             Optional<Long> humanAgentResponseDelay,
             List<String> humanAgents,
@@ -87,6 +90,7 @@ public final class ConversationSummary {
         this.handoffCount = handoffCount;
         this.userMessageCount = userMessageCount;
         this.botMessageCount = botMessageCount;
+        this.csat = csat;
         this.handleTime = handleTime;
         this.humanAgentResponseDelay = humanAgentResponseDelay;
         this.humanAgents = humanAgents;
@@ -161,6 +165,14 @@ public final class ConversationSummary {
     @JsonProperty("botMessageCount")
     public int getBotMessageCount() {
         return botMessageCount;
+    }
+
+    /**
+     * @return The CSAT score for the conversation
+     */
+    @JsonProperty("csat")
+    public Optional<Double> getCsat() {
+        return csat;
     }
 
     /**
@@ -265,6 +277,7 @@ public final class ConversationSummary {
                 && handoffCount == other.handoffCount
                 && userMessageCount == other.userMessageCount
                 && botMessageCount == other.botMessageCount
+                && csat.equals(other.csat)
                 && handleTime.equals(other.handleTime)
                 && humanAgentResponseDelay.equals(other.humanAgentResponseDelay)
                 && humanAgents.equals(other.humanAgents)
@@ -287,6 +300,7 @@ public final class ConversationSummary {
                 this.handoffCount,
                 this.userMessageCount,
                 this.botMessageCount,
+                this.csat,
                 this.handleTime,
                 this.humanAgentResponseDelay,
                 this.humanAgents,
@@ -371,6 +385,13 @@ public final class ConversationSummary {
         _FinalStage addIncompleteActionIds(EntityIdWithoutAgent incompleteActionIds);
 
         _FinalStage addAllIncompleteActionIds(List<EntityIdWithoutAgent> incompleteActionIds);
+
+        /**
+         * <p>The CSAT score for the conversation</p>
+         */
+        _FinalStage csat(Optional<Double> csat);
+
+        _FinalStage csat(Double csat);
 
         /**
          * <p>The total time in milliseconds that the user spent interacting with the conversation.
@@ -495,6 +516,8 @@ public final class ConversationSummary {
 
         private Optional<Long> handleTime = Optional.empty();
 
+        private Optional<Double> csat = Optional.empty();
+
         private List<EntityIdWithoutAgent> incompleteActionIds = new ArrayList<>();
 
         private List<EntityIdWithoutAgent> actionIds = new ArrayList<>();
@@ -514,6 +537,7 @@ public final class ConversationSummary {
             handoffCount(other.getHandoffCount());
             userMessageCount(other.getUserMessageCount());
             botMessageCount(other.getBotMessageCount());
+            csat(other.getCsat());
             handleTime(other.getHandleTime());
             humanAgentResponseDelay(other.getHumanAgentResponseDelay());
             humanAgents(other.getHumanAgents());
@@ -880,6 +904,26 @@ public final class ConversationSummary {
         }
 
         /**
+         * <p>The CSAT score for the conversation</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage csat(Double csat) {
+            this.csat = Optional.ofNullable(csat);
+            return this;
+        }
+
+        /**
+         * <p>The CSAT score for the conversation</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "csat", nulls = Nulls.SKIP)
+        public _FinalStage csat(Optional<Double> csat) {
+            this.csat = csat;
+            return this;
+        }
+
+        /**
          * <p>The IDs of the actions that were taken by Maven but not completed in the conversation. Occurs when the user is shown an action form but does not submit it.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -960,6 +1004,7 @@ public final class ConversationSummary {
                     handoffCount,
                     userMessageCount,
                     botMessageCount,
+                    csat,
                     handleTime,
                     humanAgentResponseDelay,
                     humanAgents,

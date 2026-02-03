@@ -44,6 +44,8 @@ public final class UserEvent implements IEventBaseNoId {
 
     private final Optional<List<FeedbackInfo>> feedbackInfo;
 
+    private final Optional<CsatInfo> csatInfo;
+
     private final Optional<PageInfo> pageInfo;
 
     private final Map<String, Object> additionalProperties;
@@ -59,6 +61,7 @@ public final class UserEvent implements IEventBaseNoId {
             UserEventName eventName,
             EventUserInfo userInfo,
             Optional<List<FeedbackInfo>> feedbackInfo,
+            Optional<CsatInfo> csatInfo,
             Optional<PageInfo> pageInfo,
             Map<String, Object> additionalProperties) {
         this.timestamp = timestamp;
@@ -71,6 +74,7 @@ public final class UserEvent implements IEventBaseNoId {
         this.eventName = eventName;
         this.userInfo = userInfo;
         this.feedbackInfo = feedbackInfo;
+        this.csatInfo = csatInfo;
         this.pageInfo = pageInfo;
         this.additionalProperties = additionalProperties;
     }
@@ -146,6 +150,14 @@ public final class UserEvent implements IEventBaseNoId {
     }
 
     /**
+     * @return Information about any CSAT survey associated with the event
+     */
+    @JsonProperty("csatInfo")
+    public Optional<CsatInfo> getCsatInfo() {
+        return csatInfo;
+    }
+
+    /**
      * @return Information about the page on which the event occurred
      */
     @JsonProperty("pageInfo")
@@ -175,6 +187,7 @@ public final class UserEvent implements IEventBaseNoId {
                 && eventName.equals(other.eventName)
                 && userInfo.equals(other.userInfo)
                 && feedbackInfo.equals(other.feedbackInfo)
+                && csatInfo.equals(other.csatInfo)
                 && pageInfo.equals(other.pageInfo);
     }
 
@@ -191,6 +204,7 @@ public final class UserEvent implements IEventBaseNoId {
                 this.eventName,
                 this.userInfo,
                 this.feedbackInfo,
+                this.csatInfo,
                 this.pageInfo);
     }
 
@@ -264,6 +278,13 @@ public final class UserEvent implements IEventBaseNoId {
         _FinalStage feedbackInfo(List<FeedbackInfo> feedbackInfo);
 
         /**
+         * <p>Information about any CSAT survey associated with the event</p>
+         */
+        _FinalStage csatInfo(Optional<CsatInfo> csatInfo);
+
+        _FinalStage csatInfo(CsatInfo csatInfo);
+
+        /**
          * <p>Information about the page on which the event occurred</p>
          */
         _FinalStage pageInfo(Optional<PageInfo> pageInfo);
@@ -280,6 +301,8 @@ public final class UserEvent implements IEventBaseNoId {
         private EventUserInfo userInfo;
 
         private Optional<PageInfo> pageInfo = Optional.empty();
+
+        private Optional<CsatInfo> csatInfo = Optional.empty();
 
         private Optional<List<FeedbackInfo>> feedbackInfo = Optional.empty();
 
@@ -312,6 +335,7 @@ public final class UserEvent implements IEventBaseNoId {
             eventName(other.getEventName());
             userInfo(other.getUserInfo());
             feedbackInfo(other.getFeedbackInfo());
+            csatInfo(other.getCsatInfo());
             pageInfo(other.getPageInfo());
             return this;
         }
@@ -369,6 +393,26 @@ public final class UserEvent implements IEventBaseNoId {
         @JsonSetter(value = "pageInfo", nulls = Nulls.SKIP)
         public _FinalStage pageInfo(Optional<PageInfo> pageInfo) {
             this.pageInfo = pageInfo;
+            return this;
+        }
+
+        /**
+         * <p>Information about any CSAT survey associated with the event</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage csatInfo(CsatInfo csatInfo) {
+            this.csatInfo = Optional.ofNullable(csatInfo);
+            return this;
+        }
+
+        /**
+         * <p>Information about any CSAT survey associated with the event</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "csatInfo", nulls = Nulls.SKIP)
+        public _FinalStage csatInfo(Optional<CsatInfo> csatInfo) {
+            this.csatInfo = csatInfo;
             return this;
         }
 
@@ -490,6 +534,7 @@ public final class UserEvent implements IEventBaseNoId {
                     eventName,
                     userInfo,
                     feedbackInfo,
+                    csatInfo,
                     pageInfo,
                     additionalProperties);
         }

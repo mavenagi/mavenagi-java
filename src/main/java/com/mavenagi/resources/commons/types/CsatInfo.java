@@ -22,19 +22,30 @@ import java.util.Optional;
 public final class CsatInfo {
     private final Optional<Double> rating;
 
+    private final Optional<Double> maxRating;
+
     private final Map<String, Object> additionalProperties;
 
-    private CsatInfo(Optional<Double> rating, Map<String, Object> additionalProperties) {
+    private CsatInfo(Optional<Double> rating, Optional<Double> maxRating, Map<String, Object> additionalProperties) {
         this.rating = rating;
+        this.maxRating = maxRating;
         this.additionalProperties = additionalProperties;
     }
 
     /**
-     * @return The rating of the CSAT rating [0.0, 5.0]
+     * @return The rating of the CSAT rating (0.0, 5.0]
      */
     @JsonProperty("rating")
     public Optional<Double> getRating() {
         return rating;
+    }
+
+    /**
+     * @return The max rating of the CSAT value (default 5)
+     */
+    @JsonProperty("maxRating")
+    public Optional<Double> getMaxRating() {
+        return maxRating;
     }
 
     @java.lang.Override
@@ -49,12 +60,12 @@ public final class CsatInfo {
     }
 
     private boolean equalTo(CsatInfo other) {
-        return rating.equals(other.rating);
+        return rating.equals(other.rating) && maxRating.equals(other.maxRating);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.rating);
+        return Objects.hash(this.rating, this.maxRating);
     }
 
     @java.lang.Override
@@ -70,6 +81,8 @@ public final class CsatInfo {
     public static final class Builder {
         private Optional<Double> rating = Optional.empty();
 
+        private Optional<Double> maxRating = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -77,11 +90,12 @@ public final class CsatInfo {
 
         public Builder from(CsatInfo other) {
             rating(other.getRating());
+            maxRating(other.getMaxRating());
             return this;
         }
 
         /**
-         * <p>The rating of the CSAT rating [0.0, 5.0]</p>
+         * <p>The rating of the CSAT rating (0.0, 5.0]</p>
          */
         @JsonSetter(value = "rating", nulls = Nulls.SKIP)
         public Builder rating(Optional<Double> rating) {
@@ -94,8 +108,22 @@ public final class CsatInfo {
             return this;
         }
 
+        /**
+         * <p>The max rating of the CSAT value (default 5)</p>
+         */
+        @JsonSetter(value = "maxRating", nulls = Nulls.SKIP)
+        public Builder maxRating(Optional<Double> maxRating) {
+            this.maxRating = maxRating;
+            return this;
+        }
+
+        public Builder maxRating(Double maxRating) {
+            this.maxRating = Optional.ofNullable(maxRating);
+            return this;
+        }
+
         public CsatInfo build() {
-            return new CsatInfo(rating, additionalProperties);
+            return new CsatInfo(rating, maxRating, additionalProperties);
         }
     }
 }

@@ -40,6 +40,8 @@ public final class ConversationAnalysis {
 
     private final Optional<Double> predictedNps;
 
+    private final Optional<Double> csat;
+
     private final Map<String, Object> additionalProperties;
 
     private ConversationAnalysis(
@@ -53,6 +55,7 @@ public final class ConversationAnalysis {
             Optional<Boolean> resolvedByMaven,
             Optional<String> primaryLanguage,
             Optional<Double> predictedNps,
+            Optional<Double> csat,
             Map<String, Object> additionalProperties) {
         this.userRequest = userRequest;
         this.agentResponse = agentResponse;
@@ -64,6 +67,7 @@ public final class ConversationAnalysis {
         this.resolvedByMaven = resolvedByMaven;
         this.primaryLanguage = primaryLanguage;
         this.predictedNps = predictedNps;
+        this.csat = csat;
         this.additionalProperties = additionalProperties;
     }
 
@@ -147,6 +151,14 @@ public final class ConversationAnalysis {
         return predictedNps;
     }
 
+    /**
+     * @return The CSAT of the conversation.
+     */
+    @JsonProperty("csat")
+    public Optional<Double> getCsat() {
+        return csat;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -168,7 +180,8 @@ public final class ConversationAnalysis {
                 && qualityReason.equals(other.qualityReason)
                 && resolvedByMaven.equals(other.resolvedByMaven)
                 && primaryLanguage.equals(other.primaryLanguage)
-                && predictedNps.equals(other.predictedNps);
+                && predictedNps.equals(other.predictedNps)
+                && csat.equals(other.csat);
     }
 
     @java.lang.Override
@@ -183,7 +196,8 @@ public final class ConversationAnalysis {
                 this.qualityReason,
                 this.resolvedByMaven,
                 this.primaryLanguage,
-                this.predictedNps);
+                this.predictedNps,
+                this.csat);
     }
 
     @java.lang.Override
@@ -217,6 +231,8 @@ public final class ConversationAnalysis {
 
         private Optional<Double> predictedNps = Optional.empty();
 
+        private Optional<Double> csat = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -233,6 +249,7 @@ public final class ConversationAnalysis {
             resolvedByMaven(other.getResolvedByMaven());
             primaryLanguage(other.getPrimaryLanguage());
             predictedNps(other.getPredictedNps());
+            csat(other.getCsat());
             return this;
         }
 
@@ -376,6 +393,20 @@ public final class ConversationAnalysis {
             return this;
         }
 
+        /**
+         * <p>The CSAT of the conversation.</p>
+         */
+        @JsonSetter(value = "csat", nulls = Nulls.SKIP)
+        public Builder csat(Optional<Double> csat) {
+            this.csat = csat;
+            return this;
+        }
+
+        public Builder csat(Double csat) {
+            this.csat = Optional.ofNullable(csat);
+            return this;
+        }
+
         public ConversationAnalysis build() {
             return new ConversationAnalysis(
                     userRequest,
@@ -388,6 +419,7 @@ public final class ConversationAnalysis {
                     resolvedByMaven,
                     primaryLanguage,
                     predictedNps,
+                    csat,
                     additionalProperties);
         }
     }
