@@ -33,7 +33,7 @@ public final class CsatInfo {
     }
 
     /**
-     * @return The rating of the CSAT rating (0.0, 5.0]
+     * @return The rating of the CSAT rating
      */
     @JsonProperty("rating")
     public Optional<Double> getRating() {
@@ -95,7 +95,7 @@ public final class CsatInfo {
         }
 
         /**
-         * <p>The rating of the CSAT rating (0.0, 5.0]</p>
+         * <p>The rating of the CSAT rating</p>
          */
         @JsonSetter(value = "rating", nulls = Nulls.SKIP)
         public Builder rating(Optional<Double> rating) {

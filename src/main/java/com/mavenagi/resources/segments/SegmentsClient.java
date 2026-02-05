@@ -5,6 +5,7 @@ package com.mavenagi.resources.segments;
 
 import com.mavenagi.core.ClientOptions;
 import com.mavenagi.core.RequestOptions;
+import com.mavenagi.resources.segments.requests.SegmentDeleteRequest;
 import com.mavenagi.resources.segments.requests.SegmentGetRequest;
 import com.mavenagi.resources.segments.types.SegmentPatchRequest;
 import com.mavenagi.resources.segments.types.SegmentRequest;
@@ -102,5 +103,35 @@ public class SegmentsClient {
     public SegmentResponse patch(
             String segmentReferenceId, SegmentPatchRequest request, RequestOptions requestOptions) {
         return this.rawClient.patch(segmentReferenceId, request, requestOptions).body();
+    }
+
+    /**
+     * Soft delete a segment. Only INACTIVE segments can be deleted.
+     * <p>Deleted segments are excluded from search results but can still be retrieved by ID for archival purposes. Creating a new segment with the same referenceId as a deleted segment will overwrite the deleted segment and restore it to ACTIVE status.</p>
+     * <p>Deleted segments cannot be modified.</p>
+     */
+    public SegmentResponse delete(String segmentReferenceId) {
+        return this.rawClient.delete(segmentReferenceId).body();
+    }
+
+    /**
+     * Soft delete a segment. Only INACTIVE segments can be deleted.
+     * <p>Deleted segments are excluded from search results but can still be retrieved by ID for archival purposes. Creating a new segment with the same referenceId as a deleted segment will overwrite the deleted segment and restore it to ACTIVE status.</p>
+     * <p>Deleted segments cannot be modified.</p>
+     */
+    public SegmentResponse delete(String segmentReferenceId, SegmentDeleteRequest request) {
+        return this.rawClient.delete(segmentReferenceId, request).body();
+    }
+
+    /**
+     * Soft delete a segment. Only INACTIVE segments can be deleted.
+     * <p>Deleted segments are excluded from search results but can still be retrieved by ID for archival purposes. Creating a new segment with the same referenceId as a deleted segment will overwrite the deleted segment and restore it to ACTIVE status.</p>
+     * <p>Deleted segments cannot be modified.</p>
+     */
+    public SegmentResponse delete(
+            String segmentReferenceId, SegmentDeleteRequest request, RequestOptions requestOptions) {
+        return this.rawClient
+                .delete(segmentReferenceId, request, requestOptions)
+                .body();
     }
 }

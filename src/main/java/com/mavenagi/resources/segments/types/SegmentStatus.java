@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public final class SegmentStatus {
+    public static final SegmentStatus DELETED = new SegmentStatus(Value.DELETED, "DELETED");
+
     public static final SegmentStatus ACTIVE = new SegmentStatus(Value.ACTIVE, "ACTIVE");
 
     public static final SegmentStatus INACTIVE = new SegmentStatus(Value.INACTIVE, "INACTIVE");
@@ -43,6 +45,8 @@ public final class SegmentStatus {
 
     public <T> T visit(Visitor<T> visitor) {
         switch (value) {
+            case DELETED:
+                return visitor.visitDeleted();
             case ACTIVE:
                 return visitor.visitActive();
             case INACTIVE:
@@ -56,6 +60,8 @@ public final class SegmentStatus {
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static SegmentStatus valueOf(String value) {
         switch (value) {
+            case "DELETED":
+                return DELETED;
             case "ACTIVE":
                 return ACTIVE;
             case "INACTIVE":
@@ -70,6 +76,8 @@ public final class SegmentStatus {
 
         INACTIVE,
 
+        DELETED,
+
         UNKNOWN
     }
 
@@ -77,6 +85,8 @@ public final class SegmentStatus {
         T visitActive();
 
         T visitInactive();
+
+        T visitDeleted();
 
         T visitUnknown(String unknownType);
     }

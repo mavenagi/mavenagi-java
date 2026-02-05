@@ -16,6 +16,7 @@ import com.mavenagi.resources.commons.errors.BadRequestError;
 import com.mavenagi.resources.commons.errors.NotFoundError;
 import com.mavenagi.resources.commons.errors.ServerError;
 import com.mavenagi.resources.commons.types.ErrorMessage;
+import com.mavenagi.resources.segments.requests.SegmentDeleteRequest;
 import com.mavenagi.resources.segments.requests.SegmentGetRequest;
 import com.mavenagi.resources.segments.types.SegmentPatchRequest;
 import com.mavenagi.resources.segments.types.SegmentRequest;
@@ -350,6 +351,102 @@ public class AsyncRawSegmentsClient {
                 .addHeader("Content-Type", "application/merge-patch+json")
                 .addHeader("Accept", "application/json")
                 .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        CompletableFuture<MavenAGIHttpResponse<SegmentResponse>> future = new CompletableFuture<>();
+        client.newCall(okhttpRequest).enqueue(new Callback() {
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                try (ResponseBody responseBody = response.body()) {
+                    if (response.isSuccessful()) {
+                        future.complete(new MavenAGIHttpResponse<>(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), SegmentResponse.class),
+                                response));
+                        return;
+                    }
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+                    try {
+                        switch (response.code()) {
+                            case 400:
+                                future.completeExceptionally(new BadRequestError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
+                                        response));
+                                return;
+                            case 404:
+                                future.completeExceptionally(new NotFoundError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
+                                        response));
+                                return;
+                            case 500:
+                                future.completeExceptionally(new ServerError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
+                                        response));
+                                return;
+                        }
+                    } catch (JsonProcessingException ignored) {
+                        // unable to map error response, throwing generic error
+                    }
+                    future.completeExceptionally(new MavenAGIApiException(
+                            "Error with status code " + response.code(),
+                            response.code(),
+                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                            response));
+                    return;
+                } catch (IOException e) {
+                    future.completeExceptionally(new MavenAGIException("Network error executing HTTP request", e));
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                future.completeExceptionally(new MavenAGIException("Network error executing HTTP request", e));
+            }
+        });
+        return future;
+    }
+
+    /**
+     * Soft delete a segment. Only INACTIVE segments can be deleted.
+     * <p>Deleted segments are excluded from search results but can still be retrieved by ID for archival purposes. Creating a new segment with the same referenceId as a deleted segment will overwrite the deleted segment and restore it to ACTIVE status.</p>
+     * <p>Deleted segments cannot be modified.</p>
+     */
+    public CompletableFuture<MavenAGIHttpResponse<SegmentResponse>> delete(String segmentReferenceId) {
+        return delete(segmentReferenceId, SegmentDeleteRequest.builder().build());
+    }
+
+    /**
+     * Soft delete a segment. Only INACTIVE segments can be deleted.
+     * <p>Deleted segments are excluded from search results but can still be retrieved by ID for archival purposes. Creating a new segment with the same referenceId as a deleted segment will overwrite the deleted segment and restore it to ACTIVE status.</p>
+     * <p>Deleted segments cannot be modified.</p>
+     */
+    public CompletableFuture<MavenAGIHttpResponse<SegmentResponse>> delete(
+            String segmentReferenceId, SegmentDeleteRequest request) {
+        return delete(segmentReferenceId, request, null);
+    }
+
+    /**
+     * Soft delete a segment. Only INACTIVE segments can be deleted.
+     * <p>Deleted segments are excluded from search results but can still be retrieved by ID for archival purposes. Creating a new segment with the same referenceId as a deleted segment will overwrite the deleted segment and restore it to ACTIVE status.</p>
+     * <p>Deleted segments cannot be modified.</p>
+     */
+    public CompletableFuture<MavenAGIHttpResponse<SegmentResponse>> delete(
+            String segmentReferenceId, SegmentDeleteRequest request, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("v1/segments")
+                .addPathSegment(segmentReferenceId);
+        if (request.getAppId().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "appId", request.getAppId().get(), false);
+        }
+        Request.Builder _requestBuilder = new Request.Builder()
+                .url(httpUrl.build())
+                .method("DELETE", null)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Accept", "application/json");
+        Request okhttpRequest = _requestBuilder.build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
             client = clientOptions.httpClientWithTimeout(requestOptions);

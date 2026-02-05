@@ -96,8 +96,12 @@ public final class SegmentResponse implements ISegmentBase {
     }
 
     /**
-     * @return Whether or not the segment is in active use. To preserve historical data, segments can not be deleted.
-     * <p>Only active segments will be evaluated for matching user questions.</p>
+     * @return The status of the segment.
+     * <ul>
+     * <li>ACTIVE: Segment is in use and will be evaluated for matching user questions.</li>
+     * <li>INACTIVE: Segment is not in use but can be reactivated.</li>
+     * <li>DELETED: Segment has been soft deleted. Excluded from searches and cannot be modified.</li>
+     * </ul>
      */
     @JsonProperty("status")
     public SegmentStatus getStatus() {
@@ -177,8 +181,12 @@ public final class SegmentResponse implements ISegmentBase {
 
     public interface StatusStage {
         /**
-         * <p>Whether or not the segment is in active use. To preserve historical data, segments can not be deleted.</p>
-         * <p>Only active segments will be evaluated for matching user questions.</p>
+         * <p>The status of the segment.</p>
+         * <ul>
+         * <li>ACTIVE: Segment is in use and will be evaluated for matching user questions.</li>
+         * <li>INACTIVE: Segment is not in use but can be reactivated.</li>
+         * <li>DELETED: Segment has been soft deleted. Excluded from searches and cannot be modified.</li>
+         * </ul>
          */
         _FinalStage status(@NotNull SegmentStatus status);
     }
@@ -285,10 +293,18 @@ public final class SegmentResponse implements ISegmentBase {
         }
 
         /**
-         * <p>Whether or not the segment is in active use. To preserve historical data, segments can not be deleted.</p>
-         * <p>Only active segments will be evaluated for matching user questions.</p>
-         * <p>Whether or not the segment is in active use. To preserve historical data, segments can not be deleted.</p>
-         * <p>Only active segments will be evaluated for matching user questions.</p>
+         * <p>The status of the segment.</p>
+         * <ul>
+         * <li>ACTIVE: Segment is in use and will be evaluated for matching user questions.</li>
+         * <li>INACTIVE: Segment is not in use but can be reactivated.</li>
+         * <li>DELETED: Segment has been soft deleted. Excluded from searches and cannot be modified.</li>
+         * </ul>
+         * <p>The status of the segment.</p>
+         * <ul>
+         * <li>ACTIVE: Segment is in use and will be evaluated for matching user questions.</li>
+         * <li>INACTIVE: Segment is not in use but can be reactivated.</li>
+         * <li>DELETED: Segment has been soft deleted. Excluded from searches and cannot be modified.</li>
+         * </ul>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
