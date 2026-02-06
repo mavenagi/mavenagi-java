@@ -46,6 +46,10 @@ public final class ConversationPrecondition {
         return new ConversationPrecondition(new AppValue(value));
     }
 
+    public static ConversationPrecondition intelligentField(IntelligentFieldPrecondition value) {
+        return new ConversationPrecondition(new IntelligentFieldValue(value));
+    }
+
     public boolean isTags() {
         return value instanceof TagsValue;
     }
@@ -64,6 +68,10 @@ public final class ConversationPrecondition {
 
     public boolean isApp() {
         return value instanceof AppValue;
+    }
+
+    public boolean isIntelligentField() {
+        return value instanceof IntelligentFieldValue;
     }
 
     public boolean _isUnknown() {
@@ -105,6 +113,13 @@ public final class ConversationPrecondition {
         return Optional.empty();
     }
 
+    public Optional<IntelligentFieldPrecondition> getIntelligentField() {
+        if (isIntelligentField()) {
+            return Optional.of(((IntelligentFieldValue) value).value);
+        }
+        return Optional.empty();
+    }
+
     public Optional<Object> _getUnknown() {
         if (_isUnknown()) {
             return Optional.of(((_UnknownValue) value).value);
@@ -128,6 +143,8 @@ public final class ConversationPrecondition {
 
         T visitApp(AppPrecondition app);
 
+        T visitIntelligentField(IntelligentFieldPrecondition intelligentField);
+
         T _visitUnknown(Object unknownType);
     }
 
@@ -141,7 +158,8 @@ public final class ConversationPrecondition {
         @JsonSubTypes.Type(MetadataValue.class),
         @JsonSubTypes.Type(ActionExecutedValue.class),
         @JsonSubTypes.Type(ResponseConfigValue.class),
-        @JsonSubTypes.Type(AppValue.class)
+        @JsonSubTypes.Type(AppValue.class),
+        @JsonSubTypes.Type(IntelligentFieldValue.class)
     })
     @JsonIgnoreProperties(ignoreUnknown = true)
     private interface Value {
@@ -329,6 +347,45 @@ public final class ConversationPrecondition {
         }
 
         private boolean equalTo(AppValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "ConversationPrecondition{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("intelligentField")
+    @JsonIgnoreProperties("conversationPreconditionType")
+    private static final class IntelligentFieldValue implements Value {
+        @JsonUnwrapped
+        private IntelligentFieldPrecondition value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private IntelligentFieldValue() {}
+
+        private IntelligentFieldValue(IntelligentFieldPrecondition value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitIntelligentField(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof IntelligentFieldValue && equalTo((IntelligentFieldValue) other);
+        }
+
+        private boolean equalTo(IntelligentFieldValue other) {
             return value.equals(other.value);
         }
 
