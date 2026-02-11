@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
 import com.mavenagi.resources.commons.types.EntityId;
@@ -17,12 +18,15 @@ import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = SegmentResponse.Builder.class)
 public final class SegmentResponse implements ISegmentBase {
     private final String name;
+
+    private final Optional<String> description;
 
     private final Precondition precondition;
 
@@ -32,23 +36,33 @@ public final class SegmentResponse implements ISegmentBase {
 
     private final OffsetDateTime updatedAt;
 
+    private final Optional<Long> referencedKnowledgeBaseCount;
+
+    private final Optional<Long> referencedDocumentCount;
+
     private final SegmentStatus status;
 
     private final Map<String, Object> additionalProperties;
 
     private SegmentResponse(
             String name,
+            Optional<String> description,
             Precondition precondition,
             EntityId segmentId,
             OffsetDateTime createdAt,
             OffsetDateTime updatedAt,
+            Optional<Long> referencedKnowledgeBaseCount,
+            Optional<Long> referencedDocumentCount,
             SegmentStatus status,
             Map<String, Object> additionalProperties) {
         this.name = name;
+        this.description = description;
         this.precondition = precondition;
         this.segmentId = segmentId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.referencedKnowledgeBaseCount = referencedKnowledgeBaseCount;
+        this.referencedDocumentCount = referencedDocumentCount;
         this.status = status;
         this.additionalProperties = additionalProperties;
     }
@@ -60,6 +74,15 @@ public final class SegmentResponse implements ISegmentBase {
     @java.lang.Override
     public String getName() {
         return name;
+    }
+
+    /**
+     * @return A plain text description of the segment.
+     */
+    @JsonProperty("description")
+    @java.lang.Override
+    public Optional<String> getDescription() {
+        return description;
     }
 
     /**
@@ -96,6 +119,22 @@ public final class SegmentResponse implements ISegmentBase {
     }
 
     /**
+     * @return The number of active knowledge bases that reference this segment.
+     */
+    @JsonProperty("referencedKnowledgeBaseCount")
+    public Optional<Long> getReferencedKnowledgeBaseCount() {
+        return referencedKnowledgeBaseCount;
+    }
+
+    /**
+     * @return The number of active documents that reference this segment.
+     */
+    @JsonProperty("referencedDocumentCount")
+    public Optional<Long> getReferencedDocumentCount() {
+        return referencedDocumentCount;
+    }
+
+    /**
      * @return The status of the segment.
      * <ul>
      * <li>ACTIVE: Segment is in use and will be evaluated for matching user questions.</li>
@@ -121,16 +160,28 @@ public final class SegmentResponse implements ISegmentBase {
 
     private boolean equalTo(SegmentResponse other) {
         return name.equals(other.name)
+                && description.equals(other.description)
                 && precondition.equals(other.precondition)
                 && segmentId.equals(other.segmentId)
                 && createdAt.equals(other.createdAt)
                 && updatedAt.equals(other.updatedAt)
+                && referencedKnowledgeBaseCount.equals(other.referencedKnowledgeBaseCount)
+                && referencedDocumentCount.equals(other.referencedDocumentCount)
                 && status.equals(other.status);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.name, this.precondition, this.segmentId, this.createdAt, this.updatedAt, this.status);
+        return Objects.hash(
+                this.name,
+                this.description,
+                this.precondition,
+                this.segmentId,
+                this.createdAt,
+                this.updatedAt,
+                this.referencedKnowledgeBaseCount,
+                this.referencedDocumentCount,
+                this.status);
     }
 
     @java.lang.Override
@@ -193,6 +244,27 @@ public final class SegmentResponse implements ISegmentBase {
 
     public interface _FinalStage {
         SegmentResponse build();
+
+        /**
+         * <p>A plain text description of the segment.</p>
+         */
+        _FinalStage description(Optional<String> description);
+
+        _FinalStage description(String description);
+
+        /**
+         * <p>The number of active knowledge bases that reference this segment.</p>
+         */
+        _FinalStage referencedKnowledgeBaseCount(Optional<Long> referencedKnowledgeBaseCount);
+
+        _FinalStage referencedKnowledgeBaseCount(Long referencedKnowledgeBaseCount);
+
+        /**
+         * <p>The number of active documents that reference this segment.</p>
+         */
+        _FinalStage referencedDocumentCount(Optional<Long> referencedDocumentCount);
+
+        _FinalStage referencedDocumentCount(Long referencedDocumentCount);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -216,6 +288,12 @@ public final class SegmentResponse implements ISegmentBase {
 
         private SegmentStatus status;
 
+        private Optional<Long> referencedDocumentCount = Optional.empty();
+
+        private Optional<Long> referencedKnowledgeBaseCount = Optional.empty();
+
+        private Optional<String> description = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -224,10 +302,13 @@ public final class SegmentResponse implements ISegmentBase {
         @java.lang.Override
         public Builder from(SegmentResponse other) {
             name(other.getName());
+            description(other.getDescription());
             precondition(other.getPrecondition());
             segmentId(other.getSegmentId());
             createdAt(other.getCreatedAt());
             updatedAt(other.getUpdatedAt());
+            referencedKnowledgeBaseCount(other.getReferencedKnowledgeBaseCount());
+            referencedDocumentCount(other.getReferencedDocumentCount());
             status(other.getStatus());
             return this;
         }
@@ -314,10 +395,79 @@ public final class SegmentResponse implements ISegmentBase {
             return this;
         }
 
+        /**
+         * <p>The number of active documents that reference this segment.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage referencedDocumentCount(Long referencedDocumentCount) {
+            this.referencedDocumentCount = Optional.ofNullable(referencedDocumentCount);
+            return this;
+        }
+
+        /**
+         * <p>The number of active documents that reference this segment.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "referencedDocumentCount", nulls = Nulls.SKIP)
+        public _FinalStage referencedDocumentCount(Optional<Long> referencedDocumentCount) {
+            this.referencedDocumentCount = referencedDocumentCount;
+            return this;
+        }
+
+        /**
+         * <p>The number of active knowledge bases that reference this segment.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage referencedKnowledgeBaseCount(Long referencedKnowledgeBaseCount) {
+            this.referencedKnowledgeBaseCount = Optional.ofNullable(referencedKnowledgeBaseCount);
+            return this;
+        }
+
+        /**
+         * <p>The number of active knowledge bases that reference this segment.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "referencedKnowledgeBaseCount", nulls = Nulls.SKIP)
+        public _FinalStage referencedKnowledgeBaseCount(Optional<Long> referencedKnowledgeBaseCount) {
+            this.referencedKnowledgeBaseCount = referencedKnowledgeBaseCount;
+            return this;
+        }
+
+        /**
+         * <p>A plain text description of the segment.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage description(String description) {
+            this.description = Optional.ofNullable(description);
+            return this;
+        }
+
+        /**
+         * <p>A plain text description of the segment.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "description", nulls = Nulls.SKIP)
+        public _FinalStage description(Optional<String> description) {
+            this.description = description;
+            return this;
+        }
+
         @java.lang.Override
         public SegmentResponse build() {
             return new SegmentResponse(
-                    name, precondition, segmentId, createdAt, updatedAt, status, additionalProperties);
+                    name,
+                    description,
+                    precondition,
+                    segmentId,
+                    createdAt,
+                    updatedAt,
+                    referencedKnowledgeBaseCount,
+                    referencedDocumentCount,
+                    status,
+                    additionalProperties);
         }
     }
 }

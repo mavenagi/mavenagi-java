@@ -20,6 +20,7 @@ import com.mavenagi.resources.commons.types.LlmInclusionStatus;
 import com.mavenagi.resources.commons.types.Precondition;
 import com.mavenagi.resources.knowledge.types.KnowledgeBaseRefreshFrequency;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -40,6 +41,8 @@ public final class KnowledgeBasePatchRequest {
 
     private final Optional<EntityId> segmentId;
 
+    private final Optional<List<EntityId>> segmentIds;
+
     private final Optional<KnowledgeBaseRefreshFrequency> refreshFrequency;
 
     private final Map<String, Object> additionalProperties;
@@ -51,6 +54,7 @@ public final class KnowledgeBasePatchRequest {
             Optional<LlmInclusionStatus> llmInclusionStatus,
             Optional<Precondition> precondition,
             Optional<EntityId> segmentId,
+            Optional<List<EntityId>> segmentIds,
             Optional<KnowledgeBaseRefreshFrequency> refreshFrequency,
             Map<String, Object> additionalProperties) {
         this.appId = appId;
@@ -59,6 +63,7 @@ public final class KnowledgeBasePatchRequest {
         this.llmInclusionStatus = llmInclusionStatus;
         this.precondition = precondition;
         this.segmentId = segmentId;
+        this.segmentIds = segmentIds;
         this.refreshFrequency = refreshFrequency;
         this.additionalProperties = additionalProperties;
     }
@@ -107,7 +112,7 @@ public final class KnowledgeBasePatchRequest {
     }
 
     /**
-     * @return The ID of the segment that must be matched for the knowledge base to be relevant to a conversation.
+     * @return The ID of a segment that must be matched for the knowledge base to be relevant to a conversation.
      * A null value will remove the segment from the knowledge base, it will be available on all conversations.
      * <p>Segments are replacing inline preconditions - a knowledge base may not have both an inline precondition and a segment.
      * Inline precondition support will be removed in a future release.</p>
@@ -118,6 +123,18 @@ public final class KnowledgeBasePatchRequest {
             return Optional.empty();
         }
         return segmentId;
+    }
+
+    /**
+     * @return The IDs of segment that should be matched (under an OR clause) for the knowledge base to be relevant to a
+     * conversation. An empty list will remove segments from the knowledge base, it will be available on all
+     * conversations.
+     * Segments are replacing inline preconditions - a knowledge base may not have both an inline precondition and a segment.
+     * Inline precondition support will be removed in a future release.
+     */
+    @JsonProperty("segmentIds")
+    public Optional<List<EntityId>> getSegmentIds() {
+        return segmentIds;
     }
 
     /**
@@ -158,6 +175,7 @@ public final class KnowledgeBasePatchRequest {
                 && llmInclusionStatus.equals(other.llmInclusionStatus)
                 && precondition.equals(other.precondition)
                 && segmentId.equals(other.segmentId)
+                && segmentIds.equals(other.segmentIds)
                 && refreshFrequency.equals(other.refreshFrequency);
     }
 
@@ -170,6 +188,7 @@ public final class KnowledgeBasePatchRequest {
                 this.llmInclusionStatus,
                 this.precondition,
                 this.segmentId,
+                this.segmentIds,
                 this.refreshFrequency);
     }
 
@@ -196,6 +215,8 @@ public final class KnowledgeBasePatchRequest {
 
         private Optional<EntityId> segmentId = Optional.empty();
 
+        private Optional<List<EntityId>> segmentIds = Optional.empty();
+
         private Optional<KnowledgeBaseRefreshFrequency> refreshFrequency = Optional.empty();
 
         @JsonAnySetter
@@ -210,6 +231,7 @@ public final class KnowledgeBasePatchRequest {
             llmInclusionStatus(other.getLlmInclusionStatus());
             precondition(other.getPrecondition());
             segmentId(other.getSegmentId());
+            segmentIds(other.getSegmentIds());
             refreshFrequency(other.getRefreshFrequency());
             return this;
         }
@@ -296,7 +318,7 @@ public final class KnowledgeBasePatchRequest {
         }
 
         /**
-         * <p>The ID of the segment that must be matched for the knowledge base to be relevant to a conversation.
+         * <p>The ID of a segment that must be matched for the knowledge base to be relevant to a conversation.
          * A null value will remove the segment from the knowledge base, it will be available on all conversations.</p>
          * <p>Segments are replacing inline preconditions - a knowledge base may not have both an inline precondition and a segment.
          * Inline precondition support will be removed in a future release.</p>
@@ -324,6 +346,24 @@ public final class KnowledgeBasePatchRequest {
         }
 
         /**
+         * <p>The IDs of segment that should be matched (under an OR clause) for the knowledge base to be relevant to a
+         * conversation. An empty list will remove segments from the knowledge base, it will be available on all
+         * conversations.
+         * Segments are replacing inline preconditions - a knowledge base may not have both an inline precondition and a segment.
+         * Inline precondition support will be removed in a future release.</p>
+         */
+        @JsonSetter(value = "segmentIds", nulls = Nulls.SKIP)
+        public Builder segmentIds(Optional<List<EntityId>> segmentIds) {
+            this.segmentIds = segmentIds;
+            return this;
+        }
+
+        public Builder segmentIds(List<EntityId> segmentIds) {
+            this.segmentIds = Optional.ofNullable(segmentIds);
+            return this;
+        }
+
+        /**
          * <p>How often the knowledge base should be refreshed.</p>
          */
         @JsonSetter(value = "refreshFrequency", nulls = Nulls.SKIP)
@@ -345,6 +385,7 @@ public final class KnowledgeBasePatchRequest {
                     llmInclusionStatus,
                     precondition,
                     segmentId,
+                    segmentIds,
                     refreshFrequency,
                     additionalProperties);
         }

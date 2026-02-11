@@ -25,6 +25,8 @@ public final class SegmentPatchRequest {
 
     private final Optional<String> name;
 
+    private final Optional<String> description;
+
     private final Optional<Precondition> precondition;
 
     private final Optional<SegmentStatus> status;
@@ -34,11 +36,13 @@ public final class SegmentPatchRequest {
     private SegmentPatchRequest(
             Optional<String> appId,
             Optional<String> name,
+            Optional<String> description,
             Optional<Precondition> precondition,
             Optional<SegmentStatus> status,
             Map<String, Object> additionalProperties) {
         this.appId = appId;
         this.name = name;
+        this.description = description;
         this.precondition = precondition;
         this.status = status;
         this.additionalProperties = additionalProperties;
@@ -58,6 +62,14 @@ public final class SegmentPatchRequest {
     @JsonProperty("name")
     public Optional<String> getName() {
         return name;
+    }
+
+    /**
+     * @return A plain text description of the segment.
+     */
+    @JsonProperty("description")
+    public Optional<String> getDescription() {
+        return description;
     }
 
     /**
@@ -90,13 +102,14 @@ public final class SegmentPatchRequest {
     private boolean equalTo(SegmentPatchRequest other) {
         return appId.equals(other.appId)
                 && name.equals(other.name)
+                && description.equals(other.description)
                 && precondition.equals(other.precondition)
                 && status.equals(other.status);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.appId, this.name, this.precondition, this.status);
+        return Objects.hash(this.appId, this.name, this.description, this.precondition, this.status);
     }
 
     @java.lang.Override
@@ -114,6 +127,8 @@ public final class SegmentPatchRequest {
 
         private Optional<String> name = Optional.empty();
 
+        private Optional<String> description = Optional.empty();
+
         private Optional<Precondition> precondition = Optional.empty();
 
         private Optional<SegmentStatus> status = Optional.empty();
@@ -126,6 +141,7 @@ public final class SegmentPatchRequest {
         public Builder from(SegmentPatchRequest other) {
             appId(other.getAppId());
             name(other.getName());
+            description(other.getDescription());
             precondition(other.getPrecondition());
             status(other.getStatus());
             return this;
@@ -160,6 +176,20 @@ public final class SegmentPatchRequest {
         }
 
         /**
+         * <p>A plain text description of the segment.</p>
+         */
+        @JsonSetter(value = "description", nulls = Nulls.SKIP)
+        public Builder description(Optional<String> description) {
+            this.description = description;
+            return this;
+        }
+
+        public Builder description(String description) {
+            this.description = Optional.ofNullable(description);
+            return this;
+        }
+
+        /**
          * <p>The precondition that must be met for a conversation message to be included in the segment.</p>
          */
         @JsonSetter(value = "precondition", nulls = Nulls.SKIP)
@@ -188,7 +218,7 @@ public final class SegmentPatchRequest {
         }
 
         public SegmentPatchRequest build() {
-            return new SegmentPatchRequest(appId, name, precondition, status, additionalProperties);
+            return new SegmentPatchRequest(appId, name, description, precondition, status, additionalProperties);
         }
     }
 }

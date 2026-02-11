@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -42,6 +43,8 @@ public final class ConversationAnalysis {
 
     private final Optional<Double> csat;
 
+    private final Optional<List<IntelligentFieldValueResponse>> intelligentFieldValues;
+
     private final Map<String, Object> additionalProperties;
 
     private ConversationAnalysis(
@@ -56,6 +59,7 @@ public final class ConversationAnalysis {
             Optional<String> primaryLanguage,
             Optional<Double> predictedNps,
             Optional<Double> csat,
+            Optional<List<IntelligentFieldValueResponse>> intelligentFieldValues,
             Map<String, Object> additionalProperties) {
         this.userRequest = userRequest;
         this.agentResponse = agentResponse;
@@ -68,6 +72,7 @@ public final class ConversationAnalysis {
         this.primaryLanguage = primaryLanguage;
         this.predictedNps = predictedNps;
         this.csat = csat;
+        this.intelligentFieldValues = intelligentFieldValues;
         this.additionalProperties = additionalProperties;
     }
 
@@ -159,6 +164,14 @@ public final class ConversationAnalysis {
         return csat;
     }
 
+    /**
+     * @return Latest successful intelligent field values
+     */
+    @JsonProperty("intelligentFieldValues")
+    public Optional<List<IntelligentFieldValueResponse>> getIntelligentFieldValues() {
+        return intelligentFieldValues;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -181,7 +194,8 @@ public final class ConversationAnalysis {
                 && resolvedByMaven.equals(other.resolvedByMaven)
                 && primaryLanguage.equals(other.primaryLanguage)
                 && predictedNps.equals(other.predictedNps)
-                && csat.equals(other.csat);
+                && csat.equals(other.csat)
+                && intelligentFieldValues.equals(other.intelligentFieldValues);
     }
 
     @java.lang.Override
@@ -197,7 +211,8 @@ public final class ConversationAnalysis {
                 this.resolvedByMaven,
                 this.primaryLanguage,
                 this.predictedNps,
-                this.csat);
+                this.csat,
+                this.intelligentFieldValues);
     }
 
     @java.lang.Override
@@ -233,6 +248,8 @@ public final class ConversationAnalysis {
 
         private Optional<Double> csat = Optional.empty();
 
+        private Optional<List<IntelligentFieldValueResponse>> intelligentFieldValues = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -250,6 +267,7 @@ public final class ConversationAnalysis {
             primaryLanguage(other.getPrimaryLanguage());
             predictedNps(other.getPredictedNps());
             csat(other.getCsat());
+            intelligentFieldValues(other.getIntelligentFieldValues());
             return this;
         }
 
@@ -407,6 +425,20 @@ public final class ConversationAnalysis {
             return this;
         }
 
+        /**
+         * <p>Latest successful intelligent field values</p>
+         */
+        @JsonSetter(value = "intelligentFieldValues", nulls = Nulls.SKIP)
+        public Builder intelligentFieldValues(Optional<List<IntelligentFieldValueResponse>> intelligentFieldValues) {
+            this.intelligentFieldValues = intelligentFieldValues;
+            return this;
+        }
+
+        public Builder intelligentFieldValues(List<IntelligentFieldValueResponse> intelligentFieldValues) {
+            this.intelligentFieldValues = Optional.ofNullable(intelligentFieldValues);
+            return this;
+        }
+
         public ConversationAnalysis build() {
             return new ConversationAnalysis(
                     userRequest,
@@ -420,6 +452,7 @@ public final class ConversationAnalysis {
                     primaryLanguage,
                     predictedNps,
                     csat,
+                    intelligentFieldValues,
                     additionalProperties);
         }
     }

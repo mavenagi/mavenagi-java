@@ -9,51 +9,37 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = IntelligentFieldPrecondition.Builder.class)
 public final class IntelligentFieldPrecondition {
-    private final String fieldReferenceId;
-
-    private final Optional<String> fieldAppId;
+    private final EntityIdWithoutAgent fieldIdWithoutAgent;
 
     private final IntelligentFieldCondition fieldCondition;
 
     private final Map<String, Object> additionalProperties;
 
     private IntelligentFieldPrecondition(
-            String fieldReferenceId,
-            Optional<String> fieldAppId,
+            EntityIdWithoutAgent fieldIdWithoutAgent,
             IntelligentFieldCondition fieldCondition,
             Map<String, Object> additionalProperties) {
-        this.fieldReferenceId = fieldReferenceId;
-        this.fieldAppId = fieldAppId;
+        this.fieldIdWithoutAgent = fieldIdWithoutAgent;
         this.fieldCondition = fieldCondition;
         this.additionalProperties = additionalProperties;
     }
 
     /**
-     * @return The referenceId of the intelligent field.
+     * @return The ID of the intelligent field.
      */
-    @JsonProperty("fieldReferenceId")
-    public String getFieldReferenceId() {
-        return fieldReferenceId;
-    }
-
-    /**
-     * @return The appId of the intelligent field. If not provided, the calling appId will be used.
-     */
-    @JsonProperty("fieldAppId")
-    public Optional<String> getFieldAppId() {
-        return fieldAppId;
+    @JsonProperty("fieldIdWithoutAgent")
+    public EntityIdWithoutAgent getFieldIdWithoutAgent() {
+        return fieldIdWithoutAgent;
     }
 
     /**
@@ -76,14 +62,12 @@ public final class IntelligentFieldPrecondition {
     }
 
     private boolean equalTo(IntelligentFieldPrecondition other) {
-        return fieldReferenceId.equals(other.fieldReferenceId)
-                && fieldAppId.equals(other.fieldAppId)
-                && fieldCondition.equals(other.fieldCondition);
+        return fieldIdWithoutAgent.equals(other.fieldIdWithoutAgent) && fieldCondition.equals(other.fieldCondition);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.fieldReferenceId, this.fieldAppId, this.fieldCondition);
+        return Objects.hash(this.fieldIdWithoutAgent, this.fieldCondition);
     }
 
     @java.lang.Override
@@ -91,15 +75,15 @@ public final class IntelligentFieldPrecondition {
         return ObjectMappers.stringify(this);
     }
 
-    public static FieldReferenceIdStage builder() {
+    public static FieldIdWithoutAgentStage builder() {
         return new Builder();
     }
 
-    public interface FieldReferenceIdStage {
+    public interface FieldIdWithoutAgentStage {
         /**
-         * <p>The referenceId of the intelligent field.</p>
+         * <p>The ID of the intelligent field.</p>
          */
-        FieldConditionStage fieldReferenceId(@NotNull String fieldReferenceId);
+        FieldConditionStage fieldIdWithoutAgent(@NotNull EntityIdWithoutAgent fieldIdWithoutAgent);
 
         Builder from(IntelligentFieldPrecondition other);
     }
@@ -113,22 +97,13 @@ public final class IntelligentFieldPrecondition {
 
     public interface _FinalStage {
         IntelligentFieldPrecondition build();
-
-        /**
-         * <p>The appId of the intelligent field. If not provided, the calling appId will be used.</p>
-         */
-        _FinalStage fieldAppId(Optional<String> fieldAppId);
-
-        _FinalStage fieldAppId(String fieldAppId);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements FieldReferenceIdStage, FieldConditionStage, _FinalStage {
-        private String fieldReferenceId;
+    public static final class Builder implements FieldIdWithoutAgentStage, FieldConditionStage, _FinalStage {
+        private EntityIdWithoutAgent fieldIdWithoutAgent;
 
         private IntelligentFieldCondition fieldCondition;
-
-        private Optional<String> fieldAppId = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -137,21 +112,21 @@ public final class IntelligentFieldPrecondition {
 
         @java.lang.Override
         public Builder from(IntelligentFieldPrecondition other) {
-            fieldReferenceId(other.getFieldReferenceId());
-            fieldAppId(other.getFieldAppId());
+            fieldIdWithoutAgent(other.getFieldIdWithoutAgent());
             fieldCondition(other.getFieldCondition());
             return this;
         }
 
         /**
-         * <p>The referenceId of the intelligent field.</p>
-         * <p>The referenceId of the intelligent field.</p>
+         * <p>The ID of the intelligent field.</p>
+         * <p>The ID of the intelligent field.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        @JsonSetter("fieldReferenceId")
-        public FieldConditionStage fieldReferenceId(@NotNull String fieldReferenceId) {
-            this.fieldReferenceId = Objects.requireNonNull(fieldReferenceId, "fieldReferenceId must not be null");
+        @JsonSetter("fieldIdWithoutAgent")
+        public FieldConditionStage fieldIdWithoutAgent(@NotNull EntityIdWithoutAgent fieldIdWithoutAgent) {
+            this.fieldIdWithoutAgent =
+                    Objects.requireNonNull(fieldIdWithoutAgent, "fieldIdWithoutAgent must not be null");
             return this;
         }
 
@@ -167,29 +142,9 @@ public final class IntelligentFieldPrecondition {
             return this;
         }
 
-        /**
-         * <p>The appId of the intelligent field. If not provided, the calling appId will be used.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage fieldAppId(String fieldAppId) {
-            this.fieldAppId = Optional.ofNullable(fieldAppId);
-            return this;
-        }
-
-        /**
-         * <p>The appId of the intelligent field. If not provided, the calling appId will be used.</p>
-         */
-        @java.lang.Override
-        @JsonSetter(value = "fieldAppId", nulls = Nulls.SKIP)
-        public _FinalStage fieldAppId(Optional<String> fieldAppId) {
-            this.fieldAppId = fieldAppId;
-            return this;
-        }
-
         @java.lang.Override
         public IntelligentFieldPrecondition build() {
-            return new IntelligentFieldPrecondition(fieldReferenceId, fieldAppId, fieldCondition, additionalProperties);
+            return new IntelligentFieldPrecondition(fieldIdWithoutAgent, fieldCondition, additionalProperties);
         }
     }
 }

@@ -7,9 +7,26 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public final class StringComparisonOperator {
+    public static final StringComparisonOperator NOT_ENDS_WITH =
+            new StringComparisonOperator(Value.NOT_ENDS_WITH, "NOT_ENDS_WITH");
+
     public static final StringComparisonOperator NEQ = new StringComparisonOperator(Value.NEQ, "NEQ");
 
+    public static final StringComparisonOperator CONTAINS_SUBSTRING =
+            new StringComparisonOperator(Value.CONTAINS_SUBSTRING, "CONTAINS_SUBSTRING");
+
+    public static final StringComparisonOperator NOT_STARTS_WITH =
+            new StringComparisonOperator(Value.NOT_STARTS_WITH, "NOT_STARTS_WITH");
+
+    public static final StringComparisonOperator ENDS_WITH = new StringComparisonOperator(Value.ENDS_WITH, "ENDS_WITH");
+
     public static final StringComparisonOperator EQ = new StringComparisonOperator(Value.EQ, "EQ");
+
+    public static final StringComparisonOperator STARTS_WITH =
+            new StringComparisonOperator(Value.STARTS_WITH, "STARTS_WITH");
+
+    public static final StringComparisonOperator NOT_CONTAINS_SUBSTRING =
+            new StringComparisonOperator(Value.NOT_CONTAINS_SUBSTRING, "NOT_CONTAINS_SUBSTRING");
 
     private final Value value;
 
@@ -44,10 +61,22 @@ public final class StringComparisonOperator {
 
     public <T> T visit(Visitor<T> visitor) {
         switch (value) {
+            case NOT_ENDS_WITH:
+                return visitor.visitNotEndsWith();
             case NEQ:
                 return visitor.visitNeq();
+            case CONTAINS_SUBSTRING:
+                return visitor.visitContainsSubstring();
+            case NOT_STARTS_WITH:
+                return visitor.visitNotStartsWith();
+            case ENDS_WITH:
+                return visitor.visitEndsWith();
             case EQ:
                 return visitor.visitEq();
+            case STARTS_WITH:
+                return visitor.visitStartsWith();
+            case NOT_CONTAINS_SUBSTRING:
+                return visitor.visitNotContainsSubstring();
             case UNKNOWN:
             default:
                 return visitor.visitUnknown(string);
@@ -57,10 +86,22 @@ public final class StringComparisonOperator {
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static StringComparisonOperator valueOf(String value) {
         switch (value) {
+            case "NOT_ENDS_WITH":
+                return NOT_ENDS_WITH;
             case "NEQ":
                 return NEQ;
+            case "CONTAINS_SUBSTRING":
+                return CONTAINS_SUBSTRING;
+            case "NOT_STARTS_WITH":
+                return NOT_STARTS_WITH;
+            case "ENDS_WITH":
+                return ENDS_WITH;
             case "EQ":
                 return EQ;
+            case "STARTS_WITH":
+                return STARTS_WITH;
+            case "NOT_CONTAINS_SUBSTRING":
+                return NOT_CONTAINS_SUBSTRING;
             default:
                 return new StringComparisonOperator(Value.UNKNOWN, value);
         }
@@ -71,6 +112,18 @@ public final class StringComparisonOperator {
 
         NEQ,
 
+        CONTAINS_SUBSTRING,
+
+        NOT_CONTAINS_SUBSTRING,
+
+        STARTS_WITH,
+
+        NOT_STARTS_WITH,
+
+        ENDS_WITH,
+
+        NOT_ENDS_WITH,
+
         UNKNOWN
     }
 
@@ -78,6 +131,18 @@ public final class StringComparisonOperator {
         T visitEq();
 
         T visitNeq();
+
+        T visitContainsSubstring();
+
+        T visitNotContainsSubstring();
+
+        T visitStartsWith();
+
+        T visitNotStartsWith();
+
+        T visitEndsWith();
+
+        T visitNotEndsWith();
 
         T visitUnknown(String unknownType);
     }

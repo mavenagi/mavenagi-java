@@ -4,9 +4,12 @@
 package com.mavenagi.resources.segments.types;
 
 import com.mavenagi.resources.commons.types.Precondition;
+import java.util.Optional;
 
 public interface ISegmentBase {
     String getName();
+
+    Optional<String> getDescription();
 
     Precondition getPrecondition();
 }

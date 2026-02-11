@@ -21,8 +21,8 @@ public final class SetRelationOperator {
 
     public static final SetRelationOperator SUBSET_OF = new SetRelationOperator(Value.SUBSET_OF, "SUBSET_OF");
 
-    public static final SetRelationOperator NOT_CONTAINS_ANY =
-            new SetRelationOperator(Value.NOT_CONTAINS_ANY, "NOT_CONTAINS_ANY");
+    public static final SetRelationOperator CONTAINS_NONE =
+            new SetRelationOperator(Value.CONTAINS_NONE, "CONTAINS_NONE");
 
     public static final SetRelationOperator CONTAINS_ALL = new SetRelationOperator(Value.CONTAINS_ALL, "CONTAINS_ALL");
 
@@ -70,8 +70,8 @@ public final class SetRelationOperator {
                 return visitor.visitContainsAny();
             case SUBSET_OF:
                 return visitor.visitSubsetOf();
-            case NOT_CONTAINS_ANY:
-                return visitor.visitNotContainsAny();
+            case CONTAINS_NONE:
+                return visitor.visitContainsNone();
             case CONTAINS_ALL:
                 return visitor.visitContainsAll();
             case UNKNOWN:
@@ -95,8 +95,8 @@ public final class SetRelationOperator {
                 return CONTAINS_ANY;
             case "SUBSET_OF":
                 return SUBSET_OF;
-            case "NOT_CONTAINS_ANY":
-                return NOT_CONTAINS_ANY;
+            case "CONTAINS_NONE":
+                return CONTAINS_NONE;
             case "CONTAINS_ALL":
                 return CONTAINS_ALL;
             default:
@@ -111,7 +111,7 @@ public final class SetRelationOperator {
 
         CONTAINS_ANY,
 
-        NOT_CONTAINS_ANY,
+        CONTAINS_NONE,
 
         CONTAINS_ALL,
 
@@ -131,7 +131,7 @@ public final class SetRelationOperator {
 
         T visitContainsAny();
 
-        T visitNotContainsAny();
+        T visitContainsNone();
 
         T visitContainsAll();
 

@@ -37,6 +37,8 @@ public final class KnowledgeBaseFilter {
 
     private final Optional<LlmInclusionStatus> llmInclusionStatus;
 
+    private final Optional<String> segmentId;
+
     private final Map<String, Object> additionalProperties;
 
     private KnowledgeBaseFilter(
@@ -47,6 +49,7 @@ public final class KnowledgeBaseFilter {
             Optional<List<String>> appIds,
             Optional<List<KnowledgeBaseVersionStatus>> mostRecentVersionStatus,
             Optional<LlmInclusionStatus> llmInclusionStatus,
+            Optional<String> segmentId,
             Map<String, Object> additionalProperties) {
         this.search = search;
         this.title = title;
@@ -55,6 +58,7 @@ public final class KnowledgeBaseFilter {
         this.appIds = appIds;
         this.mostRecentVersionStatus = mostRecentVersionStatus;
         this.llmInclusionStatus = llmInclusionStatus;
+        this.segmentId = segmentId;
         this.additionalProperties = additionalProperties;
     }
 
@@ -125,6 +129,14 @@ public final class KnowledgeBaseFilter {
         return llmInclusionStatus;
     }
 
+    /**
+     * @return Filter knowledge bases by the segment they are assigned to.
+     */
+    @JsonProperty("segmentId")
+    public Optional<String> getSegmentId() {
+        return segmentId;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -143,7 +155,8 @@ public final class KnowledgeBaseFilter {
                 && createdBefore.equals(other.createdBefore)
                 && appIds.equals(other.appIds)
                 && mostRecentVersionStatus.equals(other.mostRecentVersionStatus)
-                && llmInclusionStatus.equals(other.llmInclusionStatus);
+                && llmInclusionStatus.equals(other.llmInclusionStatus)
+                && segmentId.equals(other.segmentId);
     }
 
     @java.lang.Override
@@ -155,7 +168,8 @@ public final class KnowledgeBaseFilter {
                 this.createdBefore,
                 this.appIds,
                 this.mostRecentVersionStatus,
-                this.llmInclusionStatus);
+                this.llmInclusionStatus,
+                this.segmentId);
     }
 
     @java.lang.Override
@@ -183,6 +197,8 @@ public final class KnowledgeBaseFilter {
 
         private Optional<LlmInclusionStatus> llmInclusionStatus = Optional.empty();
 
+        private Optional<String> segmentId = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -196,6 +212,7 @@ public final class KnowledgeBaseFilter {
             appIds(other.getAppIds());
             mostRecentVersionStatus(other.getMostRecentVersionStatus());
             llmInclusionStatus(other.getLlmInclusionStatus());
+            segmentId(other.getSegmentId());
             return this;
         }
 
@@ -308,6 +325,20 @@ public final class KnowledgeBaseFilter {
             return this;
         }
 
+        /**
+         * <p>Filter knowledge bases by the segment they are assigned to.</p>
+         */
+        @JsonSetter(value = "segmentId", nulls = Nulls.SKIP)
+        public Builder segmentId(Optional<String> segmentId) {
+            this.segmentId = segmentId;
+            return this;
+        }
+
+        public Builder segmentId(String segmentId) {
+            this.segmentId = Optional.ofNullable(segmentId);
+            return this;
+        }
+
         public KnowledgeBaseFilter build() {
             return new KnowledgeBaseFilter(
                     search,
@@ -317,6 +348,7 @@ public final class KnowledgeBaseFilter {
                     appIds,
                     mostRecentVersionStatus,
                     llmInclusionStatus,
+                    segmentId,
                     additionalProperties);
         }
     }

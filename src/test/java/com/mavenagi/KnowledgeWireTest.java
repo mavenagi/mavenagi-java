@@ -63,7 +63,7 @@ public class KnowledgeWireTest {
     public void testSearchKnowledgeBases() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"knowledgeBases\":[{\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"knowledgeBaseId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"activeVersionId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"mostRecentVersionStatus\":\"SUCCEEDED\",\"type\":\"API\",\"metadata\":{\"metadata\":\"metadata\"},\"tags\":[\"tags\"],\"llmInclusionStatus\":\"ALWAYS\",\"refreshFrequency\":\"NONE\",\"segmentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"url\":\"url\",\"name\":\"name\",\"precondition\":{\"preconditionType\":\"user\",\"key\":\"key\",\"value\":\"value\",\"values\":[\"values\",\"values\"],\"operator\":\"NOT\"}},{\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"knowledgeBaseId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"activeVersionId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"mostRecentVersionStatus\":\"SUCCEEDED\",\"type\":\"API\",\"metadata\":{\"metadata\":\"metadata\"},\"tags\":[\"tags\"],\"llmInclusionStatus\":\"ALWAYS\",\"refreshFrequency\":\"NONE\",\"segmentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"url\":\"url\",\"name\":\"name\",\"precondition\":{\"preconditionType\":\"user\",\"key\":\"key\",\"value\":\"value\",\"values\":[\"values\",\"values\"],\"operator\":\"NOT\"}}],\"number\":1,\"size\":1,\"totalElements\":1000000,\"totalPages\":1}"));
+            .setBody("{\"knowledgeBases\":[{\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"knowledgeBaseId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"activeVersionId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"mostRecentVersionStatus\":\"SUCCEEDED\",\"type\":\"API\",\"metadata\":{\"metadata\":\"metadata\"},\"tags\":[\"tags\"],\"llmInclusionStatus\":\"ALWAYS\",\"refreshFrequency\":\"NONE\",\"segmentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"segmentIds\":[{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"url\":\"url\",\"name\":\"name\",\"precondition\":{\"preconditionType\":\"user\",\"key\":\"key\",\"value\":\"value\",\"values\":[\"values\",\"values\"],\"operator\":\"NOT\"}},{\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"knowledgeBaseId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"activeVersionId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"mostRecentVersionStatus\":\"SUCCEEDED\",\"type\":\"API\",\"metadata\":{\"metadata\":\"metadata\"},\"tags\":[\"tags\"],\"llmInclusionStatus\":\"ALWAYS\",\"refreshFrequency\":\"NONE\",\"segmentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"segmentIds\":[{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"url\":\"url\",\"name\":\"name\",\"precondition\":{\"preconditionType\":\"user\",\"key\":\"key\",\"value\":\"value\",\"values\":[\"values\",\"values\"],\"operator\":\"NOT\"}}],\"number\":1,\"size\":1,\"totalElements\":1000000,\"totalPages\":1}"));
         KnowledgeBasesResponse response = client.knowledge().searchKnowledgeBases(
             KnowledgeBaseSearchRequest
                 .builder()
@@ -139,6 +139,15 @@ public class KnowledgeWireTest {
             + "        \"appId\": \"appId\",\n"
             + "        \"referenceId\": \"x\"\n"
             + "      },\n"
+            + "      \"segmentIds\": [\n"
+            + "        {\n"
+            + "          \"organizationId\": \"organizationId\",\n"
+            + "          \"agentId\": \"agentId\",\n"
+            + "          \"type\": \"AGENT\",\n"
+            + "          \"appId\": \"appId\",\n"
+            + "          \"referenceId\": \"x\"\n"
+            + "        }\n"
+            + "      ],\n"
             + "      \"url\": \"url\",\n"
             + "      \"name\": \"name\",\n"
             + "      \"precondition\": {\n"
@@ -186,6 +195,15 @@ public class KnowledgeWireTest {
             + "        \"appId\": \"appId\",\n"
             + "        \"referenceId\": \"x\"\n"
             + "      },\n"
+            + "      \"segmentIds\": [\n"
+            + "        {\n"
+            + "          \"organizationId\": \"organizationId\",\n"
+            + "          \"agentId\": \"agentId\",\n"
+            + "          \"type\": \"AGENT\",\n"
+            + "          \"appId\": \"appId\",\n"
+            + "          \"referenceId\": \"x\"\n"
+            + "        }\n"
+            + "      ],\n"
             + "      \"url\": \"url\",\n"
             + "      \"name\": \"name\",\n"
             + "      \"precondition\": {\n"
@@ -232,7 +250,7 @@ public class KnowledgeWireTest {
     public void testCreateOrUpdateKnowledgeBase() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"createdAt\":\"2025-01-01T00:00:00Z\",\"updatedAt\":\"2025-02-02T00:00:00Z\",\"knowledgeBaseId\":{\"referenceId\":\"help-center\",\"appId\":\"readme\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"KNOWLEDGE_BASE\"},\"activeVersionId\":{\"referenceId\":\"version-1\",\"appId\":\"readme\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"KNOWLEDGE_BASE_VERSION\"},\"mostRecentVersionStatus\":\"SUCCEEDED\",\"llmInclusionStatus\":\"WHEN_RELEVANT\",\"name\":\"Help center\",\"type\":\"API\",\"metadata\":{\"key\":\"value\"},\"tags\":[\"tag1\",\"tag2\"],\"refreshFrequency\":\"DAILY\",\"segmentId\":{\"referenceId\":\"premium-users\",\"appId\":\"readme\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"SEGMENT\"}}"));
+            .setBody("{\"createdAt\":\"2025-01-01T00:00:00Z\",\"updatedAt\":\"2025-02-02T00:00:00Z\",\"knowledgeBaseId\":{\"referenceId\":\"help-center\",\"appId\":\"readme\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"KNOWLEDGE_BASE\"},\"activeVersionId\":{\"referenceId\":\"version-1\",\"appId\":\"readme\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"KNOWLEDGE_BASE_VERSION\"},\"mostRecentVersionStatus\":\"SUCCEEDED\",\"llmInclusionStatus\":\"WHEN_RELEVANT\",\"name\":\"Help center\",\"type\":\"API\",\"metadata\":{\"key\":\"value\"},\"tags\":[\"tag1\",\"tag2\"],\"refreshFrequency\":\"DAILY\",\"segmentIds\":[{\"referenceId\":\"premium-users1\",\"appId\":\"readme\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"SEGMENT\"},{\"referenceId\":\"premium-users2\",\"appId\":\"readme\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"SEGMENT\"}]}"));
         KnowledgeBaseResponse response = client.knowledge().createOrUpdateKnowledgeBase(
             KnowledgeBaseRequest
                 .builder()
@@ -313,13 +331,22 @@ public class KnowledgeWireTest {
             + "    \"tag2\"\n"
             + "  ],\n"
             + "  \"refreshFrequency\": \"DAILY\",\n"
-            + "  \"segmentId\": {\n"
-            + "    \"referenceId\": \"premium-users\",\n"
-            + "    \"appId\": \"readme\",\n"
-            + "    \"organizationId\": \"acme\",\n"
-            + "    \"agentId\": \"support\",\n"
-            + "    \"type\": \"SEGMENT\"\n"
-            + "  }\n"
+            + "  \"segmentIds\": [\n"
+            + "    {\n"
+            + "      \"referenceId\": \"premium-users1\",\n"
+            + "      \"appId\": \"readme\",\n"
+            + "      \"organizationId\": \"acme\",\n"
+            + "      \"agentId\": \"support\",\n"
+            + "      \"type\": \"SEGMENT\"\n"
+            + "    },\n"
+            + "    {\n"
+            + "      \"referenceId\": \"premium-users2\",\n"
+            + "      \"appId\": \"readme\",\n"
+            + "      \"organizationId\": \"acme\",\n"
+            + "      \"agentId\": \"support\",\n"
+            + "      \"type\": \"SEGMENT\"\n"
+            + "    }\n"
+            + "  ]\n"
             + "}";
         JsonNode actualResponseNode = objectMapper.readTree(actualResponseJson);
         JsonNode expectedResponseNode = objectMapper.readTree(expectedResponseBody);
@@ -348,7 +375,7 @@ public class KnowledgeWireTest {
     public void testGetKnowledgeBase() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"createdAt\":\"2025-01-01T00:00:00Z\",\"updatedAt\":\"2025-02-02T00:00:00Z\",\"knowledgeBaseId\":{\"referenceId\":\"help-center\",\"appId\":\"readme\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"KNOWLEDGE_BASE\"},\"activeVersionId\":{\"referenceId\":\"version-1\",\"appId\":\"readme\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"KNOWLEDGE_BASE_VERSION\"},\"mostRecentVersionStatus\":\"SUCCEEDED\",\"llmInclusionStatus\":\"WHEN_RELEVANT\",\"name\":\"Help center\",\"type\":\"API\",\"metadata\":{\"key\":\"value\"},\"tags\":[\"tag1\",\"tag2\"],\"refreshFrequency\":\"DAILY\",\"segmentId\":{\"referenceId\":\"premium-users\",\"appId\":\"readme\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"SEGMENT\"}}"));
+            .setBody("{\"createdAt\":\"2025-01-01T00:00:00Z\",\"updatedAt\":\"2025-02-02T00:00:00Z\",\"knowledgeBaseId\":{\"referenceId\":\"help-center\",\"appId\":\"readme\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"KNOWLEDGE_BASE\"},\"activeVersionId\":{\"referenceId\":\"version-1\",\"appId\":\"readme\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"KNOWLEDGE_BASE_VERSION\"},\"mostRecentVersionStatus\":\"SUCCEEDED\",\"llmInclusionStatus\":\"WHEN_RELEVANT\",\"name\":\"Help center\",\"type\":\"API\",\"metadata\":{\"key\":\"value\"},\"tags\":[\"tag1\",\"tag2\"],\"refreshFrequency\":\"DAILY\",\"segmentIds\":[{\"referenceId\":\"premium-users1\",\"appId\":\"readme\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"SEGMENT\"},{\"referenceId\":\"premium-users2\",\"appId\":\"readme\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"SEGMENT\"}]}"));
         KnowledgeBaseResponse response = client.knowledge().getKnowledgeBase(
             "help-center",
             KnowledgeBaseGetRequest
@@ -392,13 +419,22 @@ public class KnowledgeWireTest {
             + "    \"tag2\"\n"
             + "  ],\n"
             + "  \"refreshFrequency\": \"DAILY\",\n"
-            + "  \"segmentId\": {\n"
-            + "    \"referenceId\": \"premium-users\",\n"
-            + "    \"appId\": \"readme\",\n"
-            + "    \"organizationId\": \"acme\",\n"
-            + "    \"agentId\": \"support\",\n"
-            + "    \"type\": \"SEGMENT\"\n"
-            + "  }\n"
+            + "  \"segmentIds\": [\n"
+            + "    {\n"
+            + "      \"referenceId\": \"premium-users1\",\n"
+            + "      \"appId\": \"readme\",\n"
+            + "      \"organizationId\": \"acme\",\n"
+            + "      \"agentId\": \"support\",\n"
+            + "      \"type\": \"SEGMENT\"\n"
+            + "    },\n"
+            + "    {\n"
+            + "      \"referenceId\": \"premium-users2\",\n"
+            + "      \"appId\": \"readme\",\n"
+            + "      \"organizationId\": \"acme\",\n"
+            + "      \"agentId\": \"support\",\n"
+            + "      \"type\": \"SEGMENT\"\n"
+            + "    }\n"
+            + "  ]\n"
             + "}";
         JsonNode actualResponseNode = objectMapper.readTree(actualResponseJson);
         JsonNode expectedResponseNode = objectMapper.readTree(expectedResponseBody);
@@ -471,7 +507,7 @@ public class KnowledgeWireTest {
     public void testPatchKnowledgeBase() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"createdAt\":\"2025-01-01T00:00:00Z\",\"updatedAt\":\"2025-02-02T00:00:00Z\",\"knowledgeBaseId\":{\"referenceId\":\"help-center\",\"appId\":\"readme\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"KNOWLEDGE_BASE\"},\"activeVersionId\":{\"referenceId\":\"version-1\",\"appId\":\"readme\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"KNOWLEDGE_BASE_VERSION\"},\"mostRecentVersionStatus\":\"SUCCEEDED\",\"llmInclusionStatus\":\"WHEN_RELEVANT\",\"name\":\"Help center\",\"type\":\"API\",\"metadata\":{\"key\":\"value\"},\"tags\":[\"tag1\",\"tag2\"],\"refreshFrequency\":\"DAILY\",\"segmentId\":{\"referenceId\":\"premium-users\",\"appId\":\"readme\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"SEGMENT\"}}"));
+            .setBody("{\"createdAt\":\"2025-01-01T00:00:00Z\",\"updatedAt\":\"2025-02-02T00:00:00Z\",\"knowledgeBaseId\":{\"referenceId\":\"help-center\",\"appId\":\"readme\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"KNOWLEDGE_BASE\"},\"activeVersionId\":{\"referenceId\":\"version-1\",\"appId\":\"readme\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"KNOWLEDGE_BASE_VERSION\"},\"mostRecentVersionStatus\":\"SUCCEEDED\",\"llmInclusionStatus\":\"WHEN_RELEVANT\",\"name\":\"Help center\",\"type\":\"API\",\"metadata\":{\"key\":\"value\"},\"tags\":[\"tag1\",\"tag2\"],\"refreshFrequency\":\"DAILY\",\"segmentIds\":[{\"referenceId\":\"premium-users1\",\"appId\":\"readme\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"SEGMENT\"},{\"referenceId\":\"premium-users2\",\"appId\":\"readme\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"SEGMENT\"}]}"));
         KnowledgeBaseResponse response = client.knowledge().patchKnowledgeBase(
             "help-center",
             KnowledgeBasePatchRequest
@@ -571,13 +607,22 @@ public class KnowledgeWireTest {
             + "    \"tag2\"\n"
             + "  ],\n"
             + "  \"refreshFrequency\": \"DAILY\",\n"
-            + "  \"segmentId\": {\n"
-            + "    \"referenceId\": \"premium-users\",\n"
-            + "    \"appId\": \"readme\",\n"
-            + "    \"organizationId\": \"acme\",\n"
-            + "    \"agentId\": \"support\",\n"
-            + "    \"type\": \"SEGMENT\"\n"
-            + "  }\n"
+            + "  \"segmentIds\": [\n"
+            + "    {\n"
+            + "      \"referenceId\": \"premium-users1\",\n"
+            + "      \"appId\": \"readme\",\n"
+            + "      \"organizationId\": \"acme\",\n"
+            + "      \"agentId\": \"support\",\n"
+            + "      \"type\": \"SEGMENT\"\n"
+            + "    },\n"
+            + "    {\n"
+            + "      \"referenceId\": \"premium-users2\",\n"
+            + "      \"appId\": \"readme\",\n"
+            + "      \"organizationId\": \"acme\",\n"
+            + "      \"agentId\": \"support\",\n"
+            + "      \"type\": \"SEGMENT\"\n"
+            + "    }\n"
+            + "  ]\n"
             + "}";
         JsonNode actualResponseNode = objectMapper.readTree(actualResponseJson);
         JsonNode expectedResponseNode = objectMapper.readTree(expectedResponseBody);

@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
 import com.mavenagi.resources.commons.types.EntityIdBase;
@@ -16,12 +17,15 @@ import com.mavenagi.resources.commons.types.Precondition;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = SegmentRequest.Builder.class)
 public final class SegmentRequest implements ISegmentBase {
     private final String name;
+
+    private final Optional<String> description;
 
     private final Precondition precondition;
 
@@ -30,8 +34,13 @@ public final class SegmentRequest implements ISegmentBase {
     private final Map<String, Object> additionalProperties;
 
     private SegmentRequest(
-            String name, Precondition precondition, EntityIdBase segmentId, Map<String, Object> additionalProperties) {
+            String name,
+            Optional<String> description,
+            Precondition precondition,
+            EntityIdBase segmentId,
+            Map<String, Object> additionalProperties) {
         this.name = name;
+        this.description = description;
         this.precondition = precondition;
         this.segmentId = segmentId;
         this.additionalProperties = additionalProperties;
@@ -44,6 +53,15 @@ public final class SegmentRequest implements ISegmentBase {
     @java.lang.Override
     public String getName() {
         return name;
+    }
+
+    /**
+     * @return A plain text description of the segment.
+     */
+    @JsonProperty("description")
+    @java.lang.Override
+    public Optional<String> getDescription() {
+        return description;
     }
 
     /**
@@ -75,12 +93,15 @@ public final class SegmentRequest implements ISegmentBase {
     }
 
     private boolean equalTo(SegmentRequest other) {
-        return name.equals(other.name) && precondition.equals(other.precondition) && segmentId.equals(other.segmentId);
+        return name.equals(other.name)
+                && description.equals(other.description)
+                && precondition.equals(other.precondition)
+                && segmentId.equals(other.segmentId);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.name, this.precondition, this.segmentId);
+        return Objects.hash(this.name, this.description, this.precondition, this.segmentId);
     }
 
     @java.lang.Override
@@ -117,6 +138,13 @@ public final class SegmentRequest implements ISegmentBase {
 
     public interface _FinalStage {
         SegmentRequest build();
+
+        /**
+         * <p>A plain text description of the segment.</p>
+         */
+        _FinalStage description(Optional<String> description);
+
+        _FinalStage description(String description);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -127,6 +155,8 @@ public final class SegmentRequest implements ISegmentBase {
 
         private EntityIdBase segmentId;
 
+        private Optional<String> description = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -135,6 +165,7 @@ public final class SegmentRequest implements ISegmentBase {
         @java.lang.Override
         public Builder from(SegmentRequest other) {
             name(other.getName());
+            description(other.getDescription());
             precondition(other.getPrecondition());
             segmentId(other.getSegmentId());
             return this;
@@ -176,9 +207,29 @@ public final class SegmentRequest implements ISegmentBase {
             return this;
         }
 
+        /**
+         * <p>A plain text description of the segment.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage description(String description) {
+            this.description = Optional.ofNullable(description);
+            return this;
+        }
+
+        /**
+         * <p>A plain text description of the segment.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "description", nulls = Nulls.SKIP)
+        public _FinalStage description(Optional<String> description) {
+            this.description = description;
+            return this;
+        }
+
         @java.lang.Override
         public SegmentRequest build() {
-            return new SegmentRequest(name, precondition, segmentId, additionalProperties);
+            return new SegmentRequest(name, description, precondition, segmentId, additionalProperties);
         }
     }
 }

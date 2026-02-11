@@ -54,6 +54,8 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
 
     private final Optional<EntityId> segmentId;
 
+    private final Set<EntityId> segmentIds;
+
     private final Optional<String> url;
 
     private final Map<String, Object> additionalProperties;
@@ -72,6 +74,7 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
             LlmInclusionStatus llmInclusionStatus,
             KnowledgeBaseRefreshFrequency refreshFrequency,
             Optional<EntityId> segmentId,
+            Set<EntityId> segmentIds,
             Optional<String> url,
             Map<String, Object> additionalProperties) {
         this.name = name;
@@ -87,6 +90,7 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
         this.llmInclusionStatus = llmInclusionStatus;
         this.refreshFrequency = refreshFrequency;
         this.segmentId = segmentId;
+        this.segmentIds = segmentIds;
         this.url = url;
         this.additionalProperties = additionalProperties;
     }
@@ -202,6 +206,16 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
     }
 
     /**
+     * @return The IDs of the segments that should be matched for the knowledge base to be relevant to a conversation.
+     * Segments are replacing inline preconditions - a Knowledge Base may not have both an inline precondition and a segment.
+     * Inline precondition support will be removed in a future release.
+     */
+    @JsonProperty("segmentIds")
+    public Set<EntityId> getSegmentIds() {
+        return segmentIds;
+    }
+
+    /**
      * @return The source URL of URL and RSS knowledge bases that was used for crawl.
      */
     @JsonProperty("url")
@@ -234,6 +248,7 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
                 && llmInclusionStatus.equals(other.llmInclusionStatus)
                 && refreshFrequency.equals(other.refreshFrequency)
                 && segmentId.equals(other.segmentId)
+                && segmentIds.equals(other.segmentIds)
                 && url.equals(other.url);
     }
 
@@ -253,6 +268,7 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
                 this.llmInclusionStatus,
                 this.refreshFrequency,
                 this.segmentId,
+                this.segmentIds,
                 this.url);
     }
 
@@ -370,6 +386,17 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
         _FinalStage segmentId(EntityId segmentId);
 
         /**
+         * <p>The IDs of the segments that should be matched for the knowledge base to be relevant to a conversation.
+         * Segments are replacing inline preconditions - a Knowledge Base may not have both an inline precondition and a segment.
+         * Inline precondition support will be removed in a future release.</p>
+         */
+        _FinalStage segmentIds(Set<EntityId> segmentIds);
+
+        _FinalStage addSegmentIds(EntityId segmentIds);
+
+        _FinalStage addAllSegmentIds(Set<EntityId> segmentIds);
+
+        /**
          * <p>The source URL of URL and RSS knowledge bases that was used for crawl.</p>
          */
         _FinalStage url(Optional<String> url);
@@ -406,6 +433,8 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
 
         private Optional<String> url = Optional.empty();
 
+        private Set<EntityId> segmentIds = new LinkedHashSet<>();
+
         private Optional<EntityId> segmentId = Optional.empty();
 
         private Set<String> tags = new LinkedHashSet<>();
@@ -436,6 +465,7 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
             llmInclusionStatus(other.getLlmInclusionStatus());
             refreshFrequency(other.getRefreshFrequency());
             segmentId(other.getSegmentId());
+            segmentIds(other.getSegmentIds());
             url(other.getUrl());
             return this;
         }
@@ -558,6 +588,47 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
         @JsonSetter(value = "url", nulls = Nulls.SKIP)
         public _FinalStage url(Optional<String> url) {
             this.url = url;
+            return this;
+        }
+
+        /**
+         * <p>The IDs of the segments that should be matched for the knowledge base to be relevant to a conversation.
+         * Segments are replacing inline preconditions - a Knowledge Base may not have both an inline precondition and a segment.
+         * Inline precondition support will be removed in a future release.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage addAllSegmentIds(Set<EntityId> segmentIds) {
+            if (segmentIds != null) {
+                this.segmentIds.addAll(segmentIds);
+            }
+            return this;
+        }
+
+        /**
+         * <p>The IDs of the segments that should be matched for the knowledge base to be relevant to a conversation.
+         * Segments are replacing inline preconditions - a Knowledge Base may not have both an inline precondition and a segment.
+         * Inline precondition support will be removed in a future release.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage addSegmentIds(EntityId segmentIds) {
+            this.segmentIds.add(segmentIds);
+            return this;
+        }
+
+        /**
+         * <p>The IDs of the segments that should be matched for the knowledge base to be relevant to a conversation.
+         * Segments are replacing inline preconditions - a Knowledge Base may not have both an inline precondition and a segment.
+         * Inline precondition support will be removed in a future release.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "segmentIds", nulls = Nulls.SKIP)
+        public _FinalStage segmentIds(Set<EntityId> segmentIds) {
+            this.segmentIds.clear();
+            if (segmentIds != null) {
+                this.segmentIds.addAll(segmentIds);
+            }
             return this;
         }
 
@@ -711,6 +782,7 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
                     llmInclusionStatus,
                     refreshFrequency,
                     segmentId,
+                    segmentIds,
                     url,
                     additionalProperties);
         }
