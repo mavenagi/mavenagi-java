@@ -7,6 +7,7 @@ import com.mavenagi.core.ClientOptions;
 import com.mavenagi.core.RequestOptions;
 import com.mavenagi.resources.commons.types.InboxItem;
 import com.mavenagi.resources.commons.types.InboxItemFix;
+import com.mavenagi.resources.inbox.requests.InboxItemApplyTagsRequest;
 import com.mavenagi.resources.inbox.requests.InboxItemFixRequest;
 import com.mavenagi.resources.inbox.requests.InboxItemIgnoreRequest;
 import com.mavenagi.resources.inbox.requests.InboxItemRequest;
@@ -51,6 +52,21 @@ public class AsyncInboxClient {
      */
     public CompletableFuture<InboxSearchResponse> search(InboxSearchRequest request, RequestOptions requestOptions) {
         return this.rawClient.search(request, requestOptions).thenApply(response -> response.body());
+    }
+
+    /**
+     * Update inbox item tag fields. All tags provided will overwrite the existing tags on the inbox item.
+     */
+    public CompletableFuture<InboxItem> applyTags(String inboxItemId, InboxItemApplyTagsRequest request) {
+        return this.rawClient.applyTags(inboxItemId, request).thenApply(response -> response.body());
+    }
+
+    /**
+     * Update inbox item tag fields. All tags provided will overwrite the existing tags on the inbox item.
+     */
+    public CompletableFuture<InboxItem> applyTags(
+            String inboxItemId, InboxItemApplyTagsRequest request, RequestOptions requestOptions) {
+        return this.rawClient.applyTags(inboxItemId, request, requestOptions).thenApply(response -> response.body());
     }
 
     /**

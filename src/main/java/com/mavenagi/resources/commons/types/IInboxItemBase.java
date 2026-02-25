@@ -4,6 +4,8 @@
 package com.mavenagi.resources.commons.types;
 
 import java.time.OffsetDateTime;
+import java.util.Optional;
+import java.util.Set;
 
 public interface IInboxItemBase {
     EntityId getId();
@@ -15,4 +17,6 @@ public interface IInboxItemBase {
     InboxItemStatus getStatus();
 
     InboxItemSeverity getSeverity();
+
+    Optional<Set<String>> getTags();
 }

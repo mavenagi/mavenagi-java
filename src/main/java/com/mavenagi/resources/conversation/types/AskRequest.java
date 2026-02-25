@@ -23,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = AskRequest.Builder.class)
-public final class AskRequest implements IAskRequest {
+public final class AskRequest {
     private final EntityIdBase conversationMessageId;
 
     private final EntityIdBase userId;
@@ -59,7 +59,6 @@ public final class AskRequest implements IAskRequest {
      * @return Externally supplied ID to uniquely identify this message within the conversation. If a message with this ID already exists it will be reused and will not be updated.
      */
     @JsonProperty("conversationMessageId")
-    @java.lang.Override
     public EntityIdBase getConversationMessageId() {
         return conversationMessageId;
     }
@@ -68,7 +67,6 @@ public final class AskRequest implements IAskRequest {
      * @return Externally supplied ID to uniquely identify the user that created this message
      */
     @JsonProperty("userId")
-    @java.lang.Override
     public EntityIdBase getUserId() {
         return userId;
     }
@@ -77,7 +75,6 @@ public final class AskRequest implements IAskRequest {
      * @return The text of the message
      */
     @JsonProperty("text")
-    @java.lang.Override
     public String getText() {
         return text;
     }
@@ -87,7 +84,6 @@ public final class AskRequest implements IAskRequest {
      * Non-image attachments can be stored and downloaded from the API but will not be sent to the LLM.
      */
     @JsonProperty("attachments")
-    @java.lang.Override
     public Optional<List<AttachmentRequest>> getAttachments() {
         return attachments;
     }
@@ -96,7 +92,6 @@ public final class AskRequest implements IAskRequest {
      * @return Transient data which the Maven platform will not persist. This data will only be forwarded to actions taken by this ask request. For example, one may put in user tokens as transient data.
      */
     @JsonProperty("transientData")
-    @java.lang.Override
     public Optional<Map<String, String>> getTransientData() {
         return transientData;
     }
@@ -105,7 +100,6 @@ public final class AskRequest implements IAskRequest {
      * @return IANA timezone identifier (e.g. &quot;America/New_York&quot;, &quot;Europe/London&quot;) to be used for time-based operations in the conversation.
      */
     @JsonProperty("timezone")
-    @java.lang.Override
     public Optional<String> getTimezone() {
         return timezone;
     }

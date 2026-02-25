@@ -18,6 +18,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
@@ -32,6 +34,8 @@ public final class InboxItemDuplicateDocuments implements IInboxItemBase {
     private final InboxItemStatus status;
 
     private final InboxItemSeverity severity;
+
+    private final Optional<Set<String>> tags;
 
     private final List<InboxItemFixDeactivateDocument> recommendedFixes;
 
@@ -49,6 +53,7 @@ public final class InboxItemDuplicateDocuments implements IInboxItemBase {
             OffsetDateTime updatedAt,
             InboxItemStatus status,
             InboxItemSeverity severity,
+            Optional<Set<String>> tags,
             List<InboxItemFixDeactivateDocument> recommendedFixes,
             List<InboxItemFixDeactivateDocument> otherFixes,
             DocumentInformation sourceDocument,
@@ -59,6 +64,7 @@ public final class InboxItemDuplicateDocuments implements IInboxItemBase {
         this.updatedAt = updatedAt;
         this.status = status;
         this.severity = severity;
+        this.tags = tags;
         this.recommendedFixes = recommendedFixes;
         this.otherFixes = otherFixes;
         this.sourceDocument = sourceDocument;
@@ -112,6 +118,15 @@ public final class InboxItemDuplicateDocuments implements IInboxItemBase {
     }
 
     /**
+     * @return A set of tags associated with the inbox item that are used for filtering.
+     */
+    @JsonProperty("tags")
+    @java.lang.Override
+    public Optional<Set<String>> getTags() {
+        return tags;
+    }
+
+    /**
      * @return The fix recommended for being applied
      */
     @JsonProperty("recommendedFixes")
@@ -160,6 +175,7 @@ public final class InboxItemDuplicateDocuments implements IInboxItemBase {
                 && updatedAt.equals(other.updatedAt)
                 && status.equals(other.status)
                 && severity.equals(other.severity)
+                && tags.equals(other.tags)
                 && recommendedFixes.equals(other.recommendedFixes)
                 && otherFixes.equals(other.otherFixes)
                 && sourceDocument.equals(other.sourceDocument)
@@ -174,6 +190,7 @@ public final class InboxItemDuplicateDocuments implements IInboxItemBase {
                 this.updatedAt,
                 this.status,
                 this.severity,
+                this.tags,
                 this.recommendedFixes,
                 this.otherFixes,
                 this.sourceDocument,
@@ -237,6 +254,13 @@ public final class InboxItemDuplicateDocuments implements IInboxItemBase {
         InboxItemDuplicateDocuments build();
 
         /**
+         * <p>A set of tags associated with the inbox item that are used for filtering.</p>
+         */
+        _FinalStage tags(Optional<Set<String>> tags);
+
+        _FinalStage tags(Set<String> tags);
+
+        /**
          * <p>The fix recommended for being applied</p>
          */
         _FinalStage recommendedFixes(List<InboxItemFixDeactivateDocument> recommendedFixes);
@@ -291,6 +315,8 @@ public final class InboxItemDuplicateDocuments implements IInboxItemBase {
 
         private List<InboxItemFixDeactivateDocument> recommendedFixes = new ArrayList<>();
 
+        private Optional<Set<String>> tags = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -303,6 +329,7 @@ public final class InboxItemDuplicateDocuments implements IInboxItemBase {
             updatedAt(other.getUpdatedAt());
             status(other.getStatus());
             severity(other.getSeverity());
+            tags(other.getTags());
             recommendedFixes(other.getRecommendedFixes());
             otherFixes(other.getOtherFixes());
             sourceDocument(other.getSourceDocument());
@@ -487,6 +514,26 @@ public final class InboxItemDuplicateDocuments implements IInboxItemBase {
             return this;
         }
 
+        /**
+         * <p>A set of tags associated with the inbox item that are used for filtering.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage tags(Set<String> tags) {
+            this.tags = Optional.ofNullable(tags);
+            return this;
+        }
+
+        /**
+         * <p>A set of tags associated with the inbox item that are used for filtering.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "tags", nulls = Nulls.SKIP)
+        public _FinalStage tags(Optional<Set<String>> tags) {
+            this.tags = tags;
+            return this;
+        }
+
         @java.lang.Override
         public InboxItemDuplicateDocuments build() {
             return new InboxItemDuplicateDocuments(
@@ -495,6 +542,7 @@ public final class InboxItemDuplicateDocuments implements IInboxItemBase {
                     updatedAt,
                     status,
                     severity,
+                    tags,
                     recommendedFixes,
                     otherFixes,
                     sourceDocument,

@@ -29,6 +29,8 @@ public final class SegmentsSearchRequest implements IBasePaginatedRequest {
 
     private final Optional<SegmentField> sort;
 
+    private final Optional<SegmentFilter> filter;
+
     private final Map<String, Object> additionalProperties;
 
     private SegmentsSearchRequest(
@@ -36,11 +38,13 @@ public final class SegmentsSearchRequest implements IBasePaginatedRequest {
             Optional<Integer> size,
             Optional<Boolean> sortDesc,
             Optional<SegmentField> sort,
+            Optional<SegmentFilter> filter,
             Map<String, Object> additionalProperties) {
         this.page = page;
         this.size = size;
         this.sortDesc = sortDesc;
         this.sort = sort;
+        this.filter = filter;
         this.additionalProperties = additionalProperties;
     }
 
@@ -79,6 +83,14 @@ public final class SegmentsSearchRequest implements IBasePaginatedRequest {
         return sort;
     }
 
+    /**
+     * @return The filter to apply to the segments.
+     */
+    @JsonProperty("filter")
+    public Optional<SegmentFilter> getFilter() {
+        return filter;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -94,12 +106,13 @@ public final class SegmentsSearchRequest implements IBasePaginatedRequest {
         return page.equals(other.page)
                 && size.equals(other.size)
                 && sortDesc.equals(other.sortDesc)
-                && sort.equals(other.sort);
+                && sort.equals(other.sort)
+                && filter.equals(other.filter);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.page, this.size, this.sortDesc, this.sort);
+        return Objects.hash(this.page, this.size, this.sortDesc, this.sort, this.filter);
     }
 
     @java.lang.Override
@@ -121,6 +134,8 @@ public final class SegmentsSearchRequest implements IBasePaginatedRequest {
 
         private Optional<SegmentField> sort = Optional.empty();
 
+        private Optional<SegmentFilter> filter = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -131,6 +146,7 @@ public final class SegmentsSearchRequest implements IBasePaginatedRequest {
             size(other.getSize());
             sortDesc(other.getSortDesc());
             sort(other.getSort());
+            filter(other.getFilter());
             return this;
         }
 
@@ -190,8 +206,22 @@ public final class SegmentsSearchRequest implements IBasePaginatedRequest {
             return this;
         }
 
+        /**
+         * <p>The filter to apply to the segments.</p>
+         */
+        @JsonSetter(value = "filter", nulls = Nulls.SKIP)
+        public Builder filter(Optional<SegmentFilter> filter) {
+            this.filter = filter;
+            return this;
+        }
+
+        public Builder filter(SegmentFilter filter) {
+            this.filter = Optional.ofNullable(filter);
+            return this;
+        }
+
         public SegmentsSearchRequest build() {
-            return new SegmentsSearchRequest(page, size, sortDesc, sort, additionalProperties);
+            return new SegmentsSearchRequest(page, size, sortDesc, sort, filter, additionalProperties);
         }
     }
 }

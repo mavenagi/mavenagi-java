@@ -6,6 +6,7 @@ import com.mavenagi.MavenAGI;
 import com.mavenagi.core.ObjectMappers;
 import com.mavenagi.resources.commons.types.InboxItem;
 import com.mavenagi.resources.commons.types.InboxItemFix;
+import com.mavenagi.resources.inbox.requests.InboxItemApplyTagsRequest;
 import com.mavenagi.resources.inbox.requests.InboxItemFixRequest;
 import com.mavenagi.resources.inbox.requests.InboxItemIgnoreRequest;
 import com.mavenagi.resources.inbox.requests.InboxItemRequest;
@@ -13,6 +14,7 @@ import com.mavenagi.resources.inbox.types.ApplyFixesRequest;
 import com.mavenagi.resources.inbox.types.InboxSearchRequest;
 import com.mavenagi.resources.inbox.types.InboxSearchResponse;
 import java.util.Arrays;
+import java.util.HashSet;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
@@ -42,7 +44,7 @@ public class InboxWireTest {
     public void testSearch() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"items\":[{\"type\":\"duplicateDocuments\",\"recommendedFixes\":[{\"documentInformation\":{\"knowledgeBaseId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"documentId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"title\":\"title\",\"snippet\":\"snippet\"},\"id\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}},{\"documentInformation\":{\"knowledgeBaseId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"documentId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"title\":\"title\",\"snippet\":\"snippet\"},\"id\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}}],\"otherFixes\":[{\"documentInformation\":{\"knowledgeBaseId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"documentId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"title\":\"title\",\"snippet\":\"snippet\"},\"id\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}},{\"documentInformation\":{\"knowledgeBaseId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"documentId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"title\":\"title\",\"snippet\":\"snippet\"},\"id\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}}],\"sourceDocument\":{\"knowledgeBaseId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"documentId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"title\":\"title\",\"snippet\":\"snippet\"},\"documents\":[{\"knowledgeBaseId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"documentId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"title\":\"title\",\"snippet\":\"snippet\"},{\"knowledgeBaseId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"documentId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"title\":\"title\",\"snippet\":\"snippet\"}],\"id\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"status\":\"OPEN\",\"severity\":\"LOW\"},{\"type\":\"duplicateDocuments\",\"recommendedFixes\":[{\"documentInformation\":{\"knowledgeBaseId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"documentId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"title\":\"title\",\"snippet\":\"snippet\"},\"id\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}},{\"documentInformation\":{\"knowledgeBaseId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"documentId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"title\":\"title\",\"snippet\":\"snippet\"},\"id\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}}],\"otherFixes\":[{\"documentInformation\":{\"knowledgeBaseId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"documentId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"title\":\"title\",\"snippet\":\"snippet\"},\"id\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}},{\"documentInformation\":{\"knowledgeBaseId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"documentId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"title\":\"title\",\"snippet\":\"snippet\"},\"id\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}}],\"sourceDocument\":{\"knowledgeBaseId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"documentId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"title\":\"title\",\"snippet\":\"snippet\"},\"documents\":[{\"knowledgeBaseId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"documentId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"title\":\"title\",\"snippet\":\"snippet\"},{\"knowledgeBaseId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"documentId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"title\":\"title\",\"snippet\":\"snippet\"}],\"id\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"status\":\"OPEN\",\"severity\":\"LOW\"}],\"number\":1,\"size\":1,\"totalElements\":1000000,\"totalPages\":1}"));
+            .setBody("{\"items\":[{\"type\":\"duplicateDocuments\",\"recommendedFixes\":[{\"documentInformation\":{\"knowledgeBaseId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"documentId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"title\":\"title\",\"snippet\":\"snippet\"},\"id\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}},{\"documentInformation\":{\"knowledgeBaseId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"documentId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"title\":\"title\",\"snippet\":\"snippet\"},\"id\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}}],\"otherFixes\":[{\"documentInformation\":{\"knowledgeBaseId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"documentId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"title\":\"title\",\"snippet\":\"snippet\"},\"id\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}},{\"documentInformation\":{\"knowledgeBaseId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"documentId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"title\":\"title\",\"snippet\":\"snippet\"},\"id\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}}],\"sourceDocument\":{\"knowledgeBaseId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"documentId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"title\":\"title\",\"snippet\":\"snippet\"},\"documents\":[{\"knowledgeBaseId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"documentId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"title\":\"title\",\"snippet\":\"snippet\"},{\"knowledgeBaseId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"documentId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"title\":\"title\",\"snippet\":\"snippet\"}],\"id\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"status\":\"OPEN\",\"severity\":\"LOW\",\"tags\":[\"tags\"]},{\"type\":\"duplicateDocuments\",\"recommendedFixes\":[{\"documentInformation\":{\"knowledgeBaseId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"documentId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"title\":\"title\",\"snippet\":\"snippet\"},\"id\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}},{\"documentInformation\":{\"knowledgeBaseId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"documentId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"title\":\"title\",\"snippet\":\"snippet\"},\"id\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}}],\"otherFixes\":[{\"documentInformation\":{\"knowledgeBaseId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"documentId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"title\":\"title\",\"snippet\":\"snippet\"},\"id\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}},{\"documentInformation\":{\"knowledgeBaseId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"documentId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"title\":\"title\",\"snippet\":\"snippet\"},\"id\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}}],\"sourceDocument\":{\"knowledgeBaseId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"documentId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"title\":\"title\",\"snippet\":\"snippet\"},\"documents\":[{\"knowledgeBaseId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"documentId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"title\":\"title\",\"snippet\":\"snippet\"},{\"knowledgeBaseId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"documentId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"title\":\"title\",\"snippet\":\"snippet\"}],\"id\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"status\":\"OPEN\",\"severity\":\"LOW\",\"tags\":[\"tags\"]}],\"number\":1,\"size\":1,\"totalElements\":1000000,\"totalPages\":1}"));
         InboxSearchResponse response = client.inbox().search(
             InboxSearchRequest
                 .builder()
@@ -236,7 +238,10 @@ public class InboxWireTest {
             + "      \"createdAt\": \"2024-01-15T09:30:00Z\",\n"
             + "      \"updatedAt\": \"2024-01-15T09:30:00Z\",\n"
             + "      \"status\": \"OPEN\",\n"
-            + "      \"severity\": \"LOW\"\n"
+            + "      \"severity\": \"LOW\",\n"
+            + "      \"tags\": [\n"
+            + "        \"tags\"\n"
+            + "      ]\n"
             + "    },\n"
             + "    {\n"
             + "      \"type\": \"duplicateDocuments\",\n"
@@ -390,7 +395,10 @@ public class InboxWireTest {
             + "      \"createdAt\": \"2024-01-15T09:30:00Z\",\n"
             + "      \"updatedAt\": \"2024-01-15T09:30:00Z\",\n"
             + "      \"status\": \"OPEN\",\n"
-            + "      \"severity\": \"LOW\"\n"
+            + "      \"severity\": \"LOW\",\n"
+            + "      \"tags\": [\n"
+            + "        \"tags\"\n"
+            + "      ]\n"
             + "    }\n"
             + "  ],\n"
             + "  \"number\": 1,\n"
@@ -422,10 +430,105 @@ public class InboxWireTest {
         }
     }
     @Test
+    public void testApplyTags() throws Exception {
+        server.enqueue(new MockResponse()
+            .setResponseCode(200)
+            .setBody("{\"type\":\"custom\",\"id\":{\"referenceId\":\"todo-item-1\",\"appId\":\"myapp\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"INBOX_ITEM\"},\"status\":\"OPEN\",\"severity\":\"HIGH\",\"createdAt\":\"2025-01-01T00:00:00Z\",\"updatedAt\":\"2025-02-01T00:00:00Z\",\"metadata\":{\"key\":\"value\"}}"));
+        InboxItem response = client.inbox().applyTags(
+            "custom-item-1",
+            InboxItemApplyTagsRequest
+                .builder()
+                .tags(
+                    new HashSet<String>(
+                        Arrays.asList("tag1", "tag2")
+                    )
+                )
+                .build()
+        );
+        RecordedRequest request = server.takeRequest();
+        Assertions.assertNotNull(request);
+        Assertions.assertEquals("PATCH", request.getMethod());
+        // Validate request body
+        String actualRequestBody = request.getBody().readUtf8();
+        String expectedRequestBody = ""
+            + "{\n"
+            + "  \"tags\": [\n"
+            + "    \"tag1\",\n"
+            + "    \"tag2\"\n"
+            + "  ]\n"
+            + "}";
+        JsonNode actualJson = objectMapper.readTree(actualRequestBody);
+        JsonNode expectedJson = objectMapper.readTree(expectedRequestBody);
+        Assertions.assertEquals(expectedJson, actualJson, "Request body structure does not match expected");
+        if (actualJson.has("type") || actualJson.has("_type") || actualJson.has("kind")) {
+            String discriminator = null;
+            if (actualJson.has("type")) discriminator = actualJson.get("type").asText();
+            else if (actualJson.has("_type")) discriminator = actualJson.get("_type").asText();
+            else if (actualJson.has("kind")) discriminator = actualJson.get("kind").asText();
+            Assertions.assertNotNull(discriminator, "Union type should have a discriminator field");
+            Assertions.assertFalse(discriminator.isEmpty(), "Union discriminator should not be empty");
+        }
+        
+        if (!actualJson.isNull()) {
+            Assertions.assertTrue(actualJson.isObject() || actualJson.isArray() || actualJson.isValueNode(), "request should be a valid JSON value");
+        }
+        
+        if (actualJson.isArray()) {
+            Assertions.assertTrue(actualJson.size() >= 0, "Array should have valid size");
+        }
+        if (actualJson.isObject()) {
+            Assertions.assertTrue(actualJson.size() >= 0, "Object should have valid field count");
+        }
+        
+        // Validate response body
+        Assertions.assertNotNull(response, "Response should not be null");
+        String actualResponseJson = objectMapper.writeValueAsString(response);
+        String expectedResponseBody = ""
+            + "{\n"
+            + "  \"type\": \"custom\",\n"
+            + "  \"id\": {\n"
+            + "    \"referenceId\": \"todo-item-1\",\n"
+            + "    \"appId\": \"myapp\",\n"
+            + "    \"organizationId\": \"acme\",\n"
+            + "    \"agentId\": \"support\",\n"
+            + "    \"type\": \"INBOX_ITEM\"\n"
+            + "  },\n"
+            + "  \"status\": \"OPEN\",\n"
+            + "  \"severity\": \"HIGH\",\n"
+            + "  \"createdAt\": \"2025-01-01T00:00:00Z\",\n"
+            + "  \"updatedAt\": \"2025-02-01T00:00:00Z\",\n"
+            + "  \"metadata\": {\n"
+            + "    \"key\": \"value\"\n"
+            + "  }\n"
+            + "}";
+        JsonNode actualResponseNode = objectMapper.readTree(actualResponseJson);
+        JsonNode expectedResponseNode = objectMapper.readTree(expectedResponseBody);
+        Assertions.assertEquals(expectedResponseNode, actualResponseNode, "Response body structure does not match expected");
+        if (actualResponseNode.has("type") || actualResponseNode.has("_type") || actualResponseNode.has("kind")) {
+            String discriminator = null;
+            if (actualResponseNode.has("type")) discriminator = actualResponseNode.get("type").asText();
+            else if (actualResponseNode.has("_type")) discriminator = actualResponseNode.get("_type").asText();
+            else if (actualResponseNode.has("kind")) discriminator = actualResponseNode.get("kind").asText();
+            Assertions.assertNotNull(discriminator, "Union type should have a discriminator field");
+            Assertions.assertFalse(discriminator.isEmpty(), "Union discriminator should not be empty");
+        }
+        
+        if (!actualResponseNode.isNull()) {
+            Assertions.assertTrue(actualResponseNode.isObject() || actualResponseNode.isArray() || actualResponseNode.isValueNode(), "response should be a valid JSON value");
+        }
+        
+        if (actualResponseNode.isArray()) {
+            Assertions.assertTrue(actualResponseNode.size() >= 0, "Array should have valid size");
+        }
+        if (actualResponseNode.isObject()) {
+            Assertions.assertTrue(actualResponseNode.size() >= 0, "Object should have valid field count");
+        }
+    }
+    @Test
     public void testGet() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"type\":\"duplicateDocuments\",\"recommendedFixes\":[{\"documentInformation\":{\"knowledgeBaseId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"documentId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"title\":\"title\",\"snippet\":\"snippet\"},\"id\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}},{\"documentInformation\":{\"knowledgeBaseId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"documentId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"title\":\"title\",\"snippet\":\"snippet\"},\"id\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}}],\"otherFixes\":[{\"documentInformation\":{\"knowledgeBaseId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"documentId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"title\":\"title\",\"snippet\":\"snippet\"},\"id\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}},{\"documentInformation\":{\"knowledgeBaseId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"documentId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"title\":\"title\",\"snippet\":\"snippet\"},\"id\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}}],\"sourceDocument\":{\"knowledgeBaseId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"documentId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"title\":\"title\",\"snippet\":\"snippet\"},\"documents\":[{\"knowledgeBaseId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"documentId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"title\":\"title\",\"snippet\":\"snippet\"},{\"knowledgeBaseId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"documentId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"title\":\"title\",\"snippet\":\"snippet\"}],\"id\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"status\":\"OPEN\",\"severity\":\"LOW\"}"));
+            .setBody("{\"type\":\"duplicateDocuments\",\"recommendedFixes\":[{\"documentInformation\":{\"knowledgeBaseId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"documentId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"title\":\"title\",\"snippet\":\"snippet\"},\"id\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}},{\"documentInformation\":{\"knowledgeBaseId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"documentId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"title\":\"title\",\"snippet\":\"snippet\"},\"id\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}}],\"otherFixes\":[{\"documentInformation\":{\"knowledgeBaseId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"documentId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"title\":\"title\",\"snippet\":\"snippet\"},\"id\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}},{\"documentInformation\":{\"knowledgeBaseId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"documentId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"title\":\"title\",\"snippet\":\"snippet\"},\"id\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}}],\"sourceDocument\":{\"knowledgeBaseId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"documentId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"title\":\"title\",\"snippet\":\"snippet\"},\"documents\":[{\"knowledgeBaseId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"documentId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"title\":\"title\",\"snippet\":\"snippet\"},{\"knowledgeBaseId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"documentId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"title\":\"title\",\"snippet\":\"snippet\"}],\"id\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"status\":\"OPEN\",\"severity\":\"LOW\",\"tags\":[\"tags\"]}"));
         InboxItem response = client.inbox().get(
             "inboxItemId",
             InboxItemRequest
@@ -593,7 +696,10 @@ public class InboxWireTest {
             + "  \"createdAt\": \"2024-01-15T09:30:00Z\",\n"
             + "  \"updatedAt\": \"2024-01-15T09:30:00Z\",\n"
             + "  \"status\": \"OPEN\",\n"
-            + "  \"severity\": \"LOW\"\n"
+            + "  \"severity\": \"LOW\",\n"
+            + "  \"tags\": [\n"
+            + "    \"tags\"\n"
+            + "  ]\n"
             + "}";
         JsonNode actualResponseNode = objectMapper.readTree(actualResponseJson);
         JsonNode expectedResponseNode = objectMapper.readTree(expectedResponseBody);

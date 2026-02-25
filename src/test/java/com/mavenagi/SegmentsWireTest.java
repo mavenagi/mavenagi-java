@@ -46,7 +46,7 @@ public class SegmentsWireTest {
     public void testSearch() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"segments\":[{\"segmentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"referencedKnowledgeBaseCount\":1000000,\"referencedDocumentCount\":1000000,\"status\":\"ACTIVE\",\"name\":\"name\",\"description\":\"description\",\"precondition\":{\"preconditionType\":\"user\",\"key\":\"key\",\"value\":\"value\",\"values\":[\"values\",\"values\"],\"operator\":\"NOT\"}},{\"segmentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"referencedKnowledgeBaseCount\":1000000,\"referencedDocumentCount\":1000000,\"status\":\"ACTIVE\",\"name\":\"name\",\"description\":\"description\",\"precondition\":{\"preconditionType\":\"user\",\"key\":\"key\",\"value\":\"value\",\"values\":[\"values\",\"values\"],\"operator\":\"NOT\"}}],\"number\":1,\"size\":1,\"totalElements\":1000000,\"totalPages\":1}"));
+            .setBody("{\"segments\":[{\"segmentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"referencedKnowledgeBaseCount\":1000000,\"referencedDocumentCount\":1000000,\"referencedActionCount\":1000000,\"status\":\"ACTIVE\",\"name\":\"name\",\"description\":\"description\",\"precondition\":{\"preconditionType\":\"user\",\"key\":\"key\",\"value\":\"value\",\"values\":[\"values\",\"values\"],\"operator\":\"NOT\"}},{\"segmentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"referencedKnowledgeBaseCount\":1000000,\"referencedDocumentCount\":1000000,\"referencedActionCount\":1000000,\"status\":\"ACTIVE\",\"name\":\"name\",\"description\":\"description\",\"precondition\":{\"preconditionType\":\"user\",\"key\":\"key\",\"value\":\"value\",\"values\":[\"values\",\"values\"],\"operator\":\"NOT\"}}],\"number\":1,\"size\":1,\"totalElements\":1000000,\"totalPages\":1}"));
         SegmentsSearchResponse response = client.segments().search(
             SegmentsSearchRequest
                 .builder()
@@ -100,6 +100,7 @@ public class SegmentsWireTest {
             + "      \"updatedAt\": \"2024-01-15T09:30:00Z\",\n"
             + "      \"referencedKnowledgeBaseCount\": 1000000,\n"
             + "      \"referencedDocumentCount\": 1000000,\n"
+            + "      \"referencedActionCount\": 1000000,\n"
             + "      \"status\": \"ACTIVE\",\n"
             + "      \"name\": \"name\",\n"
             + "      \"description\": \"description\",\n"
@@ -126,6 +127,7 @@ public class SegmentsWireTest {
             + "      \"updatedAt\": \"2024-01-15T09:30:00Z\",\n"
             + "      \"referencedKnowledgeBaseCount\": 1000000,\n"
             + "      \"referencedDocumentCount\": 1000000,\n"
+            + "      \"referencedActionCount\": 1000000,\n"
             + "      \"status\": \"ACTIVE\",\n"
             + "      \"name\": \"name\",\n"
             + "      \"description\": \"description\",\n"
@@ -173,7 +175,7 @@ public class SegmentsWireTest {
     public void testCreateOrUpdate() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"segmentId\":{\"referenceId\":\"admin-users\",\"appId\":\"auth-app\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"SEGMENT\"},\"name\":\"Admin users\",\"createdAt\":\"2025-01-01T00:00:00Z\",\"updatedAt\":\"2025-01-15T12:30:00Z\",\"referencedKnowledgeBaseCount\":5,\"referencedDocumentCount\":34,\"status\":\"ACTIVE\",\"precondition\":{\"preconditionType\":\"group\",\"operator\":\"AND\",\"preconditions\":[{\"preconditionType\":\"user\",\"key\":\"userKey\"},{\"preconditionType\":\"user\",\"key\":\"userKey2\"}]}}"));
+            .setBody("{\"segmentId\":{\"referenceId\":\"admin-users\",\"appId\":\"auth-app\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"SEGMENT\"},\"name\":\"Admin users\",\"createdAt\":\"2025-01-01T00:00:00Z\",\"updatedAt\":\"2025-01-15T12:30:00Z\",\"referencedKnowledgeBaseCount\":5,\"referencedDocumentCount\":34,\"referencedActionCount\":3,\"status\":\"ACTIVE\",\"precondition\":{\"preconditionType\":\"group\",\"operator\":\"AND\",\"preconditions\":[{\"preconditionType\":\"user\",\"key\":\"userKey\"},{\"preconditionType\":\"user\",\"key\":\"userKey2\"}]}}"));
         SegmentResponse response = client.segments().createOrUpdate(
             SegmentRequest
                 .builder()
@@ -276,6 +278,7 @@ public class SegmentsWireTest {
             + "  \"updatedAt\": \"2025-01-15T12:30:00Z\",\n"
             + "  \"referencedKnowledgeBaseCount\": 5,\n"
             + "  \"referencedDocumentCount\": 34,\n"
+            + "  \"referencedActionCount\": 3,\n"
             + "  \"status\": \"ACTIVE\",\n"
             + "  \"precondition\": {\n"
             + "    \"preconditionType\": \"group\",\n"
@@ -319,7 +322,7 @@ public class SegmentsWireTest {
     public void testGet() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"segmentId\":{\"referenceId\":\"admin-users\",\"appId\":\"auth-app\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"SEGMENT\"},\"name\":\"Admin users\",\"createdAt\":\"2025-01-01T00:00:00Z\",\"updatedAt\":\"2025-01-15T12:30:00Z\",\"referencedKnowledgeBaseCount\":5,\"referencedDocumentCount\":34,\"status\":\"ACTIVE\",\"precondition\":{\"preconditionType\":\"group\",\"operator\":\"AND\",\"preconditions\":[{\"preconditionType\":\"user\",\"key\":\"userKey\"},{\"preconditionType\":\"user\",\"key\":\"userKey2\"}]}}"));
+            .setBody("{\"segmentId\":{\"referenceId\":\"admin-users\",\"appId\":\"auth-app\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"SEGMENT\"},\"name\":\"Admin users\",\"createdAt\":\"2025-01-01T00:00:00Z\",\"updatedAt\":\"2025-01-15T12:30:00Z\",\"referencedKnowledgeBaseCount\":5,\"referencedDocumentCount\":34,\"referencedActionCount\":3,\"status\":\"ACTIVE\",\"precondition\":{\"preconditionType\":\"group\",\"operator\":\"AND\",\"preconditions\":[{\"preconditionType\":\"user\",\"key\":\"userKey\"},{\"preconditionType\":\"user\",\"key\":\"userKey2\"}]}}"));
         SegmentResponse response = client.segments().get(
             "admin-users",
             SegmentGetRequest
@@ -347,6 +350,7 @@ public class SegmentsWireTest {
             + "  \"updatedAt\": \"2025-01-15T12:30:00Z\",\n"
             + "  \"referencedKnowledgeBaseCount\": 5,\n"
             + "  \"referencedDocumentCount\": 34,\n"
+            + "  \"referencedActionCount\": 3,\n"
             + "  \"status\": \"ACTIVE\",\n"
             + "  \"precondition\": {\n"
             + "    \"preconditionType\": \"group\",\n"
@@ -390,7 +394,7 @@ public class SegmentsWireTest {
     public void testPatch() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"segmentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"referencedKnowledgeBaseCount\":1000000,\"referencedDocumentCount\":1000000,\"status\":\"ACTIVE\",\"name\":\"name\",\"description\":\"description\",\"precondition\":{\"preconditionType\":\"user\",\"key\":\"key\",\"value\":\"value\",\"values\":[\"values\",\"values\"],\"operator\":\"NOT\"}}"));
+            .setBody("{\"segmentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"referencedKnowledgeBaseCount\":1000000,\"referencedDocumentCount\":1000000,\"referencedActionCount\":1000000,\"status\":\"ACTIVE\",\"name\":\"name\",\"description\":\"description\",\"precondition\":{\"preconditionType\":\"user\",\"key\":\"key\",\"value\":\"value\",\"values\":[\"values\",\"values\"],\"operator\":\"NOT\"}}"));
         SegmentResponse response = client.segments().patch(
             "segmentReferenceId",
             SegmentPatchRequest
@@ -443,6 +447,7 @@ public class SegmentsWireTest {
             + "  \"updatedAt\": \"2024-01-15T09:30:00Z\",\n"
             + "  \"referencedKnowledgeBaseCount\": 1000000,\n"
             + "  \"referencedDocumentCount\": 1000000,\n"
+            + "  \"referencedActionCount\": 1000000,\n"
             + "  \"status\": \"ACTIVE\",\n"
             + "  \"name\": \"name\",\n"
             + "  \"description\": \"description\",\n"
@@ -484,7 +489,7 @@ public class SegmentsWireTest {
     public void testDelete() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"segmentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"referencedKnowledgeBaseCount\":1000000,\"referencedDocumentCount\":1000000,\"status\":\"ACTIVE\",\"name\":\"name\",\"description\":\"description\",\"precondition\":{\"preconditionType\":\"user\",\"key\":\"key\",\"value\":\"value\",\"values\":[\"values\",\"values\"],\"operator\":\"NOT\"}}"));
+            .setBody("{\"segmentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"referencedKnowledgeBaseCount\":1000000,\"referencedDocumentCount\":1000000,\"referencedActionCount\":1000000,\"status\":\"ACTIVE\",\"name\":\"name\",\"description\":\"description\",\"precondition\":{\"preconditionType\":\"user\",\"key\":\"key\",\"value\":\"value\",\"values\":[\"values\",\"values\"],\"operator\":\"NOT\"}}"));
         SegmentResponse response = client.segments().delete(
             "segmentReferenceId",
             SegmentDeleteRequest
@@ -511,6 +516,7 @@ public class SegmentsWireTest {
             + "  \"updatedAt\": \"2024-01-15T09:30:00Z\",\n"
             + "  \"referencedKnowledgeBaseCount\": 1000000,\n"
             + "  \"referencedDocumentCount\": 1000000,\n"
+            + "  \"referencedActionCount\": 1000000,\n"
             + "  \"status\": \"ACTIVE\",\n"
             + "  \"name\": \"name\",\n"
             + "  \"description\": \"description\",\n"

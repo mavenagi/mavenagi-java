@@ -31,6 +31,8 @@ public final class SegmentRequest implements ISegmentBase {
 
     private final EntityIdBase segmentId;
 
+    private final Optional<SegmentStatus> status;
+
     private final Map<String, Object> additionalProperties;
 
     private SegmentRequest(
@@ -38,11 +40,13 @@ public final class SegmentRequest implements ISegmentBase {
             Optional<String> description,
             Precondition precondition,
             EntityIdBase segmentId,
+            Optional<SegmentStatus> status,
             Map<String, Object> additionalProperties) {
         this.name = name;
         this.description = description;
         this.precondition = precondition;
         this.segmentId = segmentId;
+        this.status = status;
         this.additionalProperties = additionalProperties;
     }
 
@@ -81,6 +85,14 @@ public final class SegmentRequest implements ISegmentBase {
         return segmentId;
     }
 
+    /**
+     * @return Desired status for the segment. If omitted, defaults to ACTIVE. In the future this will become required, so specify ACTIVE or INACTIVE if possible.
+     */
+    @JsonProperty("status")
+    public Optional<SegmentStatus> getStatus() {
+        return status;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -96,12 +108,13 @@ public final class SegmentRequest implements ISegmentBase {
         return name.equals(other.name)
                 && description.equals(other.description)
                 && precondition.equals(other.precondition)
-                && segmentId.equals(other.segmentId);
+                && segmentId.equals(other.segmentId)
+                && status.equals(other.status);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.name, this.description, this.precondition, this.segmentId);
+        return Objects.hash(this.name, this.description, this.precondition, this.segmentId, this.status);
     }
 
     @java.lang.Override
@@ -145,6 +158,13 @@ public final class SegmentRequest implements ISegmentBase {
         _FinalStage description(Optional<String> description);
 
         _FinalStage description(String description);
+
+        /**
+         * <p>Desired status for the segment. If omitted, defaults to ACTIVE. In the future this will become required, so specify ACTIVE or INACTIVE if possible.</p>
+         */
+        _FinalStage status(Optional<SegmentStatus> status);
+
+        _FinalStage status(SegmentStatus status);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -154,6 +174,8 @@ public final class SegmentRequest implements ISegmentBase {
         private Precondition precondition;
 
         private EntityIdBase segmentId;
+
+        private Optional<SegmentStatus> status = Optional.empty();
 
         private Optional<String> description = Optional.empty();
 
@@ -168,6 +190,7 @@ public final class SegmentRequest implements ISegmentBase {
             description(other.getDescription());
             precondition(other.getPrecondition());
             segmentId(other.getSegmentId());
+            status(other.getStatus());
             return this;
         }
 
@@ -208,6 +231,26 @@ public final class SegmentRequest implements ISegmentBase {
         }
 
         /**
+         * <p>Desired status for the segment. If omitted, defaults to ACTIVE. In the future this will become required, so specify ACTIVE or INACTIVE if possible.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage status(SegmentStatus status) {
+            this.status = Optional.ofNullable(status);
+            return this;
+        }
+
+        /**
+         * <p>Desired status for the segment. If omitted, defaults to ACTIVE. In the future this will become required, so specify ACTIVE or INACTIVE if possible.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "status", nulls = Nulls.SKIP)
+        public _FinalStage status(Optional<SegmentStatus> status) {
+            this.status = status;
+            return this;
+        }
+
+        /**
          * <p>A plain text description of the segment.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -229,7 +272,7 @@ public final class SegmentRequest implements ISegmentBase {
 
         @java.lang.Override
         public SegmentRequest build() {
-            return new SegmentRequest(name, description, precondition, segmentId, additionalProperties);
+            return new SegmentRequest(name, description, precondition, segmentId, status, additionalProperties);
         }
     }
 }

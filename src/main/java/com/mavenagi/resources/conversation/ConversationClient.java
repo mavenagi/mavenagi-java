@@ -10,7 +10,6 @@ import com.mavenagi.resources.commons.types.Feedback;
 import com.mavenagi.resources.conversation.requests.ConversationDeleteRequest;
 import com.mavenagi.resources.conversation.requests.ConversationGetRequest;
 import com.mavenagi.resources.conversation.requests.SimulationImportRequest;
-import com.mavenagi.resources.conversation.types.AskObjectRequest;
 import com.mavenagi.resources.conversation.types.AskRequest;
 import com.mavenagi.resources.conversation.types.CategorizationResponse;
 import com.mavenagi.resources.conversation.types.ConversationMessageRequest;
@@ -22,7 +21,6 @@ import com.mavenagi.resources.conversation.types.ConversationsSearchRequest;
 import com.mavenagi.resources.conversation.types.DeliverMessageRequest;
 import com.mavenagi.resources.conversation.types.DeliverMessageResponse;
 import com.mavenagi.resources.conversation.types.FeedbackRequest;
-import com.mavenagi.resources.conversation.types.ObjectStreamResponse;
 import com.mavenagi.resources.conversation.types.StreamResponse;
 import com.mavenagi.resources.conversation.types.SubmitActionFormRequest;
 import com.mavenagi.resources.conversation.types.UpdateMetadataRequest;
@@ -244,49 +242,6 @@ public class ConversationClient {
     public Iterable<StreamResponse> askStream(
             String conversationId, AskRequest request, RequestOptions requestOptions) {
         return this.rawClient.askStream(conversationId, request, requestOptions).body();
-    }
-
-    /**
-     * Generate a structured object response based on a provided schema and user prompt with a streaming response.
-     * The response will be sent as a stream of events containing text, start, and end events.
-     * The text portions of stream responses should be concatenated to form the full response text.
-     * <p>If the user question and object response already exist, they will be reused and not updated.</p>
-     * <p>Concurrency Behavior:</p>
-     * <ul>
-     * <li>If another API call is made for the same user question while a response is mid-stream, partial answers may be returned.</li>
-     * <li>The second caller will receive a truncated or partial response depending on where the first stream is in its processing. The first caller's stream will remain unaffected and continue delivering the full response.</li>
-     * </ul>
-     * <p>Known Limitations:</p>
-     * <ul>
-     * <li>Schema enforcement is best-effort and may not guarantee exact conformity.</li>
-     * <li>The API does not currently expose metadata indicating whether a response or message is incomplete. This will be addressed in a future update.</li>
-     * </ul>
-     */
-    public Iterable<ObjectStreamResponse> askObjectStream(String conversationId, AskObjectRequest request) {
-        return this.rawClient.askObjectStream(conversationId, request).body();
-    }
-
-    /**
-     * Generate a structured object response based on a provided schema and user prompt with a streaming response.
-     * The response will be sent as a stream of events containing text, start, and end events.
-     * The text portions of stream responses should be concatenated to form the full response text.
-     * <p>If the user question and object response already exist, they will be reused and not updated.</p>
-     * <p>Concurrency Behavior:</p>
-     * <ul>
-     * <li>If another API call is made for the same user question while a response is mid-stream, partial answers may be returned.</li>
-     * <li>The second caller will receive a truncated or partial response depending on where the first stream is in its processing. The first caller's stream will remain unaffected and continue delivering the full response.</li>
-     * </ul>
-     * <p>Known Limitations:</p>
-     * <ul>
-     * <li>Schema enforcement is best-effort and may not guarantee exact conformity.</li>
-     * <li>The API does not currently expose metadata indicating whether a response or message is incomplete. This will be addressed in a future update.</li>
-     * </ul>
-     */
-    public Iterable<ObjectStreamResponse> askObjectStream(
-            String conversationId, AskObjectRequest request, RequestOptions requestOptions) {
-        return this.rawClient
-                .askObjectStream(conversationId, request, requestOptions)
-                .body();
     }
 
     /**

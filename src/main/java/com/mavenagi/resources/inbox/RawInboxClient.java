@@ -18,6 +18,7 @@ import com.mavenagi.resources.commons.errors.ServerError;
 import com.mavenagi.resources.commons.types.ErrorMessage;
 import com.mavenagi.resources.commons.types.InboxItem;
 import com.mavenagi.resources.commons.types.InboxItemFix;
+import com.mavenagi.resources.inbox.requests.InboxItemApplyTagsRequest;
 import com.mavenagi.resources.inbox.requests.InboxItemFixRequest;
 import com.mavenagi.resources.inbox.requests.InboxItemIgnoreRequest;
 import com.mavenagi.resources.inbox.requests.InboxItemRequest;
@@ -87,6 +88,74 @@ public class RawInboxClient {
                 return new MavenAGIHttpResponse<>(
                         ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), InboxSearchResponse.class),
                         response);
+            }
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            try {
+                switch (response.code()) {
+                    case 400:
+                        throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                    case 500:
+                        throw new ServerError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            throw new MavenAGIApiException(
+                    "Error with status code " + response.code(),
+                    response.code(),
+                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                    response);
+        } catch (IOException e) {
+            throw new MavenAGIException("Network error executing HTTP request", e);
+        }
+    }
+
+    /**
+     * Update inbox item tag fields. All tags provided will overwrite the existing tags on the inbox item.
+     */
+    public MavenAGIHttpResponse<InboxItem> applyTags(String inboxItemId, InboxItemApplyTagsRequest request) {
+        return applyTags(inboxItemId, request, null);
+    }
+
+    /**
+     * Update inbox item tag fields. All tags provided will overwrite the existing tags on the inbox item.
+     */
+    public MavenAGIHttpResponse<InboxItem> applyTags(
+            String inboxItemId, InboxItemApplyTagsRequest request, RequestOptions requestOptions) {
+        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("v1/inbox")
+                .addPathSegment(inboxItemId)
+                .addPathSegments("tags")
+                .build();
+        RequestBody body;
+        try {
+            body = RequestBody.create(
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
+        } catch (JsonProcessingException e) {
+            throw new MavenAGIException("Failed to serialize request", e);
+        }
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl)
+                .method("PATCH", body)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
+                .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            if (response.isSuccessful()) {
+                return new MavenAGIHttpResponse<>(
+                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), InboxItem.class), response);
             }
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {

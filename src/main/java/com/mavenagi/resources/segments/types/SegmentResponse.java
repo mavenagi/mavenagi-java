@@ -40,6 +40,8 @@ public final class SegmentResponse implements ISegmentBase {
 
     private final Optional<Long> referencedDocumentCount;
 
+    private final Optional<Long> referencedActionCount;
+
     private final SegmentStatus status;
 
     private final Map<String, Object> additionalProperties;
@@ -53,6 +55,7 @@ public final class SegmentResponse implements ISegmentBase {
             OffsetDateTime updatedAt,
             Optional<Long> referencedKnowledgeBaseCount,
             Optional<Long> referencedDocumentCount,
+            Optional<Long> referencedActionCount,
             SegmentStatus status,
             Map<String, Object> additionalProperties) {
         this.name = name;
@@ -63,6 +66,7 @@ public final class SegmentResponse implements ISegmentBase {
         this.updatedAt = updatedAt;
         this.referencedKnowledgeBaseCount = referencedKnowledgeBaseCount;
         this.referencedDocumentCount = referencedDocumentCount;
+        this.referencedActionCount = referencedActionCount;
         this.status = status;
         this.additionalProperties = additionalProperties;
     }
@@ -135,6 +139,14 @@ public final class SegmentResponse implements ISegmentBase {
     }
 
     /**
+     * @return The number of active actions that reference this segment.
+     */
+    @JsonProperty("referencedActionCount")
+    public Optional<Long> getReferencedActionCount() {
+        return referencedActionCount;
+    }
+
+    /**
      * @return The status of the segment.
      * <ul>
      * <li>ACTIVE: Segment is in use and will be evaluated for matching user questions.</li>
@@ -167,6 +179,7 @@ public final class SegmentResponse implements ISegmentBase {
                 && updatedAt.equals(other.updatedAt)
                 && referencedKnowledgeBaseCount.equals(other.referencedKnowledgeBaseCount)
                 && referencedDocumentCount.equals(other.referencedDocumentCount)
+                && referencedActionCount.equals(other.referencedActionCount)
                 && status.equals(other.status);
     }
 
@@ -181,6 +194,7 @@ public final class SegmentResponse implements ISegmentBase {
                 this.updatedAt,
                 this.referencedKnowledgeBaseCount,
                 this.referencedDocumentCount,
+                this.referencedActionCount,
                 this.status);
     }
 
@@ -265,6 +279,13 @@ public final class SegmentResponse implements ISegmentBase {
         _FinalStage referencedDocumentCount(Optional<Long> referencedDocumentCount);
 
         _FinalStage referencedDocumentCount(Long referencedDocumentCount);
+
+        /**
+         * <p>The number of active actions that reference this segment.</p>
+         */
+        _FinalStage referencedActionCount(Optional<Long> referencedActionCount);
+
+        _FinalStage referencedActionCount(Long referencedActionCount);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -288,6 +309,8 @@ public final class SegmentResponse implements ISegmentBase {
 
         private SegmentStatus status;
 
+        private Optional<Long> referencedActionCount = Optional.empty();
+
         private Optional<Long> referencedDocumentCount = Optional.empty();
 
         private Optional<Long> referencedKnowledgeBaseCount = Optional.empty();
@@ -309,6 +332,7 @@ public final class SegmentResponse implements ISegmentBase {
             updatedAt(other.getUpdatedAt());
             referencedKnowledgeBaseCount(other.getReferencedKnowledgeBaseCount());
             referencedDocumentCount(other.getReferencedDocumentCount());
+            referencedActionCount(other.getReferencedActionCount());
             status(other.getStatus());
             return this;
         }
@@ -396,6 +420,26 @@ public final class SegmentResponse implements ISegmentBase {
         }
 
         /**
+         * <p>The number of active actions that reference this segment.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage referencedActionCount(Long referencedActionCount) {
+            this.referencedActionCount = Optional.ofNullable(referencedActionCount);
+            return this;
+        }
+
+        /**
+         * <p>The number of active actions that reference this segment.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "referencedActionCount", nulls = Nulls.SKIP)
+        public _FinalStage referencedActionCount(Optional<Long> referencedActionCount) {
+            this.referencedActionCount = referencedActionCount;
+            return this;
+        }
+
+        /**
          * <p>The number of active documents that reference this segment.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -466,6 +510,7 @@ public final class SegmentResponse implements ISegmentBase {
                     updatedAt,
                     referencedKnowledgeBaseCount,
                     referencedDocumentCount,
+                    referencedActionCount,
                     status,
                     additionalProperties);
         }

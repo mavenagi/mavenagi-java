@@ -17,6 +17,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
@@ -32,6 +34,8 @@ public final class InboxItemCustom implements IInboxItemBase {
 
     private final InboxItemSeverity severity;
 
+    private final Optional<Set<String>> tags;
+
     private final Map<String, String> metadata;
 
     private final Map<String, Object> additionalProperties;
@@ -42,6 +46,7 @@ public final class InboxItemCustom implements IInboxItemBase {
             OffsetDateTime updatedAt,
             InboxItemStatus status,
             InboxItemSeverity severity,
+            Optional<Set<String>> tags,
             Map<String, String> metadata,
             Map<String, Object> additionalProperties) {
         this.id = id;
@@ -49,6 +54,7 @@ public final class InboxItemCustom implements IInboxItemBase {
         this.updatedAt = updatedAt;
         this.status = status;
         this.severity = severity;
+        this.tags = tags;
         this.metadata = metadata;
         this.additionalProperties = additionalProperties;
     }
@@ -99,6 +105,15 @@ public final class InboxItemCustom implements IInboxItemBase {
     }
 
     /**
+     * @return A set of tags associated with the inbox item that are used for filtering.
+     */
+    @JsonProperty("tags")
+    @java.lang.Override
+    public Optional<Set<String>> getTags() {
+        return tags;
+    }
+
+    /**
      * @return Additional metadata associated with the inbox item.
      */
     @JsonProperty("metadata")
@@ -123,12 +138,14 @@ public final class InboxItemCustom implements IInboxItemBase {
                 && updatedAt.equals(other.updatedAt)
                 && status.equals(other.status)
                 && severity.equals(other.severity)
+                && tags.equals(other.tags)
                 && metadata.equals(other.metadata);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.id, this.createdAt, this.updatedAt, this.status, this.severity, this.metadata);
+        return Objects.hash(
+                this.id, this.createdAt, this.updatedAt, this.status, this.severity, this.tags, this.metadata);
     }
 
     @java.lang.Override
@@ -181,6 +198,13 @@ public final class InboxItemCustom implements IInboxItemBase {
         InboxItemCustom build();
 
         /**
+         * <p>A set of tags associated with the inbox item that are used for filtering.</p>
+         */
+        _FinalStage tags(Optional<Set<String>> tags);
+
+        _FinalStage tags(Set<String> tags);
+
+        /**
          * <p>Additional metadata associated with the inbox item.</p>
          */
         _FinalStage metadata(Map<String, String> metadata);
@@ -205,6 +229,8 @@ public final class InboxItemCustom implements IInboxItemBase {
 
         private Map<String, String> metadata = new LinkedHashMap<>();
 
+        private Optional<Set<String>> tags = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -217,6 +243,7 @@ public final class InboxItemCustom implements IInboxItemBase {
             updatedAt(other.getUpdatedAt());
             status(other.getStatus());
             severity(other.getSeverity());
+            tags(other.getTags());
             metadata(other.getMetadata());
             return this;
         }
@@ -316,9 +343,30 @@ public final class InboxItemCustom implements IInboxItemBase {
             return this;
         }
 
+        /**
+         * <p>A set of tags associated with the inbox item that are used for filtering.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage tags(Set<String> tags) {
+            this.tags = Optional.ofNullable(tags);
+            return this;
+        }
+
+        /**
+         * <p>A set of tags associated with the inbox item that are used for filtering.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "tags", nulls = Nulls.SKIP)
+        public _FinalStage tags(Optional<Set<String>> tags) {
+            this.tags = tags;
+            return this;
+        }
+
         @java.lang.Override
         public InboxItemCustom build() {
-            return new InboxItemCustom(id, createdAt, updatedAt, status, severity, metadata, additionalProperties);
+            return new InboxItemCustom(
+                    id, createdAt, updatedAt, status, severity, tags, metadata, additionalProperties);
         }
     }
 }

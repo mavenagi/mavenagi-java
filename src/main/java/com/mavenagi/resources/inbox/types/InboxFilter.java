@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = InboxFilter.Builder.class)
@@ -27,6 +28,8 @@ public final class InboxFilter {
     private final Optional<List<InboxItemStatus>> statuses;
 
     private final Optional<List<InboxItemType>> type;
+
+    private final Optional<Set<String>> tags;
 
     private final Optional<OffsetDateTime> createdAfter;
 
@@ -37,11 +40,13 @@ public final class InboxFilter {
     private InboxFilter(
             Optional<List<InboxItemStatus>> statuses,
             Optional<List<InboxItemType>> type,
+            Optional<Set<String>> tags,
             Optional<OffsetDateTime> createdAfter,
             Optional<OffsetDateTime> createdBefore,
             Map<String, Object> additionalProperties) {
         this.statuses = statuses;
         this.type = type;
+        this.tags = tags;
         this.createdAfter = createdAfter;
         this.createdBefore = createdBefore;
         this.additionalProperties = additionalProperties;
@@ -61,6 +66,14 @@ public final class InboxFilter {
     @JsonProperty("type")
     public Optional<List<InboxItemType>> getType() {
         return type;
+    }
+
+    /**
+     * @return Filter for items that have at least one of these tags.
+     */
+    @JsonProperty("tags")
+    public Optional<Set<String>> getTags() {
+        return tags;
     }
 
     /**
@@ -93,13 +106,14 @@ public final class InboxFilter {
     private boolean equalTo(InboxFilter other) {
         return statuses.equals(other.statuses)
                 && type.equals(other.type)
+                && tags.equals(other.tags)
                 && createdAfter.equals(other.createdAfter)
                 && createdBefore.equals(other.createdBefore);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.statuses, this.type, this.createdAfter, this.createdBefore);
+        return Objects.hash(this.statuses, this.type, this.tags, this.createdAfter, this.createdBefore);
     }
 
     @java.lang.Override
@@ -117,6 +131,8 @@ public final class InboxFilter {
 
         private Optional<List<InboxItemType>> type = Optional.empty();
 
+        private Optional<Set<String>> tags = Optional.empty();
+
         private Optional<OffsetDateTime> createdAfter = Optional.empty();
 
         private Optional<OffsetDateTime> createdBefore = Optional.empty();
@@ -129,6 +145,7 @@ public final class InboxFilter {
         public Builder from(InboxFilter other) {
             statuses(other.getStatuses());
             type(other.getType());
+            tags(other.getTags());
             createdAfter(other.getCreatedAfter());
             createdBefore(other.getCreatedBefore());
             return this;
@@ -163,6 +180,20 @@ public final class InboxFilter {
         }
 
         /**
+         * <p>Filter for items that have at least one of these tags.</p>
+         */
+        @JsonSetter(value = "tags", nulls = Nulls.SKIP)
+        public Builder tags(Optional<Set<String>> tags) {
+            this.tags = tags;
+            return this;
+        }
+
+        public Builder tags(Set<String> tags) {
+            this.tags = Optional.ofNullable(tags);
+            return this;
+        }
+
+        /**
          * <p>Filter for items created after this timestamp.</p>
          */
         @JsonSetter(value = "createdAfter", nulls = Nulls.SKIP)
@@ -191,7 +222,7 @@ public final class InboxFilter {
         }
 
         public InboxFilter build() {
-            return new InboxFilter(statuses, type, createdAfter, createdBefore, additionalProperties);
+            return new InboxFilter(statuses, type, tags, createdAfter, createdBefore, additionalProperties);
         }
     }
 }

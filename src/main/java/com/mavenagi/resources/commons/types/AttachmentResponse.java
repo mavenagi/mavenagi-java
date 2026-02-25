@@ -65,6 +65,7 @@ public final class AttachmentResponse implements IBaseAttachment {
      * <li>application/msword</li>
      * <li>application/vnd.ms-excel</li>
      * <li>application/vnd.ms-powerpoint</li>
+     * <li>application/x-subrip</li>
      * <li>audio/aac</li>
      * <li>audio/mpeg</li>
      * <li>audio/mp4</li>
@@ -164,6 +165,7 @@ public final class AttachmentResponse implements IBaseAttachment {
          * <li>application/msword</li>
          * <li>application/vnd.ms-excel</li>
          * <li>application/vnd.ms-powerpoint</li>
+         * <li>application/x-subrip</li>
          * <li>audio/aac</li>
          * <li>audio/mpeg</li>
          * <li>audio/mp4</li>
@@ -254,6 +256,7 @@ public final class AttachmentResponse implements IBaseAttachment {
          * <li>application/msword</li>
          * <li>application/vnd.ms-excel</li>
          * <li>application/vnd.ms-powerpoint</li>
+         * <li>application/x-subrip</li>
          * <li>audio/aac</li>
          * <li>audio/mpeg</li>
          * <li>audio/mp4</li>
@@ -278,6 +281,7 @@ public final class AttachmentResponse implements IBaseAttachment {
          * <li>application/msword</li>
          * <li>application/vnd.ms-excel</li>
          * <li>application/vnd.ms-powerpoint</li>
+         * <li>application/x-subrip</li>
          * <li>audio/aac</li>
          * <li>audio/mpeg</li>
          * <li>audio/mp4</li>

@@ -10,7 +10,6 @@ import com.mavenagi.resources.agents.AgentsClient;
 import com.mavenagi.resources.analytics.AnalyticsClient;
 import com.mavenagi.resources.appsettings.AppSettingsClient;
 import com.mavenagi.resources.assets.AssetsClient;
-import com.mavenagi.resources.auth.AuthClient;
 import com.mavenagi.resources.conversation.ConversationClient;
 import com.mavenagi.resources.customers.CustomersClient;
 import com.mavenagi.resources.events.EventsClient;
@@ -22,6 +21,7 @@ import com.mavenagi.resources.segments.SegmentsClient;
 import com.mavenagi.resources.translations.TranslationsClient;
 import com.mavenagi.resources.triggers.TriggersClient;
 import com.mavenagi.resources.users.UsersClient;
+import com.mavenagi.resources.voice.VoiceClient;
 import java.util.function.Supplier;
 
 public class MavenAGI {
@@ -36,8 +36,6 @@ public class MavenAGI {
     protected final Supplier<AppSettingsClient> appSettingsClient;
 
     protected final Supplier<AssetsClient> assetsClient;
-
-    protected final Supplier<AuthClient> authClient;
 
     protected final Supplier<ConversationClient> conversationClient;
 
@@ -61,6 +59,8 @@ public class MavenAGI {
 
     protected final Supplier<UsersClient> usersClient;
 
+    protected final Supplier<VoiceClient> voiceClient;
+
     public MavenAGI(ClientOptions clientOptions) {
         this.clientOptions = clientOptions;
         this.actionsClient = Suppliers.memoize(() -> new ActionsClient(clientOptions));
@@ -68,7 +68,6 @@ public class MavenAGI {
         this.analyticsClient = Suppliers.memoize(() -> new AnalyticsClient(clientOptions));
         this.appSettingsClient = Suppliers.memoize(() -> new AppSettingsClient(clientOptions));
         this.assetsClient = Suppliers.memoize(() -> new AssetsClient(clientOptions));
-        this.authClient = Suppliers.memoize(() -> new AuthClient(clientOptions));
         this.conversationClient = Suppliers.memoize(() -> new ConversationClient(clientOptions));
         this.customersClient = Suppliers.memoize(() -> new CustomersClient(clientOptions));
         this.eventsClient = Suppliers.memoize(() -> new EventsClient(clientOptions));
@@ -80,6 +79,7 @@ public class MavenAGI {
         this.translationsClient = Suppliers.memoize(() -> new TranslationsClient(clientOptions));
         this.triggersClient = Suppliers.memoize(() -> new TriggersClient(clientOptions));
         this.usersClient = Suppliers.memoize(() -> new UsersClient(clientOptions));
+        this.voiceClient = Suppliers.memoize(() -> new VoiceClient(clientOptions));
     }
 
     public ActionsClient actions() {
@@ -100,10 +100,6 @@ public class MavenAGI {
 
     public AssetsClient assets() {
         return this.assetsClient.get();
-    }
-
-    public AuthClient auth() {
-        return this.authClient.get();
     }
 
     public ConversationClient conversation() {
@@ -148,6 +144,10 @@ public class MavenAGI {
 
     public UsersClient users() {
         return this.usersClient.get();
+    }
+
+    public VoiceClient voice() {
+        return this.voiceClient.get();
     }
 
     public static MavenAGIBuilder builder() {

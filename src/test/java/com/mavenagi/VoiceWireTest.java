@@ -4,8 +4,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mavenagi.MavenAGI;
 import com.mavenagi.core.ObjectMappers;
-import com.mavenagi.resources.auth.types.SessionTokenRequest;
-import com.mavenagi.resources.auth.types.SessionTokenResponse;
+import com.mavenagi.resources.voice.types.VoiceSessionTokenRequest;
+import com.mavenagi.resources.voice.types.VoiceSessionTokenResponse;
+import com.mavenagi.resources.voice.types.VoiceTokenType;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
@@ -14,7 +15,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class AuthWireTest {
+public class VoiceWireTest {
     private MockWebServer server;
     private MavenAGI client;
     private ObjectMapper objectMapper = ObjectMappers.JSON_MAPPER;
@@ -35,11 +36,12 @@ public class AuthWireTest {
     public void testSessionToken() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"sessionToken\":\"sessionToken\",\"expiresAt\":\"2024-01-15T09:30:00Z\"}"));
-        SessionTokenResponse response = client.auth().sessionToken(
-            SessionTokenRequest
+            .setBody("{\"token\":\"token\",\"identity\":\"identity\",\"type\":\"webrtc\",\"expiresIn\":1}"));
+        VoiceSessionTokenResponse response = client.voice().sessionToken(
+            VoiceSessionTokenRequest
                 .builder()
-                .ttlSeconds(3600)
+                .appUserId("appUserId")
+                .type(VoiceTokenType.WEBRTC)
                 .build()
         );
         RecordedRequest request = server.takeRequest();
@@ -49,7 +51,8 @@ public class AuthWireTest {
         String actualRequestBody = request.getBody().readUtf8();
         String expectedRequestBody = ""
             + "{\n"
-            + "  \"ttlSeconds\": 3600\n"
+            + "  \"appUserId\": \"appUserId\",\n"
+            + "  \"type\": \"webrtc\"\n"
             + "}";
         JsonNode actualJson = objectMapper.readTree(actualRequestBody);
         JsonNode expectedJson = objectMapper.readTree(expectedRequestBody);
@@ -79,8 +82,10 @@ public class AuthWireTest {
         String actualResponseJson = objectMapper.writeValueAsString(response);
         String expectedResponseBody = ""
             + "{\n"
-            + "  \"sessionToken\": \"sessionToken\",\n"
-            + "  \"expiresAt\": \"2024-01-15T09:30:00Z\"\n"
+            + "  \"token\": \"token\",\n"
+            + "  \"identity\": \"identity\",\n"
+            + "  \"type\": \"webrtc\",\n"
+            + "  \"expiresIn\": 1\n"
             + "}";
         JsonNode actualResponseNode = objectMapper.readTree(actualResponseJson);
         JsonNode expectedResponseNode = objectMapper.readTree(expectedResponseBody);
