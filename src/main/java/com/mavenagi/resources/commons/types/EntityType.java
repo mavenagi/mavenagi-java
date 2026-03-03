@@ -15,6 +15,8 @@ public final class EntityType {
 
     public static final EntityType KNOWLEDGE_BASE = new EntityType(Value.KNOWLEDGE_BASE, "KNOWLEDGE_BASE");
 
+    public static final EntityType CHARTER = new EntityType(Value.CHARTER, "CHARTER");
+
     public static final EntityType CONVERSATION = new EntityType(Value.CONVERSATION, "CONVERSATION");
 
     public static final EntityType EVENT_TRIGGER = new EntityType(Value.EVENT_TRIGGER, "EVENT_TRIGGER");
@@ -82,6 +84,8 @@ public final class EntityType {
                 return visitor.visitUser();
             case KNOWLEDGE_BASE:
                 return visitor.visitKnowledgeBase();
+            case CHARTER:
+                return visitor.visitCharter();
             case CONVERSATION:
                 return visitor.visitConversation();
             case EVENT_TRIGGER:
@@ -125,6 +129,8 @@ public final class EntityType {
                 return USER;
             case "KNOWLEDGE_BASE":
                 return KNOWLEDGE_BASE;
+            case "CHARTER":
+                return CHARTER;
             case "CONVERSATION":
                 return CONVERSATION;
             case "EVENT_TRIGGER":
@@ -191,6 +197,8 @@ public final class EntityType {
 
         INTELLIGENT_FIELD,
 
+        CHARTER,
+
         UNKNOWN
     }
 
@@ -228,6 +236,8 @@ public final class EntityType {
         T visitCustomer();
 
         T visitIntelligentField();
+
+        T visitCharter();
 
         T visitUnknown(String unknownType);
     }

@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
+import com.mavenagi.resources.commons.types.EntityId;
 import com.mavenagi.resources.commons.types.LlmInclusionStatus;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
@@ -39,6 +40,8 @@ public final class KnowledgeBaseFilter {
 
     private final Optional<String> segmentId;
 
+    private final Optional<List<EntityId>> segmentIds;
+
     private final Map<String, Object> additionalProperties;
 
     private KnowledgeBaseFilter(
@@ -50,6 +53,7 @@ public final class KnowledgeBaseFilter {
             Optional<List<KnowledgeBaseVersionStatus>> mostRecentVersionStatus,
             Optional<LlmInclusionStatus> llmInclusionStatus,
             Optional<String> segmentId,
+            Optional<List<EntityId>> segmentIds,
             Map<String, Object> additionalProperties) {
         this.search = search;
         this.title = title;
@@ -59,6 +63,7 @@ public final class KnowledgeBaseFilter {
         this.mostRecentVersionStatus = mostRecentVersionStatus;
         this.llmInclusionStatus = llmInclusionStatus;
         this.segmentId = segmentId;
+        this.segmentIds = segmentIds;
         this.additionalProperties = additionalProperties;
     }
 
@@ -137,6 +142,14 @@ public final class KnowledgeBaseFilter {
         return segmentId;
     }
 
+    /**
+     * @return Filter knowledge bases by the segments they are assigned to. Uses OR semantics — returns knowledge bases assigned to any of the provided segments.
+     */
+    @JsonProperty("segmentIds")
+    public Optional<List<EntityId>> getSegmentIds() {
+        return segmentIds;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -156,7 +169,8 @@ public final class KnowledgeBaseFilter {
                 && appIds.equals(other.appIds)
                 && mostRecentVersionStatus.equals(other.mostRecentVersionStatus)
                 && llmInclusionStatus.equals(other.llmInclusionStatus)
-                && segmentId.equals(other.segmentId);
+                && segmentId.equals(other.segmentId)
+                && segmentIds.equals(other.segmentIds);
     }
 
     @java.lang.Override
@@ -169,7 +183,8 @@ public final class KnowledgeBaseFilter {
                 this.appIds,
                 this.mostRecentVersionStatus,
                 this.llmInclusionStatus,
-                this.segmentId);
+                this.segmentId,
+                this.segmentIds);
     }
 
     @java.lang.Override
@@ -199,6 +214,8 @@ public final class KnowledgeBaseFilter {
 
         private Optional<String> segmentId = Optional.empty();
 
+        private Optional<List<EntityId>> segmentIds = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -213,6 +230,7 @@ public final class KnowledgeBaseFilter {
             mostRecentVersionStatus(other.getMostRecentVersionStatus());
             llmInclusionStatus(other.getLlmInclusionStatus());
             segmentId(other.getSegmentId());
+            segmentIds(other.getSegmentIds());
             return this;
         }
 
@@ -339,6 +357,20 @@ public final class KnowledgeBaseFilter {
             return this;
         }
 
+        /**
+         * <p>Filter knowledge bases by the segments they are assigned to. Uses OR semantics — returns knowledge bases assigned to any of the provided segments.</p>
+         */
+        @JsonSetter(value = "segmentIds", nulls = Nulls.SKIP)
+        public Builder segmentIds(Optional<List<EntityId>> segmentIds) {
+            this.segmentIds = segmentIds;
+            return this;
+        }
+
+        public Builder segmentIds(List<EntityId> segmentIds) {
+            this.segmentIds = Optional.ofNullable(segmentIds);
+            return this;
+        }
+
         public KnowledgeBaseFilter build() {
             return new KnowledgeBaseFilter(
                     search,
@@ -349,6 +381,7 @@ public final class KnowledgeBaseFilter {
                     mostRecentVersionStatus,
                     llmInclusionStatus,
                     segmentId,
+                    segmentIds,
                     additionalProperties);
         }
     }
