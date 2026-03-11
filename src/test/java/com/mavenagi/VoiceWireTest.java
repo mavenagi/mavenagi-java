@@ -40,7 +40,7 @@ public class VoiceWireTest {
         VoiceSessionTokenResponse response = client.voice().sessionToken(
             VoiceSessionTokenRequest
                 .builder()
-                .appUserId("appUserId")
+                .appUserId("x")
                 .type(VoiceTokenType.WEBRTC)
                 .build()
         );
@@ -51,7 +51,7 @@ public class VoiceWireTest {
         String actualRequestBody = request.getBody().readUtf8();
         String expectedRequestBody = ""
             + "{\n"
-            + "  \"appUserId\": \"appUserId\",\n"
+            + "  \"appUserId\": \"x\",\n"
             + "  \"type\": \"webrtc\"\n"
             + "}";
         JsonNode actualJson = objectMapper.readTree(actualRequestBody);

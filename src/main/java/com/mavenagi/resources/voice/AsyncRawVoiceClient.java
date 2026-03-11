@@ -42,7 +42,7 @@ public class AsyncRawVoiceClient {
      * <p>Supports two token types:</p>
      * <ul>
      * <li><strong>webrtc</strong>: A Twilio-compatible access token for browser-based WebRTC calls</li>
-     * <li><strong>websocket</strong>: An RS256 JWT for direct WebSocket connections to /v1/voice/conversations</li>
+     * <li><strong>websocket</strong>: An ES256 JWT for direct WebSocket connections to /v1/voice/conversations</li>
      * </ul>
      * <p>Session tokens are required before establishing any voice connection.</p>
      */
@@ -56,7 +56,7 @@ public class AsyncRawVoiceClient {
      * <p>Supports two token types:</p>
      * <ul>
      * <li><strong>webrtc</strong>: A Twilio-compatible access token for browser-based WebRTC calls</li>
-     * <li><strong>websocket</strong>: An RS256 JWT for direct WebSocket connections to /v1/voice/conversations</li>
+     * <li><strong>websocket</strong>: An ES256 JWT for direct WebSocket connections to /v1/voice/conversations</li>
      * </ul>
      * <p>Session tokens are required before establishing any voice connection.</p>
      */

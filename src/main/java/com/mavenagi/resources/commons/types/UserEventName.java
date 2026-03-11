@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public final class UserEventName {
+    public static final UserEventName CSAT_SUBMITTED = new UserEventName(Value.CSAT_SUBMITTED, "CSAT_SUBMITTED");
+
     public static final UserEventName CHAT_OPENED = new UserEventName(Value.CHAT_OPENED, "CHAT_OPENED");
 
     public static final UserEventName TEXT_INSERTED = new UserEventName(Value.TEXT_INSERTED, "TEXT_INSERTED");
@@ -49,6 +51,8 @@ public final class UserEventName {
 
     public <T> T visit(Visitor<T> visitor) {
         switch (value) {
+            case CSAT_SUBMITTED:
+                return visitor.visitCsatSubmitted();
             case CHAT_OPENED:
                 return visitor.visitChatOpened();
             case TEXT_INSERTED:
@@ -68,6 +72,8 @@ public final class UserEventName {
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static UserEventName valueOf(String value) {
         switch (value) {
+            case "CSAT_SUBMITTED":
+                return CSAT_SUBMITTED;
             case "CHAT_OPENED":
                 return CHAT_OPENED;
             case "TEXT_INSERTED":
@@ -94,6 +100,8 @@ public final class UserEventName {
 
         TEXT_INSERTED,
 
+        CSAT_SUBMITTED,
+
         UNKNOWN
     }
 
@@ -107,6 +115,8 @@ public final class UserEventName {
         T visitChatClosed();
 
         T visitTextInserted();
+
+        T visitCsatSubmitted();
 
         T visitUnknown(String unknownType);
     }

@@ -4,16 +4,25 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mavenagi.MavenAGI;
 import com.mavenagi.core.ObjectMappers;
+import com.mavenagi.resources.commons.types.EntityId;
+import com.mavenagi.resources.commons.types.EntityIdBase;
+import com.mavenagi.resources.commons.types.EntityType;
 import com.mavenagi.resources.commons.types.InboxItem;
 import com.mavenagi.resources.commons.types.InboxItemFix;
+import com.mavenagi.resources.commons.types.InboxItemSeverity;
+import com.mavenagi.resources.commons.types.InboxItemStatus;
+import com.mavenagi.resources.commons.types.ScopedEntity;
 import com.mavenagi.resources.inbox.requests.InboxItemApplyTagsRequest;
 import com.mavenagi.resources.inbox.requests.InboxItemFixRequest;
 import com.mavenagi.resources.inbox.requests.InboxItemIgnoreRequest;
 import com.mavenagi.resources.inbox.requests.InboxItemRequest;
 import com.mavenagi.resources.inbox.types.ApplyFixesRequest;
+import com.mavenagi.resources.inbox.types.InboxItemCreateRequest;
 import com.mavenagi.resources.inbox.types.InboxSearchRequest;
 import com.mavenagi.resources.inbox.types.InboxSearchResponse;
+import java.time.OffsetDateTime;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
@@ -405,6 +414,169 @@ public class InboxWireTest {
             + "  \"size\": 1,\n"
             + "  \"totalElements\": 1000000,\n"
             + "  \"totalPages\": 1\n"
+            + "}";
+        JsonNode actualResponseNode = objectMapper.readTree(actualResponseJson);
+        JsonNode expectedResponseNode = objectMapper.readTree(expectedResponseBody);
+        Assertions.assertEquals(expectedResponseNode, actualResponseNode, "Response body structure does not match expected");
+        if (actualResponseNode.has("type") || actualResponseNode.has("_type") || actualResponseNode.has("kind")) {
+            String discriminator = null;
+            if (actualResponseNode.has("type")) discriminator = actualResponseNode.get("type").asText();
+            else if (actualResponseNode.has("_type")) discriminator = actualResponseNode.get("_type").asText();
+            else if (actualResponseNode.has("kind")) discriminator = actualResponseNode.get("kind").asText();
+            Assertions.assertNotNull(discriminator, "Union type should have a discriminator field");
+            Assertions.assertFalse(discriminator.isEmpty(), "Union discriminator should not be empty");
+        }
+        
+        if (!actualResponseNode.isNull()) {
+            Assertions.assertTrue(actualResponseNode.isObject() || actualResponseNode.isArray() || actualResponseNode.isValueNode(), "response should be a valid JSON value");
+        }
+        
+        if (actualResponseNode.isArray()) {
+            Assertions.assertTrue(actualResponseNode.size() >= 0, "Array should have valid size");
+        }
+        if (actualResponseNode.isObject()) {
+            Assertions.assertTrue(actualResponseNode.size() >= 0, "Object should have valid field count");
+        }
+    }
+    @Test
+    public void testCreateOrUpdate() throws Exception {
+        server.enqueue(new MockResponse()
+            .setResponseCode(200)
+            .setBody("{\"type\":\"custom\",\"id\":{\"referenceId\":\"todo-item-1\",\"appId\":\"myapp\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"INBOX_ITEM\"},\"status\":\"OPEN\",\"severity\":\"HIGH\",\"createdAt\":\"2025-01-01T00:00:00Z\",\"updatedAt\":\"2025-02-01T00:00:00Z\",\"metadata\":{\"key\":\"value\"}}"));
+        InboxItem response = client.inbox().createOrUpdate(
+            InboxItemCreateRequest
+                .builder()
+                .inboxItemId(
+                    EntityIdBase
+                        .builder()
+                        .referenceId("todo-item-1")
+                        .build()
+                )
+                .status(InboxItemStatus.OPEN)
+                .severity(InboxItemSeverity.HIGH)
+                .metadata(
+                    new HashMap<String, String>() {{
+                        put("key", "value");
+                    }}
+                )
+                .title("Todo Item")
+                .description("This is the first todo item.")
+                .externalUrl("todo.com")
+                .deadline(OffsetDateTime.parse("2026-12-31T23:59:59Z"))
+                .snoozedUntil(OffsetDateTime.parse("2026-12-25T23:59:59Z"))
+                .references(
+                    new HashSet<ScopedEntity>(
+                        Arrays.asList(
+                            ScopedEntity
+                                .builder()
+                                .entityId(
+                                    EntityId
+                                        .builder()
+                                        .type(EntityType.CONVERSATION_MESSAGE)
+                                        .appId("app1")
+                                        .referenceId("msgRef1201")
+                                        .organizationId("acme")
+                                        .agentId("support")
+                                        .build()
+                                )
+                                .scopeEntityId(
+                                    EntityId
+                                        .builder()
+                                        .type(EntityType.CONVERSATION)
+                                        .appId("app1")
+                                        .referenceId("ref1200")
+                                        .organizationId("acme")
+                                        .agentId("support")
+                                        .build()
+                                )
+                                .build()
+                        )
+                    )
+                )
+                .build()
+        );
+        RecordedRequest request = server.takeRequest();
+        Assertions.assertNotNull(request);
+        Assertions.assertEquals("PUT", request.getMethod());
+        // Validate request body
+        String actualRequestBody = request.getBody().readUtf8();
+        String expectedRequestBody = ""
+            + "{\n"
+            + "  \"inboxItemId\": {\n"
+            + "    \"referenceId\": \"todo-item-1\"\n"
+            + "  },\n"
+            + "  \"status\": \"OPEN\",\n"
+            + "  \"severity\": \"HIGH\",\n"
+            + "  \"title\": \"Todo Item\",\n"
+            + "  \"description\": \"This is the first todo item.\",\n"
+            + "  \"metadata\": {\n"
+            + "    \"key\": \"value\"\n"
+            + "  },\n"
+            + "  \"externalUrl\": \"todo.com\",\n"
+            + "  \"deadline\": \"2026-12-31T23:59:59Z\",\n"
+            + "  \"snoozedUntil\": \"2026-12-25T23:59:59Z\",\n"
+            + "  \"references\": [\n"
+            + "    {\n"
+            + "      \"entityId\": {\n"
+            + "        \"type\": \"CONVERSATION_MESSAGE\",\n"
+            + "        \"appId\": \"app1\",\n"
+            + "        \"referenceId\": \"msgRef1201\",\n"
+            + "        \"organizationId\": \"acme\",\n"
+            + "        \"agentId\": \"support\"\n"
+            + "      },\n"
+            + "      \"scopeEntityId\": {\n"
+            + "        \"type\": \"CONVERSATION\",\n"
+            + "        \"appId\": \"app1\",\n"
+            + "        \"referenceId\": \"ref1200\",\n"
+            + "        \"organizationId\": \"acme\",\n"
+            + "        \"agentId\": \"support\"\n"
+            + "      }\n"
+            + "    }\n"
+            + "  ]\n"
+            + "}";
+        JsonNode actualJson = objectMapper.readTree(actualRequestBody);
+        JsonNode expectedJson = objectMapper.readTree(expectedRequestBody);
+        Assertions.assertEquals(expectedJson, actualJson, "Request body structure does not match expected");
+        if (actualJson.has("type") || actualJson.has("_type") || actualJson.has("kind")) {
+            String discriminator = null;
+            if (actualJson.has("type")) discriminator = actualJson.get("type").asText();
+            else if (actualJson.has("_type")) discriminator = actualJson.get("_type").asText();
+            else if (actualJson.has("kind")) discriminator = actualJson.get("kind").asText();
+            Assertions.assertNotNull(discriminator, "Union type should have a discriminator field");
+            Assertions.assertFalse(discriminator.isEmpty(), "Union discriminator should not be empty");
+        }
+        
+        if (!actualJson.isNull()) {
+            Assertions.assertTrue(actualJson.isObject() || actualJson.isArray() || actualJson.isValueNode(), "request should be a valid JSON value");
+        }
+        
+        if (actualJson.isArray()) {
+            Assertions.assertTrue(actualJson.size() >= 0, "Array should have valid size");
+        }
+        if (actualJson.isObject()) {
+            Assertions.assertTrue(actualJson.size() >= 0, "Object should have valid field count");
+        }
+        
+        // Validate response body
+        Assertions.assertNotNull(response, "Response should not be null");
+        String actualResponseJson = objectMapper.writeValueAsString(response);
+        String expectedResponseBody = ""
+            + "{\n"
+            + "  \"type\": \"custom\",\n"
+            + "  \"id\": {\n"
+            + "    \"referenceId\": \"todo-item-1\",\n"
+            + "    \"appId\": \"myapp\",\n"
+            + "    \"organizationId\": \"acme\",\n"
+            + "    \"agentId\": \"support\",\n"
+            + "    \"type\": \"INBOX_ITEM\"\n"
+            + "  },\n"
+            + "  \"status\": \"OPEN\",\n"
+            + "  \"severity\": \"HIGH\",\n"
+            + "  \"createdAt\": \"2025-01-01T00:00:00Z\",\n"
+            + "  \"updatedAt\": \"2025-02-01T00:00:00Z\",\n"
+            + "  \"metadata\": {\n"
+            + "    \"key\": \"value\"\n"
+            + "  }\n"
             + "}";
         JsonNode actualResponseNode = objectMapper.readTree(actualResponseJson);
         JsonNode expectedResponseNode = objectMapper.readTree(expectedResponseBody);

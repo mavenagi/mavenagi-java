@@ -212,6 +212,6 @@ Add the dependency in your `pom.xml` file:
 <dependency>
   <groupId>com.mavenagi</groupId>
   <artifactId>mavenagi-java</artifactId>
-  <version>1.2.23</version>
+  <version>1.2.25</version>
 </dependency>
 ```

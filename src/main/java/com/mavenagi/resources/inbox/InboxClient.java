@@ -12,6 +12,7 @@ import com.mavenagi.resources.inbox.requests.InboxItemFixRequest;
 import com.mavenagi.resources.inbox.requests.InboxItemIgnoreRequest;
 import com.mavenagi.resources.inbox.requests.InboxItemRequest;
 import com.mavenagi.resources.inbox.types.ApplyFixesRequest;
+import com.mavenagi.resources.inbox.types.InboxItemCreateRequest;
 import com.mavenagi.resources.inbox.types.InboxSearchRequest;
 import com.mavenagi.resources.inbox.types.InboxSearchResponse;
 
@@ -51,6 +52,20 @@ public class InboxClient {
      */
     public InboxSearchResponse search(InboxSearchRequest request, RequestOptions requestOptions) {
         return this.rawClient.search(request, requestOptions).body();
+    }
+
+    /**
+     * Update an inbox item or create it if it doesn't exist.
+     */
+    public InboxItem createOrUpdate(InboxItemCreateRequest request) {
+        return this.rawClient.createOrUpdate(request).body();
+    }
+
+    /**
+     * Update an inbox item or create it if it doesn't exist.
+     */
+    public InboxItem createOrUpdate(InboxItemCreateRequest request, RequestOptions requestOptions) {
+        return this.rawClient.createOrUpdate(request, requestOptions).body();
     }
 
     /**
