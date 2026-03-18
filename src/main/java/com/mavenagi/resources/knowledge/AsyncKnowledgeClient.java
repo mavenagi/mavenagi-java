@@ -10,6 +10,7 @@ import com.mavenagi.resources.knowledge.requests.KnowledgeBasePatchRequest;
 import com.mavenagi.resources.knowledge.requests.KnowledgeBaseVersionsListRequest;
 import com.mavenagi.resources.knowledge.requests.KnowledgeDocumentGetRequest;
 import com.mavenagi.resources.knowledge.requests.KnowledgeDocumentPatchRequest;
+import com.mavenagi.resources.knowledge.types.CancelKnowledgeBaseVersionRequest;
 import com.mavenagi.resources.knowledge.types.FinalizeKnowledgeBaseVersionRequest;
 import com.mavenagi.resources.knowledge.types.KnowledgeBaseRefreshRequest;
 import com.mavenagi.resources.knowledge.types.KnowledgeBaseRequest;
@@ -139,6 +140,41 @@ public class AsyncKnowledgeClient {
             String knowledgeBaseReferenceId, KnowledgeBaseRefreshRequest request, RequestOptions requestOptions) {
         return this.rawClient
                 .refreshKnowledgeBase(knowledgeBaseReferenceId, request, requestOptions)
+                .thenApply(response -> response.body());
+    }
+
+    /**
+     * in-progress knowledge base version.
+     * <p>If the knowledge base has a version that is currently being ingested,
+     * this will cancel the ingestion workflow and set the version status to FAILED.</p>
+     */
+    public CompletableFuture<Void> cancelKnowledgeBaseVersion(String knowledgeBaseReferenceId) {
+        return this.rawClient
+                .cancelKnowledgeBaseVersion(knowledgeBaseReferenceId)
+                .thenApply(response -> response.body());
+    }
+
+    /**
+     * in-progress knowledge base version.
+     * <p>If the knowledge base has a version that is currently being ingested,
+     * this will cancel the ingestion workflow and set the version status to FAILED.</p>
+     */
+    public CompletableFuture<Void> cancelKnowledgeBaseVersion(
+            String knowledgeBaseReferenceId, CancelKnowledgeBaseVersionRequest request) {
+        return this.rawClient
+                .cancelKnowledgeBaseVersion(knowledgeBaseReferenceId, request)
+                .thenApply(response -> response.body());
+    }
+
+    /**
+     * in-progress knowledge base version.
+     * <p>If the knowledge base has a version that is currently being ingested,
+     * this will cancel the ingestion workflow and set the version status to FAILED.</p>
+     */
+    public CompletableFuture<Void> cancelKnowledgeBaseVersion(
+            String knowledgeBaseReferenceId, CancelKnowledgeBaseVersionRequest request, RequestOptions requestOptions) {
+        return this.rawClient
+                .cancelKnowledgeBaseVersion(knowledgeBaseReferenceId, request, requestOptions)
                 .thenApply(response -> response.body());
     }
 

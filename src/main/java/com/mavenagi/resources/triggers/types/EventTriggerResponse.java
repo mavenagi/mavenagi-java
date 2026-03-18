@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
 import com.mavenagi.resources.commons.types.EntityId;
@@ -16,11 +17,14 @@ import com.mavenagi.resources.commons.types.EventTriggerType;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = EventTriggerResponse.Builder.class)
 public final class EventTriggerResponse implements IEventTriggerBase {
+    private final Optional<String> name;
+
     private final String description;
 
     private final EventTriggerType type;
@@ -32,16 +36,27 @@ public final class EventTriggerResponse implements IEventTriggerBase {
     private final Map<String, Object> additionalProperties;
 
     private EventTriggerResponse(
+            Optional<String> name,
             String description,
             EventTriggerType type,
             EntityId triggerId,
             boolean enabled,
             Map<String, Object> additionalProperties) {
+        this.name = name;
         this.description = description;
         this.type = type;
         this.triggerId = triggerId;
         this.enabled = enabled;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return The name of the trigger, displayed to end users. If not set, a name is derived from the app ID and trigger type.
+     */
+    @JsonProperty("name")
+    @java.lang.Override
+    public Optional<String> getName() {
+        return name;
     }
 
     /**
@@ -93,7 +108,8 @@ public final class EventTriggerResponse implements IEventTriggerBase {
     }
 
     private boolean equalTo(EventTriggerResponse other) {
-        return description.equals(other.description)
+        return name.equals(other.name)
+                && description.equals(other.description)
                 && type.equals(other.type)
                 && triggerId.equals(other.triggerId)
                 && enabled == other.enabled;
@@ -101,7 +117,7 @@ public final class EventTriggerResponse implements IEventTriggerBase {
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.description, this.type, this.triggerId, this.enabled);
+        return Objects.hash(this.name, this.description, this.type, this.triggerId, this.enabled);
     }
 
     @java.lang.Override
@@ -148,6 +164,13 @@ public final class EventTriggerResponse implements IEventTriggerBase {
 
     public interface _FinalStage {
         EventTriggerResponse build();
+
+        /**
+         * <p>The name of the trigger, displayed to end users. If not set, a name is derived from the app ID and trigger type.</p>
+         */
+        _FinalStage name(Optional<String> name);
+
+        _FinalStage name(String name);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -161,6 +184,8 @@ public final class EventTriggerResponse implements IEventTriggerBase {
 
         private boolean enabled;
 
+        private Optional<String> name = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -168,6 +193,7 @@ public final class EventTriggerResponse implements IEventTriggerBase {
 
         @java.lang.Override
         public Builder from(EventTriggerResponse other) {
+            name(other.getName());
             description(other.getDescription());
             type(other.getType());
             triggerId(other.getTriggerId());
@@ -229,9 +255,29 @@ public final class EventTriggerResponse implements IEventTriggerBase {
             return this;
         }
 
+        /**
+         * <p>The name of the trigger, displayed to end users. If not set, a name is derived from the app ID and trigger type.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage name(String name) {
+            this.name = Optional.ofNullable(name);
+            return this;
+        }
+
+        /**
+         * <p>The name of the trigger, displayed to end users. If not set, a name is derived from the app ID and trigger type.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "name", nulls = Nulls.SKIP)
+        public _FinalStage name(Optional<String> name) {
+            this.name = name;
+            return this;
+        }
+
         @java.lang.Override
         public EventTriggerResponse build() {
-            return new EventTriggerResponse(description, type, triggerId, enabled, additionalProperties);
+            return new EventTriggerResponse(name, description, type, triggerId, enabled, additionalProperties);
         }
     }
 }

@@ -10,6 +10,7 @@ import com.mavenagi.resources.knowledge.requests.KnowledgeBasePatchRequest;
 import com.mavenagi.resources.knowledge.requests.KnowledgeBaseVersionsListRequest;
 import com.mavenagi.resources.knowledge.requests.KnowledgeDocumentGetRequest;
 import com.mavenagi.resources.knowledge.requests.KnowledgeDocumentPatchRequest;
+import com.mavenagi.resources.knowledge.types.CancelKnowledgeBaseVersionRequest;
 import com.mavenagi.resources.knowledge.types.FinalizeKnowledgeBaseVersionRequest;
 import com.mavenagi.resources.knowledge.types.KnowledgeBaseRefreshRequest;
 import com.mavenagi.resources.knowledge.types.KnowledgeBaseRequest;
@@ -134,6 +135,38 @@ public class KnowledgeClient {
             String knowledgeBaseReferenceId, KnowledgeBaseRefreshRequest request, RequestOptions requestOptions) {
         this.rawClient
                 .refreshKnowledgeBase(knowledgeBaseReferenceId, request, requestOptions)
+                .body();
+    }
+
+    /**
+     * in-progress knowledge base version.
+     * <p>If the knowledge base has a version that is currently being ingested,
+     * this will cancel the ingestion workflow and set the version status to FAILED.</p>
+     */
+    public void cancelKnowledgeBaseVersion(String knowledgeBaseReferenceId) {
+        this.rawClient.cancelKnowledgeBaseVersion(knowledgeBaseReferenceId).body();
+    }
+
+    /**
+     * in-progress knowledge base version.
+     * <p>If the knowledge base has a version that is currently being ingested,
+     * this will cancel the ingestion workflow and set the version status to FAILED.</p>
+     */
+    public void cancelKnowledgeBaseVersion(String knowledgeBaseReferenceId, CancelKnowledgeBaseVersionRequest request) {
+        this.rawClient
+                .cancelKnowledgeBaseVersion(knowledgeBaseReferenceId, request)
+                .body();
+    }
+
+    /**
+     * in-progress knowledge base version.
+     * <p>If the knowledge base has a version that is currently being ingested,
+     * this will cancel the ingestion workflow and set the version status to FAILED.</p>
+     */
+    public void cancelKnowledgeBaseVersion(
+            String knowledgeBaseReferenceId, CancelKnowledgeBaseVersionRequest request, RequestOptions requestOptions) {
+        this.rawClient
+                .cancelKnowledgeBaseVersion(knowledgeBaseReferenceId, request, requestOptions)
                 .body();
     }
 
