@@ -24,6 +24,8 @@ import org.jetbrains.annotations.NotNull;
 public final class IntelligentFieldValueResponse {
     private final EntityId fieldId;
 
+    private final String name;
+
     private final EntityId entityId;
 
     private final Optional<Object> value;
@@ -38,6 +40,7 @@ public final class IntelligentFieldValueResponse {
 
     private IntelligentFieldValueResponse(
             EntityId fieldId,
+            String name,
             EntityId entityId,
             Optional<Object> value,
             Optional<Double> confidence,
@@ -45,6 +48,7 @@ public final class IntelligentFieldValueResponse {
             Optional<OffsetDateTime> createdAt,
             Map<String, Object> additionalProperties) {
         this.fieldId = fieldId;
+        this.name = name;
         this.entityId = entityId;
         this.value = value;
         this.confidence = confidence;
@@ -59,6 +63,14 @@ public final class IntelligentFieldValueResponse {
     @JsonProperty("fieldId")
     public EntityId getFieldId() {
         return fieldId;
+    }
+
+    /**
+     * @return Display name of the intelligent field
+     */
+    @JsonProperty("name")
+    public String getName() {
+        return name;
     }
 
     /**
@@ -114,6 +126,7 @@ public final class IntelligentFieldValueResponse {
 
     private boolean equalTo(IntelligentFieldValueResponse other) {
         return fieldId.equals(other.fieldId)
+                && name.equals(other.name)
                 && entityId.equals(other.entityId)
                 && value.equals(other.value)
                 && confidence.equals(other.confidence)
@@ -123,7 +136,8 @@ public final class IntelligentFieldValueResponse {
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.fieldId, this.entityId, this.value, this.confidence, this.rationale, this.createdAt);
+        return Objects.hash(
+                this.fieldId, this.name, this.entityId, this.value, this.confidence, this.rationale, this.createdAt);
     }
 
     @java.lang.Override
@@ -139,9 +153,16 @@ public final class IntelligentFieldValueResponse {
         /**
          * <p>The intelligent field that this value belongs to</p>
          */
-        EntityIdStage fieldId(@NotNull EntityId fieldId);
+        NameStage fieldId(@NotNull EntityId fieldId);
 
         Builder from(IntelligentFieldValueResponse other);
+    }
+
+    public interface NameStage {
+        /**
+         * <p>Display name of the intelligent field</p>
+         */
+        EntityIdStage name(@NotNull String name);
     }
 
     public interface EntityIdStage {
@@ -184,8 +205,10 @@ public final class IntelligentFieldValueResponse {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements FieldIdStage, EntityIdStage, _FinalStage {
+    public static final class Builder implements FieldIdStage, NameStage, EntityIdStage, _FinalStage {
         private EntityId fieldId;
+
+        private String name;
 
         private EntityId entityId;
 
@@ -205,6 +228,7 @@ public final class IntelligentFieldValueResponse {
         @java.lang.Override
         public Builder from(IntelligentFieldValueResponse other) {
             fieldId(other.getFieldId());
+            name(other.getName());
             entityId(other.getEntityId());
             value(other.getValue());
             confidence(other.getConfidence());
@@ -220,8 +244,20 @@ public final class IntelligentFieldValueResponse {
          */
         @java.lang.Override
         @JsonSetter("fieldId")
-        public EntityIdStage fieldId(@NotNull EntityId fieldId) {
+        public NameStage fieldId(@NotNull EntityId fieldId) {
             this.fieldId = Objects.requireNonNull(fieldId, "fieldId must not be null");
+            return this;
+        }
+
+        /**
+         * <p>Display name of the intelligent field</p>
+         * <p>Display name of the intelligent field</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("name")
+        public EntityIdStage name(@NotNull String name) {
+            this.name = Objects.requireNonNull(name, "name must not be null");
             return this;
         }
 
@@ -320,7 +356,7 @@ public final class IntelligentFieldValueResponse {
         @java.lang.Override
         public IntelligentFieldValueResponse build() {
             return new IntelligentFieldValueResponse(
-                    fieldId, entityId, value, confidence, rationale, createdAt, additionalProperties);
+                    fieldId, name, entityId, value, confidence, rationale, createdAt, additionalProperties);
         }
     }
 }

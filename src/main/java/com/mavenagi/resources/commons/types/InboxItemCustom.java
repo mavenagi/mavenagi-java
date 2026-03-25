@@ -44,11 +44,7 @@ public final class InboxItemCustom implements IInboxItemBase {
 
     private final Optional<String> externalUrl;
 
-    private final Optional<OffsetDateTime> deadline;
-
-    private final Optional<OffsetDateTime> snoozedUntil;
-
-    private final Optional<String> assignee;
+    private final Optional<ScopedEntity> assignee;
 
     private final Optional<Set<ScopedEntity>> references;
 
@@ -65,9 +61,7 @@ public final class InboxItemCustom implements IInboxItemBase {
             Optional<String> title,
             Optional<String> description,
             Optional<String> externalUrl,
-            Optional<OffsetDateTime> deadline,
-            Optional<OffsetDateTime> snoozedUntil,
-            Optional<String> assignee,
+            Optional<ScopedEntity> assignee,
             Optional<Set<ScopedEntity>> references,
             Map<String, Object> additionalProperties) {
         this.id = id;
@@ -80,8 +74,6 @@ public final class InboxItemCustom implements IInboxItemBase {
         this.title = title;
         this.description = description;
         this.externalUrl = externalUrl;
-        this.deadline = deadline;
-        this.snoozedUntil = snoozedUntil;
         this.assignee = assignee;
         this.references = references;
         this.additionalProperties = additionalProperties;
@@ -174,26 +166,10 @@ public final class InboxItemCustom implements IInboxItemBase {
     }
 
     /**
-     * @return An optional deadline for the inbox item.
-     */
-    @JsonProperty("deadline")
-    public Optional<OffsetDateTime> getDeadline() {
-        return deadline;
-    }
-
-    /**
-     * @return An optional timestamp until which the inbox item is snoozed.
-     */
-    @JsonProperty("snoozedUntil")
-    public Optional<OffsetDateTime> getSnoozedUntil() {
-        return snoozedUntil;
-    }
-
-    /**
      * @return An optional assignee for the inbox item.
      */
     @JsonProperty("assignee")
-    public Optional<String> getAssignee() {
+    public Optional<ScopedEntity> getAssignee() {
         return assignee;
     }
 
@@ -227,8 +203,6 @@ public final class InboxItemCustom implements IInboxItemBase {
                 && title.equals(other.title)
                 && description.equals(other.description)
                 && externalUrl.equals(other.externalUrl)
-                && deadline.equals(other.deadline)
-                && snoozedUntil.equals(other.snoozedUntil)
                 && assignee.equals(other.assignee)
                 && references.equals(other.references);
     }
@@ -246,8 +220,6 @@ public final class InboxItemCustom implements IInboxItemBase {
                 this.title,
                 this.description,
                 this.externalUrl,
-                this.deadline,
-                this.snoozedUntil,
                 this.assignee,
                 this.references);
     }
@@ -339,25 +311,11 @@ public final class InboxItemCustom implements IInboxItemBase {
         _FinalStage externalUrl(String externalUrl);
 
         /**
-         * <p>An optional deadline for the inbox item.</p>
-         */
-        _FinalStage deadline(Optional<OffsetDateTime> deadline);
-
-        _FinalStage deadline(OffsetDateTime deadline);
-
-        /**
-         * <p>An optional timestamp until which the inbox item is snoozed.</p>
-         */
-        _FinalStage snoozedUntil(Optional<OffsetDateTime> snoozedUntil);
-
-        _FinalStage snoozedUntil(OffsetDateTime snoozedUntil);
-
-        /**
          * <p>An optional assignee for the inbox item.</p>
          */
-        _FinalStage assignee(Optional<String> assignee);
+        _FinalStage assignee(Optional<ScopedEntity> assignee);
 
-        _FinalStage assignee(String assignee);
+        _FinalStage assignee(ScopedEntity assignee);
 
         /**
          * <p>An optional list of references to other entities that are related to this inbox item.</p>
@@ -382,11 +340,7 @@ public final class InboxItemCustom implements IInboxItemBase {
 
         private Optional<Set<ScopedEntity>> references = Optional.empty();
 
-        private Optional<String> assignee = Optional.empty();
-
-        private Optional<OffsetDateTime> snoozedUntil = Optional.empty();
-
-        private Optional<OffsetDateTime> deadline = Optional.empty();
+        private Optional<ScopedEntity> assignee = Optional.empty();
 
         private Optional<String> externalUrl = Optional.empty();
 
@@ -415,8 +369,6 @@ public final class InboxItemCustom implements IInboxItemBase {
             title(other.getTitle());
             description(other.getDescription());
             externalUrl(other.getExternalUrl());
-            deadline(other.getDeadline());
-            snoozedUntil(other.getSnoozedUntil());
             assignee(other.getAssignee());
             references(other.getReferences());
             return this;
@@ -507,7 +459,7 @@ public final class InboxItemCustom implements IInboxItemBase {
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage assignee(String assignee) {
+        public _FinalStage assignee(ScopedEntity assignee) {
             this.assignee = Optional.ofNullable(assignee);
             return this;
         }
@@ -517,48 +469,8 @@ public final class InboxItemCustom implements IInboxItemBase {
          */
         @java.lang.Override
         @JsonSetter(value = "assignee", nulls = Nulls.SKIP)
-        public _FinalStage assignee(Optional<String> assignee) {
+        public _FinalStage assignee(Optional<ScopedEntity> assignee) {
             this.assignee = assignee;
-            return this;
-        }
-
-        /**
-         * <p>An optional timestamp until which the inbox item is snoozed.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage snoozedUntil(OffsetDateTime snoozedUntil) {
-            this.snoozedUntil = Optional.ofNullable(snoozedUntil);
-            return this;
-        }
-
-        /**
-         * <p>An optional timestamp until which the inbox item is snoozed.</p>
-         */
-        @java.lang.Override
-        @JsonSetter(value = "snoozedUntil", nulls = Nulls.SKIP)
-        public _FinalStage snoozedUntil(Optional<OffsetDateTime> snoozedUntil) {
-            this.snoozedUntil = snoozedUntil;
-            return this;
-        }
-
-        /**
-         * <p>An optional deadline for the inbox item.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage deadline(OffsetDateTime deadline) {
-            this.deadline = Optional.ofNullable(deadline);
-            return this;
-        }
-
-        /**
-         * <p>An optional deadline for the inbox item.</p>
-         */
-        @java.lang.Override
-        @JsonSetter(value = "deadline", nulls = Nulls.SKIP)
-        public _FinalStage deadline(Optional<OffsetDateTime> deadline) {
-            this.deadline = deadline;
             return this;
         }
 
@@ -690,8 +602,6 @@ public final class InboxItemCustom implements IInboxItemBase {
                     title,
                     description,
                     externalUrl,
-                    deadline,
-                    snoozedUntil,
                     assignee,
                     references,
                     additionalProperties);

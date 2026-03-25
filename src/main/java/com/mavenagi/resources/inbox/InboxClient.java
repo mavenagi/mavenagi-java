@@ -10,6 +10,7 @@ import com.mavenagi.resources.commons.types.InboxItemFix;
 import com.mavenagi.resources.inbox.requests.InboxItemApplyTagsRequest;
 import com.mavenagi.resources.inbox.requests.InboxItemFixRequest;
 import com.mavenagi.resources.inbox.requests.InboxItemIgnoreRequest;
+import com.mavenagi.resources.inbox.requests.InboxItemPatchRequest;
 import com.mavenagi.resources.inbox.requests.InboxItemRequest;
 import com.mavenagi.resources.inbox.types.ApplyFixesRequest;
 import com.mavenagi.resources.inbox.types.InboxItemCreateRequest;
@@ -66,6 +67,33 @@ public class InboxClient {
      */
     public InboxItem createOrUpdate(InboxItemCreateRequest request, RequestOptions requestOptions) {
         return this.rawClient.createOrUpdate(request, requestOptions).body();
+    }
+
+    /**
+     * Update mutable inbox item fields. Only supported for custom inbox items.
+     * <p>The <code>appId</code> field can be provided to update a inbox item owned by a different app.
+     * All other fields will overwrite the existing value on the inbox item only if provided.</p>
+     */
+    public InboxItem patch(String inboxItemId) {
+        return this.rawClient.patch(inboxItemId).body();
+    }
+
+    /**
+     * Update mutable inbox item fields. Only supported for custom inbox items.
+     * <p>The <code>appId</code> field can be provided to update a inbox item owned by a different app.
+     * All other fields will overwrite the existing value on the inbox item only if provided.</p>
+     */
+    public InboxItem patch(String inboxItemId, InboxItemPatchRequest request) {
+        return this.rawClient.patch(inboxItemId, request).body();
+    }
+
+    /**
+     * Update mutable inbox item fields. Only supported for custom inbox items.
+     * <p>The <code>appId</code> field can be provided to update a inbox item owned by a different app.
+     * All other fields will overwrite the existing value on the inbox item only if provided.</p>
+     */
+    public InboxItem patch(String inboxItemId, InboxItemPatchRequest request, RequestOptions requestOptions) {
+        return this.rawClient.patch(inboxItemId, request, requestOptions).body();
     }
 
     /**

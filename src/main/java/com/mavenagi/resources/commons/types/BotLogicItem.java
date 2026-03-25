@@ -50,6 +50,14 @@ public final class BotLogicItem {
         return new BotLogicItem(new SegmentsValue(value));
     }
 
+    public static BotLogicItem intelligentFields(BotLogicIntelligentFieldsItem value) {
+        return new BotLogicItem(new IntelligentFieldsValue(value));
+    }
+
+    public static BotLogicItem charters(BotLogicChartersItem value) {
+        return new BotLogicItem(new ChartersValue(value));
+    }
+
     public boolean isKnowledge() {
         return value instanceof KnowledgeValue;
     }
@@ -72,6 +80,14 @@ public final class BotLogicItem {
 
     public boolean isSegments() {
         return value instanceof SegmentsValue;
+    }
+
+    public boolean isIntelligentFields() {
+        return value instanceof IntelligentFieldsValue;
+    }
+
+    public boolean isCharters() {
+        return value instanceof ChartersValue;
     }
 
     public boolean _isUnknown() {
@@ -120,6 +136,20 @@ public final class BotLogicItem {
         return Optional.empty();
     }
 
+    public Optional<BotLogicIntelligentFieldsItem> getIntelligentFields() {
+        if (isIntelligentFields()) {
+            return Optional.of(((IntelligentFieldsValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<BotLogicChartersItem> getCharters() {
+        if (isCharters()) {
+            return Optional.of(((ChartersValue) value).value);
+        }
+        return Optional.empty();
+    }
+
     public Optional<Object> _getUnknown() {
         if (_isUnknown()) {
             return Optional.of(((_UnknownValue) value).value);
@@ -145,6 +175,10 @@ public final class BotLogicItem {
 
         T visitSegments(BotLogicSegmentsItem segments);
 
+        T visitIntelligentFields(BotLogicIntelligentFieldsItem intelligentFields);
+
+        T visitCharters(BotLogicChartersItem charters);
+
         T _visitUnknown(Object unknownType);
     }
 
@@ -155,7 +189,9 @@ public final class BotLogicItem {
         @JsonSubTypes.Type(FormValue.class),
         @JsonSubTypes.Type(SafetyValue.class),
         @JsonSubTypes.Type(UserValue.class),
-        @JsonSubTypes.Type(SegmentsValue.class)
+        @JsonSubTypes.Type(SegmentsValue.class),
+        @JsonSubTypes.Type(IntelligentFieldsValue.class),
+        @JsonSubTypes.Type(ChartersValue.class)
     })
     @JsonIgnoreProperties(ignoreUnknown = true)
     private interface Value {
@@ -382,6 +418,84 @@ public final class BotLogicItem {
         }
 
         private boolean equalTo(SegmentsValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "BotLogicItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("intelligentFields")
+    @JsonIgnoreProperties("type")
+    private static final class IntelligentFieldsValue implements Value {
+        @JsonUnwrapped
+        private BotLogicIntelligentFieldsItem value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private IntelligentFieldsValue() {}
+
+        private IntelligentFieldsValue(BotLogicIntelligentFieldsItem value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitIntelligentFields(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof IntelligentFieldsValue && equalTo((IntelligentFieldsValue) other);
+        }
+
+        private boolean equalTo(IntelligentFieldsValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "BotLogicItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("charters")
+    @JsonIgnoreProperties("type")
+    private static final class ChartersValue implements Value {
+        @JsonUnwrapped
+        private BotLogicChartersItem value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private ChartersValue() {}
+
+        private ChartersValue(BotLogicChartersItem value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitCharters(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof ChartersValue && equalTo((ChartersValue) other);
+        }
+
+        private boolean equalTo(ChartersValue other) {
             return value.equals(other.value);
         }
 

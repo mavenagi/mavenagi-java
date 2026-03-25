@@ -16,7 +16,6 @@ import com.mavenagi.resources.commons.types.EntityIdBase;
 import com.mavenagi.resources.commons.types.InboxItemSeverity;
 import com.mavenagi.resources.commons.types.InboxItemStatus;
 import com.mavenagi.resources.commons.types.ScopedEntity;
-import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -36,17 +35,13 @@ public final class InboxItemCreateRequest {
 
     private final Map<String, String> metadata;
 
-    private final Optional<String> title;
+    private final String title;
 
     private final Optional<String> description;
 
     private final Optional<String> externalUrl;
 
-    private final Optional<OffsetDateTime> deadline;
-
-    private final Optional<OffsetDateTime> snoozedUntil;
-
-    private final Optional<String> assignee;
+    private final Optional<ScopedEntity> assignee;
 
     private final Optional<Set<ScopedEntity>> references;
 
@@ -57,12 +52,10 @@ public final class InboxItemCreateRequest {
             InboxItemStatus status,
             InboxItemSeverity severity,
             Map<String, String> metadata,
-            Optional<String> title,
+            String title,
             Optional<String> description,
             Optional<String> externalUrl,
-            Optional<OffsetDateTime> deadline,
-            Optional<OffsetDateTime> snoozedUntil,
-            Optional<String> assignee,
+            Optional<ScopedEntity> assignee,
             Optional<Set<ScopedEntity>> references,
             Map<String, Object> additionalProperties) {
         this.inboxItemId = inboxItemId;
@@ -72,8 +65,6 @@ public final class InboxItemCreateRequest {
         this.title = title;
         this.description = description;
         this.externalUrl = externalUrl;
-        this.deadline = deadline;
-        this.snoozedUntil = snoozedUntil;
         this.assignee = assignee;
         this.references = references;
         this.additionalProperties = additionalProperties;
@@ -115,7 +106,7 @@ public final class InboxItemCreateRequest {
      * @return Title of the inbox item.
      */
     @JsonProperty("title")
-    public Optional<String> getTitle() {
+    public String getTitle() {
         return title;
     }
 
@@ -136,26 +127,10 @@ public final class InboxItemCreateRequest {
     }
 
     /**
-     * @return An optional deadline for the inbox item.
-     */
-    @JsonProperty("deadline")
-    public Optional<OffsetDateTime> getDeadline() {
-        return deadline;
-    }
-
-    /**
-     * @return An optional timestamp until which the inbox item is snoozed.
-     */
-    @JsonProperty("snoozedUntil")
-    public Optional<OffsetDateTime> getSnoozedUntil() {
-        return snoozedUntil;
-    }
-
-    /**
      * @return An optional assignee for the inbox item.
      */
     @JsonProperty("assignee")
-    public Optional<String> getAssignee() {
+    public Optional<ScopedEntity> getAssignee() {
         return assignee;
     }
 
@@ -186,8 +161,6 @@ public final class InboxItemCreateRequest {
                 && title.equals(other.title)
                 && description.equals(other.description)
                 && externalUrl.equals(other.externalUrl)
-                && deadline.equals(other.deadline)
-                && snoozedUntil.equals(other.snoozedUntil)
                 && assignee.equals(other.assignee)
                 && references.equals(other.references);
     }
@@ -202,8 +175,6 @@ public final class InboxItemCreateRequest {
                 this.title,
                 this.description,
                 this.externalUrl,
-                this.deadline,
-                this.snoozedUntil,
                 this.assignee,
                 this.references);
     }
@@ -237,7 +208,14 @@ public final class InboxItemCreateRequest {
         /**
          * <p>Severity of the inbox item.</p>
          */
-        _FinalStage severity(@NotNull InboxItemSeverity severity);
+        TitleStage severity(@NotNull InboxItemSeverity severity);
+    }
+
+    public interface TitleStage {
+        /**
+         * <p>Title of the inbox item.</p>
+         */
+        _FinalStage title(@NotNull String title);
     }
 
     public interface _FinalStage {
@@ -251,13 +229,6 @@ public final class InboxItemCreateRequest {
         _FinalStage putAllMetadata(Map<String, String> metadata);
 
         _FinalStage metadata(String key, String value);
-
-        /**
-         * <p>Title of the inbox item.</p>
-         */
-        _FinalStage title(Optional<String> title);
-
-        _FinalStage title(String title);
 
         /**
          * <p>Description of the inbox item.</p>
@@ -274,25 +245,11 @@ public final class InboxItemCreateRequest {
         _FinalStage externalUrl(String externalUrl);
 
         /**
-         * <p>An optional deadline for the inbox item.</p>
-         */
-        _FinalStage deadline(Optional<OffsetDateTime> deadline);
-
-        _FinalStage deadline(OffsetDateTime deadline);
-
-        /**
-         * <p>An optional timestamp until which the inbox item is snoozed.</p>
-         */
-        _FinalStage snoozedUntil(Optional<OffsetDateTime> snoozedUntil);
-
-        _FinalStage snoozedUntil(OffsetDateTime snoozedUntil);
-
-        /**
          * <p>An optional assignee for the inbox item.</p>
          */
-        _FinalStage assignee(Optional<String> assignee);
+        _FinalStage assignee(Optional<ScopedEntity> assignee);
 
-        _FinalStage assignee(String assignee);
+        _FinalStage assignee(ScopedEntity assignee);
 
         /**
          * <p>An optional list of references to other entities that are related to this inbox item.</p>
@@ -303,26 +260,22 @@ public final class InboxItemCreateRequest {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements InboxItemIdStage, StatusStage, SeverityStage, _FinalStage {
+    public static final class Builder implements InboxItemIdStage, StatusStage, SeverityStage, TitleStage, _FinalStage {
         private EntityIdBase inboxItemId;
 
         private InboxItemStatus status;
 
         private InboxItemSeverity severity;
 
+        private String title;
+
         private Optional<Set<ScopedEntity>> references = Optional.empty();
 
-        private Optional<String> assignee = Optional.empty();
-
-        private Optional<OffsetDateTime> snoozedUntil = Optional.empty();
-
-        private Optional<OffsetDateTime> deadline = Optional.empty();
+        private Optional<ScopedEntity> assignee = Optional.empty();
 
         private Optional<String> externalUrl = Optional.empty();
 
         private Optional<String> description = Optional.empty();
-
-        private Optional<String> title = Optional.empty();
 
         private Map<String, String> metadata = new LinkedHashMap<>();
 
@@ -340,8 +293,6 @@ public final class InboxItemCreateRequest {
             title(other.getTitle());
             description(other.getDescription());
             externalUrl(other.getExternalUrl());
-            deadline(other.getDeadline());
-            snoozedUntil(other.getSnoozedUntil());
             assignee(other.getAssignee());
             references(other.getReferences());
             return this;
@@ -378,8 +329,20 @@ public final class InboxItemCreateRequest {
          */
         @java.lang.Override
         @JsonSetter("severity")
-        public _FinalStage severity(@NotNull InboxItemSeverity severity) {
+        public TitleStage severity(@NotNull InboxItemSeverity severity) {
             this.severity = Objects.requireNonNull(severity, "severity must not be null");
+            return this;
+        }
+
+        /**
+         * <p>Title of the inbox item.</p>
+         * <p>Title of the inbox item.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("title")
+        public _FinalStage title(@NotNull String title) {
+            this.title = Objects.requireNonNull(title, "title must not be null");
             return this;
         }
 
@@ -408,7 +371,7 @@ public final class InboxItemCreateRequest {
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage assignee(String assignee) {
+        public _FinalStage assignee(ScopedEntity assignee) {
             this.assignee = Optional.ofNullable(assignee);
             return this;
         }
@@ -418,48 +381,8 @@ public final class InboxItemCreateRequest {
          */
         @java.lang.Override
         @JsonSetter(value = "assignee", nulls = Nulls.SKIP)
-        public _FinalStage assignee(Optional<String> assignee) {
+        public _FinalStage assignee(Optional<ScopedEntity> assignee) {
             this.assignee = assignee;
-            return this;
-        }
-
-        /**
-         * <p>An optional timestamp until which the inbox item is snoozed.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage snoozedUntil(OffsetDateTime snoozedUntil) {
-            this.snoozedUntil = Optional.ofNullable(snoozedUntil);
-            return this;
-        }
-
-        /**
-         * <p>An optional timestamp until which the inbox item is snoozed.</p>
-         */
-        @java.lang.Override
-        @JsonSetter(value = "snoozedUntil", nulls = Nulls.SKIP)
-        public _FinalStage snoozedUntil(Optional<OffsetDateTime> snoozedUntil) {
-            this.snoozedUntil = snoozedUntil;
-            return this;
-        }
-
-        /**
-         * <p>An optional deadline for the inbox item.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage deadline(OffsetDateTime deadline) {
-            this.deadline = Optional.ofNullable(deadline);
-            return this;
-        }
-
-        /**
-         * <p>An optional deadline for the inbox item.</p>
-         */
-        @java.lang.Override
-        @JsonSetter(value = "deadline", nulls = Nulls.SKIP)
-        public _FinalStage deadline(Optional<OffsetDateTime> deadline) {
-            this.deadline = deadline;
             return this;
         }
 
@@ -500,26 +423,6 @@ public final class InboxItemCreateRequest {
         @JsonSetter(value = "description", nulls = Nulls.SKIP)
         public _FinalStage description(Optional<String> description) {
             this.description = description;
-            return this;
-        }
-
-        /**
-         * <p>Title of the inbox item.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage title(String title) {
-            this.title = Optional.ofNullable(title);
-            return this;
-        }
-
-        /**
-         * <p>Title of the inbox item.</p>
-         */
-        @java.lang.Override
-        @JsonSetter(value = "title", nulls = Nulls.SKIP)
-        public _FinalStage title(Optional<String> title) {
-            this.title = title;
             return this;
         }
 
@@ -568,8 +471,6 @@ public final class InboxItemCreateRequest {
                     title,
                     description,
                     externalUrl,
-                    deadline,
-                    snoozedUntil,
                     assignee,
                     references,
                     additionalProperties);

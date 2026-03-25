@@ -92,7 +92,7 @@ public final class ActionResponse implements IActionBase, IActionProperties {
     }
 
     /**
-     * @return The description of the action. Must be less than 1024 characters. This helps Maven decide if the action is relevant to a conversation and is not displayed directly to the end user. Descriptions are used by the LLM.
+     * @return The description of the action. Must be no more than 4096 characters. This helps Maven decide if the action is relevant to a conversation and is not displayed directly to the end user. Descriptions are used by the LLM.
      */
     @JsonProperty("description")
     @java.lang.Override
@@ -266,7 +266,7 @@ public final class ActionResponse implements IActionBase, IActionProperties {
 
     public interface DescriptionStage {
         /**
-         * <p>The description of the action. Must be less than 1024 characters. This helps Maven decide if the action is relevant to a conversation and is not displayed directly to the end user. Descriptions are used by the LLM.</p>
+         * <p>The description of the action. Must be no more than 4096 characters. This helps Maven decide if the action is relevant to a conversation and is not displayed directly to the end user. Descriptions are used by the LLM.</p>
          */
         UserInteractionRequiredStage description(@NotNull String description);
     }
@@ -433,8 +433,8 @@ public final class ActionResponse implements IActionBase, IActionProperties {
         }
 
         /**
-         * <p>The description of the action. Must be less than 1024 characters. This helps Maven decide if the action is relevant to a conversation and is not displayed directly to the end user. Descriptions are used by the LLM.</p>
-         * <p>The description of the action. Must be less than 1024 characters. This helps Maven decide if the action is relevant to a conversation and is not displayed directly to the end user. Descriptions are used by the LLM.</p>
+         * <p>The description of the action. Must be no more than 4096 characters. This helps Maven decide if the action is relevant to a conversation and is not displayed directly to the end user. Descriptions are used by the LLM.</p>
+         * <p>The description of the action. Must be no more than 4096 characters. This helps Maven decide if the action is relevant to a conversation and is not displayed directly to the end user. Descriptions are used by the LLM.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
