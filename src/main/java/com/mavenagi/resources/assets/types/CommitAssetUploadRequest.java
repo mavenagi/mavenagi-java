@@ -30,7 +30,7 @@ public final class CommitAssetUploadRequest {
     }
 
     /**
-     * @return Checksum of the uploaded file (optional verification)
+     * @return MD5 hex digest of the uploaded file. Required for assets attached to knowledge documents. Used to verify blob integrity at ingestion time.
      */
     @JsonProperty("checksum")
     public Optional<String> getChecksum() {
@@ -81,7 +81,7 @@ public final class CommitAssetUploadRequest {
         }
 
         /**
-         * <p>Checksum of the uploaded file (optional verification)</p>
+         * <p>MD5 hex digest of the uploaded file. Required for assets attached to knowledge documents. Used to verify blob integrity at ingestion time.</p>
          */
         @JsonSetter(value = "checksum", nulls = Nulls.SKIP)
         public Builder checksum(Optional<String> checksum) {

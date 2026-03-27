@@ -53,7 +53,7 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
 
     private final Optional<KnowledgeDocumentStatus> processingStatus;
 
-    private final String content;
+    private final Optional<String> content;
 
     private final Optional<AttachmentResponse> asset;
 
@@ -76,7 +76,7 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
             Optional<String> language,
             Optional<String> author,
             Optional<KnowledgeDocumentStatus> processingStatus,
-            String content,
+            Optional<String> content,
             Optional<AttachmentResponse> asset,
             Map<String, String> metadata,
             Set<ScopedEntity> relevantEntities,
@@ -209,10 +209,10 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
     }
 
     /**
-     * @return The content of the document in markdown format. Not shown directly to users.
+     * @return The content of the document in markdown format. Not shown directly to users. May be absent for asset-backed documents that have not yet been processed.
      */
     @JsonProperty("content")
-    public String getContent() {
+    public Optional<String> getContent() {
         return content;
     }
 
@@ -341,14 +341,7 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
         /**
          * <p>The time at which this document was last modified.</p>
          */
-        ContentStage updatedAt(@NotNull OffsetDateTime updatedAt);
-    }
-
-    public interface ContentStage {
-        /**
-         * <p>The content of the document in markdown format. Not shown directly to users.</p>
-         */
-        _FinalStage content(@NotNull String content);
+        _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt);
     }
 
     public interface _FinalStage {
@@ -398,6 +391,13 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
         _FinalStage processingStatus(KnowledgeDocumentStatus processingStatus);
 
         /**
+         * <p>The content of the document in markdown format. Not shown directly to users. May be absent for asset-backed documents that have not yet been processed.</p>
+         */
+        _FinalStage content(Optional<String> content);
+
+        _FinalStage content(String content);
+
+        /**
          * <p>If the document is associated with an asset, this will contain the asset metadata</p>
          */
         _FinalStage asset(Optional<AttachmentResponse> asset);
@@ -431,7 +431,6 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
                     KnowledgeBaseLlmInclusionStatusStage,
                     CreatedAtStage,
                     UpdatedAtStage,
-                    ContentStage,
                     _FinalStage {
         private EntityId knowledgeDocumentId;
 
@@ -445,13 +444,13 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
 
         private OffsetDateTime updatedAt;
 
-        private String content;
-
         private Set<ScopedEntity> relevantEntities = new LinkedHashSet<>();
 
         private Map<String, String> metadata = new LinkedHashMap<>();
 
         private Optional<AttachmentResponse> asset = Optional.empty();
+
+        private Optional<String> content = Optional.empty();
 
         private Optional<KnowledgeDocumentStatus> processingStatus = Optional.empty();
 
@@ -561,20 +560,8 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
          */
         @java.lang.Override
         @JsonSetter("updatedAt")
-        public ContentStage updatedAt(@NotNull OffsetDateTime updatedAt) {
+        public _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt) {
             this.updatedAt = Objects.requireNonNull(updatedAt, "updatedAt must not be null");
-            return this;
-        }
-
-        /**
-         * <p>The content of the document in markdown format. Not shown directly to users.</p>
-         * <p>The content of the document in markdown format. Not shown directly to users.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("content")
-        public _FinalStage content(@NotNull String content) {
-            this.content = Objects.requireNonNull(content, "content must not be null");
             return this;
         }
 
@@ -665,6 +652,26 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
         @JsonSetter(value = "asset", nulls = Nulls.SKIP)
         public _FinalStage asset(Optional<AttachmentResponse> asset) {
             this.asset = asset;
+            return this;
+        }
+
+        /**
+         * <p>The content of the document in markdown format. Not shown directly to users. May be absent for asset-backed documents that have not yet been processed.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage content(String content) {
+            this.content = Optional.ofNullable(content);
+            return this;
+        }
+
+        /**
+         * <p>The content of the document in markdown format. Not shown directly to users. May be absent for asset-backed documents that have not yet been processed.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "content", nulls = Nulls.SKIP)
+        public _FinalStage content(Optional<String> content) {
+            this.content = content;
             return this;
         }
 

@@ -145,7 +145,10 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
     }
 
     /**
-     * @return (Currently in BETA. Use at your own risk, and may not work in some circumstances) ID of the asset associated with this document. This asset will be transformed into text and set as the content of the document. The following types are supported: <code>application/pdf</code>, <code>text/plain</code>.  Either this or content is required, but not both.
+     * @return (Beta: under development, endpoint may change.)
+     * ID of the asset associated with this document. This asset will be transformed into
+     * text and set as the content of the document. Supported MIME types are those accepted by <code>initiateUpload</code>.
+     * Either this or content is required, but not both. The asset must have a checksum provided at commit time (see <code>commitUpload</code>).
      */
     @JsonProperty("assetId")
     public Optional<EntityIdWithoutAgent> getAssetId() {
@@ -301,7 +304,10 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
         _FinalStage versionId(EntityIdWithoutAgent versionId);
 
         /**
-         * <p>(Currently in BETA. Use at your own risk, and may not work in some circumstances) ID of the asset associated with this document. This asset will be transformed into text and set as the content of the document. The following types are supported: <code>application/pdf</code>, <code>text/plain</code>.  Either this or content is required, but not both.</p>
+         * <p>(Beta: under development, endpoint may change.)
+         * ID of the asset associated with this document. This asset will be transformed into
+         * text and set as the content of the document. Supported MIME types are those accepted by <code>initiateUpload</code>.
+         * Either this or content is required, but not both. The asset must have a checksum provided at commit time (see <code>commitUpload</code>).</p>
          */
         _FinalStage assetId(Optional<EntityIdWithoutAgent> assetId);
 
@@ -532,7 +538,10 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
         }
 
         /**
-         * <p>(Currently in BETA. Use at your own risk, and may not work in some circumstances) ID of the asset associated with this document. This asset will be transformed into text and set as the content of the document. The following types are supported: <code>application/pdf</code>, <code>text/plain</code>.  Either this or content is required, but not both.</p>
+         * <p>(Beta: under development, endpoint may change.)
+         * ID of the asset associated with this document. This asset will be transformed into
+         * text and set as the content of the document. Supported MIME types are those accepted by <code>initiateUpload</code>.
+         * Either this or content is required, but not both. The asset must have a checksum provided at commit time (see <code>commitUpload</code>).</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -542,7 +551,10 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
         }
 
         /**
-         * <p>(Currently in BETA. Use at your own risk, and may not work in some circumstances) ID of the asset associated with this document. This asset will be transformed into text and set as the content of the document. The following types are supported: <code>application/pdf</code>, <code>text/plain</code>.  Either this or content is required, but not both.</p>
+         * <p>(Beta: under development, endpoint may change.)
+         * ID of the asset associated with this document. This asset will be transformed into
+         * text and set as the content of the document. Supported MIME types are those accepted by <code>initiateUpload</code>.
+         * Either this or content is required, but not both. The asset must have a checksum provided at commit time (see <code>commitUpload</code>).</p>
          */
         @java.lang.Override
         @JsonSetter(value = "assetId", nulls = Nulls.SKIP)
