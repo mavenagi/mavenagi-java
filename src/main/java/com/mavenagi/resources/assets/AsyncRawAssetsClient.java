@@ -16,6 +16,7 @@ import com.mavenagi.resources.assets.types.InitiateAssetUploadRequest;
 import com.mavenagi.resources.assets.types.InitiateAssetUploadResponse;
 import com.mavenagi.resources.commons.errors.BadRequestError;
 import com.mavenagi.resources.commons.errors.NotFoundError;
+import com.mavenagi.resources.commons.errors.PayloadTooLargeError;
 import com.mavenagi.resources.commons.errors.ServerError;
 import com.mavenagi.resources.commons.types.ErrorMessage;
 import java.io.IOException;
@@ -97,6 +98,11 @@ public class AsyncRawAssetsClient {
                                 return;
                             case 404:
                                 future.completeExceptionally(new NotFoundError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
+                                        response));
+                                return;
+                            case 413:
+                                future.completeExceptionally(new PayloadTooLargeError(
                                         ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
                                         response));
                                 return;
@@ -194,6 +200,11 @@ public class AsyncRawAssetsClient {
                                 return;
                             case 404:
                                 future.completeExceptionally(new NotFoundError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
+                                        response));
+                                return;
+                            case 413:
+                                future.completeExceptionally(new PayloadTooLargeError(
                                         ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
                                         response));
                                 return;

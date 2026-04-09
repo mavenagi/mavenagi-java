@@ -13,6 +13,7 @@ import com.mavenagi.core.ObjectMappers;
 import com.mavenagi.core.RequestOptions;
 import com.mavenagi.resources.commons.errors.BadRequestError;
 import com.mavenagi.resources.commons.errors.NotFoundError;
+import com.mavenagi.resources.commons.errors.PayloadTooLargeError;
 import com.mavenagi.resources.commons.errors.ServerError;
 import com.mavenagi.resources.commons.types.ErrorMessage;
 import com.mavenagi.resources.translations.types.TranslationRequest;
@@ -93,6 +94,11 @@ public class AsyncRawTranslationsClient {
                                 return;
                             case 404:
                                 future.completeExceptionally(new NotFoundError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
+                                        response));
+                                return;
+                            case 413:
+                                future.completeExceptionally(new PayloadTooLargeError(
                                         ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
                                         response));
                                 return;

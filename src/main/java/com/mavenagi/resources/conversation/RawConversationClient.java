@@ -18,6 +18,7 @@ import com.mavenagi.core.ResponseBodyReader;
 import com.mavenagi.core.Stream;
 import com.mavenagi.resources.commons.errors.BadRequestError;
 import com.mavenagi.resources.commons.errors.NotFoundError;
+import com.mavenagi.resources.commons.errors.PayloadTooLargeError;
 import com.mavenagi.resources.commons.errors.ServerError;
 import com.mavenagi.resources.commons.types.ConversationResponse;
 import com.mavenagi.resources.commons.types.ErrorMessage;
@@ -126,6 +127,9 @@ public class RawConversationClient {
                     case 404:
                         throw new NotFoundError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                    case 413:
+                        throw new PayloadTooLargeError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
                     case 500:
                         throw new ServerError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
@@ -207,6 +211,9 @@ public class RawConversationClient {
                     case 404:
                         throw new NotFoundError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                    case 413:
+                        throw new PayloadTooLargeError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
                     case 500:
                         throw new ServerError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
@@ -284,6 +291,9 @@ public class RawConversationClient {
                     case 404:
                         throw new NotFoundError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                    case 413:
+                        throw new PayloadTooLargeError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
                     case 500:
                         throw new ServerError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
@@ -360,6 +370,9 @@ public class RawConversationClient {
                     case 404:
                         throw new NotFoundError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                    case 413:
+                        throw new PayloadTooLargeError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
                     case 500:
                         throw new ServerError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
@@ -429,6 +442,9 @@ public class RawConversationClient {
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
                     case 404:
                         throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                    case 413:
+                        throw new PayloadTooLargeError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
                     case 500:
                         throw new ServerError(
@@ -518,6 +534,9 @@ public class RawConversationClient {
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
                     case 404:
                         throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                    case 413:
+                        throw new PayloadTooLargeError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
                     case 500:
                         throw new ServerError(
@@ -614,6 +633,9 @@ public class RawConversationClient {
                     case 404:
                         throw new NotFoundError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                    case 413:
+                        throw new PayloadTooLargeError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
                     case 500:
                         throw new ServerError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
@@ -674,6 +696,9 @@ public class RawConversationClient {
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
                     case 404:
                         throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                    case 413:
+                        throw new PayloadTooLargeError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
                     case 500:
                         throw new ServerError(
@@ -740,6 +765,9 @@ public class RawConversationClient {
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
                     case 404:
                         throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                    case 413:
+                        throw new PayloadTooLargeError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
                     case 500:
                         throw new ServerError(
@@ -817,6 +845,9 @@ public class RawConversationClient {
                     case 404:
                         throw new NotFoundError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                    case 413:
+                        throw new PayloadTooLargeError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
                     case 500:
                         throw new ServerError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
@@ -889,6 +920,9 @@ public class RawConversationClient {
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
                     case 404:
                         throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                    case 413:
+                        throw new PayloadTooLargeError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
                     case 500:
                         throw new ServerError(
@@ -968,6 +1002,9 @@ public class RawConversationClient {
                     case 404:
                         throw new NotFoundError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                    case 413:
+                        throw new PayloadTooLargeError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
                     case 500:
                         throw new ServerError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
@@ -1042,6 +1079,9 @@ public class RawConversationClient {
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
                     case 404:
                         throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                    case 413:
+                        throw new PayloadTooLargeError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
                     case 500:
                         throw new ServerError(
@@ -1125,6 +1165,9 @@ public class RawConversationClient {
                     case 404:
                         throw new NotFoundError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                    case 413:
+                        throw new PayloadTooLargeError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
                     case 500:
                         throw new ServerError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
@@ -1205,6 +1248,9 @@ public class RawConversationClient {
                     case 404:
                         throw new NotFoundError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                    case 413:
+                        throw new PayloadTooLargeError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
                     case 500:
                         throw new ServerError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
@@ -1280,6 +1326,9 @@ public class RawConversationClient {
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
                     case 404:
                         throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                    case 413:
+                        throw new PayloadTooLargeError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
                     case 500:
                         throw new ServerError(

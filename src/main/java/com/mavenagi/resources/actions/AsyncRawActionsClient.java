@@ -19,6 +19,7 @@ import com.mavenagi.resources.actions.types.ActionsResponse;
 import com.mavenagi.resources.actions.types.ActionsSearchRequest;
 import com.mavenagi.resources.commons.errors.BadRequestError;
 import com.mavenagi.resources.commons.errors.NotFoundError;
+import com.mavenagi.resources.commons.errors.PayloadTooLargeError;
 import com.mavenagi.resources.commons.errors.ServerError;
 import com.mavenagi.resources.commons.types.ActionResponse;
 import com.mavenagi.resources.commons.types.ErrorMessage;
@@ -97,6 +98,11 @@ public class AsyncRawActionsClient {
                                 return;
                             case 404:
                                 future.completeExceptionally(new NotFoundError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
+                                        response));
+                                return;
+                            case 413:
+                                future.completeExceptionally(new PayloadTooLargeError(
                                         ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
                                         response));
                                 return;
@@ -183,6 +189,11 @@ public class AsyncRawActionsClient {
                                 return;
                             case 404:
                                 future.completeExceptionally(new NotFoundError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
+                                        response));
+                                return;
+                            case 413:
+                                future.completeExceptionally(new PayloadTooLargeError(
                                         ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
                                         response));
                                 return;
@@ -273,6 +284,11 @@ public class AsyncRawActionsClient {
                                 return;
                             case 404:
                                 future.completeExceptionally(new NotFoundError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
+                                        response));
+                                return;
+                            case 413:
+                                future.completeExceptionally(new PayloadTooLargeError(
                                         ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
                                         response));
                                 return;
@@ -378,6 +394,11 @@ public class AsyncRawActionsClient {
                                         ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
                                         response));
                                 return;
+                            case 413:
+                                future.completeExceptionally(new PayloadTooLargeError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
+                                        response));
+                                return;
                             case 500:
                                 future.completeExceptionally(new ServerError(
                                         ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
@@ -452,6 +473,11 @@ public class AsyncRawActionsClient {
                                 return;
                             case 404:
                                 future.completeExceptionally(new NotFoundError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
+                                        response));
+                                return;
+                            case 413:
+                                future.completeExceptionally(new PayloadTooLargeError(
                                         ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
                                         response));
                                 return;

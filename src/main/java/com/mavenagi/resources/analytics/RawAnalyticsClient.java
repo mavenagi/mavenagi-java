@@ -25,6 +25,7 @@ import com.mavenagi.resources.analytics.types.FeedbackTableRequest;
 import com.mavenagi.resources.analytics.types.FeedbackTableResponse;
 import com.mavenagi.resources.commons.errors.BadRequestError;
 import com.mavenagi.resources.commons.errors.NotFoundError;
+import com.mavenagi.resources.commons.errors.PayloadTooLargeError;
 import com.mavenagi.resources.commons.errors.ServerError;
 import com.mavenagi.resources.commons.types.ErrorMessage;
 import java.io.IOException;
@@ -95,6 +96,9 @@ public class RawAnalyticsClient {
                     case 404:
                         throw new NotFoundError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                    case 413:
+                        throw new PayloadTooLargeError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
                     case 500:
                         throw new ServerError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
@@ -161,6 +165,9 @@ public class RawAnalyticsClient {
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
                     case 404:
                         throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                    case 413:
+                        throw new PayloadTooLargeError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
                     case 500:
                         throw new ServerError(
@@ -231,6 +238,9 @@ public class RawAnalyticsClient {
                     case 404:
                         throw new NotFoundError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                    case 413:
+                        throw new PayloadTooLargeError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
                     case 500:
                         throw new ServerError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
@@ -298,6 +308,9 @@ public class RawAnalyticsClient {
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
                     case 404:
                         throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                    case 413:
+                        throw new PayloadTooLargeError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
                     case 500:
                         throw new ServerError(
@@ -367,6 +380,9 @@ public class RawAnalyticsClient {
                     case 404:
                         throw new NotFoundError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                    case 413:
+                        throw new PayloadTooLargeError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
                     case 500:
                         throw new ServerError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
@@ -434,6 +450,9 @@ public class RawAnalyticsClient {
                     case 404:
                         throw new NotFoundError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                    case 413:
+                        throw new PayloadTooLargeError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
                     case 500:
                         throw new ServerError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
@@ -499,6 +518,9 @@ public class RawAnalyticsClient {
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
                     case 404:
                         throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                    case 413:
+                        throw new PayloadTooLargeError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
                     case 500:
                         throw new ServerError(
