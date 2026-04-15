@@ -27,9 +27,9 @@ public final class SegmentRequest implements ISegmentBase {
 
     private final Optional<String> description;
 
-    private final Precondition precondition;
-
     private final EntityIdBase segmentId;
+
+    private final Precondition precondition;
 
     private final Optional<SegmentStatus> status;
 
@@ -38,14 +38,14 @@ public final class SegmentRequest implements ISegmentBase {
     private SegmentRequest(
             String name,
             Optional<String> description,
-            Precondition precondition,
             EntityIdBase segmentId,
+            Precondition precondition,
             Optional<SegmentStatus> status,
             Map<String, Object> additionalProperties) {
         this.name = name;
         this.description = description;
-        this.precondition = precondition;
         this.segmentId = segmentId;
+        this.precondition = precondition;
         this.status = status;
         this.additionalProperties = additionalProperties;
     }
@@ -69,20 +69,19 @@ public final class SegmentRequest implements ISegmentBase {
     }
 
     /**
-     * @return The precondition that must be met for a conversation message to be included in the segment.
-     */
-    @JsonProperty("precondition")
-    @java.lang.Override
-    public Precondition getPrecondition() {
-        return precondition;
-    }
-
-    /**
      * @return ID that uniquely identifies this segment
      */
     @JsonProperty("segmentId")
     public EntityIdBase getSegmentId() {
         return segmentId;
+    }
+
+    /**
+     * @return The precondition that must be met for a conversation message to be included in the segment.
+     */
+    @JsonProperty("precondition")
+    public Precondition getPrecondition() {
+        return precondition;
     }
 
     /**
@@ -107,14 +106,14 @@ public final class SegmentRequest implements ISegmentBase {
     private boolean equalTo(SegmentRequest other) {
         return name.equals(other.name)
                 && description.equals(other.description)
-                && precondition.equals(other.precondition)
                 && segmentId.equals(other.segmentId)
+                && precondition.equals(other.precondition)
                 && status.equals(other.status);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.name, this.description, this.precondition, this.segmentId, this.status);
+        return Objects.hash(this.name, this.description, this.segmentId, this.precondition, this.status);
     }
 
     @java.lang.Override
@@ -130,23 +129,23 @@ public final class SegmentRequest implements ISegmentBase {
         /**
          * <p>The name of the segment.</p>
          */
-        PreconditionStage name(@NotNull String name);
+        SegmentIdStage name(@NotNull String name);
 
         Builder from(SegmentRequest other);
-    }
-
-    public interface PreconditionStage {
-        /**
-         * <p>The precondition that must be met for a conversation message to be included in the segment.</p>
-         */
-        SegmentIdStage precondition(@NotNull Precondition precondition);
     }
 
     public interface SegmentIdStage {
         /**
          * <p>ID that uniquely identifies this segment</p>
          */
-        _FinalStage segmentId(@NotNull EntityIdBase segmentId);
+        PreconditionStage segmentId(@NotNull EntityIdBase segmentId);
+    }
+
+    public interface PreconditionStage {
+        /**
+         * <p>The precondition that must be met for a conversation message to be included in the segment.</p>
+         */
+        _FinalStage precondition(@NotNull Precondition precondition);
     }
 
     public interface _FinalStage {
@@ -168,12 +167,12 @@ public final class SegmentRequest implements ISegmentBase {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements NameStage, PreconditionStage, SegmentIdStage, _FinalStage {
+    public static final class Builder implements NameStage, SegmentIdStage, PreconditionStage, _FinalStage {
         private String name;
 
-        private Precondition precondition;
-
         private EntityIdBase segmentId;
+
+        private Precondition precondition;
 
         private Optional<SegmentStatus> status = Optional.empty();
 
@@ -188,8 +187,8 @@ public final class SegmentRequest implements ISegmentBase {
         public Builder from(SegmentRequest other) {
             name(other.getName());
             description(other.getDescription());
-            precondition(other.getPrecondition());
             segmentId(other.getSegmentId());
+            precondition(other.getPrecondition());
             status(other.getStatus());
             return this;
         }
@@ -201,20 +200,8 @@ public final class SegmentRequest implements ISegmentBase {
          */
         @java.lang.Override
         @JsonSetter("name")
-        public PreconditionStage name(@NotNull String name) {
+        public SegmentIdStage name(@NotNull String name) {
             this.name = Objects.requireNonNull(name, "name must not be null");
-            return this;
-        }
-
-        /**
-         * <p>The precondition that must be met for a conversation message to be included in the segment.</p>
-         * <p>The precondition that must be met for a conversation message to be included in the segment.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("precondition")
-        public SegmentIdStage precondition(@NotNull Precondition precondition) {
-            this.precondition = Objects.requireNonNull(precondition, "precondition must not be null");
             return this;
         }
 
@@ -225,8 +212,20 @@ public final class SegmentRequest implements ISegmentBase {
          */
         @java.lang.Override
         @JsonSetter("segmentId")
-        public _FinalStage segmentId(@NotNull EntityIdBase segmentId) {
+        public PreconditionStage segmentId(@NotNull EntityIdBase segmentId) {
             this.segmentId = Objects.requireNonNull(segmentId, "segmentId must not be null");
+            return this;
+        }
+
+        /**
+         * <p>The precondition that must be met for a conversation message to be included in the segment.</p>
+         * <p>The precondition that must be met for a conversation message to be included in the segment.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("precondition")
+        public _FinalStage precondition(@NotNull Precondition precondition) {
+            this.precondition = Objects.requireNonNull(precondition, "precondition must not be null");
             return this;
         }
 
@@ -272,7 +271,7 @@ public final class SegmentRequest implements ISegmentBase {
 
         @java.lang.Override
         public SegmentRequest build() {
-            return new SegmentRequest(name, description, precondition, segmentId, status, additionalProperties);
+            return new SegmentRequest(name, description, segmentId, precondition, status, additionalProperties);
         }
     }
 }

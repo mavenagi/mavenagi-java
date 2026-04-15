@@ -12,7 +12,6 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
-import com.mavenagi.resources.commons.types.Precondition;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -26,18 +25,11 @@ public final class SegmentBase implements ISegmentBase {
 
     private final Optional<String> description;
 
-    private final Precondition precondition;
-
     private final Map<String, Object> additionalProperties;
 
-    private SegmentBase(
-            String name,
-            Optional<String> description,
-            Precondition precondition,
-            Map<String, Object> additionalProperties) {
+    private SegmentBase(String name, Optional<String> description, Map<String, Object> additionalProperties) {
         this.name = name;
         this.description = description;
-        this.precondition = precondition;
         this.additionalProperties = additionalProperties;
     }
 
@@ -59,15 +51,6 @@ public final class SegmentBase implements ISegmentBase {
         return description;
     }
 
-    /**
-     * @return The precondition that must be met for a conversation message to be included in the segment.
-     */
-    @JsonProperty("precondition")
-    @java.lang.Override
-    public Precondition getPrecondition() {
-        return precondition;
-    }
-
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -80,14 +63,12 @@ public final class SegmentBase implements ISegmentBase {
     }
 
     private boolean equalTo(SegmentBase other) {
-        return name.equals(other.name)
-                && description.equals(other.description)
-                && precondition.equals(other.precondition);
+        return name.equals(other.name) && description.equals(other.description);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.name, this.description, this.precondition);
+        return Objects.hash(this.name, this.description);
     }
 
     @java.lang.Override
@@ -103,16 +84,9 @@ public final class SegmentBase implements ISegmentBase {
         /**
          * <p>The name of the segment.</p>
          */
-        PreconditionStage name(@NotNull String name);
+        _FinalStage name(@NotNull String name);
 
         Builder from(SegmentBase other);
-    }
-
-    public interface PreconditionStage {
-        /**
-         * <p>The precondition that must be met for a conversation message to be included in the segment.</p>
-         */
-        _FinalStage precondition(@NotNull Precondition precondition);
     }
 
     public interface _FinalStage {
@@ -127,10 +101,8 @@ public final class SegmentBase implements ISegmentBase {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements NameStage, PreconditionStage, _FinalStage {
+    public static final class Builder implements NameStage, _FinalStage {
         private String name;
-
-        private Precondition precondition;
 
         private Optional<String> description = Optional.empty();
 
@@ -143,7 +115,6 @@ public final class SegmentBase implements ISegmentBase {
         public Builder from(SegmentBase other) {
             name(other.getName());
             description(other.getDescription());
-            precondition(other.getPrecondition());
             return this;
         }
 
@@ -154,20 +125,8 @@ public final class SegmentBase implements ISegmentBase {
          */
         @java.lang.Override
         @JsonSetter("name")
-        public PreconditionStage name(@NotNull String name) {
+        public _FinalStage name(@NotNull String name) {
             this.name = Objects.requireNonNull(name, "name must not be null");
-            return this;
-        }
-
-        /**
-         * <p>The precondition that must be met for a conversation message to be included in the segment.</p>
-         * <p>The precondition that must be met for a conversation message to be included in the segment.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("precondition")
-        public _FinalStage precondition(@NotNull Precondition precondition) {
-            this.precondition = Objects.requireNonNull(precondition, "precondition must not be null");
             return this;
         }
 
@@ -193,7 +152,7 @@ public final class SegmentBase implements ISegmentBase {
 
         @java.lang.Override
         public SegmentBase build() {
-            return new SegmentBase(name, description, precondition, additionalProperties);
+            return new SegmentBase(name, description, additionalProperties);
         }
     }
 }

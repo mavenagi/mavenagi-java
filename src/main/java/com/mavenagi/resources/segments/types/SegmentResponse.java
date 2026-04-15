@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
 import com.mavenagi.resources.commons.types.EntityId;
-import com.mavenagi.resources.commons.types.Precondition;
+import com.mavenagi.resources.commons.types.PreconditionResponse;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,9 +28,9 @@ public final class SegmentResponse implements ISegmentBase {
 
     private final Optional<String> description;
 
-    private final Precondition precondition;
-
     private final EntityId segmentId;
+
+    private final PreconditionResponse precondition;
 
     private final OffsetDateTime createdAt;
 
@@ -49,8 +49,8 @@ public final class SegmentResponse implements ISegmentBase {
     private SegmentResponse(
             String name,
             Optional<String> description,
-            Precondition precondition,
             EntityId segmentId,
+            PreconditionResponse precondition,
             OffsetDateTime createdAt,
             OffsetDateTime updatedAt,
             Optional<Long> referencedKnowledgeBaseCount,
@@ -60,8 +60,8 @@ public final class SegmentResponse implements ISegmentBase {
             Map<String, Object> additionalProperties) {
         this.name = name;
         this.description = description;
-        this.precondition = precondition;
         this.segmentId = segmentId;
+        this.precondition = precondition;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.referencedKnowledgeBaseCount = referencedKnowledgeBaseCount;
@@ -90,20 +90,19 @@ public final class SegmentResponse implements ISegmentBase {
     }
 
     /**
-     * @return The precondition that must be met for a conversation message to be included in the segment.
-     */
-    @JsonProperty("precondition")
-    @java.lang.Override
-    public Precondition getPrecondition() {
-        return precondition;
-    }
-
-    /**
      * @return ID that uniquely identifies this segment
      */
     @JsonProperty("segmentId")
     public EntityId getSegmentId() {
         return segmentId;
+    }
+
+    /**
+     * @return The precondition that must be met for a conversation message to be included in the segment.
+     */
+    @JsonProperty("precondition")
+    public PreconditionResponse getPrecondition() {
+        return precondition;
     }
 
     /**
@@ -173,8 +172,8 @@ public final class SegmentResponse implements ISegmentBase {
     private boolean equalTo(SegmentResponse other) {
         return name.equals(other.name)
                 && description.equals(other.description)
-                && precondition.equals(other.precondition)
                 && segmentId.equals(other.segmentId)
+                && precondition.equals(other.precondition)
                 && createdAt.equals(other.createdAt)
                 && updatedAt.equals(other.updatedAt)
                 && referencedKnowledgeBaseCount.equals(other.referencedKnowledgeBaseCount)
@@ -188,8 +187,8 @@ public final class SegmentResponse implements ISegmentBase {
         return Objects.hash(
                 this.name,
                 this.description,
-                this.precondition,
                 this.segmentId,
+                this.precondition,
                 this.createdAt,
                 this.updatedAt,
                 this.referencedKnowledgeBaseCount,
@@ -211,23 +210,23 @@ public final class SegmentResponse implements ISegmentBase {
         /**
          * <p>The name of the segment.</p>
          */
-        PreconditionStage name(@NotNull String name);
+        SegmentIdStage name(@NotNull String name);
 
         Builder from(SegmentResponse other);
-    }
-
-    public interface PreconditionStage {
-        /**
-         * <p>The precondition that must be met for a conversation message to be included in the segment.</p>
-         */
-        SegmentIdStage precondition(@NotNull Precondition precondition);
     }
 
     public interface SegmentIdStage {
         /**
          * <p>ID that uniquely identifies this segment</p>
          */
-        CreatedAtStage segmentId(@NotNull EntityId segmentId);
+        PreconditionStage segmentId(@NotNull EntityId segmentId);
+    }
+
+    public interface PreconditionStage {
+        /**
+         * <p>The precondition that must be met for a conversation message to be included in the segment.</p>
+         */
+        CreatedAtStage precondition(@NotNull PreconditionResponse precondition);
     }
 
     public interface CreatedAtStage {
@@ -291,17 +290,17 @@ public final class SegmentResponse implements ISegmentBase {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
             implements NameStage,
-                    PreconditionStage,
                     SegmentIdStage,
+                    PreconditionStage,
                     CreatedAtStage,
                     UpdatedAtStage,
                     StatusStage,
                     _FinalStage {
         private String name;
 
-        private Precondition precondition;
-
         private EntityId segmentId;
+
+        private PreconditionResponse precondition;
 
         private OffsetDateTime createdAt;
 
@@ -326,8 +325,8 @@ public final class SegmentResponse implements ISegmentBase {
         public Builder from(SegmentResponse other) {
             name(other.getName());
             description(other.getDescription());
-            precondition(other.getPrecondition());
             segmentId(other.getSegmentId());
+            precondition(other.getPrecondition());
             createdAt(other.getCreatedAt());
             updatedAt(other.getUpdatedAt());
             referencedKnowledgeBaseCount(other.getReferencedKnowledgeBaseCount());
@@ -344,20 +343,8 @@ public final class SegmentResponse implements ISegmentBase {
          */
         @java.lang.Override
         @JsonSetter("name")
-        public PreconditionStage name(@NotNull String name) {
+        public SegmentIdStage name(@NotNull String name) {
             this.name = Objects.requireNonNull(name, "name must not be null");
-            return this;
-        }
-
-        /**
-         * <p>The precondition that must be met for a conversation message to be included in the segment.</p>
-         * <p>The precondition that must be met for a conversation message to be included in the segment.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("precondition")
-        public SegmentIdStage precondition(@NotNull Precondition precondition) {
-            this.precondition = Objects.requireNonNull(precondition, "precondition must not be null");
             return this;
         }
 
@@ -368,8 +355,20 @@ public final class SegmentResponse implements ISegmentBase {
          */
         @java.lang.Override
         @JsonSetter("segmentId")
-        public CreatedAtStage segmentId(@NotNull EntityId segmentId) {
+        public PreconditionStage segmentId(@NotNull EntityId segmentId) {
             this.segmentId = Objects.requireNonNull(segmentId, "segmentId must not be null");
+            return this;
+        }
+
+        /**
+         * <p>The precondition that must be met for a conversation message to be included in the segment.</p>
+         * <p>The precondition that must be met for a conversation message to be included in the segment.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("precondition")
+        public CreatedAtStage precondition(@NotNull PreconditionResponse precondition) {
+            this.precondition = Objects.requireNonNull(precondition, "precondition must not be null");
             return this;
         }
 
@@ -504,8 +503,8 @@ public final class SegmentResponse implements ISegmentBase {
             return new SegmentResponse(
                     name,
                     description,
-                    precondition,
                     segmentId,
+                    precondition,
                     createdAt,
                     updatedAt,
                     referencedKnowledgeBaseCount,
