@@ -77,6 +77,8 @@ public final class ConversationFilter {
 
     private final Optional<SimulationFilter> simulationFilter;
 
+    private final Optional<IntelligentFieldFilter> intelligentFields;
+
     private final Map<String, Object> additionalProperties;
 
     private ConversationFilter(
@@ -104,6 +106,7 @@ public final class ConversationFilter {
             Optional<List<EntityIdFilter>> matchedSegmentIds,
             Optional<List<EntityIdFilter>> inboxItemIds,
             Optional<SimulationFilter> simulationFilter,
+            Optional<IntelligentFieldFilter> intelligentFields,
             Map<String, Object> additionalProperties) {
         this.search = search;
         this.createdAfter = createdAfter;
@@ -129,6 +132,7 @@ public final class ConversationFilter {
         this.matchedSegmentIds = matchedSegmentIds;
         this.inboxItemIds = inboxItemIds;
         this.simulationFilter = simulationFilter;
+        this.intelligentFields = intelligentFields;
         this.additionalProperties = additionalProperties;
     }
 
@@ -345,6 +349,14 @@ public final class ConversationFilter {
         return simulationFilter;
     }
 
+    /**
+     * @return Filter by intelligent field values. All conditions are ANDed together.
+     */
+    @JsonProperty("intelligentFields")
+    public Optional<IntelligentFieldFilter> getIntelligentFields() {
+        return intelligentFields;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -380,7 +392,8 @@ public final class ConversationFilter {
                 && hasAttachment.equals(other.hasAttachment)
                 && matchedSegmentIds.equals(other.matchedSegmentIds)
                 && inboxItemIds.equals(other.inboxItemIds)
-                && simulationFilter.equals(other.simulationFilter);
+                && simulationFilter.equals(other.simulationFilter)
+                && intelligentFields.equals(other.intelligentFields);
     }
 
     @java.lang.Override
@@ -409,7 +422,8 @@ public final class ConversationFilter {
                 this.hasAttachment,
                 this.matchedSegmentIds,
                 this.inboxItemIds,
-                this.simulationFilter);
+                this.simulationFilter,
+                this.intelligentFields);
     }
 
     @java.lang.Override
@@ -471,6 +485,8 @@ public final class ConversationFilter {
 
         private Optional<SimulationFilter> simulationFilter = Optional.empty();
 
+        private Optional<IntelligentFieldFilter> intelligentFields = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -501,6 +517,7 @@ public final class ConversationFilter {
             matchedSegmentIds(other.getMatchedSegmentIds());
             inboxItemIds(other.getInboxItemIds());
             simulationFilter(other.getSimulationFilter());
+            intelligentFields(other.getIntelligentFields());
             return this;
         }
 
@@ -861,6 +878,20 @@ public final class ConversationFilter {
             return this;
         }
 
+        /**
+         * <p>Filter by intelligent field values. All conditions are ANDed together.</p>
+         */
+        @JsonSetter(value = "intelligentFields", nulls = Nulls.SKIP)
+        public Builder intelligentFields(Optional<IntelligentFieldFilter> intelligentFields) {
+            this.intelligentFields = intelligentFields;
+            return this;
+        }
+
+        public Builder intelligentFields(IntelligentFieldFilter intelligentFields) {
+            this.intelligentFields = Optional.ofNullable(intelligentFields);
+            return this;
+        }
+
         public ConversationFilter build() {
             return new ConversationFilter(
                     search,
@@ -887,6 +918,7 @@ public final class ConversationFilter {
                     matchedSegmentIds,
                     inboxItemIds,
                     simulationFilter,
+                    intelligentFields,
                     additionalProperties);
         }
     }
