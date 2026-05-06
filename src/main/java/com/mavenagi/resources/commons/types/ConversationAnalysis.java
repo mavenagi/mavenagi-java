@@ -25,7 +25,7 @@ public final class ConversationAnalysis {
 
     private final Optional<String> agentResponse;
 
-    private final Optional<String> resolutionStatus;
+    private final Optional<ResolutionStatus> resolutionStatus;
 
     private final Optional<String> category;
 
@@ -50,7 +50,7 @@ public final class ConversationAnalysis {
     private ConversationAnalysis(
             Optional<String> userRequest,
             Optional<String> agentResponse,
-            Optional<String> resolutionStatus,
+            Optional<ResolutionStatus> resolutionStatus,
             Optional<String> category,
             Optional<Sentiment> sentiment,
             Optional<Quality> quality,
@@ -96,7 +96,7 @@ public final class ConversationAnalysis {
      * @return Generated resolution status of the conversation
      */
     @JsonProperty("resolutionStatus")
-    public Optional<String> getResolutionStatus() {
+    public Optional<ResolutionStatus> getResolutionStatus() {
         return resolutionStatus;
     }
 
@@ -230,7 +230,7 @@ public final class ConversationAnalysis {
 
         private Optional<String> agentResponse = Optional.empty();
 
-        private Optional<String> resolutionStatus = Optional.empty();
+        private Optional<ResolutionStatus> resolutionStatus = Optional.empty();
 
         private Optional<String> category = Optional.empty();
 
@@ -303,12 +303,12 @@ public final class ConversationAnalysis {
          * <p>Generated resolution status of the conversation</p>
          */
         @JsonSetter(value = "resolutionStatus", nulls = Nulls.SKIP)
-        public Builder resolutionStatus(Optional<String> resolutionStatus) {
+        public Builder resolutionStatus(Optional<ResolutionStatus> resolutionStatus) {
             this.resolutionStatus = resolutionStatus;
             return this;
         }
 
-        public Builder resolutionStatus(String resolutionStatus) {
+        public Builder resolutionStatus(ResolutionStatus resolutionStatus) {
             this.resolutionStatus = Optional.ofNullable(resolutionStatus);
             return this;
         }

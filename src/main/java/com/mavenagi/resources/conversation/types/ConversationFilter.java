@@ -17,6 +17,7 @@ import com.mavenagi.resources.commons.types.FeedbackType;
 import com.mavenagi.resources.commons.types.NumberRange;
 import com.mavenagi.resources.commons.types.Quality;
 import com.mavenagi.resources.commons.types.QualityReason;
+import com.mavenagi.resources.commons.types.ResolutionStatus;
 import com.mavenagi.resources.commons.types.ResponseLength;
 import com.mavenagi.resources.commons.types.Sentiment;
 import java.time.OffsetDateTime;

@@ -20,15 +20,44 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ErrorMessage.Builder.class)
 public final class ErrorMessage {
+    private final Optional<Integer> status;
+
+    private final Optional<String> error;
+
     private final Optional<String> message;
 
     private final Map<String, Object> additionalProperties;
 
-    private ErrorMessage(Optional<String> message, Map<String, Object> additionalProperties) {
+    private ErrorMessage(
+            Optional<Integer> status,
+            Optional<String> error,
+            Optional<String> message,
+            Map<String, Object> additionalProperties) {
+        this.status = status;
+        this.error = error;
         this.message = message;
         this.additionalProperties = additionalProperties;
     }
 
+    /**
+     * @return HTTP status code returned by the API.
+     */
+    @JsonProperty("status")
+    public Optional<Integer> getStatus() {
+        return status;
+    }
+
+    /**
+     * @return HTTP reason phrase for the status code.
+     */
+    @JsonProperty("error")
+    public Optional<String> getError() {
+        return error;
+    }
+
+    /**
+     * @return Human-readable error details.
+     */
     @JsonProperty("message")
     public Optional<String> getMessage() {
         return message;
@@ -46,12 +75,12 @@ public final class ErrorMessage {
     }
 
     private boolean equalTo(ErrorMessage other) {
-        return message.equals(other.message);
+        return status.equals(other.status) && error.equals(other.error) && message.equals(other.message);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.message);
+        return Objects.hash(this.status, this.error, this.message);
     }
 
     @java.lang.Override
@@ -65,6 +94,10 @@ public final class ErrorMessage {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
+        private Optional<Integer> status = Optional.empty();
+
+        private Optional<String> error = Optional.empty();
+
         private Optional<String> message = Optional.empty();
 
         @JsonAnySetter
@@ -73,10 +106,43 @@ public final class ErrorMessage {
         private Builder() {}
 
         public Builder from(ErrorMessage other) {
+            status(other.getStatus());
+            error(other.getError());
             message(other.getMessage());
             return this;
         }
 
+        /**
+         * <p>HTTP status code returned by the API.</p>
+         */
+        @JsonSetter(value = "status", nulls = Nulls.SKIP)
+        public Builder status(Optional<Integer> status) {
+            this.status = status;
+            return this;
+        }
+
+        public Builder status(Integer status) {
+            this.status = Optional.ofNullable(status);
+            return this;
+        }
+
+        /**
+         * <p>HTTP reason phrase for the status code.</p>
+         */
+        @JsonSetter(value = "error", nulls = Nulls.SKIP)
+        public Builder error(Optional<String> error) {
+            this.error = error;
+            return this;
+        }
+
+        public Builder error(String error) {
+            this.error = Optional.ofNullable(error);
+            return this;
+        }
+
+        /**
+         * <p>Human-readable error details.</p>
+         */
         @JsonSetter(value = "message", nulls = Nulls.SKIP)
         public Builder message(Optional<String> message) {
             this.message = message;
@@ -89,7 +155,7 @@ public final class ErrorMessage {
         }
 
         public ErrorMessage build() {
-            return new ErrorMessage(message, additionalProperties);
+            return new ErrorMessage(status, error, message, additionalProperties);
         }
     }
 }

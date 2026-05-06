@@ -19,6 +19,7 @@ import com.mavenagi.resources.commons.errors.BadRequestError;
 import com.mavenagi.resources.commons.errors.NotFoundError;
 import com.mavenagi.resources.commons.errors.PayloadTooLargeError;
 import com.mavenagi.resources.commons.errors.ServerError;
+import com.mavenagi.resources.commons.errors.TooManyRequestsError;
 import com.mavenagi.resources.commons.types.ErrorMessage;
 import com.mavenagi.resources.organizations.types.CreateOrganizationRequest;
 import com.mavenagi.resources.organizations.types.Organization;
@@ -99,6 +100,9 @@ public class RawOrganizationsClient {
                     case 413:
                         throw new PayloadTooLargeError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                    case 429:
+                        throw new TooManyRequestsError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
                     case 500:
                         throw new ServerError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
@@ -159,6 +163,9 @@ public class RawOrganizationsClient {
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
                     case 413:
                         throw new PayloadTooLargeError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                    case 429:
+                        throw new TooManyRequestsError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
                     case 500:
                         throw new ServerError(
@@ -249,6 +256,9 @@ public class RawOrganizationsClient {
                     case 413:
                         throw new PayloadTooLargeError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                    case 429:
+                        throw new TooManyRequestsError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
                     case 500:
                         throw new ServerError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
@@ -314,6 +324,9 @@ public class RawOrganizationsClient {
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
                     case 413:
                         throw new PayloadTooLargeError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                    case 429:
+                        throw new TooManyRequestsError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
                     case 500:
                         throw new ServerError(
@@ -394,6 +407,9 @@ public class RawOrganizationsClient {
                     case 413:
                         throw new PayloadTooLargeError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                    case 429:
+                        throw new TooManyRequestsError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
                     case 500:
                         throw new ServerError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
@@ -471,6 +487,9 @@ public class RawOrganizationsClient {
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
                     case 413:
                         throw new PayloadTooLargeError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                    case 429:
+                        throw new TooManyRequestsError(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
                     case 500:
                         throw new ServerError(

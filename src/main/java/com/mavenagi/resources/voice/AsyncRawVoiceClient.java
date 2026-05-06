@@ -15,6 +15,7 @@ import com.mavenagi.resources.commons.errors.BadRequestError;
 import com.mavenagi.resources.commons.errors.NotFoundError;
 import com.mavenagi.resources.commons.errors.PayloadTooLargeError;
 import com.mavenagi.resources.commons.errors.ServerError;
+import com.mavenagi.resources.commons.errors.TooManyRequestsError;
 import com.mavenagi.resources.commons.types.ErrorMessage;
 import com.mavenagi.resources.voice.types.VoiceSessionTokenRequest;
 import com.mavenagi.resources.voice.types.VoiceSessionTokenResponse;
@@ -113,6 +114,11 @@ public class AsyncRawVoiceClient {
                                 return;
                             case 413:
                                 future.completeExceptionally(new PayloadTooLargeError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
+                                        response));
+                                return;
+                            case 429:
+                                future.completeExceptionally(new TooManyRequestsError(
                                         ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
                                         response));
                                 return;
