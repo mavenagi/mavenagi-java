@@ -16,7 +16,13 @@ public final class ResolutionStatus {
 
     public static final ResolutionStatus RESOLVED = new ResolutionStatus(Value.RESOLVED, "RESOLVED");
 
+    public static final ResolutionStatus CONTENT_SAFETY_FLAGGED =
+            new ResolutionStatus(Value.CONTENT_SAFETY_FLAGGED, "CONTENT_SAFETY_FLAGGED");
+
     public static final ResolutionStatus INELIGIBLE = new ResolutionStatus(Value.INELIGIBLE, "INELIGIBLE");
+
+    public static final ResolutionStatus PROMPT_ATTACK_FLAGGED =
+            new ResolutionStatus(Value.PROMPT_ATTACK_FLAGGED, "PROMPT_ATTACK_FLAGGED");
 
     public static final ResolutionStatus UNKNOWN = new ResolutionStatus(Value.UNKNOWN, "UNKNOWN");
 
@@ -62,8 +68,12 @@ public final class ResolutionStatus {
                 return visitor.visitEscalated();
             case RESOLVED:
                 return visitor.visitResolved();
+            case CONTENT_SAFETY_FLAGGED:
+                return visitor.visitContentSafetyFlagged();
             case INELIGIBLE:
                 return visitor.visitIneligible();
+            case PROMPT_ATTACK_FLAGGED:
+                return visitor.visitPromptAttackFlagged();
             case UNKNOWN:
                 return visitor.visitUnknown();
             case ERROR:
@@ -85,8 +95,12 @@ public final class ResolutionStatus {
                 return ESCALATED;
             case "RESOLVED":
                 return RESOLVED;
+            case "CONTENT_SAFETY_FLAGGED":
+                return CONTENT_SAFETY_FLAGGED;
             case "INELIGIBLE":
                 return INELIGIBLE;
+            case "PROMPT_ATTACK_FLAGGED":
+                return PROMPT_ATTACK_FLAGGED;
             case "UNKNOWN":
                 return UNKNOWN;
             case "ERROR":
@@ -109,6 +123,10 @@ public final class ResolutionStatus {
 
         NEGATIVE_FEEDBACK,
 
+        CONTENT_SAFETY_FLAGGED,
+
+        PROMPT_ATTACK_FLAGGED,
+
         INELIGIBLE,
 
         _UNKNOWN
@@ -126,6 +144,10 @@ public final class ResolutionStatus {
         T visitEscalated();
 
         T visitNegativeFeedback();
+
+        T visitContentSafetyFlagged();
+
+        T visitPromptAttackFlagged();
 
         T visitIneligible();
 

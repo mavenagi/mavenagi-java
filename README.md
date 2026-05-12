@@ -200,7 +200,7 @@ Add the dependency in your `build.gradle` file:
 
 ```groovy
 dependencies {
-  implementation 'com.mavenagi:mavenagi-java:1.2.41'
+  implementation 'com.mavenagi:mavenagi-java:1.2.42'
 }
 ```
 
@@ -212,6 +212,6 @@ Add the dependency in your `pom.xml` file:
 <dependency>
   <groupId>com.mavenagi</groupId>
   <artifactId>mavenagi-java</artifactId>
-  <version>1.2.41</version>
+  <version>1.2.42</version>
 </dependency>
 ```
