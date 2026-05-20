@@ -74,6 +74,10 @@ public final class ConversationFilter {
 
     private final Optional<List<EntityIdFilter>> matchedSegmentIds;
 
+    private final Optional<List<EntityIdFilter>> matchedCharterIds;
+
+    private final Optional<Boolean> anyMsgCharterMode;
+
     private final Optional<List<EntityIdFilter>> inboxItemIds;
 
     private final Optional<SimulationFilter> simulationFilter;
@@ -105,6 +109,8 @@ public final class ConversationFilter {
             Optional<NumberRange> userMessageCount,
             Optional<Boolean> hasAttachment,
             Optional<List<EntityIdFilter>> matchedSegmentIds,
+            Optional<List<EntityIdFilter>> matchedCharterIds,
+            Optional<Boolean> anyMsgCharterMode,
             Optional<List<EntityIdFilter>> inboxItemIds,
             Optional<SimulationFilter> simulationFilter,
             Optional<IntelligentFieldFilter> intelligentFields,
@@ -131,6 +137,8 @@ public final class ConversationFilter {
         this.userMessageCount = userMessageCount;
         this.hasAttachment = hasAttachment;
         this.matchedSegmentIds = matchedSegmentIds;
+        this.matchedCharterIds = matchedCharterIds;
+        this.anyMsgCharterMode = anyMsgCharterMode;
         this.inboxItemIds = inboxItemIds;
         this.simulationFilter = simulationFilter;
         this.intelligentFields = intelligentFields;
@@ -335,6 +343,25 @@ public final class ConversationFilter {
     }
 
     /**
+     * @return Filter by the charters that any bot-response message on a conversation matched.
+     * References without a matching charter for the calling agent contribute nothing
+     * to the filter — they neither error nor warn, they simply produce no matches.
+     */
+    @JsonProperty("matchedCharterIds")
+    public Optional<List<EntityIdFilter>> getMatchedCharterIds() {
+        return matchedCharterIds;
+    }
+
+    /**
+     * @return Filter by whether any bot-response message in the conversation ran in charter mode.
+     * Omit to match every conversation regardless of charter state.
+     */
+    @JsonProperty("anyMsgCharterMode")
+    public Optional<Boolean> getAnyMsgCharterMode() {
+        return anyMsgCharterMode;
+    }
+
+    /**
      * @return Filter by inbox item IDs associated with the conversation
      */
     @JsonProperty("inboxItemIds")
@@ -392,6 +419,8 @@ public final class ConversationFilter {
                 && userMessageCount.equals(other.userMessageCount)
                 && hasAttachment.equals(other.hasAttachment)
                 && matchedSegmentIds.equals(other.matchedSegmentIds)
+                && matchedCharterIds.equals(other.matchedCharterIds)
+                && anyMsgCharterMode.equals(other.anyMsgCharterMode)
                 && inboxItemIds.equals(other.inboxItemIds)
                 && simulationFilter.equals(other.simulationFilter)
                 && intelligentFields.equals(other.intelligentFields);
@@ -422,6 +451,8 @@ public final class ConversationFilter {
                 this.userMessageCount,
                 this.hasAttachment,
                 this.matchedSegmentIds,
+                this.matchedCharterIds,
+                this.anyMsgCharterMode,
                 this.inboxItemIds,
                 this.simulationFilter,
                 this.intelligentFields);
@@ -482,6 +513,10 @@ public final class ConversationFilter {
 
         private Optional<List<EntityIdFilter>> matchedSegmentIds = Optional.empty();
 
+        private Optional<List<EntityIdFilter>> matchedCharterIds = Optional.empty();
+
+        private Optional<Boolean> anyMsgCharterMode = Optional.empty();
+
         private Optional<List<EntityIdFilter>> inboxItemIds = Optional.empty();
 
         private Optional<SimulationFilter> simulationFilter = Optional.empty();
@@ -516,6 +551,8 @@ public final class ConversationFilter {
             userMessageCount(other.getUserMessageCount());
             hasAttachment(other.getHasAttachment());
             matchedSegmentIds(other.getMatchedSegmentIds());
+            matchedCharterIds(other.getMatchedCharterIds());
+            anyMsgCharterMode(other.getAnyMsgCharterMode());
             inboxItemIds(other.getInboxItemIds());
             simulationFilter(other.getSimulationFilter());
             intelligentFields(other.getIntelligentFields());
@@ -852,6 +889,37 @@ public final class ConversationFilter {
         }
 
         /**
+         * <p>Filter by the charters that any bot-response message on a conversation matched.
+         * References without a matching charter for the calling agent contribute nothing
+         * to the filter — they neither error nor warn, they simply produce no matches.</p>
+         */
+        @JsonSetter(value = "matchedCharterIds", nulls = Nulls.SKIP)
+        public Builder matchedCharterIds(Optional<List<EntityIdFilter>> matchedCharterIds) {
+            this.matchedCharterIds = matchedCharterIds;
+            return this;
+        }
+
+        public Builder matchedCharterIds(List<EntityIdFilter> matchedCharterIds) {
+            this.matchedCharterIds = Optional.ofNullable(matchedCharterIds);
+            return this;
+        }
+
+        /**
+         * <p>Filter by whether any bot-response message in the conversation ran in charter mode.
+         * Omit to match every conversation regardless of charter state.</p>
+         */
+        @JsonSetter(value = "anyMsgCharterMode", nulls = Nulls.SKIP)
+        public Builder anyMsgCharterMode(Optional<Boolean> anyMsgCharterMode) {
+            this.anyMsgCharterMode = anyMsgCharterMode;
+            return this;
+        }
+
+        public Builder anyMsgCharterMode(Boolean anyMsgCharterMode) {
+            this.anyMsgCharterMode = Optional.ofNullable(anyMsgCharterMode);
+            return this;
+        }
+
+        /**
          * <p>Filter by inbox item IDs associated with the conversation</p>
          */
         @JsonSetter(value = "inboxItemIds", nulls = Nulls.SKIP)
@@ -917,6 +985,8 @@ public final class ConversationFilter {
                     userMessageCount,
                     hasAttachment,
                     matchedSegmentIds,
+                    matchedCharterIds,
+                    anyMsgCharterMode,
                     inboxItemIds,
                     simulationFilter,
                     intelligentFields,
