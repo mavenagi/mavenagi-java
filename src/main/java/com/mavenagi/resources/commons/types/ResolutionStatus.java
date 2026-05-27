@@ -19,6 +19,8 @@ public final class ResolutionStatus {
     public static final ResolutionStatus CONTENT_SAFETY_FLAGGED =
             new ResolutionStatus(Value.CONTENT_SAFETY_FLAGGED, "CONTENT_SAFETY_FLAGGED");
 
+    public static final ResolutionStatus HANGUP = new ResolutionStatus(Value.HANGUP, "HANGUP");
+
     public static final ResolutionStatus INELIGIBLE = new ResolutionStatus(Value.INELIGIBLE, "INELIGIBLE");
 
     public static final ResolutionStatus PROMPT_ATTACK_FLAGGED =
@@ -70,6 +72,8 @@ public final class ResolutionStatus {
                 return visitor.visitResolved();
             case CONTENT_SAFETY_FLAGGED:
                 return visitor.visitContentSafetyFlagged();
+            case HANGUP:
+                return visitor.visitHangup();
             case INELIGIBLE:
                 return visitor.visitIneligible();
             case PROMPT_ATTACK_FLAGGED:
@@ -97,6 +101,8 @@ public final class ResolutionStatus {
                 return RESOLVED;
             case "CONTENT_SAFETY_FLAGGED":
                 return CONTENT_SAFETY_FLAGGED;
+            case "HANGUP":
+                return HANGUP;
             case "INELIGIBLE":
                 return INELIGIBLE;
             case "PROMPT_ATTACK_FLAGGED":
@@ -127,6 +133,8 @@ public final class ResolutionStatus {
 
         PROMPT_ATTACK_FLAGGED,
 
+        HANGUP,
+
         INELIGIBLE,
 
         _UNKNOWN
@@ -148,6 +156,8 @@ public final class ResolutionStatus {
         T visitContentSafetyFlagged();
 
         T visitPromptAttackFlagged();
+
+        T visitHangup();
 
         T visitIneligible();
 
