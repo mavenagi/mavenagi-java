@@ -35,6 +35,8 @@ public final class KnowledgeBaseVersion implements IKnowledgeBaseVersionRequest 
 
     private final OffsetDateTime updatedAt;
 
+    private final Optional<KnowledgeBaseIndexingProgressState> indexingState;
+
     private final Map<String, Object> additionalProperties;
 
     private KnowledgeBaseVersion(
@@ -44,6 +46,7 @@ public final class KnowledgeBaseVersion implements IKnowledgeBaseVersionRequest 
             Optional<String> errorMessage,
             OffsetDateTime createdAt,
             OffsetDateTime updatedAt,
+            Optional<KnowledgeBaseIndexingProgressState> indexingState,
             Map<String, Object> additionalProperties) {
         this.type = type;
         this.versionId = versionId;
@@ -51,6 +54,7 @@ public final class KnowledgeBaseVersion implements IKnowledgeBaseVersionRequest 
         this.errorMessage = errorMessage;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.indexingState = indexingState;
         this.additionalProperties = additionalProperties;
     }
 
@@ -103,6 +107,14 @@ public final class KnowledgeBaseVersion implements IKnowledgeBaseVersionRequest 
         return updatedAt;
     }
 
+    /**
+     * @return The indexing status of the knowledge base version.
+     */
+    @JsonProperty("indexingState")
+    public Optional<KnowledgeBaseIndexingProgressState> getIndexingState() {
+        return indexingState;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -120,12 +132,20 @@ public final class KnowledgeBaseVersion implements IKnowledgeBaseVersionRequest 
                 && status.equals(other.status)
                 && errorMessage.equals(other.errorMessage)
                 && createdAt.equals(other.createdAt)
-                && updatedAt.equals(other.updatedAt);
+                && updatedAt.equals(other.updatedAt)
+                && indexingState.equals(other.indexingState);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.type, this.versionId, this.status, this.errorMessage, this.createdAt, this.updatedAt);
+        return Objects.hash(
+                this.type,
+                this.versionId,
+                this.status,
+                this.errorMessage,
+                this.createdAt,
+                this.updatedAt,
+                this.indexingState);
     }
 
     @java.lang.Override
@@ -183,6 +203,13 @@ public final class KnowledgeBaseVersion implements IKnowledgeBaseVersionRequest 
         _FinalStage errorMessage(Optional<String> errorMessage);
 
         _FinalStage errorMessage(String errorMessage);
+
+        /**
+         * <p>The indexing status of the knowledge base version.</p>
+         */
+        _FinalStage indexingState(Optional<KnowledgeBaseIndexingProgressState> indexingState);
+
+        _FinalStage indexingState(KnowledgeBaseIndexingProgressState indexingState);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -197,6 +224,8 @@ public final class KnowledgeBaseVersion implements IKnowledgeBaseVersionRequest 
         private OffsetDateTime createdAt;
 
         private OffsetDateTime updatedAt;
+
+        private Optional<KnowledgeBaseIndexingProgressState> indexingState = Optional.empty();
 
         private Optional<String> errorMessage = Optional.empty();
 
@@ -213,6 +242,7 @@ public final class KnowledgeBaseVersion implements IKnowledgeBaseVersionRequest 
             errorMessage(other.getErrorMessage());
             createdAt(other.getCreatedAt());
             updatedAt(other.getUpdatedAt());
+            indexingState(other.getIndexingState());
             return this;
         }
 
@@ -277,6 +307,26 @@ public final class KnowledgeBaseVersion implements IKnowledgeBaseVersionRequest 
         }
 
         /**
+         * <p>The indexing status of the knowledge base version.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage indexingState(KnowledgeBaseIndexingProgressState indexingState) {
+            this.indexingState = Optional.ofNullable(indexingState);
+            return this;
+        }
+
+        /**
+         * <p>The indexing status of the knowledge base version.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "indexingState", nulls = Nulls.SKIP)
+        public _FinalStage indexingState(Optional<KnowledgeBaseIndexingProgressState> indexingState) {
+            this.indexingState = indexingState;
+            return this;
+        }
+
+        /**
          * <p>A user-facing error message that provides more details about a version failure.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -299,7 +349,7 @@ public final class KnowledgeBaseVersion implements IKnowledgeBaseVersionRequest 
         @java.lang.Override
         public KnowledgeBaseVersion build() {
             return new KnowledgeBaseVersion(
-                    type, versionId, status, errorMessage, createdAt, updatedAt, additionalProperties);
+                    type, versionId, status, errorMessage, createdAt, updatedAt, indexingState, additionalProperties);
         }
     }
 }

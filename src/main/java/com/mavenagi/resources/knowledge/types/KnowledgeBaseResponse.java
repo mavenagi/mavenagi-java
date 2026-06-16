@@ -58,6 +58,8 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
 
     private final Optional<String> url;
 
+    private final Optional<KnowledgeBaseIndexingProgressState> indexingState;
+
     private final Map<String, Object> additionalProperties;
 
     private KnowledgeBaseResponse(
@@ -76,6 +78,7 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
             Optional<EntityId> segmentId,
             Set<EntityId> segmentIds,
             Optional<String> url,
+            Optional<KnowledgeBaseIndexingProgressState> indexingState,
             Map<String, Object> additionalProperties) {
         this.name = name;
         this.precondition = precondition;
@@ -92,6 +95,7 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
         this.segmentId = segmentId;
         this.segmentIds = segmentIds;
         this.url = url;
+        this.indexingState = indexingState;
         this.additionalProperties = additionalProperties;
     }
 
@@ -223,6 +227,14 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
         return url;
     }
 
+    /**
+     * @return The indexing status of the latest version of the knowledge base.
+     */
+    @JsonProperty("indexingState")
+    public Optional<KnowledgeBaseIndexingProgressState> getIndexingState() {
+        return indexingState;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -249,7 +261,8 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
                 && refreshFrequency.equals(other.refreshFrequency)
                 && segmentId.equals(other.segmentId)
                 && segmentIds.equals(other.segmentIds)
-                && url.equals(other.url);
+                && url.equals(other.url)
+                && indexingState.equals(other.indexingState);
     }
 
     @java.lang.Override
@@ -269,7 +282,8 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
                 this.refreshFrequency,
                 this.segmentId,
                 this.segmentIds,
-                this.url);
+                this.url,
+                this.indexingState);
     }
 
     @java.lang.Override
@@ -402,6 +416,13 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
         _FinalStage url(Optional<String> url);
 
         _FinalStage url(String url);
+
+        /**
+         * <p>The indexing status of the latest version of the knowledge base.</p>
+         */
+        _FinalStage indexingState(Optional<KnowledgeBaseIndexingProgressState> indexingState);
+
+        _FinalStage indexingState(KnowledgeBaseIndexingProgressState indexingState);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -430,6 +451,8 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
         private LlmInclusionStatus llmInclusionStatus;
 
         private KnowledgeBaseRefreshFrequency refreshFrequency;
+
+        private Optional<KnowledgeBaseIndexingProgressState> indexingState = Optional.empty();
 
         private Optional<String> url = Optional.empty();
 
@@ -467,6 +490,7 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
             segmentId(other.getSegmentId());
             segmentIds(other.getSegmentIds());
             url(other.getUrl());
+            indexingState(other.getIndexingState());
             return this;
         }
 
@@ -568,6 +592,26 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
         @JsonSetter("refreshFrequency")
         public _FinalStage refreshFrequency(@NotNull KnowledgeBaseRefreshFrequency refreshFrequency) {
             this.refreshFrequency = Objects.requireNonNull(refreshFrequency, "refreshFrequency must not be null");
+            return this;
+        }
+
+        /**
+         * <p>The indexing status of the latest version of the knowledge base.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage indexingState(KnowledgeBaseIndexingProgressState indexingState) {
+            this.indexingState = Optional.ofNullable(indexingState);
+            return this;
+        }
+
+        /**
+         * <p>The indexing status of the latest version of the knowledge base.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "indexingState", nulls = Nulls.SKIP)
+        public _FinalStage indexingState(Optional<KnowledgeBaseIndexingProgressState> indexingState) {
+            this.indexingState = indexingState;
             return this;
         }
 
@@ -784,6 +828,7 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
                     segmentId,
                     segmentIds,
                     url,
+                    indexingState,
                     additionalProperties);
         }
     }

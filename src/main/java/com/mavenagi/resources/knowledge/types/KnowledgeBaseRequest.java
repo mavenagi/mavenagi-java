@@ -73,7 +73,11 @@ public final class KnowledgeBaseRequest implements IKnowledgeBaseProperties {
     }
 
     /**
-     * @return Metadata for the knowledge base.
+     * @return Set of 16 key-value pairs that can be attached to an object. This can be useful for storing
+     * additional information about the object in a structured format, and querying for objects
+     * via API or the dashboard.
+     * <p>Keys are strings with a maximum length of 64 characters. Values are strings with a maximum
+     * length of 512 characters.</p>
      */
     @JsonProperty("metadata")
     public Optional<Map<String, String>> getMetadata() {
@@ -139,7 +143,11 @@ public final class KnowledgeBaseRequest implements IKnowledgeBaseProperties {
         _FinalStage precondition(Precondition precondition);
 
         /**
-         * <p>Metadata for the knowledge base.</p>
+         * <p>Set of 16 key-value pairs that can be attached to an object. This can be useful for storing
+         * additional information about the object in a structured format, and querying for objects
+         * via API or the dashboard.</p>
+         * <p>Keys are strings with a maximum length of 64 characters. Values are strings with a maximum
+         * length of 512 characters.</p>
          */
         _FinalStage metadata(Optional<Map<String, String>> metadata);
 
@@ -195,7 +203,11 @@ public final class KnowledgeBaseRequest implements IKnowledgeBaseProperties {
         }
 
         /**
-         * <p>Metadata for the knowledge base.</p>
+         * <p>Set of 16 key-value pairs that can be attached to an object. This can be useful for storing
+         * additional information about the object in a structured format, and querying for objects
+         * via API or the dashboard.</p>
+         * <p>Keys are strings with a maximum length of 64 characters. Values are strings with a maximum
+         * length of 512 characters.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -205,7 +217,11 @@ public final class KnowledgeBaseRequest implements IKnowledgeBaseProperties {
         }
 
         /**
-         * <p>Metadata for the knowledge base.</p>
+         * <p>Set of 16 key-value pairs that can be attached to an object. This can be useful for storing
+         * additional information about the object in a structured format, and querying for objects
+         * via API or the dashboard.</p>
+         * <p>Keys are strings with a maximum length of 64 characters. Values are strings with a maximum
+         * length of 512 characters.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "metadata", nulls = Nulls.SKIP)

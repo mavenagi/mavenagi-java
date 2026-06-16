@@ -43,7 +43,10 @@ public final class UpdateMetadataRequest {
     }
 
     /**
-     * @return The metadata values to add to the conversation.
+     * @return Set of 16 key-value pairs that can be attached to an object. This can be useful for storing
+     * additional information about the object in a structured format, and querying for objects
+     * via API or the dashboard.
+     * <p>Keys and values are strings with a maximum length of 500 characters.</p>
      */
     @JsonProperty("values")
     public Map<String, String> getValues() {
@@ -111,7 +114,10 @@ public final class UpdateMetadataRequest {
         }
 
         /**
-         * <p>The metadata values to add to the conversation.</p>
+         * <p>Set of 16 key-value pairs that can be attached to an object. This can be useful for storing
+         * additional information about the object in a structured format, and querying for objects
+         * via API or the dashboard.</p>
+         * <p>Keys and values are strings with a maximum length of 500 characters.</p>
          */
         @JsonSetter(value = "values", nulls = Nulls.SKIP)
         public Builder values(Map<String, String> values) {

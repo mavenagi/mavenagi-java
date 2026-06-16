@@ -72,6 +72,13 @@ public final class CustomerResponse implements ICustomerBase {
         return description;
     }
 
+    /**
+     * @return Set of 16 key-value pairs that can be attached to an object. This can be useful for storing
+     * additional information about the object in a structured format, and querying for objects
+     * via API or the dashboard.
+     * <p>Keys are strings with a maximum length of 64 characters. Values are strings with a maximum
+     * length of 512 characters.</p>
+     */
     @JsonProperty("metadata")
     @java.lang.Override
     public Map<String, String> getMetadata() {
@@ -176,6 +183,13 @@ public final class CustomerResponse implements ICustomerBase {
 
         _FinalStage description(String description);
 
+        /**
+         * <p>Set of 16 key-value pairs that can be attached to an object. This can be useful for storing
+         * additional information about the object in a structured format, and querying for objects
+         * via API or the dashboard.</p>
+         * <p>Keys are strings with a maximum length of 64 characters. Values are strings with a maximum
+         * length of 512 characters.</p>
+         */
         _FinalStage metadata(Map<String, String> metadata);
 
         _FinalStage putAllMetadata(Map<String, String> metadata);
@@ -337,12 +351,28 @@ public final class CustomerResponse implements ICustomerBase {
             return this;
         }
 
+        /**
+         * <p>Set of 16 key-value pairs that can be attached to an object. This can be useful for storing
+         * additional information about the object in a structured format, and querying for objects
+         * via API or the dashboard.</p>
+         * <p>Keys are strings with a maximum length of 64 characters. Values are strings with a maximum
+         * length of 512 characters.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
         public _FinalStage metadata(String key, String value) {
             this.metadata.put(key, value);
             return this;
         }
 
+        /**
+         * <p>Set of 16 key-value pairs that can be attached to an object. This can be useful for storing
+         * additional information about the object in a structured format, and querying for objects
+         * via API or the dashboard.</p>
+         * <p>Keys are strings with a maximum length of 64 characters. Values are strings with a maximum
+         * length of 512 characters.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
         public _FinalStage putAllMetadata(Map<String, String> metadata) {
             if (metadata != null) {
@@ -351,6 +381,13 @@ public final class CustomerResponse implements ICustomerBase {
             return this;
         }
 
+        /**
+         * <p>Set of 16 key-value pairs that can be attached to an object. This can be useful for storing
+         * additional information about the object in a structured format, and querying for objects
+         * via API or the dashboard.</p>
+         * <p>Keys are strings with a maximum length of 64 characters. Values are strings with a maximum
+         * length of 512 characters.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "metadata", nulls = Nulls.SKIP)
         public _FinalStage metadata(Map<String, String> metadata) {
