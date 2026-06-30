@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public final class ResolutionStatus {
+    public static final ResolutionStatus INCOMPLETE = new ResolutionStatus(Value.INCOMPLETE, "INCOMPLETE");
+
     public static final ResolutionStatus NEGATIVE_FEEDBACK =
             new ResolutionStatus(Value.NEGATIVE_FEEDBACK, "NEGATIVE_FEEDBACK");
 
@@ -62,6 +64,8 @@ public final class ResolutionStatus {
 
     public <T> T visit(Visitor<T> visitor) {
         switch (value) {
+            case INCOMPLETE:
+                return visitor.visitIncomplete();
             case NEGATIVE_FEEDBACK:
                 return visitor.visitNegativeFeedback();
             case IN_PROGRESS:
@@ -91,6 +95,8 @@ public final class ResolutionStatus {
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static ResolutionStatus valueOf(String value) {
         switch (value) {
+            case "INCOMPLETE":
+                return INCOMPLETE;
             case "NEGATIVE_FEEDBACK":
                 return NEGATIVE_FEEDBACK;
             case "IN_PROGRESS":
@@ -127,6 +133,8 @@ public final class ResolutionStatus {
 
         ESCALATED,
 
+        INCOMPLETE,
+
         NEGATIVE_FEEDBACK,
 
         CONTENT_SAFETY_FLAGGED,
@@ -150,6 +158,8 @@ public final class ResolutionStatus {
         T visitResolved();
 
         T visitEscalated();
+
+        T visitIncomplete();
 
         T visitNegativeFeedback();
 
