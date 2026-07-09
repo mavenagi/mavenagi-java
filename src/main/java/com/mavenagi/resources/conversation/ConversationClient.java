@@ -7,6 +7,7 @@ import com.mavenagi.core.ClientOptions;
 import com.mavenagi.core.RequestOptions;
 import com.mavenagi.resources.commons.types.ConversationResponse;
 import com.mavenagi.resources.commons.types.Feedback;
+import com.mavenagi.resources.commons.types.InitializeConversationResponse;
 import com.mavenagi.resources.conversation.requests.ConversationDeleteRequest;
 import com.mavenagi.resources.conversation.requests.ConversationGetRequest;
 import com.mavenagi.resources.conversation.requests.SimulationImportRequest;
@@ -56,7 +57,7 @@ public class ConversationClient {
      * <li>messages can be added to the conversation with the <code>appendNewMessages</code> or <code>ask</code> APIs.</li>
      * </ul>
      */
-    public ConversationResponse initialize(ConversationRequest request) {
+    public InitializeConversationResponse initialize(ConversationRequest request) {
         return this.rawClient.initialize(request).body();
     }
 
@@ -70,7 +71,7 @@ public class ConversationClient {
      * <li>messages can be added to the conversation with the <code>appendNewMessages</code> or <code>ask</code> APIs.</li>
      * </ul>
      */
-    public ConversationResponse initialize(ConversationRequest request, RequestOptions requestOptions) {
+    public InitializeConversationResponse initialize(ConversationRequest request, RequestOptions requestOptions) {
         return this.rawClient.initialize(request, requestOptions).body();
     }
 

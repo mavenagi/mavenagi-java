@@ -15,7 +15,12 @@ public final class EntityType {
 
     public static final EntityType KNOWLEDGE_BASE = new EntityType(Value.KNOWLEDGE_BASE, "KNOWLEDGE_BASE");
 
+    public static final EntityType AGENT_VARIANT = new EntityType(Value.AGENT_VARIANT, "AGENT_VARIANT");
+
     public static final EntityType CHARTER = new EntityType(Value.CHARTER, "CHARTER");
+
+    public static final EntityType CONVERSATION_KICKOFF =
+            new EntityType(Value.CONVERSATION_KICKOFF, "CONVERSATION_KICKOFF");
 
     public static final EntityType CONVERSATION = new EntityType(Value.CONVERSATION, "CONVERSATION");
 
@@ -84,8 +89,12 @@ public final class EntityType {
                 return visitor.visitUser();
             case KNOWLEDGE_BASE:
                 return visitor.visitKnowledgeBase();
+            case AGENT_VARIANT:
+                return visitor.visitAgentVariant();
             case CHARTER:
                 return visitor.visitCharter();
+            case CONVERSATION_KICKOFF:
+                return visitor.visitConversationKickoff();
             case CONVERSATION:
                 return visitor.visitConversation();
             case EVENT_TRIGGER:
@@ -129,8 +138,12 @@ public final class EntityType {
                 return USER;
             case "KNOWLEDGE_BASE":
                 return KNOWLEDGE_BASE;
+            case "AGENT_VARIANT":
+                return AGENT_VARIANT;
             case "CHARTER":
                 return CHARTER;
+            case "CONVERSATION_KICKOFF":
+                return CONVERSATION_KICKOFF;
             case "CONVERSATION":
                 return CONVERSATION;
             case "EVENT_TRIGGER":
@@ -199,6 +212,10 @@ public final class EntityType {
 
         CHARTER,
 
+        CONVERSATION_KICKOFF,
+
+        AGENT_VARIANT,
+
         UNKNOWN
     }
 
@@ -238,6 +255,10 @@ public final class EntityType {
         T visitIntelligentField();
 
         T visitCharter();
+
+        T visitConversationKickoff();
+
+        T visitAgentVariant();
 
         T visitUnknown(String unknownType);
     }

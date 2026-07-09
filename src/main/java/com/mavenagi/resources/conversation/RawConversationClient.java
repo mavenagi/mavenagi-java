@@ -24,6 +24,7 @@ import com.mavenagi.resources.commons.errors.TooManyRequestsError;
 import com.mavenagi.resources.commons.types.ConversationResponse;
 import com.mavenagi.resources.commons.types.ErrorMessage;
 import com.mavenagi.resources.commons.types.Feedback;
+import com.mavenagi.resources.commons.types.InitializeConversationResponse;
 import com.mavenagi.resources.conversation.requests.ConversationDeleteRequest;
 import com.mavenagi.resources.conversation.requests.ConversationGetRequest;
 import com.mavenagi.resources.conversation.requests.SimulationImportRequest;
@@ -74,7 +75,7 @@ public class RawConversationClient {
      * <li>messages can be added to the conversation with the <code>appendNewMessages</code> or <code>ask</code> APIs.</li>
      * </ul>
      */
-    public MavenAGIHttpResponse<ConversationResponse> initialize(ConversationRequest request) {
+    public MavenAGIHttpResponse<InitializeConversationResponse> initialize(ConversationRequest request) {
         return initialize(request, null);
     }
 
@@ -88,7 +89,7 @@ public class RawConversationClient {
      * <li>messages can be added to the conversation with the <code>appendNewMessages</code> or <code>ask</code> APIs.</li>
      * </ul>
      */
-    public MavenAGIHttpResponse<ConversationResponse> initialize(
+    public MavenAGIHttpResponse<InitializeConversationResponse> initialize(
             ConversationRequest request, RequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
@@ -116,7 +117,8 @@ public class RawConversationClient {
             ResponseBody responseBody = response.body();
             if (response.isSuccessful()) {
                 return new MavenAGIHttpResponse<>(
-                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), ConversationResponse.class),
+                        ObjectMappers.JSON_MAPPER.readValue(
+                                responseBody.string(), InitializeConversationResponse.class),
                         response);
             }
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";

@@ -24,8 +24,8 @@ import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonDeserialize(builder = ConversationResponse.Builder.class)
-public final class ConversationResponse implements IConversationResponse, IBaseConversationResponse {
+@JsonDeserialize(builder = InitializeConversationResponse.Builder.class)
+public final class InitializeConversationResponse implements IConversationResponse, IBaseConversationResponse {
     private final List<ConversationMessageResponse> messages;
 
     private final List<AttachmentResponse> attachments;
@@ -60,9 +60,11 @@ public final class ConversationResponse implements IConversationResponse, IBaseC
 
     private final Optional<SimulationContext> simulationContext;
 
+    private final Optional<ConversationKickoffResult> conversationKickoffResult;
+
     private final Map<String, Object> additionalProperties;
 
-    private ConversationResponse(
+    private InitializeConversationResponse(
             List<ConversationMessageResponse> messages,
             List<AttachmentResponse> attachments,
             Optional<ResponseConfig> responseConfig,
@@ -80,6 +82,7 @@ public final class ConversationResponse implements IConversationResponse, IBaseC
             boolean open,
             boolean llmEnabled,
             Optional<SimulationContext> simulationContext,
+            Optional<ConversationKickoffResult> conversationKickoffResult,
             Map<String, Object> additionalProperties) {
         this.messages = messages;
         this.attachments = attachments;
@@ -98,6 +101,7 @@ public final class ConversationResponse implements IConversationResponse, IBaseC
         this.open = open;
         this.llmEnabled = llmEnabled;
         this.simulationContext = simulationContext;
+        this.conversationKickoffResult = conversationKickoffResult;
         this.additionalProperties = additionalProperties;
     }
 
@@ -259,10 +263,20 @@ public final class ConversationResponse implements IConversationResponse, IBaseC
         return simulationContext;
     }
 
+    /**
+     * @return Result of the Conversation Kickoff, when one ran during conversation initialization.
+     * Only present on this initialize response; other endpoints that return a conversation
+     * do not include it.
+     */
+    @JsonProperty("conversationKickoffResult")
+    public Optional<ConversationKickoffResult> getConversationKickoffResult() {
+        return conversationKickoffResult;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
-        return other instanceof ConversationResponse && equalTo((ConversationResponse) other);
+        return other instanceof InitializeConversationResponse && equalTo((InitializeConversationResponse) other);
     }
 
     @JsonAnyGetter
@@ -270,7 +284,7 @@ public final class ConversationResponse implements IConversationResponse, IBaseC
         return this.additionalProperties;
     }
 
-    private boolean equalTo(ConversationResponse other) {
+    private boolean equalTo(InitializeConversationResponse other) {
         return messages.equals(other.messages)
                 && attachments.equals(other.attachments)
                 && responseConfig.equals(other.responseConfig)
@@ -287,7 +301,8 @@ public final class ConversationResponse implements IConversationResponse, IBaseC
                 && deleted == other.deleted
                 && open == other.open
                 && llmEnabled == other.llmEnabled
-                && simulationContext.equals(other.simulationContext);
+                && simulationContext.equals(other.simulationContext)
+                && conversationKickoffResult.equals(other.conversationKickoffResult);
     }
 
     @java.lang.Override
@@ -309,7 +324,8 @@ public final class ConversationResponse implements IConversationResponse, IBaseC
                 this.deleted,
                 this.open,
                 this.llmEnabled,
-                this.simulationContext);
+                this.simulationContext,
+                this.conversationKickoffResult);
     }
 
     @java.lang.Override
@@ -327,7 +343,7 @@ public final class ConversationResponse implements IConversationResponse, IBaseC
          */
         AnalysisStage conversationId(@NotNull EntityId conversationId);
 
-        Builder from(ConversationResponse other);
+        Builder from(InitializeConversationResponse other);
     }
 
     public interface AnalysisStage {
@@ -369,7 +385,7 @@ public final class ConversationResponse implements IConversationResponse, IBaseC
     }
 
     public interface _FinalStage {
-        ConversationResponse build();
+        InitializeConversationResponse build();
 
         /**
          * <p>The messages in the conversation</p>
@@ -455,6 +471,15 @@ public final class ConversationResponse implements IConversationResponse, IBaseC
         _FinalStage simulationContext(Optional<SimulationContext> simulationContext);
 
         _FinalStage simulationContext(SimulationContext simulationContext);
+
+        /**
+         * <p>Result of the Conversation Kickoff, when one ran during conversation initialization.
+         * Only present on this initialize response; other endpoints that return a conversation
+         * do not include it.</p>
+         */
+        _FinalStage conversationKickoffResult(Optional<ConversationKickoffResult> conversationKickoffResult);
+
+        _FinalStage conversationKickoffResult(ConversationKickoffResult conversationKickoffResult);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -477,6 +502,8 @@ public final class ConversationResponse implements IConversationResponse, IBaseC
         private boolean open;
 
         private boolean llmEnabled;
+
+        private Optional<ConversationKickoffResult> conversationKickoffResult = Optional.empty();
 
         private Optional<SimulationContext> simulationContext = Optional.empty();
 
@@ -506,7 +533,7 @@ public final class ConversationResponse implements IConversationResponse, IBaseC
         private Builder() {}
 
         @java.lang.Override
-        public Builder from(ConversationResponse other) {
+        public Builder from(InitializeConversationResponse other) {
             messages(other.getMessages());
             attachments(other.getAttachments());
             responseConfig(other.getResponseConfig());
@@ -524,6 +551,7 @@ public final class ConversationResponse implements IConversationResponse, IBaseC
             open(other.getOpen());
             llmEnabled(other.getLlmEnabled());
             simulationContext(other.getSimulationContext());
+            conversationKickoffResult(other.getConversationKickoffResult());
             return this;
         }
 
@@ -602,6 +630,30 @@ public final class ConversationResponse implements IConversationResponse, IBaseC
         @JsonSetter("llmEnabled")
         public _FinalStage llmEnabled(boolean llmEnabled) {
             this.llmEnabled = llmEnabled;
+            return this;
+        }
+
+        /**
+         * <p>Result of the Conversation Kickoff, when one ran during conversation initialization.
+         * Only present on this initialize response; other endpoints that return a conversation
+         * do not include it.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage conversationKickoffResult(ConversationKickoffResult conversationKickoffResult) {
+            this.conversationKickoffResult = Optional.ofNullable(conversationKickoffResult);
+            return this;
+        }
+
+        /**
+         * <p>Result of the Conversation Kickoff, when one ran during conversation initialization.
+         * Only present on this initialize response; other endpoints that return a conversation
+         * do not include it.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "conversationKickoffResult", nulls = Nulls.SKIP)
+        public _FinalStage conversationKickoffResult(Optional<ConversationKickoffResult> conversationKickoffResult) {
+            this.conversationKickoffResult = conversationKickoffResult;
             return this;
         }
 
@@ -876,8 +928,8 @@ public final class ConversationResponse implements IConversationResponse, IBaseC
         }
 
         @java.lang.Override
-        public ConversationResponse build() {
-            return new ConversationResponse(
+        public InitializeConversationResponse build() {
+            return new InitializeConversationResponse(
                     messages,
                     attachments,
                     responseConfig,
@@ -895,6 +947,7 @@ public final class ConversationResponse implements IConversationResponse, IBaseC
                     open,
                     llmEnabled,
                     simulationContext,
+                    conversationKickoffResult,
                     additionalProperties);
         }
     }
