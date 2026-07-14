@@ -34,6 +34,8 @@ public final class UserMessage implements IUserMessageBase, IConversationMessage
 
     private final Optional<OffsetDateTime> updatedAt;
 
+    private final Optional<Map<String, String>> appMetadata;
+
     private final EntityId conversationMessageId;
 
     private final Optional<String> language;
@@ -56,6 +58,7 @@ public final class UserMessage implements IUserMessageBase, IConversationMessage
             UserConversationMessageType userMessageType,
             Optional<OffsetDateTime> createdAt,
             Optional<OffsetDateTime> updatedAt,
+            Optional<Map<String, String>> appMetadata,
             EntityId conversationMessageId,
             Optional<String> language,
             List<AttachmentResponse> attachments,
@@ -69,6 +72,7 @@ public final class UserMessage implements IUserMessageBase, IConversationMessage
         this.userMessageType = userMessageType;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.appMetadata = appMetadata;
         this.conversationMessageId = conversationMessageId;
         this.language = language;
         this.attachments = attachments;
@@ -119,6 +123,19 @@ public final class UserMessage implements IUserMessageBase, IConversationMessage
     @java.lang.Override
     public Optional<OffsetDateTime> getUpdatedAt() {
         return updatedAt;
+    }
+
+    /**
+     * @return Key-value metadata for this message, supplied by the app which created the message.
+     * Useful for storing additional structured information about the message and querying
+     * for it via API or the dashboard.
+     * <p>Keys are strings with a maximum length of 500 characters. Values are strings with a
+     * maximum length of 500 characters.</p>
+     */
+    @JsonProperty("appMetadata")
+    @java.lang.Override
+    public Optional<Map<String, String>> getAppMetadata() {
+        return appMetadata;
     }
 
     /**
@@ -206,6 +223,7 @@ public final class UserMessage implements IUserMessageBase, IConversationMessage
                 && userMessageType.equals(other.userMessageType)
                 && createdAt.equals(other.createdAt)
                 && updatedAt.equals(other.updatedAt)
+                && appMetadata.equals(other.appMetadata)
                 && conversationMessageId.equals(other.conversationMessageId)
                 && language.equals(other.language)
                 && attachments.equals(other.attachments)
@@ -223,6 +241,7 @@ public final class UserMessage implements IUserMessageBase, IConversationMessage
                 this.userMessageType,
                 this.createdAt,
                 this.updatedAt,
+                this.appMetadata,
                 this.conversationMessageId,
                 this.language,
                 this.attachments,
@@ -299,6 +318,17 @@ public final class UserMessage implements IUserMessageBase, IConversationMessage
         _FinalStage updatedAt(OffsetDateTime updatedAt);
 
         /**
+         * <p>Key-value metadata for this message, supplied by the app which created the message.
+         * Useful for storing additional structured information about the message and querying
+         * for it via API or the dashboard.</p>
+         * <p>Keys are strings with a maximum length of 500 characters. Values are strings with a
+         * maximum length of 500 characters.</p>
+         */
+        _FinalStage appMetadata(Optional<Map<String, String>> appMetadata);
+
+        _FinalStage appMetadata(Map<String, String> appMetadata);
+
+        /**
          * <p>The language of the message in ISO 639-1 code format</p>
          */
         _FinalStage language(Optional<String> language);
@@ -370,6 +400,8 @@ public final class UserMessage implements IUserMessageBase, IConversationMessage
 
         private Optional<String> language = Optional.empty();
 
+        private Optional<Map<String, String>> appMetadata = Optional.empty();
+
         private Optional<OffsetDateTime> updatedAt = Optional.empty();
 
         private Optional<OffsetDateTime> createdAt = Optional.empty();
@@ -386,6 +418,7 @@ public final class UserMessage implements IUserMessageBase, IConversationMessage
             userMessageType(other.getUserMessageType());
             createdAt(other.getCreatedAt());
             updatedAt(other.getUpdatedAt());
+            appMetadata(other.getAppMetadata());
             conversationMessageId(other.getConversationMessageId());
             language(other.getLanguage());
             attachments(other.getAttachments());
@@ -592,6 +625,34 @@ public final class UserMessage implements IUserMessageBase, IConversationMessage
         }
 
         /**
+         * <p>Key-value metadata for this message, supplied by the app which created the message.
+         * Useful for storing additional structured information about the message and querying
+         * for it via API or the dashboard.</p>
+         * <p>Keys are strings with a maximum length of 500 characters. Values are strings with a
+         * maximum length of 500 characters.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage appMetadata(Map<String, String> appMetadata) {
+            this.appMetadata = Optional.ofNullable(appMetadata);
+            return this;
+        }
+
+        /**
+         * <p>Key-value metadata for this message, supplied by the app which created the message.
+         * Useful for storing additional structured information about the message and querying
+         * for it via API or the dashboard.</p>
+         * <p>Keys are strings with a maximum length of 500 characters. Values are strings with a
+         * maximum length of 500 characters.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "appMetadata", nulls = Nulls.SKIP)
+        public _FinalStage appMetadata(Optional<Map<String, String>> appMetadata) {
+            this.appMetadata = appMetadata;
+            return this;
+        }
+
+        /**
          * <p>The date and time the conversation was last updated</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -639,6 +700,7 @@ public final class UserMessage implements IUserMessageBase, IConversationMessage
                     userMessageType,
                     createdAt,
                     updatedAt,
+                    appMetadata,
                     conversationMessageId,
                     language,
                     attachments,

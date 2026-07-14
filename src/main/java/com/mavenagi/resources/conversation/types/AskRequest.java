@@ -36,6 +36,8 @@ public final class AskRequest {
 
     private final Optional<String> timezone;
 
+    private final Optional<Map<String, String>> appMetadata;
+
     private final Map<String, Object> additionalProperties;
 
     private AskRequest(
@@ -45,6 +47,7 @@ public final class AskRequest {
             Optional<List<AttachmentRequest>> attachments,
             Optional<Map<String, String>> transientData,
             Optional<String> timezone,
+            Optional<Map<String, String>> appMetadata,
             Map<String, Object> additionalProperties) {
         this.conversationMessageId = conversationMessageId;
         this.userId = userId;
@@ -52,6 +55,7 @@ public final class AskRequest {
         this.attachments = attachments;
         this.transientData = transientData;
         this.timezone = timezone;
+        this.appMetadata = appMetadata;
         this.additionalProperties = additionalProperties;
     }
 
@@ -104,6 +108,19 @@ public final class AskRequest {
         return timezone;
     }
 
+    /**
+     * @return Key-value metadata to persist on the user message created by this request. Unlike
+     * <code>transientData</code> (which is never persisted) this is stored and returned when the message
+     * is read back via the API or dashboard, and unlike user data it is not sent to the LLM.
+     * Applied only when the message is first created — if <code>conversationMessageId</code> already
+     * exists the message is reused and its metadata is not updated. Keys and values are strings
+     * with a maximum length of 500 characters each.
+     */
+    @JsonProperty("appMetadata")
+    public Optional<Map<String, String>> getAppMetadata() {
+        return appMetadata;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -121,7 +138,8 @@ public final class AskRequest {
                 && text.equals(other.text)
                 && attachments.equals(other.attachments)
                 && transientData.equals(other.transientData)
-                && timezone.equals(other.timezone);
+                && timezone.equals(other.timezone)
+                && appMetadata.equals(other.appMetadata);
     }
 
     @java.lang.Override
@@ -132,7 +150,8 @@ public final class AskRequest {
                 this.text,
                 this.attachments,
                 this.transientData,
-                this.timezone);
+                this.timezone,
+                this.appMetadata);
     }
 
     @java.lang.Override
@@ -191,6 +210,18 @@ public final class AskRequest {
         _FinalStage timezone(Optional<String> timezone);
 
         _FinalStage timezone(String timezone);
+
+        /**
+         * <p>Key-value metadata to persist on the user message created by this request. Unlike
+         * <code>transientData</code> (which is never persisted) this is stored and returned when the message
+         * is read back via the API or dashboard, and unlike user data it is not sent to the LLM.
+         * Applied only when the message is first created — if <code>conversationMessageId</code> already
+         * exists the message is reused and its metadata is not updated. Keys and values are strings
+         * with a maximum length of 500 characters each.</p>
+         */
+        _FinalStage appMetadata(Optional<Map<String, String>> appMetadata);
+
+        _FinalStage appMetadata(Map<String, String> appMetadata);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -200,6 +231,8 @@ public final class AskRequest {
         private EntityIdBase userId;
 
         private String text;
+
+        private Optional<Map<String, String>> appMetadata = Optional.empty();
 
         private Optional<String> timezone = Optional.empty();
 
@@ -220,6 +253,7 @@ public final class AskRequest {
             attachments(other.getAttachments());
             transientData(other.getTransientData());
             timezone(other.getTimezone());
+            appMetadata(other.getAppMetadata());
             return this;
         }
 
@@ -257,6 +291,36 @@ public final class AskRequest {
         @JsonSetter("text")
         public _FinalStage text(@NotNull String text) {
             this.text = Objects.requireNonNull(text, "text must not be null");
+            return this;
+        }
+
+        /**
+         * <p>Key-value metadata to persist on the user message created by this request. Unlike
+         * <code>transientData</code> (which is never persisted) this is stored and returned when the message
+         * is read back via the API or dashboard, and unlike user data it is not sent to the LLM.
+         * Applied only when the message is first created — if <code>conversationMessageId</code> already
+         * exists the message is reused and its metadata is not updated. Keys and values are strings
+         * with a maximum length of 500 characters each.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage appMetadata(Map<String, String> appMetadata) {
+            this.appMetadata = Optional.ofNullable(appMetadata);
+            return this;
+        }
+
+        /**
+         * <p>Key-value metadata to persist on the user message created by this request. Unlike
+         * <code>transientData</code> (which is never persisted) this is stored and returned when the message
+         * is read back via the API or dashboard, and unlike user data it is not sent to the LLM.
+         * Applied only when the message is first created — if <code>conversationMessageId</code> already
+         * exists the message is reused and its metadata is not updated. Keys and values are strings
+         * with a maximum length of 500 characters each.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "appMetadata", nulls = Nulls.SKIP)
+        public _FinalStage appMetadata(Optional<Map<String, String>> appMetadata) {
+            this.appMetadata = appMetadata;
             return this;
         }
 
@@ -325,7 +389,14 @@ public final class AskRequest {
         @java.lang.Override
         public AskRequest build() {
             return new AskRequest(
-                    conversationMessageId, userId, text, attachments, transientData, timezone, additionalProperties);
+                    conversationMessageId,
+                    userId,
+                    text,
+                    attachments,
+                    transientData,
+                    timezone,
+                    appMetadata,
+                    additionalProperties);
         }
     }
 }

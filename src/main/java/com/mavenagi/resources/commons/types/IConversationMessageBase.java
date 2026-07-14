@@ -4,10 +4,13 @@
 package com.mavenagi.resources.commons.types;
 
 import java.time.OffsetDateTime;
+import java.util.Map;
 import java.util.Optional;
 
 public interface IConversationMessageBase {
     Optional<OffsetDateTime> getCreatedAt();
 
     Optional<OffsetDateTime> getUpdatedAt();
+
+    Optional<Map<String, String>> getAppMetadata();
 }

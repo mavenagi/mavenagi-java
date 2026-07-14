@@ -25,14 +25,18 @@ public final class ConversationMessageBase implements IConversationMessageBase {
 
     private final Optional<OffsetDateTime> updatedAt;
 
+    private final Optional<Map<String, String>> appMetadata;
+
     private final Map<String, Object> additionalProperties;
 
     private ConversationMessageBase(
             Optional<OffsetDateTime> createdAt,
             Optional<OffsetDateTime> updatedAt,
+            Optional<Map<String, String>> appMetadata,
             Map<String, Object> additionalProperties) {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.appMetadata = appMetadata;
         this.additionalProperties = additionalProperties;
     }
 
@@ -54,6 +58,19 @@ public final class ConversationMessageBase implements IConversationMessageBase {
         return updatedAt;
     }
 
+    /**
+     * @return Key-value metadata for this message, supplied by the app which created the message.
+     * Useful for storing additional structured information about the message and querying
+     * for it via API or the dashboard.
+     * <p>Keys are strings with a maximum length of 500 characters. Values are strings with a
+     * maximum length of 500 characters.</p>
+     */
+    @JsonProperty("appMetadata")
+    @java.lang.Override
+    public Optional<Map<String, String>> getAppMetadata() {
+        return appMetadata;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -66,12 +83,14 @@ public final class ConversationMessageBase implements IConversationMessageBase {
     }
 
     private boolean equalTo(ConversationMessageBase other) {
-        return createdAt.equals(other.createdAt) && updatedAt.equals(other.updatedAt);
+        return createdAt.equals(other.createdAt)
+                && updatedAt.equals(other.updatedAt)
+                && appMetadata.equals(other.appMetadata);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.createdAt, this.updatedAt);
+        return Objects.hash(this.createdAt, this.updatedAt, this.appMetadata);
     }
 
     @java.lang.Override
@@ -89,6 +108,8 @@ public final class ConversationMessageBase implements IConversationMessageBase {
 
         private Optional<OffsetDateTime> updatedAt = Optional.empty();
 
+        private Optional<Map<String, String>> appMetadata = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -97,6 +118,7 @@ public final class ConversationMessageBase implements IConversationMessageBase {
         public Builder from(ConversationMessageBase other) {
             createdAt(other.getCreatedAt());
             updatedAt(other.getUpdatedAt());
+            appMetadata(other.getAppMetadata());
             return this;
         }
 
@@ -128,8 +150,26 @@ public final class ConversationMessageBase implements IConversationMessageBase {
             return this;
         }
 
+        /**
+         * <p>Key-value metadata for this message, supplied by the app which created the message.
+         * Useful for storing additional structured information about the message and querying
+         * for it via API or the dashboard.</p>
+         * <p>Keys are strings with a maximum length of 500 characters. Values are strings with a
+         * maximum length of 500 characters.</p>
+         */
+        @JsonSetter(value = "appMetadata", nulls = Nulls.SKIP)
+        public Builder appMetadata(Optional<Map<String, String>> appMetadata) {
+            this.appMetadata = appMetadata;
+            return this;
+        }
+
+        public Builder appMetadata(Map<String, String> appMetadata) {
+            this.appMetadata = Optional.ofNullable(appMetadata);
+            return this;
+        }
+
         public ConversationMessageBase build() {
-            return new ConversationMessageBase(createdAt, updatedAt, additionalProperties);
+            return new ConversationMessageBase(createdAt, updatedAt, appMetadata, additionalProperties);
         }
     }
 }

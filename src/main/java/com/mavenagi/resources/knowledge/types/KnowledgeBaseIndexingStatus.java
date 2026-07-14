@@ -10,11 +10,17 @@ public final class KnowledgeBaseIndexingStatus {
     public static final KnowledgeBaseIndexingStatus PUBLISHED =
             new KnowledgeBaseIndexingStatus(Value.PUBLISHED, "PUBLISHED");
 
+    public static final KnowledgeBaseIndexingStatus ROLLING_BACK =
+            new KnowledgeBaseIndexingStatus(Value.ROLLING_BACK, "ROLLING_BACK");
+
     public static final KnowledgeBaseIndexingStatus INDEXING =
             new KnowledgeBaseIndexingStatus(Value.INDEXING, "INDEXING");
 
     public static final KnowledgeBaseIndexingStatus BUILDING =
             new KnowledgeBaseIndexingStatus(Value.BUILDING, "BUILDING");
+
+    public static final KnowledgeBaseIndexingStatus ROLLED_BACK =
+            new KnowledgeBaseIndexingStatus(Value.ROLLED_BACK, "ROLLED_BACK");
 
     public static final KnowledgeBaseIndexingStatus INDEXED = new KnowledgeBaseIndexingStatus(Value.INDEXED, "INDEXED");
 
@@ -58,10 +64,14 @@ public final class KnowledgeBaseIndexingStatus {
         switch (value) {
             case PUBLISHED:
                 return visitor.visitPublished();
+            case ROLLING_BACK:
+                return visitor.visitRollingBack();
             case INDEXING:
                 return visitor.visitIndexing();
             case BUILDING:
                 return visitor.visitBuilding();
+            case ROLLED_BACK:
+                return visitor.visitRolledBack();
             case INDEXED:
                 return visitor.visitIndexed();
             case FAILED:
@@ -79,10 +89,14 @@ public final class KnowledgeBaseIndexingStatus {
         switch (value) {
             case "PUBLISHED":
                 return PUBLISHED;
+            case "ROLLING_BACK":
+                return ROLLING_BACK;
             case "INDEXING":
                 return INDEXING;
             case "BUILDING":
                 return BUILDING;
+            case "ROLLED_BACK":
+                return ROLLED_BACK;
             case "INDEXED":
                 return INDEXED;
             case "FAILED":
@@ -103,9 +117,13 @@ public final class KnowledgeBaseIndexingStatus {
 
         PUBLISHED,
 
+        ROLLING_BACK,
+
         FAILED,
 
         SUPERSEDED,
+
+        ROLLED_BACK,
 
         UNKNOWN
     }
@@ -119,9 +137,13 @@ public final class KnowledgeBaseIndexingStatus {
 
         T visitPublished();
 
+        T visitRollingBack();
+
         T visitFailed();
 
         T visitSuperseded();
+
+        T visitRolledBack();
 
         T visitUnknown(String unknownType);
     }

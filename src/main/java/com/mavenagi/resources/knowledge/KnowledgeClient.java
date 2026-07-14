@@ -171,6 +171,22 @@ public class KnowledgeClient {
     }
 
     /**
+     * Rolls the knowledge base back to its previous published version.
+     */
+    public void rollbackKnowledgeBaseVersion(String knowledgeBaseReferenceId) {
+        this.rawClient.rollbackKnowledgeBaseVersion(knowledgeBaseReferenceId).body();
+    }
+
+    /**
+     * Rolls the knowledge base back to its previous published version.
+     */
+    public void rollbackKnowledgeBaseVersion(String knowledgeBaseReferenceId, RequestOptions requestOptions) {
+        this.rawClient
+                .rollbackKnowledgeBaseVersion(knowledgeBaseReferenceId, requestOptions)
+                .body();
+    }
+
+    /**
      * Update mutable knowledge base fields
      * <p>The <code>appId</code> field can be provided to update a knowledge base owned by a different app.
      * All other fields will overwrite the existing value on the knowledge base only if provided.</p>

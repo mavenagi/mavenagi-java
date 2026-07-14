@@ -32,6 +32,8 @@ public final class UserMessageBase implements IUserMessageBase, IConversationMes
 
     private final Optional<OffsetDateTime> updatedAt;
 
+    private final Optional<Map<String, String>> appMetadata;
+
     private final Map<String, Object> additionalProperties;
 
     private UserMessageBase(
@@ -40,12 +42,14 @@ public final class UserMessageBase implements IUserMessageBase, IConversationMes
             UserConversationMessageType userMessageType,
             Optional<OffsetDateTime> createdAt,
             Optional<OffsetDateTime> updatedAt,
+            Optional<Map<String, String>> appMetadata,
             Map<String, Object> additionalProperties) {
         this.userId = userId;
         this.text = text;
         this.userMessageType = userMessageType;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.appMetadata = appMetadata;
         this.additionalProperties = additionalProperties;
     }
 
@@ -91,6 +95,19 @@ public final class UserMessageBase implements IUserMessageBase, IConversationMes
         return updatedAt;
     }
 
+    /**
+     * @return Key-value metadata for this message, supplied by the app which created the message.
+     * Useful for storing additional structured information about the message and querying
+     * for it via API or the dashboard.
+     * <p>Keys are strings with a maximum length of 500 characters. Values are strings with a
+     * maximum length of 500 characters.</p>
+     */
+    @JsonProperty("appMetadata")
+    @java.lang.Override
+    public Optional<Map<String, String>> getAppMetadata() {
+        return appMetadata;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -107,12 +124,14 @@ public final class UserMessageBase implements IUserMessageBase, IConversationMes
                 && text.equals(other.text)
                 && userMessageType.equals(other.userMessageType)
                 && createdAt.equals(other.createdAt)
-                && updatedAt.equals(other.updatedAt);
+                && updatedAt.equals(other.updatedAt)
+                && appMetadata.equals(other.appMetadata);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.userId, this.text, this.userMessageType, this.createdAt, this.updatedAt);
+        return Objects.hash(
+                this.userId, this.text, this.userMessageType, this.createdAt, this.updatedAt, this.appMetadata);
     }
 
     @java.lang.Override
@@ -160,6 +179,17 @@ public final class UserMessageBase implements IUserMessageBase, IConversationMes
         _FinalStage updatedAt(Optional<OffsetDateTime> updatedAt);
 
         _FinalStage updatedAt(OffsetDateTime updatedAt);
+
+        /**
+         * <p>Key-value metadata for this message, supplied by the app which created the message.
+         * Useful for storing additional structured information about the message and querying
+         * for it via API or the dashboard.</p>
+         * <p>Keys are strings with a maximum length of 500 characters. Values are strings with a
+         * maximum length of 500 characters.</p>
+         */
+        _FinalStage appMetadata(Optional<Map<String, String>> appMetadata);
+
+        _FinalStage appMetadata(Map<String, String> appMetadata);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -169,6 +199,8 @@ public final class UserMessageBase implements IUserMessageBase, IConversationMes
         private String text;
 
         private UserConversationMessageType userMessageType;
+
+        private Optional<Map<String, String>> appMetadata = Optional.empty();
 
         private Optional<OffsetDateTime> updatedAt = Optional.empty();
 
@@ -186,6 +218,7 @@ public final class UserMessageBase implements IUserMessageBase, IConversationMes
             userMessageType(other.getUserMessageType());
             createdAt(other.getCreatedAt());
             updatedAt(other.getUpdatedAt());
+            appMetadata(other.getAppMetadata());
             return this;
         }
 
@@ -217,6 +250,34 @@ public final class UserMessageBase implements IUserMessageBase, IConversationMes
         @JsonSetter("userMessageType")
         public _FinalStage userMessageType(@NotNull UserConversationMessageType userMessageType) {
             this.userMessageType = Objects.requireNonNull(userMessageType, "userMessageType must not be null");
+            return this;
+        }
+
+        /**
+         * <p>Key-value metadata for this message, supplied by the app which created the message.
+         * Useful for storing additional structured information about the message and querying
+         * for it via API or the dashboard.</p>
+         * <p>Keys are strings with a maximum length of 500 characters. Values are strings with a
+         * maximum length of 500 characters.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage appMetadata(Map<String, String> appMetadata) {
+            this.appMetadata = Optional.ofNullable(appMetadata);
+            return this;
+        }
+
+        /**
+         * <p>Key-value metadata for this message, supplied by the app which created the message.
+         * Useful for storing additional structured information about the message and querying
+         * for it via API or the dashboard.</p>
+         * <p>Keys are strings with a maximum length of 500 characters. Values are strings with a
+         * maximum length of 500 characters.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "appMetadata", nulls = Nulls.SKIP)
+        public _FinalStage appMetadata(Optional<Map<String, String>> appMetadata) {
+            this.appMetadata = appMetadata;
             return this;
         }
 
@@ -262,7 +323,8 @@ public final class UserMessageBase implements IUserMessageBase, IConversationMes
 
         @java.lang.Override
         public UserMessageBase build() {
-            return new UserMessageBase(userId, text, userMessageType, createdAt, updatedAt, additionalProperties);
+            return new UserMessageBase(
+                    userId, text, userMessageType, createdAt, updatedAt, appMetadata, additionalProperties);
         }
     }
 }

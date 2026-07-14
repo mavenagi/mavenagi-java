@@ -179,6 +179,25 @@ public class AsyncKnowledgeClient {
     }
 
     /**
+     * Rolls the knowledge base back to its previous published version.
+     */
+    public CompletableFuture<Void> rollbackKnowledgeBaseVersion(String knowledgeBaseReferenceId) {
+        return this.rawClient
+                .rollbackKnowledgeBaseVersion(knowledgeBaseReferenceId)
+                .thenApply(response -> response.body());
+    }
+
+    /**
+     * Rolls the knowledge base back to its previous published version.
+     */
+    public CompletableFuture<Void> rollbackKnowledgeBaseVersion(
+            String knowledgeBaseReferenceId, RequestOptions requestOptions) {
+        return this.rawClient
+                .rollbackKnowledgeBaseVersion(knowledgeBaseReferenceId, requestOptions)
+                .thenApply(response -> response.body());
+    }
+
+    /**
      * Update mutable knowledge base fields
      * <p>The <code>appId</code> field can be provided to update a knowledge base owned by a different app.
      * All other fields will overwrite the existing value on the knowledge base only if provided.</p>

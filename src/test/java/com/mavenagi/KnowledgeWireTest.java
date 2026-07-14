@@ -572,6 +572,16 @@ public class KnowledgeWireTest {
         }
     }
     @Test
+    public void testRollbackKnowledgeBaseVersion() throws Exception {
+        server.enqueue(new MockResponse()
+            .setResponseCode(200)
+            .setBody("{}"));
+        client.knowledge().rollbackKnowledgeBaseVersion("knowledgeBaseReferenceId");
+        RecordedRequest request = server.takeRequest();
+        Assertions.assertNotNull(request);
+        Assertions.assertEquals("POST", request.getMethod());
+    }
+    @Test
     public void testPatchKnowledgeBase() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)

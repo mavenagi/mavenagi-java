@@ -28,6 +28,8 @@ public final class BotMessage implements IConversationMessageBase {
 
     private final Optional<OffsetDateTime> updatedAt;
 
+    private final Optional<Map<String, String>> appMetadata;
+
     private final EntityId conversationMessageId;
 
     private final BotConversationMessageType botMessageType;
@@ -45,6 +47,7 @@ public final class BotMessage implements IConversationMessageBase {
     private BotMessage(
             Optional<OffsetDateTime> createdAt,
             Optional<OffsetDateTime> updatedAt,
+            Optional<Map<String, String>> appMetadata,
             EntityId conversationMessageId,
             BotConversationMessageType botMessageType,
             List<BotResponse> responses,
@@ -54,6 +57,7 @@ public final class BotMessage implements IConversationMessageBase {
             Map<String, Object> additionalProperties) {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.appMetadata = appMetadata;
         this.conversationMessageId = conversationMessageId;
         this.botMessageType = botMessageType;
         this.responses = responses;
@@ -79,6 +83,19 @@ public final class BotMessage implements IConversationMessageBase {
     @java.lang.Override
     public Optional<OffsetDateTime> getUpdatedAt() {
         return updatedAt;
+    }
+
+    /**
+     * @return Key-value metadata for this message, supplied by the app which created the message.
+     * Useful for storing additional structured information about the message and querying
+     * for it via API or the dashboard.
+     * <p>Keys are strings with a maximum length of 500 characters. Values are strings with a
+     * maximum length of 500 characters.</p>
+     */
+    @JsonProperty("appMetadata")
+    @java.lang.Override
+    public Optional<Map<String, String>> getAppMetadata() {
+        return appMetadata;
     }
 
     /**
@@ -131,6 +148,7 @@ public final class BotMessage implements IConversationMessageBase {
     private boolean equalTo(BotMessage other) {
         return createdAt.equals(other.createdAt)
                 && updatedAt.equals(other.updatedAt)
+                && appMetadata.equals(other.appMetadata)
                 && conversationMessageId.equals(other.conversationMessageId)
                 && botMessageType.equals(other.botMessageType)
                 && responses.equals(other.responses)
@@ -144,6 +162,7 @@ public final class BotMessage implements IConversationMessageBase {
         return Objects.hash(
                 this.createdAt,
                 this.updatedAt,
+                this.appMetadata,
                 this.conversationMessageId,
                 this.botMessageType,
                 this.responses,
@@ -199,6 +218,17 @@ public final class BotMessage implements IConversationMessageBase {
 
         _FinalStage updatedAt(OffsetDateTime updatedAt);
 
+        /**
+         * <p>Key-value metadata for this message, supplied by the app which created the message.
+         * Useful for storing additional structured information about the message and querying
+         * for it via API or the dashboard.</p>
+         * <p>Keys are strings with a maximum length of 500 characters. Values are strings with a
+         * maximum length of 500 characters.</p>
+         */
+        _FinalStage appMetadata(Optional<Map<String, String>> appMetadata);
+
+        _FinalStage appMetadata(Map<String, String> appMetadata);
+
         _FinalStage responses(List<BotResponse> responses);
 
         _FinalStage addResponses(BotResponse responses);
@@ -228,6 +258,8 @@ public final class BotMessage implements IConversationMessageBase {
 
         private List<BotResponse> responses = new ArrayList<>();
 
+        private Optional<Map<String, String>> appMetadata = Optional.empty();
+
         private Optional<OffsetDateTime> updatedAt = Optional.empty();
 
         private Optional<OffsetDateTime> createdAt = Optional.empty();
@@ -241,6 +273,7 @@ public final class BotMessage implements IConversationMessageBase {
         public Builder from(BotMessage other) {
             createdAt(other.getCreatedAt());
             updatedAt(other.getUpdatedAt());
+            appMetadata(other.getAppMetadata());
             conversationMessageId(other.getConversationMessageId());
             botMessageType(other.getBotMessageType());
             responses(other.getResponses());
@@ -329,6 +362,34 @@ public final class BotMessage implements IConversationMessageBase {
         }
 
         /**
+         * <p>Key-value metadata for this message, supplied by the app which created the message.
+         * Useful for storing additional structured information about the message and querying
+         * for it via API or the dashboard.</p>
+         * <p>Keys are strings with a maximum length of 500 characters. Values are strings with a
+         * maximum length of 500 characters.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage appMetadata(Map<String, String> appMetadata) {
+            this.appMetadata = Optional.ofNullable(appMetadata);
+            return this;
+        }
+
+        /**
+         * <p>Key-value metadata for this message, supplied by the app which created the message.
+         * Useful for storing additional structured information about the message and querying
+         * for it via API or the dashboard.</p>
+         * <p>Keys are strings with a maximum length of 500 characters. Values are strings with a
+         * maximum length of 500 characters.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "appMetadata", nulls = Nulls.SKIP)
+        public _FinalStage appMetadata(Optional<Map<String, String>> appMetadata) {
+            this.appMetadata = appMetadata;
+            return this;
+        }
+
+        /**
          * <p>The date and time the conversation was last updated</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -373,6 +434,7 @@ public final class BotMessage implements IConversationMessageBase {
             return new BotMessage(
                     createdAt,
                     updatedAt,
+                    appMetadata,
                     conversationMessageId,
                     botMessageType,
                     responses,
