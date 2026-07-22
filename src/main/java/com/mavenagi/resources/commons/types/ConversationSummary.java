@@ -28,6 +28,12 @@ public final class ConversationSummary {
 
     private final List<EntityIdWithoutAgent> incompleteActionIds;
 
+    private final List<EntityIdWithoutAgent> matchedCharterIds;
+
+    private final List<String> matchedCharterNames;
+
+    private final List<String> matchedSegmentedCharterNames;
+
     private final int insertCount;
 
     private final int thumbsUpCount;
@@ -65,6 +71,9 @@ public final class ConversationSummary {
     private ConversationSummary(
             List<EntityIdWithoutAgent> actionIds,
             List<EntityIdWithoutAgent> incompleteActionIds,
+            List<EntityIdWithoutAgent> matchedCharterIds,
+            List<String> matchedCharterNames,
+            List<String> matchedSegmentedCharterNames,
             int insertCount,
             int thumbsUpCount,
             int thumbsDownCount,
@@ -84,6 +93,9 @@ public final class ConversationSummary {
             Map<String, Object> additionalProperties) {
         this.actionIds = actionIds;
         this.incompleteActionIds = incompleteActionIds;
+        this.matchedCharterIds = matchedCharterIds;
+        this.matchedCharterNames = matchedCharterNames;
+        this.matchedSegmentedCharterNames = matchedSegmentedCharterNames;
         this.insertCount = insertCount;
         this.thumbsUpCount = thumbsUpCount;
         this.thumbsDownCount = thumbsDownCount;
@@ -117,6 +129,30 @@ public final class ConversationSummary {
     @JsonProperty("incompleteActionIds")
     public List<EntityIdWithoutAgent> getIncompleteActionIds() {
         return incompleteActionIds;
+    }
+
+    /**
+     * @return The IDs of the charters that were matched anywhere in the conversation.
+     */
+    @JsonProperty("matchedCharterIds")
+    public List<EntityIdWithoutAgent> getMatchedCharterIds() {
+        return matchedCharterIds;
+    }
+
+    /**
+     * @return The names of the charters that were matched anywhere in the conversation.
+     */
+    @JsonProperty("matchedCharterNames")
+    public List<String> getMatchedCharterNames() {
+        return matchedCharterNames;
+    }
+
+    /**
+     * @return The names of the matched charters that are gated by a segment (i.e. have a segment condition) anywhere in the conversation.
+     */
+    @JsonProperty("matchedSegmentedCharterNames")
+    public List<String> getMatchedSegmentedCharterNames() {
+        return matchedSegmentedCharterNames;
     }
 
     /**
@@ -271,6 +307,9 @@ public final class ConversationSummary {
     private boolean equalTo(ConversationSummary other) {
         return actionIds.equals(other.actionIds)
                 && incompleteActionIds.equals(other.incompleteActionIds)
+                && matchedCharterIds.equals(other.matchedCharterIds)
+                && matchedCharterNames.equals(other.matchedCharterNames)
+                && matchedSegmentedCharterNames.equals(other.matchedSegmentedCharterNames)
                 && insertCount == other.insertCount
                 && thumbsUpCount == other.thumbsUpCount
                 && thumbsDownCount == other.thumbsDownCount
@@ -294,6 +333,9 @@ public final class ConversationSummary {
         return Objects.hash(
                 this.actionIds,
                 this.incompleteActionIds,
+                this.matchedCharterIds,
+                this.matchedCharterNames,
+                this.matchedSegmentedCharterNames,
                 this.insertCount,
                 this.thumbsUpCount,
                 this.thumbsDownCount,
@@ -385,6 +427,33 @@ public final class ConversationSummary {
         _FinalStage addIncompleteActionIds(EntityIdWithoutAgent incompleteActionIds);
 
         _FinalStage addAllIncompleteActionIds(List<EntityIdWithoutAgent> incompleteActionIds);
+
+        /**
+         * <p>The IDs of the charters that were matched anywhere in the conversation.</p>
+         */
+        _FinalStage matchedCharterIds(List<EntityIdWithoutAgent> matchedCharterIds);
+
+        _FinalStage addMatchedCharterIds(EntityIdWithoutAgent matchedCharterIds);
+
+        _FinalStage addAllMatchedCharterIds(List<EntityIdWithoutAgent> matchedCharterIds);
+
+        /**
+         * <p>The names of the charters that were matched anywhere in the conversation.</p>
+         */
+        _FinalStage matchedCharterNames(List<String> matchedCharterNames);
+
+        _FinalStage addMatchedCharterNames(String matchedCharterNames);
+
+        _FinalStage addAllMatchedCharterNames(List<String> matchedCharterNames);
+
+        /**
+         * <p>The names of the matched charters that are gated by a segment (i.e. have a segment condition) anywhere in the conversation.</p>
+         */
+        _FinalStage matchedSegmentedCharterNames(List<String> matchedSegmentedCharterNames);
+
+        _FinalStage addMatchedSegmentedCharterNames(String matchedSegmentedCharterNames);
+
+        _FinalStage addAllMatchedSegmentedCharterNames(List<String> matchedSegmentedCharterNames);
 
         /**
          * <p>The CSAT score for the conversation</p>
@@ -518,6 +587,12 @@ public final class ConversationSummary {
 
         private Optional<Double> csat = Optional.empty();
 
+        private List<String> matchedSegmentedCharterNames = new ArrayList<>();
+
+        private List<String> matchedCharterNames = new ArrayList<>();
+
+        private List<EntityIdWithoutAgent> matchedCharterIds = new ArrayList<>();
+
         private List<EntityIdWithoutAgent> incompleteActionIds = new ArrayList<>();
 
         private List<EntityIdWithoutAgent> actionIds = new ArrayList<>();
@@ -531,6 +606,9 @@ public final class ConversationSummary {
         public Builder from(ConversationSummary other) {
             actionIds(other.getActionIds());
             incompleteActionIds(other.getIncompleteActionIds());
+            matchedCharterIds(other.getMatchedCharterIds());
+            matchedCharterNames(other.getMatchedCharterNames());
+            matchedSegmentedCharterNames(other.getMatchedSegmentedCharterNames());
             insertCount(other.getInsertCount());
             thumbsUpCount(other.getThumbsUpCount());
             thumbsDownCount(other.getThumbsDownCount());
@@ -924,6 +1002,111 @@ public final class ConversationSummary {
         }
 
         /**
+         * <p>The names of the matched charters that are gated by a segment (i.e. have a segment condition) anywhere in the conversation.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage addAllMatchedSegmentedCharterNames(List<String> matchedSegmentedCharterNames) {
+            if (matchedSegmentedCharterNames != null) {
+                this.matchedSegmentedCharterNames.addAll(matchedSegmentedCharterNames);
+            }
+            return this;
+        }
+
+        /**
+         * <p>The names of the matched charters that are gated by a segment (i.e. have a segment condition) anywhere in the conversation.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage addMatchedSegmentedCharterNames(String matchedSegmentedCharterNames) {
+            this.matchedSegmentedCharterNames.add(matchedSegmentedCharterNames);
+            return this;
+        }
+
+        /**
+         * <p>The names of the matched charters that are gated by a segment (i.e. have a segment condition) anywhere in the conversation.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "matchedSegmentedCharterNames", nulls = Nulls.SKIP)
+        public _FinalStage matchedSegmentedCharterNames(List<String> matchedSegmentedCharterNames) {
+            this.matchedSegmentedCharterNames.clear();
+            if (matchedSegmentedCharterNames != null) {
+                this.matchedSegmentedCharterNames.addAll(matchedSegmentedCharterNames);
+            }
+            return this;
+        }
+
+        /**
+         * <p>The names of the charters that were matched anywhere in the conversation.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage addAllMatchedCharterNames(List<String> matchedCharterNames) {
+            if (matchedCharterNames != null) {
+                this.matchedCharterNames.addAll(matchedCharterNames);
+            }
+            return this;
+        }
+
+        /**
+         * <p>The names of the charters that were matched anywhere in the conversation.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage addMatchedCharterNames(String matchedCharterNames) {
+            this.matchedCharterNames.add(matchedCharterNames);
+            return this;
+        }
+
+        /**
+         * <p>The names of the charters that were matched anywhere in the conversation.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "matchedCharterNames", nulls = Nulls.SKIP)
+        public _FinalStage matchedCharterNames(List<String> matchedCharterNames) {
+            this.matchedCharterNames.clear();
+            if (matchedCharterNames != null) {
+                this.matchedCharterNames.addAll(matchedCharterNames);
+            }
+            return this;
+        }
+
+        /**
+         * <p>The IDs of the charters that were matched anywhere in the conversation.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage addAllMatchedCharterIds(List<EntityIdWithoutAgent> matchedCharterIds) {
+            if (matchedCharterIds != null) {
+                this.matchedCharterIds.addAll(matchedCharterIds);
+            }
+            return this;
+        }
+
+        /**
+         * <p>The IDs of the charters that were matched anywhere in the conversation.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage addMatchedCharterIds(EntityIdWithoutAgent matchedCharterIds) {
+            this.matchedCharterIds.add(matchedCharterIds);
+            return this;
+        }
+
+        /**
+         * <p>The IDs of the charters that were matched anywhere in the conversation.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "matchedCharterIds", nulls = Nulls.SKIP)
+        public _FinalStage matchedCharterIds(List<EntityIdWithoutAgent> matchedCharterIds) {
+            this.matchedCharterIds.clear();
+            if (matchedCharterIds != null) {
+                this.matchedCharterIds.addAll(matchedCharterIds);
+            }
+            return this;
+        }
+
+        /**
          * <p>The IDs of the actions that were taken by Maven but not completed in the conversation. Occurs when the user is shown an action form but does not submit it.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -998,6 +1181,9 @@ public final class ConversationSummary {
             return new ConversationSummary(
                     actionIds,
                     incompleteActionIds,
+                    matchedCharterIds,
+                    matchedCharterNames,
+                    matchedSegmentedCharterNames,
                     insertCount,
                     thumbsUpCount,
                     thumbsDownCount,

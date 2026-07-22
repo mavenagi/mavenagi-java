@@ -11,6 +11,8 @@ public final class EntityType {
 
     public static final EntityType ACTION = new EntityType(Value.ACTION, "ACTION");
 
+    public static final EntityType CONFIG_SNAPSHOT = new EntityType(Value.CONFIG_SNAPSHOT, "CONFIG_SNAPSHOT");
+
     public static final EntityType USER = new EntityType(Value.USER, "USER");
 
     public static final EntityType KNOWLEDGE_BASE = new EntityType(Value.KNOWLEDGE_BASE, "KNOWLEDGE_BASE");
@@ -85,6 +87,8 @@ public final class EntityType {
                 return visitor.visitAgent();
             case ACTION:
                 return visitor.visitAction();
+            case CONFIG_SNAPSHOT:
+                return visitor.visitConfigSnapshot();
             case USER:
                 return visitor.visitUser();
             case KNOWLEDGE_BASE:
@@ -134,6 +138,8 @@ public final class EntityType {
                 return AGENT;
             case "ACTION":
                 return ACTION;
+            case "CONFIG_SNAPSHOT":
+                return CONFIG_SNAPSHOT;
             case "USER":
                 return USER;
             case "KNOWLEDGE_BASE":
@@ -216,6 +222,8 @@ public final class EntityType {
 
         AGENT_VARIANT,
 
+        CONFIG_SNAPSHOT,
+
         UNKNOWN
     }
 
@@ -259,6 +267,8 @@ public final class EntityType {
         T visitConversationKickoff();
 
         T visitAgentVariant();
+
+        T visitConfigSnapshot();
 
         T visitUnknown(String unknownType);
     }
