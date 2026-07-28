@@ -42,6 +42,10 @@ public final class IntelligentFieldCondition {
         return new IntelligentFieldCondition(new SetValue(value));
     }
 
+    public static IntelligentFieldCondition universal(UniversalCondition value) {
+        return new IntelligentFieldCondition(new UniversalValue(value));
+    }
+
     public boolean isString() {
         return value instanceof StringValue;
     }
@@ -56,6 +60,10 @@ public final class IntelligentFieldCondition {
 
     public boolean isSet() {
         return value instanceof SetValue;
+    }
+
+    public boolean isUniversal() {
+        return value instanceof UniversalValue;
     }
 
     public boolean _isUnknown() {
@@ -90,6 +98,13 @@ public final class IntelligentFieldCondition {
         return Optional.empty();
     }
 
+    public Optional<UniversalCondition> getUniversal() {
+        if (isUniversal()) {
+            return Optional.of(((UniversalValue) value).value);
+        }
+        return Optional.empty();
+    }
+
     public Optional<Object> _getUnknown() {
         if (_isUnknown()) {
             return Optional.of(((_UnknownValue) value).value);
@@ -111,6 +126,8 @@ public final class IntelligentFieldCondition {
 
         T visitSet(SetCondition set);
 
+        T visitUniversal(UniversalCondition universal);
+
         T _visitUnknown(Object unknownType);
     }
 
@@ -123,7 +140,8 @@ public final class IntelligentFieldCondition {
         @JsonSubTypes.Type(StringValue.class),
         @JsonSubTypes.Type(NumericValue.class),
         @JsonSubTypes.Type(BooleanValue.class),
-        @JsonSubTypes.Type(SetValue.class)
+        @JsonSubTypes.Type(SetValue.class),
+        @JsonSubTypes.Type(UniversalValue.class)
     })
     @JsonIgnoreProperties(ignoreUnknown = true)
     private interface Value {
@@ -266,6 +284,43 @@ public final class IntelligentFieldCondition {
         }
 
         private boolean equalTo(SetValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "IntelligentFieldCondition{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("universal")
+    @JsonIgnoreProperties("fieldValidationType")
+    private static final class UniversalValue implements Value {
+        @JsonProperty("value")
+        private UniversalCondition value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private UniversalValue(@JsonProperty("value") UniversalCondition value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitUniversal(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof UniversalValue && equalTo((UniversalValue) other);
+        }
+
+        private boolean equalTo(UniversalValue other) {
             return value.equals(other.value);
         }
 

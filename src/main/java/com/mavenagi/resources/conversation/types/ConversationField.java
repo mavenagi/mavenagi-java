@@ -12,6 +12,8 @@ public final class ConversationField {
     public static final ConversationField USER_MESSAGE_COUNT =
             new ConversationField(Value.USER_MESSAGE_COUNT, "UserMessageCount");
 
+    public static final ConversationField CHARTERS = new ConversationField(Value.CHARTERS, "Charters");
+
     public static final ConversationField FIRST_RESPONSE_TIME =
             new ConversationField(Value.FIRST_RESPONSE_TIME, "FirstResponseTime");
 
@@ -114,6 +116,8 @@ public final class ConversationField {
                 return visitor.visitActions();
             case USER_MESSAGE_COUNT:
                 return visitor.visitUserMessageCount();
+            case CHARTERS:
+                return visitor.visitCharters();
             case FIRST_RESPONSE_TIME:
                 return visitor.visitFirstResponseTime();
             case HUMAN_AGENTS_WITH_INSERTS:
@@ -183,6 +187,8 @@ public final class ConversationField {
                 return ACTIONS;
             case "UserMessageCount":
                 return USER_MESSAGE_COUNT;
+            case "Charters":
+                return CHARTERS;
             case "FirstResponseTime":
                 return FIRST_RESPONSE_TIME;
             case "HumanAgentsWithInserts":
@@ -289,6 +295,8 @@ public final class ConversationField {
 
         INCOMPLETE_ACTIONS,
 
+        CHARTERS,
+
         SOURCES,
 
         CREATED_AT,
@@ -352,6 +360,8 @@ public final class ConversationField {
         T visitActions();
 
         T visitIncompleteActions();
+
+        T visitCharters();
 
         T visitSources();
 

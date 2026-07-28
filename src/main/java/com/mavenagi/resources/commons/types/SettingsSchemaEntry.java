@@ -54,6 +54,10 @@ public final class SettingsSchemaEntry {
         return new SettingsSchemaEntry(new CheckboxValue(value));
     }
 
+    public static SettingsSchemaEntry switch_(SwitchSettingsSchemaEntry value) {
+        return new SettingsSchemaEntry(new SwitchValue(value));
+    }
+
     public static SettingsSchemaEntry dropdown(DropdownSettingsSchemaEntry value) {
         return new SettingsSchemaEntry(new DropdownValue(value));
     }
@@ -72,6 +76,10 @@ public final class SettingsSchemaEntry {
 
     public static SettingsSchemaEntry oneOf(OneOfSettingsSchemaEntry value) {
         return new SettingsSchemaEntry(new OneOfValue(value));
+    }
+
+    public static SettingsSchemaEntry jsonSchema(JsonSchemaSettingsSchemaEntry value) {
+        return new SettingsSchemaEntry(new JsonSchemaValue(value));
     }
 
     public boolean isText() {
@@ -102,6 +110,10 @@ public final class SettingsSchemaEntry {
         return value instanceof CheckboxValue;
     }
 
+    public boolean isSwitch() {
+        return value instanceof SwitchValue;
+    }
+
     public boolean isDropdown() {
         return value instanceof DropdownValue;
     }
@@ -120,6 +132,10 @@ public final class SettingsSchemaEntry {
 
     public boolean isOneOf() {
         return value instanceof OneOfValue;
+    }
+
+    public boolean isJsonSchema() {
+        return value instanceof JsonSchemaValue;
     }
 
     public boolean _isUnknown() {
@@ -175,6 +191,13 @@ public final class SettingsSchemaEntry {
         return Optional.empty();
     }
 
+    public Optional<SwitchSettingsSchemaEntry> getSwitch() {
+        if (isSwitch()) {
+            return Optional.of(((SwitchValue) value).value);
+        }
+        return Optional.empty();
+    }
+
     public Optional<DropdownSettingsSchemaEntry> getDropdown() {
         if (isDropdown()) {
             return Optional.of(((DropdownValue) value).value);
@@ -210,6 +233,13 @@ public final class SettingsSchemaEntry {
         return Optional.empty();
     }
 
+    public Optional<JsonSchemaSettingsSchemaEntry> getJsonSchema() {
+        if (isJsonSchema()) {
+            return Optional.of(((JsonSchemaValue) value).value);
+        }
+        return Optional.empty();
+    }
+
     public Optional<Object> _getUnknown() {
         if (_isUnknown()) {
             return Optional.of(((_UnknownValue) value).value);
@@ -237,6 +267,8 @@ public final class SettingsSchemaEntry {
 
         T visitCheckbox(CheckboxSettingsSchemaEntry checkbox);
 
+        T visitSwitch(SwitchSettingsSchemaEntry switch_);
+
         T visitDropdown(DropdownSettingsSchemaEntry dropdown);
 
         T visitSection(SectionSettingsSchemaEntry section);
@@ -246,6 +278,8 @@ public final class SettingsSchemaEntry {
         T visitNumber(NumberSettingsSchemaEntry number);
 
         T visitOneOf(OneOfSettingsSchemaEntry oneOf);
+
+        T visitJsonSchema(JsonSchemaSettingsSchemaEntry jsonSchema);
 
         T _visitUnknown(Object unknownType);
     }
@@ -259,11 +293,13 @@ public final class SettingsSchemaEntry {
         @JsonSubTypes.Type(ColorValue.class),
         @JsonSubTypes.Type(ImageValue.class),
         @JsonSubTypes.Type(CheckboxValue.class),
+        @JsonSubTypes.Type(SwitchValue.class),
         @JsonSubTypes.Type(DropdownValue.class),
         @JsonSubTypes.Type(SectionValue.class),
         @JsonSubTypes.Type(OauthValue.class),
         @JsonSubTypes.Type(NumberValue.class),
-        @JsonSubTypes.Type(OneOfValue.class)
+        @JsonSubTypes.Type(OneOfValue.class),
+        @JsonSubTypes.Type(JsonSchemaValue.class)
     })
     @JsonIgnoreProperties(ignoreUnknown = true)
     private interface Value {
@@ -543,6 +579,45 @@ public final class SettingsSchemaEntry {
         }
     }
 
+    @JsonTypeName("switch")
+    @JsonIgnoreProperties("type")
+    private static final class SwitchValue implements Value {
+        @JsonUnwrapped
+        private SwitchSettingsSchemaEntry value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private SwitchValue() {}
+
+        private SwitchValue(SwitchSettingsSchemaEntry value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitSwitch(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof SwitchValue && equalTo((SwitchValue) other);
+        }
+
+        private boolean equalTo(SwitchValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "SettingsSchemaEntry{" + "value: " + value + "}";
+        }
+    }
+
     @JsonTypeName("dropdown")
     @JsonIgnoreProperties("type")
     private static final class DropdownValue implements Value {
@@ -724,6 +799,45 @@ public final class SettingsSchemaEntry {
         }
 
         private boolean equalTo(OneOfValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "SettingsSchemaEntry{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("jsonSchema")
+    @JsonIgnoreProperties("type")
+    private static final class JsonSchemaValue implements Value {
+        @JsonUnwrapped
+        private JsonSchemaSettingsSchemaEntry value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private JsonSchemaValue() {}
+
+        private JsonSchemaValue(JsonSchemaSettingsSchemaEntry value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitJsonSchema(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof JsonSchemaValue && equalTo((JsonSchemaValue) other);
+        }
+
+        private boolean equalTo(JsonSchemaValue other) {
             return value.equals(other.value);
         }
 
