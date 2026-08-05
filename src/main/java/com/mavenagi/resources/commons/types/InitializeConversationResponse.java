@@ -60,7 +60,9 @@ public final class InitializeConversationResponse implements IConversationRespon
 
     private final Optional<SimulationContext> simulationContext;
 
-    private final Optional<ConversationKickoffResult> conversationKickoffResult;
+    private final Optional<Map<RelationshipType, List<EntityId>>> relatedEntities;
+
+    private final List<ConversationKickoffExecutionResponse> conversationKickoffResults;
 
     private final Map<String, Object> additionalProperties;
 
@@ -82,7 +84,8 @@ public final class InitializeConversationResponse implements IConversationRespon
             boolean open,
             boolean llmEnabled,
             Optional<SimulationContext> simulationContext,
-            Optional<ConversationKickoffResult> conversationKickoffResult,
+            Optional<Map<RelationshipType, List<EntityId>>> relatedEntities,
+            List<ConversationKickoffExecutionResponse> conversationKickoffResults,
             Map<String, Object> additionalProperties) {
         this.messages = messages;
         this.attachments = attachments;
@@ -101,7 +104,8 @@ public final class InitializeConversationResponse implements IConversationRespon
         this.open = open;
         this.llmEnabled = llmEnabled;
         this.simulationContext = simulationContext;
-        this.conversationKickoffResult = conversationKickoffResult;
+        this.relatedEntities = relatedEntities;
+        this.conversationKickoffResults = conversationKickoffResults;
         this.additionalProperties = additionalProperties;
     }
 
@@ -264,13 +268,27 @@ public final class InitializeConversationResponse implements IConversationRespon
     }
 
     /**
-     * @return Result of the Conversation Kickoff, when one ran during conversation initialization.
-     * Only present on this initialize response; other endpoints that return a conversation
-     * do not include it.
+     * @return Related entity ids grouped by relationship type.
+     * <ul>
+     * <li><code>SPAWN_FROM</code>: the conversation this one was spawned from (set via <code>ConversationCreateRequest.spawnedFromConversationId</code>).</li>
+     * <li><code>SPAWN_TO</code>: the conversations that were spawned from this conversation.</li>
+     * </ul>
      */
-    @JsonProperty("conversationKickoffResult")
-    public Optional<ConversationKickoffResult> getConversationKickoffResult() {
-        return conversationKickoffResult;
+    @JsonProperty("relatedEntities")
+    @java.lang.Override
+    public Optional<Map<RelationshipType, List<EntityId>>> getRelatedEntities() {
+        return relatedEntities;
+    }
+
+    /**
+     * @return Results of the Conversation Kickoffs that ran during conversation initialization, one
+     * entry per kickoff in the order they were recorded. Empty when no kickoff ran. Only
+     * present on this initialize response; other endpoints that return a conversation do not
+     * include it.
+     */
+    @JsonProperty("conversationKickoffResults")
+    public List<ConversationKickoffExecutionResponse> getConversationKickoffResults() {
+        return conversationKickoffResults;
     }
 
     @java.lang.Override
@@ -302,7 +320,8 @@ public final class InitializeConversationResponse implements IConversationRespon
                 && open == other.open
                 && llmEnabled == other.llmEnabled
                 && simulationContext.equals(other.simulationContext)
-                && conversationKickoffResult.equals(other.conversationKickoffResult);
+                && relatedEntities.equals(other.relatedEntities)
+                && conversationKickoffResults.equals(other.conversationKickoffResults);
     }
 
     @java.lang.Override
@@ -325,7 +344,8 @@ public final class InitializeConversationResponse implements IConversationRespon
                 this.open,
                 this.llmEnabled,
                 this.simulationContext,
-                this.conversationKickoffResult);
+                this.relatedEntities,
+                this.conversationKickoffResults);
     }
 
     @java.lang.Override
@@ -473,13 +493,28 @@ public final class InitializeConversationResponse implements IConversationRespon
         _FinalStage simulationContext(SimulationContext simulationContext);
 
         /**
-         * <p>Result of the Conversation Kickoff, when one ran during conversation initialization.
-         * Only present on this initialize response; other endpoints that return a conversation
-         * do not include it.</p>
+         * <p>Related entity ids grouped by relationship type.</p>
+         * <ul>
+         * <li><code>SPAWN_FROM</code>: the conversation this one was spawned from (set via <code>ConversationCreateRequest.spawnedFromConversationId</code>).</li>
+         * <li><code>SPAWN_TO</code>: the conversations that were spawned from this conversation.</li>
+         * </ul>
          */
-        _FinalStage conversationKickoffResult(Optional<ConversationKickoffResult> conversationKickoffResult);
+        _FinalStage relatedEntities(Optional<Map<RelationshipType, List<EntityId>>> relatedEntities);
 
-        _FinalStage conversationKickoffResult(ConversationKickoffResult conversationKickoffResult);
+        _FinalStage relatedEntities(Map<RelationshipType, List<EntityId>> relatedEntities);
+
+        /**
+         * <p>Results of the Conversation Kickoffs that ran during conversation initialization, one
+         * entry per kickoff in the order they were recorded. Empty when no kickoff ran. Only
+         * present on this initialize response; other endpoints that return a conversation do not
+         * include it.</p>
+         */
+        _FinalStage conversationKickoffResults(List<ConversationKickoffExecutionResponse> conversationKickoffResults);
+
+        _FinalStage addConversationKickoffResults(ConversationKickoffExecutionResponse conversationKickoffResults);
+
+        _FinalStage addAllConversationKickoffResults(
+                List<ConversationKickoffExecutionResponse> conversationKickoffResults);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -503,7 +538,9 @@ public final class InitializeConversationResponse implements IConversationRespon
 
         private boolean llmEnabled;
 
-        private Optional<ConversationKickoffResult> conversationKickoffResult = Optional.empty();
+        private List<ConversationKickoffExecutionResponse> conversationKickoffResults = new ArrayList<>();
+
+        private Optional<Map<RelationshipType, List<EntityId>>> relatedEntities = Optional.empty();
 
         private Optional<SimulationContext> simulationContext = Optional.empty();
 
@@ -551,7 +588,8 @@ public final class InitializeConversationResponse implements IConversationRespon
             open(other.getOpen());
             llmEnabled(other.getLlmEnabled());
             simulationContext(other.getSimulationContext());
-            conversationKickoffResult(other.getConversationKickoffResult());
+            relatedEntities(other.getRelatedEntities());
+            conversationKickoffResults(other.getConversationKickoffResults());
             return this;
         }
 
@@ -634,26 +672,77 @@ public final class InitializeConversationResponse implements IConversationRespon
         }
 
         /**
-         * <p>Result of the Conversation Kickoff, when one ran during conversation initialization.
-         * Only present on this initialize response; other endpoints that return a conversation
-         * do not include it.</p>
+         * <p>Results of the Conversation Kickoffs that ran during conversation initialization, one
+         * entry per kickoff in the order they were recorded. Empty when no kickoff ran. Only
+         * present on this initialize response; other endpoints that return a conversation do not
+         * include it.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage conversationKickoffResult(ConversationKickoffResult conversationKickoffResult) {
-            this.conversationKickoffResult = Optional.ofNullable(conversationKickoffResult);
+        public _FinalStage addAllConversationKickoffResults(
+                List<ConversationKickoffExecutionResponse> conversationKickoffResults) {
+            if (conversationKickoffResults != null) {
+                this.conversationKickoffResults.addAll(conversationKickoffResults);
+            }
             return this;
         }
 
         /**
-         * <p>Result of the Conversation Kickoff, when one ran during conversation initialization.
-         * Only present on this initialize response; other endpoints that return a conversation
-         * do not include it.</p>
+         * <p>Results of the Conversation Kickoffs that ran during conversation initialization, one
+         * entry per kickoff in the order they were recorded. Empty when no kickoff ran. Only
+         * present on this initialize response; other endpoints that return a conversation do not
+         * include it.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        @JsonSetter(value = "conversationKickoffResult", nulls = Nulls.SKIP)
-        public _FinalStage conversationKickoffResult(Optional<ConversationKickoffResult> conversationKickoffResult) {
-            this.conversationKickoffResult = conversationKickoffResult;
+        public _FinalStage addConversationKickoffResults(
+                ConversationKickoffExecutionResponse conversationKickoffResults) {
+            this.conversationKickoffResults.add(conversationKickoffResults);
+            return this;
+        }
+
+        /**
+         * <p>Results of the Conversation Kickoffs that ran during conversation initialization, one
+         * entry per kickoff in the order they were recorded. Empty when no kickoff ran. Only
+         * present on this initialize response; other endpoints that return a conversation do not
+         * include it.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "conversationKickoffResults", nulls = Nulls.SKIP)
+        public _FinalStage conversationKickoffResults(
+                List<ConversationKickoffExecutionResponse> conversationKickoffResults) {
+            this.conversationKickoffResults.clear();
+            if (conversationKickoffResults != null) {
+                this.conversationKickoffResults.addAll(conversationKickoffResults);
+            }
+            return this;
+        }
+
+        /**
+         * <p>Related entity ids grouped by relationship type.</p>
+         * <ul>
+         * <li><code>SPAWN_FROM</code>: the conversation this one was spawned from (set via <code>ConversationCreateRequest.spawnedFromConversationId</code>).</li>
+         * <li><code>SPAWN_TO</code>: the conversations that were spawned from this conversation.</li>
+         * </ul>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage relatedEntities(Map<RelationshipType, List<EntityId>> relatedEntities) {
+            this.relatedEntities = Optional.ofNullable(relatedEntities);
+            return this;
+        }
+
+        /**
+         * <p>Related entity ids grouped by relationship type.</p>
+         * <ul>
+         * <li><code>SPAWN_FROM</code>: the conversation this one was spawned from (set via <code>ConversationCreateRequest.spawnedFromConversationId</code>).</li>
+         * <li><code>SPAWN_TO</code>: the conversations that were spawned from this conversation.</li>
+         * </ul>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "relatedEntities", nulls = Nulls.SKIP)
+        public _FinalStage relatedEntities(Optional<Map<RelationshipType, List<EntityId>>> relatedEntities) {
+            this.relatedEntities = relatedEntities;
             return this;
         }
 
@@ -947,7 +1036,8 @@ public final class InitializeConversationResponse implements IConversationRespon
                     open,
                     llmEnabled,
                     simulationContext,
-                    conversationKickoffResult,
+                    relatedEntities,
+                    conversationKickoffResults,
                     additionalProperties);
         }
     }

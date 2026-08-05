@@ -27,16 +27,20 @@ public final class ConversationExecutedActionPrecondition implements IPreconditi
 
     private final Optional<String> appId;
 
+    private final Optional<ConversationRound> conversationRound;
+
     private final Map<String, Object> additionalProperties;
 
     private ConversationExecutedActionPrecondition(
             Optional<PreconditionOperator> operator,
             String actionId,
             Optional<String> appId,
+            Optional<ConversationRound> conversationRound,
             Map<String, Object> additionalProperties) {
         this.operator = operator;
         this.actionId = actionId;
         this.appId = appId;
+        this.conversationRound = conversationRound;
         this.additionalProperties = additionalProperties;
     }
 
@@ -65,6 +69,14 @@ public final class ConversationExecutedActionPrecondition implements IPreconditi
         return appId;
     }
 
+    /**
+     * @return Restricts which round the action must have executed in. Defaults to ANY when omitted, matching an action executed in any round.
+     */
+    @JsonProperty("conversationRound")
+    public Optional<ConversationRound> getConversationRound() {
+        return conversationRound;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -78,12 +90,15 @@ public final class ConversationExecutedActionPrecondition implements IPreconditi
     }
 
     private boolean equalTo(ConversationExecutedActionPrecondition other) {
-        return operator.equals(other.operator) && actionId.equals(other.actionId) && appId.equals(other.appId);
+        return operator.equals(other.operator)
+                && actionId.equals(other.actionId)
+                && appId.equals(other.appId)
+                && conversationRound.equals(other.conversationRound);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.operator, this.actionId, this.appId);
+        return Objects.hash(this.operator, this.actionId, this.appId, this.conversationRound);
     }
 
     @java.lang.Override
@@ -120,11 +135,20 @@ public final class ConversationExecutedActionPrecondition implements IPreconditi
         _FinalStage appId(Optional<String> appId);
 
         _FinalStage appId(String appId);
+
+        /**
+         * <p>Restricts which round the action must have executed in. Defaults to ANY when omitted, matching an action executed in any round.</p>
+         */
+        _FinalStage conversationRound(Optional<ConversationRound> conversationRound);
+
+        _FinalStage conversationRound(ConversationRound conversationRound);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements ActionIdStage, _FinalStage {
         private String actionId;
+
+        private Optional<ConversationRound> conversationRound = Optional.empty();
 
         private Optional<String> appId = Optional.empty();
 
@@ -140,6 +164,7 @@ public final class ConversationExecutedActionPrecondition implements IPreconditi
             operator(other.getOperator());
             actionId(other.getActionId());
             appId(other.getAppId());
+            conversationRound(other.getConversationRound());
             return this;
         }
 
@@ -152,6 +177,26 @@ public final class ConversationExecutedActionPrecondition implements IPreconditi
         @JsonSetter("actionId")
         public _FinalStage actionId(@NotNull String actionId) {
             this.actionId = Objects.requireNonNull(actionId, "actionId must not be null");
+            return this;
+        }
+
+        /**
+         * <p>Restricts which round the action must have executed in. Defaults to ANY when omitted, matching an action executed in any round.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage conversationRound(ConversationRound conversationRound) {
+            this.conversationRound = Optional.ofNullable(conversationRound);
+            return this;
+        }
+
+        /**
+         * <p>Restricts which round the action must have executed in. Defaults to ANY when omitted, matching an action executed in any round.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "conversationRound", nulls = Nulls.SKIP)
+        public _FinalStage conversationRound(Optional<ConversationRound> conversationRound) {
+            this.conversationRound = conversationRound;
             return this;
         }
 
@@ -197,7 +242,8 @@ public final class ConversationExecutedActionPrecondition implements IPreconditi
 
         @java.lang.Override
         public ConversationExecutedActionPrecondition build() {
-            return new ConversationExecutedActionPrecondition(operator, actionId, appId, additionalProperties);
+            return new ConversationExecutedActionPrecondition(
+                    operator, actionId, appId, conversationRound, additionalProperties);
         }
     }
 }

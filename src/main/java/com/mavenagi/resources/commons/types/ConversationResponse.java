@@ -60,6 +60,8 @@ public final class ConversationResponse implements IConversationResponse, IBaseC
 
     private final Optional<SimulationContext> simulationContext;
 
+    private final Optional<Map<RelationshipType, List<EntityId>>> relatedEntities;
+
     private final Map<String, Object> additionalProperties;
 
     private ConversationResponse(
@@ -80,6 +82,7 @@ public final class ConversationResponse implements IConversationResponse, IBaseC
             boolean open,
             boolean llmEnabled,
             Optional<SimulationContext> simulationContext,
+            Optional<Map<RelationshipType, List<EntityId>>> relatedEntities,
             Map<String, Object> additionalProperties) {
         this.messages = messages;
         this.attachments = attachments;
@@ -98,6 +101,7 @@ public final class ConversationResponse implements IConversationResponse, IBaseC
         this.open = open;
         this.llmEnabled = llmEnabled;
         this.simulationContext = simulationContext;
+        this.relatedEntities = relatedEntities;
         this.additionalProperties = additionalProperties;
     }
 
@@ -259,6 +263,19 @@ public final class ConversationResponse implements IConversationResponse, IBaseC
         return simulationContext;
     }
 
+    /**
+     * @return Related entity ids grouped by relationship type.
+     * <ul>
+     * <li><code>SPAWN_FROM</code>: the conversation this one was spawned from (set via <code>ConversationCreateRequest.spawnedFromConversationId</code>).</li>
+     * <li><code>SPAWN_TO</code>: the conversations that were spawned from this conversation.</li>
+     * </ul>
+     */
+    @JsonProperty("relatedEntities")
+    @java.lang.Override
+    public Optional<Map<RelationshipType, List<EntityId>>> getRelatedEntities() {
+        return relatedEntities;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -287,7 +304,8 @@ public final class ConversationResponse implements IConversationResponse, IBaseC
                 && deleted == other.deleted
                 && open == other.open
                 && llmEnabled == other.llmEnabled
-                && simulationContext.equals(other.simulationContext);
+                && simulationContext.equals(other.simulationContext)
+                && relatedEntities.equals(other.relatedEntities);
     }
 
     @java.lang.Override
@@ -309,7 +327,8 @@ public final class ConversationResponse implements IConversationResponse, IBaseC
                 this.deleted,
                 this.open,
                 this.llmEnabled,
-                this.simulationContext);
+                this.simulationContext,
+                this.relatedEntities);
     }
 
     @java.lang.Override
@@ -455,6 +474,17 @@ public final class ConversationResponse implements IConversationResponse, IBaseC
         _FinalStage simulationContext(Optional<SimulationContext> simulationContext);
 
         _FinalStage simulationContext(SimulationContext simulationContext);
+
+        /**
+         * <p>Related entity ids grouped by relationship type.</p>
+         * <ul>
+         * <li><code>SPAWN_FROM</code>: the conversation this one was spawned from (set via <code>ConversationCreateRequest.spawnedFromConversationId</code>).</li>
+         * <li><code>SPAWN_TO</code>: the conversations that were spawned from this conversation.</li>
+         * </ul>
+         */
+        _FinalStage relatedEntities(Optional<Map<RelationshipType, List<EntityId>>> relatedEntities);
+
+        _FinalStage relatedEntities(Map<RelationshipType, List<EntityId>> relatedEntities);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -477,6 +507,8 @@ public final class ConversationResponse implements IConversationResponse, IBaseC
         private boolean open;
 
         private boolean llmEnabled;
+
+        private Optional<Map<RelationshipType, List<EntityId>>> relatedEntities = Optional.empty();
 
         private Optional<SimulationContext> simulationContext = Optional.empty();
 
@@ -524,6 +556,7 @@ public final class ConversationResponse implements IConversationResponse, IBaseC
             open(other.getOpen());
             llmEnabled(other.getLlmEnabled());
             simulationContext(other.getSimulationContext());
+            relatedEntities(other.getRelatedEntities());
             return this;
         }
 
@@ -602,6 +635,34 @@ public final class ConversationResponse implements IConversationResponse, IBaseC
         @JsonSetter("llmEnabled")
         public _FinalStage llmEnabled(boolean llmEnabled) {
             this.llmEnabled = llmEnabled;
+            return this;
+        }
+
+        /**
+         * <p>Related entity ids grouped by relationship type.</p>
+         * <ul>
+         * <li><code>SPAWN_FROM</code>: the conversation this one was spawned from (set via <code>ConversationCreateRequest.spawnedFromConversationId</code>).</li>
+         * <li><code>SPAWN_TO</code>: the conversations that were spawned from this conversation.</li>
+         * </ul>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage relatedEntities(Map<RelationshipType, List<EntityId>> relatedEntities) {
+            this.relatedEntities = Optional.ofNullable(relatedEntities);
+            return this;
+        }
+
+        /**
+         * <p>Related entity ids grouped by relationship type.</p>
+         * <ul>
+         * <li><code>SPAWN_FROM</code>: the conversation this one was spawned from (set via <code>ConversationCreateRequest.spawnedFromConversationId</code>).</li>
+         * <li><code>SPAWN_TO</code>: the conversations that were spawned from this conversation.</li>
+         * </ul>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "relatedEntities", nulls = Nulls.SKIP)
+        public _FinalStage relatedEntities(Optional<Map<RelationshipType, List<EntityId>>> relatedEntities) {
+            this.relatedEntities = relatedEntities;
             return this;
         }
 
@@ -895,6 +956,7 @@ public final class ConversationResponse implements IConversationResponse, IBaseC
                     open,
                     llmEnabled,
                     simulationContext,
+                    relatedEntities,
                     additionalProperties);
         }
     }

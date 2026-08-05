@@ -43,6 +43,8 @@ public final class BaseAttachment implements IBaseAttachment {
      * <li>image/webp</li>
      * <li>application/pdf</li>
      * <li>text/plain</li>
+     * <li>text/markdown</li>
+     * <li>text/x-markdown</li>
      * <li>text/csv</li>
      * <li>application/vnd.openxmlformats-officedocument.wordprocessingml.document</li>
      * <li>application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</li>
@@ -115,6 +117,8 @@ public final class BaseAttachment implements IBaseAttachment {
          * <li>image/webp</li>
          * <li>application/pdf</li>
          * <li>text/plain</li>
+         * <li>text/markdown</li>
+         * <li>text/x-markdown</li>
          * <li>text/csv</li>
          * <li>application/vnd.openxmlformats-officedocument.wordprocessingml.document</li>
          * <li>application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</li>
@@ -176,6 +180,8 @@ public final class BaseAttachment implements IBaseAttachment {
          * <li>image/webp</li>
          * <li>application/pdf</li>
          * <li>text/plain</li>
+         * <li>text/markdown</li>
+         * <li>text/x-markdown</li>
          * <li>text/csv</li>
          * <li>application/vnd.openxmlformats-officedocument.wordprocessingml.document</li>
          * <li>application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</li>
@@ -201,6 +207,8 @@ public final class BaseAttachment implements IBaseAttachment {
          * <li>image/webp</li>
          * <li>application/pdf</li>
          * <li>text/plain</li>
+         * <li>text/markdown</li>
+         * <li>text/x-markdown</li>
          * <li>text/csv</li>
          * <li>application/vnd.openxmlformats-officedocument.wordprocessingml.document</li>
          * <li>application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</li>

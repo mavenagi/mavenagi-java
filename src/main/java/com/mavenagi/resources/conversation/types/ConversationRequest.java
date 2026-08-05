@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
+import com.mavenagi.resources.commons.types.EntityId;
 import com.mavenagi.resources.commons.types.EntityIdBase;
 import com.mavenagi.resources.commons.types.ResponseConfig;
 import com.mavenagi.resources.commons.types.SimulationContext;
@@ -48,6 +49,8 @@ public final class ConversationRequest {
 
     private final List<ConversationMessageRequest> messages;
 
+    private final Optional<EntityId> spawnedFromConversationId;
+
     private final Map<String, Object> additionalProperties;
 
     private ConversationRequest(
@@ -61,6 +64,7 @@ public final class ConversationRequest {
             Optional<Set<String>> tags,
             Optional<Map<String, String>> metadata,
             List<ConversationMessageRequest> messages,
+            Optional<EntityId> spawnedFromConversationId,
             Map<String, Object> additionalProperties) {
         this.conversationId = conversationId;
         this.simulationContext = simulationContext;
@@ -72,6 +76,7 @@ public final class ConversationRequest {
         this.tags = tags;
         this.metadata = metadata;
         this.messages = messages;
+        this.spawnedFromConversationId = spawnedFromConversationId;
         this.additionalProperties = additionalProperties;
     }
 
@@ -162,6 +167,14 @@ public final class ConversationRequest {
         return messages;
     }
 
+    /**
+     * @return The unique identifier of the conversation this new conversation was spawned from, if applicable.
+     */
+    @JsonProperty("spawnedFromConversationId")
+    public Optional<EntityId> getSpawnedFromConversationId() {
+        return spawnedFromConversationId;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -183,7 +196,8 @@ public final class ConversationRequest {
                 && updatedAt.equals(other.updatedAt)
                 && tags.equals(other.tags)
                 && metadata.equals(other.metadata)
-                && messages.equals(other.messages);
+                && messages.equals(other.messages)
+                && spawnedFromConversationId.equals(other.spawnedFromConversationId);
     }
 
     @java.lang.Override
@@ -198,7 +212,8 @@ public final class ConversationRequest {
                 this.updatedAt,
                 this.tags,
                 this.metadata,
-                this.messages);
+                this.messages,
+                this.spawnedFromConversationId);
     }
 
     @java.lang.Override
@@ -293,11 +308,20 @@ public final class ConversationRequest {
         _FinalStage addMessages(ConversationMessageRequest messages);
 
         _FinalStage addAllMessages(List<ConversationMessageRequest> messages);
+
+        /**
+         * <p>The unique identifier of the conversation this new conversation was spawned from, if applicable.</p>
+         */
+        _FinalStage spawnedFromConversationId(Optional<EntityId> spawnedFromConversationId);
+
+        _FinalStage spawnedFromConversationId(EntityId spawnedFromConversationId);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements ConversationIdStage, _FinalStage {
         private EntityIdBase conversationId;
+
+        private Optional<EntityId> spawnedFromConversationId = Optional.empty();
 
         private List<ConversationMessageRequest> messages = new ArrayList<>();
 
@@ -334,6 +358,7 @@ public final class ConversationRequest {
             tags(other.getTags());
             metadata(other.getMetadata());
             messages(other.getMessages());
+            spawnedFromConversationId(other.getSpawnedFromConversationId());
             return this;
         }
 
@@ -346,6 +371,26 @@ public final class ConversationRequest {
         @JsonSetter("conversationId")
         public _FinalStage conversationId(@NotNull EntityIdBase conversationId) {
             this.conversationId = Objects.requireNonNull(conversationId, "conversationId must not be null");
+            return this;
+        }
+
+        /**
+         * <p>The unique identifier of the conversation this new conversation was spawned from, if applicable.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage spawnedFromConversationId(EntityId spawnedFromConversationId) {
+            this.spawnedFromConversationId = Optional.ofNullable(spawnedFromConversationId);
+            return this;
+        }
+
+        /**
+         * <p>The unique identifier of the conversation this new conversation was spawned from, if applicable.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "spawnedFromConversationId", nulls = Nulls.SKIP)
+        public _FinalStage spawnedFromConversationId(Optional<EntityId> spawnedFromConversationId) {
+            this.spawnedFromConversationId = spawnedFromConversationId;
             return this;
         }
 
@@ -571,6 +616,7 @@ public final class ConversationRequest {
                     tags,
                     metadata,
                     messages,
+                    spawnedFromConversationId,
                     additionalProperties);
         }
     }

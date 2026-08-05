@@ -84,6 +84,8 @@ public final class ConversationFilter {
 
     private final Optional<IntelligentFieldFilter> intelligentFields;
 
+    private final Optional<List<BillableFilterField>> billable;
+
     private final Map<String, Object> additionalProperties;
 
     private ConversationFilter(
@@ -114,6 +116,7 @@ public final class ConversationFilter {
             Optional<List<EntityIdFilter>> inboxItemIds,
             Optional<SimulationFilter> simulationFilter,
             Optional<IntelligentFieldFilter> intelligentFields,
+            Optional<List<BillableFilterField>> billable,
             Map<String, Object> additionalProperties) {
         this.search = search;
         this.createdAfter = createdAfter;
@@ -142,6 +145,7 @@ public final class ConversationFilter {
         this.inboxItemIds = inboxItemIds;
         this.simulationFilter = simulationFilter;
         this.intelligentFields = intelligentFields;
+        this.billable = billable;
         this.additionalProperties = additionalProperties;
     }
 
@@ -304,6 +308,9 @@ public final class ConversationFilter {
 
     /**
      * @return Filter by conversation resolution status which is determined by AI based on the conversation content.
+     * <p>When <code>resolutionStatus</code>, <code>resolvedByMaven</code>, and <code>billable</code> are combined in a single filter,
+     * precedence is applied in the following order: <code>resolutionStatus</code>, <code>resolvedByMaven</code>,
+     * and then <code>billable</code>.</p>
      */
     @JsonProperty("resolutionStatus")
     public Optional<List<ResolutionStatus>> getResolutionStatus() {
@@ -311,7 +318,10 @@ public final class ConversationFilter {
     }
 
     /**
-     * @return Filter conversations based on whether they were resolved by Maven AI
+     * @return Filter conversations based on whether they were resolved by Maven AI.
+     * <p>When <code>resolutionStatus</code>, <code>resolvedByMaven</code>, and <code>billable</code> are combined in a single filter,
+     * precedence is applied in the following order: <code>resolutionStatus</code>, <code>resolvedByMaven</code>,
+     * and then <code>billable</code>.</p>
      */
     @JsonProperty("resolvedByMaven")
     public Optional<Boolean> getResolvedByMaven() {
@@ -385,6 +395,20 @@ public final class ConversationFilter {
         return intelligentFields;
     }
 
+    /**
+     * @return Filter by whether the conversation is billable. Defaults to all eligible conversations,
+     * which means ELIGIBLE_AND_BILLABLE and ELIGIBLE_AND_NOT_BILLABLE.
+     * <p>When <code>resolutionStatus</code>, <code>resolvedByMaven</code>, and <code>billable</code> are combined in a single filter,
+     * precedence is applied in the following order: <code>resolutionStatus</code>, <code>resolvedByMaven</code>,
+     * and then <code>billable</code>.</p>
+     * <p>If billable is <code>null</code> or <code>[]</code> then defaults to all eligible conversations,
+     * which means ELIGIBLE_AND_BILLABLE and ELIGIBLE_AND_NOT_BILLABLE.</p>
+     */
+    @JsonProperty("billable")
+    public Optional<List<BillableFilterField>> getBillable() {
+        return billable;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -423,7 +447,8 @@ public final class ConversationFilter {
                 && anyMsgCharterMode.equals(other.anyMsgCharterMode)
                 && inboxItemIds.equals(other.inboxItemIds)
                 && simulationFilter.equals(other.simulationFilter)
-                && intelligentFields.equals(other.intelligentFields);
+                && intelligentFields.equals(other.intelligentFields)
+                && billable.equals(other.billable);
     }
 
     @java.lang.Override
@@ -455,7 +480,8 @@ public final class ConversationFilter {
                 this.anyMsgCharterMode,
                 this.inboxItemIds,
                 this.simulationFilter,
-                this.intelligentFields);
+                this.intelligentFields,
+                this.billable);
     }
 
     @java.lang.Override
@@ -523,6 +549,8 @@ public final class ConversationFilter {
 
         private Optional<IntelligentFieldFilter> intelligentFields = Optional.empty();
 
+        private Optional<List<BillableFilterField>> billable = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -556,6 +584,7 @@ public final class ConversationFilter {
             inboxItemIds(other.getInboxItemIds());
             simulationFilter(other.getSimulationFilter());
             intelligentFields(other.getIntelligentFields());
+            billable(other.getBillable());
             return this;
         }
 
@@ -820,6 +849,9 @@ public final class ConversationFilter {
 
         /**
          * <p>Filter by conversation resolution status which is determined by AI based on the conversation content.</p>
+         * <p>When <code>resolutionStatus</code>, <code>resolvedByMaven</code>, and <code>billable</code> are combined in a single filter,
+         * precedence is applied in the following order: <code>resolutionStatus</code>, <code>resolvedByMaven</code>,
+         * and then <code>billable</code>.</p>
          */
         @JsonSetter(value = "resolutionStatus", nulls = Nulls.SKIP)
         public Builder resolutionStatus(Optional<List<ResolutionStatus>> resolutionStatus) {
@@ -833,7 +865,10 @@ public final class ConversationFilter {
         }
 
         /**
-         * <p>Filter conversations based on whether they were resolved by Maven AI</p>
+         * <p>Filter conversations based on whether they were resolved by Maven AI.</p>
+         * <p>When <code>resolutionStatus</code>, <code>resolvedByMaven</code>, and <code>billable</code> are combined in a single filter,
+         * precedence is applied in the following order: <code>resolutionStatus</code>, <code>resolvedByMaven</code>,
+         * and then <code>billable</code>.</p>
          */
         @JsonSetter(value = "resolvedByMaven", nulls = Nulls.SKIP)
         public Builder resolvedByMaven(Optional<Boolean> resolvedByMaven) {
@@ -961,6 +996,26 @@ public final class ConversationFilter {
             return this;
         }
 
+        /**
+         * <p>Filter by whether the conversation is billable. Defaults to all eligible conversations,
+         * which means ELIGIBLE_AND_BILLABLE and ELIGIBLE_AND_NOT_BILLABLE.</p>
+         * <p>When <code>resolutionStatus</code>, <code>resolvedByMaven</code>, and <code>billable</code> are combined in a single filter,
+         * precedence is applied in the following order: <code>resolutionStatus</code>, <code>resolvedByMaven</code>,
+         * and then <code>billable</code>.</p>
+         * <p>If billable is <code>null</code> or <code>[]</code> then defaults to all eligible conversations,
+         * which means ELIGIBLE_AND_BILLABLE and ELIGIBLE_AND_NOT_BILLABLE.</p>
+         */
+        @JsonSetter(value = "billable", nulls = Nulls.SKIP)
+        public Builder billable(Optional<List<BillableFilterField>> billable) {
+            this.billable = billable;
+            return this;
+        }
+
+        public Builder billable(List<BillableFilterField> billable) {
+            this.billable = Optional.ofNullable(billable);
+            return this;
+        }
+
         public ConversationFilter build() {
             return new ConversationFilter(
                     search,
@@ -990,6 +1045,7 @@ public final class ConversationFilter {
                     inboxItemIds,
                     simulationFilter,
                     intelligentFields,
+                    billable,
                     additionalProperties);
         }
     }

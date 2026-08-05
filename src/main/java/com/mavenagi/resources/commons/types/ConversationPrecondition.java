@@ -46,6 +46,10 @@ public final class ConversationPrecondition {
         return new ConversationPrecondition(new AppValue(value));
     }
 
+    public static ConversationPrecondition conversationState(ConversationStatePrecondition value) {
+        return new ConversationPrecondition(new ConversationStateValue(value));
+    }
+
     public static ConversationPrecondition intelligentField(IntelligentFieldPrecondition value) {
         return new ConversationPrecondition(new IntelligentFieldValue(value));
     }
@@ -68,6 +72,10 @@ public final class ConversationPrecondition {
 
     public boolean isApp() {
         return value instanceof AppValue;
+    }
+
+    public boolean isConversationState() {
+        return value instanceof ConversationStateValue;
     }
 
     public boolean isIntelligentField() {
@@ -113,6 +121,13 @@ public final class ConversationPrecondition {
         return Optional.empty();
     }
 
+    public Optional<ConversationStatePrecondition> getConversationState() {
+        if (isConversationState()) {
+            return Optional.of(((ConversationStateValue) value).value);
+        }
+        return Optional.empty();
+    }
+
     public Optional<IntelligentFieldPrecondition> getIntelligentField() {
         if (isIntelligentField()) {
             return Optional.of(((IntelligentFieldValue) value).value);
@@ -143,6 +158,8 @@ public final class ConversationPrecondition {
 
         T visitApp(AppPrecondition app);
 
+        T visitConversationState(ConversationStatePrecondition conversationState);
+
         T visitIntelligentField(IntelligentFieldPrecondition intelligentField);
 
         T _visitUnknown(Object unknownType);
@@ -159,6 +176,7 @@ public final class ConversationPrecondition {
         @JsonSubTypes.Type(ActionExecutedValue.class),
         @JsonSubTypes.Type(ResponseConfigValue.class),
         @JsonSubTypes.Type(AppValue.class),
+        @JsonSubTypes.Type(ConversationStateValue.class),
         @JsonSubTypes.Type(IntelligentFieldValue.class)
     })
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -347,6 +365,45 @@ public final class ConversationPrecondition {
         }
 
         private boolean equalTo(AppValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "ConversationPrecondition{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("conversationState")
+    @JsonIgnoreProperties("conversationPreconditionType")
+    private static final class ConversationStateValue implements Value {
+        @JsonUnwrapped
+        private ConversationStatePrecondition value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private ConversationStateValue() {}
+
+        private ConversationStateValue(ConversationStatePrecondition value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitConversationState(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof ConversationStateValue && equalTo((ConversationStateValue) other);
+        }
+
+        private boolean equalTo(ConversationStateValue other) {
             return value.equals(other.value);
         }
 

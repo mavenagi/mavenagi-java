@@ -146,9 +146,20 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
 
     /**
      * @return (Beta: under development, endpoint may change.)
-     * ID of the asset associated with this document. This asset will be transformed into
-     * text and set as the content of the document. Supported MIME types are those accepted by <code>initiateUpload</code>.
-     * Either this or content is required, but not both. The asset must have a checksum provided at commit time (see <code>commitUpload</code>).
+     * ID of the asset associated with this document. This asset is transformed into text and
+     * set as the content of a single document, so only single-document MIME types are supported:
+     * <ul>
+     * <li>text/plain</li>
+     * <li>text/markdown</li>
+     * <li>text/x-markdown</li>
+     * <li>application/pdf</li>
+     * <li>application/vnd.openxmlformats-officedocument.wordprocessingml.document (docx)</li>
+     * <li>application/vnd.openxmlformats-officedocument.spreadsheetml.sheet (xlsx)
+     * Multi-record formats that fan out into many documents (text/csv, application/json,
+     * application/jsonl) are not supported here. Any other type accepted by <code>initiateUpload</code>
+     * (e.g. images, audio, video) will result in a failed knowledge base version.
+     * Either this or content is required, but not both. The asset must have a checksum provided at commit time (see <code>commitUpload</code>).</li>
+     * </ul>
      */
     @JsonProperty("assetId")
     public Optional<EntityIdWithoutAgent> getAssetId() {
@@ -309,9 +320,20 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
 
         /**
          * <p>(Beta: under development, endpoint may change.)
-         * ID of the asset associated with this document. This asset will be transformed into
-         * text and set as the content of the document. Supported MIME types are those accepted by <code>initiateUpload</code>.
-         * Either this or content is required, but not both. The asset must have a checksum provided at commit time (see <code>commitUpload</code>).</p>
+         * ID of the asset associated with this document. This asset is transformed into text and
+         * set as the content of a single document, so only single-document MIME types are supported:</p>
+         * <ul>
+         * <li>text/plain</li>
+         * <li>text/markdown</li>
+         * <li>text/x-markdown</li>
+         * <li>application/pdf</li>
+         * <li>application/vnd.openxmlformats-officedocument.wordprocessingml.document (docx)</li>
+         * <li>application/vnd.openxmlformats-officedocument.spreadsheetml.sheet (xlsx)
+         * Multi-record formats that fan out into many documents (text/csv, application/json,
+         * application/jsonl) are not supported here. Any other type accepted by <code>initiateUpload</code>
+         * (e.g. images, audio, video) will result in a failed knowledge base version.
+         * Either this or content is required, but not both. The asset must have a checksum provided at commit time (see <code>commitUpload</code>).</li>
+         * </ul>
          */
         _FinalStage assetId(Optional<EntityIdWithoutAgent> assetId);
 
@@ -555,9 +577,20 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
 
         /**
          * <p>(Beta: under development, endpoint may change.)
-         * ID of the asset associated with this document. This asset will be transformed into
-         * text and set as the content of the document. Supported MIME types are those accepted by <code>initiateUpload</code>.
-         * Either this or content is required, but not both. The asset must have a checksum provided at commit time (see <code>commitUpload</code>).</p>
+         * ID of the asset associated with this document. This asset is transformed into text and
+         * set as the content of a single document, so only single-document MIME types are supported:</p>
+         * <ul>
+         * <li>text/plain</li>
+         * <li>text/markdown</li>
+         * <li>text/x-markdown</li>
+         * <li>application/pdf</li>
+         * <li>application/vnd.openxmlformats-officedocument.wordprocessingml.document (docx)</li>
+         * <li>application/vnd.openxmlformats-officedocument.spreadsheetml.sheet (xlsx)
+         * Multi-record formats that fan out into many documents (text/csv, application/json,
+         * application/jsonl) are not supported here. Any other type accepted by <code>initiateUpload</code>
+         * (e.g. images, audio, video) will result in a failed knowledge base version.
+         * Either this or content is required, but not both. The asset must have a checksum provided at commit time (see <code>commitUpload</code>).</li>
+         * </ul>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -568,9 +601,20 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
 
         /**
          * <p>(Beta: under development, endpoint may change.)
-         * ID of the asset associated with this document. This asset will be transformed into
-         * text and set as the content of the document. Supported MIME types are those accepted by <code>initiateUpload</code>.
-         * Either this or content is required, but not both. The asset must have a checksum provided at commit time (see <code>commitUpload</code>).</p>
+         * ID of the asset associated with this document. This asset is transformed into text and
+         * set as the content of a single document, so only single-document MIME types are supported:</p>
+         * <ul>
+         * <li>text/plain</li>
+         * <li>text/markdown</li>
+         * <li>text/x-markdown</li>
+         * <li>application/pdf</li>
+         * <li>application/vnd.openxmlformats-officedocument.wordprocessingml.document (docx)</li>
+         * <li>application/vnd.openxmlformats-officedocument.spreadsheetml.sheet (xlsx)
+         * Multi-record formats that fan out into many documents (text/csv, application/json,
+         * application/jsonl) are not supported here. Any other type accepted by <code>initiateUpload</code>
+         * (e.g. images, audio, video) will result in a failed knowledge base version.
+         * Either this or content is required, but not both. The asset must have a checksum provided at commit time (see <code>commitUpload</code>).</li>
+         * </ul>
          */
         @java.lang.Override
         @JsonSetter(value = "assetId", nulls = Nulls.SKIP)

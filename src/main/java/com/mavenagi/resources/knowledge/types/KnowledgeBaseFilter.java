@@ -34,6 +34,8 @@ public final class KnowledgeBaseFilter {
 
     private final Optional<List<String>> appIds;
 
+    private final Optional<List<KnowledgeBaseType>> types;
+
     private final Optional<List<KnowledgeBaseVersionStatus>> mostRecentVersionStatus;
 
     private final Optional<LlmInclusionStatus> llmInclusionStatus;
@@ -50,6 +52,7 @@ public final class KnowledgeBaseFilter {
             Optional<OffsetDateTime> createdAfter,
             Optional<OffsetDateTime> createdBefore,
             Optional<List<String>> appIds,
+            Optional<List<KnowledgeBaseType>> types,
             Optional<List<KnowledgeBaseVersionStatus>> mostRecentVersionStatus,
             Optional<LlmInclusionStatus> llmInclusionStatus,
             Optional<String> segmentId,
@@ -60,6 +63,7 @@ public final class KnowledgeBaseFilter {
         this.createdAfter = createdAfter;
         this.createdBefore = createdBefore;
         this.appIds = appIds;
+        this.types = types;
         this.mostRecentVersionStatus = mostRecentVersionStatus;
         this.llmInclusionStatus = llmInclusionStatus;
         this.segmentId = segmentId;
@@ -119,6 +123,14 @@ public final class KnowledgeBaseFilter {
     }
 
     /**
+     * @return Filter by knowledge base type.
+     */
+    @JsonProperty("types")
+    public Optional<List<KnowledgeBaseType>> getTypes() {
+        return types;
+    }
+
+    /**
      * @return Filter knowledge bases by the most recent version status
      */
     @JsonProperty("mostRecentVersionStatus")
@@ -167,6 +179,7 @@ public final class KnowledgeBaseFilter {
                 && createdAfter.equals(other.createdAfter)
                 && createdBefore.equals(other.createdBefore)
                 && appIds.equals(other.appIds)
+                && types.equals(other.types)
                 && mostRecentVersionStatus.equals(other.mostRecentVersionStatus)
                 && llmInclusionStatus.equals(other.llmInclusionStatus)
                 && segmentId.equals(other.segmentId)
@@ -181,6 +194,7 @@ public final class KnowledgeBaseFilter {
                 this.createdAfter,
                 this.createdBefore,
                 this.appIds,
+                this.types,
                 this.mostRecentVersionStatus,
                 this.llmInclusionStatus,
                 this.segmentId,
@@ -208,6 +222,8 @@ public final class KnowledgeBaseFilter {
 
         private Optional<List<String>> appIds = Optional.empty();
 
+        private Optional<List<KnowledgeBaseType>> types = Optional.empty();
+
         private Optional<List<KnowledgeBaseVersionStatus>> mostRecentVersionStatus = Optional.empty();
 
         private Optional<LlmInclusionStatus> llmInclusionStatus = Optional.empty();
@@ -227,6 +243,7 @@ public final class KnowledgeBaseFilter {
             createdAfter(other.getCreatedAfter());
             createdBefore(other.getCreatedBefore());
             appIds(other.getAppIds());
+            types(other.getTypes());
             mostRecentVersionStatus(other.getMostRecentVersionStatus());
             llmInclusionStatus(other.getLlmInclusionStatus());
             segmentId(other.getSegmentId());
@@ -316,6 +333,20 @@ public final class KnowledgeBaseFilter {
         }
 
         /**
+         * <p>Filter by knowledge base type.</p>
+         */
+        @JsonSetter(value = "types", nulls = Nulls.SKIP)
+        public Builder types(Optional<List<KnowledgeBaseType>> types) {
+            this.types = types;
+            return this;
+        }
+
+        public Builder types(List<KnowledgeBaseType> types) {
+            this.types = Optional.ofNullable(types);
+            return this;
+        }
+
+        /**
          * <p>Filter knowledge bases by the most recent version status</p>
          */
         @JsonSetter(value = "mostRecentVersionStatus", nulls = Nulls.SKIP)
@@ -378,6 +409,7 @@ public final class KnowledgeBaseFilter {
                     createdAfter,
                     createdBefore,
                     appIds,
+                    types,
                     mostRecentVersionStatus,
                     llmInclusionStatus,
                     segmentId,

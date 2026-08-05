@@ -4,6 +4,7 @@
 package com.mavenagi.resources.commons.types;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -38,4 +39,6 @@ public interface IBaseConversationResponse {
     boolean getLlmEnabled();
 
     Optional<SimulationContext> getSimulationContext();
+
+    Optional<Map<RelationshipType, List<EntityId>>> getRelatedEntities();
 }
