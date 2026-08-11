@@ -77,6 +77,7 @@ public final class ConversationBarChartRequest implements IConversationAnalytics
      * <li><code>Sources</code>: Document title (e.g., &quot;Product Documentation&quot;)</li>
      * <li><code>Actions</code>: &quot;Action Name - App Name&quot; (e.g., &quot;Create Ticket - Freshdesk&quot;)</li>
      * <li><code>IncompleteActions</code>: &quot;Action Name - App Name&quot; (e.g., &quot;Search Documents - Zendesk&quot;)</li>
+     * <li><code>ErroredActions</code>: &quot;Action Name - App Name&quot; (e.g., &quot;Get Balance - Core Banking&quot;)</li>
      * <li><code>Users</code>: User identifier value (e.g., &quot;user@example.com&quot;)</li>
      * <li><code>InboxItems</code>: Inbox item title</li>
      * <li><code>HumanAgents</code>: Human agent display name</li>
@@ -105,6 +106,7 @@ public final class ConversationBarChartRequest implements IConversationAnalytics
      * <li><code>Sources</code>: Document title (e.g., &quot;Product Documentation&quot;)</li>
      * <li><code>Actions</code>: &quot;Action Name - App Name&quot; (e.g., &quot;Create Ticket - Freshdesk&quot;)</li>
      * <li><code>IncompleteActions</code>: &quot;Action Name - App Name&quot; (e.g., &quot;Search Documents - Zendesk&quot;)</li>
+     * <li><code>ErroredActions</code>: &quot;Action Name - App Name&quot; (e.g., &quot;Get Balance - Core Banking&quot;)</li>
      * <li><code>Users</code>: User identifier value (e.g., &quot;user@example.com&quot;)</li>
      * <li><code>InboxItems</code>: Inbox item title</li>
      * <li><code>HumanAgents</code>: Human agent display name</li>
@@ -160,6 +162,7 @@ public final class ConversationBarChartRequest implements IConversationAnalytics
          * <li><code>Sources</code>: Document title (e.g., &quot;Product Documentation&quot;)</li>
          * <li><code>Actions</code>: &quot;Action Name - App Name&quot; (e.g., &quot;Create Ticket - Freshdesk&quot;)</li>
          * <li><code>IncompleteActions</code>: &quot;Action Name - App Name&quot; (e.g., &quot;Search Documents - Zendesk&quot;)</li>
+         * <li><code>ErroredActions</code>: &quot;Action Name - App Name&quot; (e.g., &quot;Get Balance - Core Banking&quot;)</li>
          * <li><code>Users</code>: User identifier value (e.g., &quot;user@example.com&quot;)</li>
          * <li><code>InboxItems</code>: Inbox item title</li>
          * <li><code>HumanAgents</code>: Human agent display name</li>
@@ -206,6 +209,7 @@ public final class ConversationBarChartRequest implements IConversationAnalytics
          * <li><code>Sources</code>: Document title (e.g., &quot;Product Documentation&quot;)</li>
          * <li><code>Actions</code>: &quot;Action Name - App Name&quot; (e.g., &quot;Create Ticket - Freshdesk&quot;)</li>
          * <li><code>IncompleteActions</code>: &quot;Action Name - App Name&quot; (e.g., &quot;Search Documents - Zendesk&quot;)</li>
+         * <li><code>ErroredActions</code>: &quot;Action Name - App Name&quot; (e.g., &quot;Get Balance - Core Banking&quot;)</li>
          * <li><code>Users</code>: User identifier value (e.g., &quot;user@example.com&quot;)</li>
          * <li><code>InboxItems</code>: Inbox item title</li>
          * <li><code>HumanAgents</code>: Human agent display name</li>
@@ -253,6 +257,7 @@ public final class ConversationBarChartRequest implements IConversationAnalytics
          * <li><code>Sources</code>: Document title (e.g., &quot;Product Documentation&quot;)</li>
          * <li><code>Actions</code>: &quot;Action Name - App Name&quot; (e.g., &quot;Create Ticket - Freshdesk&quot;)</li>
          * <li><code>IncompleteActions</code>: &quot;Action Name - App Name&quot; (e.g., &quot;Search Documents - Zendesk&quot;)</li>
+         * <li><code>ErroredActions</code>: &quot;Action Name - App Name&quot; (e.g., &quot;Get Balance - Core Banking&quot;)</li>
          * <li><code>Users</code>: User identifier value (e.g., &quot;user@example.com&quot;)</li>
          * <li><code>InboxItems</code>: Inbox item title</li>
          * <li><code>HumanAgents</code>: Human agent display name</li>
@@ -266,6 +271,7 @@ public final class ConversationBarChartRequest implements IConversationAnalytics
          * <li><code>Sources</code>: Document title (e.g., &quot;Product Documentation&quot;)</li>
          * <li><code>Actions</code>: &quot;Action Name - App Name&quot; (e.g., &quot;Create Ticket - Freshdesk&quot;)</li>
          * <li><code>IncompleteActions</code>: &quot;Action Name - App Name&quot; (e.g., &quot;Search Documents - Zendesk&quot;)</li>
+         * <li><code>ErroredActions</code>: &quot;Action Name - App Name&quot; (e.g., &quot;Get Balance - Core Banking&quot;)</li>
          * <li><code>Users</code>: User identifier value (e.g., &quot;user@example.com&quot;)</li>
          * <li><code>InboxItems</code>: Inbox item title</li>
          * <li><code>HumanAgents</code>: Human agent display name</li>
@@ -301,6 +307,7 @@ public final class ConversationBarChartRequest implements IConversationAnalytics
          * <li><code>Sources</code>: Document title (e.g., &quot;Product Documentation&quot;)</li>
          * <li><code>Actions</code>: &quot;Action Name - App Name&quot; (e.g., &quot;Create Ticket - Freshdesk&quot;)</li>
          * <li><code>IncompleteActions</code>: &quot;Action Name - App Name&quot; (e.g., &quot;Search Documents - Zendesk&quot;)</li>
+         * <li><code>ErroredActions</code>: &quot;Action Name - App Name&quot; (e.g., &quot;Get Balance - Core Banking&quot;)</li>
          * <li><code>Users</code>: User identifier value (e.g., &quot;user@example.com&quot;)</li>
          * <li><code>InboxItems</code>: Inbox item title</li>
          * <li><code>HumanAgents</code>: Human agent display name</li>
@@ -323,6 +330,7 @@ public final class ConversationBarChartRequest implements IConversationAnalytics
          * <li><code>Sources</code>: Document title (e.g., &quot;Product Documentation&quot;)</li>
          * <li><code>Actions</code>: &quot;Action Name - App Name&quot; (e.g., &quot;Create Ticket - Freshdesk&quot;)</li>
          * <li><code>IncompleteActions</code>: &quot;Action Name - App Name&quot; (e.g., &quot;Search Documents - Zendesk&quot;)</li>
+         * <li><code>ErroredActions</code>: &quot;Action Name - App Name&quot; (e.g., &quot;Get Balance - Core Banking&quot;)</li>
          * <li><code>Users</code>: User identifier value (e.g., &quot;user@example.com&quot;)</li>
          * <li><code>InboxItems</code>: Inbox item title</li>
          * <li><code>HumanAgents</code>: Human agent display name</li>

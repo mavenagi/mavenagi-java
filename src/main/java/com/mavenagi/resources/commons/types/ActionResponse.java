@@ -186,7 +186,7 @@ public final class ActionResponse implements IActionBase, IActionProperties {
     }
 
     /**
-     * @return A human-readable explanation of the precondition associated with this action, if present.
+     * @return No longer populated. This field is always absent and will be removed in a future release.
      */
     @JsonProperty("preconditionExplanation")
     public Optional<String> getPreconditionExplanation() {
@@ -355,7 +355,7 @@ public final class ActionResponse implements IActionBase, IActionProperties {
         _FinalStage segmentId(EntityId segmentId);
 
         /**
-         * <p>A human-readable explanation of the precondition associated with this action, if present.</p>
+         * <p>No longer populated. This field is always absent and will be removed in a future release.</p>
          */
         _FinalStage preconditionExplanation(Optional<String> preconditionExplanation);
 
@@ -503,7 +503,7 @@ public final class ActionResponse implements IActionBase, IActionProperties {
         }
 
         /**
-         * <p>A human-readable explanation of the precondition associated with this action, if present.</p>
+         * <p>No longer populated. This field is always absent and will be removed in a future release.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -513,7 +513,7 @@ public final class ActionResponse implements IActionBase, IActionProperties {
         }
 
         /**
-         * <p>A human-readable explanation of the precondition associated with this action, if present.</p>
+         * <p>No longer populated. This field is always absent and will be removed in a future release.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "preconditionExplanation", nulls = Nulls.SKIP)

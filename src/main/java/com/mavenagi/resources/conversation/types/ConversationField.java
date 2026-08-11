@@ -30,6 +30,9 @@ public final class ConversationField {
     public static final ConversationField THUMBS_UP_COUNT =
             new ConversationField(Value.THUMBS_UP_COUNT, "ThumbsUpCount");
 
+    public static final ConversationField ACTION_EXECUTION_COUNT =
+            new ConversationField(Value.ACTION_EXECUTION_COUNT, "ActionExecutionCount");
+
     public static final ConversationField INVOLVED_APPS = new ConversationField(Value.INVOLVED_APPS, "InvolvedApps");
 
     public static final ConversationField INBOX_ITEMS = new ConversationField(Value.INBOX_ITEMS, "InboxItems");
@@ -75,8 +78,14 @@ public final class ConversationField {
     public static final ConversationField BOT_MESSAGE_COUNT =
             new ConversationField(Value.BOT_MESSAGE_COUNT, "BotMessageCount");
 
+    public static final ConversationField ACTION_ERROR_COUNT =
+            new ConversationField(Value.ACTION_ERROR_COUNT, "ActionErrorCount");
+
     public static final ConversationField RESOLUTION_STATUS =
             new ConversationField(Value.RESOLUTION_STATUS, "ResolutionStatus");
+
+    public static final ConversationField ERRORED_ACTIONS =
+            new ConversationField(Value.ERRORED_ACTIONS, "ErroredActions");
 
     public static final ConversationField HUMAN_AGENTS = new ConversationField(Value.HUMAN_AGENTS, "HumanAgents");
 
@@ -130,6 +139,8 @@ public final class ConversationField {
                 return visitor.visitCsat();
             case THUMBS_UP_COUNT:
                 return visitor.visitThumbsUpCount();
+            case ACTION_EXECUTION_COUNT:
+                return visitor.visitActionExecutionCount();
             case INVOLVED_APPS:
                 return visitor.visitInvolvedApps();
             case INBOX_ITEMS:
@@ -170,8 +181,12 @@ public final class ConversationField {
                 return visitor.visitPredictedNps();
             case BOT_MESSAGE_COUNT:
                 return visitor.visitBotMessageCount();
+            case ACTION_ERROR_COUNT:
+                return visitor.visitActionErrorCount();
             case RESOLUTION_STATUS:
                 return visitor.visitResolutionStatus();
+            case ERRORED_ACTIONS:
+                return visitor.visitErroredActions();
             case HUMAN_AGENTS:
                 return visitor.visitHumanAgents();
             case UNKNOWN:
@@ -201,6 +216,8 @@ public final class ConversationField {
                 return CSAT;
             case "ThumbsUpCount":
                 return THUMBS_UP_COUNT;
+            case "ActionExecutionCount":
+                return ACTION_EXECUTION_COUNT;
             case "InvolvedApps":
                 return INVOLVED_APPS;
             case "InboxItems":
@@ -241,8 +258,12 @@ public final class ConversationField {
                 return PREDICTED_NPS;
             case "BotMessageCount":
                 return BOT_MESSAGE_COUNT;
+            case "ActionErrorCount":
+                return ACTION_ERROR_COUNT;
             case "ResolutionStatus":
                 return RESOLUTION_STATUS;
+            case "ErroredActions":
+                return ERRORED_ACTIONS;
             case "HumanAgents":
                 return HUMAN_AGENTS;
             default:
@@ -294,6 +315,12 @@ public final class ConversationField {
         ACTIONS,
 
         INCOMPLETE_ACTIONS,
+
+        ERRORED_ACTIONS,
+
+        ACTION_EXECUTION_COUNT,
+
+        ACTION_ERROR_COUNT,
 
         CHARTERS,
 
@@ -360,6 +387,12 @@ public final class ConversationField {
         T visitActions();
 
         T visitIncompleteActions();
+
+        T visitErroredActions();
+
+        T visitActionExecutionCount();
+
+        T visitActionErrorCount();
 
         T visitCharters();
 

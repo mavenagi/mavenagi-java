@@ -58,6 +58,10 @@ public final class BotLogicItem {
         return new BotLogicItem(new ChartersValue(value));
     }
 
+    public static BotLogicItem steering(BotLogicSteeringItem value) {
+        return new BotLogicItem(new SteeringValue(value));
+    }
+
     public boolean isKnowledge() {
         return value instanceof KnowledgeValue;
     }
@@ -88,6 +92,10 @@ public final class BotLogicItem {
 
     public boolean isCharters() {
         return value instanceof ChartersValue;
+    }
+
+    public boolean isSteering() {
+        return value instanceof SteeringValue;
     }
 
     public boolean _isUnknown() {
@@ -150,6 +158,13 @@ public final class BotLogicItem {
         return Optional.empty();
     }
 
+    public Optional<BotLogicSteeringItem> getSteering() {
+        if (isSteering()) {
+            return Optional.of(((SteeringValue) value).value);
+        }
+        return Optional.empty();
+    }
+
     public Optional<Object> _getUnknown() {
         if (_isUnknown()) {
             return Optional.of(((_UnknownValue) value).value);
@@ -179,6 +194,8 @@ public final class BotLogicItem {
 
         T visitCharters(BotLogicChartersItem charters);
 
+        T visitSteering(BotLogicSteeringItem steering);
+
         T _visitUnknown(Object unknownType);
     }
 
@@ -191,7 +208,8 @@ public final class BotLogicItem {
         @JsonSubTypes.Type(UserValue.class),
         @JsonSubTypes.Type(SegmentsValue.class),
         @JsonSubTypes.Type(IntelligentFieldsValue.class),
-        @JsonSubTypes.Type(ChartersValue.class)
+        @JsonSubTypes.Type(ChartersValue.class),
+        @JsonSubTypes.Type(SteeringValue.class)
     })
     @JsonIgnoreProperties(ignoreUnknown = true)
     private interface Value {
@@ -496,6 +514,45 @@ public final class BotLogicItem {
         }
 
         private boolean equalTo(ChartersValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "BotLogicItem{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("steering")
+    @JsonIgnoreProperties("type")
+    private static final class SteeringValue implements Value {
+        @JsonUnwrapped
+        private BotLogicSteeringItem value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private SteeringValue() {}
+
+        private SteeringValue(BotLogicSteeringItem value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitSteering(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof SteeringValue && equalTo((SteeringValue) other);
+        }
+
+        private boolean equalTo(SteeringValue other) {
             return value.equals(other.value);
         }
 

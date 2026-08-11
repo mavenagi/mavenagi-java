@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
+import com.mavenagi.resources.commons.types.AskType;
 import com.mavenagi.resources.commons.types.AttachmentRequest;
 import com.mavenagi.resources.commons.types.EntityIdBase;
 import java.util.HashMap;
@@ -28,7 +29,9 @@ public final class AskRequest {
 
     private final EntityIdBase userId;
 
-    private final String text;
+    private final Optional<AskType> type;
+
+    private final Optional<String> text;
 
     private final Optional<List<AttachmentRequest>> attachments;
 
@@ -43,7 +46,8 @@ public final class AskRequest {
     private AskRequest(
             EntityIdBase conversationMessageId,
             EntityIdBase userId,
-            String text,
+            Optional<AskType> type,
+            Optional<String> text,
             Optional<List<AttachmentRequest>> attachments,
             Optional<Map<String, String>> transientData,
             Optional<String> timezone,
@@ -51,6 +55,7 @@ public final class AskRequest {
             Map<String, Object> additionalProperties) {
         this.conversationMessageId = conversationMessageId;
         this.userId = userId;
+        this.type = type;
         this.text = text;
         this.attachments = attachments;
         this.transientData = transientData;
@@ -76,10 +81,24 @@ public final class AskRequest {
     }
 
     /**
-     * @return The text of the message
+     * @return What prompts this assistant turn. Omit (or send USER_MESSAGE) for a normal user
+     * question — this is the backwards-compatible default. Use WELCOME for an agent-authored
+     * opener, or PROACTIVE for a message the user did not prompt.
+     */
+    @JsonProperty("type")
+    public Optional<AskType> getType() {
+        return type;
+    }
+
+    /**
+     * @return For USER_MESSAGE (the default) this is the user's message, in the user's own words, and
+     * is required. For WELCOME and PROACTIVE it is optional and, when provided, steers the
+     * agent's response (a directive to the agent, not the user's own words). (Changed from
+     * required to optional to support the non-user turn types — existing USER_MESSAGE callers
+     * are unaffected.)
      */
     @JsonProperty("text")
-    public String getText() {
+    public Optional<String> getText() {
         return text;
     }
 
@@ -135,6 +154,7 @@ public final class AskRequest {
     private boolean equalTo(AskRequest other) {
         return conversationMessageId.equals(other.conversationMessageId)
                 && userId.equals(other.userId)
+                && type.equals(other.type)
                 && text.equals(other.text)
                 && attachments.equals(other.attachments)
                 && transientData.equals(other.transientData)
@@ -147,6 +167,7 @@ public final class AskRequest {
         return Objects.hash(
                 this.conversationMessageId,
                 this.userId,
+                this.type,
                 this.text,
                 this.attachments,
                 this.transientData,
@@ -176,18 +197,31 @@ public final class AskRequest {
         /**
          * <p>Externally supplied ID to uniquely identify the user that created this message</p>
          */
-        TextStage userId(@NotNull EntityIdBase userId);
-    }
-
-    public interface TextStage {
-        /**
-         * <p>The text of the message</p>
-         */
-        _FinalStage text(@NotNull String text);
+        _FinalStage userId(@NotNull EntityIdBase userId);
     }
 
     public interface _FinalStage {
         AskRequest build();
+
+        /**
+         * <p>What prompts this assistant turn. Omit (or send USER_MESSAGE) for a normal user
+         * question — this is the backwards-compatible default. Use WELCOME for an agent-authored
+         * opener, or PROACTIVE for a message the user did not prompt.</p>
+         */
+        _FinalStage type(Optional<AskType> type);
+
+        _FinalStage type(AskType type);
+
+        /**
+         * <p>For USER_MESSAGE (the default) this is the user's message, in the user's own words, and
+         * is required. For WELCOME and PROACTIVE it is optional and, when provided, steers the
+         * agent's response (a directive to the agent, not the user's own words). (Changed from
+         * required to optional to support the non-user turn types — existing USER_MESSAGE callers
+         * are unaffected.)</p>
+         */
+        _FinalStage text(Optional<String> text);
+
+        _FinalStage text(String text);
 
         /**
          * <p>The attachments to the message. Image attachments will be sent to the LLM as additional data.
@@ -225,12 +259,10 @@ public final class AskRequest {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements ConversationMessageIdStage, UserIdStage, TextStage, _FinalStage {
+    public static final class Builder implements ConversationMessageIdStage, UserIdStage, _FinalStage {
         private EntityIdBase conversationMessageId;
 
         private EntityIdBase userId;
-
-        private String text;
 
         private Optional<Map<String, String>> appMetadata = Optional.empty();
 
@@ -239,6 +271,10 @@ public final class AskRequest {
         private Optional<Map<String, String>> transientData = Optional.empty();
 
         private Optional<List<AttachmentRequest>> attachments = Optional.empty();
+
+        private Optional<String> text = Optional.empty();
+
+        private Optional<AskType> type = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -249,6 +285,7 @@ public final class AskRequest {
         public Builder from(AskRequest other) {
             conversationMessageId(other.getConversationMessageId());
             userId(other.getUserId());
+            type(other.getType());
             text(other.getText());
             attachments(other.getAttachments());
             transientData(other.getTransientData());
@@ -277,20 +314,8 @@ public final class AskRequest {
          */
         @java.lang.Override
         @JsonSetter("userId")
-        public TextStage userId(@NotNull EntityIdBase userId) {
+        public _FinalStage userId(@NotNull EntityIdBase userId) {
             this.userId = Objects.requireNonNull(userId, "userId must not be null");
-            return this;
-        }
-
-        /**
-         * <p>The text of the message</p>
-         * <p>The text of the message</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("text")
-        public _FinalStage text(@NotNull String text) {
-            this.text = Objects.requireNonNull(text, "text must not be null");
             return this;
         }
 
@@ -386,11 +411,64 @@ public final class AskRequest {
             return this;
         }
 
+        /**
+         * <p>For USER_MESSAGE (the default) this is the user's message, in the user's own words, and
+         * is required. For WELCOME and PROACTIVE it is optional and, when provided, steers the
+         * agent's response (a directive to the agent, not the user's own words). (Changed from
+         * required to optional to support the non-user turn types — existing USER_MESSAGE callers
+         * are unaffected.)</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage text(String text) {
+            this.text = Optional.ofNullable(text);
+            return this;
+        }
+
+        /**
+         * <p>For USER_MESSAGE (the default) this is the user's message, in the user's own words, and
+         * is required. For WELCOME and PROACTIVE it is optional and, when provided, steers the
+         * agent's response (a directive to the agent, not the user's own words). (Changed from
+         * required to optional to support the non-user turn types — existing USER_MESSAGE callers
+         * are unaffected.)</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "text", nulls = Nulls.SKIP)
+        public _FinalStage text(Optional<String> text) {
+            this.text = text;
+            return this;
+        }
+
+        /**
+         * <p>What prompts this assistant turn. Omit (or send USER_MESSAGE) for a normal user
+         * question — this is the backwards-compatible default. Use WELCOME for an agent-authored
+         * opener, or PROACTIVE for a message the user did not prompt.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage type(AskType type) {
+            this.type = Optional.ofNullable(type);
+            return this;
+        }
+
+        /**
+         * <p>What prompts this assistant turn. Omit (or send USER_MESSAGE) for a normal user
+         * question — this is the backwards-compatible default. Use WELCOME for an agent-authored
+         * opener, or PROACTIVE for a message the user did not prompt.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "type", nulls = Nulls.SKIP)
+        public _FinalStage type(Optional<AskType> type) {
+            this.type = type;
+            return this;
+        }
+
         @java.lang.Override
         public AskRequest build() {
             return new AskRequest(
                     conversationMessageId,
                     userId,
+                    type,
                     text,
                     attachments,
                     transientData,

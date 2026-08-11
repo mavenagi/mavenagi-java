@@ -42,6 +42,8 @@ public final class EntityType {
 
     public static final EntityType INTELLIGENT_FIELD = new EntityType(Value.INTELLIGENT_FIELD, "INTELLIGENT_FIELD");
 
+    public static final EntityType TRAFFIC_CONFIG = new EntityType(Value.TRAFFIC_CONFIG, "TRAFFIC_CONFIG");
+
     public static final EntityType USER_PROFILE = new EntityType(Value.USER_PROFILE, "USER_PROFILE");
 
     public static final EntityType KNOWLEDGE_DOCUMENT = new EntityType(Value.KNOWLEDGE_DOCUMENT, "KNOWLEDGE_DOCUMENT");
@@ -117,6 +119,8 @@ public final class EntityType {
                 return visitor.visitSegment();
             case INTELLIGENT_FIELD:
                 return visitor.visitIntelligentField();
+            case TRAFFIC_CONFIG:
+                return visitor.visitTrafficConfig();
             case USER_PROFILE:
                 return visitor.visitUserProfile();
             case KNOWLEDGE_DOCUMENT:
@@ -170,6 +174,8 @@ public final class EntityType {
                 return SEGMENT;
             case "INTELLIGENT_FIELD":
                 return INTELLIGENT_FIELD;
+            case "TRAFFIC_CONFIG":
+                return TRAFFIC_CONFIG;
             case "USER_PROFILE":
                 return USER_PROFILE;
             case "KNOWLEDGE_DOCUMENT":
@@ -232,6 +238,8 @@ public final class EntityType {
 
         ASSET,
 
+        TRAFFIC_CONFIG,
+
         UNKNOWN
     }
 
@@ -279,6 +287,8 @@ public final class EntityType {
         T visitConfigSnapshot();
 
         T visitAsset();
+
+        T visitTrafficConfig();
 
         T visitUnknown(String unknownType);
     }

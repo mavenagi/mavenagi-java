@@ -44,6 +44,8 @@ public final class ConversationFilter {
 
     private final Optional<List<EntityIdFilter>> incompleteActions;
 
+    private final Optional<List<EntityIdFilter>> erroredActions;
+
     private final Optional<List<FeedbackType>> feedback;
 
     private final Optional<List<String>> humanAgents;
@@ -96,6 +98,7 @@ public final class ConversationFilter {
             Optional<List<String>> categories,
             Optional<List<EntityIdFilter>> actions,
             Optional<List<EntityIdFilter>> incompleteActions,
+            Optional<List<EntityIdFilter>> erroredActions,
             Optional<List<FeedbackType>> feedback,
             Optional<List<String>> humanAgents,
             Optional<List<String>> humanAgentsWithInserts,
@@ -125,6 +128,7 @@ public final class ConversationFilter {
         this.categories = categories;
         this.actions = actions;
         this.incompleteActions = incompleteActions;
+        this.erroredActions = erroredActions;
         this.feedback = feedback;
         this.humanAgents = humanAgents;
         this.humanAgentsWithInserts = humanAgentsWithInserts;
@@ -222,6 +226,14 @@ public final class ConversationFilter {
     @JsonProperty("incompleteActions")
     public Optional<List<EntityIdFilter>> getIncompleteActions() {
         return incompleteActions;
+    }
+
+    /**
+     * @return Filter by actions that returned an error when executed in the conversation
+     */
+    @JsonProperty("erroredActions")
+    public Optional<List<EntityIdFilter>> getErroredActions() {
+        return erroredActions;
     }
 
     /**
@@ -428,6 +440,7 @@ public final class ConversationFilter {
                 && categories.equals(other.categories)
                 && actions.equals(other.actions)
                 && incompleteActions.equals(other.incompleteActions)
+                && erroredActions.equals(other.erroredActions)
                 && feedback.equals(other.feedback)
                 && humanAgents.equals(other.humanAgents)
                 && humanAgentsWithInserts.equals(other.humanAgentsWithInserts)
@@ -461,6 +474,7 @@ public final class ConversationFilter {
                 this.categories,
                 this.actions,
                 this.incompleteActions,
+                this.erroredActions,
                 this.feedback,
                 this.humanAgents,
                 this.humanAgentsWithInserts,
@@ -508,6 +522,8 @@ public final class ConversationFilter {
         private Optional<List<EntityIdFilter>> actions = Optional.empty();
 
         private Optional<List<EntityIdFilter>> incompleteActions = Optional.empty();
+
+        private Optional<List<EntityIdFilter>> erroredActions = Optional.empty();
 
         private Optional<List<FeedbackType>> feedback = Optional.empty();
 
@@ -564,6 +580,7 @@ public final class ConversationFilter {
             categories(other.getCategories());
             actions(other.getActions());
             incompleteActions(other.getIncompleteActions());
+            erroredActions(other.getErroredActions());
             feedback(other.getFeedback());
             humanAgents(other.getHumanAgents());
             humanAgentsWithInserts(other.getHumanAgentsWithInserts());
@@ -702,6 +719,20 @@ public final class ConversationFilter {
 
         public Builder incompleteActions(List<EntityIdFilter> incompleteActions) {
             this.incompleteActions = Optional.ofNullable(incompleteActions);
+            return this;
+        }
+
+        /**
+         * <p>Filter by actions that returned an error when executed in the conversation</p>
+         */
+        @JsonSetter(value = "erroredActions", nulls = Nulls.SKIP)
+        public Builder erroredActions(Optional<List<EntityIdFilter>> erroredActions) {
+            this.erroredActions = erroredActions;
+            return this;
+        }
+
+        public Builder erroredActions(List<EntityIdFilter> erroredActions) {
+            this.erroredActions = Optional.ofNullable(erroredActions);
             return this;
         }
 
@@ -1025,6 +1056,7 @@ public final class ConversationFilter {
                     categories,
                     actions,
                     incompleteActions,
+                    erroredActions,
                     feedback,
                     humanAgents,
                     humanAgentsWithInserts,

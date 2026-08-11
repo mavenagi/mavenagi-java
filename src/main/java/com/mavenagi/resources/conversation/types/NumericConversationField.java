@@ -13,6 +13,9 @@ public final class NumericConversationField {
     public static final NumericConversationField THUMBS_UP_COUNT =
             new NumericConversationField(Value.THUMBS_UP_COUNT, "ThumbsUpCount");
 
+    public static final NumericConversationField ACTION_EXECUTION_COUNT =
+            new NumericConversationField(Value.ACTION_EXECUTION_COUNT, "ActionExecutionCount");
+
     public static final NumericConversationField USER_MESSAGE_COUNT =
             new NumericConversationField(Value.USER_MESSAGE_COUNT, "UserMessageCount");
 
@@ -30,6 +33,9 @@ public final class NumericConversationField {
 
     public static final NumericConversationField BOT_MESSAGE_COUNT =
             new NumericConversationField(Value.BOT_MESSAGE_COUNT, "BotMessageCount");
+
+    public static final NumericConversationField ACTION_ERROR_COUNT =
+            new NumericConversationField(Value.ACTION_ERROR_COUNT, "ActionErrorCount");
 
     public static final NumericConversationField CSAT = new NumericConversationField(Value.CSAT, "Csat");
 
@@ -70,6 +76,8 @@ public final class NumericConversationField {
                 return visitor.visitThumbsDownCount();
             case THUMBS_UP_COUNT:
                 return visitor.visitThumbsUpCount();
+            case ACTION_EXECUTION_COUNT:
+                return visitor.visitActionExecutionCount();
             case USER_MESSAGE_COUNT:
                 return visitor.visitUserMessageCount();
             case HANDLE_TIME:
@@ -82,6 +90,8 @@ public final class NumericConversationField {
                 return visitor.visitPredictedNps();
             case BOT_MESSAGE_COUNT:
                 return visitor.visitBotMessageCount();
+            case ACTION_ERROR_COUNT:
+                return visitor.visitActionErrorCount();
             case CSAT:
                 return visitor.visitCsat();
             case UNKNOWN:
@@ -97,6 +107,8 @@ public final class NumericConversationField {
                 return THUMBS_DOWN_COUNT;
             case "ThumbsUpCount":
                 return THUMBS_UP_COUNT;
+            case "ActionExecutionCount":
+                return ACTION_EXECUTION_COUNT;
             case "UserMessageCount":
                 return USER_MESSAGE_COUNT;
             case "HandleTime":
@@ -109,6 +121,8 @@ public final class NumericConversationField {
                 return PREDICTED_NPS;
             case "BotMessageCount":
                 return BOT_MESSAGE_COUNT;
+            case "ActionErrorCount":
+                return ACTION_ERROR_COUNT;
             case "Csat":
                 return CSAT;
             default:
@@ -135,6 +149,10 @@ public final class NumericConversationField {
 
         CSAT,
 
+        ACTION_EXECUTION_COUNT,
+
+        ACTION_ERROR_COUNT,
+
         UNKNOWN
     }
 
@@ -156,6 +174,10 @@ public final class NumericConversationField {
         T visitPredictedNps();
 
         T visitCsat();
+
+        T visitActionExecutionCount();
+
+        T visitActionErrorCount();
 
         T visitUnknown(String unknownType);
     }
