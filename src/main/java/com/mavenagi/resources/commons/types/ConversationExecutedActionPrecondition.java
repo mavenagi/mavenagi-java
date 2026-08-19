@@ -29,6 +29,8 @@ public final class ConversationExecutedActionPrecondition implements IPreconditi
 
     private final Optional<ConversationRound> conversationRound;
 
+    private final Optional<ObjectCondition> dataCondition;
+
     private final Map<String, Object> additionalProperties;
 
     private ConversationExecutedActionPrecondition(
@@ -36,11 +38,13 @@ public final class ConversationExecutedActionPrecondition implements IPreconditi
             String actionId,
             Optional<String> appId,
             Optional<ConversationRound> conversationRound,
+            Optional<ObjectCondition> dataCondition,
             Map<String, Object> additionalProperties) {
         this.operator = operator;
         this.actionId = actionId;
         this.appId = appId;
         this.conversationRound = conversationRound;
+        this.dataCondition = dataCondition;
         this.additionalProperties = additionalProperties;
     }
 
@@ -77,6 +81,21 @@ public final class ConversationExecutedActionPrecondition implements IPreconditi
         return conversationRound;
     }
 
+    /**
+     * @return Restricts the match to executions whose returned data satisfies this condition.
+     * When omitted, any execution of the action matches regardless of what it returned.
+     * <p>Actions may return <code>{response, data}</code>, where <code>data</code> is a JSON object persisted
+     * alongside the response. This gates the precondition on what the action returned
+     * rather than only on whether it ran.</p>
+     * <p>The precondition is met when <em>some</em> execution of the action in scope returned data
+     * satisfying this condition. An action that executed but returned no data never
+     * matches, except via <code>universal</code> <code>IS_UNDETERMINED</code>.</p>
+     */
+    @JsonProperty("dataCondition")
+    public Optional<ObjectCondition> getDataCondition() {
+        return dataCondition;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -93,12 +112,13 @@ public final class ConversationExecutedActionPrecondition implements IPreconditi
         return operator.equals(other.operator)
                 && actionId.equals(other.actionId)
                 && appId.equals(other.appId)
-                && conversationRound.equals(other.conversationRound);
+                && conversationRound.equals(other.conversationRound)
+                && dataCondition.equals(other.dataCondition);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.operator, this.actionId, this.appId, this.conversationRound);
+        return Objects.hash(this.operator, this.actionId, this.appId, this.conversationRound, this.dataCondition);
     }
 
     @java.lang.Override
@@ -142,11 +162,27 @@ public final class ConversationExecutedActionPrecondition implements IPreconditi
         _FinalStage conversationRound(Optional<ConversationRound> conversationRound);
 
         _FinalStage conversationRound(ConversationRound conversationRound);
+
+        /**
+         * <p>Restricts the match to executions whose returned data satisfies this condition.
+         * When omitted, any execution of the action matches regardless of what it returned.</p>
+         * <p>Actions may return <code>{response, data}</code>, where <code>data</code> is a JSON object persisted
+         * alongside the response. This gates the precondition on what the action returned
+         * rather than only on whether it ran.</p>
+         * <p>The precondition is met when <em>some</em> execution of the action in scope returned data
+         * satisfying this condition. An action that executed but returned no data never
+         * matches, except via <code>universal</code> <code>IS_UNDETERMINED</code>.</p>
+         */
+        _FinalStage dataCondition(Optional<ObjectCondition> dataCondition);
+
+        _FinalStage dataCondition(ObjectCondition dataCondition);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements ActionIdStage, _FinalStage {
         private String actionId;
+
+        private Optional<ObjectCondition> dataCondition = Optional.empty();
 
         private Optional<ConversationRound> conversationRound = Optional.empty();
 
@@ -165,6 +201,7 @@ public final class ConversationExecutedActionPrecondition implements IPreconditi
             actionId(other.getActionId());
             appId(other.getAppId());
             conversationRound(other.getConversationRound());
+            dataCondition(other.getDataCondition());
             return this;
         }
 
@@ -177,6 +214,40 @@ public final class ConversationExecutedActionPrecondition implements IPreconditi
         @JsonSetter("actionId")
         public _FinalStage actionId(@NotNull String actionId) {
             this.actionId = Objects.requireNonNull(actionId, "actionId must not be null");
+            return this;
+        }
+
+        /**
+         * <p>Restricts the match to executions whose returned data satisfies this condition.
+         * When omitted, any execution of the action matches regardless of what it returned.</p>
+         * <p>Actions may return <code>{response, data}</code>, where <code>data</code> is a JSON object persisted
+         * alongside the response. This gates the precondition on what the action returned
+         * rather than only on whether it ran.</p>
+         * <p>The precondition is met when <em>some</em> execution of the action in scope returned data
+         * satisfying this condition. An action that executed but returned no data never
+         * matches, except via <code>universal</code> <code>IS_UNDETERMINED</code>.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage dataCondition(ObjectCondition dataCondition) {
+            this.dataCondition = Optional.ofNullable(dataCondition);
+            return this;
+        }
+
+        /**
+         * <p>Restricts the match to executions whose returned data satisfies this condition.
+         * When omitted, any execution of the action matches regardless of what it returned.</p>
+         * <p>Actions may return <code>{response, data}</code>, where <code>data</code> is a JSON object persisted
+         * alongside the response. This gates the precondition on what the action returned
+         * rather than only on whether it ran.</p>
+         * <p>The precondition is met when <em>some</em> execution of the action in scope returned data
+         * satisfying this condition. An action that executed but returned no data never
+         * matches, except via <code>universal</code> <code>IS_UNDETERMINED</code>.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "dataCondition", nulls = Nulls.SKIP)
+        public _FinalStage dataCondition(Optional<ObjectCondition> dataCondition) {
+            this.dataCondition = dataCondition;
             return this;
         }
 
@@ -243,7 +314,7 @@ public final class ConversationExecutedActionPrecondition implements IPreconditi
         @java.lang.Override
         public ConversationExecutedActionPrecondition build() {
             return new ConversationExecutedActionPrecondition(
-                    operator, actionId, appId, conversationRound, additionalProperties);
+                    operator, actionId, appId, conversationRound, dataCondition, additionalProperties);
         }
     }
 }

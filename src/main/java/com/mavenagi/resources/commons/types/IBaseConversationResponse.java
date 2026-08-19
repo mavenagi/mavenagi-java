@@ -41,4 +41,6 @@ public interface IBaseConversationResponse {
     Optional<SimulationContext> getSimulationContext();
 
     Optional<Map<RelationshipType, List<EntityId>>> getRelatedEntities();
+
+    Optional<ConversationMode> getConversationMode();
 }

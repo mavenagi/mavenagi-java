@@ -62,6 +62,8 @@ public final class InitializeConversationResponse implements IConversationRespon
 
     private final Optional<Map<RelationshipType, List<EntityId>>> relatedEntities;
 
+    private final Optional<ConversationMode> conversationMode;
+
     private final List<ConversationKickoffExecutionResponse> conversationKickoffResults;
 
     private final Map<String, Object> additionalProperties;
@@ -85,6 +87,7 @@ public final class InitializeConversationResponse implements IConversationRespon
             boolean llmEnabled,
             Optional<SimulationContext> simulationContext,
             Optional<Map<RelationshipType, List<EntityId>>> relatedEntities,
+            Optional<ConversationMode> conversationMode,
             List<ConversationKickoffExecutionResponse> conversationKickoffResults,
             Map<String, Object> additionalProperties) {
         this.messages = messages;
@@ -105,6 +108,7 @@ public final class InitializeConversationResponse implements IConversationRespon
         this.llmEnabled = llmEnabled;
         this.simulationContext = simulationContext;
         this.relatedEntities = relatedEntities;
+        this.conversationMode = conversationMode;
         this.conversationKickoffResults = conversationKickoffResults;
         this.additionalProperties = additionalProperties;
     }
@@ -281,6 +285,16 @@ public final class InitializeConversationResponse implements IConversationRespon
     }
 
     /**
+     * @return Whether the conversation is spoken or written. Set by the platform and read-only —
+     * it cannot be supplied when creating or updating a conversation.
+     */
+    @JsonProperty("conversationMode")
+    @java.lang.Override
+    public Optional<ConversationMode> getConversationMode() {
+        return conversationMode;
+    }
+
+    /**
      * @return Results of the Conversation Kickoffs that ran during conversation initialization, one
      * entry per kickoff in the order they were recorded. Empty when no kickoff ran. Only
      * present on this initialize response; other endpoints that return a conversation do not
@@ -321,6 +335,7 @@ public final class InitializeConversationResponse implements IConversationRespon
                 && llmEnabled == other.llmEnabled
                 && simulationContext.equals(other.simulationContext)
                 && relatedEntities.equals(other.relatedEntities)
+                && conversationMode.equals(other.conversationMode)
                 && conversationKickoffResults.equals(other.conversationKickoffResults);
     }
 
@@ -345,6 +360,7 @@ public final class InitializeConversationResponse implements IConversationRespon
                 this.llmEnabled,
                 this.simulationContext,
                 this.relatedEntities,
+                this.conversationMode,
                 this.conversationKickoffResults);
     }
 
@@ -504,6 +520,14 @@ public final class InitializeConversationResponse implements IConversationRespon
         _FinalStage relatedEntities(Map<RelationshipType, List<EntityId>> relatedEntities);
 
         /**
+         * <p>Whether the conversation is spoken or written. Set by the platform and read-only —
+         * it cannot be supplied when creating or updating a conversation.</p>
+         */
+        _FinalStage conversationMode(Optional<ConversationMode> conversationMode);
+
+        _FinalStage conversationMode(ConversationMode conversationMode);
+
+        /**
          * <p>Results of the Conversation Kickoffs that ran during conversation initialization, one
          * entry per kickoff in the order they were recorded. Empty when no kickoff ran. Only
          * present on this initialize response; other endpoints that return a conversation do not
@@ -539,6 +563,8 @@ public final class InitializeConversationResponse implements IConversationRespon
         private boolean llmEnabled;
 
         private List<ConversationKickoffExecutionResponse> conversationKickoffResults = new ArrayList<>();
+
+        private Optional<ConversationMode> conversationMode = Optional.empty();
 
         private Optional<Map<RelationshipType, List<EntityId>>> relatedEntities = Optional.empty();
 
@@ -589,6 +615,7 @@ public final class InitializeConversationResponse implements IConversationRespon
             llmEnabled(other.getLlmEnabled());
             simulationContext(other.getSimulationContext());
             relatedEntities(other.getRelatedEntities());
+            conversationMode(other.getConversationMode());
             conversationKickoffResults(other.getConversationKickoffResults());
             return this;
         }
@@ -715,6 +742,28 @@ public final class InitializeConversationResponse implements IConversationRespon
             if (conversationKickoffResults != null) {
                 this.conversationKickoffResults.addAll(conversationKickoffResults);
             }
+            return this;
+        }
+
+        /**
+         * <p>Whether the conversation is spoken or written. Set by the platform and read-only —
+         * it cannot be supplied when creating or updating a conversation.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage conversationMode(ConversationMode conversationMode) {
+            this.conversationMode = Optional.ofNullable(conversationMode);
+            return this;
+        }
+
+        /**
+         * <p>Whether the conversation is spoken or written. Set by the platform and read-only —
+         * it cannot be supplied when creating or updating a conversation.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "conversationMode", nulls = Nulls.SKIP)
+        public _FinalStage conversationMode(Optional<ConversationMode> conversationMode) {
+            this.conversationMode = conversationMode;
             return this;
         }
 
@@ -1037,6 +1086,7 @@ public final class InitializeConversationResponse implements IConversationRespon
                     llmEnabled,
                     simulationContext,
                     relatedEntities,
+                    conversationMode,
                     conversationKickoffResults,
                     additionalProperties);
         }

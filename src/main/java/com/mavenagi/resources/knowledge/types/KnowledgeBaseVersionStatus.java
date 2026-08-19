@@ -10,6 +10,9 @@ public final class KnowledgeBaseVersionStatus {
     public static final KnowledgeBaseVersionStatus IN_PROGRESS =
             new KnowledgeBaseVersionStatus(Value.IN_PROGRESS, "IN_PROGRESS");
 
+    public static final KnowledgeBaseVersionStatus CANCELED =
+            new KnowledgeBaseVersionStatus(Value.CANCELED, "CANCELED");
+
     public static final KnowledgeBaseVersionStatus SUCCEEDED =
             new KnowledgeBaseVersionStatus(Value.SUCCEEDED, "SUCCEEDED");
 
@@ -50,6 +53,8 @@ public final class KnowledgeBaseVersionStatus {
         switch (value) {
             case IN_PROGRESS:
                 return visitor.visitInProgress();
+            case CANCELED:
+                return visitor.visitCanceled();
             case SUCCEEDED:
                 return visitor.visitSucceeded();
             case FAILED:
@@ -65,6 +70,8 @@ public final class KnowledgeBaseVersionStatus {
         switch (value) {
             case "IN_PROGRESS":
                 return IN_PROGRESS;
+            case "CANCELED":
+                return CANCELED;
             case "SUCCEEDED":
                 return SUCCEEDED;
             case "FAILED":
@@ -81,6 +88,8 @@ public final class KnowledgeBaseVersionStatus {
 
         IN_PROGRESS,
 
+        CANCELED,
+
         UNKNOWN
     }
 
@@ -90,6 +99,8 @@ public final class KnowledgeBaseVersionStatus {
         T visitFailed();
 
         T visitInProgress();
+
+        T visitCanceled();
 
         T visitUnknown(String unknownType);
     }

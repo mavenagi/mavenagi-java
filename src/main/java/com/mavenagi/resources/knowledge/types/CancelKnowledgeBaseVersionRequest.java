@@ -21,14 +21,27 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = CancelKnowledgeBaseVersionRequest.Builder.class)
 public final class CancelKnowledgeBaseVersionRequest {
+    private final Optional<String> appId;
+
     private final Optional<EntityIdWithoutAgent> versionId;
 
     private final Map<String, Object> additionalProperties;
 
     private CancelKnowledgeBaseVersionRequest(
-            Optional<EntityIdWithoutAgent> versionId, Map<String, Object> additionalProperties) {
+            Optional<String> appId,
+            Optional<EntityIdWithoutAgent> versionId,
+            Map<String, Object> additionalProperties) {
+        this.appId = appId;
         this.versionId = versionId;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return The App ID of the knowledge base to cancel. If not provided the ID of the calling app will be used.
+     */
+    @JsonProperty("appId")
+    public Optional<String> getAppId() {
+        return appId;
     }
 
     /**
@@ -51,12 +64,12 @@ public final class CancelKnowledgeBaseVersionRequest {
     }
 
     private boolean equalTo(CancelKnowledgeBaseVersionRequest other) {
-        return versionId.equals(other.versionId);
+        return appId.equals(other.appId) && versionId.equals(other.versionId);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.versionId);
+        return Objects.hash(this.appId, this.versionId);
     }
 
     @java.lang.Override
@@ -70,6 +83,8 @@ public final class CancelKnowledgeBaseVersionRequest {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
+        private Optional<String> appId = Optional.empty();
+
         private Optional<EntityIdWithoutAgent> versionId = Optional.empty();
 
         @JsonAnySetter
@@ -78,7 +93,22 @@ public final class CancelKnowledgeBaseVersionRequest {
         private Builder() {}
 
         public Builder from(CancelKnowledgeBaseVersionRequest other) {
+            appId(other.getAppId());
             versionId(other.getVersionId());
+            return this;
+        }
+
+        /**
+         * <p>The App ID of the knowledge base to cancel. If not provided the ID of the calling app will be used.</p>
+         */
+        @JsonSetter(value = "appId", nulls = Nulls.SKIP)
+        public Builder appId(Optional<String> appId) {
+            this.appId = appId;
+            return this;
+        }
+
+        public Builder appId(String appId) {
+            this.appId = Optional.ofNullable(appId);
             return this;
         }
 
@@ -97,7 +127,7 @@ public final class CancelKnowledgeBaseVersionRequest {
         }
 
         public CancelKnowledgeBaseVersionRequest build() {
-            return new CancelKnowledgeBaseVersionRequest(versionId, additionalProperties);
+            return new CancelKnowledgeBaseVersionRequest(appId, versionId, additionalProperties);
         }
     }
 }

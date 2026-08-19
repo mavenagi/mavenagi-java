@@ -62,6 +62,8 @@ public final class ConversationResponse implements IConversationResponse, IBaseC
 
     private final Optional<Map<RelationshipType, List<EntityId>>> relatedEntities;
 
+    private final Optional<ConversationMode> conversationMode;
+
     private final Map<String, Object> additionalProperties;
 
     private ConversationResponse(
@@ -83,6 +85,7 @@ public final class ConversationResponse implements IConversationResponse, IBaseC
             boolean llmEnabled,
             Optional<SimulationContext> simulationContext,
             Optional<Map<RelationshipType, List<EntityId>>> relatedEntities,
+            Optional<ConversationMode> conversationMode,
             Map<String, Object> additionalProperties) {
         this.messages = messages;
         this.attachments = attachments;
@@ -102,6 +105,7 @@ public final class ConversationResponse implements IConversationResponse, IBaseC
         this.llmEnabled = llmEnabled;
         this.simulationContext = simulationContext;
         this.relatedEntities = relatedEntities;
+        this.conversationMode = conversationMode;
         this.additionalProperties = additionalProperties;
     }
 
@@ -276,6 +280,16 @@ public final class ConversationResponse implements IConversationResponse, IBaseC
         return relatedEntities;
     }
 
+    /**
+     * @return Whether the conversation is spoken or written. Set by the platform and read-only —
+     * it cannot be supplied when creating or updating a conversation.
+     */
+    @JsonProperty("conversationMode")
+    @java.lang.Override
+    public Optional<ConversationMode> getConversationMode() {
+        return conversationMode;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -305,7 +319,8 @@ public final class ConversationResponse implements IConversationResponse, IBaseC
                 && open == other.open
                 && llmEnabled == other.llmEnabled
                 && simulationContext.equals(other.simulationContext)
-                && relatedEntities.equals(other.relatedEntities);
+                && relatedEntities.equals(other.relatedEntities)
+                && conversationMode.equals(other.conversationMode);
     }
 
     @java.lang.Override
@@ -328,7 +343,8 @@ public final class ConversationResponse implements IConversationResponse, IBaseC
                 this.open,
                 this.llmEnabled,
                 this.simulationContext,
-                this.relatedEntities);
+                this.relatedEntities,
+                this.conversationMode);
     }
 
     @java.lang.Override
@@ -485,6 +501,14 @@ public final class ConversationResponse implements IConversationResponse, IBaseC
         _FinalStage relatedEntities(Optional<Map<RelationshipType, List<EntityId>>> relatedEntities);
 
         _FinalStage relatedEntities(Map<RelationshipType, List<EntityId>> relatedEntities);
+
+        /**
+         * <p>Whether the conversation is spoken or written. Set by the platform and read-only —
+         * it cannot be supplied when creating or updating a conversation.</p>
+         */
+        _FinalStage conversationMode(Optional<ConversationMode> conversationMode);
+
+        _FinalStage conversationMode(ConversationMode conversationMode);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -507,6 +531,8 @@ public final class ConversationResponse implements IConversationResponse, IBaseC
         private boolean open;
 
         private boolean llmEnabled;
+
+        private Optional<ConversationMode> conversationMode = Optional.empty();
 
         private Optional<Map<RelationshipType, List<EntityId>>> relatedEntities = Optional.empty();
 
@@ -557,6 +583,7 @@ public final class ConversationResponse implements IConversationResponse, IBaseC
             llmEnabled(other.getLlmEnabled());
             simulationContext(other.getSimulationContext());
             relatedEntities(other.getRelatedEntities());
+            conversationMode(other.getConversationMode());
             return this;
         }
 
@@ -635,6 +662,28 @@ public final class ConversationResponse implements IConversationResponse, IBaseC
         @JsonSetter("llmEnabled")
         public _FinalStage llmEnabled(boolean llmEnabled) {
             this.llmEnabled = llmEnabled;
+            return this;
+        }
+
+        /**
+         * <p>Whether the conversation is spoken or written. Set by the platform and read-only —
+         * it cannot be supplied when creating or updating a conversation.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage conversationMode(ConversationMode conversationMode) {
+            this.conversationMode = Optional.ofNullable(conversationMode);
+            return this;
+        }
+
+        /**
+         * <p>Whether the conversation is spoken or written. Set by the platform and read-only —
+         * it cannot be supplied when creating or updating a conversation.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "conversationMode", nulls = Nulls.SKIP)
+        public _FinalStage conversationMode(Optional<ConversationMode> conversationMode) {
+            this.conversationMode = conversationMode;
             return this;
         }
 
@@ -957,6 +1006,7 @@ public final class ConversationResponse implements IConversationResponse, IBaseC
                     llmEnabled,
                     simulationContext,
                     relatedEntities,
+                    conversationMode,
                     additionalProperties);
         }
     }
