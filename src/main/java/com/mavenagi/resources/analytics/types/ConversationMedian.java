@@ -9,12 +9,15 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
+import com.mavenagi.resources.commons.types.EntityId;
 import com.mavenagi.resources.conversation.types.NumericConversationField;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
@@ -22,10 +25,16 @@ import org.jetbrains.annotations.NotNull;
 public final class ConversationMedian implements IConversationNumericMetric {
     private final NumericConversationField targetField;
 
+    private final Optional<EntityId> intelligentFieldId;
+
     private final Map<String, Object> additionalProperties;
 
-    private ConversationMedian(NumericConversationField targetField, Map<String, Object> additionalProperties) {
+    private ConversationMedian(
+            NumericConversationField targetField,
+            Optional<EntityId> intelligentFieldId,
+            Map<String, Object> additionalProperties) {
         this.targetField = targetField;
+        this.intelligentFieldId = intelligentFieldId;
         this.additionalProperties = additionalProperties;
     }
 
@@ -36,6 +45,16 @@ public final class ConversationMedian implements IConversationNumericMetric {
     @java.lang.Override
     public NumericConversationField getTargetField() {
         return targetField;
+    }
+
+    /**
+     * @return Fully specified ID of the intelligent field. Required when <code>targetField</code> is
+     * <code>IntelligentField</code>, and ignored otherwise.
+     */
+    @JsonProperty("intelligentFieldId")
+    @java.lang.Override
+    public Optional<EntityId> getIntelligentFieldId() {
+        return intelligentFieldId;
     }
 
     @java.lang.Override
@@ -50,12 +69,12 @@ public final class ConversationMedian implements IConversationNumericMetric {
     }
 
     private boolean equalTo(ConversationMedian other) {
-        return targetField.equals(other.targetField);
+        return targetField.equals(other.targetField) && intelligentFieldId.equals(other.intelligentFieldId);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.targetField);
+        return Objects.hash(this.targetField, this.intelligentFieldId);
     }
 
     @java.lang.Override
@@ -78,11 +97,21 @@ public final class ConversationMedian implements IConversationNumericMetric {
 
     public interface _FinalStage {
         ConversationMedian build();
+
+        /**
+         * <p>Fully specified ID of the intelligent field. Required when <code>targetField</code> is
+         * <code>IntelligentField</code>, and ignored otherwise.</p>
+         */
+        _FinalStage intelligentFieldId(Optional<EntityId> intelligentFieldId);
+
+        _FinalStage intelligentFieldId(EntityId intelligentFieldId);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements TargetFieldStage, _FinalStage {
         private NumericConversationField targetField;
+
+        private Optional<EntityId> intelligentFieldId = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -92,6 +121,7 @@ public final class ConversationMedian implements IConversationNumericMetric {
         @java.lang.Override
         public Builder from(ConversationMedian other) {
             targetField(other.getTargetField());
+            intelligentFieldId(other.getIntelligentFieldId());
             return this;
         }
 
@@ -107,9 +137,31 @@ public final class ConversationMedian implements IConversationNumericMetric {
             return this;
         }
 
+        /**
+         * <p>Fully specified ID of the intelligent field. Required when <code>targetField</code> is
+         * <code>IntelligentField</code>, and ignored otherwise.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage intelligentFieldId(EntityId intelligentFieldId) {
+            this.intelligentFieldId = Optional.ofNullable(intelligentFieldId);
+            return this;
+        }
+
+        /**
+         * <p>Fully specified ID of the intelligent field. Required when <code>targetField</code> is
+         * <code>IntelligentField</code>, and ignored otherwise.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "intelligentFieldId", nulls = Nulls.SKIP)
+        public _FinalStage intelligentFieldId(Optional<EntityId> intelligentFieldId) {
+            this.intelligentFieldId = intelligentFieldId;
+            return this;
+        }
+
         @java.lang.Override
         public ConversationMedian build() {
-            return new ConversationMedian(targetField, additionalProperties);
+            return new ConversationMedian(targetField, intelligentFieldId, additionalProperties);
         }
     }
 }

@@ -9,12 +9,15 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
+import com.mavenagi.resources.commons.types.EntityId;
 import com.mavenagi.resources.conversation.types.NumericConversationField;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
@@ -22,13 +25,19 @@ import org.jetbrains.annotations.NotNull;
 public final class ConversationPercentile implements IConversationNumericMetric {
     private final NumericConversationField targetField;
 
+    private final Optional<EntityId> intelligentFieldId;
+
     private final double percentile;
 
     private final Map<String, Object> additionalProperties;
 
     private ConversationPercentile(
-            NumericConversationField targetField, double percentile, Map<String, Object> additionalProperties) {
+            NumericConversationField targetField,
+            Optional<EntityId> intelligentFieldId,
+            double percentile,
+            Map<String, Object> additionalProperties) {
         this.targetField = targetField;
+        this.intelligentFieldId = intelligentFieldId;
         this.percentile = percentile;
         this.additionalProperties = additionalProperties;
     }
@@ -40,6 +49,16 @@ public final class ConversationPercentile implements IConversationNumericMetric 
     @java.lang.Override
     public NumericConversationField getTargetField() {
         return targetField;
+    }
+
+    /**
+     * @return Fully specified ID of the intelligent field. Required when <code>targetField</code> is
+     * <code>IntelligentField</code>, and ignored otherwise.
+     */
+    @JsonProperty("intelligentFieldId")
+    @java.lang.Override
+    public Optional<EntityId> getIntelligentFieldId() {
+        return intelligentFieldId;
     }
 
     /**
@@ -62,12 +81,14 @@ public final class ConversationPercentile implements IConversationNumericMetric 
     }
 
     private boolean equalTo(ConversationPercentile other) {
-        return targetField.equals(other.targetField) && percentile == other.percentile;
+        return targetField.equals(other.targetField)
+                && intelligentFieldId.equals(other.intelligentFieldId)
+                && percentile == other.percentile;
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.targetField, this.percentile);
+        return Objects.hash(this.targetField, this.intelligentFieldId, this.percentile);
     }
 
     @java.lang.Override
@@ -97,6 +118,14 @@ public final class ConversationPercentile implements IConversationNumericMetric 
 
     public interface _FinalStage {
         ConversationPercentile build();
+
+        /**
+         * <p>Fully specified ID of the intelligent field. Required when <code>targetField</code> is
+         * <code>IntelligentField</code>, and ignored otherwise.</p>
+         */
+        _FinalStage intelligentFieldId(Optional<EntityId> intelligentFieldId);
+
+        _FinalStage intelligentFieldId(EntityId intelligentFieldId);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -104,6 +133,8 @@ public final class ConversationPercentile implements IConversationNumericMetric 
         private NumericConversationField targetField;
 
         private double percentile;
+
+        private Optional<EntityId> intelligentFieldId = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -113,6 +144,7 @@ public final class ConversationPercentile implements IConversationNumericMetric 
         @java.lang.Override
         public Builder from(ConversationPercentile other) {
             targetField(other.getTargetField());
+            intelligentFieldId(other.getIntelligentFieldId());
             percentile(other.getPercentile());
             return this;
         }
@@ -141,9 +173,31 @@ public final class ConversationPercentile implements IConversationNumericMetric 
             return this;
         }
 
+        /**
+         * <p>Fully specified ID of the intelligent field. Required when <code>targetField</code> is
+         * <code>IntelligentField</code>, and ignored otherwise.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage intelligentFieldId(EntityId intelligentFieldId) {
+            this.intelligentFieldId = Optional.ofNullable(intelligentFieldId);
+            return this;
+        }
+
+        /**
+         * <p>Fully specified ID of the intelligent field. Required when <code>targetField</code> is
+         * <code>IntelligentField</code>, and ignored otherwise.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "intelligentFieldId", nulls = Nulls.SKIP)
+        public _FinalStage intelligentFieldId(Optional<EntityId> intelligentFieldId) {
+            this.intelligentFieldId = intelligentFieldId;
+            return this;
+        }
+
         @java.lang.Override
         public ConversationPercentile build() {
-            return new ConversationPercentile(targetField, percentile, additionalProperties);
+            return new ConversationPercentile(targetField, intelligentFieldId, percentile, additionalProperties);
         }
     }
 }

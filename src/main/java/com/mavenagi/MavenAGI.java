@@ -15,6 +15,7 @@ import com.mavenagi.resources.customers.CustomersClient;
 import com.mavenagi.resources.events.EventsClient;
 import com.mavenagi.resources.inbox.InboxClient;
 import com.mavenagi.resources.integrations.IntegrationsClient;
+import com.mavenagi.resources.intelligentfields.IntelligentFieldsClient;
 import com.mavenagi.resources.knowledge.KnowledgeClient;
 import com.mavenagi.resources.organizations.OrganizationsClient;
 import com.mavenagi.resources.segments.SegmentsClient;
@@ -47,6 +48,8 @@ public class MavenAGI {
 
     protected final Supplier<IntegrationsClient> integrationsClient;
 
+    protected final Supplier<IntelligentFieldsClient> intelligentFieldsClient;
+
     protected final Supplier<KnowledgeClient> knowledgeClient;
 
     protected final Supplier<OrganizationsClient> organizationsClient;
@@ -73,6 +76,7 @@ public class MavenAGI {
         this.eventsClient = Suppliers.memoize(() -> new EventsClient(clientOptions));
         this.inboxClient = Suppliers.memoize(() -> new InboxClient(clientOptions));
         this.integrationsClient = Suppliers.memoize(() -> new IntegrationsClient(clientOptions));
+        this.intelligentFieldsClient = Suppliers.memoize(() -> new IntelligentFieldsClient(clientOptions));
         this.knowledgeClient = Suppliers.memoize(() -> new KnowledgeClient(clientOptions));
         this.organizationsClient = Suppliers.memoize(() -> new OrganizationsClient(clientOptions));
         this.segmentsClient = Suppliers.memoize(() -> new SegmentsClient(clientOptions));
@@ -120,6 +124,10 @@ public class MavenAGI {
 
     public IntegrationsClient integrations() {
         return this.integrationsClient.get();
+    }
+
+    public IntelligentFieldsClient intelligentFields() {
+        return this.intelligentFieldsClient.get();
     }
 
     public KnowledgeClient knowledge() {

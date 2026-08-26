@@ -3,8 +3,12 @@
  */
 package com.mavenagi.resources.analytics.types;
 
+import com.mavenagi.resources.commons.types.EntityId;
 import com.mavenagi.resources.conversation.types.ConversationField;
+import java.util.Optional;
 
 public interface IConversationBasicMetric {
     ConversationField getTargetField();
+
+    Optional<EntityId> getIntelligentFieldId();
 }

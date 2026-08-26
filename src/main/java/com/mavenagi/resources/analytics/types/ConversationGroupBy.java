@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
+import com.mavenagi.resources.commons.types.EntityId;
 import com.mavenagi.resources.conversation.types.ConversationField;
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +28,8 @@ public final class ConversationGroupBy implements IGroupByBase {
 
     private final ConversationField field;
 
+    private final Optional<EntityId> intelligentFieldId;
+
     private final Optional<List<Range>> ranges;
 
     private final Map<String, Object> additionalProperties;
@@ -34,10 +37,12 @@ public final class ConversationGroupBy implements IGroupByBase {
     private ConversationGroupBy(
             Optional<Integer> limit,
             ConversationField field,
+            Optional<EntityId> intelligentFieldId,
             Optional<List<Range>> ranges,
             Map<String, Object> additionalProperties) {
         this.limit = limit;
         this.field = field;
+        this.intelligentFieldId = intelligentFieldId;
         this.ranges = ranges;
         this.additionalProperties = additionalProperties;
     }
@@ -60,7 +65,17 @@ public final class ConversationGroupBy implements IGroupByBase {
     }
 
     /**
-     * @return Numeric ranges for grouping data into predefined buckets. Applies only to numeric fields.
+     * @return Fully specified ID of the intelligent field. Required when <code>field</code> is
+     * <code>IntelligentField</code>, and ignored otherwise.
+     */
+    @JsonProperty("intelligentFieldId")
+    public Optional<EntityId> getIntelligentFieldId() {
+        return intelligentFieldId;
+    }
+
+    /**
+     * @return Numeric ranges for grouping data into predefined buckets.
+     * Applies only to numeric fields and to NUMBER-validated intelligent fields.
      */
     @JsonProperty("ranges")
     public Optional<List<Range>> getRanges() {
@@ -79,12 +94,15 @@ public final class ConversationGroupBy implements IGroupByBase {
     }
 
     private boolean equalTo(ConversationGroupBy other) {
-        return limit.equals(other.limit) && field.equals(other.field) && ranges.equals(other.ranges);
+        return limit.equals(other.limit)
+                && field.equals(other.field)
+                && intelligentFieldId.equals(other.intelligentFieldId)
+                && ranges.equals(other.ranges);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.limit, this.field, this.ranges);
+        return Objects.hash(this.limit, this.field, this.intelligentFieldId, this.ranges);
     }
 
     @java.lang.Override
@@ -116,7 +134,16 @@ public final class ConversationGroupBy implements IGroupByBase {
         _FinalStage limit(Integer limit);
 
         /**
-         * <p>Numeric ranges for grouping data into predefined buckets. Applies only to numeric fields.</p>
+         * <p>Fully specified ID of the intelligent field. Required when <code>field</code> is
+         * <code>IntelligentField</code>, and ignored otherwise.</p>
+         */
+        _FinalStage intelligentFieldId(Optional<EntityId> intelligentFieldId);
+
+        _FinalStage intelligentFieldId(EntityId intelligentFieldId);
+
+        /**
+         * <p>Numeric ranges for grouping data into predefined buckets.
+         * Applies only to numeric fields and to NUMBER-validated intelligent fields.</p>
          */
         _FinalStage ranges(Optional<List<Range>> ranges);
 
@@ -129,6 +156,8 @@ public final class ConversationGroupBy implements IGroupByBase {
 
         private Optional<List<Range>> ranges = Optional.empty();
 
+        private Optional<EntityId> intelligentFieldId = Optional.empty();
+
         private Optional<Integer> limit = Optional.empty();
 
         @JsonAnySetter
@@ -140,6 +169,7 @@ public final class ConversationGroupBy implements IGroupByBase {
         public Builder from(ConversationGroupBy other) {
             limit(other.getLimit());
             field(other.getField());
+            intelligentFieldId(other.getIntelligentFieldId());
             ranges(other.getRanges());
             return this;
         }
@@ -157,7 +187,8 @@ public final class ConversationGroupBy implements IGroupByBase {
         }
 
         /**
-         * <p>Numeric ranges for grouping data into predefined buckets. Applies only to numeric fields.</p>
+         * <p>Numeric ranges for grouping data into predefined buckets.
+         * Applies only to numeric fields and to NUMBER-validated intelligent fields.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -167,12 +198,35 @@ public final class ConversationGroupBy implements IGroupByBase {
         }
 
         /**
-         * <p>Numeric ranges for grouping data into predefined buckets. Applies only to numeric fields.</p>
+         * <p>Numeric ranges for grouping data into predefined buckets.
+         * Applies only to numeric fields and to NUMBER-validated intelligent fields.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "ranges", nulls = Nulls.SKIP)
         public _FinalStage ranges(Optional<List<Range>> ranges) {
             this.ranges = ranges;
+            return this;
+        }
+
+        /**
+         * <p>Fully specified ID of the intelligent field. Required when <code>field</code> is
+         * <code>IntelligentField</code>, and ignored otherwise.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage intelligentFieldId(EntityId intelligentFieldId) {
+            this.intelligentFieldId = Optional.ofNullable(intelligentFieldId);
+            return this;
+        }
+
+        /**
+         * <p>Fully specified ID of the intelligent field. Required when <code>field</code> is
+         * <code>IntelligentField</code>, and ignored otherwise.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "intelligentFieldId", nulls = Nulls.SKIP)
+        public _FinalStage intelligentFieldId(Optional<EntityId> intelligentFieldId) {
+            this.intelligentFieldId = intelligentFieldId;
             return this;
         }
 
@@ -198,7 +252,7 @@ public final class ConversationGroupBy implements IGroupByBase {
 
         @java.lang.Override
         public ConversationGroupBy build() {
-            return new ConversationGroupBy(limit, field, ranges, additionalProperties);
+            return new ConversationGroupBy(limit, field, intelligentFieldId, ranges, additionalProperties);
         }
     }
 }

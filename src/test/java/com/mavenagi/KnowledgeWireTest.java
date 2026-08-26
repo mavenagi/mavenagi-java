@@ -22,6 +22,8 @@ import com.mavenagi.resources.knowledge.types.KnowledgeBaseResponse;
 import com.mavenagi.resources.knowledge.types.KnowledgeBaseSearchRequest;
 import com.mavenagi.resources.knowledge.types.KnowledgeBaseVersion;
 import com.mavenagi.resources.knowledge.types.KnowledgeBaseVersionFinalizeStatus;
+import com.mavenagi.resources.knowledge.types.KnowledgeBaseVersionProgress;
+import com.mavenagi.resources.knowledge.types.KnowledgeBaseVersionProgressRequest;
 import com.mavenagi.resources.knowledge.types.KnowledgeBaseVersionRequest;
 import com.mavenagi.resources.knowledge.types.KnowledgeBaseVersionType;
 import com.mavenagi.resources.knowledge.types.KnowledgeBaseVersionsListResponse;
@@ -64,7 +66,7 @@ public class KnowledgeWireTest {
     public void testSearchKnowledgeBases() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"knowledgeBases\":[{\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"knowledgeBaseId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"activeVersionId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"mostRecentVersionStatus\":\"SUCCEEDED\",\"type\":\"API\",\"metadata\":{\"metadata\":\"metadata\"},\"tags\":[\"tags\"],\"llmInclusionStatus\":\"ALWAYS\",\"refreshFrequency\":\"NONE\",\"segmentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"segmentIds\":[{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"url\":\"url\",\"indexingState\":{\"versionId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"status\":\"BUILDING\",\"expectedCount\":1000000,\"indexedCount\":1000000,\"failedCount\":1000000},\"name\":\"name\",\"precondition\":{\"preconditionType\":\"user\",\"key\":\"key\",\"value\":\"value\",\"values\":[\"values\",\"values\"],\"operator\":\"NOT\"}},{\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"knowledgeBaseId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"activeVersionId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"mostRecentVersionStatus\":\"SUCCEEDED\",\"type\":\"API\",\"metadata\":{\"metadata\":\"metadata\"},\"tags\":[\"tags\"],\"llmInclusionStatus\":\"ALWAYS\",\"refreshFrequency\":\"NONE\",\"segmentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"segmentIds\":[{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"url\":\"url\",\"indexingState\":{\"versionId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"status\":\"BUILDING\",\"expectedCount\":1000000,\"indexedCount\":1000000,\"failedCount\":1000000},\"name\":\"name\",\"precondition\":{\"preconditionType\":\"user\",\"key\":\"key\",\"value\":\"value\",\"values\":[\"values\",\"values\"],\"operator\":\"NOT\"}}],\"number\":1,\"size\":1,\"totalElements\":1000000,\"totalPages\":1}"));
+            .setBody("{\"knowledgeBases\":[{\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"knowledgeBaseId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"activeVersionId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"mostRecentVersionStatus\":\"SUCCEEDED\",\"type\":\"API\",\"metadata\":{\"metadata\":\"metadata\"},\"tags\":[\"tags\"],\"llmInclusionStatus\":\"ALWAYS\",\"refreshFrequency\":\"NONE\",\"segmentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"segmentIds\":[{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"url\":\"url\",\"indexingState\":{\"versionId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"status\":\"BUILDING\",\"expectedCount\":1000000,\"indexedCount\":1000000,\"failedCount\":1000000},\"progress\":{\"message\":\"message\",\"completedCount\":1000000,\"totalCount\":1000000},\"name\":\"name\",\"precondition\":{\"preconditionType\":\"user\",\"key\":\"key\",\"value\":\"value\",\"values\":[\"values\",\"values\"],\"operator\":\"NOT\"}},{\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"knowledgeBaseId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"activeVersionId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"mostRecentVersionStatus\":\"SUCCEEDED\",\"type\":\"API\",\"metadata\":{\"metadata\":\"metadata\"},\"tags\":[\"tags\"],\"llmInclusionStatus\":\"ALWAYS\",\"refreshFrequency\":\"NONE\",\"segmentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"segmentIds\":[{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"url\":\"url\",\"indexingState\":{\"versionId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"status\":\"BUILDING\",\"expectedCount\":1000000,\"indexedCount\":1000000,\"failedCount\":1000000},\"progress\":{\"message\":\"message\",\"completedCount\":1000000,\"totalCount\":1000000},\"name\":\"name\",\"precondition\":{\"preconditionType\":\"user\",\"key\":\"key\",\"value\":\"value\",\"values\":[\"values\",\"values\"],\"operator\":\"NOT\"}}],\"number\":1,\"size\":1,\"totalElements\":1000000,\"totalPages\":1}"));
         KnowledgeBasesResponse response = client.knowledge().searchKnowledgeBases(
             KnowledgeBaseSearchRequest
                 .builder()
@@ -163,6 +165,11 @@ public class KnowledgeWireTest {
             + "        \"indexedCount\": 1000000,\n"
             + "        \"failedCount\": 1000000\n"
             + "      },\n"
+            + "      \"progress\": {\n"
+            + "        \"message\": \"message\",\n"
+            + "        \"completedCount\": 1000000,\n"
+            + "        \"totalCount\": 1000000\n"
+            + "      },\n"
             + "      \"name\": \"name\",\n"
             + "      \"precondition\": {\n"
             + "        \"preconditionType\": \"user\",\n"
@@ -231,6 +238,11 @@ public class KnowledgeWireTest {
             + "        \"expectedCount\": 1000000,\n"
             + "        \"indexedCount\": 1000000,\n"
             + "        \"failedCount\": 1000000\n"
+            + "      },\n"
+            + "      \"progress\": {\n"
+            + "        \"message\": \"message\",\n"
+            + "        \"completedCount\": 1000000,\n"
+            + "        \"totalCount\": 1000000\n"
             + "      },\n"
             + "      \"name\": \"name\",\n"
             + "      \"precondition\": {\n"
@@ -907,10 +919,123 @@ public class KnowledgeWireTest {
         }
     }
     @Test
+    public void testUpdateKnowledgeBaseVersionProgress() throws Exception {
+        server.enqueue(new MockResponse()
+            .setResponseCode(200)
+            .setBody("{\"versionId\":{\"type\":\"KNOWLEDGE_BASE_VERSION\",\"referenceId\":\"versionId\",\"appId\":\"maven\",\"organizationId\":\"acme\",\"agentId\":\"support\"},\"type\":\"FULL\",\"status\":\"IN_PROGRESS\",\"createdAt\":\"2024-01-01T00:00:00Z\",\"updatedAt\":\"2024-02-02T00:00:00Z\",\"progress\":{\"message\":\"Fetching articles from the help center\",\"completedCount\":120,\"totalCount\":500}}"));
+        KnowledgeBaseVersion response = client.knowledge().updateKnowledgeBaseVersionProgress(
+            "help-center",
+            KnowledgeBaseVersionProgressRequest
+                .builder()
+                .versionId(
+                    EntityIdWithoutAgent
+                        .builder()
+                        .type(EntityType.KNOWLEDGE_BASE_VERSION)
+                        .referenceId("versionId")
+                        .appId("maven")
+                        .build()
+                )
+                .progress(
+                    KnowledgeBaseVersionProgress
+                        .builder()
+                        .message("Fetching articles from the help center")
+                        .completedCount(120L)
+                        .totalCount(500L)
+                        .build()
+                )
+                .build()
+        );
+        RecordedRequest request = server.takeRequest();
+        Assertions.assertNotNull(request);
+        Assertions.assertEquals("POST", request.getMethod());
+        // Validate request body
+        String actualRequestBody = request.getBody().readUtf8();
+        String expectedRequestBody = ""
+            + "{\n"
+            + "  \"versionId\": {\n"
+            + "    \"type\": \"KNOWLEDGE_BASE_VERSION\",\n"
+            + "    \"referenceId\": \"versionId\",\n"
+            + "    \"appId\": \"maven\"\n"
+            + "  },\n"
+            + "  \"progress\": {\n"
+            + "    \"message\": \"Fetching articles from the help center\",\n"
+            + "    \"completedCount\": 120,\n"
+            + "    \"totalCount\": 500\n"
+            + "  }\n"
+            + "}";
+        JsonNode actualJson = objectMapper.readTree(actualRequestBody);
+        JsonNode expectedJson = objectMapper.readTree(expectedRequestBody);
+        Assertions.assertEquals(expectedJson, actualJson, "Request body structure does not match expected");
+        if (actualJson.has("type") || actualJson.has("_type") || actualJson.has("kind")) {
+            String discriminator = null;
+            if (actualJson.has("type")) discriminator = actualJson.get("type").asText();
+            else if (actualJson.has("_type")) discriminator = actualJson.get("_type").asText();
+            else if (actualJson.has("kind")) discriminator = actualJson.get("kind").asText();
+            Assertions.assertNotNull(discriminator, "Union type should have a discriminator field");
+            Assertions.assertFalse(discriminator.isEmpty(), "Union discriminator should not be empty");
+        }
+        
+        if (!actualJson.isNull()) {
+            Assertions.assertTrue(actualJson.isObject() || actualJson.isArray() || actualJson.isValueNode(), "request should be a valid JSON value");
+        }
+        
+        if (actualJson.isArray()) {
+            Assertions.assertTrue(actualJson.size() >= 0, "Array should have valid size");
+        }
+        if (actualJson.isObject()) {
+            Assertions.assertTrue(actualJson.size() >= 0, "Object should have valid field count");
+        }
+        
+        // Validate response body
+        Assertions.assertNotNull(response, "Response should not be null");
+        String actualResponseJson = objectMapper.writeValueAsString(response);
+        String expectedResponseBody = ""
+            + "{\n"
+            + "  \"versionId\": {\n"
+            + "    \"type\": \"KNOWLEDGE_BASE_VERSION\",\n"
+            + "    \"referenceId\": \"versionId\",\n"
+            + "    \"appId\": \"maven\",\n"
+            + "    \"organizationId\": \"acme\",\n"
+            + "    \"agentId\": \"support\"\n"
+            + "  },\n"
+            + "  \"type\": \"FULL\",\n"
+            + "  \"status\": \"IN_PROGRESS\",\n"
+            + "  \"createdAt\": \"2024-01-01T00:00:00Z\",\n"
+            + "  \"updatedAt\": \"2024-02-02T00:00:00Z\",\n"
+            + "  \"progress\": {\n"
+            + "    \"message\": \"Fetching articles from the help center\",\n"
+            + "    \"completedCount\": 120,\n"
+            + "    \"totalCount\": 500\n"
+            + "  }\n"
+            + "}";
+        JsonNode actualResponseNode = objectMapper.readTree(actualResponseJson);
+        JsonNode expectedResponseNode = objectMapper.readTree(expectedResponseBody);
+        Assertions.assertEquals(expectedResponseNode, actualResponseNode, "Response body structure does not match expected");
+        if (actualResponseNode.has("type") || actualResponseNode.has("_type") || actualResponseNode.has("kind")) {
+            String discriminator = null;
+            if (actualResponseNode.has("type")) discriminator = actualResponseNode.get("type").asText();
+            else if (actualResponseNode.has("_type")) discriminator = actualResponseNode.get("_type").asText();
+            else if (actualResponseNode.has("kind")) discriminator = actualResponseNode.get("kind").asText();
+            Assertions.assertNotNull(discriminator, "Union type should have a discriminator field");
+            Assertions.assertFalse(discriminator.isEmpty(), "Union discriminator should not be empty");
+        }
+        
+        if (!actualResponseNode.isNull()) {
+            Assertions.assertTrue(actualResponseNode.isObject() || actualResponseNode.isArray() || actualResponseNode.isValueNode(), "response should be a valid JSON value");
+        }
+        
+        if (actualResponseNode.isArray()) {
+            Assertions.assertTrue(actualResponseNode.size() >= 0, "Array should have valid size");
+        }
+        if (actualResponseNode.isObject()) {
+            Assertions.assertTrue(actualResponseNode.size() >= 0, "Object should have valid field count");
+        }
+    }
+    @Test
     public void testListKnowledgeBaseVersions() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"knowledgeBaseVersions\":[{\"versionId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"status\":\"SUCCEEDED\",\"errorMessage\":\"errorMessage\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"indexingState\":{\"versionId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"status\":\"BUILDING\",\"expectedCount\":1000000,\"indexedCount\":1000000,\"failedCount\":1000000},\"type\":\"FULL\"},{\"versionId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"status\":\"SUCCEEDED\",\"errorMessage\":\"errorMessage\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"indexingState\":{\"versionId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"status\":\"BUILDING\",\"expectedCount\":1000000,\"indexedCount\":1000000,\"failedCount\":1000000},\"type\":\"FULL\"}]}"));
+            .setBody("{\"knowledgeBaseVersions\":[{\"versionId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"status\":\"SUCCEEDED\",\"errorMessage\":\"errorMessage\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"indexingState\":{\"versionId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"status\":\"BUILDING\",\"expectedCount\":1000000,\"indexedCount\":1000000,\"failedCount\":1000000},\"progress\":{\"message\":\"message\",\"completedCount\":1000000,\"totalCount\":1000000},\"type\":\"FULL\"},{\"versionId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"status\":\"SUCCEEDED\",\"errorMessage\":\"errorMessage\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"indexingState\":{\"versionId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"status\":\"BUILDING\",\"expectedCount\":1000000,\"indexedCount\":1000000,\"failedCount\":1000000},\"progress\":{\"message\":\"message\",\"completedCount\":1000000,\"totalCount\":1000000},\"type\":\"FULL\"}]}"));
         KnowledgeBaseVersionsListResponse response = client.knowledge().listKnowledgeBaseVersions(
             "knowledgeBaseReferenceId",
             KnowledgeBaseVersionsListRequest
@@ -952,6 +1077,11 @@ public class KnowledgeWireTest {
             + "        \"indexedCount\": 1000000,\n"
             + "        \"failedCount\": 1000000\n"
             + "      },\n"
+            + "      \"progress\": {\n"
+            + "        \"message\": \"message\",\n"
+            + "        \"completedCount\": 1000000,\n"
+            + "        \"totalCount\": 1000000\n"
+            + "      },\n"
             + "      \"type\": \"FULL\"\n"
             + "    },\n"
             + "    {\n"
@@ -978,6 +1108,11 @@ public class KnowledgeWireTest {
             + "        \"expectedCount\": 1000000,\n"
             + "        \"indexedCount\": 1000000,\n"
             + "        \"failedCount\": 1000000\n"
+            + "      },\n"
+            + "      \"progress\": {\n"
+            + "        \"message\": \"message\",\n"
+            + "        \"completedCount\": 1000000,\n"
+            + "        \"totalCount\": 1000000\n"
             + "      },\n"
             + "      \"type\": \"FULL\"\n"
             + "    }\n"

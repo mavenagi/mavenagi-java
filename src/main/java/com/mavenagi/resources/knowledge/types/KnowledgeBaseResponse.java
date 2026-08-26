@@ -60,6 +60,8 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
 
     private final Optional<KnowledgeBaseIndexingProgressState> indexingState;
 
+    private final Optional<KnowledgeBaseVersionProgress> progress;
+
     private final Map<String, Object> additionalProperties;
 
     private KnowledgeBaseResponse(
@@ -79,6 +81,7 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
             Set<EntityId> segmentIds,
             Optional<String> url,
             Optional<KnowledgeBaseIndexingProgressState> indexingState,
+            Optional<KnowledgeBaseVersionProgress> progress,
             Map<String, Object> additionalProperties) {
         this.name = name;
         this.precondition = precondition;
@@ -96,6 +99,7 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
         this.segmentIds = segmentIds;
         this.url = url;
         this.indexingState = indexingState;
+        this.progress = progress;
         this.additionalProperties = additionalProperties;
     }
 
@@ -235,6 +239,15 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
         return indexingState;
     }
 
+    /**
+     * @return Refresh progress most recently reported by the app that owns this knowledge base.
+     * Only populated while the latest version is in progress - absent once it has completed.
+     */
+    @JsonProperty("progress")
+    public Optional<KnowledgeBaseVersionProgress> getProgress() {
+        return progress;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -262,7 +275,8 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
                 && segmentId.equals(other.segmentId)
                 && segmentIds.equals(other.segmentIds)
                 && url.equals(other.url)
-                && indexingState.equals(other.indexingState);
+                && indexingState.equals(other.indexingState)
+                && progress.equals(other.progress);
     }
 
     @java.lang.Override
@@ -283,7 +297,8 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
                 this.segmentId,
                 this.segmentIds,
                 this.url,
-                this.indexingState);
+                this.indexingState,
+                this.progress);
     }
 
     @java.lang.Override
@@ -423,6 +438,14 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
         _FinalStage indexingState(Optional<KnowledgeBaseIndexingProgressState> indexingState);
 
         _FinalStage indexingState(KnowledgeBaseIndexingProgressState indexingState);
+
+        /**
+         * <p>Refresh progress most recently reported by the app that owns this knowledge base.
+         * Only populated while the latest version is in progress - absent once it has completed.</p>
+         */
+        _FinalStage progress(Optional<KnowledgeBaseVersionProgress> progress);
+
+        _FinalStage progress(KnowledgeBaseVersionProgress progress);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -451,6 +474,8 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
         private LlmInclusionStatus llmInclusionStatus;
 
         private KnowledgeBaseRefreshFrequency refreshFrequency;
+
+        private Optional<KnowledgeBaseVersionProgress> progress = Optional.empty();
 
         private Optional<KnowledgeBaseIndexingProgressState> indexingState = Optional.empty();
 
@@ -491,6 +516,7 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
             segmentIds(other.getSegmentIds());
             url(other.getUrl());
             indexingState(other.getIndexingState());
+            progress(other.getProgress());
             return this;
         }
 
@@ -592,6 +618,28 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
         @JsonSetter("refreshFrequency")
         public _FinalStage refreshFrequency(@NotNull KnowledgeBaseRefreshFrequency refreshFrequency) {
             this.refreshFrequency = Objects.requireNonNull(refreshFrequency, "refreshFrequency must not be null");
+            return this;
+        }
+
+        /**
+         * <p>Refresh progress most recently reported by the app that owns this knowledge base.
+         * Only populated while the latest version is in progress - absent once it has completed.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage progress(KnowledgeBaseVersionProgress progress) {
+            this.progress = Optional.ofNullable(progress);
+            return this;
+        }
+
+        /**
+         * <p>Refresh progress most recently reported by the app that owns this knowledge base.
+         * Only populated while the latest version is in progress - absent once it has completed.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "progress", nulls = Nulls.SKIP)
+        public _FinalStage progress(Optional<KnowledgeBaseVersionProgress> progress) {
+            this.progress = progress;
             return this;
         }
 
@@ -829,6 +877,7 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
                     segmentIds,
                     url,
                     indexingState,
+                    progress,
                     additionalProperties);
         }
     }

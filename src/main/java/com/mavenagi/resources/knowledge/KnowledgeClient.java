@@ -17,6 +17,7 @@ import com.mavenagi.resources.knowledge.types.KnowledgeBaseRequest;
 import com.mavenagi.resources.knowledge.types.KnowledgeBaseResponse;
 import com.mavenagi.resources.knowledge.types.KnowledgeBaseSearchRequest;
 import com.mavenagi.resources.knowledge.types.KnowledgeBaseVersion;
+import com.mavenagi.resources.knowledge.types.KnowledgeBaseVersionProgressRequest;
 import com.mavenagi.resources.knowledge.types.KnowledgeBaseVersionRequest;
 import com.mavenagi.resources.knowledge.types.KnowledgeBaseVersionsListResponse;
 import com.mavenagi.resources.knowledge.types.KnowledgeBasesResponse;
@@ -275,6 +276,34 @@ public class KnowledgeClient {
             RequestOptions requestOptions) {
         return this.rawClient
                 .finalizeKnowledgeBaseVersion(knowledgeBaseReferenceId, request, requestOptions)
+                .body();
+    }
+
+    /**
+     * Report refresh progress for an in-progress knowledge base version.
+     * <p>Progress is advisory and shown to users while a refresh runs. Each call replaces the
+     * version's entire progress state - no history is kept, only the most recent value is
+     * retained. Will throw an exception if the target version is not in progress.</p>
+     */
+    public KnowledgeBaseVersion updateKnowledgeBaseVersionProgress(
+            String knowledgeBaseReferenceId, KnowledgeBaseVersionProgressRequest request) {
+        return this.rawClient
+                .updateKnowledgeBaseVersionProgress(knowledgeBaseReferenceId, request)
+                .body();
+    }
+
+    /**
+     * Report refresh progress for an in-progress knowledge base version.
+     * <p>Progress is advisory and shown to users while a refresh runs. Each call replaces the
+     * version's entire progress state - no history is kept, only the most recent value is
+     * retained. Will throw an exception if the target version is not in progress.</p>
+     */
+    public KnowledgeBaseVersion updateKnowledgeBaseVersionProgress(
+            String knowledgeBaseReferenceId,
+            KnowledgeBaseVersionProgressRequest request,
+            RequestOptions requestOptions) {
+        return this.rawClient
+                .updateKnowledgeBaseVersionProgress(knowledgeBaseReferenceId, request, requestOptions)
                 .body();
     }
 

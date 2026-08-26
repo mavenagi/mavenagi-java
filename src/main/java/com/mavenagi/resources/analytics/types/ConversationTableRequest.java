@@ -83,6 +83,11 @@ public final class ConversationTableRequest implements IConversationAnalyticsReq
      * If multiple fields are provided, the result is grouped by their unique value combinations.
      * If empty, all data is aggregated into a single row. |
      * Note: The field <code>CreatedAt</code> should not be used here, all time-based grouping should be done using the <code>timeGrouping</code> field.
+     * <p>Note: A row's <code>identifier</code> cannot name an intelligent field, so an <code>IntelligentField</code>
+     * grouping is not currently distinguishable here from a second <code>IntelligentField</code> grouping,
+     * nor from <code>timeGrouping</code>. Row counts are correct in both cases, but the identifier keeps
+     * only one value. Use a single <code>IntelligentField</code> grouping with no <code>timeGrouping</code>, or a
+     * chart, which is unaffected.</p>
      */
     @JsonProperty("fieldGroupings")
     public List<ConversationGroupBy> getFieldGroupings() {
@@ -206,6 +211,11 @@ public final class ConversationTableRequest implements IConversationAnalyticsReq
          * If multiple fields are provided, the result is grouped by their unique value combinations.
          * If empty, all data is aggregated into a single row. |
          * Note: The field <code>CreatedAt</code> should not be used here, all time-based grouping should be done using the <code>timeGrouping</code> field.</p>
+         * <p>Note: A row's <code>identifier</code> cannot name an intelligent field, so an <code>IntelligentField</code>
+         * grouping is not currently distinguishable here from a second <code>IntelligentField</code> grouping,
+         * nor from <code>timeGrouping</code>. Row counts are correct in both cases, but the identifier keeps
+         * only one value. Use a single <code>IntelligentField</code> grouping with no <code>timeGrouping</code>, or a
+         * chart, which is unaffected.</p>
          */
         @JsonSetter(value = "fieldGroupings", nulls = Nulls.SKIP)
         public Builder fieldGroupings(List<ConversationGroupBy> fieldGroupings) {

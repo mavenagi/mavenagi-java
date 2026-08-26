@@ -21,12 +21,11 @@ import org.jetbrains.annotations.NotNull;
 public final class KeyValueEntryCondition {
     private final String path;
 
-    private final IntelligentFieldCondition condition;
+    private final FieldCondition condition;
 
     private final Map<String, Object> additionalProperties;
 
-    private KeyValueEntryCondition(
-            String path, IntelligentFieldCondition condition, Map<String, Object> additionalProperties) {
+    private KeyValueEntryCondition(String path, FieldCondition condition, Map<String, Object> additionalProperties) {
         this.path = path;
         this.condition = condition;
         this.additionalProperties = additionalProperties;
@@ -45,7 +44,7 @@ public final class KeyValueEntryCondition {
      * @return The condition to evaluate against the value at <code>path</code>.
      */
     @JsonProperty("condition")
-    public IntelligentFieldCondition getCondition() {
+    public FieldCondition getCondition() {
         return condition;
     }
 
@@ -92,7 +91,7 @@ public final class KeyValueEntryCondition {
         /**
          * <p>The condition to evaluate against the value at <code>path</code>.</p>
          */
-        _FinalStage condition(@NotNull IntelligentFieldCondition condition);
+        _FinalStage condition(@NotNull FieldCondition condition);
     }
 
     public interface _FinalStage {
@@ -103,7 +102,7 @@ public final class KeyValueEntryCondition {
     public static final class Builder implements PathStage, ConditionStage, _FinalStage {
         private String path;
 
-        private IntelligentFieldCondition condition;
+        private FieldCondition condition;
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -138,7 +137,7 @@ public final class KeyValueEntryCondition {
          */
         @java.lang.Override
         @JsonSetter("condition")
-        public _FinalStage condition(@NotNull IntelligentFieldCondition condition) {
+        public _FinalStage condition(@NotNull FieldCondition condition) {
             this.condition = Objects.requireNonNull(condition, "condition must not be null");
             return this;
         }

@@ -22,10 +22,20 @@ import java.util.Optional;
 public final class SegmentDeleteRequest {
     private final Optional<String> appId;
 
+    private final Optional<String> variantReferenceId;
+
+    private final Optional<String> variantAppId;
+
     private final Map<String, Object> additionalProperties;
 
-    private SegmentDeleteRequest(Optional<String> appId, Map<String, Object> additionalProperties) {
+    private SegmentDeleteRequest(
+            Optional<String> appId,
+            Optional<String> variantReferenceId,
+            Optional<String> variantAppId,
+            Map<String, Object> additionalProperties) {
         this.appId = appId;
+        this.variantReferenceId = variantReferenceId;
+        this.variantAppId = variantAppId;
         this.additionalProperties = additionalProperties;
     }
 
@@ -35,6 +45,27 @@ public final class SegmentDeleteRequest {
     @JsonProperty("appId")
     public Optional<String> getAppId() {
         return appId;
+    }
+
+    /**
+     * @return The reference ID of the agent variant this delete is scoped to. When set, the
+     * deletion is staged in that variant's working set instead of being applied to the
+     * agent's live configuration.
+     * <p>Omit this parameter to delete directly from the agent. Variant scoping is not
+     * active yet: a variant supplied today is accepted and ignored, and the delete applies
+     * to the agent.</p>
+     */
+    @JsonProperty("variantReferenceId")
+    public Optional<String> getVariantReferenceId() {
+        return variantReferenceId;
+    }
+
+    /**
+     * @return The App ID of the agent variant named by <code>variantReferenceId</code>. If not provided, the ID of the calling app will be used.
+     */
+    @JsonProperty("variantAppId")
+    public Optional<String> getVariantAppId() {
+        return variantAppId;
     }
 
     @java.lang.Override
@@ -49,12 +80,14 @@ public final class SegmentDeleteRequest {
     }
 
     private boolean equalTo(SegmentDeleteRequest other) {
-        return appId.equals(other.appId);
+        return appId.equals(other.appId)
+                && variantReferenceId.equals(other.variantReferenceId)
+                && variantAppId.equals(other.variantAppId);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.appId);
+        return Objects.hash(this.appId, this.variantReferenceId, this.variantAppId);
     }
 
     @java.lang.Override
@@ -70,6 +103,10 @@ public final class SegmentDeleteRequest {
     public static final class Builder {
         private Optional<String> appId = Optional.empty();
 
+        private Optional<String> variantReferenceId = Optional.empty();
+
+        private Optional<String> variantAppId = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -77,6 +114,8 @@ public final class SegmentDeleteRequest {
 
         public Builder from(SegmentDeleteRequest other) {
             appId(other.getAppId());
+            variantReferenceId(other.getVariantReferenceId());
+            variantAppId(other.getVariantAppId());
             return this;
         }
 
@@ -94,8 +133,41 @@ public final class SegmentDeleteRequest {
             return this;
         }
 
+        /**
+         * <p>The reference ID of the agent variant this delete is scoped to. When set, the
+         * deletion is staged in that variant's working set instead of being applied to the
+         * agent's live configuration.</p>
+         * <p>Omit this parameter to delete directly from the agent. Variant scoping is not
+         * active yet: a variant supplied today is accepted and ignored, and the delete applies
+         * to the agent.</p>
+         */
+        @JsonSetter(value = "variantReferenceId", nulls = Nulls.SKIP)
+        public Builder variantReferenceId(Optional<String> variantReferenceId) {
+            this.variantReferenceId = variantReferenceId;
+            return this;
+        }
+
+        public Builder variantReferenceId(String variantReferenceId) {
+            this.variantReferenceId = Optional.ofNullable(variantReferenceId);
+            return this;
+        }
+
+        /**
+         * <p>The App ID of the agent variant named by <code>variantReferenceId</code>. If not provided, the ID of the calling app will be used.</p>
+         */
+        @JsonSetter(value = "variantAppId", nulls = Nulls.SKIP)
+        public Builder variantAppId(Optional<String> variantAppId) {
+            this.variantAppId = variantAppId;
+            return this;
+        }
+
+        public Builder variantAppId(String variantAppId) {
+            this.variantAppId = Optional.ofNullable(variantAppId);
+            return this;
+        }
+
         public SegmentDeleteRequest build() {
-            return new SegmentDeleteRequest(appId, additionalProperties);
+            return new SegmentDeleteRequest(appId, variantReferenceId, variantAppId, additionalProperties);
         }
     }
 }

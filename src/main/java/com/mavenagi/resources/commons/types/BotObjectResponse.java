@@ -9,41 +9,29 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BotObjectResponse.Builder.class)
-public final class BotObjectResponse {
-    private final Optional<String> label;
-
+public final class BotObjectResponse implements IBotObjectResponse {
     private final Object object;
 
     private final Map<String, Object> additionalProperties;
 
-    private BotObjectResponse(Optional<String> label, Object object, Map<String, Object> additionalProperties) {
-        this.label = label;
+    private BotObjectResponse(Object object, Map<String, Object> additionalProperties) {
         this.object = object;
         this.additionalProperties = additionalProperties;
     }
 
     /**
-     * @return A human-readable name for the generated object, for use in the UI.
-     */
-    @JsonProperty("label")
-    public Optional<String> getLabel() {
-        return label;
-    }
-
-    /**
-     * @return The generated object conforming to the provided schema.
+     * @return The answer, matching the schema the ask supplied. Every property the schema requires is present, with <code>null</code> where a nullable one does not apply.
      */
     @JsonProperty("object")
+    @java.lang.Override
     public Object getObject() {
         return object;
     }
@@ -60,12 +48,12 @@ public final class BotObjectResponse {
     }
 
     private boolean equalTo(BotObjectResponse other) {
-        return label.equals(other.label) && object.equals(other.object);
+        return object.equals(other.object);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.label, this.object);
+        return Objects.hash(this.object);
     }
 
     @java.lang.Override
@@ -79,7 +67,7 @@ public final class BotObjectResponse {
 
     public interface ObjectStage {
         /**
-         * <p>The generated object conforming to the provided schema.</p>
+         * <p>The answer, matching the schema the ask supplied. Every property the schema requires is present, with <code>null</code> where a nullable one does not apply.</p>
          */
         _FinalStage object(Object object);
 
@@ -88,20 +76,11 @@ public final class BotObjectResponse {
 
     public interface _FinalStage {
         BotObjectResponse build();
-
-        /**
-         * <p>A human-readable name for the generated object, for use in the UI.</p>
-         */
-        _FinalStage label(Optional<String> label);
-
-        _FinalStage label(String label);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements ObjectStage, _FinalStage {
         private Object object;
-
-        private Optional<String> label = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -110,14 +89,13 @@ public final class BotObjectResponse {
 
         @java.lang.Override
         public Builder from(BotObjectResponse other) {
-            label(other.getLabel());
             object(other.getObject());
             return this;
         }
 
         /**
-         * <p>The generated object conforming to the provided schema.</p>
-         * <p>The generated object conforming to the provided schema.</p>
+         * <p>The answer, matching the schema the ask supplied. Every property the schema requires is present, with <code>null</code> where a nullable one does not apply.</p>
+         * <p>The answer, matching the schema the ask supplied. Every property the schema requires is present, with <code>null</code> where a nullable one does not apply.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -127,29 +105,9 @@ public final class BotObjectResponse {
             return this;
         }
 
-        /**
-         * <p>A human-readable name for the generated object, for use in the UI.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage label(String label) {
-            this.label = Optional.ofNullable(label);
-            return this;
-        }
-
-        /**
-         * <p>A human-readable name for the generated object, for use in the UI.</p>
-         */
-        @java.lang.Override
-        @JsonSetter(value = "label", nulls = Nulls.SKIP)
-        public _FinalStage label(Optional<String> label) {
-            this.label = label;
-            return this;
-        }
-
         @java.lang.Override
         public BotObjectResponse build() {
-            return new BotObjectResponse(label, object, additionalProperties);
+            return new BotObjectResponse(object, additionalProperties);
         }
     }
 }

@@ -15,6 +15,7 @@ import com.mavenagi.core.ObjectMappers;
 import com.mavenagi.resources.commons.types.AskType;
 import com.mavenagi.resources.commons.types.AttachmentRequest;
 import com.mavenagi.resources.commons.types.EntityIdBase;
+import com.mavenagi.resources.commons.types.TextFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +34,8 @@ public final class AskRequest {
 
     private final Optional<String> text;
 
+    private final Optional<TextFormat> textFormat;
+
     private final Optional<List<AttachmentRequest>> attachments;
 
     private final Optional<Map<String, String>> transientData;
@@ -48,6 +51,7 @@ public final class AskRequest {
             EntityIdBase userId,
             Optional<AskType> type,
             Optional<String> text,
+            Optional<TextFormat> textFormat,
             Optional<List<AttachmentRequest>> attachments,
             Optional<Map<String, String>> transientData,
             Optional<String> timezone,
@@ -57,6 +61,7 @@ public final class AskRequest {
         this.userId = userId;
         this.type = type;
         this.text = text;
+        this.textFormat = textFormat;
         this.attachments = attachments;
         this.transientData = transientData;
         this.timezone = timezone;
@@ -100,6 +105,32 @@ public final class AskRequest {
     @JsonProperty("text")
     public Optional<String> getText() {
         return text;
+    }
+
+    /**
+     * @return What form the answer takes. Omit it for prose, or send <code>jsonSchema</code> to additionally get a
+     * <code>BotObjectResponse</code> matching a schema you supply.
+     * <p>Set per ask and independent of <code>type</code>, so one conversation can mix prose and structured
+     * turns. Only the answer's form changes: knowledge, actions, charters and segments apply
+     * the same way either way.</p>
+     * <p>A structured answer accompanies the prose one rather than replacing it — the same turn
+     * produces both, so the conversation stays readable. On <code>ask_stream</code> the prose still streams
+     * on <code>text</code> events as it always has, and the object arrives whole on a single <code>object</code> event
+     * near the end.</p>
+     * <p>Every answering turn carries an object, including one where the agent asks a clarifying
+     * question rather than answering. Shape the schema so it can say &quot;not enough information&quot;
+     * — a populated object is not on its own evidence of a confident answer.</p>
+     * <p>Two exceptions. A turn that asks the user to <em>act</em> produces an action form from the
+     * action rather than from an answer, so it carries no object; the turn that answers after
+     * the form is submitted does carry one. Leave the <code>FORMS</code> capability off if you need an
+     * object on every turn.</p>
+     * <p>A turn answered verbatim by a <code>STRICT_RETURN</code> charter also carries no object. That
+     * charter's manual is returned exactly as written without consulting the agent, so there is
+     * nothing to shape into the requested schema — the turn returns the manual as <code>text</code> alone.</p>
+     */
+    @JsonProperty("textFormat")
+    public Optional<TextFormat> getTextFormat() {
+        return textFormat;
     }
 
     /**
@@ -156,6 +187,7 @@ public final class AskRequest {
                 && userId.equals(other.userId)
                 && type.equals(other.type)
                 && text.equals(other.text)
+                && textFormat.equals(other.textFormat)
                 && attachments.equals(other.attachments)
                 && transientData.equals(other.transientData)
                 && timezone.equals(other.timezone)
@@ -169,6 +201,7 @@ public final class AskRequest {
                 this.userId,
                 this.type,
                 this.text,
+                this.textFormat,
                 this.attachments,
                 this.transientData,
                 this.timezone,
@@ -224,6 +257,31 @@ public final class AskRequest {
         _FinalStage text(String text);
 
         /**
+         * <p>What form the answer takes. Omit it for prose, or send <code>jsonSchema</code> to additionally get a
+         * <code>BotObjectResponse</code> matching a schema you supply.</p>
+         * <p>Set per ask and independent of <code>type</code>, so one conversation can mix prose and structured
+         * turns. Only the answer's form changes: knowledge, actions, charters and segments apply
+         * the same way either way.</p>
+         * <p>A structured answer accompanies the prose one rather than replacing it — the same turn
+         * produces both, so the conversation stays readable. On <code>ask_stream</code> the prose still streams
+         * on <code>text</code> events as it always has, and the object arrives whole on a single <code>object</code> event
+         * near the end.</p>
+         * <p>Every answering turn carries an object, including one where the agent asks a clarifying
+         * question rather than answering. Shape the schema so it can say &quot;not enough information&quot;
+         * — a populated object is not on its own evidence of a confident answer.</p>
+         * <p>Two exceptions. A turn that asks the user to <em>act</em> produces an action form from the
+         * action rather than from an answer, so it carries no object; the turn that answers after
+         * the form is submitted does carry one. Leave the <code>FORMS</code> capability off if you need an
+         * object on every turn.</p>
+         * <p>A turn answered verbatim by a <code>STRICT_RETURN</code> charter also carries no object. That
+         * charter's manual is returned exactly as written without consulting the agent, so there is
+         * nothing to shape into the requested schema — the turn returns the manual as <code>text</code> alone.</p>
+         */
+        _FinalStage textFormat(Optional<TextFormat> textFormat);
+
+        _FinalStage textFormat(TextFormat textFormat);
+
+        /**
          * <p>The attachments to the message. Image attachments will be sent to the LLM as additional data.
          * Non-image attachments can be stored and downloaded from the API but will not be sent to the LLM.</p>
          */
@@ -272,6 +330,8 @@ public final class AskRequest {
 
         private Optional<List<AttachmentRequest>> attachments = Optional.empty();
 
+        private Optional<TextFormat> textFormat = Optional.empty();
+
         private Optional<String> text = Optional.empty();
 
         private Optional<AskType> type = Optional.empty();
@@ -287,6 +347,7 @@ public final class AskRequest {
             userId(other.getUserId());
             type(other.getType());
             text(other.getText());
+            textFormat(other.getTextFormat());
             attachments(other.getAttachments());
             transientData(other.getTransientData());
             timezone(other.getTimezone());
@@ -412,6 +473,62 @@ public final class AskRequest {
         }
 
         /**
+         * <p>What form the answer takes. Omit it for prose, or send <code>jsonSchema</code> to additionally get a
+         * <code>BotObjectResponse</code> matching a schema you supply.</p>
+         * <p>Set per ask and independent of <code>type</code>, so one conversation can mix prose and structured
+         * turns. Only the answer's form changes: knowledge, actions, charters and segments apply
+         * the same way either way.</p>
+         * <p>A structured answer accompanies the prose one rather than replacing it — the same turn
+         * produces both, so the conversation stays readable. On <code>ask_stream</code> the prose still streams
+         * on <code>text</code> events as it always has, and the object arrives whole on a single <code>object</code> event
+         * near the end.</p>
+         * <p>Every answering turn carries an object, including one where the agent asks a clarifying
+         * question rather than answering. Shape the schema so it can say &quot;not enough information&quot;
+         * — a populated object is not on its own evidence of a confident answer.</p>
+         * <p>Two exceptions. A turn that asks the user to <em>act</em> produces an action form from the
+         * action rather than from an answer, so it carries no object; the turn that answers after
+         * the form is submitted does carry one. Leave the <code>FORMS</code> capability off if you need an
+         * object on every turn.</p>
+         * <p>A turn answered verbatim by a <code>STRICT_RETURN</code> charter also carries no object. That
+         * charter's manual is returned exactly as written without consulting the agent, so there is
+         * nothing to shape into the requested schema — the turn returns the manual as <code>text</code> alone.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage textFormat(TextFormat textFormat) {
+            this.textFormat = Optional.ofNullable(textFormat);
+            return this;
+        }
+
+        /**
+         * <p>What form the answer takes. Omit it for prose, or send <code>jsonSchema</code> to additionally get a
+         * <code>BotObjectResponse</code> matching a schema you supply.</p>
+         * <p>Set per ask and independent of <code>type</code>, so one conversation can mix prose and structured
+         * turns. Only the answer's form changes: knowledge, actions, charters and segments apply
+         * the same way either way.</p>
+         * <p>A structured answer accompanies the prose one rather than replacing it — the same turn
+         * produces both, so the conversation stays readable. On <code>ask_stream</code> the prose still streams
+         * on <code>text</code> events as it always has, and the object arrives whole on a single <code>object</code> event
+         * near the end.</p>
+         * <p>Every answering turn carries an object, including one where the agent asks a clarifying
+         * question rather than answering. Shape the schema so it can say &quot;not enough information&quot;
+         * — a populated object is not on its own evidence of a confident answer.</p>
+         * <p>Two exceptions. A turn that asks the user to <em>act</em> produces an action form from the
+         * action rather than from an answer, so it carries no object; the turn that answers after
+         * the form is submitted does carry one. Leave the <code>FORMS</code> capability off if you need an
+         * object on every turn.</p>
+         * <p>A turn answered verbatim by a <code>STRICT_RETURN</code> charter also carries no object. That
+         * charter's manual is returned exactly as written without consulting the agent, so there is
+         * nothing to shape into the requested schema — the turn returns the manual as <code>text</code> alone.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "textFormat", nulls = Nulls.SKIP)
+        public _FinalStage textFormat(Optional<TextFormat> textFormat) {
+            this.textFormat = textFormat;
+            return this;
+        }
+
+        /**
          * <p>For USER_MESSAGE (the default) this is the user's message, in the user's own words, and
          * is required. For WELCOME and PROACTIVE it is optional and, when provided, steers the
          * agent's response (a directive to the agent, not the user's own words). (Changed from
@@ -470,6 +587,7 @@ public final class AskRequest {
                     userId,
                     type,
                     text,
+                    textFormat,
                     attachments,
                     transientData,
                     timezone,

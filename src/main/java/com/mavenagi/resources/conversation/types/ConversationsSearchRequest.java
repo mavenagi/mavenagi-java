@@ -75,6 +75,11 @@ public final class ConversationsSearchRequest implements IBasePaginatedRequest {
         return sortDesc;
     }
 
+    /**
+     * @return Field to sort results by. <code>IntelligentField</code> is not supported here - sorting conversations
+     * by an intelligent field value is not available. Intelligent fields can be filtered on via
+     * <code>filter.intelligentFields</code>, and grouped or aggregated through the analytics APIs.
+     */
     @JsonProperty("sort")
     public Optional<ConversationField> getSort() {
         return sort;
@@ -186,6 +191,11 @@ public final class ConversationsSearchRequest implements IBasePaginatedRequest {
             return this;
         }
 
+        /**
+         * <p>Field to sort results by. <code>IntelligentField</code> is not supported here - sorting conversations
+         * by an intelligent field value is not available. Intelligent fields can be filtered on via
+         * <code>filter.intelligentFields</code>, and grouped or aggregated through the analytics APIs.</p>
+         */
         @JsonSetter(value = "sort", nulls = Nulls.SKIP)
         public Builder sort(Optional<ConversationField> sort) {
             this.sort = sort;

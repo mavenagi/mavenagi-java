@@ -25,14 +25,14 @@ public final class IntelligentFieldPreconditionResponse {
 
     private final Optional<String> name;
 
-    private final IntelligentFieldCondition fieldCondition;
+    private final FieldCondition fieldCondition;
 
     private final Map<String, Object> additionalProperties;
 
     private IntelligentFieldPreconditionResponse(
             EntityIdWithoutAgent fieldIdWithoutAgent,
             Optional<String> name,
-            IntelligentFieldCondition fieldCondition,
+            FieldCondition fieldCondition,
             Map<String, Object> additionalProperties) {
         this.fieldIdWithoutAgent = fieldIdWithoutAgent;
         this.name = name;
@@ -60,7 +60,7 @@ public final class IntelligentFieldPreconditionResponse {
      * @return The condition to evaluate against the field's value.
      */
     @JsonProperty("fieldCondition")
-    public IntelligentFieldCondition getFieldCondition() {
+    public FieldCondition getFieldCondition() {
         return fieldCondition;
     }
 
@@ -109,7 +109,7 @@ public final class IntelligentFieldPreconditionResponse {
         /**
          * <p>The condition to evaluate against the field's value.</p>
          */
-        _FinalStage fieldCondition(@NotNull IntelligentFieldCondition fieldCondition);
+        _FinalStage fieldCondition(@NotNull FieldCondition fieldCondition);
     }
 
     public interface _FinalStage {
@@ -127,7 +127,7 @@ public final class IntelligentFieldPreconditionResponse {
     public static final class Builder implements FieldIdWithoutAgentStage, FieldConditionStage, _FinalStage {
         private EntityIdWithoutAgent fieldIdWithoutAgent;
 
-        private IntelligentFieldCondition fieldCondition;
+        private FieldCondition fieldCondition;
 
         private Optional<String> name = Optional.empty();
 
@@ -164,7 +164,7 @@ public final class IntelligentFieldPreconditionResponse {
          */
         @java.lang.Override
         @JsonSetter("fieldCondition")
-        public _FinalStage fieldCondition(@NotNull IntelligentFieldCondition fieldCondition) {
+        public _FinalStage fieldCondition(@NotNull FieldCondition fieldCondition) {
             this.fieldCondition = Objects.requireNonNull(fieldCondition, "fieldCondition must not be null");
             return this;
         }

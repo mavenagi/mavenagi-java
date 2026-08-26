@@ -37,6 +37,9 @@ public final class NumericConversationField {
     public static final NumericConversationField ACTION_ERROR_COUNT =
             new NumericConversationField(Value.ACTION_ERROR_COUNT, "ActionErrorCount");
 
+    public static final NumericConversationField INTELLIGENT_FIELD =
+            new NumericConversationField(Value.INTELLIGENT_FIELD, "IntelligentField");
+
     public static final NumericConversationField CSAT = new NumericConversationField(Value.CSAT, "Csat");
 
     private final Value value;
@@ -92,6 +95,8 @@ public final class NumericConversationField {
                 return visitor.visitBotMessageCount();
             case ACTION_ERROR_COUNT:
                 return visitor.visitActionErrorCount();
+            case INTELLIGENT_FIELD:
+                return visitor.visitIntelligentField();
             case CSAT:
                 return visitor.visitCsat();
             case UNKNOWN:
@@ -123,6 +128,8 @@ public final class NumericConversationField {
                 return BOT_MESSAGE_COUNT;
             case "ActionErrorCount":
                 return ACTION_ERROR_COUNT;
+            case "IntelligentField":
+                return INTELLIGENT_FIELD;
             case "Csat":
                 return CSAT;
             default:
@@ -153,6 +160,8 @@ public final class NumericConversationField {
 
         ACTION_ERROR_COUNT,
 
+        INTELLIGENT_FIELD,
+
         UNKNOWN
     }
 
@@ -178,6 +187,8 @@ public final class NumericConversationField {
         T visitActionExecutionCount();
 
         T visitActionErrorCount();
+
+        T visitIntelligentField();
 
         T visitUnknown(String unknownType);
     }

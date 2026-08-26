@@ -14,11 +14,11 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Objects;
 import java.util.Optional;
 
-public final class IntelligentFieldCondition {
+public final class FieldCondition {
     private final Value value;
 
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
-    private IntelligentFieldCondition(Value value) {
+    private FieldCondition(Value value) {
         this.value = value;
     }
 
@@ -26,24 +26,24 @@ public final class IntelligentFieldCondition {
         return value.visit(visitor);
     }
 
-    public static IntelligentFieldCondition string(StringCondition value) {
-        return new IntelligentFieldCondition(new StringValue(value));
+    public static FieldCondition string(StringCondition value) {
+        return new FieldCondition(new StringValue(value));
     }
 
-    public static IntelligentFieldCondition numeric(NumericCondition value) {
-        return new IntelligentFieldCondition(new NumericValue(value));
+    public static FieldCondition numeric(NumericCondition value) {
+        return new FieldCondition(new NumericValue(value));
     }
 
-    public static IntelligentFieldCondition boolean_(BooleanCondition value) {
-        return new IntelligentFieldCondition(new BooleanValue(value));
+    public static FieldCondition boolean_(BooleanCondition value) {
+        return new FieldCondition(new BooleanValue(value));
     }
 
-    public static IntelligentFieldCondition set(SetCondition value) {
-        return new IntelligentFieldCondition(new SetValue(value));
+    public static FieldCondition set(SetCondition value) {
+        return new FieldCondition(new SetValue(value));
     }
 
-    public static IntelligentFieldCondition universal(UniversalCondition value) {
-        return new IntelligentFieldCondition(new UniversalValue(value));
+    public static FieldCondition universal(UniversalCondition value) {
+        return new FieldCondition(new UniversalValue(value));
     }
 
     public boolean isString() {
@@ -181,7 +181,7 @@ public final class IntelligentFieldCondition {
 
         @java.lang.Override
         public String toString() {
-            return "IntelligentFieldCondition{" + "value: " + value + "}";
+            return "FieldCondition{" + "value: " + value + "}";
         }
     }
 
@@ -218,7 +218,7 @@ public final class IntelligentFieldCondition {
 
         @java.lang.Override
         public String toString() {
-            return "IntelligentFieldCondition{" + "value: " + value + "}";
+            return "FieldCondition{" + "value: " + value + "}";
         }
     }
 
@@ -257,7 +257,7 @@ public final class IntelligentFieldCondition {
 
         @java.lang.Override
         public String toString() {
-            return "IntelligentFieldCondition{" + "value: " + value + "}";
+            return "FieldCondition{" + "value: " + value + "}";
         }
     }
 
@@ -294,7 +294,7 @@ public final class IntelligentFieldCondition {
 
         @java.lang.Override
         public String toString() {
-            return "IntelligentFieldCondition{" + "value: " + value + "}";
+            return "FieldCondition{" + "value: " + value + "}";
         }
     }
 
@@ -331,7 +331,7 @@ public final class IntelligentFieldCondition {
 
         @java.lang.Override
         public String toString() {
-            return "IntelligentFieldCondition{" + "value: " + value + "}";
+            return "FieldCondition{" + "value: " + value + "}";
         }
     }
 
@@ -367,7 +367,7 @@ public final class IntelligentFieldCondition {
 
         @java.lang.Override
         public String toString() {
-            return "IntelligentFieldCondition{" + "type: " + type + ", value: " + value + "}";
+            return "FieldCondition{" + "type: " + type + ", value: " + value + "}";
         }
     }
 }

@@ -37,6 +37,8 @@ public final class KnowledgeBaseVersion implements IKnowledgeBaseVersionRequest 
 
     private final Optional<KnowledgeBaseIndexingProgressState> indexingState;
 
+    private final Optional<KnowledgeBaseVersionProgress> progress;
+
     private final Map<String, Object> additionalProperties;
 
     private KnowledgeBaseVersion(
@@ -47,6 +49,7 @@ public final class KnowledgeBaseVersion implements IKnowledgeBaseVersionRequest 
             OffsetDateTime createdAt,
             OffsetDateTime updatedAt,
             Optional<KnowledgeBaseIndexingProgressState> indexingState,
+            Optional<KnowledgeBaseVersionProgress> progress,
             Map<String, Object> additionalProperties) {
         this.type = type;
         this.versionId = versionId;
@@ -55,6 +58,7 @@ public final class KnowledgeBaseVersion implements IKnowledgeBaseVersionRequest 
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.indexingState = indexingState;
+        this.progress = progress;
         this.additionalProperties = additionalProperties;
     }
 
@@ -115,6 +119,15 @@ public final class KnowledgeBaseVersion implements IKnowledgeBaseVersionRequest 
         return indexingState;
     }
 
+    /**
+     * @return Refresh progress most recently reported by the app that owns this knowledge base.
+     * Only populated while the version is in progress - absent once the version has completed.
+     */
+    @JsonProperty("progress")
+    public Optional<KnowledgeBaseVersionProgress> getProgress() {
+        return progress;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -133,7 +146,8 @@ public final class KnowledgeBaseVersion implements IKnowledgeBaseVersionRequest 
                 && errorMessage.equals(other.errorMessage)
                 && createdAt.equals(other.createdAt)
                 && updatedAt.equals(other.updatedAt)
-                && indexingState.equals(other.indexingState);
+                && indexingState.equals(other.indexingState)
+                && progress.equals(other.progress);
     }
 
     @java.lang.Override
@@ -145,7 +159,8 @@ public final class KnowledgeBaseVersion implements IKnowledgeBaseVersionRequest 
                 this.errorMessage,
                 this.createdAt,
                 this.updatedAt,
-                this.indexingState);
+                this.indexingState,
+                this.progress);
     }
 
     @java.lang.Override
@@ -210,6 +225,14 @@ public final class KnowledgeBaseVersion implements IKnowledgeBaseVersionRequest 
         _FinalStage indexingState(Optional<KnowledgeBaseIndexingProgressState> indexingState);
 
         _FinalStage indexingState(KnowledgeBaseIndexingProgressState indexingState);
+
+        /**
+         * <p>Refresh progress most recently reported by the app that owns this knowledge base.
+         * Only populated while the version is in progress - absent once the version has completed.</p>
+         */
+        _FinalStage progress(Optional<KnowledgeBaseVersionProgress> progress);
+
+        _FinalStage progress(KnowledgeBaseVersionProgress progress);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -224,6 +247,8 @@ public final class KnowledgeBaseVersion implements IKnowledgeBaseVersionRequest 
         private OffsetDateTime createdAt;
 
         private OffsetDateTime updatedAt;
+
+        private Optional<KnowledgeBaseVersionProgress> progress = Optional.empty();
 
         private Optional<KnowledgeBaseIndexingProgressState> indexingState = Optional.empty();
 
@@ -243,6 +268,7 @@ public final class KnowledgeBaseVersion implements IKnowledgeBaseVersionRequest 
             createdAt(other.getCreatedAt());
             updatedAt(other.getUpdatedAt());
             indexingState(other.getIndexingState());
+            progress(other.getProgress());
             return this;
         }
 
@@ -307,6 +333,28 @@ public final class KnowledgeBaseVersion implements IKnowledgeBaseVersionRequest 
         }
 
         /**
+         * <p>Refresh progress most recently reported by the app that owns this knowledge base.
+         * Only populated while the version is in progress - absent once the version has completed.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage progress(KnowledgeBaseVersionProgress progress) {
+            this.progress = Optional.ofNullable(progress);
+            return this;
+        }
+
+        /**
+         * <p>Refresh progress most recently reported by the app that owns this knowledge base.
+         * Only populated while the version is in progress - absent once the version has completed.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "progress", nulls = Nulls.SKIP)
+        public _FinalStage progress(Optional<KnowledgeBaseVersionProgress> progress) {
+            this.progress = progress;
+            return this;
+        }
+
+        /**
          * <p>The indexing status of the knowledge base version.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -349,7 +397,15 @@ public final class KnowledgeBaseVersion implements IKnowledgeBaseVersionRequest 
         @java.lang.Override
         public KnowledgeBaseVersion build() {
             return new KnowledgeBaseVersion(
-                    type, versionId, status, errorMessage, createdAt, updatedAt, indexingState, additionalProperties);
+                    type,
+                    versionId,
+                    status,
+                    errorMessage,
+                    createdAt,
+                    updatedAt,
+                    indexingState,
+                    progress,
+                    additionalProperties);
         }
     }
 }

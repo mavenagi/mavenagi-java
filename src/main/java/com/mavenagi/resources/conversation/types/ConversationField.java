@@ -14,6 +14,9 @@ public final class ConversationField {
 
     public static final ConversationField CHARTERS = new ConversationField(Value.CHARTERS, "Charters");
 
+    public static final ConversationField INTELLIGENT_FIELD =
+            new ConversationField(Value.INTELLIGENT_FIELD, "IntelligentField");
+
     public static final ConversationField FIRST_RESPONSE_TIME =
             new ConversationField(Value.FIRST_RESPONSE_TIME, "FirstResponseTime");
 
@@ -45,6 +48,9 @@ public final class ConversationField {
             new ConversationField(Value.RESPONSE_LENGTH, "ResponseLength");
 
     public static final ConversationField LANGUAGES = new ConversationField(Value.LANGUAGES, "Languages");
+
+    public static final ConversationField AGENT_ENVIRONMENT =
+            new ConversationField(Value.AGENT_ENVIRONMENT, "AgentEnvironment");
 
     public static final ConversationField QUALITY_REASON = new ConversationField(Value.QUALITY_REASON, "QualityReason");
 
@@ -127,6 +133,8 @@ public final class ConversationField {
                 return visitor.visitUserMessageCount();
             case CHARTERS:
                 return visitor.visitCharters();
+            case INTELLIGENT_FIELD:
+                return visitor.visitIntelligentField();
             case FIRST_RESPONSE_TIME:
                 return visitor.visitFirstResponseTime();
             case HUMAN_AGENTS_WITH_INSERTS:
@@ -153,6 +161,8 @@ public final class ConversationField {
                 return visitor.visitResponseLength();
             case LANGUAGES:
                 return visitor.visitLanguages();
+            case AGENT_ENVIRONMENT:
+                return visitor.visitAgentEnvironment();
             case QUALITY_REASON:
                 return visitor.visitQualityReason();
             case USERS:
@@ -204,6 +214,8 @@ public final class ConversationField {
                 return USER_MESSAGE_COUNT;
             case "Charters":
                 return CHARTERS;
+            case "IntelligentField":
+                return INTELLIGENT_FIELD;
             case "FirstResponseTime":
                 return FIRST_RESPONSE_TIME;
             case "HumanAgentsWithInserts":
@@ -230,6 +242,8 @@ public final class ConversationField {
                 return RESPONSE_LENGTH;
             case "Languages":
                 return LANGUAGES;
+            case "AgentEnvironment":
+                return AGENT_ENVIRONMENT;
             case "QualityReason":
                 return QUALITY_REASON;
             case "Users":
@@ -336,9 +350,13 @@ public final class ConversationField {
 
         AGENT_ID,
 
+        AGENT_ENVIRONMENT,
+
         INBOX_ITEMS,
 
         INVOLVED_APPS,
+
+        INTELLIGENT_FIELD,
 
         UNKNOWN
     }
@@ -408,9 +426,13 @@ public final class ConversationField {
 
         T visitAgentId();
 
+        T visitAgentEnvironment();
+
         T visitInboxItems();
 
         T visitInvolvedApps();
+
+        T visitIntelligentField();
 
         T visitUnknown(String unknownType);
     }

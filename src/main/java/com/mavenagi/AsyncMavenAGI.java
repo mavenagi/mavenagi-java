@@ -15,6 +15,7 @@ import com.mavenagi.resources.customers.AsyncCustomersClient;
 import com.mavenagi.resources.events.AsyncEventsClient;
 import com.mavenagi.resources.inbox.AsyncInboxClient;
 import com.mavenagi.resources.integrations.AsyncIntegrationsClient;
+import com.mavenagi.resources.intelligentfields.AsyncIntelligentFieldsClient;
 import com.mavenagi.resources.knowledge.AsyncKnowledgeClient;
 import com.mavenagi.resources.organizations.AsyncOrganizationsClient;
 import com.mavenagi.resources.segments.AsyncSegmentsClient;
@@ -47,6 +48,8 @@ public class AsyncMavenAGI {
 
     protected final Supplier<AsyncIntegrationsClient> integrationsClient;
 
+    protected final Supplier<AsyncIntelligentFieldsClient> intelligentFieldsClient;
+
     protected final Supplier<AsyncKnowledgeClient> knowledgeClient;
 
     protected final Supplier<AsyncOrganizationsClient> organizationsClient;
@@ -73,6 +76,7 @@ public class AsyncMavenAGI {
         this.eventsClient = Suppliers.memoize(() -> new AsyncEventsClient(clientOptions));
         this.inboxClient = Suppliers.memoize(() -> new AsyncInboxClient(clientOptions));
         this.integrationsClient = Suppliers.memoize(() -> new AsyncIntegrationsClient(clientOptions));
+        this.intelligentFieldsClient = Suppliers.memoize(() -> new AsyncIntelligentFieldsClient(clientOptions));
         this.knowledgeClient = Suppliers.memoize(() -> new AsyncKnowledgeClient(clientOptions));
         this.organizationsClient = Suppliers.memoize(() -> new AsyncOrganizationsClient(clientOptions));
         this.segmentsClient = Suppliers.memoize(() -> new AsyncSegmentsClient(clientOptions));
@@ -120,6 +124,10 @@ public class AsyncMavenAGI {
 
     public AsyncIntegrationsClient integrations() {
         return this.integrationsClient.get();
+    }
+
+    public AsyncIntelligentFieldsClient intelligentFields() {
+        return this.intelligentFieldsClient.get();
     }
 
     public AsyncKnowledgeClient knowledge() {

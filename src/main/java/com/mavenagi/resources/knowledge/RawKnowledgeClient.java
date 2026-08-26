@@ -30,6 +30,7 @@ import com.mavenagi.resources.knowledge.types.KnowledgeBaseRequest;
 import com.mavenagi.resources.knowledge.types.KnowledgeBaseResponse;
 import com.mavenagi.resources.knowledge.types.KnowledgeBaseSearchRequest;
 import com.mavenagi.resources.knowledge.types.KnowledgeBaseVersion;
+import com.mavenagi.resources.knowledge.types.KnowledgeBaseVersionProgressRequest;
 import com.mavenagi.resources.knowledge.types.KnowledgeBaseVersionRequest;
 import com.mavenagi.resources.knowledge.types.KnowledgeBaseVersionsListResponse;
 import com.mavenagi.resources.knowledge.types.KnowledgeBasesResponse;
@@ -732,6 +733,90 @@ public class RawKnowledgeClient {
                 .addPathSegments("v1/knowledge")
                 .addPathSegment(knowledgeBaseReferenceId)
                 .addPathSegments("version/finalize")
+                .build();
+        RequestBody body;
+        try {
+            body = RequestBody.create(
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
+        } catch (JsonProcessingException e) {
+            throw new MavenAGIException("Failed to serialize request", e);
+        }
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl)
+                .method("POST", body)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
+                .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            if (response.isSuccessful()) {
+                return new MavenAGIHttpResponse<>(
+                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), KnowledgeBaseVersion.class),
+                        response);
+            }
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            try {
+                switch (response.code()) {
+                    case 400:
+                        throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                    case 413:
+                        throw new PayloadTooLargeError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                    case 429:
+                        throw new TooManyRequestsError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                    case 500:
+                        throw new ServerError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            throw new MavenAGIApiException(
+                    "Error with status code " + response.code(),
+                    response.code(),
+                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                    response);
+        } catch (IOException e) {
+            throw new MavenAGIException("Network error executing HTTP request", e);
+        }
+    }
+
+    /**
+     * Report refresh progress for an in-progress knowledge base version.
+     * <p>Progress is advisory and shown to users while a refresh runs. Each call replaces the
+     * version's entire progress state - no history is kept, only the most recent value is
+     * retained. Will throw an exception if the target version is not in progress.</p>
+     */
+    public MavenAGIHttpResponse<KnowledgeBaseVersion> updateKnowledgeBaseVersionProgress(
+            String knowledgeBaseReferenceId, KnowledgeBaseVersionProgressRequest request) {
+        return updateKnowledgeBaseVersionProgress(knowledgeBaseReferenceId, request, null);
+    }
+
+    /**
+     * Report refresh progress for an in-progress knowledge base version.
+     * <p>Progress is advisory and shown to users while a refresh runs. Each call replaces the
+     * version's entire progress state - no history is kept, only the most recent value is
+     * retained. Will throw an exception if the target version is not in progress.</p>
+     */
+    public MavenAGIHttpResponse<KnowledgeBaseVersion> updateKnowledgeBaseVersionProgress(
+            String knowledgeBaseReferenceId,
+            KnowledgeBaseVersionProgressRequest request,
+            RequestOptions requestOptions) {
+        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("v1/knowledge")
+                .addPathSegment(knowledgeBaseReferenceId)
+                .addPathSegments("version/progress")
                 .build();
         RequestBody body;
         try {

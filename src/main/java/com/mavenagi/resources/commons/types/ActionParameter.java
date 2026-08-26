@@ -126,8 +126,8 @@ public final class ActionParameter {
      * <p><strong>Schema Requirements:</strong></p>
      * <ul>
      * <li>Root type must be &quot;object&quot; - The top-level schema must define an object type</li>
-     * <li>Supported types: string, number, boolean, integer, object, array, enum, anyOf</li>
-     * <li>Unsupported features: oneOf, allOf, const, not, if/then/else, pattern, maxLength, minLength</li>
+     * <li>Supported types: string, number, integer, boolean, object, array, null</li>
+     * <li>Structural keywords only: properties, required, additionalProperties, items, anyOf, enum, const (with a sibling type), $defs/$ref, description. Value constraints such as pattern, format, minimum or minItems, and combinators such as oneOf, allOf and if/then/else, are not accepted</li>
      * <li>Required fields: All fields must be required (no optional properties)</li>
      * <li>Additional properties: Must be set to false</li>
      * </ul>
@@ -257,8 +257,8 @@ public final class ActionParameter {
          * <p><strong>Schema Requirements:</strong></p>
          * <ul>
          * <li>Root type must be &quot;object&quot; - The top-level schema must define an object type</li>
-         * <li>Supported types: string, number, boolean, integer, object, array, enum, anyOf</li>
-         * <li>Unsupported features: oneOf, allOf, const, not, if/then/else, pattern, maxLength, minLength</li>
+         * <li>Supported types: string, number, integer, boolean, object, array, null</li>
+         * <li>Structural keywords only: properties, required, additionalProperties, items, anyOf, enum, const (with a sibling type), $defs/$ref, description. Value constraints such as pattern, format, minimum or minItems, and combinators such as oneOf, allOf and if/then/else, are not accepted</li>
          * <li>Required fields: All fields must be required (no optional properties)</li>
          * <li>Additional properties: Must be set to false</li>
          * </ul>
@@ -394,8 +394,8 @@ public final class ActionParameter {
          * <p><strong>Schema Requirements:</strong></p>
          * <ul>
          * <li>Root type must be &quot;object&quot; - The top-level schema must define an object type</li>
-         * <li>Supported types: string, number, boolean, integer, object, array, enum, anyOf</li>
-         * <li>Unsupported features: oneOf, allOf, const, not, if/then/else, pattern, maxLength, minLength</li>
+         * <li>Supported types: string, number, integer, boolean, object, array, null</li>
+         * <li>Structural keywords only: properties, required, additionalProperties, items, anyOf, enum, const (with a sibling type), $defs/$ref, description. Value constraints such as pattern, format, minimum or minItems, and combinators such as oneOf, allOf and if/then/else, are not accepted</li>
          * <li>Required fields: All fields must be required (no optional properties)</li>
          * <li>Additional properties: Must be set to false</li>
          * </ul>
@@ -419,8 +419,8 @@ public final class ActionParameter {
          * <p><strong>Schema Requirements:</strong></p>
          * <ul>
          * <li>Root type must be &quot;object&quot; - The top-level schema must define an object type</li>
-         * <li>Supported types: string, number, boolean, integer, object, array, enum, anyOf</li>
-         * <li>Unsupported features: oneOf, allOf, const, not, if/then/else, pattern, maxLength, minLength</li>
+         * <li>Supported types: string, number, integer, boolean, object, array, null</li>
+         * <li>Structural keywords only: properties, required, additionalProperties, items, anyOf, enum, const (with a sibling type), $defs/$ref, description. Value constraints such as pattern, format, minimum or minItems, and combinators such as oneOf, allOf and if/then/else, are not accepted</li>
          * <li>Required fields: All fields must be required (no optional properties)</li>
          * <li>Additional properties: Must be set to false</li>
          * </ul>
