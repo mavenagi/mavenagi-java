@@ -17,6 +17,8 @@ import com.mavenagi.resources.conversation.types.ConversationMessageRequest;
 import com.mavenagi.resources.conversation.types.ConversationMetadata;
 import com.mavenagi.resources.conversation.types.ConversationPatchRequest;
 import com.mavenagi.resources.conversation.types.ConversationRequest;
+import com.mavenagi.resources.conversation.types.ConversationsCursorSearchRequest;
+import com.mavenagi.resources.conversation.types.ConversationsCursorSearchResponse;
 import com.mavenagi.resources.conversation.types.ConversationsResponse;
 import com.mavenagi.resources.conversation.types.ConversationsSearchRequest;
 import com.mavenagi.resources.conversation.types.DeliverMessageRequest;
@@ -260,14 +262,16 @@ public class ConversationClient {
     }
 
     /**
-     * Update feedback or create it if it doesn't exist
+     * Replaced by the Create events API, which records feedback as a user event.
+     * <p>Update feedback or create it if it doesn't exist.</p>
      */
     public Feedback createFeedback(FeedbackRequest request) {
         return this.rawClient.createFeedback(request).body();
     }
 
     /**
-     * Update feedback or create it if it doesn't exist
+     * Replaced by the Create events API, which records feedback as a user event.
+     * <p>Update feedback or create it if it doesn't exist.</p>
      */
     public Feedback createFeedback(FeedbackRequest request, RequestOptions requestOptions) {
         return this.rawClient.createFeedback(request, requestOptions).body();
@@ -361,6 +365,52 @@ public class ConversationClient {
      */
     public ConversationsResponse search(ConversationsSearchRequest request, RequestOptions requestOptions) {
         return this.rawClient.search(request, requestOptions).body();
+    }
+
+    /**
+     * Search conversations using cursor pagination, which can read past the 10,000th result that
+     * <code>search</code> cannot reach.
+     * <p>Results are ordered by conversation creation time. Start with no <code>cursor</code>, then pass each
+     * response's <code>nextCursor</code> back unchanged until the response omits it. Keep every other field
+     * identical for the whole traversal — changing the filter, size, or sort direction mid-way is
+     * rejected rather than silently restarting you at the beginning.</p>
+     * <p><code>nextCursor</code> is the only reliable end-of-results signal. Do not stop early because a page
+     * came back with fewer conversations than you asked for: that happens legitimately, and more
+     * pages may still remain.</p>
+     */
+    public ConversationsCursorSearchResponse searchCursor() {
+        return this.rawClient.searchCursor().body();
+    }
+
+    /**
+     * Search conversations using cursor pagination, which can read past the 10,000th result that
+     * <code>search</code> cannot reach.
+     * <p>Results are ordered by conversation creation time. Start with no <code>cursor</code>, then pass each
+     * response's <code>nextCursor</code> back unchanged until the response omits it. Keep every other field
+     * identical for the whole traversal — changing the filter, size, or sort direction mid-way is
+     * rejected rather than silently restarting you at the beginning.</p>
+     * <p><code>nextCursor</code> is the only reliable end-of-results signal. Do not stop early because a page
+     * came back with fewer conversations than you asked for: that happens legitimately, and more
+     * pages may still remain.</p>
+     */
+    public ConversationsCursorSearchResponse searchCursor(ConversationsCursorSearchRequest request) {
+        return this.rawClient.searchCursor(request).body();
+    }
+
+    /**
+     * Search conversations using cursor pagination, which can read past the 10,000th result that
+     * <code>search</code> cannot reach.
+     * <p>Results are ordered by conversation creation time. Start with no <code>cursor</code>, then pass each
+     * response's <code>nextCursor</code> back unchanged until the response omits it. Keep every other field
+     * identical for the whole traversal — changing the filter, size, or sort direction mid-way is
+     * rejected rather than silently restarting you at the beginning.</p>
+     * <p><code>nextCursor</code> is the only reliable end-of-results signal. Do not stop early because a page
+     * came back with fewer conversations than you asked for: that happens legitimately, and more
+     * pages may still remain.</p>
+     */
+    public ConversationsCursorSearchResponse searchCursor(
+            ConversationsCursorSearchRequest request, RequestOptions requestOptions) {
+        return this.rawClient.searchCursor(request, requestOptions).body();
     }
 
     /**

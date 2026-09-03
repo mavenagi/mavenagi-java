@@ -34,6 +34,8 @@ import com.mavenagi.resources.conversation.types.ConversationMessageRequest;
 import com.mavenagi.resources.conversation.types.ConversationMetadata;
 import com.mavenagi.resources.conversation.types.ConversationPatchRequest;
 import com.mavenagi.resources.conversation.types.ConversationRequest;
+import com.mavenagi.resources.conversation.types.ConversationsCursorSearchRequest;
+import com.mavenagi.resources.conversation.types.ConversationsCursorSearchResponse;
 import com.mavenagi.resources.conversation.types.ConversationsResponse;
 import com.mavenagi.resources.conversation.types.ConversationsSearchRequest;
 import com.mavenagi.resources.conversation.types.DeliverMessageRequest;
@@ -940,14 +942,16 @@ public class AsyncRawConversationClient {
     }
 
     /**
-     * Update feedback or create it if it doesn't exist
+     * Replaced by the Create events API, which records feedback as a user event.
+     * <p>Update feedback or create it if it doesn't exist.</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<Feedback>> createFeedback(FeedbackRequest request) {
         return createFeedback(request, null);
     }
 
     /**
-     * Update feedback or create it if it doesn't exist
+     * Replaced by the Create events API, which records feedback as a user event.
+     * <p>Update feedback or create it if it doesn't exist.</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<Feedback>> createFeedback(
             FeedbackRequest request, RequestOptions requestOptions) {
@@ -1399,6 +1403,136 @@ public class AsyncRawConversationClient {
                     if (response.isSuccessful()) {
                         future.complete(new MavenAGIHttpResponse<>(
                                 ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), ConversationsResponse.class),
+                                response));
+                        return;
+                    }
+                    String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+                    try {
+                        switch (response.code()) {
+                            case 400:
+                                future.completeExceptionally(new BadRequestError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
+                                        response));
+                                return;
+                            case 404:
+                                future.completeExceptionally(new NotFoundError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
+                                        response));
+                                return;
+                            case 413:
+                                future.completeExceptionally(new PayloadTooLargeError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
+                                        response));
+                                return;
+                            case 429:
+                                future.completeExceptionally(new TooManyRequestsError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
+                                        response));
+                                return;
+                            case 500:
+                                future.completeExceptionally(new ServerError(
+                                        ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class),
+                                        response));
+                                return;
+                        }
+                    } catch (JsonProcessingException ignored) {
+                        // unable to map error response, throwing generic error
+                    }
+                    future.completeExceptionally(new MavenAGIApiException(
+                            "Error with status code " + response.code(),
+                            response.code(),
+                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                            response));
+                    return;
+                } catch (IOException e) {
+                    future.completeExceptionally(new MavenAGIException("Network error executing HTTP request", e));
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                future.completeExceptionally(new MavenAGIException("Network error executing HTTP request", e));
+            }
+        });
+        return future;
+    }
+
+    /**
+     * Search conversations using cursor pagination, which can read past the 10,000th result that
+     * <code>search</code> cannot reach.
+     * <p>Results are ordered by conversation creation time. Start with no <code>cursor</code>, then pass each
+     * response's <code>nextCursor</code> back unchanged until the response omits it. Keep every other field
+     * identical for the whole traversal — changing the filter, size, or sort direction mid-way is
+     * rejected rather than silently restarting you at the beginning.</p>
+     * <p><code>nextCursor</code> is the only reliable end-of-results signal. Do not stop early because a page
+     * came back with fewer conversations than you asked for: that happens legitimately, and more
+     * pages may still remain.</p>
+     */
+    public CompletableFuture<MavenAGIHttpResponse<ConversationsCursorSearchResponse>> searchCursor() {
+        return searchCursor(ConversationsCursorSearchRequest.builder().build());
+    }
+
+    /**
+     * Search conversations using cursor pagination, which can read past the 10,000th result that
+     * <code>search</code> cannot reach.
+     * <p>Results are ordered by conversation creation time. Start with no <code>cursor</code>, then pass each
+     * response's <code>nextCursor</code> back unchanged until the response omits it. Keep every other field
+     * identical for the whole traversal — changing the filter, size, or sort direction mid-way is
+     * rejected rather than silently restarting you at the beginning.</p>
+     * <p><code>nextCursor</code> is the only reliable end-of-results signal. Do not stop early because a page
+     * came back with fewer conversations than you asked for: that happens legitimately, and more
+     * pages may still remain.</p>
+     */
+    public CompletableFuture<MavenAGIHttpResponse<ConversationsCursorSearchResponse>> searchCursor(
+            ConversationsCursorSearchRequest request) {
+        return searchCursor(request, null);
+    }
+
+    /**
+     * Search conversations using cursor pagination, which can read past the 10,000th result that
+     * <code>search</code> cannot reach.
+     * <p>Results are ordered by conversation creation time. Start with no <code>cursor</code>, then pass each
+     * response's <code>nextCursor</code> back unchanged until the response omits it. Keep every other field
+     * identical for the whole traversal — changing the filter, size, or sort direction mid-way is
+     * rejected rather than silently restarting you at the beginning.</p>
+     * <p><code>nextCursor</code> is the only reliable end-of-results signal. Do not stop early because a page
+     * came back with fewer conversations than you asked for: that happens legitimately, and more
+     * pages may still remain.</p>
+     */
+    public CompletableFuture<MavenAGIHttpResponse<ConversationsCursorSearchResponse>> searchCursor(
+            ConversationsCursorSearchRequest request, RequestOptions requestOptions) {
+        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("v1/conversations")
+                .addPathSegments("search/cursor")
+                .build();
+        RequestBody body;
+        try {
+            body = RequestBody.create(
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
+        } catch (JsonProcessingException e) {
+            throw new MavenAGIException("Failed to serialize request", e);
+        }
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl)
+                .method("POST", body)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json")
+                .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        CompletableFuture<MavenAGIHttpResponse<ConversationsCursorSearchResponse>> future = new CompletableFuture<>();
+        client.newCall(okhttpRequest).enqueue(new Callback() {
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                try (ResponseBody responseBody = response.body()) {
+                    if (response.isSuccessful()) {
+                        future.complete(new MavenAGIHttpResponse<>(
+                                ObjectMappers.JSON_MAPPER.readValue(
+                                        responseBody.string(), ConversationsCursorSearchResponse.class),
                                 response));
                         return;
                     }

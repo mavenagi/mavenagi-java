@@ -1035,7 +1035,7 @@ public class KnowledgeWireTest {
     public void testListKnowledgeBaseVersions() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"knowledgeBaseVersions\":[{\"versionId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"status\":\"SUCCEEDED\",\"errorMessage\":\"errorMessage\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"indexingState\":{\"versionId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"status\":\"BUILDING\",\"expectedCount\":1000000,\"indexedCount\":1000000,\"failedCount\":1000000},\"progress\":{\"message\":\"message\",\"completedCount\":1000000,\"totalCount\":1000000},\"type\":\"FULL\"},{\"versionId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"status\":\"SUCCEEDED\",\"errorMessage\":\"errorMessage\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"indexingState\":{\"versionId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"status\":\"BUILDING\",\"expectedCount\":1000000,\"indexedCount\":1000000,\"failedCount\":1000000},\"progress\":{\"message\":\"message\",\"completedCount\":1000000,\"totalCount\":1000000},\"type\":\"FULL\"}]}"));
+            .setBody("{\"knowledgeBaseVersions\":[{\"versionId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"status\":\"SUCCEEDED\",\"errorMessage\":\"errorMessage\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"indexingState\":{\"versionId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"status\":\"BUILDING\",\"expectedCount\":1000000,\"indexedCount\":1000000,\"failedCount\":1000000},\"progress\":{\"message\":\"message\",\"completedCount\":1000000,\"totalCount\":1000000},\"documentDeltas\":{\"addedCount\":1000000,\"updatedCount\":1000000,\"removedCount\":1000000},\"type\":\"FULL\"},{\"versionId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"status\":\"SUCCEEDED\",\"errorMessage\":\"errorMessage\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"indexingState\":{\"versionId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"status\":\"BUILDING\",\"expectedCount\":1000000,\"indexedCount\":1000000,\"failedCount\":1000000},\"progress\":{\"message\":\"message\",\"completedCount\":1000000,\"totalCount\":1000000},\"documentDeltas\":{\"addedCount\":1000000,\"updatedCount\":1000000,\"removedCount\":1000000},\"type\":\"FULL\"}]}"));
         KnowledgeBaseVersionsListResponse response = client.knowledge().listKnowledgeBaseVersions(
             "knowledgeBaseReferenceId",
             KnowledgeBaseVersionsListRequest
@@ -1082,6 +1082,11 @@ public class KnowledgeWireTest {
             + "        \"completedCount\": 1000000,\n"
             + "        \"totalCount\": 1000000\n"
             + "      },\n"
+            + "      \"documentDeltas\": {\n"
+            + "        \"addedCount\": 1000000,\n"
+            + "        \"updatedCount\": 1000000,\n"
+            + "        \"removedCount\": 1000000\n"
+            + "      },\n"
             + "      \"type\": \"FULL\"\n"
             + "    },\n"
             + "    {\n"
@@ -1113,6 +1118,11 @@ public class KnowledgeWireTest {
             + "        \"message\": \"message\",\n"
             + "        \"completedCount\": 1000000,\n"
             + "        \"totalCount\": 1000000\n"
+            + "      },\n"
+            + "      \"documentDeltas\": {\n"
+            + "        \"addedCount\": 1000000,\n"
+            + "        \"updatedCount\": 1000000,\n"
+            + "        \"removedCount\": 1000000\n"
             + "      },\n"
             + "      \"type\": \"FULL\"\n"
             + "    }\n"

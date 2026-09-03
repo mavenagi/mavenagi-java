@@ -169,6 +169,13 @@ public final class ConversationRequest {
 
     /**
      * @return The unique identifier of the conversation this new conversation was spawned from, if applicable.
+     * <p>Setting this also gives the new conversation access to the context it branched from: when the bot
+     * answers, the transcript of the spawned-from conversation (and of the conversations that one was
+     * spawned from, in turn) is merged into the prompt ahead of this conversation's own messages. Each
+     * ancestor is truncated at the point the spawn happened, so messages it receives afterwards are not
+     * included.</p>
+     * <p>The referenced conversation must belong to the same agent. Because the merged transcript is read
+     * back to the end user, only set this to a conversation the current user is entitled to see.</p>
      */
     @JsonProperty("spawnedFromConversationId")
     public Optional<EntityId> getSpawnedFromConversationId() {
@@ -311,6 +318,13 @@ public final class ConversationRequest {
 
         /**
          * <p>The unique identifier of the conversation this new conversation was spawned from, if applicable.</p>
+         * <p>Setting this also gives the new conversation access to the context it branched from: when the bot
+         * answers, the transcript of the spawned-from conversation (and of the conversations that one was
+         * spawned from, in turn) is merged into the prompt ahead of this conversation's own messages. Each
+         * ancestor is truncated at the point the spawn happened, so messages it receives afterwards are not
+         * included.</p>
+         * <p>The referenced conversation must belong to the same agent. Because the merged transcript is read
+         * back to the end user, only set this to a conversation the current user is entitled to see.</p>
          */
         _FinalStage spawnedFromConversationId(Optional<EntityId> spawnedFromConversationId);
 
@@ -376,6 +390,13 @@ public final class ConversationRequest {
 
         /**
          * <p>The unique identifier of the conversation this new conversation was spawned from, if applicable.</p>
+         * <p>Setting this also gives the new conversation access to the context it branched from: when the bot
+         * answers, the transcript of the spawned-from conversation (and of the conversations that one was
+         * spawned from, in turn) is merged into the prompt ahead of this conversation's own messages. Each
+         * ancestor is truncated at the point the spawn happened, so messages it receives afterwards are not
+         * included.</p>
+         * <p>The referenced conversation must belong to the same agent. Because the merged transcript is read
+         * back to the end user, only set this to a conversation the current user is entitled to see.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -386,6 +407,13 @@ public final class ConversationRequest {
 
         /**
          * <p>The unique identifier of the conversation this new conversation was spawned from, if applicable.</p>
+         * <p>Setting this also gives the new conversation access to the context it branched from: when the bot
+         * answers, the transcript of the spawned-from conversation (and of the conversations that one was
+         * spawned from, in turn) is merged into the prompt ahead of this conversation's own messages. Each
+         * ancestor is truncated at the point the spawn happened, so messages it receives afterwards are not
+         * included.</p>
+         * <p>The referenced conversation must belong to the same agent. Because the merged transcript is read
+         * back to the end user, only set this to a conversation the current user is entitled to see.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "spawnedFromConversationId", nulls = Nulls.SKIP)

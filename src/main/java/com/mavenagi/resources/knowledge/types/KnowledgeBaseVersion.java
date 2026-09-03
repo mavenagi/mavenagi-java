@@ -39,6 +39,8 @@ public final class KnowledgeBaseVersion implements IKnowledgeBaseVersionRequest 
 
     private final Optional<KnowledgeBaseVersionProgress> progress;
 
+    private final Optional<KnowledgeBaseDocumentDeltas> documentDeltas;
+
     private final Map<String, Object> additionalProperties;
 
     private KnowledgeBaseVersion(
@@ -50,6 +52,7 @@ public final class KnowledgeBaseVersion implements IKnowledgeBaseVersionRequest 
             OffsetDateTime updatedAt,
             Optional<KnowledgeBaseIndexingProgressState> indexingState,
             Optional<KnowledgeBaseVersionProgress> progress,
+            Optional<KnowledgeBaseDocumentDeltas> documentDeltas,
             Map<String, Object> additionalProperties) {
         this.type = type;
         this.versionId = versionId;
@@ -59,6 +62,7 @@ public final class KnowledgeBaseVersion implements IKnowledgeBaseVersionRequest 
         this.updatedAt = updatedAt;
         this.indexingState = indexingState;
         this.progress = progress;
+        this.documentDeltas = documentDeltas;
         this.additionalProperties = additionalProperties;
     }
 
@@ -128,6 +132,15 @@ public final class KnowledgeBaseVersion implements IKnowledgeBaseVersionRequest 
         return progress;
     }
 
+    /**
+     * @return How this version changed the knowledge base. Absent for historical versions and for
+     * versions that did not complete successfully.
+     */
+    @JsonProperty("documentDeltas")
+    public Optional<KnowledgeBaseDocumentDeltas> getDocumentDeltas() {
+        return documentDeltas;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -147,7 +160,8 @@ public final class KnowledgeBaseVersion implements IKnowledgeBaseVersionRequest 
                 && createdAt.equals(other.createdAt)
                 && updatedAt.equals(other.updatedAt)
                 && indexingState.equals(other.indexingState)
-                && progress.equals(other.progress);
+                && progress.equals(other.progress)
+                && documentDeltas.equals(other.documentDeltas);
     }
 
     @java.lang.Override
@@ -160,7 +174,8 @@ public final class KnowledgeBaseVersion implements IKnowledgeBaseVersionRequest 
                 this.createdAt,
                 this.updatedAt,
                 this.indexingState,
-                this.progress);
+                this.progress,
+                this.documentDeltas);
     }
 
     @java.lang.Override
@@ -233,6 +248,14 @@ public final class KnowledgeBaseVersion implements IKnowledgeBaseVersionRequest 
         _FinalStage progress(Optional<KnowledgeBaseVersionProgress> progress);
 
         _FinalStage progress(KnowledgeBaseVersionProgress progress);
+
+        /**
+         * <p>How this version changed the knowledge base. Absent for historical versions and for
+         * versions that did not complete successfully.</p>
+         */
+        _FinalStage documentDeltas(Optional<KnowledgeBaseDocumentDeltas> documentDeltas);
+
+        _FinalStage documentDeltas(KnowledgeBaseDocumentDeltas documentDeltas);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -247,6 +270,8 @@ public final class KnowledgeBaseVersion implements IKnowledgeBaseVersionRequest 
         private OffsetDateTime createdAt;
 
         private OffsetDateTime updatedAt;
+
+        private Optional<KnowledgeBaseDocumentDeltas> documentDeltas = Optional.empty();
 
         private Optional<KnowledgeBaseVersionProgress> progress = Optional.empty();
 
@@ -269,6 +294,7 @@ public final class KnowledgeBaseVersion implements IKnowledgeBaseVersionRequest 
             updatedAt(other.getUpdatedAt());
             indexingState(other.getIndexingState());
             progress(other.getProgress());
+            documentDeltas(other.getDocumentDeltas());
             return this;
         }
 
@@ -329,6 +355,28 @@ public final class KnowledgeBaseVersion implements IKnowledgeBaseVersionRequest 
         @JsonSetter("updatedAt")
         public _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt) {
             this.updatedAt = Objects.requireNonNull(updatedAt, "updatedAt must not be null");
+            return this;
+        }
+
+        /**
+         * <p>How this version changed the knowledge base. Absent for historical versions and for
+         * versions that did not complete successfully.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage documentDeltas(KnowledgeBaseDocumentDeltas documentDeltas) {
+            this.documentDeltas = Optional.ofNullable(documentDeltas);
+            return this;
+        }
+
+        /**
+         * <p>How this version changed the knowledge base. Absent for historical versions and for
+         * versions that did not complete successfully.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "documentDeltas", nulls = Nulls.SKIP)
+        public _FinalStage documentDeltas(Optional<KnowledgeBaseDocumentDeltas> documentDeltas) {
+            this.documentDeltas = documentDeltas;
             return this;
         }
 
@@ -405,6 +453,7 @@ public final class KnowledgeBaseVersion implements IKnowledgeBaseVersionRequest 
                     updatedAt,
                     indexingState,
                     progress,
+                    documentDeltas,
                     additionalProperties);
         }
     }
