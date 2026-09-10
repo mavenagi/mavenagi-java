@@ -13,8 +13,10 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
 import com.mavenagi.resources.conversation.types.ConversationField;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -25,14 +27,18 @@ public final class ConversationRow implements IRowBase {
 
     private final Map<ConversationField, FieldValue> identifier;
 
+    private final List<ConversationRowIdentifier> identifiers;
+
     private final Map<String, Object> additionalProperties;
 
     private ConversationRow(
             Map<String, CellData> data,
             Map<ConversationField, FieldValue> identifier,
+            List<ConversationRowIdentifier> identifiers,
             Map<String, Object> additionalProperties) {
         this.data = data;
         this.identifier = identifier;
+        this.identifiers = identifiers;
         this.additionalProperties = additionalProperties;
     }
 
@@ -46,12 +52,21 @@ public final class ConversationRow implements IRowBase {
     }
 
     /**
-     * @return A unique identifier for each row, consisting of field names mapped to their respective values.
-     * This includes time groupings and any specified field groupings.
+     * @return Keyed by field, so it cannot represent two groupings that share a key - notably two
+     * intelligent fields. Use <code>identifiers</code>, which carries one entry per grouping in request
+     * order.
      */
     @JsonProperty("identifier")
     public Map<ConversationField, FieldValue> getIdentifier() {
         return identifier;
+    }
+
+    /**
+     * @return One entry per grouping, in the order the groupings were requested.
+     */
+    @JsonProperty("identifiers")
+    public List<ConversationRowIdentifier> getIdentifiers() {
+        return identifiers;
     }
 
     @java.lang.Override
@@ -66,12 +81,12 @@ public final class ConversationRow implements IRowBase {
     }
 
     private boolean equalTo(ConversationRow other) {
-        return data.equals(other.data) && identifier.equals(other.identifier);
+        return data.equals(other.data) && identifier.equals(other.identifier) && identifiers.equals(other.identifiers);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.data, this.identifier);
+        return Objects.hash(this.data, this.identifier, this.identifiers);
     }
 
     @java.lang.Override
@@ -89,6 +104,8 @@ public final class ConversationRow implements IRowBase {
 
         private Map<ConversationField, FieldValue> identifier = new LinkedHashMap<>();
 
+        private List<ConversationRowIdentifier> identifiers = new ArrayList<>();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -97,6 +114,7 @@ public final class ConversationRow implements IRowBase {
         public Builder from(ConversationRow other) {
             data(other.getData());
             identifier(other.getIdentifier());
+            identifiers(other.getIdentifiers());
             return this;
         }
 
@@ -125,8 +143,9 @@ public final class ConversationRow implements IRowBase {
         }
 
         /**
-         * <p>A unique identifier for each row, consisting of field names mapped to their respective values.
-         * This includes time groupings and any specified field groupings.</p>
+         * <p>Keyed by field, so it cannot represent two groupings that share a key - notably two
+         * intelligent fields. Use <code>identifiers</code>, which carries one entry per grouping in request
+         * order.</p>
          */
         @JsonSetter(value = "identifier", nulls = Nulls.SKIP)
         public Builder identifier(Map<ConversationField, FieldValue> identifier) {
@@ -149,8 +168,32 @@ public final class ConversationRow implements IRowBase {
             return this;
         }
 
+        /**
+         * <p>One entry per grouping, in the order the groupings were requested.</p>
+         */
+        @JsonSetter(value = "identifiers", nulls = Nulls.SKIP)
+        public Builder identifiers(List<ConversationRowIdentifier> identifiers) {
+            this.identifiers.clear();
+            if (identifiers != null) {
+                this.identifiers.addAll(identifiers);
+            }
+            return this;
+        }
+
+        public Builder addIdentifiers(ConversationRowIdentifier identifiers) {
+            this.identifiers.add(identifiers);
+            return this;
+        }
+
+        public Builder addAllIdentifiers(List<ConversationRowIdentifier> identifiers) {
+            if (identifiers != null) {
+                this.identifiers.addAll(identifiers);
+            }
+            return this;
+        }
+
         public ConversationRow build() {
-            return new ConversationRow(data, identifier, additionalProperties);
+            return new ConversationRow(data, identifier, identifiers, additionalProperties);
         }
     }
 }

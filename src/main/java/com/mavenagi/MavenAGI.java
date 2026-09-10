@@ -8,6 +8,7 @@ import com.mavenagi.core.Suppliers;
 import com.mavenagi.resources.actions.ActionsClient;
 import com.mavenagi.resources.agents.AgentsClient;
 import com.mavenagi.resources.analytics.AnalyticsClient;
+import com.mavenagi.resources.appdirectory.AppDirectoryClient;
 import com.mavenagi.resources.appsettings.AppSettingsClient;
 import com.mavenagi.resources.assets.AssetsClient;
 import com.mavenagi.resources.conversation.ConversationClient;
@@ -33,6 +34,8 @@ public class MavenAGI {
     protected final Supplier<AgentsClient> agentsClient;
 
     protected final Supplier<AnalyticsClient> analyticsClient;
+
+    protected final Supplier<AppDirectoryClient> appDirectoryClient;
 
     protected final Supplier<AppSettingsClient> appSettingsClient;
 
@@ -69,6 +72,7 @@ public class MavenAGI {
         this.actionsClient = Suppliers.memoize(() -> new ActionsClient(clientOptions));
         this.agentsClient = Suppliers.memoize(() -> new AgentsClient(clientOptions));
         this.analyticsClient = Suppliers.memoize(() -> new AnalyticsClient(clientOptions));
+        this.appDirectoryClient = Suppliers.memoize(() -> new AppDirectoryClient(clientOptions));
         this.appSettingsClient = Suppliers.memoize(() -> new AppSettingsClient(clientOptions));
         this.assetsClient = Suppliers.memoize(() -> new AssetsClient(clientOptions));
         this.conversationClient = Suppliers.memoize(() -> new ConversationClient(clientOptions));
@@ -96,6 +100,10 @@ public class MavenAGI {
 
     public AnalyticsClient analytics() {
         return this.analyticsClient.get();
+    }
+
+    public AppDirectoryClient appDirectory() {
+        return this.appDirectoryClient.get();
     }
 
     public AppSettingsClient appSettings() {

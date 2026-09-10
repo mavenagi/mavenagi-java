@@ -37,6 +37,8 @@ public final class ActionBase implements IActionBase, IActionProperties {
 
     private final Optional<String> language;
 
+    private final Optional<SideEffects> sideEffects;
+
     private final Map<String, Object> additionalProperties;
 
     private ActionBase(
@@ -47,6 +49,7 @@ public final class ActionBase implements IActionBase, IActionProperties {
             Optional<Precondition> precondition,
             List<ActionParameter> userFormParameters,
             Optional<String> language,
+            Optional<SideEffects> sideEffects,
             Map<String, Object> additionalProperties) {
         this.name = name;
         this.description = description;
@@ -55,6 +58,7 @@ public final class ActionBase implements IActionBase, IActionProperties {
         this.precondition = precondition;
         this.userFormParameters = userFormParameters;
         this.language = language;
+        this.sideEffects = sideEffects;
         this.additionalProperties = additionalProperties;
     }
 
@@ -121,6 +125,17 @@ public final class ActionBase implements IActionBase, IActionProperties {
         return language;
     }
 
+    /**
+     * @return Whether executing this action causes side effects. Absent means the action has never
+     * declared either way.
+     * <p>This value is informational only. It does not yet affect action execution.</p>
+     */
+    @JsonProperty("sideEffects")
+    @java.lang.Override
+    public Optional<SideEffects> getSideEffects() {
+        return sideEffects;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -139,7 +154,8 @@ public final class ActionBase implements IActionBase, IActionProperties {
                 && buttonName.equals(other.buttonName)
                 && precondition.equals(other.precondition)
                 && userFormParameters.equals(other.userFormParameters)
-                && language.equals(other.language);
+                && language.equals(other.language)
+                && sideEffects.equals(other.sideEffects);
     }
 
     @java.lang.Override
@@ -151,7 +167,8 @@ public final class ActionBase implements IActionBase, IActionProperties {
                 this.buttonName,
                 this.precondition,
                 this.userFormParameters,
-                this.language);
+                this.language,
+                this.sideEffects);
     }
 
     @java.lang.Override
@@ -218,6 +235,15 @@ public final class ActionBase implements IActionBase, IActionProperties {
         _FinalStage language(Optional<String> language);
 
         _FinalStage language(String language);
+
+        /**
+         * <p>Whether executing this action causes side effects. Absent means the action has never
+         * declared either way.</p>
+         * <p>This value is informational only. It does not yet affect action execution.</p>
+         */
+        _FinalStage sideEffects(Optional<SideEffects> sideEffects);
+
+        _FinalStage sideEffects(SideEffects sideEffects);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -228,6 +254,8 @@ public final class ActionBase implements IActionBase, IActionProperties {
         private String description;
 
         private boolean userInteractionRequired;
+
+        private Optional<SideEffects> sideEffects = Optional.empty();
 
         private Optional<String> language = Optional.empty();
 
@@ -251,6 +279,7 @@ public final class ActionBase implements IActionBase, IActionProperties {
             precondition(other.getPrecondition());
             userFormParameters(other.getUserFormParameters());
             language(other.getLanguage());
+            sideEffects(other.getSideEffects());
             return this;
         }
 
@@ -287,6 +316,30 @@ public final class ActionBase implements IActionBase, IActionProperties {
         @JsonSetter("userInteractionRequired")
         public _FinalStage userInteractionRequired(boolean userInteractionRequired) {
             this.userInteractionRequired = userInteractionRequired;
+            return this;
+        }
+
+        /**
+         * <p>Whether executing this action causes side effects. Absent means the action has never
+         * declared either way.</p>
+         * <p>This value is informational only. It does not yet affect action execution.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage sideEffects(SideEffects sideEffects) {
+            this.sideEffects = Optional.ofNullable(sideEffects);
+            return this;
+        }
+
+        /**
+         * <p>Whether executing this action causes side effects. Absent means the action has never
+         * declared either way.</p>
+         * <p>This value is informational only. It does not yet affect action execution.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "sideEffects", nulls = Nulls.SKIP)
+        public _FinalStage sideEffects(Optional<SideEffects> sideEffects) {
+            this.sideEffects = sideEffects;
             return this;
         }
 
@@ -395,6 +448,7 @@ public final class ActionBase implements IActionBase, IActionProperties {
                     precondition,
                     userFormParameters,
                     language,
+                    sideEffects,
                     additionalProperties);
         }
     }

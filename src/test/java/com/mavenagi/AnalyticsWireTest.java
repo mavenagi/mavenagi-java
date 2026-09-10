@@ -76,7 +76,7 @@ public class AnalyticsWireTest {
     public void testGetConversationTable() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"headers\":[\"count\",\"avg_first_response_time\",\"percentile_first_response_time\"],\"rows\":[{\"identifier\":{\"Category\":{\"type\":\"string\",\"value\":\"Sales\"},\"CreatedAt\":{\"type\":\"dateTime\",\"value\":\"2023-10-01T00:00:00Z\"}},\"data\":{\"count\":{\"type\":\"double\",\"value\":5},\"avg_first_response_time\":{\"type\":\"millisecond\",\"value\":150},\"percentile_handle_time\":{\"type\":\"millisecond\",\"value\":110}}},{\"identifier\":{\"Category\":{\"type\":\"string\",\"value\":\"Support\"},\"CreatedAt\":{\"type\":\"dateTime\",\"value\":\"2023-10-01T00:00:00Z\"}},\"data\":{\"count\":{\"type\":\"double\",\"value\":10},\"avg_first_response_time\":{\"type\":\"millisecond\",\"value\":300},\"percentile_handle_time\":{\"type\":\"millisecond\",\"value\":250}}},{\"identifier\":{\"Category\":{\"type\":\"string\",\"value\":\"Sales\",\"CreatedAt\":{\"type\":\"dateTime\",\"value\":\"2023-10-02T00:00:00Z\"}}},\"data\":{\"count\":{\"type\":\"double\",\"value\":7},\"avg_first_response_time\":{\"type\":\"millisecond\",\"value\":180},\"percentile_handle_time\":{\"type\":\"millisecond\",\"value\":180}}},{\"identifier\":{\"Category\":{\"type\":\"string\",\"value\":\"Support\"},\"CreatedAt\":{\"type\":\"dateTime\",\"value\":\"2023-10-02T00:00:00Z\"}},\"data\":{\"count\":{\"type\":\"double\",\"value\":8},\"avg_first_response_time\":{\"type\":\"millisecond\",\"value\":320},\"percentile_handle_time\":{\"type\":\"millisecond\",\"value\":220}}}]}"));
+            .setBody("{\"headers\":[\"count\",\"avg_first_response_time\",\"percentile_first_response_time\"],\"rows\":[{\"identifier\":{\"Category\":{\"type\":\"string\",\"value\":\"Sales\"},\"CreatedAt\":{\"type\":\"dateTime\",\"value\":\"2023-10-01T00:00:00Z\"}},\"identifiers\":[{\"field\":\"Category\",\"value\":{\"type\":\"string\",\"value\":\"Sales\"}},{\"field\":\"CreatedAt\",\"value\":{\"type\":\"dateTime\",\"value\":\"2023-10-01T00:00:00Z\"}}],\"data\":{\"count\":{\"type\":\"double\",\"value\":5},\"avg_first_response_time\":{\"type\":\"millisecond\",\"value\":150},\"percentile_handle_time\":{\"type\":\"millisecond\",\"value\":110}}},{\"identifier\":{\"Category\":{\"type\":\"string\",\"value\":\"Support\"},\"CreatedAt\":{\"type\":\"dateTime\",\"value\":\"2023-10-01T00:00:00Z\"}},\"identifiers\":[{\"field\":\"Category\",\"value\":{\"type\":\"string\",\"value\":\"Support\"}},{\"field\":\"CreatedAt\",\"value\":{\"type\":\"dateTime\",\"value\":\"2023-10-01T00:00:00Z\"}}],\"data\":{\"count\":{\"type\":\"double\",\"value\":10},\"avg_first_response_time\":{\"type\":\"millisecond\",\"value\":300},\"percentile_handle_time\":{\"type\":\"millisecond\",\"value\":250}}},{\"identifier\":{\"Category\":{\"type\":\"string\",\"value\":\"Sales\"},\"CreatedAt\":{\"type\":\"dateTime\",\"value\":\"2023-10-02T00:00:00Z\"}},\"identifiers\":[{\"field\":\"Category\",\"value\":{\"type\":\"string\",\"value\":\"Sales\"}},{\"field\":\"CreatedAt\",\"value\":{\"type\":\"dateTime\",\"value\":\"2023-10-02T00:00:00Z\"}}],\"data\":{\"count\":{\"type\":\"double\",\"value\":7},\"avg_first_response_time\":{\"type\":\"millisecond\",\"value\":180},\"percentile_handle_time\":{\"type\":\"millisecond\",\"value\":180}}},{\"identifier\":{\"Category\":{\"type\":\"string\",\"value\":\"Support\"},\"CreatedAt\":{\"type\":\"dateTime\",\"value\":\"2023-10-02T00:00:00Z\"}},\"identifiers\":[{\"field\":\"Category\",\"value\":{\"type\":\"string\",\"value\":\"Support\"}},{\"field\":\"CreatedAt\",\"value\":{\"type\":\"dateTime\",\"value\":\"2023-10-02T00:00:00Z\"}}],\"data\":{\"count\":{\"type\":\"double\",\"value\":8},\"avg_first_response_time\":{\"type\":\"millisecond\",\"value\":320},\"percentile_handle_time\":{\"type\":\"millisecond\",\"value\":220}}}]}"));
         ConversationTableResponse response = client.analytics().getConversationTable(
             ConversationTableRequest
                 .builder()
@@ -229,6 +229,22 @@ public class AnalyticsWireTest {
             + "          \"value\": \"2023-10-01T00:00:00Z\"\n"
             + "        }\n"
             + "      },\n"
+            + "      \"identifiers\": [\n"
+            + "        {\n"
+            + "          \"field\": \"Category\",\n"
+            + "          \"value\": {\n"
+            + "            \"type\": \"string\",\n"
+            + "            \"value\": \"Sales\"\n"
+            + "          }\n"
+            + "        },\n"
+            + "        {\n"
+            + "          \"field\": \"CreatedAt\",\n"
+            + "          \"value\": {\n"
+            + "            \"type\": \"dateTime\",\n"
+            + "            \"value\": \"2023-10-01T00:00:00Z\"\n"
+            + "          }\n"
+            + "        }\n"
+            + "      ],\n"
             + "      \"data\": {\n"
             + "        \"count\": {\n"
             + "          \"type\": \"double\",\n"
@@ -255,6 +271,22 @@ public class AnalyticsWireTest {
             + "          \"value\": \"2023-10-01T00:00:00Z\"\n"
             + "        }\n"
             + "      },\n"
+            + "      \"identifiers\": [\n"
+            + "        {\n"
+            + "          \"field\": \"Category\",\n"
+            + "          \"value\": {\n"
+            + "            \"type\": \"string\",\n"
+            + "            \"value\": \"Support\"\n"
+            + "          }\n"
+            + "        },\n"
+            + "        {\n"
+            + "          \"field\": \"CreatedAt\",\n"
+            + "          \"value\": {\n"
+            + "            \"type\": \"dateTime\",\n"
+            + "            \"value\": \"2023-10-01T00:00:00Z\"\n"
+            + "          }\n"
+            + "        }\n"
+            + "      ],\n"
             + "      \"data\": {\n"
             + "        \"count\": {\n"
             + "          \"type\": \"double\",\n"
@@ -274,13 +306,29 @@ public class AnalyticsWireTest {
             + "      \"identifier\": {\n"
             + "        \"Category\": {\n"
             + "          \"type\": \"string\",\n"
-            + "          \"value\": \"Sales\",\n"
-            + "          \"CreatedAt\": {\n"
+            + "          \"value\": \"Sales\"\n"
+            + "        },\n"
+            + "        \"CreatedAt\": {\n"
+            + "          \"type\": \"dateTime\",\n"
+            + "          \"value\": \"2023-10-02T00:00:00Z\"\n"
+            + "        }\n"
+            + "      },\n"
+            + "      \"identifiers\": [\n"
+            + "        {\n"
+            + "          \"field\": \"Category\",\n"
+            + "          \"value\": {\n"
+            + "            \"type\": \"string\",\n"
+            + "            \"value\": \"Sales\"\n"
+            + "          }\n"
+            + "        },\n"
+            + "        {\n"
+            + "          \"field\": \"CreatedAt\",\n"
+            + "          \"value\": {\n"
             + "            \"type\": \"dateTime\",\n"
             + "            \"value\": \"2023-10-02T00:00:00Z\"\n"
             + "          }\n"
             + "        }\n"
-            + "      },\n"
+            + "      ],\n"
             + "      \"data\": {\n"
             + "        \"count\": {\n"
             + "          \"type\": \"double\",\n"
@@ -307,6 +355,22 @@ public class AnalyticsWireTest {
             + "          \"value\": \"2023-10-02T00:00:00Z\"\n"
             + "        }\n"
             + "      },\n"
+            + "      \"identifiers\": [\n"
+            + "        {\n"
+            + "          \"field\": \"Category\",\n"
+            + "          \"value\": {\n"
+            + "            \"type\": \"string\",\n"
+            + "            \"value\": \"Support\"\n"
+            + "          }\n"
+            + "        },\n"
+            + "        {\n"
+            + "          \"field\": \"CreatedAt\",\n"
+            + "          \"value\": {\n"
+            + "            \"type\": \"dateTime\",\n"
+            + "            \"value\": \"2023-10-02T00:00:00Z\"\n"
+            + "          }\n"
+            + "        }\n"
+            + "      ],\n"
             + "      \"data\": {\n"
             + "        \"count\": {\n"
             + "          \"type\": \"double\",\n"
@@ -473,7 +537,7 @@ public class AnalyticsWireTest {
     public void testGetFeedbackTable() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"headers\":[\"feedback_count\",\"unique_users\"],\"rows\":[{\"identifier\":{\"CreatedBy\":{\"type\":\"string\",\"value\":\"John Doe\"}},\"data\":{\"feedback_count\":{\"type\":\"double\",\"value\":5}}},{\"identifier\":{\"CreatedBy\":{\"type\":\"string\",\"value\":\"Jane Smith\"}},\"data\":{\"feedback_count\":{\"type\":\"double\",\"value\":3}}}]}"));
+            .setBody("{\"headers\":[\"feedback_count\",\"unique_users\"],\"rows\":[{\"identifier\":{\"CreatedBy\":{\"type\":\"string\",\"value\":\"John Doe\"}},\"identifiers\":[{\"field\":\"CreatedBy\",\"value\":{\"type\":\"string\",\"value\":\"John Doe\"}}],\"data\":{\"feedback_count\":{\"type\":\"double\",\"value\":5}}},{\"identifier\":{\"CreatedBy\":{\"type\":\"string\",\"value\":\"Jane Smith\"}},\"identifiers\":[{\"field\":\"CreatedBy\",\"value\":{\"type\":\"string\",\"value\":\"Jane Smith\"}}],\"data\":{\"feedback_count\":{\"type\":\"double\",\"value\":3}}}]}"));
         FeedbackTableResponse response = client.analytics().getFeedbackTable(
             FeedbackTableRequest
                 .builder()
@@ -579,6 +643,15 @@ public class AnalyticsWireTest {
             + "          \"value\": \"John Doe\"\n"
             + "        }\n"
             + "      },\n"
+            + "      \"identifiers\": [\n"
+            + "        {\n"
+            + "          \"field\": \"CreatedBy\",\n"
+            + "          \"value\": {\n"
+            + "            \"type\": \"string\",\n"
+            + "            \"value\": \"John Doe\"\n"
+            + "          }\n"
+            + "        }\n"
+            + "      ],\n"
             + "      \"data\": {\n"
             + "        \"feedback_count\": {\n"
             + "          \"type\": \"double\",\n"
@@ -593,6 +666,15 @@ public class AnalyticsWireTest {
             + "          \"value\": \"Jane Smith\"\n"
             + "        }\n"
             + "      },\n"
+            + "      \"identifiers\": [\n"
+            + "        {\n"
+            + "          \"field\": \"CreatedBy\",\n"
+            + "          \"value\": {\n"
+            + "            \"type\": \"string\",\n"
+            + "            \"value\": \"Jane Smith\"\n"
+            + "          }\n"
+            + "        }\n"
+            + "      ],\n"
             + "      \"data\": {\n"
             + "        \"feedback_count\": {\n"
             + "          \"type\": \"double\",\n"
@@ -629,7 +711,7 @@ public class AnalyticsWireTest {
     public void testGetAgentUserTable() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"headers\":[\"user_count\"],\"rows\":[{\"identifier\":{\"CreatedAt\":{\"type\":\"dateTime\",\"value\":\"2023-10-01T00:00:00Z\"}},\"data\":{\"user_count\":{\"type\":\"double\",\"value\":5}}}]}"));
+            .setBody("{\"headers\":[\"user_count\"],\"rows\":[{\"identifier\":{\"CreatedAt\":{\"type\":\"dateTime\",\"value\":\"2023-10-01T00:00:00Z\"}},\"identifiers\":[{\"field\":\"CreatedAt\",\"value\":{\"type\":\"dateTime\",\"value\":\"2023-10-01T00:00:00Z\"}}],\"data\":{\"user_count\":{\"type\":\"double\",\"value\":5}}}]}"));
         AgentUserTableResponse response = client.analytics().getAgentUserTable(
             AgentUserTableRequest
                 .builder()
@@ -714,6 +796,15 @@ public class AnalyticsWireTest {
             + "          \"value\": \"2023-10-01T00:00:00Z\"\n"
             + "        }\n"
             + "      },\n"
+            + "      \"identifiers\": [\n"
+            + "        {\n"
+            + "          \"field\": \"CreatedAt\",\n"
+            + "          \"value\": {\n"
+            + "            \"type\": \"dateTime\",\n"
+            + "            \"value\": \"2023-10-01T00:00:00Z\"\n"
+            + "          }\n"
+            + "        }\n"
+            + "      ],\n"
             + "      \"data\": {\n"
             + "        \"user_count\": {\n"
             + "          \"type\": \"double\",\n"
@@ -750,7 +841,7 @@ public class AnalyticsWireTest {
     public void testGetEventTable() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"headers\":[\"event_count\"],\"rows\":[{\"identifier\":{\"EVENT_NAME\":{\"type\":\"string\",\"value\":\"CHAT_OPENED\"}},\"data\":{\"event_count\":{\"type\":\"double\",\"value\":50}}},{\"identifier\":{\"EVENT_NAME\":{\"type\":\"string\",\"value\":\"CHAT_CLOSED\"}},\"data\":{\"event_count\":{\"type\":\"double\",\"value\":45}}}]}"));
+            .setBody("{\"headers\":[\"event_count\"],\"rows\":[{\"identifier\":{\"EVENT_NAME\":{\"type\":\"string\",\"value\":\"CHAT_OPENED\"}},\"identifiers\":[{\"field\":\"EVENT_NAME\",\"value\":{\"type\":\"string\",\"value\":\"CHAT_OPENED\"}}],\"data\":{\"event_count\":{\"type\":\"double\",\"value\":50}}},{\"identifier\":{\"EVENT_NAME\":{\"type\":\"string\",\"value\":\"CHAT_CLOSED\"}},\"identifiers\":[{\"field\":\"EVENT_NAME\",\"value\":{\"type\":\"string\",\"value\":\"CHAT_CLOSED\"}}],\"data\":{\"event_count\":{\"type\":\"double\",\"value\":45}}}]}"));
         EventTableResponse response = client.analytics().getEventTable(
             EventTableRequest
                 .builder()
@@ -854,6 +945,15 @@ public class AnalyticsWireTest {
             + "          \"value\": \"CHAT_OPENED\"\n"
             + "        }\n"
             + "      },\n"
+            + "      \"identifiers\": [\n"
+            + "        {\n"
+            + "          \"field\": \"EVENT_NAME\",\n"
+            + "          \"value\": {\n"
+            + "            \"type\": \"string\",\n"
+            + "            \"value\": \"CHAT_OPENED\"\n"
+            + "          }\n"
+            + "        }\n"
+            + "      ],\n"
             + "      \"data\": {\n"
             + "        \"event_count\": {\n"
             + "          \"type\": \"double\",\n"
@@ -868,6 +968,15 @@ public class AnalyticsWireTest {
             + "          \"value\": \"CHAT_CLOSED\"\n"
             + "        }\n"
             + "      },\n"
+            + "      \"identifiers\": [\n"
+            + "        {\n"
+            + "          \"field\": \"EVENT_NAME\",\n"
+            + "          \"value\": {\n"
+            + "            \"type\": \"string\",\n"
+            + "            \"value\": \"CHAT_CLOSED\"\n"
+            + "          }\n"
+            + "        }\n"
+            + "      ],\n"
             + "      \"data\": {\n"
             + "        \"event_count\": {\n"
             + "          \"type\": \"double\",\n"

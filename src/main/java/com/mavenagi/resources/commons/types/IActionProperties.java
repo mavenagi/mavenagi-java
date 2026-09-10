@@ -16,4 +16,6 @@ public interface IActionProperties {
     List<ActionParameter> getUserFormParameters();
 
     Optional<String> getLanguage();
+
+    Optional<SideEffects> getSideEffects();
 }

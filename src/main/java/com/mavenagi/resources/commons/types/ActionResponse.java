@@ -37,6 +37,8 @@ public final class ActionResponse implements IActionBase, IActionProperties {
 
     private final Optional<String> language;
 
+    private final Optional<SideEffects> sideEffects;
+
     private final EntityId actionId;
 
     private final Optional<String> instructions;
@@ -59,6 +61,7 @@ public final class ActionResponse implements IActionBase, IActionProperties {
             Optional<Precondition> precondition,
             List<ActionParameter> userFormParameters,
             Optional<String> language,
+            Optional<SideEffects> sideEffects,
             EntityId actionId,
             Optional<String> instructions,
             LlmInclusionStatus llmInclusionStatus,
@@ -73,6 +76,7 @@ public final class ActionResponse implements IActionBase, IActionProperties {
         this.precondition = precondition;
         this.userFormParameters = userFormParameters;
         this.language = language;
+        this.sideEffects = sideEffects;
         this.actionId = actionId;
         this.instructions = instructions;
         this.llmInclusionStatus = llmInclusionStatus;
@@ -143,6 +147,17 @@ public final class ActionResponse implements IActionBase, IActionProperties {
     @java.lang.Override
     public Optional<String> getLanguage() {
         return language;
+    }
+
+    /**
+     * @return Whether executing this action causes side effects. Absent means the action has never
+     * declared either way.
+     * <p>This value is informational only. It does not yet affect action execution.</p>
+     */
+    @JsonProperty("sideEffects")
+    @java.lang.Override
+    public Optional<SideEffects> getSideEffects() {
+        return sideEffects;
     }
 
     /**
@@ -220,6 +235,7 @@ public final class ActionResponse implements IActionBase, IActionProperties {
                 && precondition.equals(other.precondition)
                 && userFormParameters.equals(other.userFormParameters)
                 && language.equals(other.language)
+                && sideEffects.equals(other.sideEffects)
                 && actionId.equals(other.actionId)
                 && instructions.equals(other.instructions)
                 && llmInclusionStatus.equals(other.llmInclusionStatus)
@@ -238,6 +254,7 @@ public final class ActionResponse implements IActionBase, IActionProperties {
                 this.precondition,
                 this.userFormParameters,
                 this.language,
+                this.sideEffects,
                 this.actionId,
                 this.instructions,
                 this.llmInclusionStatus,
@@ -338,6 +355,15 @@ public final class ActionResponse implements IActionBase, IActionProperties {
         _FinalStage language(String language);
 
         /**
+         * <p>Whether executing this action causes side effects. Absent means the action has never
+         * declared either way.</p>
+         * <p>This value is informational only. It does not yet affect action execution.</p>
+         */
+        _FinalStage sideEffects(Optional<SideEffects> sideEffects);
+
+        _FinalStage sideEffects(SideEffects sideEffects);
+
+        /**
          * <p>The instructions given to the LLM when determining whether to execute the action.
          * This field defaults to the <code>description</code> field if not provided. Use the <code>patch</code> API to update.</p>
          */
@@ -389,6 +415,8 @@ public final class ActionResponse implements IActionBase, IActionProperties {
 
         private Optional<String> instructions = Optional.empty();
 
+        private Optional<SideEffects> sideEffects = Optional.empty();
+
         private Optional<String> language = Optional.empty();
 
         private List<ActionParameter> userFormParameters = new ArrayList<>();
@@ -411,6 +439,7 @@ public final class ActionResponse implements IActionBase, IActionProperties {
             precondition(other.getPrecondition());
             userFormParameters(other.getUserFormParameters());
             language(other.getLanguage());
+            sideEffects(other.getSideEffects());
             actionId(other.getActionId());
             instructions(other.getInstructions());
             llmInclusionStatus(other.getLlmInclusionStatus());
@@ -569,6 +598,30 @@ public final class ActionResponse implements IActionBase, IActionProperties {
         }
 
         /**
+         * <p>Whether executing this action causes side effects. Absent means the action has never
+         * declared either way.</p>
+         * <p>This value is informational only. It does not yet affect action execution.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage sideEffects(SideEffects sideEffects) {
+            this.sideEffects = Optional.ofNullable(sideEffects);
+            return this;
+        }
+
+        /**
+         * <p>Whether executing this action causes side effects. Absent means the action has never
+         * declared either way.</p>
+         * <p>This value is informational only. It does not yet affect action execution.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "sideEffects", nulls = Nulls.SKIP)
+        public _FinalStage sideEffects(Optional<SideEffects> sideEffects) {
+            this.sideEffects = sideEffects;
+            return this;
+        }
+
+        /**
          * <p>The ISO 639-1 code for the language used in all fields of this action. Will be derived using the description's text if not specified.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -673,6 +726,7 @@ public final class ActionResponse implements IActionBase, IActionProperties {
                     precondition,
                     userFormParameters,
                     language,
+                    sideEffects,
                     actionId,
                     instructions,
                     llmInclusionStatus,

@@ -3,6 +3,7 @@
  */
 package com.mavenagi.resources.commons.types;
 
+import java.time.OffsetDateTime;
 import java.util.Map;
 import java.util.Optional;
 
@@ -12,4 +13,10 @@ public interface IBotLogicActionExecutedDetail extends IBotLogicActionReviewedDe
     Optional<String> getExecutionResult();
 
     Optional<String> getExecutionError();
+
+    Optional<Map<String, Object>> getData();
+
+    Optional<OffsetDateTime> getStartedAt();
+
+    Optional<Long> getDurationMs();
 }

@@ -16,22 +16,35 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BotLogicUserItem.Builder.class)
 public final class BotLogicUserItem {
     private final Map<String, String> userData;
 
+    private final Optional<String> displayName;
+
     private final Map<String, Object> additionalProperties;
 
-    private BotLogicUserItem(Map<String, String> userData, Map<String, Object> additionalProperties) {
+    private BotLogicUserItem(
+            Map<String, String> userData, Optional<String> displayName, Map<String, Object> additionalProperties) {
         this.userData = userData;
+        this.displayName = displayName;
         this.additionalProperties = additionalProperties;
     }
 
     @JsonProperty("userData")
     public Map<String, String> getUserData() {
         return userData;
+    }
+
+    /**
+     * @return The user's name, when one can be determined from their user data. Absent otherwise — how a name is derived may broaden over time, so treat this as a display convenience rather than an identifier.
+     */
+    @JsonProperty("displayName")
+    public Optional<String> getDisplayName() {
+        return displayName;
     }
 
     @java.lang.Override
@@ -46,12 +59,12 @@ public final class BotLogicUserItem {
     }
 
     private boolean equalTo(BotLogicUserItem other) {
-        return userData.equals(other.userData);
+        return userData.equals(other.userData) && displayName.equals(other.displayName);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.userData);
+        return Objects.hash(this.userData, this.displayName);
     }
 
     @java.lang.Override
@@ -67,6 +80,8 @@ public final class BotLogicUserItem {
     public static final class Builder {
         private Map<String, String> userData = new LinkedHashMap<>();
 
+        private Optional<String> displayName = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -74,6 +89,7 @@ public final class BotLogicUserItem {
 
         public Builder from(BotLogicUserItem other) {
             userData(other.getUserData());
+            displayName(other.getDisplayName());
             return this;
         }
 
@@ -98,8 +114,22 @@ public final class BotLogicUserItem {
             return this;
         }
 
+        /**
+         * <p>The user's name, when one can be determined from their user data. Absent otherwise — how a name is derived may broaden over time, so treat this as a display convenience rather than an identifier.</p>
+         */
+        @JsonSetter(value = "displayName", nulls = Nulls.SKIP)
+        public Builder displayName(Optional<String> displayName) {
+            this.displayName = displayName;
+            return this;
+        }
+
+        public Builder displayName(String displayName) {
+            this.displayName = Optional.ofNullable(displayName);
+            return this;
+        }
+
         public BotLogicUserItem build() {
-            return new BotLogicUserItem(userData, additionalProperties);
+            return new BotLogicUserItem(userData, displayName, additionalProperties);
         }
     }
 }

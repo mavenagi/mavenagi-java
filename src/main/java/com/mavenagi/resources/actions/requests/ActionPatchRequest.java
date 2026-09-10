@@ -17,6 +17,7 @@ import com.mavenagi.core.NullableNonemptyFilter;
 import com.mavenagi.core.ObjectMappers;
 import com.mavenagi.resources.commons.types.EntityId;
 import com.mavenagi.resources.commons.types.LlmInclusionStatus;
+import com.mavenagi.resources.commons.types.SideEffects;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -33,6 +34,8 @@ public final class ActionPatchRequest {
 
     private final Optional<EntityId> segmentId;
 
+    private final Optional<SideEffects> sideEffects;
+
     private final Map<String, Object> additionalProperties;
 
     private ActionPatchRequest(
@@ -40,11 +43,13 @@ public final class ActionPatchRequest {
             Optional<String> instructions,
             Optional<LlmInclusionStatus> llmInclusionStatus,
             Optional<EntityId> segmentId,
+            Optional<SideEffects> sideEffects,
             Map<String, Object> additionalProperties) {
         this.appId = appId;
         this.instructions = instructions;
         this.llmInclusionStatus = llmInclusionStatus;
         this.segmentId = segmentId;
+        this.sideEffects = sideEffects;
         this.additionalProperties = additionalProperties;
     }
 
@@ -86,10 +91,28 @@ public final class ActionPatchRequest {
         return segmentId;
     }
 
+    /**
+     * @return Whether executing this action causes side effects.
+     * A null value clears it back to undeclared.
+     */
+    @JsonIgnore
+    public Optional<SideEffects> getSideEffects() {
+        if (sideEffects == null) {
+            return Optional.empty();
+        }
+        return sideEffects;
+    }
+
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
     @JsonProperty("segmentId")
     private Optional<EntityId> _getSegmentId() {
         return segmentId;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("sideEffects")
+    private Optional<SideEffects> _getSideEffects() {
+        return sideEffects;
     }
 
     @java.lang.Override
@@ -107,12 +130,13 @@ public final class ActionPatchRequest {
         return appId.equals(other.appId)
                 && instructions.equals(other.instructions)
                 && llmInclusionStatus.equals(other.llmInclusionStatus)
-                && segmentId.equals(other.segmentId);
+                && segmentId.equals(other.segmentId)
+                && sideEffects.equals(other.sideEffects);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.appId, this.instructions, this.llmInclusionStatus, this.segmentId);
+        return Objects.hash(this.appId, this.instructions, this.llmInclusionStatus, this.segmentId, this.sideEffects);
     }
 
     @java.lang.Override
@@ -134,6 +158,8 @@ public final class ActionPatchRequest {
 
         private Optional<EntityId> segmentId = Optional.empty();
 
+        private Optional<SideEffects> sideEffects = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -144,6 +170,7 @@ public final class ActionPatchRequest {
             instructions(other.getInstructions());
             llmInclusionStatus(other.getLlmInclusionStatus());
             segmentId(other.getSegmentId());
+            sideEffects(other.getSideEffects());
             return this;
         }
 
@@ -217,8 +244,35 @@ public final class ActionPatchRequest {
             return this;
         }
 
+        /**
+         * <p>Whether executing this action causes side effects.
+         * A null value clears it back to undeclared.</p>
+         */
+        @JsonSetter(value = "sideEffects", nulls = Nulls.SKIP)
+        public Builder sideEffects(Optional<SideEffects> sideEffects) {
+            this.sideEffects = sideEffects;
+            return this;
+        }
+
+        public Builder sideEffects(SideEffects sideEffects) {
+            this.sideEffects = Optional.ofNullable(sideEffects);
+            return this;
+        }
+
+        public Builder sideEffects(Nullable<SideEffects> sideEffects) {
+            if (sideEffects.isNull()) {
+                this.sideEffects = null;
+            } else if (sideEffects.isEmpty()) {
+                this.sideEffects = Optional.empty();
+            } else {
+                this.sideEffects = Optional.of(sideEffects.get());
+            }
+            return this;
+        }
+
         public ActionPatchRequest build() {
-            return new ActionPatchRequest(appId, instructions, llmInclusionStatus, segmentId, additionalProperties);
+            return new ActionPatchRequest(
+                    appId, instructions, llmInclusionStatus, segmentId, sideEffects, additionalProperties);
         }
     }
 }

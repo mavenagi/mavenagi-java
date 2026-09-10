@@ -8,6 +8,7 @@ import com.mavenagi.core.Suppliers;
 import com.mavenagi.resources.actions.AsyncActionsClient;
 import com.mavenagi.resources.agents.AsyncAgentsClient;
 import com.mavenagi.resources.analytics.AsyncAnalyticsClient;
+import com.mavenagi.resources.appdirectory.AsyncAppDirectoryClient;
 import com.mavenagi.resources.appsettings.AsyncAppSettingsClient;
 import com.mavenagi.resources.assets.AsyncAssetsClient;
 import com.mavenagi.resources.conversation.AsyncConversationClient;
@@ -33,6 +34,8 @@ public class AsyncMavenAGI {
     protected final Supplier<AsyncAgentsClient> agentsClient;
 
     protected final Supplier<AsyncAnalyticsClient> analyticsClient;
+
+    protected final Supplier<AsyncAppDirectoryClient> appDirectoryClient;
 
     protected final Supplier<AsyncAppSettingsClient> appSettingsClient;
 
@@ -69,6 +72,7 @@ public class AsyncMavenAGI {
         this.actionsClient = Suppliers.memoize(() -> new AsyncActionsClient(clientOptions));
         this.agentsClient = Suppliers.memoize(() -> new AsyncAgentsClient(clientOptions));
         this.analyticsClient = Suppliers.memoize(() -> new AsyncAnalyticsClient(clientOptions));
+        this.appDirectoryClient = Suppliers.memoize(() -> new AsyncAppDirectoryClient(clientOptions));
         this.appSettingsClient = Suppliers.memoize(() -> new AsyncAppSettingsClient(clientOptions));
         this.assetsClient = Suppliers.memoize(() -> new AsyncAssetsClient(clientOptions));
         this.conversationClient = Suppliers.memoize(() -> new AsyncConversationClient(clientOptions));
@@ -96,6 +100,10 @@ public class AsyncMavenAGI {
 
     public AsyncAnalyticsClient analytics() {
         return this.analyticsClient.get();
+    }
+
+    public AsyncAppDirectoryClient appDirectory() {
+        return this.appDirectoryClient.get();
     }
 
     public AsyncAppSettingsClient appSettings() {

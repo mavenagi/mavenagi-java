@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
+import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -28,6 +29,12 @@ public final class BotLogicFormSubmissionItem implements IBotLogicActionExecuted
 
     private final Optional<String> executionError;
 
+    private final Optional<Map<String, Object>> data;
+
+    private final Optional<OffsetDateTime> startedAt;
+
+    private final Optional<Long> durationMs;
+
     private final EntityIdWithoutAgent actionId;
 
     private final String actionName;
@@ -38,12 +45,18 @@ public final class BotLogicFormSubmissionItem implements IBotLogicActionExecuted
             Map<String, ActionExecutionParamValue> actionParameters,
             Optional<String> executionResult,
             Optional<String> executionError,
+            Optional<Map<String, Object>> data,
+            Optional<OffsetDateTime> startedAt,
+            Optional<Long> durationMs,
             EntityIdWithoutAgent actionId,
             String actionName,
             Map<String, Object> additionalProperties) {
         this.actionParameters = actionParameters;
         this.executionResult = executionResult;
         this.executionError = executionError;
+        this.data = data;
+        this.startedAt = startedAt;
+        this.durationMs = durationMs;
         this.actionId = actionId;
         this.actionName = actionName;
         this.additionalProperties = additionalProperties;
@@ -65,6 +78,34 @@ public final class BotLogicFormSubmissionItem implements IBotLogicActionExecuted
     @java.lang.Override
     public Optional<String> getExecutionError() {
         return executionError;
+    }
+
+    /**
+     * @return Structured data the action returned alongside its text result. Absent for actions that returned only text.
+     */
+    @JsonProperty("data")
+    @java.lang.Override
+    public Optional<Map<String, Object>> getData() {
+        return data;
+    }
+
+    /**
+     * @return When the action invocation started. Absent for actions executed before per-action timing was recorded, and for an invocation that never returned — see <code>durationMs</code>.
+     */
+    @JsonProperty("startedAt")
+    @java.lang.Override
+    public Optional<OffsetDateTime> getStartedAt() {
+        return startedAt;
+    }
+
+    /**
+     * @return How long the action invocation took, in milliseconds. Measures the invocation itself, not the agent's surrounding reasoning.
+     * <p>Absent in two cases: actions executed before per-action timing was recorded, and actions whose invocation never returned a result — it timed out, or threw before completing. The second case matters when aggregating: the attempts with no duration are disproportionately the slowest ones, so a percentile computed over this field alone is biased low. Count <code>executionError</code> alongside it rather than treating absent as &quot;fast&quot;.</p>
+     */
+    @JsonProperty("durationMs")
+    @java.lang.Override
+    public Optional<Long> getDurationMs() {
+        return durationMs;
     }
 
     @JsonProperty("actionId")
@@ -94,6 +135,9 @@ public final class BotLogicFormSubmissionItem implements IBotLogicActionExecuted
         return actionParameters.equals(other.actionParameters)
                 && executionResult.equals(other.executionResult)
                 && executionError.equals(other.executionError)
+                && data.equals(other.data)
+                && startedAt.equals(other.startedAt)
+                && durationMs.equals(other.durationMs)
                 && actionId.equals(other.actionId)
                 && actionName.equals(other.actionName);
     }
@@ -101,7 +145,14 @@ public final class BotLogicFormSubmissionItem implements IBotLogicActionExecuted
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.actionParameters, this.executionResult, this.executionError, this.actionId, this.actionName);
+                this.actionParameters,
+                this.executionResult,
+                this.executionError,
+                this.data,
+                this.startedAt,
+                this.durationMs,
+                this.actionId,
+                this.actionName);
     }
 
     @java.lang.Override
@@ -139,6 +190,28 @@ public final class BotLogicFormSubmissionItem implements IBotLogicActionExecuted
         _FinalStage executionError(Optional<String> executionError);
 
         _FinalStage executionError(String executionError);
+
+        /**
+         * <p>Structured data the action returned alongside its text result. Absent for actions that returned only text.</p>
+         */
+        _FinalStage data(Optional<Map<String, Object>> data);
+
+        _FinalStage data(Map<String, Object> data);
+
+        /**
+         * <p>When the action invocation started. Absent for actions executed before per-action timing was recorded, and for an invocation that never returned — see <code>durationMs</code>.</p>
+         */
+        _FinalStage startedAt(Optional<OffsetDateTime> startedAt);
+
+        _FinalStage startedAt(OffsetDateTime startedAt);
+
+        /**
+         * <p>How long the action invocation took, in milliseconds. Measures the invocation itself, not the agent's surrounding reasoning.</p>
+         * <p>Absent in two cases: actions executed before per-action timing was recorded, and actions whose invocation never returned a result — it timed out, or threw before completing. The second case matters when aggregating: the attempts with no duration are disproportionately the slowest ones, so a percentile computed over this field alone is biased low. Count <code>executionError</code> alongside it rather than treating absent as &quot;fast&quot;.</p>
+         */
+        _FinalStage durationMs(Optional<Long> durationMs);
+
+        _FinalStage durationMs(Long durationMs);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -146,6 +219,12 @@ public final class BotLogicFormSubmissionItem implements IBotLogicActionExecuted
         private EntityIdWithoutAgent actionId;
 
         private String actionName;
+
+        private Optional<Long> durationMs = Optional.empty();
+
+        private Optional<OffsetDateTime> startedAt = Optional.empty();
+
+        private Optional<Map<String, Object>> data = Optional.empty();
 
         private Optional<String> executionError = Optional.empty();
 
@@ -163,6 +242,9 @@ public final class BotLogicFormSubmissionItem implements IBotLogicActionExecuted
             actionParameters(other.getActionParameters());
             executionResult(other.getExecutionResult());
             executionError(other.getExecutionError());
+            data(other.getData());
+            startedAt(other.getStartedAt());
+            durationMs(other.getDurationMs());
             actionId(other.getActionId());
             actionName(other.getActionName());
             return this;
@@ -179,6 +261,68 @@ public final class BotLogicFormSubmissionItem implements IBotLogicActionExecuted
         @JsonSetter("actionName")
         public _FinalStage actionName(@NotNull String actionName) {
             this.actionName = Objects.requireNonNull(actionName, "actionName must not be null");
+            return this;
+        }
+
+        /**
+         * <p>How long the action invocation took, in milliseconds. Measures the invocation itself, not the agent's surrounding reasoning.</p>
+         * <p>Absent in two cases: actions executed before per-action timing was recorded, and actions whose invocation never returned a result — it timed out, or threw before completing. The second case matters when aggregating: the attempts with no duration are disproportionately the slowest ones, so a percentile computed over this field alone is biased low. Count <code>executionError</code> alongside it rather than treating absent as &quot;fast&quot;.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage durationMs(Long durationMs) {
+            this.durationMs = Optional.ofNullable(durationMs);
+            return this;
+        }
+
+        /**
+         * <p>How long the action invocation took, in milliseconds. Measures the invocation itself, not the agent's surrounding reasoning.</p>
+         * <p>Absent in two cases: actions executed before per-action timing was recorded, and actions whose invocation never returned a result — it timed out, or threw before completing. The second case matters when aggregating: the attempts with no duration are disproportionately the slowest ones, so a percentile computed over this field alone is biased low. Count <code>executionError</code> alongside it rather than treating absent as &quot;fast&quot;.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "durationMs", nulls = Nulls.SKIP)
+        public _FinalStage durationMs(Optional<Long> durationMs) {
+            this.durationMs = durationMs;
+            return this;
+        }
+
+        /**
+         * <p>When the action invocation started. Absent for actions executed before per-action timing was recorded, and for an invocation that never returned — see <code>durationMs</code>.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage startedAt(OffsetDateTime startedAt) {
+            this.startedAt = Optional.ofNullable(startedAt);
+            return this;
+        }
+
+        /**
+         * <p>When the action invocation started. Absent for actions executed before per-action timing was recorded, and for an invocation that never returned — see <code>durationMs</code>.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "startedAt", nulls = Nulls.SKIP)
+        public _FinalStage startedAt(Optional<OffsetDateTime> startedAt) {
+            this.startedAt = startedAt;
+            return this;
+        }
+
+        /**
+         * <p>Structured data the action returned alongside its text result. Absent for actions that returned only text.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage data(Map<String, Object> data) {
+            this.data = Optional.ofNullable(data);
+            return this;
+        }
+
+        /**
+         * <p>Structured data the action returned alongside its text result. Absent for actions that returned only text.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "data", nulls = Nulls.SKIP)
+        public _FinalStage data(Optional<Map<String, Object>> data) {
+            this.data = data;
             return this;
         }
 
@@ -235,7 +379,15 @@ public final class BotLogicFormSubmissionItem implements IBotLogicActionExecuted
         @java.lang.Override
         public BotLogicFormSubmissionItem build() {
             return new BotLogicFormSubmissionItem(
-                    actionParameters, executionResult, executionError, actionId, actionName, additionalProperties);
+                    actionParameters,
+                    executionResult,
+                    executionError,
+                    data,
+                    startedAt,
+                    durationMs,
+                    actionId,
+                    actionName,
+                    additionalProperties);
         }
     }
 }

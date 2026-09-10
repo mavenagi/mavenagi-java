@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
+import com.mavenagi.resources.commons.types.ConversationMode;
 import com.mavenagi.resources.commons.types.EntityIdFilter;
 import com.mavenagi.resources.commons.types.FeedbackType;
 import com.mavenagi.resources.commons.types.NumberRange;
@@ -62,6 +63,8 @@ public final class ConversationFilter {
 
     private final Optional<List<Sentiment>> sentiment;
 
+    private final Optional<List<ConversationMode>> conversationMode;
+
     private final Optional<List<String>> tags;
 
     private final Optional<List<String>> agentUserIds;
@@ -107,6 +110,7 @@ public final class ConversationFilter {
             Optional<List<QualityReason>> qualityReason,
             Optional<List<ResponseLength>> responseLength,
             Optional<List<Sentiment>> sentiment,
+            Optional<List<ConversationMode>> conversationMode,
             Optional<List<String>> tags,
             Optional<List<String>> agentUserIds,
             Optional<List<ResolutionStatus>> resolutionStatus,
@@ -137,6 +141,7 @@ public final class ConversationFilter {
         this.qualityReason = qualityReason;
         this.responseLength = responseLength;
         this.sentiment = sentiment;
+        this.conversationMode = conversationMode;
         this.tags = tags;
         this.agentUserIds = agentUserIds;
         this.resolutionStatus = resolutionStatus;
@@ -303,6 +308,15 @@ public final class ConversationFilter {
     }
 
     /**
+     * @return Filter by whether the conversation is spoken or written. Platform-assigned, never
+     * customer-writable.
+     */
+    @JsonProperty("conversationMode")
+    public Optional<List<ConversationMode>> getConversationMode() {
+        return conversationMode;
+    }
+
+    /**
      * @return Filter by tags applied to the conversation
      */
     @JsonProperty("tags")
@@ -449,6 +463,7 @@ public final class ConversationFilter {
                 && qualityReason.equals(other.qualityReason)
                 && responseLength.equals(other.responseLength)
                 && sentiment.equals(other.sentiment)
+                && conversationMode.equals(other.conversationMode)
                 && tags.equals(other.tags)
                 && agentUserIds.equals(other.agentUserIds)
                 && resolutionStatus.equals(other.resolutionStatus)
@@ -483,6 +498,7 @@ public final class ConversationFilter {
                 this.qualityReason,
                 this.responseLength,
                 this.sentiment,
+                this.conversationMode,
                 this.tags,
                 this.agentUserIds,
                 this.resolutionStatus,
@@ -541,6 +557,8 @@ public final class ConversationFilter {
 
         private Optional<List<Sentiment>> sentiment = Optional.empty();
 
+        private Optional<List<ConversationMode>> conversationMode = Optional.empty();
+
         private Optional<List<String>> tags = Optional.empty();
 
         private Optional<List<String>> agentUserIds = Optional.empty();
@@ -589,6 +607,7 @@ public final class ConversationFilter {
             qualityReason(other.getQualityReason());
             responseLength(other.getResponseLength());
             sentiment(other.getSentiment());
+            conversationMode(other.getConversationMode());
             tags(other.getTags());
             agentUserIds(other.getAgentUserIds());
             resolutionStatus(other.getResolutionStatus());
@@ -851,6 +870,21 @@ public final class ConversationFilter {
         }
 
         /**
+         * <p>Filter by whether the conversation is spoken or written. Platform-assigned, never
+         * customer-writable.</p>
+         */
+        @JsonSetter(value = "conversationMode", nulls = Nulls.SKIP)
+        public Builder conversationMode(Optional<List<ConversationMode>> conversationMode) {
+            this.conversationMode = conversationMode;
+            return this;
+        }
+
+        public Builder conversationMode(List<ConversationMode> conversationMode) {
+            this.conversationMode = Optional.ofNullable(conversationMode);
+            return this;
+        }
+
+        /**
          * <p>Filter by tags applied to the conversation</p>
          */
         @JsonSetter(value = "tags", nulls = Nulls.SKIP)
@@ -1065,6 +1099,7 @@ public final class ConversationFilter {
                     qualityReason,
                     responseLength,
                     sentiment,
+                    conversationMode,
                     tags,
                     agentUserIds,
                     resolutionStatus,

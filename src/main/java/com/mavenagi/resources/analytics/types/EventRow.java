@@ -13,8 +13,10 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
 import com.mavenagi.resources.commons.types.EventField;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -25,14 +27,18 @@ public final class EventRow implements IRowBase {
 
     private final Map<EventField, FieldValue> identifier;
 
+    private final List<EventRowIdentifier> identifiers;
+
     private final Map<String, Object> additionalProperties;
 
     private EventRow(
             Map<String, CellData> data,
             Map<EventField, FieldValue> identifier,
+            List<EventRowIdentifier> identifiers,
             Map<String, Object> additionalProperties) {
         this.data = data;
         this.identifier = identifier;
+        this.identifiers = identifiers;
         this.additionalProperties = additionalProperties;
     }
 
@@ -46,12 +52,21 @@ public final class EventRow implements IRowBase {
     }
 
     /**
-     * @return A unique identifier for each row, consisting of field names mapped to their respective values.
-     * This includes time groupings and any specified field groupings.
+     * @return Keyed by field, so it cannot represent two groupings that share a key - notably two
+     * intelligent fields. Use <code>identifiers</code>, which carries one entry per grouping in request
+     * order.
      */
     @JsonProperty("identifier")
     public Map<EventField, FieldValue> getIdentifier() {
         return identifier;
+    }
+
+    /**
+     * @return One entry per grouping, in the order the groupings were requested.
+     */
+    @JsonProperty("identifiers")
+    public List<EventRowIdentifier> getIdentifiers() {
+        return identifiers;
     }
 
     @java.lang.Override
@@ -66,12 +81,12 @@ public final class EventRow implements IRowBase {
     }
 
     private boolean equalTo(EventRow other) {
-        return data.equals(other.data) && identifier.equals(other.identifier);
+        return data.equals(other.data) && identifier.equals(other.identifier) && identifiers.equals(other.identifiers);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.data, this.identifier);
+        return Objects.hash(this.data, this.identifier, this.identifiers);
     }
 
     @java.lang.Override
@@ -89,6 +104,8 @@ public final class EventRow implements IRowBase {
 
         private Map<EventField, FieldValue> identifier = new LinkedHashMap<>();
 
+        private List<EventRowIdentifier> identifiers = new ArrayList<>();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -97,6 +114,7 @@ public final class EventRow implements IRowBase {
         public Builder from(EventRow other) {
             data(other.getData());
             identifier(other.getIdentifier());
+            identifiers(other.getIdentifiers());
             return this;
         }
 
@@ -125,8 +143,9 @@ public final class EventRow implements IRowBase {
         }
 
         /**
-         * <p>A unique identifier for each row, consisting of field names mapped to their respective values.
-         * This includes time groupings and any specified field groupings.</p>
+         * <p>Keyed by field, so it cannot represent two groupings that share a key - notably two
+         * intelligent fields. Use <code>identifiers</code>, which carries one entry per grouping in request
+         * order.</p>
          */
         @JsonSetter(value = "identifier", nulls = Nulls.SKIP)
         public Builder identifier(Map<EventField, FieldValue> identifier) {
@@ -149,8 +168,32 @@ public final class EventRow implements IRowBase {
             return this;
         }
 
+        /**
+         * <p>One entry per grouping, in the order the groupings were requested.</p>
+         */
+        @JsonSetter(value = "identifiers", nulls = Nulls.SKIP)
+        public Builder identifiers(List<EventRowIdentifier> identifiers) {
+            this.identifiers.clear();
+            if (identifiers != null) {
+                this.identifiers.addAll(identifiers);
+            }
+            return this;
+        }
+
+        public Builder addIdentifiers(EventRowIdentifier identifiers) {
+            this.identifiers.add(identifiers);
+            return this;
+        }
+
+        public Builder addAllIdentifiers(List<EventRowIdentifier> identifiers) {
+            if (identifiers != null) {
+                this.identifiers.addAll(identifiers);
+            }
+            return this;
+        }
+
         public EventRow build() {
-            return new EventRow(data, identifier, additionalProperties);
+            return new EventRow(data, identifier, identifiers, additionalProperties);
         }
     }
 }

@@ -36,16 +36,25 @@ public final class Link {
         this.additionalProperties = additionalProperties;
     }
 
+    /**
+     * @return Link text.
+     */
     @JsonProperty("title")
     public String getTitle() {
         return title;
     }
 
+    /**
+     * @return Optional longer explanation of where the link goes.
+     */
     @JsonProperty("description")
     public Optional<String> getDescription() {
         return description;
     }
 
+    /**
+     * @return Destination URL.
+     */
     @JsonProperty("url")
     public String getUrl() {
         return url;
@@ -81,18 +90,27 @@ public final class Link {
     }
 
     public interface TitleStage {
+        /**
+         * <p>Link text.</p>
+         */
         UrlStage title(@NotNull String title);
 
         Builder from(Link other);
     }
 
     public interface UrlStage {
+        /**
+         * <p>Destination URL.</p>
+         */
         _FinalStage url(@NotNull String url);
     }
 
     public interface _FinalStage {
         Link build();
 
+        /**
+         * <p>Optional longer explanation of where the link goes.</p>
+         */
         _FinalStage description(Optional<String> description);
 
         _FinalStage description(String description);
@@ -119,6 +137,11 @@ public final class Link {
             return this;
         }
 
+        /**
+         * <p>Link text.</p>
+         * <p>Link text.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
         @JsonSetter("title")
         public UrlStage title(@NotNull String title) {
@@ -126,6 +149,11 @@ public final class Link {
             return this;
         }
 
+        /**
+         * <p>Destination URL.</p>
+         * <p>Destination URL.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
         @JsonSetter("url")
         public _FinalStage url(@NotNull String url) {
@@ -133,12 +161,19 @@ public final class Link {
             return this;
         }
 
+        /**
+         * <p>Optional longer explanation of where the link goes.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
         public _FinalStage description(String description) {
             this.description = Optional.ofNullable(description);
             return this;
         }
 
+        /**
+         * <p>Optional longer explanation of where the link goes.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "description", nulls = Nulls.SKIP)
         public _FinalStage description(Optional<String> description) {

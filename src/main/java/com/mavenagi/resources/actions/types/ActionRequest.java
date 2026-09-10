@@ -17,6 +17,7 @@ import com.mavenagi.resources.commons.types.EntityIdBase;
 import com.mavenagi.resources.commons.types.IActionBase;
 import com.mavenagi.resources.commons.types.IActionProperties;
 import com.mavenagi.resources.commons.types.Precondition;
+import com.mavenagi.resources.commons.types.SideEffects;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -42,6 +43,8 @@ public final class ActionRequest implements IActionBase, IActionProperties {
 
     private final Optional<String> language;
 
+    private final Optional<SideEffects> sideEffects;
+
     private final EntityIdBase actionId;
 
     private final Map<String, Object> additionalProperties;
@@ -54,6 +57,7 @@ public final class ActionRequest implements IActionBase, IActionProperties {
             Optional<Precondition> precondition,
             List<ActionParameter> userFormParameters,
             Optional<String> language,
+            Optional<SideEffects> sideEffects,
             EntityIdBase actionId,
             Map<String, Object> additionalProperties) {
         this.name = name;
@@ -63,6 +67,7 @@ public final class ActionRequest implements IActionBase, IActionProperties {
         this.precondition = precondition;
         this.userFormParameters = userFormParameters;
         this.language = language;
+        this.sideEffects = sideEffects;
         this.actionId = actionId;
         this.additionalProperties = additionalProperties;
     }
@@ -131,6 +136,17 @@ public final class ActionRequest implements IActionBase, IActionProperties {
     }
 
     /**
+     * @return Whether executing this action causes side effects. Absent means the action has never
+     * declared either way.
+     * <p>This value is informational only. It does not yet affect action execution.</p>
+     */
+    @JsonProperty("sideEffects")
+    @java.lang.Override
+    public Optional<SideEffects> getSideEffects() {
+        return sideEffects;
+    }
+
+    /**
      * @return ID that uniquely identifies this action
      */
     @JsonProperty("actionId")
@@ -157,6 +173,7 @@ public final class ActionRequest implements IActionBase, IActionProperties {
                 && precondition.equals(other.precondition)
                 && userFormParameters.equals(other.userFormParameters)
                 && language.equals(other.language)
+                && sideEffects.equals(other.sideEffects)
                 && actionId.equals(other.actionId);
     }
 
@@ -170,6 +187,7 @@ public final class ActionRequest implements IActionBase, IActionProperties {
                 this.precondition,
                 this.userFormParameters,
                 this.language,
+                this.sideEffects,
                 this.actionId);
     }
 
@@ -244,6 +262,15 @@ public final class ActionRequest implements IActionBase, IActionProperties {
         _FinalStage language(Optional<String> language);
 
         _FinalStage language(String language);
+
+        /**
+         * <p>Whether executing this action causes side effects. Absent means the action has never
+         * declared either way.</p>
+         * <p>This value is informational only. It does not yet affect action execution.</p>
+         */
+        _FinalStage sideEffects(Optional<SideEffects> sideEffects);
+
+        _FinalStage sideEffects(SideEffects sideEffects);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -256,6 +283,8 @@ public final class ActionRequest implements IActionBase, IActionProperties {
         private boolean userInteractionRequired;
 
         private EntityIdBase actionId;
+
+        private Optional<SideEffects> sideEffects = Optional.empty();
 
         private Optional<String> language = Optional.empty();
 
@@ -279,6 +308,7 @@ public final class ActionRequest implements IActionBase, IActionProperties {
             precondition(other.getPrecondition());
             userFormParameters(other.getUserFormParameters());
             language(other.getLanguage());
+            sideEffects(other.getSideEffects());
             actionId(other.getActionId());
             return this;
         }
@@ -328,6 +358,30 @@ public final class ActionRequest implements IActionBase, IActionProperties {
         @JsonSetter("actionId")
         public _FinalStage actionId(@NotNull EntityIdBase actionId) {
             this.actionId = Objects.requireNonNull(actionId, "actionId must not be null");
+            return this;
+        }
+
+        /**
+         * <p>Whether executing this action causes side effects. Absent means the action has never
+         * declared either way.</p>
+         * <p>This value is informational only. It does not yet affect action execution.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage sideEffects(SideEffects sideEffects) {
+            this.sideEffects = Optional.ofNullable(sideEffects);
+            return this;
+        }
+
+        /**
+         * <p>Whether executing this action causes side effects. Absent means the action has never
+         * declared either way.</p>
+         * <p>This value is informational only. It does not yet affect action execution.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "sideEffects", nulls = Nulls.SKIP)
+        public _FinalStage sideEffects(Optional<SideEffects> sideEffects) {
+            this.sideEffects = sideEffects;
             return this;
         }
 
@@ -436,6 +490,7 @@ public final class ActionRequest implements IActionBase, IActionProperties {
                     precondition,
                     userFormParameters,
                     language,
+                    sideEffects,
                     actionId,
                     additionalProperties);
         }
