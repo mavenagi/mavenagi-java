@@ -85,7 +85,8 @@ public final class KnowledgeBasePatchRequest {
     }
 
     /**
-     * @return The tags of the knowledge base.
+     * @return Deprecated. Superseded by charters, which determine when knowledge bases and actions apply. Has no effect for agents using charters.
+     * <p>The tags of the knowledge base.</p>
      */
     @JsonProperty("tags")
     public Optional<Set<String>> getTags() {
@@ -101,7 +102,9 @@ public final class KnowledgeBasePatchRequest {
     }
 
     /**
-     * @return The preconditions that must be met for a knowledge base to be relevant to a conversation. Can be used to restrict knowledge bases to certain types of users. A null value will remove the precondition from the knowledge base, it will be available on all conversations.
+     * @return Deprecated. Superseded by charters, which determine when knowledge bases and actions apply. Has no effect for agents using charters.
+     * <p>The preconditions that must be met for a knowledge base to be relevant to a conversation.
+     * A null value will remove the precondition from the knowledge base, it will be available on all conversations.</p>
      */
     @JsonIgnore
     public Optional<Precondition> getPrecondition() {
@@ -112,10 +115,9 @@ public final class KnowledgeBasePatchRequest {
     }
 
     /**
-     * @return The ID of a segment that must be matched for the knowledge base to be relevant to a conversation.
-     * A null value will remove the segment from the knowledge base, it will be available on all conversations.
-     * <p>Segments are replacing inline preconditions - a knowledge base may not have both an inline precondition and a segment.
-     * Inline precondition support will be removed in a future release.</p>
+     * @return Deprecated. Superseded by charters, which determine when knowledge bases and actions apply. Has no effect for agents using charters.
+     * <p>The ID of a segment that must be matched for the knowledge base to be relevant to a conversation.
+     * A null value will remove the segment from the knowledge base, it will be available on all conversations.</p>
      */
     @JsonIgnore
     public Optional<EntityId> getSegmentId() {
@@ -126,11 +128,10 @@ public final class KnowledgeBasePatchRequest {
     }
 
     /**
-     * @return The IDs of segment that should be matched (under an OR clause) for the knowledge base to be relevant to a
-     * conversation. An empty list will remove segments from the knowledge base, it will be available on all
-     * conversations.
-     * Segments are replacing inline preconditions - a knowledge base may not have both an inline precondition and a segment.
-     * Inline precondition support will be removed in a future release.
+     * @return Deprecated. Superseded by charters, which determine when knowledge bases and actions apply. Has no effect for agents using charters.
+     * <p>The IDs of segments that should be matched (under an OR clause) for the knowledge base to be relevant
+     * to a conversation. An empty list will remove segments from the knowledge base, it will be available on
+     * all conversations.</p>
      */
     @JsonProperty("segmentIds")
     public Optional<List<EntityId>> getSegmentIds() {
@@ -265,6 +266,7 @@ public final class KnowledgeBasePatchRequest {
         }
 
         /**
+         * <p>Deprecated. Superseded by charters, which determine when knowledge bases and actions apply. Has no effect for agents using charters.</p>
          * <p>The tags of the knowledge base.</p>
          */
         @JsonSetter(value = "tags", nulls = Nulls.SKIP)
@@ -293,7 +295,9 @@ public final class KnowledgeBasePatchRequest {
         }
 
         /**
-         * <p>The preconditions that must be met for a knowledge base to be relevant to a conversation. Can be used to restrict knowledge bases to certain types of users. A null value will remove the precondition from the knowledge base, it will be available on all conversations.</p>
+         * <p>Deprecated. Superseded by charters, which determine when knowledge bases and actions apply. Has no effect for agents using charters.</p>
+         * <p>The preconditions that must be met for a knowledge base to be relevant to a conversation.
+         * A null value will remove the precondition from the knowledge base, it will be available on all conversations.</p>
          */
         @JsonSetter(value = "precondition", nulls = Nulls.SKIP)
         public Builder precondition(Optional<Precondition> precondition) {
@@ -318,10 +322,9 @@ public final class KnowledgeBasePatchRequest {
         }
 
         /**
+         * <p>Deprecated. Superseded by charters, which determine when knowledge bases and actions apply. Has no effect for agents using charters.</p>
          * <p>The ID of a segment that must be matched for the knowledge base to be relevant to a conversation.
          * A null value will remove the segment from the knowledge base, it will be available on all conversations.</p>
-         * <p>Segments are replacing inline preconditions - a knowledge base may not have both an inline precondition and a segment.
-         * Inline precondition support will be removed in a future release.</p>
          */
         @JsonSetter(value = "segmentId", nulls = Nulls.SKIP)
         public Builder segmentId(Optional<EntityId> segmentId) {
@@ -346,11 +349,10 @@ public final class KnowledgeBasePatchRequest {
         }
 
         /**
-         * <p>The IDs of segment that should be matched (under an OR clause) for the knowledge base to be relevant to a
-         * conversation. An empty list will remove segments from the knowledge base, it will be available on all
-         * conversations.
-         * Segments are replacing inline preconditions - a knowledge base may not have both an inline precondition and a segment.
-         * Inline precondition support will be removed in a future release.</p>
+         * <p>Deprecated. Superseded by charters, which determine when knowledge bases and actions apply. Has no effect for agents using charters.</p>
+         * <p>The IDs of segments that should be matched (under an OR clause) for the knowledge base to be relevant
+         * to a conversation. An empty list will remove segments from the knowledge base, it will be available on
+         * all conversations.</p>
          */
         @JsonSetter(value = "segmentIds", nulls = Nulls.SKIP)
         public Builder segmentIds(Optional<List<EntityId>> segmentIds) {

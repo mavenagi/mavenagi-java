@@ -9,15 +9,79 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public final class UserEventName {
     public static final UserEventName CSAT_SUBMITTED = new UserEventName(Value.CSAT_SUBMITTED, "CSAT_SUBMITTED");
 
-    public static final UserEventName CHAT_OPENED = new UserEventName(Value.CHAT_OPENED, "CHAT_OPENED");
+    public static final UserEventName SIGNED_OUT = new UserEventName(Value.SIGNED_OUT, "SIGNED_OUT");
+
+    public static final UserEventName PAYMENT_FAILED = new UserEventName(Value.PAYMENT_FAILED, "PAYMENT_FAILED");
 
     public static final UserEventName TEXT_INSERTED = new UserEventName(Value.TEXT_INSERTED, "TEXT_INSERTED");
 
-    public static final UserEventName BUTTON_CLICKED = new UserEventName(Value.BUTTON_CLICKED, "BUTTON_CLICKED");
+    public static final UserEventName ACCOUNT_CREATED = new UserEventName(Value.ACCOUNT_CREATED, "ACCOUNT_CREATED");
+
+    public static final UserEventName FLOW_STEP_COMPLETED =
+            new UserEventName(Value.FLOW_STEP_COMPLETED, "FLOW_STEP_COMPLETED");
+
+    public static final UserEventName ARTICLE_VIEWED = new UserEventName(Value.ARTICLE_VIEWED, "ARTICLE_VIEWED");
+
+    public static final UserEventName SUBSCRIPTION_STARTED =
+            new UserEventName(Value.SUBSCRIPTION_STARTED, "SUBSCRIPTION_STARTED");
+
+    public static final UserEventName LINK_CLICKED = new UserEventName(Value.LINK_CLICKED, "LINK_CLICKED");
+
+    public static final UserEventName ERROR_DISPLAYED = new UserEventName(Value.ERROR_DISPLAYED, "ERROR_DISPLAYED");
+
+    public static final UserEventName FLOW_ABANDONED = new UserEventName(Value.FLOW_ABANDONED, "FLOW_ABANDONED");
+
+    public static final UserEventName HANDOFF_REQUESTED =
+            new UserEventName(Value.HANDOFF_REQUESTED, "HANDOFF_REQUESTED");
+
+    public static final UserEventName FLOW_STARTED = new UserEventName(Value.FLOW_STARTED, "FLOW_STARTED");
+
+    public static final UserEventName PAGE_VIEWED = new UserEventName(Value.PAGE_VIEWED, "PAGE_VIEWED");
+
+    public static final UserEventName ORDER_CANCELLED = new UserEventName(Value.ORDER_CANCELLED, "ORDER_CANCELLED");
 
     public static final UserEventName CHAT_CLOSED = new UserEventName(Value.CHAT_CLOSED, "CHAT_CLOSED");
 
-    public static final UserEventName LINK_CLICKED = new UserEventName(Value.LINK_CLICKED, "LINK_CLICKED");
+    public static final UserEventName SIGNED_IN = new UserEventName(Value.SIGNED_IN, "SIGNED_IN");
+
+    public static final UserEventName FLOW_COMPLETED = new UserEventName(Value.FLOW_COMPLETED, "FLOW_COMPLETED");
+
+    public static final UserEventName SUBSCRIPTION_CANCELLED =
+            new UserEventName(Value.SUBSCRIPTION_CANCELLED, "SUBSCRIPTION_CANCELLED");
+
+    public static final UserEventName BUTTON_CLICKED = new UserEventName(Value.BUTTON_CLICKED, "BUTTON_CLICKED");
+
+    public static final UserEventName FILE_DOWNLOADED = new UserEventName(Value.FILE_DOWNLOADED, "FILE_DOWNLOADED");
+
+    public static final UserEventName TICKET_CREATED = new UserEventName(Value.TICKET_CREATED, "TICKET_CREATED");
+
+    public static final UserEventName CONTENT_TRANSLATED =
+            new UserEventName(Value.CONTENT_TRANSLATED, "CONTENT_TRANSLATED");
+
+    public static final UserEventName FORM_STARTED = new UserEventName(Value.FORM_STARTED, "FORM_STARTED");
+
+    public static final UserEventName SEARCH_SUBMITTED = new UserEventName(Value.SEARCH_SUBMITTED, "SEARCH_SUBMITTED");
+
+    public static final UserEventName CHAT_OPENED = new UserEventName(Value.CHAT_OPENED, "CHAT_OPENED");
+
+    public static final UserEventName CONVERSATION_ENDED =
+            new UserEventName(Value.CONVERSATION_ENDED, "CONVERSATION_ENDED");
+
+    public static final UserEventName TEXT_COPIED = new UserEventName(Value.TEXT_COPIED, "TEXT_COPIED");
+
+    public static final UserEventName FORM_SUBMITTED = new UserEventName(Value.FORM_SUBMITTED, "FORM_SUBMITTED");
+
+    public static final UserEventName SUGGESTION_CLICKED =
+            new UserEventName(Value.SUGGESTION_CLICKED, "SUGGESTION_CLICKED");
+
+    public static final UserEventName ORDER_PLACED = new UserEventName(Value.ORDER_PLACED, "ORDER_PLACED");
+
+    public static final UserEventName SEARCH_RESULT_CLICKED =
+            new UserEventName(Value.SEARCH_RESULT_CLICKED, "SEARCH_RESULT_CLICKED");
+
+    public static final UserEventName FILE_UPLOADED = new UserEventName(Value.FILE_UPLOADED, "FILE_UPLOADED");
+
+    public static final UserEventName FORM_ABANDONED = new UserEventName(Value.FORM_ABANDONED, "FORM_ABANDONED");
 
     private final Value value;
 
@@ -53,16 +117,72 @@ public final class UserEventName {
         switch (value) {
             case CSAT_SUBMITTED:
                 return visitor.visitCsatSubmitted();
-            case CHAT_OPENED:
-                return visitor.visitChatOpened();
+            case SIGNED_OUT:
+                return visitor.visitSignedOut();
+            case PAYMENT_FAILED:
+                return visitor.visitPaymentFailed();
             case TEXT_INSERTED:
                 return visitor.visitTextInserted();
-            case BUTTON_CLICKED:
-                return visitor.visitButtonClicked();
-            case CHAT_CLOSED:
-                return visitor.visitChatClosed();
+            case ACCOUNT_CREATED:
+                return visitor.visitAccountCreated();
+            case FLOW_STEP_COMPLETED:
+                return visitor.visitFlowStepCompleted();
+            case ARTICLE_VIEWED:
+                return visitor.visitArticleViewed();
+            case SUBSCRIPTION_STARTED:
+                return visitor.visitSubscriptionStarted();
             case LINK_CLICKED:
                 return visitor.visitLinkClicked();
+            case ERROR_DISPLAYED:
+                return visitor.visitErrorDisplayed();
+            case FLOW_ABANDONED:
+                return visitor.visitFlowAbandoned();
+            case HANDOFF_REQUESTED:
+                return visitor.visitHandoffRequested();
+            case FLOW_STARTED:
+                return visitor.visitFlowStarted();
+            case PAGE_VIEWED:
+                return visitor.visitPageViewed();
+            case ORDER_CANCELLED:
+                return visitor.visitOrderCancelled();
+            case CHAT_CLOSED:
+                return visitor.visitChatClosed();
+            case SIGNED_IN:
+                return visitor.visitSignedIn();
+            case FLOW_COMPLETED:
+                return visitor.visitFlowCompleted();
+            case SUBSCRIPTION_CANCELLED:
+                return visitor.visitSubscriptionCancelled();
+            case BUTTON_CLICKED:
+                return visitor.visitButtonClicked();
+            case FILE_DOWNLOADED:
+                return visitor.visitFileDownloaded();
+            case TICKET_CREATED:
+                return visitor.visitTicketCreated();
+            case CONTENT_TRANSLATED:
+                return visitor.visitContentTranslated();
+            case FORM_STARTED:
+                return visitor.visitFormStarted();
+            case SEARCH_SUBMITTED:
+                return visitor.visitSearchSubmitted();
+            case CHAT_OPENED:
+                return visitor.visitChatOpened();
+            case CONVERSATION_ENDED:
+                return visitor.visitConversationEnded();
+            case TEXT_COPIED:
+                return visitor.visitTextCopied();
+            case FORM_SUBMITTED:
+                return visitor.visitFormSubmitted();
+            case SUGGESTION_CLICKED:
+                return visitor.visitSuggestionClicked();
+            case ORDER_PLACED:
+                return visitor.visitOrderPlaced();
+            case SEARCH_RESULT_CLICKED:
+                return visitor.visitSearchResultClicked();
+            case FILE_UPLOADED:
+                return visitor.visitFileUploaded();
+            case FORM_ABANDONED:
+                return visitor.visitFormAbandoned();
             case UNKNOWN:
             default:
                 return visitor.visitUnknown(string);
@@ -74,16 +194,72 @@ public final class UserEventName {
         switch (value) {
             case "CSAT_SUBMITTED":
                 return CSAT_SUBMITTED;
-            case "CHAT_OPENED":
-                return CHAT_OPENED;
+            case "SIGNED_OUT":
+                return SIGNED_OUT;
+            case "PAYMENT_FAILED":
+                return PAYMENT_FAILED;
             case "TEXT_INSERTED":
                 return TEXT_INSERTED;
-            case "BUTTON_CLICKED":
-                return BUTTON_CLICKED;
-            case "CHAT_CLOSED":
-                return CHAT_CLOSED;
+            case "ACCOUNT_CREATED":
+                return ACCOUNT_CREATED;
+            case "FLOW_STEP_COMPLETED":
+                return FLOW_STEP_COMPLETED;
+            case "ARTICLE_VIEWED":
+                return ARTICLE_VIEWED;
+            case "SUBSCRIPTION_STARTED":
+                return SUBSCRIPTION_STARTED;
             case "LINK_CLICKED":
                 return LINK_CLICKED;
+            case "ERROR_DISPLAYED":
+                return ERROR_DISPLAYED;
+            case "FLOW_ABANDONED":
+                return FLOW_ABANDONED;
+            case "HANDOFF_REQUESTED":
+                return HANDOFF_REQUESTED;
+            case "FLOW_STARTED":
+                return FLOW_STARTED;
+            case "PAGE_VIEWED":
+                return PAGE_VIEWED;
+            case "ORDER_CANCELLED":
+                return ORDER_CANCELLED;
+            case "CHAT_CLOSED":
+                return CHAT_CLOSED;
+            case "SIGNED_IN":
+                return SIGNED_IN;
+            case "FLOW_COMPLETED":
+                return FLOW_COMPLETED;
+            case "SUBSCRIPTION_CANCELLED":
+                return SUBSCRIPTION_CANCELLED;
+            case "BUTTON_CLICKED":
+                return BUTTON_CLICKED;
+            case "FILE_DOWNLOADED":
+                return FILE_DOWNLOADED;
+            case "TICKET_CREATED":
+                return TICKET_CREATED;
+            case "CONTENT_TRANSLATED":
+                return CONTENT_TRANSLATED;
+            case "FORM_STARTED":
+                return FORM_STARTED;
+            case "SEARCH_SUBMITTED":
+                return SEARCH_SUBMITTED;
+            case "CHAT_OPENED":
+                return CHAT_OPENED;
+            case "CONVERSATION_ENDED":
+                return CONVERSATION_ENDED;
+            case "TEXT_COPIED":
+                return TEXT_COPIED;
+            case "FORM_SUBMITTED":
+                return FORM_SUBMITTED;
+            case "SUGGESTION_CLICKED":
+                return SUGGESTION_CLICKED;
+            case "ORDER_PLACED":
+                return ORDER_PLACED;
+            case "SEARCH_RESULT_CLICKED":
+                return SEARCH_RESULT_CLICKED;
+            case "FILE_UPLOADED":
+                return FILE_UPLOADED;
+            case "FORM_ABANDONED":
+                return FORM_ABANDONED;
             default:
                 return new UserEventName(Value.UNKNOWN, value);
         }
@@ -102,6 +278,62 @@ public final class UserEventName {
 
         CSAT_SUBMITTED,
 
+        PAGE_VIEWED,
+
+        SUGGESTION_CLICKED,
+
+        CONVERSATION_ENDED,
+
+        HANDOFF_REQUESTED,
+
+        TICKET_CREATED,
+
+        TEXT_COPIED,
+
+        CONTENT_TRANSLATED,
+
+        SEARCH_SUBMITTED,
+
+        SEARCH_RESULT_CLICKED,
+
+        ARTICLE_VIEWED,
+
+        FILE_UPLOADED,
+
+        FILE_DOWNLOADED,
+
+        FORM_STARTED,
+
+        FORM_SUBMITTED,
+
+        FORM_ABANDONED,
+
+        FLOW_STARTED,
+
+        FLOW_STEP_COMPLETED,
+
+        FLOW_COMPLETED,
+
+        FLOW_ABANDONED,
+
+        ACCOUNT_CREATED,
+
+        SIGNED_IN,
+
+        SIGNED_OUT,
+
+        SUBSCRIPTION_STARTED,
+
+        SUBSCRIPTION_CANCELLED,
+
+        ORDER_PLACED,
+
+        ORDER_CANCELLED,
+
+        PAYMENT_FAILED,
+
+        ERROR_DISPLAYED,
+
         UNKNOWN
     }
 
@@ -117,6 +349,62 @@ public final class UserEventName {
         T visitTextInserted();
 
         T visitCsatSubmitted();
+
+        T visitPageViewed();
+
+        T visitSuggestionClicked();
+
+        T visitConversationEnded();
+
+        T visitHandoffRequested();
+
+        T visitTicketCreated();
+
+        T visitTextCopied();
+
+        T visitContentTranslated();
+
+        T visitSearchSubmitted();
+
+        T visitSearchResultClicked();
+
+        T visitArticleViewed();
+
+        T visitFileUploaded();
+
+        T visitFileDownloaded();
+
+        T visitFormStarted();
+
+        T visitFormSubmitted();
+
+        T visitFormAbandoned();
+
+        T visitFlowStarted();
+
+        T visitFlowStepCompleted();
+
+        T visitFlowCompleted();
+
+        T visitFlowAbandoned();
+
+        T visitAccountCreated();
+
+        T visitSignedIn();
+
+        T visitSignedOut();
+
+        T visitSubscriptionStarted();
+
+        T visitSubscriptionCancelled();
+
+        T visitOrderPlaced();
+
+        T visitOrderCancelled();
+
+        T visitPaymentFailed();
+
+        T visitErrorDisplayed();
 
         T visitUnknown(String unknownType);
     }

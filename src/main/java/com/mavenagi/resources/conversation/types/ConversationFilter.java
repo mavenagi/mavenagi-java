@@ -242,9 +242,10 @@ public final class ConversationFilter {
     }
 
     /**
-     * @return Filter by feedback types received in the conversation.
-     * This is a legacy field that maps to Events saved in the system for <code>ThumbsUp</code>, <code>ThumbsDown</code>, and <code>Insert</code>.
-     * The <code>Handoff</code> filter will pass if any bot responses on the conversation returned the system fallback message; there are no corresponding handoff events.
+     * @return Filter by the user events recorded on the conversation. <code>ThumbsUp</code> and <code>ThumbsDown</code> match
+     * <code>BUTTON_CLICKED</code> events by their <code>feedbackInfo.thumbUp</code> value, and <code>Insert</code> matches
+     * <code>TEXT_INSERTED</code> events. <code>Handoff</code> matches bot responses that returned the system fallback
+     * message.
      */
     @JsonProperty("feedback")
     public Optional<List<FeedbackType>> getFeedback() {
@@ -756,9 +757,10 @@ public final class ConversationFilter {
         }
 
         /**
-         * <p>Filter by feedback types received in the conversation.
-         * This is a legacy field that maps to Events saved in the system for <code>ThumbsUp</code>, <code>ThumbsDown</code>, and <code>Insert</code>.
-         * The <code>Handoff</code> filter will pass if any bot responses on the conversation returned the system fallback message; there are no corresponding handoff events.</p>
+         * <p>Filter by the user events recorded on the conversation. <code>ThumbsUp</code> and <code>ThumbsDown</code> match
+         * <code>BUTTON_CLICKED</code> events by their <code>feedbackInfo.thumbUp</code> value, and <code>Insert</code> matches
+         * <code>TEXT_INSERTED</code> events. <code>Handoff</code> matches bot responses that returned the system fallback
+         * message.</p>
          */
         @JsonSetter(value = "feedback", nulls = Nulls.SKIP)
         public Builder feedback(Optional<List<FeedbackType>> feedback) {

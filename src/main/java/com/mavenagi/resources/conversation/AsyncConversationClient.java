@@ -267,7 +267,9 @@ public class AsyncConversationClient {
     }
 
     /**
-     * Replaced by the Create events API, which records feedback as a user event.
+     * Deprecated. Use the Create events API instead, which records feedback as a user event:
+     * emit a <code>USER</code> event with an <code>eventName</code> of <code>BUTTON_CLICKED</code> for thumbs up/down or
+     * <code>TEXT_INSERTED</code> for inserts.
      * <p>Update feedback or create it if it doesn't exist.</p>
      */
     public CompletableFuture<Feedback> createFeedback(FeedbackRequest request) {
@@ -275,7 +277,9 @@ public class AsyncConversationClient {
     }
 
     /**
-     * Replaced by the Create events API, which records feedback as a user event.
+     * Deprecated. Use the Create events API instead, which records feedback as a user event:
+     * emit a <code>USER</code> event with an <code>eventName</code> of <code>BUTTON_CLICKED</code> for thumbs up/down or
+     * <code>TEXT_INSERTED</code> for inserts.
      * <p>Update feedback or create it if it doesn't exist.</p>
      */
     public CompletableFuture<Feedback> createFeedback(FeedbackRequest request, RequestOptions requestOptions) {

@@ -203,7 +203,16 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
     }
 
     /**
-     * @return Scoped entities this document is associated with for context-based filtering. By default, the document is associated with the agent.
+     * @return Narrows this document to the given entities. Omit it - the default - to make the document
+     * part of the agent's general knowledge, retrievable on every conversation.
+     * <p>A document narrowed to entities is only retrieved on conversations whose
+     * <code>responseConfig.contextFilter</code> names one of them, so it never surfaces on unrelated
+     * conversations. Each <code>entityId</code> must be fully specified and must belong to the
+     * organization and agent the request is made against; one that does not, or that names an
+     * entity type with no internal form, is rejected rather than dropped - dropping the last
+     * entity would widen the document back to the whole agent.</p>
+     * <p>Changing the entities on an existing document is not supported yet: re-sending a
+     * document with different <code>relevantEntities</code> but unchanged content is a no-op.</p>
      */
     @JsonProperty("relevantEntities")
     public Optional<Set<ScopedEntity>> getRelevantEntities() {
@@ -372,7 +381,16 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
         _FinalStage updatedAt(OffsetDateTime updatedAt);
 
         /**
-         * <p>Scoped entities this document is associated with for context-based filtering. By default, the document is associated with the agent.</p>
+         * <p>Narrows this document to the given entities. Omit it - the default - to make the document
+         * part of the agent's general knowledge, retrievable on every conversation.</p>
+         * <p>A document narrowed to entities is only retrieved on conversations whose
+         * <code>responseConfig.contextFilter</code> names one of them, so it never surfaces on unrelated
+         * conversations. Each <code>entityId</code> must be fully specified and must belong to the
+         * organization and agent the request is made against; one that does not, or that names an
+         * entity type with no internal form, is rejected rather than dropped - dropping the last
+         * entity would widen the document back to the whole agent.</p>
+         * <p>Changing the entities on an existing document is not supported yet: re-sending a
+         * document with different <code>relevantEntities</code> but unchanged content is a no-op.</p>
          */
         _FinalStage relevantEntities(Optional<Set<ScopedEntity>> relevantEntities);
 
@@ -468,7 +486,16 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
         }
 
         /**
-         * <p>Scoped entities this document is associated with for context-based filtering. By default, the document is associated with the agent.</p>
+         * <p>Narrows this document to the given entities. Omit it - the default - to make the document
+         * part of the agent's general knowledge, retrievable on every conversation.</p>
+         * <p>A document narrowed to entities is only retrieved on conversations whose
+         * <code>responseConfig.contextFilter</code> names one of them, so it never surfaces on unrelated
+         * conversations. Each <code>entityId</code> must be fully specified and must belong to the
+         * organization and agent the request is made against; one that does not, or that names an
+         * entity type with no internal form, is rejected rather than dropped - dropping the last
+         * entity would widen the document back to the whole agent.</p>
+         * <p>Changing the entities on an existing document is not supported yet: re-sending a
+         * document with different <code>relevantEntities</code> but unchanged content is a no-op.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -478,7 +505,16 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
         }
 
         /**
-         * <p>Scoped entities this document is associated with for context-based filtering. By default, the document is associated with the agent.</p>
+         * <p>Narrows this document to the given entities. Omit it - the default - to make the document
+         * part of the agent's general knowledge, retrievable on every conversation.</p>
+         * <p>A document narrowed to entities is only retrieved on conversations whose
+         * <code>responseConfig.contextFilter</code> names one of them, so it never surfaces on unrelated
+         * conversations. Each <code>entityId</code> must be fully specified and must belong to the
+         * organization and agent the request is made against; one that does not, or that names an
+         * entity type with no internal form, is rejected rather than dropped - dropping the last
+         * entity would widen the document back to the whole agent.</p>
+         * <p>Changing the entities on an existing document is not supported yet: re-sending a
+         * document with different <code>relevantEntities</code> but unchanged content is a no-op.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "relevantEntities", nulls = Nulls.SKIP)

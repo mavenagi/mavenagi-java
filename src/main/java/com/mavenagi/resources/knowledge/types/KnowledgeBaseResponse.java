@@ -113,7 +113,8 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
     }
 
     /**
-     * @return The preconditions that must be met for knowledge base be relevant to a conversation. Can be used to restrict knowledge bases to certain types of users.
+     * @return Deprecated. Superseded by charters, which determine when knowledge bases and actions apply. Has no effect for agents using charters.
+     * <p>The preconditions that must be met for a knowledge base to be relevant to a conversation.</p>
      */
     @JsonProperty("precondition")
     @java.lang.Override
@@ -180,7 +181,8 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
     }
 
     /**
-     * @return The tags of the knowledge base.
+     * @return Deprecated. Superseded by charters, which determine when knowledge bases and actions apply. Has no effect for agents using charters.
+     * <p>The tags of the knowledge base.</p>
      */
     @JsonProperty("tags")
     public Set<String> getTags() {
@@ -204,9 +206,8 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
     }
 
     /**
-     * @return The IDs of the segment that must be matched for the knowledge base to be relevant to a conversation.
-     * Segments are replacing inline preconditions - a Knowledge Base may not have both an inline precondition and a segment.
-     * Inline precondition support will be removed in a future release.
+     * @return Deprecated. Superseded by charters, which determine when knowledge bases and actions apply. Has no effect for agents using charters.
+     * <p>The ID of the segment that must be matched for the knowledge base to be relevant to a conversation.</p>
      */
     @JsonProperty("segmentId")
     public Optional<EntityId> getSegmentId() {
@@ -214,9 +215,8 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
     }
 
     /**
-     * @return The IDs of the segments that should be matched for the knowledge base to be relevant to a conversation.
-     * Segments are replacing inline preconditions - a Knowledge Base may not have both an inline precondition and a segment.
-     * Inline precondition support will be removed in a future release.
+     * @return Deprecated. Superseded by charters, which determine when knowledge bases and actions apply. Has no effect for agents using charters.
+     * <p>The IDs of the segments that should be matched for the knowledge base to be relevant to a conversation.</p>
      */
     @JsonProperty("segmentIds")
     public Set<EntityId> getSegmentIds() {
@@ -374,7 +374,8 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
         KnowledgeBaseResponse build();
 
         /**
-         * <p>The preconditions that must be met for knowledge base be relevant to a conversation. Can be used to restrict knowledge bases to certain types of users.</p>
+         * <p>Deprecated. Superseded by charters, which determine when knowledge bases and actions apply. Has no effect for agents using charters.</p>
+         * <p>The preconditions that must be met for a knowledge base to be relevant to a conversation.</p>
          */
         _FinalStage precondition(Optional<Precondition> precondition);
 
@@ -397,6 +398,7 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
         _FinalStage metadata(String key, String value);
 
         /**
+         * <p>Deprecated. Superseded by charters, which determine when knowledge bases and actions apply. Has no effect for agents using charters.</p>
          * <p>The tags of the knowledge base.</p>
          */
         _FinalStage tags(Set<String> tags);
@@ -406,18 +408,16 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
         _FinalStage addAllTags(Set<String> tags);
 
         /**
-         * <p>The IDs of the segment that must be matched for the knowledge base to be relevant to a conversation.
-         * Segments are replacing inline preconditions - a Knowledge Base may not have both an inline precondition and a segment.
-         * Inline precondition support will be removed in a future release.</p>
+         * <p>Deprecated. Superseded by charters, which determine when knowledge bases and actions apply. Has no effect for agents using charters.</p>
+         * <p>The ID of the segment that must be matched for the knowledge base to be relevant to a conversation.</p>
          */
         _FinalStage segmentId(Optional<EntityId> segmentId);
 
         _FinalStage segmentId(EntityId segmentId);
 
         /**
-         * <p>The IDs of the segments that should be matched for the knowledge base to be relevant to a conversation.
-         * Segments are replacing inline preconditions - a Knowledge Base may not have both an inline precondition and a segment.
-         * Inline precondition support will be removed in a future release.</p>
+         * <p>Deprecated. Superseded by charters, which determine when knowledge bases and actions apply. Has no effect for agents using charters.</p>
+         * <p>The IDs of the segments that should be matched for the knowledge base to be relevant to a conversation.</p>
          */
         _FinalStage segmentIds(Set<EntityId> segmentIds);
 
@@ -684,9 +684,8 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
         }
 
         /**
-         * <p>The IDs of the segments that should be matched for the knowledge base to be relevant to a conversation.
-         * Segments are replacing inline preconditions - a Knowledge Base may not have both an inline precondition and a segment.
-         * Inline precondition support will be removed in a future release.</p>
+         * <p>Deprecated. Superseded by charters, which determine when knowledge bases and actions apply. Has no effect for agents using charters.</p>
+         * <p>The IDs of the segments that should be matched for the knowledge base to be relevant to a conversation.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -698,9 +697,8 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
         }
 
         /**
-         * <p>The IDs of the segments that should be matched for the knowledge base to be relevant to a conversation.
-         * Segments are replacing inline preconditions - a Knowledge Base may not have both an inline precondition and a segment.
-         * Inline precondition support will be removed in a future release.</p>
+         * <p>Deprecated. Superseded by charters, which determine when knowledge bases and actions apply. Has no effect for agents using charters.</p>
+         * <p>The IDs of the segments that should be matched for the knowledge base to be relevant to a conversation.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -710,9 +708,8 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
         }
 
         /**
-         * <p>The IDs of the segments that should be matched for the knowledge base to be relevant to a conversation.
-         * Segments are replacing inline preconditions - a Knowledge Base may not have both an inline precondition and a segment.
-         * Inline precondition support will be removed in a future release.</p>
+         * <p>Deprecated. Superseded by charters, which determine when knowledge bases and actions apply. Has no effect for agents using charters.</p>
+         * <p>The IDs of the segments that should be matched for the knowledge base to be relevant to a conversation.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "segmentIds", nulls = Nulls.SKIP)
@@ -725,9 +722,8 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
         }
 
         /**
-         * <p>The IDs of the segment that must be matched for the knowledge base to be relevant to a conversation.
-         * Segments are replacing inline preconditions - a Knowledge Base may not have both an inline precondition and a segment.
-         * Inline precondition support will be removed in a future release.</p>
+         * <p>Deprecated. Superseded by charters, which determine when knowledge bases and actions apply. Has no effect for agents using charters.</p>
+         * <p>The ID of the segment that must be matched for the knowledge base to be relevant to a conversation.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -737,9 +733,8 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
         }
 
         /**
-         * <p>The IDs of the segment that must be matched for the knowledge base to be relevant to a conversation.
-         * Segments are replacing inline preconditions - a Knowledge Base may not have both an inline precondition and a segment.
-         * Inline precondition support will be removed in a future release.</p>
+         * <p>Deprecated. Superseded by charters, which determine when knowledge bases and actions apply. Has no effect for agents using charters.</p>
+         * <p>The ID of the segment that must be matched for the knowledge base to be relevant to a conversation.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "segmentId", nulls = Nulls.SKIP)
@@ -749,6 +744,7 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
         }
 
         /**
+         * <p>Deprecated. Superseded by charters, which determine when knowledge bases and actions apply. Has no effect for agents using charters.</p>
          * <p>The tags of the knowledge base.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -761,6 +757,7 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
         }
 
         /**
+         * <p>Deprecated. Superseded by charters, which determine when knowledge bases and actions apply. Has no effect for agents using charters.</p>
          * <p>The tags of the knowledge base.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -771,6 +768,7 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
         }
 
         /**
+         * <p>Deprecated. Superseded by charters, which determine when knowledge bases and actions apply. Has no effect for agents using charters.</p>
          * <p>The tags of the knowledge base.</p>
          */
         @java.lang.Override
@@ -839,7 +837,8 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
         }
 
         /**
-         * <p>The preconditions that must be met for knowledge base be relevant to a conversation. Can be used to restrict knowledge bases to certain types of users.</p>
+         * <p>Deprecated. Superseded by charters, which determine when knowledge bases and actions apply. Has no effect for agents using charters.</p>
+         * <p>The preconditions that must be met for a knowledge base to be relevant to a conversation.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -849,7 +848,8 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
         }
 
         /**
-         * <p>The preconditions that must be met for knowledge base be relevant to a conversation. Can be used to restrict knowledge bases to certain types of users.</p>
+         * <p>Deprecated. Superseded by charters, which determine when knowledge bases and actions apply. Has no effect for agents using charters.</p>
+         * <p>The preconditions that must be met for a knowledge base to be relevant to a conversation.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "precondition", nulls = Nulls.SKIP)

@@ -155,7 +155,9 @@ public final class KnowledgeBaseFilter {
     }
 
     /**
-     * @return Filter knowledge bases by the segments they are assigned to. Uses OR semantics — returns knowledge bases assigned to any of the provided segments.
+     * @return Deprecated. Segment assignment on knowledge bases is superseded by charters.
+     * <p>Filter knowledge bases by the segments they are assigned to. Uses OR semantics — returns knowledge bases
+     * assigned to any of the provided segments.</p>
      */
     @JsonProperty("segmentIds")
     public Optional<List<EntityId>> getSegmentIds() {
@@ -389,7 +391,9 @@ public final class KnowledgeBaseFilter {
         }
 
         /**
-         * <p>Filter knowledge bases by the segments they are assigned to. Uses OR semantics — returns knowledge bases assigned to any of the provided segments.</p>
+         * <p>Deprecated. Segment assignment on knowledge bases is superseded by charters.</p>
+         * <p>Filter knowledge bases by the segments they are assigned to. Uses OR semantics — returns knowledge bases
+         * assigned to any of the provided segments.</p>
          */
         @JsonSetter(value = "segmentIds", nulls = Nulls.SKIP)
         public Builder segmentIds(Optional<List<EntityId>> segmentIds) {

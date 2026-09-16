@@ -269,14 +269,20 @@ public class RawAnalyticsClient {
     }
 
     /**
-     * Retrieves structured feedback data formatted as a table, allowing users to group, filter,  and define specific metrics to display as columns.
+     * Deprecated. Use <code>getEventTable</code> instead, which reports the same thumbs up/down and insert
+     * activity as user events.
+     * <p>Retrieves structured feedback data formatted as a table, allowing users to group, filter,
+     * and define specific metrics to display as columns.</p>
      */
     public MavenAGIHttpResponse<FeedbackTableResponse> getFeedbackTable(FeedbackTableRequest request) {
         return getFeedbackTable(request, null);
     }
 
     /**
-     * Retrieves structured feedback data formatted as a table, allowing users to group, filter,  and define specific metrics to display as columns.
+     * Deprecated. Use <code>getEventTable</code> instead, which reports the same thumbs up/down and insert
+     * activity as user events.
+     * <p>Retrieves structured feedback data formatted as a table, allowing users to group, filter,
+     * and define specific metrics to display as columns.</p>
      */
     public MavenAGIHttpResponse<FeedbackTableResponse> getFeedbackTable(
             FeedbackTableRequest request, RequestOptions requestOptions) {

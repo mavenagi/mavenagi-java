@@ -79,11 +79,13 @@ public final class ResponseConfig {
     }
 
     /**
-     * @return Filters that restrict the knowledge retrieval candidate pool.
-     * <ul>
-     * <li>entities: specific entities to scope by</li>
-     * <li>entityTypes: entity types to scope by (e.g., AGENT, CUSTOMER)</li>
-     * </ul>
+     * @return Widens the knowledge retrieval candidate pool to include documents scoped to the given
+     * entities, in addition to the agent's own knowledge.
+     * <p>Knowledge documents are scoped by setting <code>relevantEntities</code> on the document. A document
+     * with no <code>relevantEntities</code> belongs to the agent and is always a retrieval candidate;
+     * naming entities here additionally makes documents scoped to those entities retrievable.
+     * Omitting this field restricts retrieval to the agent's own knowledge.</p>
+     * <p>Only the <code>byEntities</code> variant is supported today - see <code>byEntityTypes</code>.</p>
      */
     @JsonProperty("contextFilter")
     public Optional<KnowledgeContextFilter> getContextFilter() {
@@ -159,11 +161,13 @@ public final class ResponseConfig {
         _FinalStage addAllCapabilities(List<Capability> capabilities);
 
         /**
-         * <p>Filters that restrict the knowledge retrieval candidate pool.</p>
-         * <ul>
-         * <li>entities: specific entities to scope by</li>
-         * <li>entityTypes: entity types to scope by (e.g., AGENT, CUSTOMER)</li>
-         * </ul>
+         * <p>Widens the knowledge retrieval candidate pool to include documents scoped to the given
+         * entities, in addition to the agent's own knowledge.</p>
+         * <p>Knowledge documents are scoped by setting <code>relevantEntities</code> on the document. A document
+         * with no <code>relevantEntities</code> belongs to the agent and is always a retrieval candidate;
+         * naming entities here additionally makes documents scoped to those entities retrievable.
+         * Omitting this field restricts retrieval to the agent's own knowledge.</p>
+         * <p>Only the <code>byEntities</code> variant is supported today - see <code>byEntityTypes</code>.</p>
          */
         _FinalStage contextFilter(Optional<KnowledgeContextFilter> contextFilter);
 
@@ -219,11 +223,13 @@ public final class ResponseConfig {
         }
 
         /**
-         * <p>Filters that restrict the knowledge retrieval candidate pool.</p>
-         * <ul>
-         * <li>entities: specific entities to scope by</li>
-         * <li>entityTypes: entity types to scope by (e.g., AGENT, CUSTOMER)</li>
-         * </ul>
+         * <p>Widens the knowledge retrieval candidate pool to include documents scoped to the given
+         * entities, in addition to the agent's own knowledge.</p>
+         * <p>Knowledge documents are scoped by setting <code>relevantEntities</code> on the document. A document
+         * with no <code>relevantEntities</code> belongs to the agent and is always a retrieval candidate;
+         * naming entities here additionally makes documents scoped to those entities retrievable.
+         * Omitting this field restricts retrieval to the agent's own knowledge.</p>
+         * <p>Only the <code>byEntities</code> variant is supported today - see <code>byEntityTypes</code>.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -233,11 +239,13 @@ public final class ResponseConfig {
         }
 
         /**
-         * <p>Filters that restrict the knowledge retrieval candidate pool.</p>
-         * <ul>
-         * <li>entities: specific entities to scope by</li>
-         * <li>entityTypes: entity types to scope by (e.g., AGENT, CUSTOMER)</li>
-         * </ul>
+         * <p>Widens the knowledge retrieval candidate pool to include documents scoped to the given
+         * entities, in addition to the agent's own knowledge.</p>
+         * <p>Knowledge documents are scoped by setting <code>relevantEntities</code> on the document. A document
+         * with no <code>relevantEntities</code> belongs to the agent and is always a retrieval candidate;
+         * naming entities here additionally makes documents scoped to those entities retrievable.
+         * Omitting this field restricts retrieval to the agent's own knowledge.</p>
+         * <p>Only the <code>byEntities</code> variant is supported today - see <code>byEntityTypes</code>.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "contextFilter", nulls = Nulls.SKIP)

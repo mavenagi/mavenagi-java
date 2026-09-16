@@ -72,7 +72,8 @@ public final class EventTriggerResponse implements IEventTriggerBase {
      * @return The type of event trigger this app wishes to handle.
      * <p>Conversation triggers fire when a conversation is created, after each additional message, and upon deletion events.
      * There is a small delay before trigger execution to allow time for conversation analysis to complete.</p>
-     * <p>Feedback can not be modified, so the feedback trigger fires immediately after feedback is created.</p>
+     * <p>Events are immutable, so an event trigger fires immediately after the event is created.</p>
+     * <p>Inbox triggers fire when an inbox item is created or updated.</p>
      */
     @JsonProperty("type")
     @java.lang.Override
@@ -143,7 +144,8 @@ public final class EventTriggerResponse implements IEventTriggerBase {
          * <p>The type of event trigger this app wishes to handle.</p>
          * <p>Conversation triggers fire when a conversation is created, after each additional message, and upon deletion events.
          * There is a small delay before trigger execution to allow time for conversation analysis to complete.</p>
-         * <p>Feedback can not be modified, so the feedback trigger fires immediately after feedback is created.</p>
+         * <p>Events are immutable, so an event trigger fires immediately after the event is created.</p>
+         * <p>Inbox triggers fire when an inbox item is created or updated.</p>
          */
         TriggerIdStage type(@NotNull EventTriggerType type);
     }
@@ -217,11 +219,13 @@ public final class EventTriggerResponse implements IEventTriggerBase {
          * <p>The type of event trigger this app wishes to handle.</p>
          * <p>Conversation triggers fire when a conversation is created, after each additional message, and upon deletion events.
          * There is a small delay before trigger execution to allow time for conversation analysis to complete.</p>
-         * <p>Feedback can not be modified, so the feedback trigger fires immediately after feedback is created.</p>
+         * <p>Events are immutable, so an event trigger fires immediately after the event is created.</p>
+         * <p>Inbox triggers fire when an inbox item is created or updated.</p>
          * <p>The type of event trigger this app wishes to handle.</p>
          * <p>Conversation triggers fire when a conversation is created, after each additional message, and upon deletion events.
          * There is a small delay before trigger execution to allow time for conversation analysis to complete.</p>
-         * <p>Feedback can not be modified, so the feedback trigger fires immediately after feedback is created.</p>
+         * <p>Events are immutable, so an event trigger fires immediately after the event is created.</p>
+         * <p>Inbox triggers fire when an inbox item is created or updated.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override

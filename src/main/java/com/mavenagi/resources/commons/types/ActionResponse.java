@@ -123,7 +123,8 @@ public final class ActionResponse implements IActionBase, IActionProperties {
     }
 
     /**
-     * @return The preconditions that must be met for an action to be relevant to a conversation. Can be used to restrict actions to certain types of users.
+     * @return Deprecated. Superseded by charters, which determine when knowledge bases and actions apply. Has no effect for agents using charters.
+     * <p>The preconditions that must be met for an action to be relevant to a conversation.</p>
      */
     @JsonProperty("precondition")
     @java.lang.Override
@@ -191,9 +192,8 @@ public final class ActionResponse implements IActionBase, IActionProperties {
     }
 
     /**
-     * @return The IDs of the segment that must be matched for the action to be relevant to a conversation.
-     * Segments are replacing inline preconditions - an Action may not have both an inline precondition and a segment.
-     * Inline precondition support will be removed in a future release.
+     * @return Deprecated. Superseded by charters, which determine when knowledge bases and actions apply. Has no effect for agents using charters.
+     * <p>The ID of the segment that must be matched for the action to be relevant to a conversation.</p>
      */
     @JsonProperty("segmentId")
     public Optional<EntityId> getSegmentId() {
@@ -332,7 +332,8 @@ public final class ActionResponse implements IActionBase, IActionProperties {
         _FinalStage buttonName(String buttonName);
 
         /**
-         * <p>The preconditions that must be met for an action to be relevant to a conversation. Can be used to restrict actions to certain types of users.</p>
+         * <p>Deprecated. Superseded by charters, which determine when knowledge bases and actions apply. Has no effect for agents using charters.</p>
+         * <p>The preconditions that must be met for an action to be relevant to a conversation.</p>
          */
         _FinalStage precondition(Optional<Precondition> precondition);
 
@@ -372,9 +373,8 @@ public final class ActionResponse implements IActionBase, IActionProperties {
         _FinalStage instructions(String instructions);
 
         /**
-         * <p>The IDs of the segment that must be matched for the action to be relevant to a conversation.
-         * Segments are replacing inline preconditions - an Action may not have both an inline precondition and a segment.
-         * Inline precondition support will be removed in a future release.</p>
+         * <p>Deprecated. Superseded by charters, which determine when knowledge bases and actions apply. Has no effect for agents using charters.</p>
+         * <p>The ID of the segment that must be matched for the action to be relevant to a conversation.</p>
          */
         _FinalStage segmentId(Optional<EntityId> segmentId);
 
@@ -552,9 +552,8 @@ public final class ActionResponse implements IActionBase, IActionProperties {
         }
 
         /**
-         * <p>The IDs of the segment that must be matched for the action to be relevant to a conversation.
-         * Segments are replacing inline preconditions - an Action may not have both an inline precondition and a segment.
-         * Inline precondition support will be removed in a future release.</p>
+         * <p>Deprecated. Superseded by charters, which determine when knowledge bases and actions apply. Has no effect for agents using charters.</p>
+         * <p>The ID of the segment that must be matched for the action to be relevant to a conversation.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -564,9 +563,8 @@ public final class ActionResponse implements IActionBase, IActionProperties {
         }
 
         /**
-         * <p>The IDs of the segment that must be matched for the action to be relevant to a conversation.
-         * Segments are replacing inline preconditions - an Action may not have both an inline precondition and a segment.
-         * Inline precondition support will be removed in a future release.</p>
+         * <p>Deprecated. Superseded by charters, which determine when knowledge bases and actions apply. Has no effect for agents using charters.</p>
+         * <p>The ID of the segment that must be matched for the action to be relevant to a conversation.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "segmentId", nulls = Nulls.SKIP)
@@ -677,7 +675,8 @@ public final class ActionResponse implements IActionBase, IActionProperties {
         }
 
         /**
-         * <p>The preconditions that must be met for an action to be relevant to a conversation. Can be used to restrict actions to certain types of users.</p>
+         * <p>Deprecated. Superseded by charters, which determine when knowledge bases and actions apply. Has no effect for agents using charters.</p>
+         * <p>The preconditions that must be met for an action to be relevant to a conversation.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -687,7 +686,8 @@ public final class ActionResponse implements IActionBase, IActionProperties {
         }
 
         /**
-         * <p>The preconditions that must be met for an action to be relevant to a conversation. Can be used to restrict actions to certain types of users.</p>
+         * <p>Deprecated. Superseded by charters, which determine when knowledge bases and actions apply. Has no effect for agents using charters.</p>
+         * <p>The preconditions that must be met for an action to be relevant to a conversation.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "precondition", nulls = Nulls.SKIP)

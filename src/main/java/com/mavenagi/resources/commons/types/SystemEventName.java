@@ -7,11 +7,32 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public final class SystemEventName {
+    public static final SystemEventName NOTIFICATION_DELIVERED =
+            new SystemEventName(Value.NOTIFICATION_DELIVERED, "NOTIFICATION_DELIVERED");
+
+    public static final SystemEventName SYNC_FAILED = new SystemEventName(Value.SYNC_FAILED, "SYNC_FAILED");
+
     public static final SystemEventName APP_UPDATED = new SystemEventName(Value.APP_UPDATED, "APP_UPDATED");
+
+    public static final SystemEventName INTEGRATION_CONNECTED =
+            new SystemEventName(Value.INTEGRATION_CONNECTED, "INTEGRATION_CONNECTED");
+
+    public static final SystemEventName NOTIFICATION_SENT =
+            new SystemEventName(Value.NOTIFICATION_SENT, "NOTIFICATION_SENT");
+
+    public static final SystemEventName NOTIFICATION_FAILED =
+            new SystemEventName(Value.NOTIFICATION_FAILED, "NOTIFICATION_FAILED");
+
+    public static final SystemEventName SYNC_STARTED = new SystemEventName(Value.SYNC_STARTED, "SYNC_STARTED");
 
     public static final SystemEventName APP_UNINSTALLED = new SystemEventName(Value.APP_UNINSTALLED, "APP_UNINSTALLED");
 
+    public static final SystemEventName SYNC_COMPLETED = new SystemEventName(Value.SYNC_COMPLETED, "SYNC_COMPLETED");
+
     public static final SystemEventName APP_INSTALLED = new SystemEventName(Value.APP_INSTALLED, "APP_INSTALLED");
+
+    public static final SystemEventName INTEGRATION_DISCONNECTED =
+            new SystemEventName(Value.INTEGRATION_DISCONNECTED, "INTEGRATION_DISCONNECTED");
 
     private final Value value;
 
@@ -45,12 +66,28 @@ public final class SystemEventName {
 
     public <T> T visit(Visitor<T> visitor) {
         switch (value) {
+            case NOTIFICATION_DELIVERED:
+                return visitor.visitNotificationDelivered();
+            case SYNC_FAILED:
+                return visitor.visitSyncFailed();
             case APP_UPDATED:
                 return visitor.visitAppUpdated();
+            case INTEGRATION_CONNECTED:
+                return visitor.visitIntegrationConnected();
+            case NOTIFICATION_SENT:
+                return visitor.visitNotificationSent();
+            case NOTIFICATION_FAILED:
+                return visitor.visitNotificationFailed();
+            case SYNC_STARTED:
+                return visitor.visitSyncStarted();
             case APP_UNINSTALLED:
                 return visitor.visitAppUninstalled();
+            case SYNC_COMPLETED:
+                return visitor.visitSyncCompleted();
             case APP_INSTALLED:
                 return visitor.visitAppInstalled();
+            case INTEGRATION_DISCONNECTED:
+                return visitor.visitIntegrationDisconnected();
             case UNKNOWN:
             default:
                 return visitor.visitUnknown(string);
@@ -60,12 +97,28 @@ public final class SystemEventName {
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static SystemEventName valueOf(String value) {
         switch (value) {
+            case "NOTIFICATION_DELIVERED":
+                return NOTIFICATION_DELIVERED;
+            case "SYNC_FAILED":
+                return SYNC_FAILED;
             case "APP_UPDATED":
                 return APP_UPDATED;
+            case "INTEGRATION_CONNECTED":
+                return INTEGRATION_CONNECTED;
+            case "NOTIFICATION_SENT":
+                return NOTIFICATION_SENT;
+            case "NOTIFICATION_FAILED":
+                return NOTIFICATION_FAILED;
+            case "SYNC_STARTED":
+                return SYNC_STARTED;
             case "APP_UNINSTALLED":
                 return APP_UNINSTALLED;
+            case "SYNC_COMPLETED":
+                return SYNC_COMPLETED;
             case "APP_INSTALLED":
                 return APP_INSTALLED;
+            case "INTEGRATION_DISCONNECTED":
+                return INTEGRATION_DISCONNECTED;
             default:
                 return new SystemEventName(Value.UNKNOWN, value);
         }
@@ -78,6 +131,22 @@ public final class SystemEventName {
 
         APP_UPDATED,
 
+        NOTIFICATION_SENT,
+
+        NOTIFICATION_DELIVERED,
+
+        NOTIFICATION_FAILED,
+
+        INTEGRATION_CONNECTED,
+
+        INTEGRATION_DISCONNECTED,
+
+        SYNC_STARTED,
+
+        SYNC_COMPLETED,
+
+        SYNC_FAILED,
+
         UNKNOWN
     }
 
@@ -87,6 +156,22 @@ public final class SystemEventName {
         T visitAppUninstalled();
 
         T visitAppUpdated();
+
+        T visitNotificationSent();
+
+        T visitNotificationDelivered();
+
+        T visitNotificationFailed();
+
+        T visitIntegrationConnected();
+
+        T visitIntegrationDisconnected();
+
+        T visitSyncStarted();
+
+        T visitSyncCompleted();
+
+        T visitSyncFailed();
 
         T visitUnknown(String unknownType);
     }

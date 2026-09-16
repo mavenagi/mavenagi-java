@@ -72,7 +72,8 @@ public final class ActionProperties implements IActionProperties {
     }
 
     /**
-     * @return The preconditions that must be met for an action to be relevant to a conversation. Can be used to restrict actions to certain types of users.
+     * @return Deprecated. Superseded by charters, which determine when knowledge bases and actions apply. Has no effect for agents using charters.
+     * <p>The preconditions that must be met for an action to be relevant to a conversation.</p>
      */
     @JsonProperty("precondition")
     @java.lang.Override
@@ -169,7 +170,8 @@ public final class ActionProperties implements IActionProperties {
         _FinalStage buttonName(String buttonName);
 
         /**
-         * <p>The preconditions that must be met for an action to be relevant to a conversation. Can be used to restrict actions to certain types of users.</p>
+         * <p>Deprecated. Superseded by charters, which determine when knowledge bases and actions apply. Has no effect for agents using charters.</p>
+         * <p>The preconditions that must be met for an action to be relevant to a conversation.</p>
          */
         _FinalStage precondition(Optional<Precondition> precondition);
 
@@ -323,7 +325,8 @@ public final class ActionProperties implements IActionProperties {
         }
 
         /**
-         * <p>The preconditions that must be met for an action to be relevant to a conversation. Can be used to restrict actions to certain types of users.</p>
+         * <p>Deprecated. Superseded by charters, which determine when knowledge bases and actions apply. Has no effect for agents using charters.</p>
+         * <p>The preconditions that must be met for an action to be relevant to a conversation.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -333,7 +336,8 @@ public final class ActionProperties implements IActionProperties {
         }
 
         /**
-         * <p>The preconditions that must be met for an action to be relevant to a conversation. Can be used to restrict actions to certain types of users.</p>
+         * <p>Deprecated. Superseded by charters, which determine when knowledge bases and actions apply. Has no effect for agents using charters.</p>
+         * <p>The preconditions that must be met for an action to be relevant to a conversation.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "precondition", nulls = Nulls.SKIP)

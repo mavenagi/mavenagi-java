@@ -138,7 +138,8 @@ public final class NovelUserEvent implements IEventBaseNoId {
     }
 
     /**
-     * @return Information about any feedback associated with the event
+     * @return Any rating carried by the event. A <code>BUTTON_CLICKED</code> thumbs up or down sets a single entry
+     * with <code>thumbUp</code> true or false.
      */
     @JsonProperty("feedbackInfo")
     public Optional<List<FeedbackInfo>> getFeedbackInfo() {
@@ -257,7 +258,8 @@ public final class NovelUserEvent implements IEventBaseNoId {
         _FinalStage csatInfo(CsatInfo csatInfo);
 
         /**
-         * <p>Information about any feedback associated with the event</p>
+         * <p>Any rating carried by the event. A <code>BUTTON_CLICKED</code> thumbs up or down sets a single entry
+         * with <code>thumbUp</code> true or false.</p>
          */
         _FinalStage feedbackInfo(Optional<List<FeedbackInfo>> feedbackInfo);
 
@@ -373,7 +375,8 @@ public final class NovelUserEvent implements IEventBaseNoId {
         }
 
         /**
-         * <p>Information about any feedback associated with the event</p>
+         * <p>Any rating carried by the event. A <code>BUTTON_CLICKED</code> thumbs up or down sets a single entry
+         * with <code>thumbUp</code> true or false.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -383,7 +386,8 @@ public final class NovelUserEvent implements IEventBaseNoId {
         }
 
         /**
-         * <p>Information about any feedback associated with the event</p>
+         * <p>Any rating carried by the event. A <code>BUTTON_CLICKED</code> thumbs up or down sets a single entry
+         * with <code>thumbUp</code> true or false.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "feedbackInfo", nulls = Nulls.SKIP)

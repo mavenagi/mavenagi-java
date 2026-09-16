@@ -41,9 +41,8 @@ public final class SimulationContext {
     }
 
     /**
-     * @return If provided, overrides the agent's default additional prompt text during the simulation.
-     * Note that this field is provided for backwards compatibility and will be removed in a future release.
-     * Instead please use the <code>availableKnowledgeBases</code> field to include a knowledge base with a document <code>llmInclusionStatus</code> set to <code>ALWAYS</code>.
+     * @return Deprecated. Superseded by charters, which determine agent behavior per turn. Has no effect for agents using charters.
+     * <p>If provided, overrides the agent's default additional prompt text during the simulation.</p>
      */
     @JsonProperty("additionalPromptText")
     public Optional<String> getAdditionalPromptText() {
@@ -51,7 +50,7 @@ public final class SimulationContext {
     }
 
     /**
-     * @return The persona to use during the simulation. If not provided, the agent's default persona will be used.
+     * @return Deprecated. Superseded by charters, which determine agent behavior per turn. Has no effect for agents using charters.
      */
     @JsonProperty("persona")
     public Optional<LlmPersona> getPersona() {
@@ -118,9 +117,8 @@ public final class SimulationContext {
         }
 
         /**
-         * <p>If provided, overrides the agent's default additional prompt text during the simulation.
-         * Note that this field is provided for backwards compatibility and will be removed in a future release.
-         * Instead please use the <code>availableKnowledgeBases</code> field to include a knowledge base with a document <code>llmInclusionStatus</code> set to <code>ALWAYS</code>.</p>
+         * <p>Deprecated. Superseded by charters, which determine agent behavior per turn. Has no effect for agents using charters.</p>
+         * <p>If provided, overrides the agent's default additional prompt text during the simulation.</p>
          */
         @JsonSetter(value = "additionalPromptText", nulls = Nulls.SKIP)
         public Builder additionalPromptText(Optional<String> additionalPromptText) {
@@ -134,7 +132,7 @@ public final class SimulationContext {
         }
 
         /**
-         * <p>The persona to use during the simulation. If not provided, the agent's default persona will be used.</p>
+         * <p>Deprecated. Superseded by charters, which determine agent behavior per turn. Has no effect for agents using charters.</p>
          */
         @JsonSetter(value = "persona", nulls = Nulls.SKIP)
         public Builder persona(Optional<LlmPersona> persona) {

@@ -109,6 +109,11 @@ public final class EventFilter {
         return agentUserIds;
     }
 
+    /**
+     * @return Narrow to the events that carry a rating. <code>ThumbsUp</code> and <code>ThumbsDown</code> match <code>BUTTON_CLICKED</code>
+     * events by their <code>feedbackInfo.thumbUp</code> value, and <code>Insert</code> matches <code>TEXT_INSERTED</code> events.
+     * <code>Handoff</code> is no longer supported.
+     */
     @JsonProperty("legacyFeedbackTypes")
     public Optional<List<FeedbackType>> getLegacyFeedbackTypes() {
         return legacyFeedbackTypes;
@@ -296,6 +301,11 @@ public final class EventFilter {
             return this;
         }
 
+        /**
+         * <p>Narrow to the events that carry a rating. <code>ThumbsUp</code> and <code>ThumbsDown</code> match <code>BUTTON_CLICKED</code>
+         * events by their <code>feedbackInfo.thumbUp</code> value, and <code>Insert</code> matches <code>TEXT_INSERTED</code> events.
+         * <code>Handoff</code> is no longer supported.</p>
+         */
         @JsonSetter(value = "legacyFeedbackTypes", nulls = Nulls.SKIP)
         public Builder legacyFeedbackTypes(Optional<List<FeedbackType>> legacyFeedbackTypes) {
             this.legacyFeedbackTypes = legacyFeedbackTypes;

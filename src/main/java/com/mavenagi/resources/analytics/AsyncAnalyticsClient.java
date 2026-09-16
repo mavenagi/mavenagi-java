@@ -84,14 +84,20 @@ public class AsyncAnalyticsClient {
     }
 
     /**
-     * Retrieves structured feedback data formatted as a table, allowing users to group, filter,  and define specific metrics to display as columns.
+     * Deprecated. Use <code>getEventTable</code> instead, which reports the same thumbs up/down and insert
+     * activity as user events.
+     * <p>Retrieves structured feedback data formatted as a table, allowing users to group, filter,
+     * and define specific metrics to display as columns.</p>
      */
     public CompletableFuture<FeedbackTableResponse> getFeedbackTable(FeedbackTableRequest request) {
         return this.rawClient.getFeedbackTable(request).thenApply(response -> response.body());
     }
 
     /**
-     * Retrieves structured feedback data formatted as a table, allowing users to group, filter,  and define specific metrics to display as columns.
+     * Deprecated. Use <code>getEventTable</code> instead, which reports the same thumbs up/down and insert
+     * activity as user events.
+     * <p>Retrieves structured feedback data formatted as a table, allowing users to group, filter,
+     * and define specific metrics to display as columns.</p>
      */
     public CompletableFuture<FeedbackTableResponse> getFeedbackTable(
             FeedbackTableRequest request, RequestOptions requestOptions) {

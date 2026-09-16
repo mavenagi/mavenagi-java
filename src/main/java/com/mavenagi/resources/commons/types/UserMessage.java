@@ -50,6 +50,8 @@ public final class UserMessage implements IUserMessageBase, IConversationMessage
 
     private final Optional<UserMessageResponseState> responseState;
 
+    private final Optional<String> timezone;
+
     private final Map<String, Object> additionalProperties;
 
     private UserMessage(
@@ -66,6 +68,7 @@ public final class UserMessage implements IUserMessageBase, IConversationMessage
             Optional<String> userDisplayName,
             MessageStatus status,
             Optional<UserMessageResponseState> responseState,
+            Optional<String> timezone,
             Map<String, Object> additionalProperties) {
         this.userId = userId;
         this.text = text;
@@ -80,6 +83,7 @@ public final class UserMessage implements IUserMessageBase, IConversationMessage
         this.userDisplayName = userDisplayName;
         this.status = status;
         this.responseState = responseState;
+        this.timezone = timezone;
         this.additionalProperties = additionalProperties;
     }
 
@@ -206,6 +210,17 @@ public final class UserMessage implements IUserMessageBase, IConversationMessage
         return responseState;
     }
 
+    /**
+     * @return The timezone supplied with the creating request and used for the message's time-based
+     * operations, normally an IANA identifier (e.g. &quot;America/New_York&quot;, &quot;Europe/London&quot;).
+     * Absent when the request did not supply one, in which case the agent's default timezone
+     * applied.
+     */
+    @JsonProperty("timezone")
+    public Optional<String> getTimezone() {
+        return timezone;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -230,7 +245,8 @@ public final class UserMessage implements IUserMessageBase, IConversationMessage
                 && agentUserId.equals(other.agentUserId)
                 && userDisplayName.equals(other.userDisplayName)
                 && status.equals(other.status)
-                && responseState.equals(other.responseState);
+                && responseState.equals(other.responseState)
+                && timezone.equals(other.timezone);
     }
 
     @java.lang.Override
@@ -248,7 +264,8 @@ public final class UserMessage implements IUserMessageBase, IConversationMessage
                 this.agentUserId,
                 this.userDisplayName,
                 this.status,
-                this.responseState);
+                this.responseState,
+                this.timezone);
     }
 
     @java.lang.Override
@@ -370,6 +387,16 @@ public final class UserMessage implements IUserMessageBase, IConversationMessage
         _FinalStage responseState(Optional<UserMessageResponseState> responseState);
 
         _FinalStage responseState(UserMessageResponseState responseState);
+
+        /**
+         * <p>The timezone supplied with the creating request and used for the message's time-based
+         * operations, normally an IANA identifier (e.g. &quot;America/New_York&quot;, &quot;Europe/London&quot;).
+         * Absent when the request did not supply one, in which case the agent's default timezone
+         * applied.</p>
+         */
+        _FinalStage timezone(Optional<String> timezone);
+
+        _FinalStage timezone(String timezone);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -389,6 +416,8 @@ public final class UserMessage implements IUserMessageBase, IConversationMessage
         private EntityId conversationMessageId;
 
         private MessageStatus status;
+
+        private Optional<String> timezone = Optional.empty();
 
         private Optional<UserMessageResponseState> responseState = Optional.empty();
 
@@ -426,6 +455,7 @@ public final class UserMessage implements IUserMessageBase, IConversationMessage
             userDisplayName(other.getUserDisplayName());
             status(other.getStatus());
             responseState(other.getResponseState());
+            timezone(other.getTimezone());
             return this;
         }
 
@@ -494,6 +524,32 @@ public final class UserMessage implements IUserMessageBase, IConversationMessage
         @JsonSetter("status")
         public _FinalStage status(@NotNull MessageStatus status) {
             this.status = Objects.requireNonNull(status, "status must not be null");
+            return this;
+        }
+
+        /**
+         * <p>The timezone supplied with the creating request and used for the message's time-based
+         * operations, normally an IANA identifier (e.g. &quot;America/New_York&quot;, &quot;Europe/London&quot;).
+         * Absent when the request did not supply one, in which case the agent's default timezone
+         * applied.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage timezone(String timezone) {
+            this.timezone = Optional.ofNullable(timezone);
+            return this;
+        }
+
+        /**
+         * <p>The timezone supplied with the creating request and used for the message's time-based
+         * operations, normally an IANA identifier (e.g. &quot;America/New_York&quot;, &quot;Europe/London&quot;).
+         * Absent when the request did not supply one, in which case the agent's default timezone
+         * applied.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "timezone", nulls = Nulls.SKIP)
+        public _FinalStage timezone(Optional<String> timezone) {
+            this.timezone = timezone;
             return this;
         }
 
@@ -708,6 +764,7 @@ public final class UserMessage implements IUserMessageBase, IConversationMessage
                     userDisplayName,
                     status,
                     responseState,
+                    timezone,
                     additionalProperties);
         }
     }

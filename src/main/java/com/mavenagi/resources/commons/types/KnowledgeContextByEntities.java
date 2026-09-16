@@ -30,6 +30,16 @@ public final class KnowledgeContextByEntities {
         this.additionalProperties = additionalProperties;
     }
 
+    /**
+     * @return The entities whose documents should be retrievable, in addition to the agent's own
+     * knowledge. Each <code>entityId</code> must be fully specified and must belong to the organization
+     * and agent the request is made against; one that does not is rejected. Entities are never
+     * silently dropped, which would omit exactly the documents the caller asked to bring into
+     * scope.
+     * <p><code>AGENT</code> and <code>FEEDBACK</code> are rejected: neither has an internal form to resolve to, and
+     * <code>AGENT</code> in particular is redundant here because the agent's own knowledge is always in
+     * scope. Every other <code>EntityType</code> is accepted.</p>
+     */
     @JsonProperty("entities")
     public Set<ScopedEntity> getEntities() {
         return entities;
@@ -78,6 +88,16 @@ public final class KnowledgeContextByEntities {
             return this;
         }
 
+        /**
+         * <p>The entities whose documents should be retrievable, in addition to the agent's own
+         * knowledge. Each <code>entityId</code> must be fully specified and must belong to the organization
+         * and agent the request is made against; one that does not is rejected. Entities are never
+         * silently dropped, which would omit exactly the documents the caller asked to bring into
+         * scope.</p>
+         * <p><code>AGENT</code> and <code>FEEDBACK</code> are rejected: neither has an internal form to resolve to, and
+         * <code>AGENT</code> in particular is redundant here because the agent's own knowledge is always in
+         * scope. Every other <code>EntityType</code> is accepted.</p>
+         */
         @JsonSetter(value = "entities", nulls = Nulls.SKIP)
         public Builder entities(Set<ScopedEntity> entities) {
             this.entities.clear();

@@ -78,10 +78,9 @@ public final class ActionPatchRequest {
     }
 
     /**
-     * @return The ID of the segment that must be matched for the action to be relevant to a conversation.
-     * A null value will remove the segment from the action, it will be available on all conversations.
-     * <p>Segments are replacing inline preconditions - an action may not have both an inline precondition and a segment.
-     * Inline precondition support will be removed in a future release.</p>
+     * @return Deprecated. Superseded by charters, which determine when knowledge bases and actions apply. Has no effect for agents using charters.
+     * <p>The ID of the segment that must be matched for the action to be relevant to a conversation.
+     * A null value will remove the segment from the action, it will be available on all conversations.</p>
      */
     @JsonIgnore
     public Optional<EntityId> getSegmentId() {
@@ -217,10 +216,9 @@ public final class ActionPatchRequest {
         }
 
         /**
+         * <p>Deprecated. Superseded by charters, which determine when knowledge bases and actions apply. Has no effect for agents using charters.</p>
          * <p>The ID of the segment that must be matched for the action to be relevant to a conversation.
          * A null value will remove the segment from the action, it will be available on all conversations.</p>
-         * <p>Segments are replacing inline preconditions - an action may not have both an inline precondition and a segment.
-         * Inline precondition support will be removed in a future release.</p>
          */
         @JsonSetter(value = "segmentId", nulls = Nulls.SKIP)
         public Builder segmentId(Optional<EntityId> segmentId) {
