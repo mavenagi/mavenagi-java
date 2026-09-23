@@ -14,11 +14,14 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
 import com.mavenagi.resources.commons.types.EntityId;
 import com.mavenagi.resources.commons.types.LlmInclusionStatus;
+import com.mavenagi.resources.commons.types.ScopedEntity;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
@@ -40,6 +43,8 @@ public final class KnowledgeDocumentSearchResponse implements IKnowledgeDocument
 
     private final OffsetDateTime updatedAt;
 
+    private final Set<ScopedEntity> relevantEntities;
+
     private final Optional<String> url;
 
     private final Optional<String> language;
@@ -57,6 +62,7 @@ public final class KnowledgeDocumentSearchResponse implements IKnowledgeDocument
             LlmInclusionStatus knowledgeBaseLlmInclusionStatus,
             OffsetDateTime createdAt,
             OffsetDateTime updatedAt,
+            Set<ScopedEntity> relevantEntities,
             Optional<String> url,
             Optional<String> language,
             Optional<String> author,
@@ -69,6 +75,7 @@ public final class KnowledgeDocumentSearchResponse implements IKnowledgeDocument
         this.knowledgeBaseLlmInclusionStatus = knowledgeBaseLlmInclusionStatus;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.relevantEntities = relevantEntities;
         this.url = url;
         this.language = language;
         this.author = author;
@@ -149,6 +156,16 @@ public final class KnowledgeDocumentSearchResponse implements IKnowledgeDocument
     }
 
     /**
+     * @return The entities this document is narrowed to. Empty for a document that is part of the
+     * agent's general knowledge.
+     */
+    @JsonProperty("relevantEntities")
+    @java.lang.Override
+    public Set<ScopedEntity> getRelevantEntities() {
+        return relevantEntities;
+    }
+
+    /**
      * @return The URL of the document. Should be visible to end users. Will be shown as part of answers. Not used for crawling.
      */
     @JsonProperty("url")
@@ -195,6 +212,7 @@ public final class KnowledgeDocumentSearchResponse implements IKnowledgeDocument
                 && knowledgeBaseLlmInclusionStatus.equals(other.knowledgeBaseLlmInclusionStatus)
                 && createdAt.equals(other.createdAt)
                 && updatedAt.equals(other.updatedAt)
+                && relevantEntities.equals(other.relevantEntities)
                 && url.equals(other.url)
                 && language.equals(other.language)
                 && author.equals(other.author);
@@ -211,6 +229,7 @@ public final class KnowledgeDocumentSearchResponse implements IKnowledgeDocument
                 this.knowledgeBaseLlmInclusionStatus,
                 this.createdAt,
                 this.updatedAt,
+                this.relevantEntities,
                 this.url,
                 this.language,
                 this.author);
@@ -288,6 +307,16 @@ public final class KnowledgeDocumentSearchResponse implements IKnowledgeDocument
         _FinalStage title(String title);
 
         /**
+         * <p>The entities this document is narrowed to. Empty for a document that is part of the
+         * agent's general knowledge.</p>
+         */
+        _FinalStage relevantEntities(Set<ScopedEntity> relevantEntities);
+
+        _FinalStage addRelevantEntities(ScopedEntity relevantEntities);
+
+        _FinalStage addAllRelevantEntities(Set<ScopedEntity> relevantEntities);
+
+        /**
          * <p>The URL of the document. Should be visible to end users. Will be shown as part of answers. Not used for crawling.</p>
          */
         _FinalStage url(Optional<String> url);
@@ -336,6 +365,8 @@ public final class KnowledgeDocumentSearchResponse implements IKnowledgeDocument
 
         private Optional<String> url = Optional.empty();
 
+        private Set<ScopedEntity> relevantEntities = new LinkedHashSet<>();
+
         private Optional<String> title = Optional.empty();
 
         private Optional<EntityId> knowledgeBaseVersionId = Optional.empty();
@@ -355,6 +386,7 @@ public final class KnowledgeDocumentSearchResponse implements IKnowledgeDocument
             knowledgeBaseLlmInclusionStatus(other.getKnowledgeBaseLlmInclusionStatus());
             createdAt(other.getCreatedAt());
             updatedAt(other.getUpdatedAt());
+            relevantEntities(other.getRelevantEntities());
             url(other.getUrl());
             language(other.getLanguage());
             author(other.getAuthor());
@@ -497,6 +529,44 @@ public final class KnowledgeDocumentSearchResponse implements IKnowledgeDocument
         }
 
         /**
+         * <p>The entities this document is narrowed to. Empty for a document that is part of the
+         * agent's general knowledge.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage addAllRelevantEntities(Set<ScopedEntity> relevantEntities) {
+            if (relevantEntities != null) {
+                this.relevantEntities.addAll(relevantEntities);
+            }
+            return this;
+        }
+
+        /**
+         * <p>The entities this document is narrowed to. Empty for a document that is part of the
+         * agent's general knowledge.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage addRelevantEntities(ScopedEntity relevantEntities) {
+            this.relevantEntities.add(relevantEntities);
+            return this;
+        }
+
+        /**
+         * <p>The entities this document is narrowed to. Empty for a document that is part of the
+         * agent's general knowledge.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "relevantEntities", nulls = Nulls.SKIP)
+        public _FinalStage relevantEntities(Set<ScopedEntity> relevantEntities) {
+            this.relevantEntities.clear();
+            if (relevantEntities != null) {
+                this.relevantEntities.addAll(relevantEntities);
+            }
+            return this;
+        }
+
+        /**
          * <p>The title of the document. Will be shown as part of answers. May be missing on legacy documents.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -549,6 +619,7 @@ public final class KnowledgeDocumentSearchResponse implements IKnowledgeDocument
                     knowledgeBaseLlmInclusionStatus,
                     createdAt,
                     updatedAt,
+                    relevantEntities,
                     url,
                     language,
                     author,

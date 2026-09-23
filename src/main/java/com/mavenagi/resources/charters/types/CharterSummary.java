@@ -17,7 +17,6 @@ import com.mavenagi.core.NullableNonemptyFilter;
 import com.mavenagi.core.ObjectMappers;
 import com.mavenagi.resources.commons.types.EntityId;
 import com.mavenagi.resources.commons.types.PreconditionResponse;
-import com.mavenagi.resources.segments.types.SegmentSummary;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,8 +30,6 @@ public final class CharterSummary {
     private final EntityId charterId;
 
     private final String name;
-
-    private final Optional<SegmentSummary> segmentSummary;
 
     private final Optional<PreconditionResponse> precondition;
 
@@ -53,7 +50,6 @@ public final class CharterSummary {
     private CharterSummary(
             EntityId charterId,
             String name,
-            Optional<SegmentSummary> segmentSummary,
             Optional<PreconditionResponse> precondition,
             Optional<EntityId> parentCharterId,
             CharterStatus status,
@@ -64,7 +60,6 @@ public final class CharterSummary {
             Map<String, Object> additionalProperties) {
         this.charterId = charterId;
         this.name = name;
-        this.segmentSummary = segmentSummary;
         this.precondition = precondition;
         this.parentCharterId = parentCharterId;
         this.status = status;
@@ -92,20 +87,7 @@ public final class CharterSummary {
     }
 
     /**
-     * @return The segment backing this charter's rule. An implementation detail of <code>precondition</code>;
-     * read that instead.
-     */
-    @JsonIgnore
-    public Optional<SegmentSummary> getSegmentSummary() {
-        if (segmentSummary == null) {
-            return Optional.empty();
-        }
-        return segmentSummary;
-    }
-
-    /**
-     * @return The rule controlling when this charter applies, read from the charter's backing
-     * segment. Null means wildcard (always matches).
+     * @return The rule controlling when this charter applies. Null means wildcard (always matches).
      */
     @JsonIgnore
     public Optional<PreconditionResponse> getPrecondition() {
@@ -167,12 +149,6 @@ public final class CharterSummary {
     }
 
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
-    @JsonProperty("segmentSummary")
-    private Optional<SegmentSummary> _getSegmentSummary() {
-        return segmentSummary;
-    }
-
-    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
     @JsonProperty("precondition")
     private Optional<PreconditionResponse> _getPrecondition() {
         return precondition;
@@ -198,7 +174,6 @@ public final class CharterSummary {
     private boolean equalTo(CharterSummary other) {
         return charterId.equals(other.charterId)
                 && name.equals(other.name)
-                && segmentSummary.equals(other.segmentSummary)
                 && precondition.equals(other.precondition)
                 && parentCharterId.equals(other.parentCharterId)
                 && status.equals(other.status)
@@ -213,7 +188,6 @@ public final class CharterSummary {
         return Objects.hash(
                 this.charterId,
                 this.name,
-                this.segmentSummary,
                 this.precondition,
                 this.parentCharterId,
                 this.status,
@@ -273,18 +247,7 @@ public final class CharterSummary {
         CharterSummary build();
 
         /**
-         * <p>The segment backing this charter's rule. An implementation detail of <code>precondition</code>;
-         * read that instead.</p>
-         */
-        _FinalStage segmentSummary(Optional<SegmentSummary> segmentSummary);
-
-        _FinalStage segmentSummary(SegmentSummary segmentSummary);
-
-        _FinalStage segmentSummary(Nullable<SegmentSummary> segmentSummary);
-
-        /**
-         * <p>The rule controlling when this charter applies, read from the charter's backing
-         * segment. Null means wildcard (always matches).</p>
+         * <p>The rule controlling when this charter applies. Null means wildcard (always matches).</p>
          */
         _FinalStage precondition(Optional<PreconditionResponse> precondition);
 
@@ -337,8 +300,6 @@ public final class CharterSummary {
 
         private Optional<PreconditionResponse> precondition = Optional.empty();
 
-        private Optional<SegmentSummary> segmentSummary = Optional.empty();
-
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -348,7 +309,6 @@ public final class CharterSummary {
         public Builder from(CharterSummary other) {
             charterId(other.getCharterId());
             name(other.getName());
-            segmentSummary(other.getSegmentSummary());
             precondition(other.getPrecondition());
             parentCharterId(other.getParentCharterId());
             status(other.getStatus());
@@ -496,8 +456,7 @@ public final class CharterSummary {
         }
 
         /**
-         * <p>The rule controlling when this charter applies, read from the charter's backing
-         * segment. Null means wildcard (always matches).</p>
+         * <p>The rule controlling when this charter applies. Null means wildcard (always matches).</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -513,8 +472,7 @@ public final class CharterSummary {
         }
 
         /**
-         * <p>The rule controlling when this charter applies, read from the charter's backing
-         * segment. Null means wildcard (always matches).</p>
+         * <p>The rule controlling when this charter applies. Null means wildcard (always matches).</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -524,8 +482,7 @@ public final class CharterSummary {
         }
 
         /**
-         * <p>The rule controlling when this charter applies, read from the charter's backing
-         * segment. Null means wildcard (always matches).</p>
+         * <p>The rule controlling when this charter applies. Null means wildcard (always matches).</p>
          */
         @java.lang.Override
         @JsonSetter(value = "precondition", nulls = Nulls.SKIP)
@@ -534,51 +491,11 @@ public final class CharterSummary {
             return this;
         }
 
-        /**
-         * <p>The segment backing this charter's rule. An implementation detail of <code>precondition</code>;
-         * read that instead.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage segmentSummary(Nullable<SegmentSummary> segmentSummary) {
-            if (segmentSummary.isNull()) {
-                this.segmentSummary = null;
-            } else if (segmentSummary.isEmpty()) {
-                this.segmentSummary = Optional.empty();
-            } else {
-                this.segmentSummary = Optional.of(segmentSummary.get());
-            }
-            return this;
-        }
-
-        /**
-         * <p>The segment backing this charter's rule. An implementation detail of <code>precondition</code>;
-         * read that instead.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage segmentSummary(SegmentSummary segmentSummary) {
-            this.segmentSummary = Optional.ofNullable(segmentSummary);
-            return this;
-        }
-
-        /**
-         * <p>The segment backing this charter's rule. An implementation detail of <code>precondition</code>;
-         * read that instead.</p>
-         */
-        @java.lang.Override
-        @JsonSetter(value = "segmentSummary", nulls = Nulls.SKIP)
-        public _FinalStage segmentSummary(Optional<SegmentSummary> segmentSummary) {
-            this.segmentSummary = segmentSummary;
-            return this;
-        }
-
         @java.lang.Override
         public CharterSummary build() {
             return new CharterSummary(
                     charterId,
                     name,
-                    segmentSummary,
                     precondition,
                     parentCharterId,
                     status,

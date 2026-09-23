@@ -124,7 +124,7 @@ public final class IntelligentFieldResponse
     }
 
     /**
-     * @return ID of the agent variant that created this field, if applicable
+     * @return ID of the agent variant this field belongs to, if applicable
      */
     @JsonProperty("variantId")
     @java.lang.Override
@@ -151,14 +151,15 @@ public final class IntelligentFieldResponse
     }
 
     /**
-     * @return Result type hint used for schema generation, UI, and validation.
+     * @return The type of value this field holds. It constrains the schema the LLM is asked to fill
+     * and the JSON type of the computed <code>value</code>.
      * <ul>
-     * <li>STRING / MULTILINE: single string value</li>
-     * <li>MULTI_SELECT: multiple values</li>
-     * <li>BOOLEAN: boolean value</li>
-     * <li>NUMBER: numeric value</li>
+     * <li>STRING / MULTILINE: a single string</li>
+     * <li>MULTI_SELECT: a list of strings</li>
+     * <li>BOOLEAN: <code>true</code> or <code>false</code></li>
+     * <li>NUMBER: a number</li>
      * </ul>
-     * <p>Note: for single select, use STRING/NUMBER with a list of enumOptions.</p>
+     * <p>For a single select, use STRING or NUMBER together with <code>enumOptions</code>.</p>
      */
     @JsonProperty("validationType")
     @java.lang.Override
@@ -176,7 +177,8 @@ public final class IntelligentFieldResponse
     }
 
     /**
-     * @return Optional enum options for STRING/MULTILINE/NUMBER when a finite set is desired
+     * @return The finite set of values this field may take. Omit to let the LLM produce any value of
+     * the <code>validationType</code>. Options may be added later with the patch endpoint, but not removed.
      */
     @JsonProperty("enumOptions")
     @java.lang.Override
@@ -266,14 +268,15 @@ public final class IntelligentFieldResponse
 
     public interface ValidationTypeStage {
         /**
-         * <p>Result type hint used for schema generation, UI, and validation.</p>
+         * <p>The type of value this field holds. It constrains the schema the LLM is asked to fill
+         * and the JSON type of the computed <code>value</code>.</p>
          * <ul>
-         * <li>STRING / MULTILINE: single string value</li>
-         * <li>MULTI_SELECT: multiple values</li>
-         * <li>BOOLEAN: boolean value</li>
-         * <li>NUMBER: numeric value</li>
+         * <li>STRING / MULTILINE: a single string</li>
+         * <li>MULTI_SELECT: a list of strings</li>
+         * <li>BOOLEAN: <code>true</code> or <code>false</code></li>
+         * <li>NUMBER: a number</li>
          * </ul>
-         * <p>Note: for single select, use STRING/NUMBER with a list of enumOptions.</p>
+         * <p>For a single select, use STRING or NUMBER together with <code>enumOptions</code>.</p>
          */
         DefinitionStage validationType(@NotNull IntelligentFieldType validationType);
     }
@@ -303,7 +306,7 @@ public final class IntelligentFieldResponse
         _FinalStage updatedAt(OffsetDateTime updatedAt);
 
         /**
-         * <p>ID of the agent variant that created this field, if applicable</p>
+         * <p>ID of the agent variant this field belongs to, if applicable</p>
          */
         _FinalStage variantId(Optional<EntityIdWithoutAgent> variantId);
 
@@ -317,7 +320,8 @@ public final class IntelligentFieldResponse
         _FinalStage description(String description);
 
         /**
-         * <p>Optional enum options for STRING/MULTILINE/NUMBER when a finite set is desired</p>
+         * <p>The finite set of values this field may take. Omit to let the LLM produce any value of
+         * the <code>validationType</code>. Options may be added later with the patch endpoint, but not removed.</p>
          */
         _FinalStage enumOptions(Optional<List<EnumOption>> enumOptions);
 
@@ -425,22 +429,24 @@ public final class IntelligentFieldResponse
         }
 
         /**
-         * <p>Result type hint used for schema generation, UI, and validation.</p>
+         * <p>The type of value this field holds. It constrains the schema the LLM is asked to fill
+         * and the JSON type of the computed <code>value</code>.</p>
          * <ul>
-         * <li>STRING / MULTILINE: single string value</li>
-         * <li>MULTI_SELECT: multiple values</li>
-         * <li>BOOLEAN: boolean value</li>
-         * <li>NUMBER: numeric value</li>
+         * <li>STRING / MULTILINE: a single string</li>
+         * <li>MULTI_SELECT: a list of strings</li>
+         * <li>BOOLEAN: <code>true</code> or <code>false</code></li>
+         * <li>NUMBER: a number</li>
          * </ul>
-         * <p>Note: for single select, use STRING/NUMBER with a list of enumOptions.</p>
-         * <p>Result type hint used for schema generation, UI, and validation.</p>
+         * <p>For a single select, use STRING or NUMBER together with <code>enumOptions</code>.</p>
+         * <p>The type of value this field holds. It constrains the schema the LLM is asked to fill
+         * and the JSON type of the computed <code>value</code>.</p>
          * <ul>
-         * <li>STRING / MULTILINE: single string value</li>
-         * <li>MULTI_SELECT: multiple values</li>
-         * <li>BOOLEAN: boolean value</li>
-         * <li>NUMBER: numeric value</li>
+         * <li>STRING / MULTILINE: a single string</li>
+         * <li>MULTI_SELECT: a list of strings</li>
+         * <li>BOOLEAN: <code>true</code> or <code>false</code></li>
+         * <li>NUMBER: a number</li>
          * </ul>
-         * <p>Note: for single select, use STRING/NUMBER with a list of enumOptions.</p>
+         * <p>For a single select, use STRING or NUMBER together with <code>enumOptions</code>.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -463,7 +469,8 @@ public final class IntelligentFieldResponse
         }
 
         /**
-         * <p>Optional enum options for STRING/MULTILINE/NUMBER when a finite set is desired</p>
+         * <p>The finite set of values this field may take. Omit to let the LLM produce any value of
+         * the <code>validationType</code>. Options may be added later with the patch endpoint, but not removed.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -473,7 +480,8 @@ public final class IntelligentFieldResponse
         }
 
         /**
-         * <p>Optional enum options for STRING/MULTILINE/NUMBER when a finite set is desired</p>
+         * <p>The finite set of values this field may take. Omit to let the LLM produce any value of
+         * the <code>validationType</code>. Options may be added later with the patch endpoint, but not removed.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "enumOptions", nulls = Nulls.SKIP)
@@ -503,7 +511,7 @@ public final class IntelligentFieldResponse
         }
 
         /**
-         * <p>ID of the agent variant that created this field, if applicable</p>
+         * <p>ID of the agent variant this field belongs to, if applicable</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -513,7 +521,7 @@ public final class IntelligentFieldResponse
         }
 
         /**
-         * <p>ID of the agent variant that created this field, if applicable</p>
+         * <p>ID of the agent variant this field belongs to, if applicable</p>
          */
         @java.lang.Override
         @JsonSetter(value = "variantId", nulls = Nulls.SKIP)

@@ -45,6 +45,8 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
 
     private final OffsetDateTime updatedAt;
 
+    private final Set<ScopedEntity> relevantEntities;
+
     private final Optional<String> url;
 
     private final Optional<String> language;
@@ -59,8 +61,6 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
 
     private final Map<String, String> metadata;
 
-    private final Set<ScopedEntity> relevantEntities;
-
     private final Map<String, Object> additionalProperties;
 
     private KnowledgeDocumentResponse(
@@ -72,6 +72,7 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
             LlmInclusionStatus knowledgeBaseLlmInclusionStatus,
             OffsetDateTime createdAt,
             OffsetDateTime updatedAt,
+            Set<ScopedEntity> relevantEntities,
             Optional<String> url,
             Optional<String> language,
             Optional<String> author,
@@ -79,7 +80,6 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
             Optional<String> content,
             Optional<AttachmentResponse> asset,
             Map<String, String> metadata,
-            Set<ScopedEntity> relevantEntities,
             Map<String, Object> additionalProperties) {
         this.knowledgeDocumentId = knowledgeDocumentId;
         this.knowledgeBaseVersionId = knowledgeBaseVersionId;
@@ -89,6 +89,7 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
         this.knowledgeBaseLlmInclusionStatus = knowledgeBaseLlmInclusionStatus;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.relevantEntities = relevantEntities;
         this.url = url;
         this.language = language;
         this.author = author;
@@ -96,7 +97,6 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
         this.content = content;
         this.asset = asset;
         this.metadata = metadata;
-        this.relevantEntities = relevantEntities;
         this.additionalProperties = additionalProperties;
     }
 
@@ -174,6 +174,16 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
     }
 
     /**
+     * @return The entities this document is narrowed to. Empty for a document that is part of the
+     * agent's general knowledge.
+     */
+    @JsonProperty("relevantEntities")
+    @java.lang.Override
+    public Set<ScopedEntity> getRelevantEntities() {
+        return relevantEntities;
+    }
+
+    /**
      * @return The URL of the document. Should be visible to end users. Will be shown as part of answers. Not used for crawling.
      */
     @JsonProperty("url")
@@ -232,14 +242,6 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
         return metadata;
     }
 
-    /**
-     * @return Scoped entities this document is associated with for context-based filtering.
-     */
-    @JsonProperty("relevantEntities")
-    public Set<ScopedEntity> getRelevantEntities() {
-        return relevantEntities;
-    }
-
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -260,14 +262,14 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
                 && knowledgeBaseLlmInclusionStatus.equals(other.knowledgeBaseLlmInclusionStatus)
                 && createdAt.equals(other.createdAt)
                 && updatedAt.equals(other.updatedAt)
+                && relevantEntities.equals(other.relevantEntities)
                 && url.equals(other.url)
                 && language.equals(other.language)
                 && author.equals(other.author)
                 && processingStatus.equals(other.processingStatus)
                 && content.equals(other.content)
                 && asset.equals(other.asset)
-                && metadata.equals(other.metadata)
-                && relevantEntities.equals(other.relevantEntities);
+                && metadata.equals(other.metadata);
     }
 
     @java.lang.Override
@@ -281,14 +283,14 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
                 this.knowledgeBaseLlmInclusionStatus,
                 this.createdAt,
                 this.updatedAt,
+                this.relevantEntities,
                 this.url,
                 this.language,
                 this.author,
                 this.processingStatus,
                 this.content,
                 this.asset,
-                this.metadata,
-                this.relevantEntities);
+                this.metadata);
     }
 
     @java.lang.Override
@@ -363,6 +365,16 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
         _FinalStage title(String title);
 
         /**
+         * <p>The entities this document is narrowed to. Empty for a document that is part of the
+         * agent's general knowledge.</p>
+         */
+        _FinalStage relevantEntities(Set<ScopedEntity> relevantEntities);
+
+        _FinalStage addRelevantEntities(ScopedEntity relevantEntities);
+
+        _FinalStage addAllRelevantEntities(Set<ScopedEntity> relevantEntities);
+
+        /**
          * <p>The URL of the document. Should be visible to end users. Will be shown as part of answers. Not used for crawling.</p>
          */
         _FinalStage url(Optional<String> url);
@@ -412,15 +424,6 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
         _FinalStage putAllMetadata(Map<String, String> metadata);
 
         _FinalStage metadata(String key, String value);
-
-        /**
-         * <p>Scoped entities this document is associated with for context-based filtering.</p>
-         */
-        _FinalStage relevantEntities(Set<ScopedEntity> relevantEntities);
-
-        _FinalStage addRelevantEntities(ScopedEntity relevantEntities);
-
-        _FinalStage addAllRelevantEntities(Set<ScopedEntity> relevantEntities);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -444,8 +447,6 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
 
         private OffsetDateTime updatedAt;
 
-        private Set<ScopedEntity> relevantEntities = new LinkedHashSet<>();
-
         private Map<String, String> metadata = new LinkedHashMap<>();
 
         private Optional<AttachmentResponse> asset = Optional.empty();
@@ -459,6 +460,8 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
         private Optional<String> language = Optional.empty();
 
         private Optional<String> url = Optional.empty();
+
+        private Set<ScopedEntity> relevantEntities = new LinkedHashSet<>();
 
         private Optional<String> title = Optional.empty();
 
@@ -479,6 +482,7 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
             knowledgeBaseLlmInclusionStatus(other.getKnowledgeBaseLlmInclusionStatus());
             createdAt(other.getCreatedAt());
             updatedAt(other.getUpdatedAt());
+            relevantEntities(other.getRelevantEntities());
             url(other.getUrl());
             language(other.getLanguage());
             author(other.getAuthor());
@@ -486,7 +490,6 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
             content(other.getContent());
             asset(other.getAsset());
             metadata(other.getMetadata());
-            relevantEntities(other.getRelevantEntities());
             return this;
         }
 
@@ -562,41 +565,6 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
         @JsonSetter("updatedAt")
         public _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt) {
             this.updatedAt = Objects.requireNonNull(updatedAt, "updatedAt must not be null");
-            return this;
-        }
-
-        /**
-         * <p>Scoped entities this document is associated with for context-based filtering.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage addAllRelevantEntities(Set<ScopedEntity> relevantEntities) {
-            if (relevantEntities != null) {
-                this.relevantEntities.addAll(relevantEntities);
-            }
-            return this;
-        }
-
-        /**
-         * <p>Scoped entities this document is associated with for context-based filtering.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage addRelevantEntities(ScopedEntity relevantEntities) {
-            this.relevantEntities.add(relevantEntities);
-            return this;
-        }
-
-        /**
-         * <p>Scoped entities this document is associated with for context-based filtering.</p>
-         */
-        @java.lang.Override
-        @JsonSetter(value = "relevantEntities", nulls = Nulls.SKIP)
-        public _FinalStage relevantEntities(Set<ScopedEntity> relevantEntities) {
-            this.relevantEntities.clear();
-            if (relevantEntities != null) {
-                this.relevantEntities.addAll(relevantEntities);
-            }
             return this;
         }
 
@@ -756,6 +724,44 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
         }
 
         /**
+         * <p>The entities this document is narrowed to. Empty for a document that is part of the
+         * agent's general knowledge.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage addAllRelevantEntities(Set<ScopedEntity> relevantEntities) {
+            if (relevantEntities != null) {
+                this.relevantEntities.addAll(relevantEntities);
+            }
+            return this;
+        }
+
+        /**
+         * <p>The entities this document is narrowed to. Empty for a document that is part of the
+         * agent's general knowledge.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage addRelevantEntities(ScopedEntity relevantEntities) {
+            this.relevantEntities.add(relevantEntities);
+            return this;
+        }
+
+        /**
+         * <p>The entities this document is narrowed to. Empty for a document that is part of the
+         * agent's general knowledge.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "relevantEntities", nulls = Nulls.SKIP)
+        public _FinalStage relevantEntities(Set<ScopedEntity> relevantEntities) {
+            this.relevantEntities.clear();
+            if (relevantEntities != null) {
+                this.relevantEntities.addAll(relevantEntities);
+            }
+            return this;
+        }
+
+        /**
          * <p>The title of the document. Will be shown as part of answers. May be missing on legacy documents.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -808,6 +814,7 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
                     knowledgeBaseLlmInclusionStatus,
                     createdAt,
                     updatedAt,
+                    relevantEntities,
                     url,
                     language,
                     author,
@@ -815,7 +822,6 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
                     content,
                     asset,
                     metadata,
-                    relevantEntities,
                     additionalProperties);
         }
     }

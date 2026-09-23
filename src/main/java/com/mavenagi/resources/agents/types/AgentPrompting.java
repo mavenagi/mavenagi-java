@@ -50,7 +50,7 @@ public final class AgentPrompting {
     }
 
     /**
-     * @return Deprecated. Superseded by charters, which determine agent behavior per turn. Has no effect for agents using charters.
+     * @return Deprecated. Superseded by charters, which determine agent behavior per round. Has no effect for agents using charters.
      */
     @JsonProperty("persona")
     public LlmPersona getPersona() {
@@ -58,7 +58,7 @@ public final class AgentPrompting {
     }
 
     /**
-     * @return Deprecated. Superseded by charters, which determine agent behavior per turn. Has no effect for agents using charters.
+     * @return Deprecated. Superseded by charters, which determine agent behavior per round. Has no effect for agents using charters.
      */
     @JsonProperty("additionalPromptText")
     public Optional<String> getAdditionalPromptText() {
@@ -86,7 +86,7 @@ public final class AgentPrompting {
     }
 
     /**
-     * @return Deprecated. Superseded by charters, which determine agent behavior per turn. Has no effect for agents using charters.
+     * @return Deprecated. Superseded by charters, which determine agent behavior per round. Has no effect for agents using charters.
      * <p>Return the system fallback message on all questions that have no relevant knowledge bases or actions.</p>
      */
     @JsonProperty("rejectQuestionsWithoutKnowledge")
@@ -134,7 +134,7 @@ public final class AgentPrompting {
 
     public interface PersonaStage {
         /**
-         * <p>Deprecated. Superseded by charters, which determine agent behavior per turn. Has no effect for agents using charters.</p>
+         * <p>Deprecated. Superseded by charters, which determine agent behavior per round. Has no effect for agents using charters.</p>
          */
         RejectQuestionsWithoutKnowledgeStage persona(@NotNull LlmPersona persona);
 
@@ -143,7 +143,7 @@ public final class AgentPrompting {
 
     public interface RejectQuestionsWithoutKnowledgeStage {
         /**
-         * <p>Deprecated. Superseded by charters, which determine agent behavior per turn. Has no effect for agents using charters.</p>
+         * <p>Deprecated. Superseded by charters, which determine agent behavior per round. Has no effect for agents using charters.</p>
          * <p>Return the system fallback message on all questions that have no relevant knowledge bases or actions.</p>
          */
         _FinalStage rejectQuestionsWithoutKnowledge(boolean rejectQuestionsWithoutKnowledge);
@@ -153,7 +153,7 @@ public final class AgentPrompting {
         AgentPrompting build();
 
         /**
-         * <p>Deprecated. Superseded by charters, which determine agent behavior per turn. Has no effect for agents using charters.</p>
+         * <p>Deprecated. Superseded by charters, which determine agent behavior per round. Has no effect for agents using charters.</p>
          */
         _FinalStage additionalPromptText(Optional<String> additionalPromptText);
 
@@ -206,8 +206,8 @@ public final class AgentPrompting {
         }
 
         /**
-         * <p>Deprecated. Superseded by charters, which determine agent behavior per turn. Has no effect for agents using charters.</p>
-         * <p>Deprecated. Superseded by charters, which determine agent behavior per turn. Has no effect for agents using charters.</p>
+         * <p>Deprecated. Superseded by charters, which determine agent behavior per round. Has no effect for agents using charters.</p>
+         * <p>Deprecated. Superseded by charters, which determine agent behavior per round. Has no effect for agents using charters.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -218,9 +218,9 @@ public final class AgentPrompting {
         }
 
         /**
-         * <p>Deprecated. Superseded by charters, which determine agent behavior per turn. Has no effect for agents using charters.</p>
+         * <p>Deprecated. Superseded by charters, which determine agent behavior per round. Has no effect for agents using charters.</p>
          * <p>Return the system fallback message on all questions that have no relevant knowledge bases or actions.</p>
-         * <p>Deprecated. Superseded by charters, which determine agent behavior per turn. Has no effect for agents using charters.</p>
+         * <p>Deprecated. Superseded by charters, which determine agent behavior per round. Has no effect for agents using charters.</p>
          * <p>Return the system fallback message on all questions that have no relevant knowledge bases or actions.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -282,7 +282,7 @@ public final class AgentPrompting {
         }
 
         /**
-         * <p>Deprecated. Superseded by charters, which determine agent behavior per turn. Has no effect for agents using charters.</p>
+         * <p>Deprecated. Superseded by charters, which determine agent behavior per round. Has no effect for agents using charters.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -292,7 +292,7 @@ public final class AgentPrompting {
         }
 
         /**
-         * <p>Deprecated. Superseded by charters, which determine agent behavior per turn. Has no effect for agents using charters.</p>
+         * <p>Deprecated. Superseded by charters, which determine agent behavior per round. Has no effect for agents using charters.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "additionalPromptText", nulls = Nulls.SKIP)

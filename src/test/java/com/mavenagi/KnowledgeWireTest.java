@@ -1155,7 +1155,7 @@ public class KnowledgeWireTest {
     public void testSearchKnowledgeDocuments() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"knowledgeDocuments\":[{\"knowledgeDocumentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"knowledgeBaseVersionId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"knowledgeBaseId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"title\":\"title\",\"llmInclusionStatus\":\"ALWAYS\",\"knowledgeBaseLlmInclusionStatus\":\"ALWAYS\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"url\":\"url\",\"language\":\"language\",\"author\":\"author\"},{\"knowledgeDocumentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"knowledgeBaseVersionId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"knowledgeBaseId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"title\":\"title\",\"llmInclusionStatus\":\"ALWAYS\",\"knowledgeBaseLlmInclusionStatus\":\"ALWAYS\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"url\":\"url\",\"language\":\"language\",\"author\":\"author\"}],\"number\":1,\"size\":1,\"totalElements\":1000000,\"totalPages\":1}"));
+            .setBody("{\"knowledgeDocuments\":[{\"knowledgeDocumentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"knowledgeBaseVersionId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"knowledgeBaseId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"title\":\"title\",\"llmInclusionStatus\":\"ALWAYS\",\"knowledgeBaseLlmInclusionStatus\":\"ALWAYS\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"relevantEntities\":[{\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"scopeEntityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}}],\"url\":\"url\",\"language\":\"language\",\"author\":\"author\"},{\"knowledgeDocumentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"knowledgeBaseVersionId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"knowledgeBaseId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"title\":\"title\",\"llmInclusionStatus\":\"ALWAYS\",\"knowledgeBaseLlmInclusionStatus\":\"ALWAYS\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"relevantEntities\":[{\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"scopeEntityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}}],\"url\":\"url\",\"language\":\"language\",\"author\":\"author\"}],\"number\":1,\"size\":1,\"totalElements\":1000000,\"totalPages\":1}"));
         KnowledgeDocumentsResponse response = client.knowledge().searchKnowledgeDocuments(
             KnowledgeDocumentSearchRequest
                 .builder()
@@ -1224,6 +1224,24 @@ public class KnowledgeWireTest {
             + "      \"knowledgeBaseLlmInclusionStatus\": \"ALWAYS\",\n"
             + "      \"createdAt\": \"2024-01-15T09:30:00Z\",\n"
             + "      \"updatedAt\": \"2024-01-15T09:30:00Z\",\n"
+            + "      \"relevantEntities\": [\n"
+            + "        {\n"
+            + "          \"entityId\": {\n"
+            + "            \"organizationId\": \"organizationId\",\n"
+            + "            \"agentId\": \"agentId\",\n"
+            + "            \"type\": \"AGENT\",\n"
+            + "            \"appId\": \"appId\",\n"
+            + "            \"referenceId\": \"x\"\n"
+            + "          },\n"
+            + "          \"scopeEntityId\": {\n"
+            + "            \"organizationId\": \"organizationId\",\n"
+            + "            \"agentId\": \"agentId\",\n"
+            + "            \"type\": \"AGENT\",\n"
+            + "            \"appId\": \"appId\",\n"
+            + "            \"referenceId\": \"x\"\n"
+            + "          }\n"
+            + "        }\n"
+            + "      ],\n"
             + "      \"url\": \"url\",\n"
             + "      \"language\": \"language\",\n"
             + "      \"author\": \"author\"\n"
@@ -1255,6 +1273,24 @@ public class KnowledgeWireTest {
             + "      \"knowledgeBaseLlmInclusionStatus\": \"ALWAYS\",\n"
             + "      \"createdAt\": \"2024-01-15T09:30:00Z\",\n"
             + "      \"updatedAt\": \"2024-01-15T09:30:00Z\",\n"
+            + "      \"relevantEntities\": [\n"
+            + "        {\n"
+            + "          \"entityId\": {\n"
+            + "            \"organizationId\": \"organizationId\",\n"
+            + "            \"agentId\": \"agentId\",\n"
+            + "            \"type\": \"AGENT\",\n"
+            + "            \"appId\": \"appId\",\n"
+            + "            \"referenceId\": \"x\"\n"
+            + "          },\n"
+            + "          \"scopeEntityId\": {\n"
+            + "            \"organizationId\": \"organizationId\",\n"
+            + "            \"agentId\": \"agentId\",\n"
+            + "            \"type\": \"AGENT\",\n"
+            + "            \"appId\": \"appId\",\n"
+            + "            \"referenceId\": \"x\"\n"
+            + "          }\n"
+            + "        }\n"
+            + "      ],\n"
             + "      \"url\": \"url\",\n"
             + "      \"language\": \"language\",\n"
             + "      \"author\": \"author\"\n"
@@ -1292,7 +1328,7 @@ public class KnowledgeWireTest {
     public void testCreateKnowledgeDocument() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"knowledgeDocumentId\":{\"referenceId\":\"getting-started\",\"appId\":\"readme\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"KNOWLEDGE_DOCUMENT\"},\"knowledgeBaseVersionId\":{\"referenceId\":\"versionId\",\"appId\":\"maven\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"KNOWLEDGE_BASE_VERSION\"},\"knowledgeBaseId\":{\"referenceId\":\"help-docs\",\"appId\":\"help-center\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"KNOWLEDGE_BASE\"},\"content\":\"## Getting started This is a getting started guide for the help center.\",\"title\":\"Getting started\",\"metadata\":{\"category\":\"getting-started\"},\"createdAt\":\"2024-01-01T00:00:00Z\",\"updatedAt\":\"2024-02-02T00:00:00Z\",\"llmInclusionStatus\":\"WHEN_RELEVANT\",\"relevantEntities\":[{\"entityId\":{\"type\":\"CUSTOMER\",\"appId\":\"crm\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"referenceId\":\"customer-42\"},\"scopeEntityId\":{\"type\":\"AGENT\",\"appId\":\"maven\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"referenceId\":\"support\"}}],\"knowledgeBaseLlmInclusionStatus\":\"WHEN_RELEVANT\"}"));
+            .setBody("{\"knowledgeDocumentId\":{\"referenceId\":\"getting-started\",\"appId\":\"readme\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"KNOWLEDGE_DOCUMENT\"},\"knowledgeBaseVersionId\":{\"referenceId\":\"versionId\",\"appId\":\"maven\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"KNOWLEDGE_BASE_VERSION\"},\"knowledgeBaseId\":{\"referenceId\":\"help-docs\",\"appId\":\"help-center\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"KNOWLEDGE_BASE\"},\"content\":\"## Getting started This is a getting started guide for the help center.\",\"title\":\"Getting started\",\"metadata\":{\"category\":\"getting-started\"},\"createdAt\":\"2024-01-01T00:00:00Z\",\"updatedAt\":\"2024-02-02T00:00:00Z\",\"llmInclusionStatus\":\"WHEN_RELEVANT\",\"relevantEntities\":[],\"knowledgeBaseLlmInclusionStatus\":\"WHEN_RELEVANT\"}"));
         KnowledgeDocumentResponse response = client.knowledge().createKnowledgeDocument(
             "help-center",
             KnowledgeDocumentRequest
@@ -1400,24 +1436,7 @@ public class KnowledgeWireTest {
             + "  \"createdAt\": \"2024-01-01T00:00:00Z\",\n"
             + "  \"updatedAt\": \"2024-02-02T00:00:00Z\",\n"
             + "  \"llmInclusionStatus\": \"WHEN_RELEVANT\",\n"
-            + "  \"relevantEntities\": [\n"
-            + "    {\n"
-            + "      \"entityId\": {\n"
-            + "        \"type\": \"CUSTOMER\",\n"
-            + "        \"appId\": \"crm\",\n"
-            + "        \"organizationId\": \"acme\",\n"
-            + "        \"agentId\": \"support\",\n"
-            + "        \"referenceId\": \"customer-42\"\n"
-            + "      },\n"
-            + "      \"scopeEntityId\": {\n"
-            + "        \"type\": \"AGENT\",\n"
-            + "        \"appId\": \"maven\",\n"
-            + "        \"organizationId\": \"acme\",\n"
-            + "        \"agentId\": \"support\",\n"
-            + "        \"referenceId\": \"support\"\n"
-            + "      }\n"
-            + "    }\n"
-            + "  ],\n"
+            + "  \"relevantEntities\": [],\n"
             + "  \"knowledgeBaseLlmInclusionStatus\": \"WHEN_RELEVANT\"\n"
             + "}";
         JsonNode actualResponseNode = objectMapper.readTree(actualResponseJson);
@@ -1503,7 +1522,7 @@ public class KnowledgeWireTest {
     public void testGetKnowledgeDocument() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"processingStatus\":\"SUCCEEDED\",\"content\":\"content\",\"asset\":{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},\"metadata\":{\"metadata\":\"metadata\"},\"relevantEntities\":[{\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"scopeEntityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}}],\"knowledgeDocumentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"knowledgeBaseVersionId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"knowledgeBaseId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"title\":\"title\",\"llmInclusionStatus\":\"ALWAYS\",\"knowledgeBaseLlmInclusionStatus\":\"ALWAYS\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"url\":\"url\",\"language\":\"language\",\"author\":\"author\"}"));
+            .setBody("{\"processingStatus\":\"SUCCEEDED\",\"content\":\"content\",\"asset\":{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},\"metadata\":{\"metadata\":\"metadata\"},\"knowledgeDocumentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"knowledgeBaseVersionId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"knowledgeBaseId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"title\":\"title\",\"llmInclusionStatus\":\"ALWAYS\",\"knowledgeBaseLlmInclusionStatus\":\"ALWAYS\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"relevantEntities\":[{\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"scopeEntityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}}],\"url\":\"url\",\"language\":\"language\",\"author\":\"author\"}"));
         KnowledgeDocumentResponse response = client.knowledge().getKnowledgeDocument(
             "knowledgeBaseVersionReferenceId",
             "knowledgeDocumentReferenceId",
@@ -1533,24 +1552,6 @@ public class KnowledgeWireTest {
             + "  \"metadata\": {\n"
             + "    \"metadata\": \"metadata\"\n"
             + "  },\n"
-            + "  \"relevantEntities\": [\n"
-            + "    {\n"
-            + "      \"entityId\": {\n"
-            + "        \"organizationId\": \"organizationId\",\n"
-            + "        \"agentId\": \"agentId\",\n"
-            + "        \"type\": \"AGENT\",\n"
-            + "        \"appId\": \"appId\",\n"
-            + "        \"referenceId\": \"x\"\n"
-            + "      },\n"
-            + "      \"scopeEntityId\": {\n"
-            + "        \"organizationId\": \"organizationId\",\n"
-            + "        \"agentId\": \"agentId\",\n"
-            + "        \"type\": \"AGENT\",\n"
-            + "        \"appId\": \"appId\",\n"
-            + "        \"referenceId\": \"x\"\n"
-            + "      }\n"
-            + "    }\n"
-            + "  ],\n"
             + "  \"knowledgeDocumentId\": {\n"
             + "    \"organizationId\": \"organizationId\",\n"
             + "    \"agentId\": \"agentId\",\n"
@@ -1577,6 +1578,24 @@ public class KnowledgeWireTest {
             + "  \"knowledgeBaseLlmInclusionStatus\": \"ALWAYS\",\n"
             + "  \"createdAt\": \"2024-01-15T09:30:00Z\",\n"
             + "  \"updatedAt\": \"2024-01-15T09:30:00Z\",\n"
+            + "  \"relevantEntities\": [\n"
+            + "    {\n"
+            + "      \"entityId\": {\n"
+            + "        \"organizationId\": \"organizationId\",\n"
+            + "        \"agentId\": \"agentId\",\n"
+            + "        \"type\": \"AGENT\",\n"
+            + "        \"appId\": \"appId\",\n"
+            + "        \"referenceId\": \"x\"\n"
+            + "      },\n"
+            + "      \"scopeEntityId\": {\n"
+            + "        \"organizationId\": \"organizationId\",\n"
+            + "        \"agentId\": \"agentId\",\n"
+            + "        \"type\": \"AGENT\",\n"
+            + "        \"appId\": \"appId\",\n"
+            + "        \"referenceId\": \"x\"\n"
+            + "      }\n"
+            + "    }\n"
+            + "  ],\n"
             + "  \"url\": \"url\",\n"
             + "  \"language\": \"language\",\n"
             + "  \"author\": \"author\"\n"
@@ -1608,7 +1627,7 @@ public class KnowledgeWireTest {
     public void testPatchKnowledgeDocument() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"knowledgeDocumentId\":{\"referenceId\":\"getting-started\",\"appId\":\"readme\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"KNOWLEDGE_DOCUMENT\"},\"knowledgeBaseVersionId\":{\"referenceId\":\"versionId\",\"appId\":\"maven\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"KNOWLEDGE_BASE_VERSION\"},\"knowledgeBaseId\":{\"referenceId\":\"help-docs\",\"appId\":\"help-center\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"KNOWLEDGE_BASE\"},\"content\":\"## Getting started This is a getting started guide for the help center.\",\"title\":\"Getting started\",\"metadata\":{\"category\":\"getting-started\"},\"createdAt\":\"2024-01-01T00:00:00Z\",\"updatedAt\":\"2024-02-02T00:00:00Z\",\"llmInclusionStatus\":\"WHEN_RELEVANT\",\"relevantEntities\":[{\"entityId\":{\"type\":\"CUSTOMER\",\"appId\":\"crm\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"referenceId\":\"customer-42\"},\"scopeEntityId\":{\"type\":\"AGENT\",\"appId\":\"maven\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"referenceId\":\"support\"}}],\"knowledgeBaseLlmInclusionStatus\":\"WHEN_RELEVANT\"}"));
+            .setBody("{\"knowledgeDocumentId\":{\"referenceId\":\"getting-started\",\"appId\":\"readme\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"KNOWLEDGE_DOCUMENT\"},\"knowledgeBaseVersionId\":{\"referenceId\":\"versionId\",\"appId\":\"maven\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"KNOWLEDGE_BASE_VERSION\"},\"knowledgeBaseId\":{\"referenceId\":\"help-docs\",\"appId\":\"help-center\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"KNOWLEDGE_BASE\"},\"content\":\"## Getting started This is a getting started guide for the help center.\",\"title\":\"Getting started\",\"metadata\":{\"category\":\"getting-started\"},\"createdAt\":\"2024-01-01T00:00:00Z\",\"updatedAt\":\"2024-02-02T00:00:00Z\",\"llmInclusionStatus\":\"WHEN_RELEVANT\",\"relevantEntities\":[],\"knowledgeBaseLlmInclusionStatus\":\"WHEN_RELEVANT\"}"));
         KnowledgeDocumentResponse response = client.knowledge().patchKnowledgeDocument(
             "help-center",
             "how-it-works",
@@ -1683,24 +1702,7 @@ public class KnowledgeWireTest {
             + "  \"createdAt\": \"2024-01-01T00:00:00Z\",\n"
             + "  \"updatedAt\": \"2024-02-02T00:00:00Z\",\n"
             + "  \"llmInclusionStatus\": \"WHEN_RELEVANT\",\n"
-            + "  \"relevantEntities\": [\n"
-            + "    {\n"
-            + "      \"entityId\": {\n"
-            + "        \"type\": \"CUSTOMER\",\n"
-            + "        \"appId\": \"crm\",\n"
-            + "        \"organizationId\": \"acme\",\n"
-            + "        \"agentId\": \"support\",\n"
-            + "        \"referenceId\": \"customer-42\"\n"
-            + "      },\n"
-            + "      \"scopeEntityId\": {\n"
-            + "        \"type\": \"AGENT\",\n"
-            + "        \"appId\": \"maven\",\n"
-            + "        \"organizationId\": \"acme\",\n"
-            + "        \"agentId\": \"support\",\n"
-            + "        \"referenceId\": \"support\"\n"
-            + "      }\n"
-            + "    }\n"
-            + "  ],\n"
+            + "  \"relevantEntities\": [],\n"
             + "  \"knowledgeBaseLlmInclusionStatus\": \"WHEN_RELEVANT\"\n"
             + "}";
         JsonNode actualResponseNode = objectMapper.readTree(actualResponseJson);

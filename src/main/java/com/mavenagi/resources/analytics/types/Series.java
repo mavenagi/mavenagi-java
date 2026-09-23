@@ -45,6 +45,7 @@ public final class Series {
 
     /**
      * @return List of labeled data points for the series.
+     * A bucket the metric could not measure has no point here.
      */
     @JsonProperty("data")
     public List<LabeledPoint> getData() {
@@ -94,7 +95,8 @@ public final class Series {
         Series build();
 
         /**
-         * <p>List of labeled data points for the series.</p>
+         * <p>List of labeled data points for the series.
+         * A bucket the metric could not measure has no point here.</p>
          */
         _FinalStage data(List<LabeledPoint> data);
 
@@ -136,7 +138,8 @@ public final class Series {
         }
 
         /**
-         * <p>List of labeled data points for the series.</p>
+         * <p>List of labeled data points for the series.
+         * A bucket the metric could not measure has no point here.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -148,7 +151,8 @@ public final class Series {
         }
 
         /**
-         * <p>List of labeled data points for the series.</p>
+         * <p>List of labeled data points for the series.
+         * A bucket the metric could not measure has no point here.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -158,7 +162,8 @@ public final class Series {
         }
 
         /**
-         * <p>List of labeled data points for the series.</p>
+         * <p>List of labeled data points for the series.
+         * A bucket the metric could not measure has no point here.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "data", nulls = Nulls.SKIP)

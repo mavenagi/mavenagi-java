@@ -27,6 +27,9 @@ public final class SystemEventName {
 
     public static final SystemEventName APP_UNINSTALLED = new SystemEventName(Value.APP_UNINSTALLED, "APP_UNINSTALLED");
 
+    public static final SystemEventName INTELLIGENT_FIELD_VALUE_CHANGED =
+            new SystemEventName(Value.INTELLIGENT_FIELD_VALUE_CHANGED, "INTELLIGENT_FIELD_VALUE_CHANGED");
+
     public static final SystemEventName SYNC_COMPLETED = new SystemEventName(Value.SYNC_COMPLETED, "SYNC_COMPLETED");
 
     public static final SystemEventName APP_INSTALLED = new SystemEventName(Value.APP_INSTALLED, "APP_INSTALLED");
@@ -82,6 +85,8 @@ public final class SystemEventName {
                 return visitor.visitSyncStarted();
             case APP_UNINSTALLED:
                 return visitor.visitAppUninstalled();
+            case INTELLIGENT_FIELD_VALUE_CHANGED:
+                return visitor.visitIntelligentFieldValueChanged();
             case SYNC_COMPLETED:
                 return visitor.visitSyncCompleted();
             case APP_INSTALLED:
@@ -113,6 +118,8 @@ public final class SystemEventName {
                 return SYNC_STARTED;
             case "APP_UNINSTALLED":
                 return APP_UNINSTALLED;
+            case "INTELLIGENT_FIELD_VALUE_CHANGED":
+                return INTELLIGENT_FIELD_VALUE_CHANGED;
             case "SYNC_COMPLETED":
                 return SYNC_COMPLETED;
             case "APP_INSTALLED":
@@ -147,6 +154,8 @@ public final class SystemEventName {
 
         SYNC_FAILED,
 
+        INTELLIGENT_FIELD_VALUE_CHANGED,
+
         UNKNOWN
     }
 
@@ -172,6 +181,8 @@ public final class SystemEventName {
         T visitSyncCompleted();
 
         T visitSyncFailed();
+
+        T visitIntelligentFieldValueChanged();
 
         T visitUnknown(String unknownType);
     }

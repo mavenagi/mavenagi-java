@@ -7,16 +7,16 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public final class IntelligentFieldType {
-    public static final IntelligentFieldType MULTILINE = new IntelligentFieldType(Value.MULTILINE, "MULTILINE");
-
     public static final IntelligentFieldType MULTI_SELECT =
             new IntelligentFieldType(Value.MULTI_SELECT, "MULTI_SELECT");
 
-    public static final IntelligentFieldType NUMBER = new IntelligentFieldType(Value.NUMBER, "NUMBER");
+    public static final IntelligentFieldType BOOLEAN = new IntelligentFieldType(Value.BOOLEAN, "BOOLEAN");
 
     public static final IntelligentFieldType STRING = new IntelligentFieldType(Value.STRING, "STRING");
 
-    public static final IntelligentFieldType BOOLEAN = new IntelligentFieldType(Value.BOOLEAN, "BOOLEAN");
+    public static final IntelligentFieldType MULTILINE = new IntelligentFieldType(Value.MULTILINE, "MULTILINE");
+
+    public static final IntelligentFieldType NUMBER = new IntelligentFieldType(Value.NUMBER, "NUMBER");
 
     private final Value value;
 
@@ -50,16 +50,16 @@ public final class IntelligentFieldType {
 
     public <T> T visit(Visitor<T> visitor) {
         switch (value) {
-            case MULTILINE:
-                return visitor.visitMultiline();
             case MULTI_SELECT:
                 return visitor.visitMultiSelect();
-            case NUMBER:
-                return visitor.visitNumber();
-            case STRING:
-                return visitor.visitString();
             case BOOLEAN:
                 return visitor.visitBoolean();
+            case STRING:
+                return visitor.visitString();
+            case MULTILINE:
+                return visitor.visitMultiline();
+            case NUMBER:
+                return visitor.visitNumber();
             case UNKNOWN:
             default:
                 return visitor.visitUnknown(string);
@@ -69,16 +69,16 @@ public final class IntelligentFieldType {
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static IntelligentFieldType valueOf(String value) {
         switch (value) {
-            case "MULTILINE":
-                return MULTILINE;
             case "MULTI_SELECT":
                 return MULTI_SELECT;
-            case "NUMBER":
-                return NUMBER;
-            case "STRING":
-                return STRING;
             case "BOOLEAN":
                 return BOOLEAN;
+            case "STRING":
+                return STRING;
+            case "MULTILINE":
+                return MULTILINE;
+            case "NUMBER":
+                return NUMBER;
             default:
                 return new IntelligentFieldType(Value.UNKNOWN, value);
         }

@@ -44,6 +44,8 @@ public final class TimeSeries {
 
     /**
      * @return List of time-based data points for the series.
+     * An interval the metric could not measure has no point here, so a series can be shorter
+     * than the number of intervals in the requested range.
      */
     @JsonProperty("data")
     public List<TimeDataPoint> getData() {
@@ -92,7 +94,9 @@ public final class TimeSeries {
         TimeSeries build();
 
         /**
-         * <p>List of time-based data points for the series.</p>
+         * <p>List of time-based data points for the series.
+         * An interval the metric could not measure has no point here, so a series can be shorter
+         * than the number of intervals in the requested range.</p>
          */
         _FinalStage data(List<TimeDataPoint> data);
 
@@ -132,7 +136,9 @@ public final class TimeSeries {
         }
 
         /**
-         * <p>List of time-based data points for the series.</p>
+         * <p>List of time-based data points for the series.
+         * An interval the metric could not measure has no point here, so a series can be shorter
+         * than the number of intervals in the requested range.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -144,7 +150,9 @@ public final class TimeSeries {
         }
 
         /**
-         * <p>List of time-based data points for the series.</p>
+         * <p>List of time-based data points for the series.
+         * An interval the metric could not measure has no point here, so a series can be shorter
+         * than the number of intervals in the requested range.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -154,7 +162,9 @@ public final class TimeSeries {
         }
 
         /**
-         * <p>List of time-based data points for the series.</p>
+         * <p>List of time-based data points for the series.
+         * An interval the metric could not measure has no point here, so a series can be shorter
+         * than the number of intervals in the requested range.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "data", nulls = Nulls.SKIP)

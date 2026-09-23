@@ -86,7 +86,7 @@ public final class AskRequest {
     }
 
     /**
-     * @return What prompts this assistant turn. Omit (or send USER_MESSAGE) for a normal user
+     * @return What prompts this assistant response. Omit (or send USER_MESSAGE) for a normal user
      * question — this is the backwards-compatible default. Use WELCOME for an agent-authored
      * opener, or PROACTIVE for a message the user did not prompt.
      */
@@ -99,7 +99,7 @@ public final class AskRequest {
      * @return For USER_MESSAGE (the default) this is the user's message, in the user's own words, and
      * is required. For WELCOME and PROACTIVE it is optional and, when provided, steers the
      * agent's response (a directive to the agent, not the user's own words). (Changed from
-     * required to optional to support the non-user turn types — existing USER_MESSAGE callers
+     * required to optional to support the non-user ask types — existing USER_MESSAGE callers
      * are unaffected.)
      */
     @JsonProperty("text")
@@ -111,22 +111,22 @@ public final class AskRequest {
      * @return What form the answer takes. Omit it for prose, or send <code>jsonSchema</code> to additionally get a
      * <code>BotObjectResponse</code> matching a schema you supply.
      * <p>Set per ask and independent of <code>type</code>, so one conversation can mix prose and structured
-     * turns. Only the answer's form changes: knowledge, actions, charters and segments apply
+     * rounds. Only the answer's form changes: knowledge, actions, charters and segments apply
      * the same way either way.</p>
-     * <p>A structured answer accompanies the prose one rather than replacing it — the same turn
+     * <p>A structured answer accompanies the prose one rather than replacing it — the same round
      * produces both, so the conversation stays readable. On <code>ask_stream</code> the prose still streams
      * on <code>text</code> events as it always has, and the object arrives whole on a single <code>object</code> event
      * near the end.</p>
-     * <p>Every answering turn carries an object, including one where the agent asks a clarifying
+     * <p>Every answering round carries an object, including one where the agent asks a clarifying
      * question rather than answering. Shape the schema so it can say &quot;not enough information&quot;
      * — a populated object is not on its own evidence of a confident answer.</p>
-     * <p>Two exceptions. A turn that asks the user to <em>act</em> produces an action form from the
-     * action rather than from an answer, so it carries no object; the turn that answers after
+     * <p>Two exceptions. A round that asks the user to <em>act</em> produces an action form from the
+     * action rather than from an answer, so it carries no object; the round that answers after
      * the form is submitted does carry one. Leave the <code>FORMS</code> capability off if you need an
-     * object on every turn.</p>
-     * <p>A turn answered verbatim by a <code>STRICT_RETURN</code> charter also carries no object. That
+     * object on every round.</p>
+     * <p>A round answered verbatim by a <code>STRICT_RETURN</code> charter also carries no object. That
      * charter's manual is returned exactly as written without consulting the agent, so there is
-     * nothing to shape into the requested schema — the turn returns the manual as <code>text</code> alone.</p>
+     * nothing to shape into the requested schema — the round returns the manual as <code>text</code> alone.</p>
      */
     @JsonProperty("textFormat")
     public Optional<TextFormat> getTextFormat() {
@@ -237,7 +237,7 @@ public final class AskRequest {
         AskRequest build();
 
         /**
-         * <p>What prompts this assistant turn. Omit (or send USER_MESSAGE) for a normal user
+         * <p>What prompts this assistant response. Omit (or send USER_MESSAGE) for a normal user
          * question — this is the backwards-compatible default. Use WELCOME for an agent-authored
          * opener, or PROACTIVE for a message the user did not prompt.</p>
          */
@@ -249,7 +249,7 @@ public final class AskRequest {
          * <p>For USER_MESSAGE (the default) this is the user's message, in the user's own words, and
          * is required. For WELCOME and PROACTIVE it is optional and, when provided, steers the
          * agent's response (a directive to the agent, not the user's own words). (Changed from
-         * required to optional to support the non-user turn types — existing USER_MESSAGE callers
+         * required to optional to support the non-user ask types — existing USER_MESSAGE callers
          * are unaffected.)</p>
          */
         _FinalStage text(Optional<String> text);
@@ -260,22 +260,22 @@ public final class AskRequest {
          * <p>What form the answer takes. Omit it for prose, or send <code>jsonSchema</code> to additionally get a
          * <code>BotObjectResponse</code> matching a schema you supply.</p>
          * <p>Set per ask and independent of <code>type</code>, so one conversation can mix prose and structured
-         * turns. Only the answer's form changes: knowledge, actions, charters and segments apply
+         * rounds. Only the answer's form changes: knowledge, actions, charters and segments apply
          * the same way either way.</p>
-         * <p>A structured answer accompanies the prose one rather than replacing it — the same turn
+         * <p>A structured answer accompanies the prose one rather than replacing it — the same round
          * produces both, so the conversation stays readable. On <code>ask_stream</code> the prose still streams
          * on <code>text</code> events as it always has, and the object arrives whole on a single <code>object</code> event
          * near the end.</p>
-         * <p>Every answering turn carries an object, including one where the agent asks a clarifying
+         * <p>Every answering round carries an object, including one where the agent asks a clarifying
          * question rather than answering. Shape the schema so it can say &quot;not enough information&quot;
          * — a populated object is not on its own evidence of a confident answer.</p>
-         * <p>Two exceptions. A turn that asks the user to <em>act</em> produces an action form from the
-         * action rather than from an answer, so it carries no object; the turn that answers after
+         * <p>Two exceptions. A round that asks the user to <em>act</em> produces an action form from the
+         * action rather than from an answer, so it carries no object; the round that answers after
          * the form is submitted does carry one. Leave the <code>FORMS</code> capability off if you need an
-         * object on every turn.</p>
-         * <p>A turn answered verbatim by a <code>STRICT_RETURN</code> charter also carries no object. That
+         * object on every round.</p>
+         * <p>A round answered verbatim by a <code>STRICT_RETURN</code> charter also carries no object. That
          * charter's manual is returned exactly as written without consulting the agent, so there is
-         * nothing to shape into the requested schema — the turn returns the manual as <code>text</code> alone.</p>
+         * nothing to shape into the requested schema — the round returns the manual as <code>text</code> alone.</p>
          */
         _FinalStage textFormat(Optional<TextFormat> textFormat);
 
@@ -476,22 +476,22 @@ public final class AskRequest {
          * <p>What form the answer takes. Omit it for prose, or send <code>jsonSchema</code> to additionally get a
          * <code>BotObjectResponse</code> matching a schema you supply.</p>
          * <p>Set per ask and independent of <code>type</code>, so one conversation can mix prose and structured
-         * turns. Only the answer's form changes: knowledge, actions, charters and segments apply
+         * rounds. Only the answer's form changes: knowledge, actions, charters and segments apply
          * the same way either way.</p>
-         * <p>A structured answer accompanies the prose one rather than replacing it — the same turn
+         * <p>A structured answer accompanies the prose one rather than replacing it — the same round
          * produces both, so the conversation stays readable. On <code>ask_stream</code> the prose still streams
          * on <code>text</code> events as it always has, and the object arrives whole on a single <code>object</code> event
          * near the end.</p>
-         * <p>Every answering turn carries an object, including one where the agent asks a clarifying
+         * <p>Every answering round carries an object, including one where the agent asks a clarifying
          * question rather than answering. Shape the schema so it can say &quot;not enough information&quot;
          * — a populated object is not on its own evidence of a confident answer.</p>
-         * <p>Two exceptions. A turn that asks the user to <em>act</em> produces an action form from the
-         * action rather than from an answer, so it carries no object; the turn that answers after
+         * <p>Two exceptions. A round that asks the user to <em>act</em> produces an action form from the
+         * action rather than from an answer, so it carries no object; the round that answers after
          * the form is submitted does carry one. Leave the <code>FORMS</code> capability off if you need an
-         * object on every turn.</p>
-         * <p>A turn answered verbatim by a <code>STRICT_RETURN</code> charter also carries no object. That
+         * object on every round.</p>
+         * <p>A round answered verbatim by a <code>STRICT_RETURN</code> charter also carries no object. That
          * charter's manual is returned exactly as written without consulting the agent, so there is
-         * nothing to shape into the requested schema — the turn returns the manual as <code>text</code> alone.</p>
+         * nothing to shape into the requested schema — the round returns the manual as <code>text</code> alone.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -504,22 +504,22 @@ public final class AskRequest {
          * <p>What form the answer takes. Omit it for prose, or send <code>jsonSchema</code> to additionally get a
          * <code>BotObjectResponse</code> matching a schema you supply.</p>
          * <p>Set per ask and independent of <code>type</code>, so one conversation can mix prose and structured
-         * turns. Only the answer's form changes: knowledge, actions, charters and segments apply
+         * rounds. Only the answer's form changes: knowledge, actions, charters and segments apply
          * the same way either way.</p>
-         * <p>A structured answer accompanies the prose one rather than replacing it — the same turn
+         * <p>A structured answer accompanies the prose one rather than replacing it — the same round
          * produces both, so the conversation stays readable. On <code>ask_stream</code> the prose still streams
          * on <code>text</code> events as it always has, and the object arrives whole on a single <code>object</code> event
          * near the end.</p>
-         * <p>Every answering turn carries an object, including one where the agent asks a clarifying
+         * <p>Every answering round carries an object, including one where the agent asks a clarifying
          * question rather than answering. Shape the schema so it can say &quot;not enough information&quot;
          * — a populated object is not on its own evidence of a confident answer.</p>
-         * <p>Two exceptions. A turn that asks the user to <em>act</em> produces an action form from the
-         * action rather than from an answer, so it carries no object; the turn that answers after
+         * <p>Two exceptions. A round that asks the user to <em>act</em> produces an action form from the
+         * action rather than from an answer, so it carries no object; the round that answers after
          * the form is submitted does carry one. Leave the <code>FORMS</code> capability off if you need an
-         * object on every turn.</p>
-         * <p>A turn answered verbatim by a <code>STRICT_RETURN</code> charter also carries no object. That
+         * object on every round.</p>
+         * <p>A round answered verbatim by a <code>STRICT_RETURN</code> charter also carries no object. That
          * charter's manual is returned exactly as written without consulting the agent, so there is
-         * nothing to shape into the requested schema — the turn returns the manual as <code>text</code> alone.</p>
+         * nothing to shape into the requested schema — the round returns the manual as <code>text</code> alone.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "textFormat", nulls = Nulls.SKIP)
@@ -532,7 +532,7 @@ public final class AskRequest {
          * <p>For USER_MESSAGE (the default) this is the user's message, in the user's own words, and
          * is required. For WELCOME and PROACTIVE it is optional and, when provided, steers the
          * agent's response (a directive to the agent, not the user's own words). (Changed from
-         * required to optional to support the non-user turn types — existing USER_MESSAGE callers
+         * required to optional to support the non-user ask types — existing USER_MESSAGE callers
          * are unaffected.)</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -546,7 +546,7 @@ public final class AskRequest {
          * <p>For USER_MESSAGE (the default) this is the user's message, in the user's own words, and
          * is required. For WELCOME and PROACTIVE it is optional and, when provided, steers the
          * agent's response (a directive to the agent, not the user's own words). (Changed from
-         * required to optional to support the non-user turn types — existing USER_MESSAGE callers
+         * required to optional to support the non-user ask types — existing USER_MESSAGE callers
          * are unaffected.)</p>
          */
         @java.lang.Override
@@ -557,7 +557,7 @@ public final class AskRequest {
         }
 
         /**
-         * <p>What prompts this assistant turn. Omit (or send USER_MESSAGE) for a normal user
+         * <p>What prompts this assistant response. Omit (or send USER_MESSAGE) for a normal user
          * question — this is the backwards-compatible default. Use WELCOME for an agent-authored
          * opener, or PROACTIVE for a message the user did not prompt.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
@@ -569,7 +569,7 @@ public final class AskRequest {
         }
 
         /**
-         * <p>What prompts this assistant turn. Omit (or send USER_MESSAGE) for a normal user
+         * <p>What prompts this assistant response. Omit (or send USER_MESSAGE) for a normal user
          * question — this is the backwards-compatible default. Use WELCOME for an agent-authored
          * opener, or PROACTIVE for a message the user did not prompt.</p>
          */

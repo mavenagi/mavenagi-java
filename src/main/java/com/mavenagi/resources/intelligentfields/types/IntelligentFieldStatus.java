@@ -7,11 +7,11 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public final class IntelligentFieldStatus {
+    public static final IntelligentFieldStatus INACTIVE = new IntelligentFieldStatus(Value.INACTIVE, "INACTIVE");
+
     public static final IntelligentFieldStatus DELETED = new IntelligentFieldStatus(Value.DELETED, "DELETED");
 
     public static final IntelligentFieldStatus ACTIVE = new IntelligentFieldStatus(Value.ACTIVE, "ACTIVE");
-
-    public static final IntelligentFieldStatus INACTIVE = new IntelligentFieldStatus(Value.INACTIVE, "INACTIVE");
 
     private final Value value;
 
@@ -46,12 +46,12 @@ public final class IntelligentFieldStatus {
 
     public <T> T visit(Visitor<T> visitor) {
         switch (value) {
+            case INACTIVE:
+                return visitor.visitInactive();
             case DELETED:
                 return visitor.visitDeleted();
             case ACTIVE:
                 return visitor.visitActive();
-            case INACTIVE:
-                return visitor.visitInactive();
             case UNKNOWN:
             default:
                 return visitor.visitUnknown(string);
@@ -61,12 +61,12 @@ public final class IntelligentFieldStatus {
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static IntelligentFieldStatus valueOf(String value) {
         switch (value) {
+            case "INACTIVE":
+                return INACTIVE;
             case "DELETED":
                 return DELETED;
             case "ACTIVE":
                 return ACTIVE;
-            case "INACTIVE":
-                return INACTIVE;
             default:
                 return new IntelligentFieldStatus(Value.UNKNOWN, value);
         }

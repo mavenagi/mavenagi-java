@@ -118,7 +118,7 @@ public final class AgentPatchRequest {
     }
 
     /**
-     * @return Deprecated. Superseded by charters, which determine agent behavior per turn. Has no effect for agents using charters.
+     * @return Deprecated. Superseded by charters, which determine agent behavior per round. Has no effect for agents using charters.
      */
     @JsonProperty("persona")
     public Optional<LlmPersona> getPersona() {
@@ -126,7 +126,7 @@ public final class AgentPatchRequest {
     }
 
     /**
-     * @return Deprecated. Superseded by charters, which determine agent behavior per turn. Has no effect for agents using charters.
+     * @return Deprecated. Superseded by charters, which determine agent behavior per round. Has no effect for agents using charters.
      */
     @JsonIgnore
     public Optional<String> getAdditionalPromptText() {
@@ -159,7 +159,7 @@ public final class AgentPatchRequest {
     }
 
     /**
-     * @return Deprecated. Superseded by charters, which determine agent behavior per turn. Has no effect for agents using charters.
+     * @return Deprecated. Superseded by charters, which determine agent behavior per round. Has no effect for agents using charters.
      * <p>Return the system fallback message on all questions that have no relevant knowledge bases or actions.</p>
      */
     @JsonProperty("rejectQuestionsWithoutKnowledge")
@@ -362,7 +362,7 @@ public final class AgentPatchRequest {
         }
 
         /**
-         * <p>Deprecated. Superseded by charters, which determine agent behavior per turn. Has no effect for agents using charters.</p>
+         * <p>Deprecated. Superseded by charters, which determine agent behavior per round. Has no effect for agents using charters.</p>
          */
         @JsonSetter(value = "persona", nulls = Nulls.SKIP)
         public Builder persona(Optional<LlmPersona> persona) {
@@ -376,7 +376,7 @@ public final class AgentPatchRequest {
         }
 
         /**
-         * <p>Deprecated. Superseded by charters, which determine agent behavior per turn. Has no effect for agents using charters.</p>
+         * <p>Deprecated. Superseded by charters, which determine agent behavior per round. Has no effect for agents using charters.</p>
          */
         @JsonSetter(value = "additionalPromptText", nulls = Nulls.SKIP)
         public Builder additionalPromptText(Optional<String> additionalPromptText) {
@@ -455,7 +455,7 @@ public final class AgentPatchRequest {
         }
 
         /**
-         * <p>Deprecated. Superseded by charters, which determine agent behavior per turn. Has no effect for agents using charters.</p>
+         * <p>Deprecated. Superseded by charters, which determine agent behavior per round. Has no effect for agents using charters.</p>
          * <p>Return the system fallback message on all questions that have no relevant knowledge bases or actions.</p>
          */
         @JsonSetter(value = "rejectQuestionsWithoutKnowledge", nulls = Nulls.SKIP)

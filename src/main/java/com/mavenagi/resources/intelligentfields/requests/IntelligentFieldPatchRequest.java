@@ -36,6 +36,8 @@ public final class IntelligentFieldPatchRequest {
 
     private final Optional<EntityIdBase> variantId;
 
+    private final Optional<String> variantAppId;
+
     private final Map<String, Object> additionalProperties;
 
     private IntelligentFieldPatchRequest(
@@ -45,6 +47,7 @@ public final class IntelligentFieldPatchRequest {
             Optional<String> description,
             Optional<List<EnumOption>> enumOptions,
             Optional<EntityIdBase> variantId,
+            Optional<String> variantAppId,
             Map<String, Object> additionalProperties) {
         this.appId = appId;
         this.definition = definition;
@@ -52,6 +55,7 @@ public final class IntelligentFieldPatchRequest {
         this.description = description;
         this.enumOptions = enumOptions;
         this.variantId = variantId;
+        this.variantAppId = variantAppId;
         this.additionalProperties = additionalProperties;
     }
 
@@ -64,7 +68,7 @@ public final class IntelligentFieldPatchRequest {
     }
 
     /**
-     * @return The definition of the intelligent field. This text will be influential in guiding the LLM to produce the desired results.
+     * @return The definition of the intelligent field. This text will be influential in guiding the LLM to produce the desired results. Limited to 5,000 characters.
      */
     @JsonProperty("definition")
     public Optional<String> getDefinition() {
@@ -72,7 +76,11 @@ public final class IntelligentFieldPatchRequest {
     }
 
     /**
-     * @return The lifecycle state for whether this field is evaluated by workflows. Use INACTIVE to deactivate.
+     * @return The lifecycle state for whether this field is evaluated. Use ACTIVE to start
+     * evaluating the field and INACTIVE to stop.
+     * <p>Each agent has a limit on how many fields may be ACTIVE at once; activating a
+     * field beyond that limit is rejected. A field referenced by an active precondition
+     * cannot be deactivated.</p>
      */
     @JsonProperty("status")
     public Optional<IntelligentFieldStatus> getStatus() {
@@ -88,7 +96,7 @@ public final class IntelligentFieldPatchRequest {
     }
 
     /**
-     * @return Updated enum options for select/multi-select fields. Omit to leave unchanged. The new list must be a superset of the existing options (add-only; removals are rejected).
+     * @return Updated enum options for fields that constrain the LLM to a finite set. Omit to leave unchanged. The new list must be a superset of the existing options (add-only; removals are rejected).
      */
     @JsonProperty("enumOptions")
     public Optional<List<EnumOption>> getEnumOptions() {
@@ -96,11 +104,19 @@ public final class IntelligentFieldPatchRequest {
     }
 
     /**
-     * @return ID of the agent variant that this field belongs to, if applicable
+     * @return The agent variant to stage this patch in, by reference ID. Its owning app is <code>variantAppId</code>.
      */
     @JsonProperty("variantId")
     public Optional<EntityIdBase> getVariantId() {
         return variantId;
+    }
+
+    /**
+     * @return The App ID of the agent variant named by <code>variantId</code>. If not provided, the ID of the calling app will be used — name the owning app to patch in a variant the caller does not own, as the platform's own seeded variants are.
+     */
+    @JsonProperty("variantAppId")
+    public Optional<String> getVariantAppId() {
+        return variantAppId;
     }
 
     @java.lang.Override
@@ -120,13 +136,20 @@ public final class IntelligentFieldPatchRequest {
                 && status.equals(other.status)
                 && description.equals(other.description)
                 && enumOptions.equals(other.enumOptions)
-                && variantId.equals(other.variantId);
+                && variantId.equals(other.variantId)
+                && variantAppId.equals(other.variantAppId);
     }
 
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.appId, this.definition, this.status, this.description, this.enumOptions, this.variantId);
+                this.appId,
+                this.definition,
+                this.status,
+                this.description,
+                this.enumOptions,
+                this.variantId,
+                this.variantAppId);
     }
 
     @java.lang.Override
@@ -152,6 +175,8 @@ public final class IntelligentFieldPatchRequest {
 
         private Optional<EntityIdBase> variantId = Optional.empty();
 
+        private Optional<String> variantAppId = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -164,6 +189,7 @@ public final class IntelligentFieldPatchRequest {
             description(other.getDescription());
             enumOptions(other.getEnumOptions());
             variantId(other.getVariantId());
+            variantAppId(other.getVariantAppId());
             return this;
         }
 
@@ -182,7 +208,7 @@ public final class IntelligentFieldPatchRequest {
         }
 
         /**
-         * <p>The definition of the intelligent field. This text will be influential in guiding the LLM to produce the desired results.</p>
+         * <p>The definition of the intelligent field. This text will be influential in guiding the LLM to produce the desired results. Limited to 5,000 characters.</p>
          */
         @JsonSetter(value = "definition", nulls = Nulls.SKIP)
         public Builder definition(Optional<String> definition) {
@@ -196,7 +222,11 @@ public final class IntelligentFieldPatchRequest {
         }
 
         /**
-         * <p>The lifecycle state for whether this field is evaluated by workflows. Use INACTIVE to deactivate.</p>
+         * <p>The lifecycle state for whether this field is evaluated. Use ACTIVE to start
+         * evaluating the field and INACTIVE to stop.</p>
+         * <p>Each agent has a limit on how many fields may be ACTIVE at once; activating a
+         * field beyond that limit is rejected. A field referenced by an active precondition
+         * cannot be deactivated.</p>
          */
         @JsonSetter(value = "status", nulls = Nulls.SKIP)
         public Builder status(Optional<IntelligentFieldStatus> status) {
@@ -224,7 +254,7 @@ public final class IntelligentFieldPatchRequest {
         }
 
         /**
-         * <p>Updated enum options for select/multi-select fields. Omit to leave unchanged. The new list must be a superset of the existing options (add-only; removals are rejected).</p>
+         * <p>Updated enum options for fields that constrain the LLM to a finite set. Omit to leave unchanged. The new list must be a superset of the existing options (add-only; removals are rejected).</p>
          */
         @JsonSetter(value = "enumOptions", nulls = Nulls.SKIP)
         public Builder enumOptions(Optional<List<EnumOption>> enumOptions) {
@@ -238,7 +268,7 @@ public final class IntelligentFieldPatchRequest {
         }
 
         /**
-         * <p>ID of the agent variant that this field belongs to, if applicable</p>
+         * <p>The agent variant to stage this patch in, by reference ID. Its owning app is <code>variantAppId</code>.</p>
          */
         @JsonSetter(value = "variantId", nulls = Nulls.SKIP)
         public Builder variantId(Optional<EntityIdBase> variantId) {
@@ -251,9 +281,23 @@ public final class IntelligentFieldPatchRequest {
             return this;
         }
 
+        /**
+         * <p>The App ID of the agent variant named by <code>variantId</code>. If not provided, the ID of the calling app will be used — name the owning app to patch in a variant the caller does not own, as the platform's own seeded variants are.</p>
+         */
+        @JsonSetter(value = "variantAppId", nulls = Nulls.SKIP)
+        public Builder variantAppId(Optional<String> variantAppId) {
+            this.variantAppId = variantAppId;
+            return this;
+        }
+
+        public Builder variantAppId(String variantAppId) {
+            this.variantAppId = Optional.ofNullable(variantAppId);
+            return this;
+        }
+
         public IntelligentFieldPatchRequest build() {
             return new IntelligentFieldPatchRequest(
-                    appId, definition, status, description, enumOptions, variantId, additionalProperties);
+                    appId, definition, status, description, enumOptions, variantId, variantAppId, additionalProperties);
         }
     }
 }

@@ -5,8 +5,10 @@ package com.mavenagi.resources.knowledge.types;
 
 import com.mavenagi.resources.commons.types.EntityId;
 import com.mavenagi.resources.commons.types.LlmInclusionStatus;
+import com.mavenagi.resources.commons.types.ScopedEntity;
 import java.time.OffsetDateTime;
 import java.util.Optional;
+import java.util.Set;
 
 public interface IKnowledgeDocumentSearchResponse extends IBaseKnowledgeDocument {
     EntityId getKnowledgeDocumentId();
@@ -24,4 +26,6 @@ public interface IKnowledgeDocumentSearchResponse extends IBaseKnowledgeDocument
     OffsetDateTime getCreatedAt();
 
     OffsetDateTime getUpdatedAt();
+
+    Set<ScopedEntity> getRelevantEntities();
 }

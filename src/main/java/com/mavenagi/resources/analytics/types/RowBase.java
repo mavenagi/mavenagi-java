@@ -31,6 +31,8 @@ public final class RowBase implements IRowBase {
 
     /**
      * @return The actual row data, where keys represent column headers and values contain the respective metric results.
+     * A column the metric could not measure is absent from the map, so a row can carry fewer
+     * entries than there are headers.
      */
     @JsonProperty("data")
     @java.lang.Override
@@ -82,7 +84,9 @@ public final class RowBase implements IRowBase {
         }
 
         /**
-         * <p>The actual row data, where keys represent column headers and values contain the respective metric results.</p>
+         * <p>The actual row data, where keys represent column headers and values contain the respective metric results.
+         * A column the metric could not measure is absent from the map, so a row can carry fewer
+         * entries than there are headers.</p>
          */
         @JsonSetter(value = "data", nulls = Nulls.SKIP)
         public Builder data(Map<String, CellData> data) {

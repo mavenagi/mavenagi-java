@@ -48,7 +48,11 @@ public class AsyncRawIntelligentFieldsClient {
     }
 
     /**
-     * Create a new intelligent field. Intelligent fields are used to store custom LLM-generated values on entities like conversations or events.
+     * Create a new intelligent field, or replace it if one already exists with the same
+     * <code>fieldId.referenceId</code>. Intelligent fields hold LLM-generated values computed for
+     * entities such as conversations.
+     * <p>New fields are created with <code>status: INACTIVE</code> and are not evaluated until activated
+     * with the patch endpoint. <code>definition</code> is limited to 5,000 characters.</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<IntelligentFieldResponse>> createOrUpdate(
             IntelligentFieldRequest request) {
@@ -56,7 +60,11 @@ public class AsyncRawIntelligentFieldsClient {
     }
 
     /**
-     * Create a new intelligent field. Intelligent fields are used to store custom LLM-generated values on entities like conversations or events.
+     * Create a new intelligent field, or replace it if one already exists with the same
+     * <code>fieldId.referenceId</code>. Intelligent fields hold LLM-generated values computed for
+     * entities such as conversations.
+     * <p>New fields are created with <code>status: INACTIVE</code> and are not evaluated until activated
+     * with the patch endpoint. <code>definition</code> is limited to 5,000 characters.</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<IntelligentFieldResponse>> createOrUpdate(
             IntelligentFieldRequest request, RequestOptions requestOptions) {
@@ -173,6 +181,17 @@ public class AsyncRawIntelligentFieldsClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "appId", request.getAppId().get(), false);
         }
+        if (request.getVariantReferenceId().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl,
+                    "variantReferenceId",
+                    request.getVariantReferenceId().get(),
+                    false);
+        }
+        if (request.getVariantAppId().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "variantAppId", request.getVariantAppId().get(), false);
+        }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
@@ -247,14 +266,22 @@ public class AsyncRawIntelligentFieldsClient {
     }
 
     /**
-     * Patch an intelligent field. Can be used to update the definition, status, or other mutable properties.
+     * Update the mutable properties of an intelligent field. Only the properties present in
+     * the request body are changed.
+     * <p>This is also how a field is activated and deactivated: set <code>status</code> to <code>ACTIVE</code> to
+     * start evaluating it, or <code>INACTIVE</code> to stop. <code>name</code>, <code>entityType</code>, and <code>validationType</code>
+     * cannot be changed after creation.</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<IntelligentFieldResponse>> patch(String fieldReferenceId) {
         return patch(fieldReferenceId, IntelligentFieldPatchRequest.builder().build());
     }
 
     /**
-     * Patch an intelligent field. Can be used to update the definition, status, or other mutable properties.
+     * Update the mutable properties of an intelligent field. Only the properties present in
+     * the request body are changed.
+     * <p>This is also how a field is activated and deactivated: set <code>status</code> to <code>ACTIVE</code> to
+     * start evaluating it, or <code>INACTIVE</code> to stop. <code>name</code>, <code>entityType</code>, and <code>validationType</code>
+     * cannot be changed after creation.</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<IntelligentFieldResponse>> patch(
             String fieldReferenceId, IntelligentFieldPatchRequest request) {
@@ -262,7 +289,11 @@ public class AsyncRawIntelligentFieldsClient {
     }
 
     /**
-     * Patch an intelligent field. Can be used to update the definition, status, or other mutable properties.
+     * Update the mutable properties of an intelligent field. Only the properties present in
+     * the request body are changed.
+     * <p>This is also how a field is activated and deactivated: set <code>status</code> to <code>ACTIVE</code> to
+     * start evaluating it, or <code>INACTIVE</code> to stop. <code>name</code>, <code>entityType</code>, and <code>validationType</code>
+     * cannot be changed after creation.</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<IntelligentFieldResponse>> patch(
             String fieldReferenceId, IntelligentFieldPatchRequest request, RequestOptions requestOptions) {
@@ -478,14 +509,22 @@ public class AsyncRawIntelligentFieldsClient {
     }
 
     /**
-     * Search computed values for intelligent fields across entities. Supports filtering by field properties and target entity.
+     * Search the values that have been computed for intelligent fields, across entities.
+     * Supports filtering by properties of the field, by target entity, and by when the
+     * value was computed.
+     * <p>Values only exist for fields that were ACTIVE when the entity was evaluated, so a
+     * newly activated field returns nothing until evaluation has run.</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<IntelligentFieldValueSearchResponse>> searchValues() {
         return searchValues(IntelligentFieldValueSearchRequest.builder().build());
     }
 
     /**
-     * Search computed values for intelligent fields across entities. Supports filtering by field properties and target entity.
+     * Search the values that have been computed for intelligent fields, across entities.
+     * Supports filtering by properties of the field, by target entity, and by when the
+     * value was computed.
+     * <p>Values only exist for fields that were ACTIVE when the entity was evaluated, so a
+     * newly activated field returns nothing until evaluation has run.</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<IntelligentFieldValueSearchResponse>> searchValues(
             IntelligentFieldValueSearchRequest request) {
@@ -493,7 +532,11 @@ public class AsyncRawIntelligentFieldsClient {
     }
 
     /**
-     * Search computed values for intelligent fields across entities. Supports filtering by field properties and target entity.
+     * Search the values that have been computed for intelligent fields, across entities.
+     * Supports filtering by properties of the field, by target entity, and by when the
+     * value was computed.
+     * <p>Values only exist for fields that were ACTIVE when the entity was evaluated, so a
+     * newly activated field returns nothing until evaluation has run.</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<IntelligentFieldValueSearchResponse>> searchValues(
             IntelligentFieldValueSearchRequest request, RequestOptions requestOptions) {

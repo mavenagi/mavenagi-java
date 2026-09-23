@@ -11,6 +11,7 @@ import com.mavenagi.resources.analytics.AnalyticsClient;
 import com.mavenagi.resources.appdirectory.AppDirectoryClient;
 import com.mavenagi.resources.appsettings.AppSettingsClient;
 import com.mavenagi.resources.assets.AssetsClient;
+import com.mavenagi.resources.charters.ChartersClient;
 import com.mavenagi.resources.conversation.ConversationClient;
 import com.mavenagi.resources.customers.CustomersClient;
 import com.mavenagi.resources.events.EventsClient;
@@ -40,6 +41,8 @@ public class MavenAGI {
     protected final Supplier<AppSettingsClient> appSettingsClient;
 
     protected final Supplier<AssetsClient> assetsClient;
+
+    protected final Supplier<ChartersClient> chartersClient;
 
     protected final Supplier<ConversationClient> conversationClient;
 
@@ -75,6 +78,7 @@ public class MavenAGI {
         this.appDirectoryClient = Suppliers.memoize(() -> new AppDirectoryClient(clientOptions));
         this.appSettingsClient = Suppliers.memoize(() -> new AppSettingsClient(clientOptions));
         this.assetsClient = Suppliers.memoize(() -> new AssetsClient(clientOptions));
+        this.chartersClient = Suppliers.memoize(() -> new ChartersClient(clientOptions));
         this.conversationClient = Suppliers.memoize(() -> new ConversationClient(clientOptions));
         this.customersClient = Suppliers.memoize(() -> new CustomersClient(clientOptions));
         this.eventsClient = Suppliers.memoize(() -> new EventsClient(clientOptions));
@@ -112,6 +116,10 @@ public class MavenAGI {
 
     public AssetsClient assets() {
         return this.assetsClient.get();
+    }
+
+    public ChartersClient charters() {
+        return this.chartersClient.get();
     }
 
     public ConversationClient conversation() {

@@ -22,10 +22,20 @@ import java.util.Optional;
 public final class IntelligentFieldGetRequest {
     private final Optional<String> appId;
 
+    private final Optional<String> variantReferenceId;
+
+    private final Optional<String> variantAppId;
+
     private final Map<String, Object> additionalProperties;
 
-    private IntelligentFieldGetRequest(Optional<String> appId, Map<String, Object> additionalProperties) {
+    private IntelligentFieldGetRequest(
+            Optional<String> appId,
+            Optional<String> variantReferenceId,
+            Optional<String> variantAppId,
+            Map<String, Object> additionalProperties) {
         this.appId = appId;
+        this.variantReferenceId = variantReferenceId;
+        this.variantAppId = variantAppId;
         this.additionalProperties = additionalProperties;
     }
 
@@ -35,6 +45,22 @@ public final class IntelligentFieldGetRequest {
     @JsonProperty("appId")
     public Optional<String> getAppId() {
         return appId;
+    }
+
+    /**
+     * @return The agent variant reference ID to resolve the intelligent field's version through. If not provided, defaults to the agent's production variant.
+     */
+    @JsonProperty("variantReferenceId")
+    public Optional<String> getVariantReferenceId() {
+        return variantReferenceId;
+    }
+
+    /**
+     * @return The App ID of the agent variant reference. If not provided, the ID of the calling app will be used.
+     */
+    @JsonProperty("variantAppId")
+    public Optional<String> getVariantAppId() {
+        return variantAppId;
     }
 
     @java.lang.Override
@@ -49,12 +75,14 @@ public final class IntelligentFieldGetRequest {
     }
 
     private boolean equalTo(IntelligentFieldGetRequest other) {
-        return appId.equals(other.appId);
+        return appId.equals(other.appId)
+                && variantReferenceId.equals(other.variantReferenceId)
+                && variantAppId.equals(other.variantAppId);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.appId);
+        return Objects.hash(this.appId, this.variantReferenceId, this.variantAppId);
     }
 
     @java.lang.Override
@@ -70,6 +98,10 @@ public final class IntelligentFieldGetRequest {
     public static final class Builder {
         private Optional<String> appId = Optional.empty();
 
+        private Optional<String> variantReferenceId = Optional.empty();
+
+        private Optional<String> variantAppId = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -77,6 +109,8 @@ public final class IntelligentFieldGetRequest {
 
         public Builder from(IntelligentFieldGetRequest other) {
             appId(other.getAppId());
+            variantReferenceId(other.getVariantReferenceId());
+            variantAppId(other.getVariantAppId());
             return this;
         }
 
@@ -94,8 +128,36 @@ public final class IntelligentFieldGetRequest {
             return this;
         }
 
+        /**
+         * <p>The agent variant reference ID to resolve the intelligent field's version through. If not provided, defaults to the agent's production variant.</p>
+         */
+        @JsonSetter(value = "variantReferenceId", nulls = Nulls.SKIP)
+        public Builder variantReferenceId(Optional<String> variantReferenceId) {
+            this.variantReferenceId = variantReferenceId;
+            return this;
+        }
+
+        public Builder variantReferenceId(String variantReferenceId) {
+            this.variantReferenceId = Optional.ofNullable(variantReferenceId);
+            return this;
+        }
+
+        /**
+         * <p>The App ID of the agent variant reference. If not provided, the ID of the calling app will be used.</p>
+         */
+        @JsonSetter(value = "variantAppId", nulls = Nulls.SKIP)
+        public Builder variantAppId(Optional<String> variantAppId) {
+            this.variantAppId = variantAppId;
+            return this;
+        }
+
+        public Builder variantAppId(String variantAppId) {
+            this.variantAppId = Optional.ofNullable(variantAppId);
+            return this;
+        }
+
         public IntelligentFieldGetRequest build() {
-            return new IntelligentFieldGetRequest(appId, additionalProperties);
+            return new IntelligentFieldGetRequest(appId, variantReferenceId, variantAppId, additionalProperties);
         }
     }
 }

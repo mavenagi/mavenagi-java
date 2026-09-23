@@ -41,7 +41,7 @@ public final class SimulationContext {
     }
 
     /**
-     * @return Deprecated. Superseded by charters, which determine agent behavior per turn. Has no effect for agents using charters.
+     * @return Deprecated. Superseded by charters, which determine agent behavior per round. Has no effect for agents using charters.
      * <p>If provided, overrides the agent's default additional prompt text during the simulation.</p>
      */
     @JsonProperty("additionalPromptText")
@@ -50,7 +50,7 @@ public final class SimulationContext {
     }
 
     /**
-     * @return Deprecated. Superseded by charters, which determine agent behavior per turn. Has no effect for agents using charters.
+     * @return Deprecated. Superseded by charters, which determine agent behavior per round. Has no effect for agents using charters.
      */
     @JsonProperty("persona")
     public Optional<LlmPersona> getPersona() {
@@ -117,7 +117,7 @@ public final class SimulationContext {
         }
 
         /**
-         * <p>Deprecated. Superseded by charters, which determine agent behavior per turn. Has no effect for agents using charters.</p>
+         * <p>Deprecated. Superseded by charters, which determine agent behavior per round. Has no effect for agents using charters.</p>
          * <p>If provided, overrides the agent's default additional prompt text during the simulation.</p>
          */
         @JsonSetter(value = "additionalPromptText", nulls = Nulls.SKIP)
@@ -132,7 +132,7 @@ public final class SimulationContext {
         }
 
         /**
-         * <p>Deprecated. Superseded by charters, which determine agent behavior per turn. Has no effect for agents using charters.</p>
+         * <p>Deprecated. Superseded by charters, which determine agent behavior per round. Has no effect for agents using charters.</p>
          */
         @JsonSetter(value = "persona", nulls = Nulls.SKIP)
         public Builder persona(Optional<LlmPersona> persona) {

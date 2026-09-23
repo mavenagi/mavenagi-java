@@ -211,8 +211,10 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
      * organization and agent the request is made against; one that does not, or that names an
      * entity type with no internal form, is rejected rather than dropped - dropping the last
      * entity would widen the document back to the whole agent.</p>
-     * <p>Changing the entities on an existing document is not supported yet: re-sending a
-     * document with different <code>relevantEntities</code> but unchanged content is a no-op.</p>
+     * <p>Changing the entities on an existing document is not supported yet: document reuse is
+     * decided by a checksum over <code>title</code>, <code>text</code>, <code>metadata</code>, <code>sourceUrl</code> and the attached
+     * asset, so re-sending a document with different <code>relevantEntities</code> but none of those
+     * changed returns the stored document and discards the new entities.</p>
      */
     @JsonProperty("relevantEntities")
     public Optional<Set<ScopedEntity>> getRelevantEntities() {
@@ -389,8 +391,10 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
          * organization and agent the request is made against; one that does not, or that names an
          * entity type with no internal form, is rejected rather than dropped - dropping the last
          * entity would widen the document back to the whole agent.</p>
-         * <p>Changing the entities on an existing document is not supported yet: re-sending a
-         * document with different <code>relevantEntities</code> but unchanged content is a no-op.</p>
+         * <p>Changing the entities on an existing document is not supported yet: document reuse is
+         * decided by a checksum over <code>title</code>, <code>text</code>, <code>metadata</code>, <code>sourceUrl</code> and the attached
+         * asset, so re-sending a document with different <code>relevantEntities</code> but none of those
+         * changed returns the stored document and discards the new entities.</p>
          */
         _FinalStage relevantEntities(Optional<Set<ScopedEntity>> relevantEntities);
 
@@ -494,8 +498,10 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
          * organization and agent the request is made against; one that does not, or that names an
          * entity type with no internal form, is rejected rather than dropped - dropping the last
          * entity would widen the document back to the whole agent.</p>
-         * <p>Changing the entities on an existing document is not supported yet: re-sending a
-         * document with different <code>relevantEntities</code> but unchanged content is a no-op.</p>
+         * <p>Changing the entities on an existing document is not supported yet: document reuse is
+         * decided by a checksum over <code>title</code>, <code>text</code>, <code>metadata</code>, <code>sourceUrl</code> and the attached
+         * asset, so re-sending a document with different <code>relevantEntities</code> but none of those
+         * changed returns the stored document and discards the new entities.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -513,8 +519,10 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
          * organization and agent the request is made against; one that does not, or that names an
          * entity type with no internal form, is rejected rather than dropped - dropping the last
          * entity would widen the document back to the whole agent.</p>
-         * <p>Changing the entities on an existing document is not supported yet: re-sending a
-         * document with different <code>relevantEntities</code> but unchanged content is a no-op.</p>
+         * <p>Changing the entities on an existing document is not supported yet: document reuse is
+         * decided by a checksum over <code>title</code>, <code>text</code>, <code>metadata</code>, <code>sourceUrl</code> and the attached
+         * asset, so re-sending a document with different <code>relevantEntities</code> but none of those
+         * changed returns the stored document and discards the new entities.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "relevantEntities", nulls = Nulls.SKIP)

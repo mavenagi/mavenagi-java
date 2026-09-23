@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
 import com.mavenagi.resources.commons.types.EntityIdWithoutAgent;
 import com.mavenagi.resources.commons.types.LlmInclusionStatus;
+import com.mavenagi.resources.commons.types.ScopedEntity;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -40,6 +41,8 @@ public final class KnowledgeDocumentFilter {
 
     private final Optional<List<LlmInclusionStatus>> llmInclusionStatus;
 
+    private final Optional<List<ScopedEntity>> relevantEntities;
+
     private final Map<String, Object> additionalProperties;
 
     private KnowledgeDocumentFilter(
@@ -51,6 +54,7 @@ public final class KnowledgeDocumentFilter {
             Optional<List<String>> appIds,
             Optional<EntityIdWithoutAgent> knowledgeBaseVersionId,
             Optional<List<LlmInclusionStatus>> llmInclusionStatus,
+            Optional<List<ScopedEntity>> relevantEntities,
             Map<String, Object> additionalProperties) {
         this.search = search;
         this.title = title;
@@ -60,6 +64,7 @@ public final class KnowledgeDocumentFilter {
         this.appIds = appIds;
         this.knowledgeBaseVersionId = knowledgeBaseVersionId;
         this.llmInclusionStatus = llmInclusionStatus;
+        this.relevantEntities = relevantEntities;
         this.additionalProperties = additionalProperties;
     }
 
@@ -139,6 +144,21 @@ public final class KnowledgeDocumentFilter {
         return llmInclusionStatus;
     }
 
+    /**
+     * @return Return only documents narrowed to one of these entities. Uses OR semantics - a document
+     * matching any of them is returned.
+     * <p>This is an exact match on the document's <code>relevantEntities</code>, not the widening a
+     * conversation's <code>contextFilter</code> performs: filtering by a customer returns that customer's
+     * documents and not the agent's general knowledge. Omit the field to search every
+     * document regardless of what it is narrowed to; an empty list does the same.</p>
+     * <p>Each <code>entityId</code> must be fully specified and belong to the organization and agent the
+     * request is made against.</p>
+     */
+    @JsonProperty("relevantEntities")
+    public Optional<List<ScopedEntity>> getRelevantEntities() {
+        return relevantEntities;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -158,7 +178,8 @@ public final class KnowledgeDocumentFilter {
                 && createdBefore.equals(other.createdBefore)
                 && appIds.equals(other.appIds)
                 && knowledgeBaseVersionId.equals(other.knowledgeBaseVersionId)
-                && llmInclusionStatus.equals(other.llmInclusionStatus);
+                && llmInclusionStatus.equals(other.llmInclusionStatus)
+                && relevantEntities.equals(other.relevantEntities);
     }
 
     @java.lang.Override
@@ -171,7 +192,8 @@ public final class KnowledgeDocumentFilter {
                 this.createdBefore,
                 this.appIds,
                 this.knowledgeBaseVersionId,
-                this.llmInclusionStatus);
+                this.llmInclusionStatus,
+                this.relevantEntities);
     }
 
     @java.lang.Override
@@ -201,6 +223,8 @@ public final class KnowledgeDocumentFilter {
 
         private Optional<List<LlmInclusionStatus>> llmInclusionStatus = Optional.empty();
 
+        private Optional<List<ScopedEntity>> relevantEntities = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -215,6 +239,7 @@ public final class KnowledgeDocumentFilter {
             appIds(other.getAppIds());
             knowledgeBaseVersionId(other.getKnowledgeBaseVersionId());
             llmInclusionStatus(other.getLlmInclusionStatus());
+            relevantEntities(other.getRelevantEntities());
             return this;
         }
 
@@ -342,6 +367,27 @@ public final class KnowledgeDocumentFilter {
             return this;
         }
 
+        /**
+         * <p>Return only documents narrowed to one of these entities. Uses OR semantics - a document
+         * matching any of them is returned.</p>
+         * <p>This is an exact match on the document's <code>relevantEntities</code>, not the widening a
+         * conversation's <code>contextFilter</code> performs: filtering by a customer returns that customer's
+         * documents and not the agent's general knowledge. Omit the field to search every
+         * document regardless of what it is narrowed to; an empty list does the same.</p>
+         * <p>Each <code>entityId</code> must be fully specified and belong to the organization and agent the
+         * request is made against.</p>
+         */
+        @JsonSetter(value = "relevantEntities", nulls = Nulls.SKIP)
+        public Builder relevantEntities(Optional<List<ScopedEntity>> relevantEntities) {
+            this.relevantEntities = relevantEntities;
+            return this;
+        }
+
+        public Builder relevantEntities(List<ScopedEntity> relevantEntities) {
+            this.relevantEntities = Optional.ofNullable(relevantEntities);
+            return this;
+        }
+
         public KnowledgeDocumentFilter build() {
             return new KnowledgeDocumentFilter(
                     search,
@@ -352,6 +398,7 @@ public final class KnowledgeDocumentFilter {
                     appIds,
                     knowledgeBaseVersionId,
                     llmInclusionStatus,
+                    relevantEntities,
                     additionalProperties);
         }
     }

@@ -373,6 +373,8 @@ public final class ConversationFilter {
 
     /**
      * @return Filter by the segments that any message on a conversation matched.
+     * <p>Superseded by <code>matchedCharterIds</code>. Segments are being phased out in favour of
+     * charter preconditions.</p>
      */
     @JsonProperty("matchedSegmentIds")
     public Optional<List<EntityIdFilter>> getMatchedSegmentIds() {
@@ -978,6 +980,8 @@ public final class ConversationFilter {
 
         /**
          * <p>Filter by the segments that any message on a conversation matched.</p>
+         * <p>Superseded by <code>matchedCharterIds</code>. Segments are being phased out in favour of
+         * charter preconditions.</p>
          */
         @JsonSetter(value = "matchedSegmentIds", nulls = Nulls.SKIP)
         public Builder matchedSegmentIds(Optional<List<EntityIdFilter>> matchedSegmentIds) {
