@@ -48,7 +48,7 @@ public final class IntelligentFieldGetRequest {
     }
 
     /**
-     * @return The agent variant reference ID to resolve the intelligent field's version through. If not provided, defaults to the agent's production variant.
+     * @return The agent variant reference ID to resolve the intelligent field's version through. Required on an agent with versioned intelligent fields; a request that omits it there is rejected with reason <code>VARIANT_REQUIRED</code>. Otherwise, if omitted, the agent's only variant is used.
      */
     @JsonProperty("variantReferenceId")
     public Optional<String> getVariantReferenceId() {
@@ -129,7 +129,7 @@ public final class IntelligentFieldGetRequest {
         }
 
         /**
-         * <p>The agent variant reference ID to resolve the intelligent field's version through. If not provided, defaults to the agent's production variant.</p>
+         * <p>The agent variant reference ID to resolve the intelligent field's version through. Required on an agent with versioned intelligent fields; a request that omits it there is rejected with reason <code>VARIANT_REQUIRED</code>. Otherwise, if omitted, the agent's only variant is used.</p>
          */
         @JsonSetter(value = "variantReferenceId", nulls = Nulls.SKIP)
         public Builder variantReferenceId(Optional<String> variantReferenceId) {

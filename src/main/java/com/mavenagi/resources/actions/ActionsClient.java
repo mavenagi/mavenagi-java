@@ -29,14 +29,29 @@ public class ActionsClient {
         return this.rawClient;
     }
 
+    /**
+     * Deprecated. Use <code>POST /v1/capabilities/search</code>, which searches every kind of capability
+     * at once. It returns the fields every capability shares rather than the whole Action;
+     * fetch one by its kind and reference ID for the rest.
+     */
     public ActionsResponse search() {
         return this.rawClient.search().body();
     }
 
+    /**
+     * Deprecated. Use <code>POST /v1/capabilities/search</code>, which searches every kind of capability
+     * at once. It returns the fields every capability shares rather than the whole Action;
+     * fetch one by its kind and reference ID for the rest.
+     */
     public ActionsResponse search(ActionsSearchRequest request) {
         return this.rawClient.search(request).body();
     }
 
+    /**
+     * Deprecated. Use <code>POST /v1/capabilities/search</code>, which searches every kind of capability
+     * at once. It returns the fields every capability shares rather than the whole Action;
+     * fetch one by its kind and reference ID for the rest.
+     */
     public ActionsResponse search(ActionsSearchRequest request, RequestOptions requestOptions) {
         return this.rawClient.search(request, requestOptions).body();
     }
@@ -56,21 +71,27 @@ public class ActionsClient {
     }
 
     /**
-     * Get an action by its supplied ID
+     * Deprecated. Use <code>GET /v1/capabilities/ACTION/{referenceId}</code>, which returns this same
+     * object for an action and the equivalent for every other kind of capability.
+     * <p>Get an action by its supplied ID</p>
      */
     public ActionResponse get(String actionReferenceId) {
         return this.rawClient.get(actionReferenceId).body();
     }
 
     /**
-     * Get an action by its supplied ID
+     * Deprecated. Use <code>GET /v1/capabilities/ACTION/{referenceId}</code>, which returns this same
+     * object for an action and the equivalent for every other kind of capability.
+     * <p>Get an action by its supplied ID</p>
      */
     public ActionResponse get(String actionReferenceId, ActionGetRequest request) {
         return this.rawClient.get(actionReferenceId, request).body();
     }
 
     /**
-     * Get an action by its supplied ID
+     * Deprecated. Use <code>GET /v1/capabilities/ACTION/{referenceId}</code>, which returns this same
+     * object for an action and the equivalent for every other kind of capability.
+     * <p>Get an action by its supplied ID</p>
      */
     public ActionResponse get(String actionReferenceId, ActionGetRequest request, RequestOptions requestOptions) {
         return this.rawClient.get(actionReferenceId, request, requestOptions).body();
@@ -104,14 +125,18 @@ public class ActionsClient {
     }
 
     /**
-     * Delete an action
+     * Deprecated. Use <code>DELETE /v1/capabilities/ACTION/{referenceId}</code>, which deletes any kind of
+     * capability the same way.
+     * <p>Delete an action</p>
      */
     public void delete(String actionReferenceId) {
         this.rawClient.delete(actionReferenceId).body();
     }
 
     /**
-     * Delete an action
+     * Deprecated. Use <code>DELETE /v1/capabilities/ACTION/{referenceId}</code>, which deletes any kind of
+     * capability the same way.
+     * <p>Delete an action</p>
      */
     public void delete(String actionReferenceId, RequestOptions requestOptions) {
         this.rawClient.delete(actionReferenceId, requestOptions).body();

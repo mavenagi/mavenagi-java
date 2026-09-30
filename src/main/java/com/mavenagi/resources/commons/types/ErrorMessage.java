@@ -26,16 +26,20 @@ public final class ErrorMessage {
 
     private final Optional<String> message;
 
+    private final Optional<ErrorReason> reason;
+
     private final Map<String, Object> additionalProperties;
 
     private ErrorMessage(
             Optional<Integer> status,
             Optional<String> error,
             Optional<String> message,
+            Optional<ErrorReason> reason,
             Map<String, Object> additionalProperties) {
         this.status = status;
         this.error = error;
         this.message = message;
+        this.reason = reason;
         this.additionalProperties = additionalProperties;
     }
 
@@ -63,6 +67,14 @@ public final class ErrorMessage {
         return message;
     }
 
+    /**
+     * @return Machine-readable reason for the failure, when the API defines one. Match on this rather than on <code>message</code>, whose wording may change.
+     */
+    @JsonProperty("reason")
+    public Optional<ErrorReason> getReason() {
+        return reason;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -75,12 +87,15 @@ public final class ErrorMessage {
     }
 
     private boolean equalTo(ErrorMessage other) {
-        return status.equals(other.status) && error.equals(other.error) && message.equals(other.message);
+        return status.equals(other.status)
+                && error.equals(other.error)
+                && message.equals(other.message)
+                && reason.equals(other.reason);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.status, this.error, this.message);
+        return Objects.hash(this.status, this.error, this.message, this.reason);
     }
 
     @java.lang.Override
@@ -100,6 +115,8 @@ public final class ErrorMessage {
 
         private Optional<String> message = Optional.empty();
 
+        private Optional<ErrorReason> reason = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -109,6 +126,7 @@ public final class ErrorMessage {
             status(other.getStatus());
             error(other.getError());
             message(other.getMessage());
+            reason(other.getReason());
             return this;
         }
 
@@ -154,8 +172,22 @@ public final class ErrorMessage {
             return this;
         }
 
+        /**
+         * <p>Machine-readable reason for the failure, when the API defines one. Match on this rather than on <code>message</code>, whose wording may change.</p>
+         */
+        @JsonSetter(value = "reason", nulls = Nulls.SKIP)
+        public Builder reason(Optional<ErrorReason> reason) {
+            this.reason = reason;
+            return this;
+        }
+
+        public Builder reason(ErrorReason reason) {
+            this.reason = Optional.ofNullable(reason);
+            return this;
+        }
+
         public ErrorMessage build() {
-            return new ErrorMessage(status, error, message, additionalProperties);
+            return new ErrorMessage(status, error, message, reason, additionalProperties);
         }
     }
 }

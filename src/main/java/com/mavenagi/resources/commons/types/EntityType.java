@@ -11,8 +11,6 @@ public final class EntityType {
 
     public static final EntityType ACTION = new EntityType(Value.ACTION, "ACTION");
 
-    public static final EntityType CONFIG_SNAPSHOT = new EntityType(Value.CONFIG_SNAPSHOT, "CONFIG_SNAPSHOT");
-
     public static final EntityType ASSET = new EntityType(Value.ASSET, "ASSET");
 
     public static final EntityType USER = new EntityType(Value.USER, "USER");
@@ -44,13 +42,15 @@ public final class EntityType {
 
     public static final EntityType TRAFFIC_CONFIG = new EntityType(Value.TRAFFIC_CONFIG, "TRAFFIC_CONFIG");
 
-    public static final EntityType USER_PROFILE = new EntityType(Value.USER_PROFILE, "USER_PROFILE");
+    public static final EntityType AGENT_USER = new EntityType(Value.AGENT_USER, "AGENT_USER");
 
     public static final EntityType KNOWLEDGE_DOCUMENT = new EntityType(Value.KNOWLEDGE_DOCUMENT, "KNOWLEDGE_DOCUMENT");
 
     public static final EntityType EVENT = new EntityType(Value.EVENT, "EVENT");
 
     public static final EntityType FEEDBACK = new EntityType(Value.FEEDBACK, "FEEDBACK");
+
+    public static final EntityType USER_PROFILE = new EntityType(Value.USER_PROFILE, "USER_PROFILE");
 
     public static final EntityType INBOX_ITEM = new EntityType(Value.INBOX_ITEM, "INBOX_ITEM");
 
@@ -91,8 +91,6 @@ public final class EntityType {
                 return visitor.visitAgent();
             case ACTION:
                 return visitor.visitAction();
-            case CONFIG_SNAPSHOT:
-                return visitor.visitConfigSnapshot();
             case ASSET:
                 return visitor.visitAsset();
             case USER:
@@ -121,14 +119,16 @@ public final class EntityType {
                 return visitor.visitIntelligentField();
             case TRAFFIC_CONFIG:
                 return visitor.visitTrafficConfig();
-            case USER_PROFILE:
-                return visitor.visitUserProfile();
+            case AGENT_USER:
+                return visitor.visitAgentUser();
             case KNOWLEDGE_DOCUMENT:
                 return visitor.visitKnowledgeDocument();
             case EVENT:
                 return visitor.visitEvent();
             case FEEDBACK:
                 return visitor.visitFeedback();
+            case USER_PROFILE:
+                return visitor.visitUserProfile();
             case INBOX_ITEM:
                 return visitor.visitInboxItem();
             case INBOX_ITEM_FIX:
@@ -146,8 +146,6 @@ public final class EntityType {
                 return AGENT;
             case "ACTION":
                 return ACTION;
-            case "CONFIG_SNAPSHOT":
-                return CONFIG_SNAPSHOT;
             case "ASSET":
                 return ASSET;
             case "USER":
@@ -176,14 +174,16 @@ public final class EntityType {
                 return INTELLIGENT_FIELD;
             case "TRAFFIC_CONFIG":
                 return TRAFFIC_CONFIG;
-            case "USER_PROFILE":
-                return USER_PROFILE;
+            case "AGENT_USER":
+                return AGENT_USER;
             case "KNOWLEDGE_DOCUMENT":
                 return KNOWLEDGE_DOCUMENT;
             case "EVENT":
                 return EVENT;
             case "FEEDBACK":
                 return FEEDBACK;
+            case "USER_PROFILE":
+                return USER_PROFILE;
             case "INBOX_ITEM":
                 return INBOX_ITEM;
             case "INBOX_ITEM_FIX":
@@ -216,6 +216,8 @@ public final class EntityType {
 
         USER_PROFILE,
 
+        AGENT_USER,
+
         FEEDBACK,
 
         INBOX_ITEM,
@@ -233,8 +235,6 @@ public final class EntityType {
         CONVERSATION_KICKOFF,
 
         AGENT_VARIANT,
-
-        CONFIG_SNAPSHOT,
 
         ASSET,
 
@@ -266,6 +266,8 @@ public final class EntityType {
 
         T visitUserProfile();
 
+        T visitAgentUser();
+
         T visitFeedback();
 
         T visitInboxItem();
@@ -283,8 +285,6 @@ public final class EntityType {
         T visitConversationKickoff();
 
         T visitAgentVariant();
-
-        T visitConfigSnapshot();
 
         T visitAsset();
 

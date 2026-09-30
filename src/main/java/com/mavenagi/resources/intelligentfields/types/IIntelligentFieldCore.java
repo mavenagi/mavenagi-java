@@ -7,10 +7,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IIntelligentFieldCore {
-    String getName();
-
-    Optional<String> getDescription();
-
     IntelligentFieldType getValidationType();
 
     String getDefinition();

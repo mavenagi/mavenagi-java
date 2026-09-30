@@ -45,14 +45,29 @@ public class AsyncRawActionsClient {
         this.clientOptions = clientOptions;
     }
 
+    /**
+     * Deprecated. Use <code>POST /v1/capabilities/search</code>, which searches every kind of capability
+     * at once. It returns the fields every capability shares rather than the whole Action;
+     * fetch one by its kind and reference ID for the rest.
+     */
     public CompletableFuture<MavenAGIHttpResponse<ActionsResponse>> search() {
         return search(ActionsSearchRequest.builder().build());
     }
 
+    /**
+     * Deprecated. Use <code>POST /v1/capabilities/search</code>, which searches every kind of capability
+     * at once. It returns the fields every capability shares rather than the whole Action;
+     * fetch one by its kind and reference ID for the rest.
+     */
     public CompletableFuture<MavenAGIHttpResponse<ActionsResponse>> search(ActionsSearchRequest request) {
         return search(request, null);
     }
 
+    /**
+     * Deprecated. Use <code>POST /v1/capabilities/search</code>, which searches every kind of capability
+     * at once. It returns the fields every capability shares rather than the whole Action;
+     * fetch one by its kind and reference ID for the rest.
+     */
     public CompletableFuture<MavenAGIHttpResponse<ActionsResponse>> search(
             ActionsSearchRequest request, RequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
@@ -237,14 +252,18 @@ public class AsyncRawActionsClient {
     }
 
     /**
-     * Get an action by its supplied ID
+     * Deprecated. Use <code>GET /v1/capabilities/ACTION/{referenceId}</code>, which returns this same
+     * object for an action and the equivalent for every other kind of capability.
+     * <p>Get an action by its supplied ID</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<ActionResponse>> get(String actionReferenceId) {
         return get(actionReferenceId, ActionGetRequest.builder().build());
     }
 
     /**
-     * Get an action by its supplied ID
+     * Deprecated. Use <code>GET /v1/capabilities/ACTION/{referenceId}</code>, which returns this same
+     * object for an action and the equivalent for every other kind of capability.
+     * <p>Get an action by its supplied ID</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<ActionResponse>> get(
             String actionReferenceId, ActionGetRequest request) {
@@ -252,7 +271,9 @@ public class AsyncRawActionsClient {
     }
 
     /**
-     * Get an action by its supplied ID
+     * Deprecated. Use <code>GET /v1/capabilities/ACTION/{referenceId}</code>, which returns this same
+     * object for an action and the equivalent for every other kind of capability.
+     * <p>Get an action by its supplied ID</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<ActionResponse>> get(
             String actionReferenceId, ActionGetRequest request, RequestOptions requestOptions) {
@@ -449,14 +470,18 @@ public class AsyncRawActionsClient {
     }
 
     /**
-     * Delete an action
+     * Deprecated. Use <code>DELETE /v1/capabilities/ACTION/{referenceId}</code>, which deletes any kind of
+     * capability the same way.
+     * <p>Delete an action</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<Void>> delete(String actionReferenceId) {
         return delete(actionReferenceId, null);
     }
 
     /**
-     * Delete an action
+     * Deprecated. Use <code>DELETE /v1/capabilities/ACTION/{referenceId}</code>, which deletes any kind of
+     * capability the same way.
+     * <p>Delete an action</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<Void>> delete(
             String actionReferenceId, RequestOptions requestOptions) {

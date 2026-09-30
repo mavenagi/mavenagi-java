@@ -30,14 +30,29 @@ public class AsyncActionsClient {
         return this.rawClient;
     }
 
+    /**
+     * Deprecated. Use <code>POST /v1/capabilities/search</code>, which searches every kind of capability
+     * at once. It returns the fields every capability shares rather than the whole Action;
+     * fetch one by its kind and reference ID for the rest.
+     */
     public CompletableFuture<ActionsResponse> search() {
         return this.rawClient.search().thenApply(response -> response.body());
     }
 
+    /**
+     * Deprecated. Use <code>POST /v1/capabilities/search</code>, which searches every kind of capability
+     * at once. It returns the fields every capability shares rather than the whole Action;
+     * fetch one by its kind and reference ID for the rest.
+     */
     public CompletableFuture<ActionsResponse> search(ActionsSearchRequest request) {
         return this.rawClient.search(request).thenApply(response -> response.body());
     }
 
+    /**
+     * Deprecated. Use <code>POST /v1/capabilities/search</code>, which searches every kind of capability
+     * at once. It returns the fields every capability shares rather than the whole Action;
+     * fetch one by its kind and reference ID for the rest.
+     */
     public CompletableFuture<ActionsResponse> search(ActionsSearchRequest request, RequestOptions requestOptions) {
         return this.rawClient.search(request, requestOptions).thenApply(response -> response.body());
     }
@@ -57,21 +72,27 @@ public class AsyncActionsClient {
     }
 
     /**
-     * Get an action by its supplied ID
+     * Deprecated. Use <code>GET /v1/capabilities/ACTION/{referenceId}</code>, which returns this same
+     * object for an action and the equivalent for every other kind of capability.
+     * <p>Get an action by its supplied ID</p>
      */
     public CompletableFuture<ActionResponse> get(String actionReferenceId) {
         return this.rawClient.get(actionReferenceId).thenApply(response -> response.body());
     }
 
     /**
-     * Get an action by its supplied ID
+     * Deprecated. Use <code>GET /v1/capabilities/ACTION/{referenceId}</code>, which returns this same
+     * object for an action and the equivalent for every other kind of capability.
+     * <p>Get an action by its supplied ID</p>
      */
     public CompletableFuture<ActionResponse> get(String actionReferenceId, ActionGetRequest request) {
         return this.rawClient.get(actionReferenceId, request).thenApply(response -> response.body());
     }
 
     /**
-     * Get an action by its supplied ID
+     * Deprecated. Use <code>GET /v1/capabilities/ACTION/{referenceId}</code>, which returns this same
+     * object for an action and the equivalent for every other kind of capability.
+     * <p>Get an action by its supplied ID</p>
      */
     public CompletableFuture<ActionResponse> get(
             String actionReferenceId, ActionGetRequest request, RequestOptions requestOptions) {
@@ -107,14 +128,18 @@ public class AsyncActionsClient {
     }
 
     /**
-     * Delete an action
+     * Deprecated. Use <code>DELETE /v1/capabilities/ACTION/{referenceId}</code>, which deletes any kind of
+     * capability the same way.
+     * <p>Delete an action</p>
      */
     public CompletableFuture<Void> delete(String actionReferenceId) {
         return this.rawClient.delete(actionReferenceId).thenApply(response -> response.body());
     }
 
     /**
-     * Delete an action
+     * Deprecated. Use <code>DELETE /v1/capabilities/ACTION/{referenceId}</code>, which deletes any kind of
+     * capability the same way.
+     * <p>Delete an action</p>
      */
     public CompletableFuture<Void> delete(String actionReferenceId, RequestOptions requestOptions) {
         return this.rawClient.delete(actionReferenceId, requestOptions).thenApply(response -> response.body());

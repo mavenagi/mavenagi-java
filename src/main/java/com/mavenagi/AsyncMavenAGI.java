@@ -11,8 +11,10 @@ import com.mavenagi.resources.analytics.AsyncAnalyticsClient;
 import com.mavenagi.resources.appdirectory.AsyncAppDirectoryClient;
 import com.mavenagi.resources.appsettings.AsyncAppSettingsClient;
 import com.mavenagi.resources.assets.AsyncAssetsClient;
+import com.mavenagi.resources.capabilities.AsyncCapabilitiesClient;
 import com.mavenagi.resources.charters.AsyncChartersClient;
 import com.mavenagi.resources.conversation.AsyncConversationClient;
+import com.mavenagi.resources.conversationkickoffs.AsyncConversationKickoffsClient;
 import com.mavenagi.resources.customers.AsyncCustomersClient;
 import com.mavenagi.resources.events.AsyncEventsClient;
 import com.mavenagi.resources.inbox.AsyncInboxClient;
@@ -42,7 +44,11 @@ public class AsyncMavenAGI {
 
     protected final Supplier<AsyncAssetsClient> assetsClient;
 
+    protected final Supplier<AsyncCapabilitiesClient> capabilitiesClient;
+
     protected final Supplier<AsyncChartersClient> chartersClient;
+
+    protected final Supplier<AsyncConversationKickoffsClient> conversationKickoffsClient;
 
     protected final Supplier<AsyncConversationClient> conversationClient;
 
@@ -78,7 +84,9 @@ public class AsyncMavenAGI {
         this.appDirectoryClient = Suppliers.memoize(() -> new AsyncAppDirectoryClient(clientOptions));
         this.appSettingsClient = Suppliers.memoize(() -> new AsyncAppSettingsClient(clientOptions));
         this.assetsClient = Suppliers.memoize(() -> new AsyncAssetsClient(clientOptions));
+        this.capabilitiesClient = Suppliers.memoize(() -> new AsyncCapabilitiesClient(clientOptions));
         this.chartersClient = Suppliers.memoize(() -> new AsyncChartersClient(clientOptions));
+        this.conversationKickoffsClient = Suppliers.memoize(() -> new AsyncConversationKickoffsClient(clientOptions));
         this.conversationClient = Suppliers.memoize(() -> new AsyncConversationClient(clientOptions));
         this.customersClient = Suppliers.memoize(() -> new AsyncCustomersClient(clientOptions));
         this.eventsClient = Suppliers.memoize(() -> new AsyncEventsClient(clientOptions));
@@ -118,8 +126,16 @@ public class AsyncMavenAGI {
         return this.assetsClient.get();
     }
 
+    public AsyncCapabilitiesClient capabilities() {
+        return this.capabilitiesClient.get();
+    }
+
     public AsyncChartersClient charters() {
         return this.chartersClient.get();
+    }
+
+    public AsyncConversationKickoffsClient conversationKickoffs() {
+        return this.conversationKickoffsClient.get();
     }
 
     public AsyncConversationClient conversation() {

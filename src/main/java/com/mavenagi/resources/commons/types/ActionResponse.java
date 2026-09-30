@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,11 +23,7 @@ import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ActionResponse.Builder.class)
-public final class ActionResponse implements IActionBase, IActionProperties {
-    private final String name;
-
-    private final String description;
-
+public final class ActionResponse implements IActionProperties, ICapabilityBase {
     private final boolean userInteractionRequired;
 
     private final Optional<String> buttonName;
@@ -38,6 +35,16 @@ public final class ActionResponse implements IActionBase, IActionProperties {
     private final Optional<String> language;
 
     private final Optional<SideEffects> sideEffects;
+
+    private final String name;
+
+    private final Optional<String> description;
+
+    private final OffsetDateTime createdAt;
+
+    private final OffsetDateTime updatedAt;
+
+    private final CapabilityStatus status;
 
     private final EntityId actionId;
 
@@ -54,14 +61,17 @@ public final class ActionResponse implements IActionBase, IActionProperties {
     private final Map<String, Object> additionalProperties;
 
     private ActionResponse(
-            String name,
-            String description,
             boolean userInteractionRequired,
             Optional<String> buttonName,
             Optional<Precondition> precondition,
             List<ActionParameter> userFormParameters,
             Optional<String> language,
             Optional<SideEffects> sideEffects,
+            String name,
+            Optional<String> description,
+            OffsetDateTime createdAt,
+            OffsetDateTime updatedAt,
+            CapabilityStatus status,
             EntityId actionId,
             Optional<String> instructions,
             LlmInclusionStatus llmInclusionStatus,
@@ -69,14 +79,17 @@ public final class ActionResponse implements IActionBase, IActionProperties {
             Optional<String> preconditionExplanation,
             boolean deleted,
             Map<String, Object> additionalProperties) {
-        this.name = name;
-        this.description = description;
         this.userInteractionRequired = userInteractionRequired;
         this.buttonName = buttonName;
         this.precondition = precondition;
         this.userFormParameters = userFormParameters;
         this.language = language;
         this.sideEffects = sideEffects;
+        this.name = name;
+        this.description = description;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.status = status;
         this.actionId = actionId;
         this.instructions = instructions;
         this.llmInclusionStatus = llmInclusionStatus;
@@ -84,24 +97,6 @@ public final class ActionResponse implements IActionBase, IActionProperties {
         this.preconditionExplanation = preconditionExplanation;
         this.deleted = deleted;
         this.additionalProperties = additionalProperties;
-    }
-
-    /**
-     * @return The name of the action. This is displayed to the end user as part of forms when user interaction is required. It is also used to help Maven decide if the action is relevant to a conversation.
-     */
-    @JsonProperty("name")
-    @java.lang.Override
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * @return The description of the action. Must be no more than 4096 characters. This helps Maven decide if the action is relevant to a conversation and is not displayed directly to the end user. Descriptions are used by the LLM.
-     */
-    @JsonProperty("description")
-    @java.lang.Override
-    public String getDescription() {
-        return description;
     }
 
     /**
@@ -162,6 +157,53 @@ public final class ActionResponse implements IActionBase, IActionProperties {
     }
 
     /**
+     * @return The capability's display name, shown to whoever manages the agent. A trigger registered
+     * without one is named after the app that registered it and the event it fires on.
+     */
+    @JsonProperty("name")
+    @java.lang.Override
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * @return What the capability does. Shown to whoever manages the agent, and for the types the LLM
+     * can choose between, used to decide when the capability applies.
+     */
+    @JsonProperty("description")
+    @java.lang.Override
+    public Optional<String> getDescription() {
+        return description;
+    }
+
+    /**
+     * @return When the capability was created.
+     */
+    @JsonProperty("createdAt")
+    @java.lang.Override
+    public OffsetDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    /**
+     * @return When the capability was last modified.
+     */
+    @JsonProperty("updatedAt")
+    @java.lang.Override
+    public OffsetDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    /**
+     * @return Whether the agent uses this capability, and whether it still exists.
+     */
+    @JsonProperty("status")
+    @java.lang.Override
+    public CapabilityStatus getStatus() {
+        return status;
+    }
+
+    /**
      * @return ID that uniquely identifies this action
      */
     @JsonProperty("actionId")
@@ -179,7 +221,8 @@ public final class ActionResponse implements IActionBase, IActionProperties {
     }
 
     /**
-     * @return Determines whether the action is sent to the LLM as part of a conversation.
+     * @return Deprecated. Superseded by <code>status</code>, which says the same thing for every capability type.
+     * <p>Determines whether the action is sent to the LLM as part of a conversation.</p>
      * <ul>
      * <li><code>ALWAYS</code>: The action is always available for use in conversations, textual relevance is not considered.</li>
      * <li><code>WHEN_RELEVANT</code>: The action is available only in conversations where the action is determined to be relevant to the user's question.</li>
@@ -209,7 +252,8 @@ public final class ActionResponse implements IActionBase, IActionProperties {
     }
 
     /**
-     * @return Whether the action has been deleted. Deleted actions will not sent to the LLM nor returned in search results.
+     * @return Deprecated. Superseded by <code>status</code>, where a deleted action is <code>DELETED</code>.
+     * <p>Whether the action has been deleted. Deleted actions will not sent to the LLM nor returned in search results.</p>
      */
     @JsonProperty("deleted")
     public boolean getDeleted() {
@@ -228,14 +272,17 @@ public final class ActionResponse implements IActionBase, IActionProperties {
     }
 
     private boolean equalTo(ActionResponse other) {
-        return name.equals(other.name)
-                && description.equals(other.description)
-                && userInteractionRequired == other.userInteractionRequired
+        return userInteractionRequired == other.userInteractionRequired
                 && buttonName.equals(other.buttonName)
                 && precondition.equals(other.precondition)
                 && userFormParameters.equals(other.userFormParameters)
                 && language.equals(other.language)
                 && sideEffects.equals(other.sideEffects)
+                && name.equals(other.name)
+                && description.equals(other.description)
+                && createdAt.equals(other.createdAt)
+                && updatedAt.equals(other.updatedAt)
+                && status.equals(other.status)
                 && actionId.equals(other.actionId)
                 && instructions.equals(other.instructions)
                 && llmInclusionStatus.equals(other.llmInclusionStatus)
@@ -247,14 +294,17 @@ public final class ActionResponse implements IActionBase, IActionProperties {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.name,
-                this.description,
                 this.userInteractionRequired,
                 this.buttonName,
                 this.precondition,
                 this.userFormParameters,
                 this.language,
                 this.sideEffects,
+                this.name,
+                this.description,
+                this.createdAt,
+                this.updatedAt,
+                this.status,
                 this.actionId,
                 this.instructions,
                 this.llmInclusionStatus,
@@ -268,31 +318,46 @@ public final class ActionResponse implements IActionBase, IActionProperties {
         return ObjectMappers.stringify(this);
     }
 
-    public static NameStage builder() {
+    public static UserInteractionRequiredStage builder() {
         return new Builder();
-    }
-
-    public interface NameStage {
-        /**
-         * <p>The name of the action. This is displayed to the end user as part of forms when user interaction is required. It is also used to help Maven decide if the action is relevant to a conversation.</p>
-         */
-        DescriptionStage name(@NotNull String name);
-
-        Builder from(ActionResponse other);
-    }
-
-    public interface DescriptionStage {
-        /**
-         * <p>The description of the action. Must be no more than 4096 characters. This helps Maven decide if the action is relevant to a conversation and is not displayed directly to the end user. Descriptions are used by the LLM.</p>
-         */
-        UserInteractionRequiredStage description(@NotNull String description);
     }
 
     public interface UserInteractionRequiredStage {
         /**
          * <p>Whether the action requires user interaction to execute. If false, and all of the required action parameters are known, the LLM may call the action automatically. If true, an conversations ask call will return a BotActionFormResponse which must be submitted by an API caller. API callers must display a button with the buttonName label to confirm the user's intent.</p>
          */
-        ActionIdStage userInteractionRequired(boolean userInteractionRequired);
+        NameStage userInteractionRequired(boolean userInteractionRequired);
+
+        Builder from(ActionResponse other);
+    }
+
+    public interface NameStage {
+        /**
+         * <p>The capability's display name, shown to whoever manages the agent. A trigger registered
+         * without one is named after the app that registered it and the event it fires on.</p>
+         */
+        CreatedAtStage name(@NotNull String name);
+    }
+
+    public interface CreatedAtStage {
+        /**
+         * <p>When the capability was created.</p>
+         */
+        UpdatedAtStage createdAt(@NotNull OffsetDateTime createdAt);
+    }
+
+    public interface UpdatedAtStage {
+        /**
+         * <p>When the capability was last modified.</p>
+         */
+        StatusStage updatedAt(@NotNull OffsetDateTime updatedAt);
+    }
+
+    public interface StatusStage {
+        /**
+         * <p>Whether the agent uses this capability, and whether it still exists.</p>
+         */
+        ActionIdStage status(@NotNull CapabilityStatus status);
     }
 
     public interface ActionIdStage {
@@ -304,6 +369,7 @@ public final class ActionResponse implements IActionBase, IActionProperties {
 
     public interface LlmInclusionStatusStage {
         /**
+         * <p>Deprecated. Superseded by <code>status</code>, which says the same thing for every capability type.</p>
          * <p>Determines whether the action is sent to the LLM as part of a conversation.</p>
          * <ul>
          * <li><code>ALWAYS</code>: The action is always available for use in conversations, textual relevance is not considered.</li>
@@ -316,6 +382,7 @@ public final class ActionResponse implements IActionBase, IActionProperties {
 
     public interface DeletedStage {
         /**
+         * <p>Deprecated. Superseded by <code>status</code>, where a deleted action is <code>DELETED</code>.</p>
          * <p>Whether the action has been deleted. Deleted actions will not sent to the LLM nor returned in search results.</p>
          */
         _FinalStage deleted(boolean deleted);
@@ -365,6 +432,14 @@ public final class ActionResponse implements IActionBase, IActionProperties {
         _FinalStage sideEffects(SideEffects sideEffects);
 
         /**
+         * <p>What the capability does. Shown to whoever manages the agent, and for the types the LLM
+         * can choose between, used to decide when the capability applies.</p>
+         */
+        _FinalStage description(Optional<String> description);
+
+        _FinalStage description(String description);
+
+        /**
          * <p>The instructions given to the LLM when determining whether to execute the action.
          * This field defaults to the <code>description</code> field if not provided. Use the <code>patch</code> API to update.</p>
          */
@@ -390,18 +465,24 @@ public final class ActionResponse implements IActionBase, IActionProperties {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
-            implements NameStage,
-                    DescriptionStage,
-                    UserInteractionRequiredStage,
+            implements UserInteractionRequiredStage,
+                    NameStage,
+                    CreatedAtStage,
+                    UpdatedAtStage,
+                    StatusStage,
                     ActionIdStage,
                     LlmInclusionStatusStage,
                     DeletedStage,
                     _FinalStage {
+        private boolean userInteractionRequired;
+
         private String name;
 
-        private String description;
+        private OffsetDateTime createdAt;
 
-        private boolean userInteractionRequired;
+        private OffsetDateTime updatedAt;
+
+        private CapabilityStatus status;
 
         private EntityId actionId;
 
@@ -414,6 +495,8 @@ public final class ActionResponse implements IActionBase, IActionProperties {
         private Optional<EntityId> segmentId = Optional.empty();
 
         private Optional<String> instructions = Optional.empty();
+
+        private Optional<String> description = Optional.empty();
 
         private Optional<SideEffects> sideEffects = Optional.empty();
 
@@ -432,14 +515,17 @@ public final class ActionResponse implements IActionBase, IActionProperties {
 
         @java.lang.Override
         public Builder from(ActionResponse other) {
-            name(other.getName());
-            description(other.getDescription());
             userInteractionRequired(other.getUserInteractionRequired());
             buttonName(other.getButtonName());
             precondition(other.getPrecondition());
             userFormParameters(other.getUserFormParameters());
             language(other.getLanguage());
             sideEffects(other.getSideEffects());
+            name(other.getName());
+            description(other.getDescription());
+            createdAt(other.getCreatedAt());
+            updatedAt(other.getUpdatedAt());
+            status(other.getStatus());
             actionId(other.getActionId());
             instructions(other.getInstructions());
             llmInclusionStatus(other.getLlmInclusionStatus());
@@ -450,38 +536,64 @@ public final class ActionResponse implements IActionBase, IActionProperties {
         }
 
         /**
-         * <p>The name of the action. This is displayed to the end user as part of forms when user interaction is required. It is also used to help Maven decide if the action is relevant to a conversation.</p>
-         * <p>The name of the action. This is displayed to the end user as part of forms when user interaction is required. It is also used to help Maven decide if the action is relevant to a conversation.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("name")
-        public DescriptionStage name(@NotNull String name) {
-            this.name = Objects.requireNonNull(name, "name must not be null");
-            return this;
-        }
-
-        /**
-         * <p>The description of the action. Must be no more than 4096 characters. This helps Maven decide if the action is relevant to a conversation and is not displayed directly to the end user. Descriptions are used by the LLM.</p>
-         * <p>The description of the action. Must be no more than 4096 characters. This helps Maven decide if the action is relevant to a conversation and is not displayed directly to the end user. Descriptions are used by the LLM.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("description")
-        public UserInteractionRequiredStage description(@NotNull String description) {
-            this.description = Objects.requireNonNull(description, "description must not be null");
-            return this;
-        }
-
-        /**
          * <p>Whether the action requires user interaction to execute. If false, and all of the required action parameters are known, the LLM may call the action automatically. If true, an conversations ask call will return a BotActionFormResponse which must be submitted by an API caller. API callers must display a button with the buttonName label to confirm the user's intent.</p>
          * <p>Whether the action requires user interaction to execute. If false, and all of the required action parameters are known, the LLM may call the action automatically. If true, an conversations ask call will return a BotActionFormResponse which must be submitted by an API caller. API callers must display a button with the buttonName label to confirm the user's intent.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("userInteractionRequired")
-        public ActionIdStage userInteractionRequired(boolean userInteractionRequired) {
+        public NameStage userInteractionRequired(boolean userInteractionRequired) {
             this.userInteractionRequired = userInteractionRequired;
+            return this;
+        }
+
+        /**
+         * <p>The capability's display name, shown to whoever manages the agent. A trigger registered
+         * without one is named after the app that registered it and the event it fires on.</p>
+         * <p>The capability's display name, shown to whoever manages the agent. A trigger registered
+         * without one is named after the app that registered it and the event it fires on.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("name")
+        public CreatedAtStage name(@NotNull String name) {
+            this.name = Objects.requireNonNull(name, "name must not be null");
+            return this;
+        }
+
+        /**
+         * <p>When the capability was created.</p>
+         * <p>When the capability was created.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("createdAt")
+        public UpdatedAtStage createdAt(@NotNull OffsetDateTime createdAt) {
+            this.createdAt = Objects.requireNonNull(createdAt, "createdAt must not be null");
+            return this;
+        }
+
+        /**
+         * <p>When the capability was last modified.</p>
+         * <p>When the capability was last modified.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("updatedAt")
+        public StatusStage updatedAt(@NotNull OffsetDateTime updatedAt) {
+            this.updatedAt = Objects.requireNonNull(updatedAt, "updatedAt must not be null");
+            return this;
+        }
+
+        /**
+         * <p>Whether the agent uses this capability, and whether it still exists.</p>
+         * <p>Whether the agent uses this capability, and whether it still exists.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("status")
+        public ActionIdStage status(@NotNull CapabilityStatus status) {
+            this.status = Objects.requireNonNull(status, "status must not be null");
             return this;
         }
 
@@ -498,12 +610,14 @@ public final class ActionResponse implements IActionBase, IActionProperties {
         }
 
         /**
+         * <p>Deprecated. Superseded by <code>status</code>, which says the same thing for every capability type.</p>
          * <p>Determines whether the action is sent to the LLM as part of a conversation.</p>
          * <ul>
          * <li><code>ALWAYS</code>: The action is always available for use in conversations, textual relevance is not considered.</li>
          * <li><code>WHEN_RELEVANT</code>: The action is available only in conversations where the action is determined to be relevant to the user's question.</li>
          * <li><code>NEVER</code>: The action is not available for use in conversations.</li>
          * </ul>
+         * <p>Deprecated. Superseded by <code>status</code>, which says the same thing for every capability type.</p>
          * <p>Determines whether the action is sent to the LLM as part of a conversation.</p>
          * <ul>
          * <li><code>ALWAYS</code>: The action is always available for use in conversations, textual relevance is not considered.</li>
@@ -520,7 +634,9 @@ public final class ActionResponse implements IActionBase, IActionProperties {
         }
 
         /**
+         * <p>Deprecated. Superseded by <code>status</code>, where a deleted action is <code>DELETED</code>.</p>
          * <p>Whether the action has been deleted. Deleted actions will not sent to the LLM nor returned in search results.</p>
+         * <p>Deprecated. Superseded by <code>status</code>, where a deleted action is <code>DELETED</code>.</p>
          * <p>Whether the action has been deleted. Deleted actions will not sent to the LLM nor returned in search results.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -592,6 +708,28 @@ public final class ActionResponse implements IActionBase, IActionProperties {
         @JsonSetter(value = "instructions", nulls = Nulls.SKIP)
         public _FinalStage instructions(Optional<String> instructions) {
             this.instructions = instructions;
+            return this;
+        }
+
+        /**
+         * <p>What the capability does. Shown to whoever manages the agent, and for the types the LLM
+         * can choose between, used to decide when the capability applies.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage description(String description) {
+            this.description = Optional.ofNullable(description);
+            return this;
+        }
+
+        /**
+         * <p>What the capability does. Shown to whoever manages the agent, and for the types the LLM
+         * can choose between, used to decide when the capability applies.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "description", nulls = Nulls.SKIP)
+        public _FinalStage description(Optional<String> description) {
+            this.description = description;
             return this;
         }
 
@@ -719,14 +857,17 @@ public final class ActionResponse implements IActionBase, IActionProperties {
         @java.lang.Override
         public ActionResponse build() {
             return new ActionResponse(
-                    name,
-                    description,
                     userInteractionRequired,
                     buttonName,
                     precondition,
                     userFormParameters,
                     language,
                     sideEffects,
+                    name,
+                    description,
+                    createdAt,
+                    updatedAt,
+                    status,
                     actionId,
                     instructions,
                     llmInclusionStatus,

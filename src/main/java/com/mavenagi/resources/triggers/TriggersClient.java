@@ -28,14 +28,29 @@ public class TriggersClient {
         return this.rawClient;
     }
 
+    /**
+     * Deprecated. Use <code>POST /v1/capabilities/search</code>, which searches every kind of capability
+     * at once. It returns the fields every capability shares rather than the whole Event
+     * Trigger; fetch one by its kind and reference ID for the rest.
+     */
     public EventTriggersSearchResponse search() {
         return this.rawClient.search().body();
     }
 
+    /**
+     * Deprecated. Use <code>POST /v1/capabilities/search</code>, which searches every kind of capability
+     * at once. It returns the fields every capability shares rather than the whole Event
+     * Trigger; fetch one by its kind and reference ID for the rest.
+     */
     public EventTriggersSearchResponse search(EventTriggersSearchRequest request) {
         return this.rawClient.search(request).body();
     }
 
+    /**
+     * Deprecated. Use <code>POST /v1/capabilities/search</code>, which searches every kind of capability
+     * at once. It returns the fields every capability shares rather than the whole Event
+     * Trigger; fetch one by its kind and reference ID for the rest.
+     */
     public EventTriggersSearchResponse search(EventTriggersSearchRequest request, RequestOptions requestOptions) {
         return this.rawClient.search(request, requestOptions).body();
     }
@@ -55,42 +70,54 @@ public class TriggersClient {
     }
 
     /**
-     * Get an event trigger by its supplied ID
+     * Deprecated. Use <code>GET /v1/capabilities/TRIGGER/{referenceId}</code>, which returns this same
+     * object for a trigger and the equivalent for every other kind of capability.
+     * <p>Get an event trigger by its supplied ID</p>
      */
     public EventTriggerResponse get(String triggerReferenceId) {
         return this.rawClient.get(triggerReferenceId).body();
     }
 
     /**
-     * Get an event trigger by its supplied ID
+     * Deprecated. Use <code>GET /v1/capabilities/TRIGGER/{referenceId}</code>, which returns this same
+     * object for a trigger and the equivalent for every other kind of capability.
+     * <p>Get an event trigger by its supplied ID</p>
      */
     public EventTriggerResponse get(String triggerReferenceId, RequestOptions requestOptions) {
         return this.rawClient.get(triggerReferenceId, requestOptions).body();
     }
 
     /**
-     * Delete an event trigger
+     * Deprecated. Use <code>DELETE /v1/capabilities/TRIGGER/{referenceId}</code>, which deletes any kind
+     * of capability the same way.
+     * <p>Delete an event trigger</p>
      */
     public void delete(String triggerReferenceId) {
         this.rawClient.delete(triggerReferenceId).body();
     }
 
     /**
-     * Delete an event trigger
+     * Deprecated. Use <code>DELETE /v1/capabilities/TRIGGER/{referenceId}</code>, which deletes any kind
+     * of capability the same way.
+     * <p>Delete an event trigger</p>
      */
     public void delete(String triggerReferenceId, RequestOptions requestOptions) {
         this.rawClient.delete(triggerReferenceId, requestOptions).body();
     }
 
     /**
-     * Updates an event trigger. Only the enabled field is editable.
+     * Deprecated. Use <code>PATCH /v1/capabilities/TRIGGER/{referenceId}</code> with a <code>status</code>, which
+     * publishes and unpublishes any kind of capability the same way.
+     * <p>Updates an event trigger. Only the enabled field is editable.</p>
      */
     public EventTriggerResponse partialUpdate(String triggerReferenceId, PartialUpdateRequest request) {
         return this.rawClient.partialUpdate(triggerReferenceId, request).body();
     }
 
     /**
-     * Updates an event trigger. Only the enabled field is editable.
+     * Deprecated. Use <code>PATCH /v1/capabilities/TRIGGER/{referenceId}</code> with a <code>status</code>, which
+     * publishes and unpublishes any kind of capability the same way.
+     * <p>Updates an event trigger. Only the enabled field is editable.</p>
      */
     public EventTriggerResponse partialUpdate(
             String triggerReferenceId, PartialUpdateRequest request, RequestOptions requestOptions) {

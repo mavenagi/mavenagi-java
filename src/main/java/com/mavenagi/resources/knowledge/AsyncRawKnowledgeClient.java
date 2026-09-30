@@ -799,6 +799,8 @@ public class AsyncRawKnowledgeClient {
     /**
      * Create a new knowledge base version.
      * <p>If an existing version is in progress, then that version will be finalized in an error state.</p>
+     * <p>If another version create for the same knowledge base is still in progress, this request may
+     * return 503 with a <code>Retry-After</code> header. Nothing is changed in that case, so it is safe to retry.</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<KnowledgeBaseVersion>> createKnowledgeBaseVersion(
             String knowledgeBaseReferenceId, KnowledgeBaseVersionRequest request) {
@@ -808,6 +810,8 @@ public class AsyncRawKnowledgeClient {
     /**
      * Create a new knowledge base version.
      * <p>If an existing version is in progress, then that version will be finalized in an error state.</p>
+     * <p>If another version create for the same knowledge base is still in progress, this request may
+     * return 503 with a <code>Retry-After</code> header. Nothing is changed in that case, so it is safe to retry.</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<KnowledgeBaseVersion>> createKnowledgeBaseVersion(
             String knowledgeBaseReferenceId, KnowledgeBaseVersionRequest request, RequestOptions requestOptions) {

@@ -22,10 +22,6 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = IntelligentFieldCore.Builder.class)
 public final class IntelligentFieldCore implements IIntelligentFieldCore {
-    private final String name;
-
-    private final Optional<String> description;
-
     private final IntelligentFieldType validationType;
 
     private final String definition;
@@ -35,36 +31,14 @@ public final class IntelligentFieldCore implements IIntelligentFieldCore {
     private final Map<String, Object> additionalProperties;
 
     private IntelligentFieldCore(
-            String name,
-            Optional<String> description,
             IntelligentFieldType validationType,
             String definition,
             Optional<List<EnumOption>> enumOptions,
             Map<String, Object> additionalProperties) {
-        this.name = name;
-        this.description = description;
         this.validationType = validationType;
         this.definition = definition;
         this.enumOptions = enumOptions;
         this.additionalProperties = additionalProperties;
-    }
-
-    /**
-     * @return Display name for the intelligent field
-     */
-    @JsonProperty("name")
-    @java.lang.Override
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * @return A plain text description of the intelligent field.
-     */
-    @JsonProperty("description")
-    @java.lang.Override
-    public Optional<String> getDescription() {
-        return description;
     }
 
     /**
@@ -115,16 +89,14 @@ public final class IntelligentFieldCore implements IIntelligentFieldCore {
     }
 
     private boolean equalTo(IntelligentFieldCore other) {
-        return name.equals(other.name)
-                && description.equals(other.description)
-                && validationType.equals(other.validationType)
+        return validationType.equals(other.validationType)
                 && definition.equals(other.definition)
                 && enumOptions.equals(other.enumOptions);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.name, this.description, this.validationType, this.definition, this.enumOptions);
+        return Objects.hash(this.validationType, this.definition, this.enumOptions);
     }
 
     @java.lang.Override
@@ -132,17 +104,8 @@ public final class IntelligentFieldCore implements IIntelligentFieldCore {
         return ObjectMappers.stringify(this);
     }
 
-    public static NameStage builder() {
+    public static ValidationTypeStage builder() {
         return new Builder();
-    }
-
-    public interface NameStage {
-        /**
-         * <p>Display name for the intelligent field</p>
-         */
-        ValidationTypeStage name(@NotNull String name);
-
-        Builder from(IntelligentFieldCore other);
     }
 
     public interface ValidationTypeStage {
@@ -158,6 +121,8 @@ public final class IntelligentFieldCore implements IIntelligentFieldCore {
          * <p>For a single select, use STRING or NUMBER together with <code>enumOptions</code>.</p>
          */
         DefinitionStage validationType(@NotNull IntelligentFieldType validationType);
+
+        Builder from(IntelligentFieldCore other);
     }
 
     public interface DefinitionStage {
@@ -171,13 +136,6 @@ public final class IntelligentFieldCore implements IIntelligentFieldCore {
         IntelligentFieldCore build();
 
         /**
-         * <p>A plain text description of the intelligent field.</p>
-         */
-        _FinalStage description(Optional<String> description);
-
-        _FinalStage description(String description);
-
-        /**
          * <p>The finite set of values this field may take. Omit to let the LLM produce any value of
          * the <code>validationType</code>. Options may be added later with the patch endpoint, but not removed.</p>
          */
@@ -187,16 +145,12 @@ public final class IntelligentFieldCore implements IIntelligentFieldCore {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements NameStage, ValidationTypeStage, DefinitionStage, _FinalStage {
-        private String name;
-
+    public static final class Builder implements ValidationTypeStage, DefinitionStage, _FinalStage {
         private IntelligentFieldType validationType;
 
         private String definition;
 
         private Optional<List<EnumOption>> enumOptions = Optional.empty();
-
-        private Optional<String> description = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -205,23 +159,9 @@ public final class IntelligentFieldCore implements IIntelligentFieldCore {
 
         @java.lang.Override
         public Builder from(IntelligentFieldCore other) {
-            name(other.getName());
-            description(other.getDescription());
             validationType(other.getValidationType());
             definition(other.getDefinition());
             enumOptions(other.getEnumOptions());
-            return this;
-        }
-
-        /**
-         * <p>Display name for the intelligent field</p>
-         * <p>Display name for the intelligent field</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("name")
-        public ValidationTypeStage name(@NotNull String name) {
-            this.name = Objects.requireNonNull(name, "name must not be null");
             return this;
         }
 
@@ -287,30 +227,9 @@ public final class IntelligentFieldCore implements IIntelligentFieldCore {
             return this;
         }
 
-        /**
-         * <p>A plain text description of the intelligent field.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage description(String description) {
-            this.description = Optional.ofNullable(description);
-            return this;
-        }
-
-        /**
-         * <p>A plain text description of the intelligent field.</p>
-         */
-        @java.lang.Override
-        @JsonSetter(value = "description", nulls = Nulls.SKIP)
-        public _FinalStage description(Optional<String> description) {
-            this.description = description;
-            return this;
-        }
-
         @java.lang.Override
         public IntelligentFieldCore build() {
-            return new IntelligentFieldCore(
-                    name, description, validationType, definition, enumOptions, additionalProperties);
+            return new IntelligentFieldCore(validationType, definition, enumOptions, additionalProperties);
         }
     }
 }

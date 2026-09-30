@@ -41,7 +41,7 @@ public class TriggersWireTest {
     public void testSearch() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"triggers\":[{\"triggerId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"enabled\":true,\"name\":\"name\",\"description\":\"description\",\"type\":\"CONVERSATION_CREATED\"},{\"triggerId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"enabled\":true,\"name\":\"name\",\"description\":\"description\",\"type\":\"CONVERSATION_CREATED\"}],\"number\":1,\"size\":1,\"totalElements\":1000000,\"totalPages\":1}"));
+            .setBody("{\"triggers\":[{\"triggerId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"enabled\":true,\"type\":\"CONVERSATION_CREATED\",\"name\":\"name\",\"description\":\"description\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"status\":\"ACTIVE\"},{\"triggerId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"enabled\":true,\"type\":\"CONVERSATION_CREATED\",\"name\":\"name\",\"description\":\"description\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"status\":\"ACTIVE\"}],\"number\":1,\"size\":1,\"totalElements\":1000000,\"totalPages\":1}"));
         EventTriggersSearchResponse response = client.triggers().search(
             EventTriggersSearchRequest
                 .builder()
@@ -92,9 +92,12 @@ public class TriggersWireTest {
             + "        \"referenceId\": \"x\"\n"
             + "      },\n"
             + "      \"enabled\": true,\n"
+            + "      \"type\": \"CONVERSATION_CREATED\",\n"
             + "      \"name\": \"name\",\n"
             + "      \"description\": \"description\",\n"
-            + "      \"type\": \"CONVERSATION_CREATED\"\n"
+            + "      \"createdAt\": \"2024-01-15T09:30:00Z\",\n"
+            + "      \"updatedAt\": \"2024-01-15T09:30:00Z\",\n"
+            + "      \"status\": \"ACTIVE\"\n"
             + "    },\n"
             + "    {\n"
             + "      \"triggerId\": {\n"
@@ -105,9 +108,12 @@ public class TriggersWireTest {
             + "        \"referenceId\": \"x\"\n"
             + "      },\n"
             + "      \"enabled\": true,\n"
+            + "      \"type\": \"CONVERSATION_CREATED\",\n"
             + "      \"name\": \"name\",\n"
             + "      \"description\": \"description\",\n"
-            + "      \"type\": \"CONVERSATION_CREATED\"\n"
+            + "      \"createdAt\": \"2024-01-15T09:30:00Z\",\n"
+            + "      \"updatedAt\": \"2024-01-15T09:30:00Z\",\n"
+            + "      \"status\": \"ACTIVE\"\n"
             + "    }\n"
             + "  ],\n"
             + "  \"number\": 1,\n"
@@ -142,7 +148,7 @@ public class TriggersWireTest {
     public void testCreateOrUpdate() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"triggerId\":{\"referenceId\":\"store-in-snowflake\",\"appId\":\"snowflake\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"EVENT_TRIGGER\"},\"description\":\"Stores conversation data in Snowflake\",\"type\":\"CONVERSATION_CREATED\",\"enabled\":true}"));
+            .setBody("{\"triggerId\":{\"referenceId\":\"store-in-snowflake\",\"appId\":\"snowflake\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"EVENT_TRIGGER\"},\"name\":\"Store in Snowflake\",\"description\":\"Stores conversation data in Snowflake\",\"type\":\"CONVERSATION_CREATED\",\"enabled\":true,\"createdAt\":\"2026-01-15T10:30:00Z\",\"updatedAt\":\"2026-01-15T10:30:00Z\",\"status\":\"ACTIVE\"}"));
         EventTriggerResponse response = client.triggers().createOrUpdate(
             EventTriggerRequest
                 .builder()
@@ -204,9 +210,13 @@ public class TriggersWireTest {
             + "    \"agentId\": \"support\",\n"
             + "    \"type\": \"EVENT_TRIGGER\"\n"
             + "  },\n"
+            + "  \"name\": \"Store in Snowflake\",\n"
             + "  \"description\": \"Stores conversation data in Snowflake\",\n"
             + "  \"type\": \"CONVERSATION_CREATED\",\n"
-            + "  \"enabled\": true\n"
+            + "  \"enabled\": true,\n"
+            + "  \"createdAt\": \"2026-01-15T10:30:00Z\",\n"
+            + "  \"updatedAt\": \"2026-01-15T10:30:00Z\",\n"
+            + "  \"status\": \"ACTIVE\"\n"
             + "}";
         JsonNode actualResponseNode = objectMapper.readTree(actualResponseJson);
         JsonNode expectedResponseNode = objectMapper.readTree(expectedResponseBody);
@@ -235,7 +245,7 @@ public class TriggersWireTest {
     public void testGet() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"triggerId\":{\"referenceId\":\"store-in-snowflake\",\"appId\":\"snowflake\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"EVENT_TRIGGER\"},\"description\":\"Stores conversation data in Snowflake\",\"type\":\"CONVERSATION_CREATED\",\"enabled\":true}"));
+            .setBody("{\"triggerId\":{\"referenceId\":\"store-in-snowflake\",\"appId\":\"snowflake\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"EVENT_TRIGGER\"},\"name\":\"Store in Snowflake\",\"description\":\"Stores conversation data in Snowflake\",\"type\":\"CONVERSATION_CREATED\",\"enabled\":true,\"createdAt\":\"2026-01-15T10:30:00Z\",\"updatedAt\":\"2026-01-15T10:30:00Z\",\"status\":\"ACTIVE\"}"));
         EventTriggerResponse response = client.triggers().get("store-in-snowflake");
         RecordedRequest request = server.takeRequest();
         Assertions.assertNotNull(request);
@@ -253,9 +263,13 @@ public class TriggersWireTest {
             + "    \"agentId\": \"support\",\n"
             + "    \"type\": \"EVENT_TRIGGER\"\n"
             + "  },\n"
+            + "  \"name\": \"Store in Snowflake\",\n"
             + "  \"description\": \"Stores conversation data in Snowflake\",\n"
             + "  \"type\": \"CONVERSATION_CREATED\",\n"
-            + "  \"enabled\": true\n"
+            + "  \"enabled\": true,\n"
+            + "  \"createdAt\": \"2026-01-15T10:30:00Z\",\n"
+            + "  \"updatedAt\": \"2026-01-15T10:30:00Z\",\n"
+            + "  \"status\": \"ACTIVE\"\n"
             + "}";
         JsonNode actualResponseNode = objectMapper.readTree(actualResponseJson);
         JsonNode expectedResponseNode = objectMapper.readTree(expectedResponseBody);
@@ -294,7 +308,7 @@ public class TriggersWireTest {
     public void testPartialUpdate() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"triggerId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"enabled\":true,\"name\":\"name\",\"description\":\"description\",\"type\":\"CONVERSATION_CREATED\"}"));
+            .setBody("{\"triggerId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"enabled\":true,\"type\":\"CONVERSATION_CREATED\",\"name\":\"name\",\"description\":\"description\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"status\":\"ACTIVE\"}"));
         EventTriggerResponse response = client.triggers().partialUpdate(
             "triggerReferenceId",
             PartialUpdateRequest
@@ -349,9 +363,12 @@ public class TriggersWireTest {
             + "    \"referenceId\": \"x\"\n"
             + "  },\n"
             + "  \"enabled\": true,\n"
+            + "  \"type\": \"CONVERSATION_CREATED\",\n"
             + "  \"name\": \"name\",\n"
             + "  \"description\": \"description\",\n"
-            + "  \"type\": \"CONVERSATION_CREATED\"\n"
+            + "  \"createdAt\": \"2024-01-15T09:30:00Z\",\n"
+            + "  \"updatedAt\": \"2024-01-15T09:30:00Z\",\n"
+            + "  \"status\": \"ACTIVE\"\n"
             + "}";
         JsonNode actualResponseNode = objectMapper.readTree(actualResponseJson);
         JsonNode expectedResponseNode = objectMapper.readTree(expectedResponseBody);

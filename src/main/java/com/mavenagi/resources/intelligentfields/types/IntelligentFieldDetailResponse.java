@@ -13,9 +13,11 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
 import com.mavenagi.resources.charters.types.CharterSummary;
+import com.mavenagi.resources.commons.types.CapabilityStatus;
 import com.mavenagi.resources.commons.types.EntityId;
 import com.mavenagi.resources.commons.types.EntityIdWithoutAgent;
 import com.mavenagi.resources.commons.types.EntityType;
+import com.mavenagi.resources.commons.types.ICapabilityBase;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -27,14 +29,8 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = IntelligentFieldDetailResponse.Builder.class)
 public final class IntelligentFieldDetailResponse
-        implements IIntelligentFieldResponse, IIntelligentFieldBase, IIntelligentFieldCore {
+        implements IIntelligentFieldResponse, IIntelligentFieldBase, ICapabilityBase, IIntelligentFieldCore {
     private final EntityId fieldId;
-
-    private final IntelligentFieldStatus status;
-
-    private final Optional<OffsetDateTime> createdAt;
-
-    private final Optional<OffsetDateTime> updatedAt;
 
     private final EntityType entityType;
 
@@ -43,6 +39,12 @@ public final class IntelligentFieldDetailResponse
     private final String name;
 
     private final Optional<String> description;
+
+    private final OffsetDateTime createdAt;
+
+    private final OffsetDateTime updatedAt;
+
+    private final CapabilityStatus status;
 
     private final IntelligentFieldType validationType;
 
@@ -56,26 +58,26 @@ public final class IntelligentFieldDetailResponse
 
     private IntelligentFieldDetailResponse(
             EntityId fieldId,
-            IntelligentFieldStatus status,
-            Optional<OffsetDateTime> createdAt,
-            Optional<OffsetDateTime> updatedAt,
             EntityType entityType,
             Optional<EntityIdWithoutAgent> variantId,
             String name,
             Optional<String> description,
+            OffsetDateTime createdAt,
+            OffsetDateTime updatedAt,
+            CapabilityStatus status,
             IntelligentFieldType validationType,
             String definition,
             Optional<List<EnumOption>> enumOptions,
             Optional<List<CharterSummary>> referencingCharters,
             Map<String, Object> additionalProperties) {
         this.fieldId = fieldId;
-        this.status = status;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
         this.entityType = entityType;
         this.variantId = variantId;
         this.name = name;
         this.description = description;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.status = status;
         this.validationType = validationType;
         this.definition = definition;
         this.enumOptions = enumOptions;
@@ -90,33 +92,6 @@ public final class IntelligentFieldDetailResponse
     @java.lang.Override
     public EntityId getFieldId() {
         return fieldId;
-    }
-
-    /**
-     * @return Lifecycle state for whether this field is evaluated by workflows. Defaults to INACTIVE on creation. Use PATCH to activate.
-     */
-    @JsonProperty("status")
-    @java.lang.Override
-    public IntelligentFieldStatus getStatus() {
-        return status;
-    }
-
-    /**
-     * @return The date and time the intelligent field was created
-     */
-    @JsonProperty("createdAt")
-    @java.lang.Override
-    public Optional<OffsetDateTime> getCreatedAt() {
-        return createdAt;
-    }
-
-    /**
-     * @return The date and time the intelligent field was last updated
-     */
-    @JsonProperty("updatedAt")
-    @java.lang.Override
-    public Optional<OffsetDateTime> getUpdatedAt() {
-        return updatedAt;
     }
 
     /**
@@ -138,7 +113,8 @@ public final class IntelligentFieldDetailResponse
     }
 
     /**
-     * @return Display name for the intelligent field
+     * @return The capability's display name, shown to whoever manages the agent. A trigger registered
+     * without one is named after the app that registered it and the event it fires on.
      */
     @JsonProperty("name")
     @java.lang.Override
@@ -147,12 +123,40 @@ public final class IntelligentFieldDetailResponse
     }
 
     /**
-     * @return A plain text description of the intelligent field.
+     * @return What the capability does. Shown to whoever manages the agent, and for the types the LLM
+     * can choose between, used to decide when the capability applies.
      */
     @JsonProperty("description")
     @java.lang.Override
     public Optional<String> getDescription() {
         return description;
+    }
+
+    /**
+     * @return When the capability was created.
+     */
+    @JsonProperty("createdAt")
+    @java.lang.Override
+    public OffsetDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    /**
+     * @return When the capability was last modified.
+     */
+    @JsonProperty("updatedAt")
+    @java.lang.Override
+    public OffsetDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    /**
+     * @return Whether the agent uses this capability, and whether it still exists.
+     */
+    @JsonProperty("status")
+    @java.lang.Override
+    public CapabilityStatus getStatus() {
+        return status;
     }
 
     /**
@@ -213,13 +217,13 @@ public final class IntelligentFieldDetailResponse
 
     private boolean equalTo(IntelligentFieldDetailResponse other) {
         return fieldId.equals(other.fieldId)
-                && status.equals(other.status)
-                && createdAt.equals(other.createdAt)
-                && updatedAt.equals(other.updatedAt)
                 && entityType.equals(other.entityType)
                 && variantId.equals(other.variantId)
                 && name.equals(other.name)
                 && description.equals(other.description)
+                && createdAt.equals(other.createdAt)
+                && updatedAt.equals(other.updatedAt)
+                && status.equals(other.status)
                 && validationType.equals(other.validationType)
                 && definition.equals(other.definition)
                 && enumOptions.equals(other.enumOptions)
@@ -230,13 +234,13 @@ public final class IntelligentFieldDetailResponse
     public int hashCode() {
         return Objects.hash(
                 this.fieldId,
-                this.status,
-                this.createdAt,
-                this.updatedAt,
                 this.entityType,
                 this.variantId,
                 this.name,
                 this.description,
+                this.createdAt,
+                this.updatedAt,
+                this.status,
                 this.validationType,
                 this.definition,
                 this.enumOptions,
@@ -256,16 +260,9 @@ public final class IntelligentFieldDetailResponse
         /**
          * <p>ID that uniquely identifies this intelligent field</p>
          */
-        StatusStage fieldId(@NotNull EntityId fieldId);
+        EntityTypeStage fieldId(@NotNull EntityId fieldId);
 
         Builder from(IntelligentFieldDetailResponse other);
-    }
-
-    public interface StatusStage {
-        /**
-         * <p>Lifecycle state for whether this field is evaluated by workflows. Defaults to INACTIVE on creation. Use PATCH to activate.</p>
-         */
-        EntityTypeStage status(@NotNull IntelligentFieldStatus status);
     }
 
     public interface EntityTypeStage {
@@ -277,9 +274,31 @@ public final class IntelligentFieldDetailResponse
 
     public interface NameStage {
         /**
-         * <p>Display name for the intelligent field</p>
+         * <p>The capability's display name, shown to whoever manages the agent. A trigger registered
+         * without one is named after the app that registered it and the event it fires on.</p>
          */
-        ValidationTypeStage name(@NotNull String name);
+        CreatedAtStage name(@NotNull String name);
+    }
+
+    public interface CreatedAtStage {
+        /**
+         * <p>When the capability was created.</p>
+         */
+        UpdatedAtStage createdAt(@NotNull OffsetDateTime createdAt);
+    }
+
+    public interface UpdatedAtStage {
+        /**
+         * <p>When the capability was last modified.</p>
+         */
+        StatusStage updatedAt(@NotNull OffsetDateTime updatedAt);
+    }
+
+    public interface StatusStage {
+        /**
+         * <p>Whether the agent uses this capability, and whether it still exists.</p>
+         */
+        ValidationTypeStage status(@NotNull CapabilityStatus status);
     }
 
     public interface ValidationTypeStage {
@@ -308,20 +327,6 @@ public final class IntelligentFieldDetailResponse
         IntelligentFieldDetailResponse build();
 
         /**
-         * <p>The date and time the intelligent field was created</p>
-         */
-        _FinalStage createdAt(Optional<OffsetDateTime> createdAt);
-
-        _FinalStage createdAt(OffsetDateTime createdAt);
-
-        /**
-         * <p>The date and time the intelligent field was last updated</p>
-         */
-        _FinalStage updatedAt(Optional<OffsetDateTime> updatedAt);
-
-        _FinalStage updatedAt(OffsetDateTime updatedAt);
-
-        /**
          * <p>ID of the agent variant this field belongs to, if applicable</p>
          */
         _FinalStage variantId(Optional<EntityIdWithoutAgent> variantId);
@@ -329,7 +334,8 @@ public final class IntelligentFieldDetailResponse
         _FinalStage variantId(EntityIdWithoutAgent variantId);
 
         /**
-         * <p>A plain text description of the intelligent field.</p>
+         * <p>What the capability does. Shown to whoever manages the agent, and for the types the LLM
+         * can choose between, used to decide when the capability applies.</p>
          */
         _FinalStage description(Optional<String> description);
 
@@ -355,19 +361,25 @@ public final class IntelligentFieldDetailResponse
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
             implements FieldIdStage,
-                    StatusStage,
                     EntityTypeStage,
                     NameStage,
+                    CreatedAtStage,
+                    UpdatedAtStage,
+                    StatusStage,
                     ValidationTypeStage,
                     DefinitionStage,
                     _FinalStage {
         private EntityId fieldId;
 
-        private IntelligentFieldStatus status;
-
         private EntityType entityType;
 
         private String name;
+
+        private OffsetDateTime createdAt;
+
+        private OffsetDateTime updatedAt;
+
+        private CapabilityStatus status;
 
         private IntelligentFieldType validationType;
 
@@ -381,10 +393,6 @@ public final class IntelligentFieldDetailResponse
 
         private Optional<EntityIdWithoutAgent> variantId = Optional.empty();
 
-        private Optional<OffsetDateTime> updatedAt = Optional.empty();
-
-        private Optional<OffsetDateTime> createdAt = Optional.empty();
-
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -393,13 +401,13 @@ public final class IntelligentFieldDetailResponse
         @java.lang.Override
         public Builder from(IntelligentFieldDetailResponse other) {
             fieldId(other.getFieldId());
-            status(other.getStatus());
-            createdAt(other.getCreatedAt());
-            updatedAt(other.getUpdatedAt());
             entityType(other.getEntityType());
             variantId(other.getVariantId());
             name(other.getName());
             description(other.getDescription());
+            createdAt(other.getCreatedAt());
+            updatedAt(other.getUpdatedAt());
+            status(other.getStatus());
             validationType(other.getValidationType());
             definition(other.getDefinition());
             enumOptions(other.getEnumOptions());
@@ -414,20 +422,8 @@ public final class IntelligentFieldDetailResponse
          */
         @java.lang.Override
         @JsonSetter("fieldId")
-        public StatusStage fieldId(@NotNull EntityId fieldId) {
+        public EntityTypeStage fieldId(@NotNull EntityId fieldId) {
             this.fieldId = Objects.requireNonNull(fieldId, "fieldId must not be null");
-            return this;
-        }
-
-        /**
-         * <p>Lifecycle state for whether this field is evaluated by workflows. Defaults to INACTIVE on creation. Use PATCH to activate.</p>
-         * <p>Lifecycle state for whether this field is evaluated by workflows. Defaults to INACTIVE on creation. Use PATCH to activate.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("status")
-        public EntityTypeStage status(@NotNull IntelligentFieldStatus status) {
-            this.status = Objects.requireNonNull(status, "status must not be null");
             return this;
         }
 
@@ -444,14 +440,52 @@ public final class IntelligentFieldDetailResponse
         }
 
         /**
-         * <p>Display name for the intelligent field</p>
-         * <p>Display name for the intelligent field</p>
+         * <p>The capability's display name, shown to whoever manages the agent. A trigger registered
+         * without one is named after the app that registered it and the event it fires on.</p>
+         * <p>The capability's display name, shown to whoever manages the agent. A trigger registered
+         * without one is named after the app that registered it and the event it fires on.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("name")
-        public ValidationTypeStage name(@NotNull String name) {
+        public CreatedAtStage name(@NotNull String name) {
             this.name = Objects.requireNonNull(name, "name must not be null");
+            return this;
+        }
+
+        /**
+         * <p>When the capability was created.</p>
+         * <p>When the capability was created.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("createdAt")
+        public UpdatedAtStage createdAt(@NotNull OffsetDateTime createdAt) {
+            this.createdAt = Objects.requireNonNull(createdAt, "createdAt must not be null");
+            return this;
+        }
+
+        /**
+         * <p>When the capability was last modified.</p>
+         * <p>When the capability was last modified.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("updatedAt")
+        public StatusStage updatedAt(@NotNull OffsetDateTime updatedAt) {
+            this.updatedAt = Objects.requireNonNull(updatedAt, "updatedAt must not be null");
+            return this;
+        }
+
+        /**
+         * <p>Whether the agent uses this capability, and whether it still exists.</p>
+         * <p>Whether the agent uses this capability, and whether it still exists.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("status")
+        public ValidationTypeStage status(@NotNull CapabilityStatus status) {
+            this.status = Objects.requireNonNull(status, "status must not be null");
             return this;
         }
 
@@ -540,7 +574,8 @@ public final class IntelligentFieldDetailResponse
         }
 
         /**
-         * <p>A plain text description of the intelligent field.</p>
+         * <p>What the capability does. Shown to whoever manages the agent, and for the types the LLM
+         * can choose between, used to decide when the capability applies.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -550,7 +585,8 @@ public final class IntelligentFieldDetailResponse
         }
 
         /**
-         * <p>A plain text description of the intelligent field.</p>
+         * <p>What the capability does. Shown to whoever manages the agent, and for the types the LLM
+         * can choose between, used to decide when the capability applies.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "description", nulls = Nulls.SKIP)
@@ -579,57 +615,17 @@ public final class IntelligentFieldDetailResponse
             return this;
         }
 
-        /**
-         * <p>The date and time the intelligent field was last updated</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage updatedAt(OffsetDateTime updatedAt) {
-            this.updatedAt = Optional.ofNullable(updatedAt);
-            return this;
-        }
-
-        /**
-         * <p>The date and time the intelligent field was last updated</p>
-         */
-        @java.lang.Override
-        @JsonSetter(value = "updatedAt", nulls = Nulls.SKIP)
-        public _FinalStage updatedAt(Optional<OffsetDateTime> updatedAt) {
-            this.updatedAt = updatedAt;
-            return this;
-        }
-
-        /**
-         * <p>The date and time the intelligent field was created</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage createdAt(OffsetDateTime createdAt) {
-            this.createdAt = Optional.ofNullable(createdAt);
-            return this;
-        }
-
-        /**
-         * <p>The date and time the intelligent field was created</p>
-         */
-        @java.lang.Override
-        @JsonSetter(value = "createdAt", nulls = Nulls.SKIP)
-        public _FinalStage createdAt(Optional<OffsetDateTime> createdAt) {
-            this.createdAt = createdAt;
-            return this;
-        }
-
         @java.lang.Override
         public IntelligentFieldDetailResponse build() {
             return new IntelligentFieldDetailResponse(
                     fieldId,
-                    status,
-                    createdAt,
-                    updatedAt,
                     entityType,
                     variantId,
                     name,
                     description,
+                    createdAt,
+                    updatedAt,
+                    status,
                     validationType,
                     definition,
                     enumOptions,

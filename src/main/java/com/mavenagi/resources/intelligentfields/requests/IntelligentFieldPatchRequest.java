@@ -12,9 +12,9 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
+import com.mavenagi.resources.commons.types.CapabilityStatus;
 import com.mavenagi.resources.commons.types.EntityIdBase;
 import com.mavenagi.resources.intelligentfields.types.EnumOption;
-import com.mavenagi.resources.intelligentfields.types.IntelligentFieldStatus;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +28,7 @@ public final class IntelligentFieldPatchRequest {
 
     private final Optional<String> definition;
 
-    private final Optional<IntelligentFieldStatus> status;
+    private final Optional<CapabilityStatus> status;
 
     private final Optional<String> description;
 
@@ -43,7 +43,7 @@ public final class IntelligentFieldPatchRequest {
     private IntelligentFieldPatchRequest(
             Optional<String> appId,
             Optional<String> definition,
-            Optional<IntelligentFieldStatus> status,
+            Optional<CapabilityStatus> status,
             Optional<String> description,
             Optional<List<EnumOption>> enumOptions,
             Optional<EntityIdBase> variantId,
@@ -83,7 +83,7 @@ public final class IntelligentFieldPatchRequest {
      * cannot be deactivated.</p>
      */
     @JsonProperty("status")
-    public Optional<IntelligentFieldStatus> getStatus() {
+    public Optional<CapabilityStatus> getStatus() {
         return status;
     }
 
@@ -104,7 +104,7 @@ public final class IntelligentFieldPatchRequest {
     }
 
     /**
-     * @return The agent variant to stage this patch in, by reference ID. Its owning app is <code>variantAppId</code>.
+     * @return The agent variant to stage this patch in, by reference ID. Its owning app is <code>variantAppId</code>. Required on an agent with versioned intelligent fields; a patch that omits it there is rejected with reason <code>VARIANT_REQUIRED</code>.
      */
     @JsonProperty("variantId")
     public Optional<EntityIdBase> getVariantId() {
@@ -167,7 +167,7 @@ public final class IntelligentFieldPatchRequest {
 
         private Optional<String> definition = Optional.empty();
 
-        private Optional<IntelligentFieldStatus> status = Optional.empty();
+        private Optional<CapabilityStatus> status = Optional.empty();
 
         private Optional<String> description = Optional.empty();
 
@@ -229,12 +229,12 @@ public final class IntelligentFieldPatchRequest {
          * cannot be deactivated.</p>
          */
         @JsonSetter(value = "status", nulls = Nulls.SKIP)
-        public Builder status(Optional<IntelligentFieldStatus> status) {
+        public Builder status(Optional<CapabilityStatus> status) {
             this.status = status;
             return this;
         }
 
-        public Builder status(IntelligentFieldStatus status) {
+        public Builder status(CapabilityStatus status) {
             this.status = Optional.ofNullable(status);
             return this;
         }
@@ -268,7 +268,7 @@ public final class IntelligentFieldPatchRequest {
         }
 
         /**
-         * <p>The agent variant to stage this patch in, by reference ID. Its owning app is <code>variantAppId</code>.</p>
+         * <p>The agent variant to stage this patch in, by reference ID. Its owning app is <code>variantAppId</code>. Required on an agent with versioned intelligent fields; a patch that omits it there is rejected with reason <code>VARIANT_REQUIRED</code>.</p>
          */
         @JsonSetter(value = "variantId", nulls = Nulls.SKIP)
         public Builder variantId(Optional<EntityIdBase> variantId) {

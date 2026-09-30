@@ -25,11 +25,18 @@ public final class EnumOption {
 
     private final Optional<String> label;
 
+    private final Optional<String> description;
+
     private final Map<String, Object> additionalProperties;
 
-    private EnumOption(String value, Optional<String> label, Map<String, Object> additionalProperties) {
+    private EnumOption(
+            String value,
+            Optional<String> label,
+            Optional<String> description,
+            Map<String, Object> additionalProperties) {
         this.value = value;
         this.label = label;
+        this.description = description;
         this.additionalProperties = additionalProperties;
     }
 
@@ -49,6 +56,15 @@ public final class EnumOption {
         return label;
     }
 
+    /**
+     * @return Instructions that tell the LLM when to pick this option. Up to 1200 characters. On a
+     * patch, an option sent without a description has its description cleared.
+     */
+    @JsonProperty("description")
+    public Optional<String> getDescription() {
+        return description;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -61,12 +77,12 @@ public final class EnumOption {
     }
 
     private boolean equalTo(EnumOption other) {
-        return value.equals(other.value) && label.equals(other.label);
+        return value.equals(other.value) && label.equals(other.label) && description.equals(other.description);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.value, this.label);
+        return Objects.hash(this.value, this.label, this.description);
     }
 
     @java.lang.Override
@@ -96,11 +112,21 @@ public final class EnumOption {
         _FinalStage label(Optional<String> label);
 
         _FinalStage label(String label);
+
+        /**
+         * <p>Instructions that tell the LLM when to pick this option. Up to 1200 characters. On a
+         * patch, an option sent without a description has its description cleared.</p>
+         */
+        _FinalStage description(Optional<String> description);
+
+        _FinalStage description(String description);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements ValueStage, _FinalStage {
         private String value;
+
+        private Optional<String> description = Optional.empty();
 
         private Optional<String> label = Optional.empty();
 
@@ -113,6 +139,7 @@ public final class EnumOption {
         public Builder from(EnumOption other) {
             value(other.getValue());
             label(other.getLabel());
+            description(other.getDescription());
             return this;
         }
 
@@ -125,6 +152,28 @@ public final class EnumOption {
         @JsonSetter("value")
         public _FinalStage value(@NotNull String value) {
             this.value = Objects.requireNonNull(value, "value must not be null");
+            return this;
+        }
+
+        /**
+         * <p>Instructions that tell the LLM when to pick this option. Up to 1200 characters. On a
+         * patch, an option sent without a description has its description cleared.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage description(String description) {
+            this.description = Optional.ofNullable(description);
+            return this;
+        }
+
+        /**
+         * <p>Instructions that tell the LLM when to pick this option. Up to 1200 characters. On a
+         * patch, an option sent without a description has its description cleared.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "description", nulls = Nulls.SKIP)
+        public _FinalStage description(Optional<String> description) {
+            this.description = description;
             return this;
         }
 
@@ -150,7 +199,7 @@ public final class EnumOption {
 
         @java.lang.Override
         public EnumOption build() {
-            return new EnumOption(value, label, additionalProperties);
+            return new EnumOption(value, label, description, additionalProperties);
         }
     }
 }

@@ -48,7 +48,7 @@ public final class IntelligentFieldDeleteRequest {
     }
 
     /**
-     * @return The agent variant reference ID of the intelligent field to delete.
+     * @return The agent variant to stage the delete in, by reference ID. Required on an agent with versioned intelligent fields; a delete that omits it there is rejected with reason <code>VARIANT_REQUIRED</code>.
      */
     @JsonProperty("variantReferenceId")
     public Optional<String> getVariantReferenceId() {
@@ -129,7 +129,7 @@ public final class IntelligentFieldDeleteRequest {
         }
 
         /**
-         * <p>The agent variant reference ID of the intelligent field to delete.</p>
+         * <p>The agent variant to stage the delete in, by reference ID. Required on an agent with versioned intelligent fields; a delete that omits it there is rejected with reason <code>VARIANT_REQUIRED</code>.</p>
          */
         @JsonSetter(value = "variantReferenceId", nulls = Nulls.SKIP)
         public Builder variantReferenceId(Optional<String> variantReferenceId) {

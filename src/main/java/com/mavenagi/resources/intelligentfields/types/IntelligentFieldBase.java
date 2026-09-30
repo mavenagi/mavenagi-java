@@ -28,10 +28,6 @@ public final class IntelligentFieldBase implements IIntelligentFieldBase, IIntel
 
     private final Optional<EntityIdWithoutAgent> variantId;
 
-    private final String name;
-
-    private final Optional<String> description;
-
     private final IntelligentFieldType validationType;
 
     private final String definition;
@@ -43,16 +39,12 @@ public final class IntelligentFieldBase implements IIntelligentFieldBase, IIntel
     private IntelligentFieldBase(
             EntityType entityType,
             Optional<EntityIdWithoutAgent> variantId,
-            String name,
-            Optional<String> description,
             IntelligentFieldType validationType,
             String definition,
             Optional<List<EnumOption>> enumOptions,
             Map<String, Object> additionalProperties) {
         this.entityType = entityType;
         this.variantId = variantId;
-        this.name = name;
-        this.description = description;
         this.validationType = validationType;
         this.definition = definition;
         this.enumOptions = enumOptions;
@@ -75,24 +67,6 @@ public final class IntelligentFieldBase implements IIntelligentFieldBase, IIntel
     @java.lang.Override
     public Optional<EntityIdWithoutAgent> getVariantId() {
         return variantId;
-    }
-
-    /**
-     * @return Display name for the intelligent field
-     */
-    @JsonProperty("name")
-    @java.lang.Override
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * @return A plain text description of the intelligent field.
-     */
-    @JsonProperty("description")
-    @java.lang.Override
-    public Optional<String> getDescription() {
-        return description;
     }
 
     /**
@@ -145,8 +119,6 @@ public final class IntelligentFieldBase implements IIntelligentFieldBase, IIntel
     private boolean equalTo(IntelligentFieldBase other) {
         return entityType.equals(other.entityType)
                 && variantId.equals(other.variantId)
-                && name.equals(other.name)
-                && description.equals(other.description)
                 && validationType.equals(other.validationType)
                 && definition.equals(other.definition)
                 && enumOptions.equals(other.enumOptions);
@@ -154,14 +126,7 @@ public final class IntelligentFieldBase implements IIntelligentFieldBase, IIntel
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(
-                this.entityType,
-                this.variantId,
-                this.name,
-                this.description,
-                this.validationType,
-                this.definition,
-                this.enumOptions);
+        return Objects.hash(this.entityType, this.variantId, this.validationType, this.definition, this.enumOptions);
     }
 
     @java.lang.Override
@@ -177,16 +142,9 @@ public final class IntelligentFieldBase implements IIntelligentFieldBase, IIntel
         /**
          * <p>Target entity type for evaluation. Only CONVERSATION is supported at this time. The backend will return an error for other types.</p>
          */
-        NameStage entityType(@NotNull EntityType entityType);
+        ValidationTypeStage entityType(@NotNull EntityType entityType);
 
         Builder from(IntelligentFieldBase other);
-    }
-
-    public interface NameStage {
-        /**
-         * <p>Display name for the intelligent field</p>
-         */
-        ValidationTypeStage name(@NotNull String name);
     }
 
     public interface ValidationTypeStage {
@@ -222,13 +180,6 @@ public final class IntelligentFieldBase implements IIntelligentFieldBase, IIntel
         _FinalStage variantId(EntityIdWithoutAgent variantId);
 
         /**
-         * <p>A plain text description of the intelligent field.</p>
-         */
-        _FinalStage description(Optional<String> description);
-
-        _FinalStage description(String description);
-
-        /**
          * <p>The finite set of values this field may take. Omit to let the LLM produce any value of
          * the <code>validationType</code>. Options may be added later with the patch endpoint, but not removed.</p>
          */
@@ -238,19 +189,14 @@ public final class IntelligentFieldBase implements IIntelligentFieldBase, IIntel
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder
-            implements EntityTypeStage, NameStage, ValidationTypeStage, DefinitionStage, _FinalStage {
+    public static final class Builder implements EntityTypeStage, ValidationTypeStage, DefinitionStage, _FinalStage {
         private EntityType entityType;
-
-        private String name;
 
         private IntelligentFieldType validationType;
 
         private String definition;
 
         private Optional<List<EnumOption>> enumOptions = Optional.empty();
-
-        private Optional<String> description = Optional.empty();
 
         private Optional<EntityIdWithoutAgent> variantId = Optional.empty();
 
@@ -263,8 +209,6 @@ public final class IntelligentFieldBase implements IIntelligentFieldBase, IIntel
         public Builder from(IntelligentFieldBase other) {
             entityType(other.getEntityType());
             variantId(other.getVariantId());
-            name(other.getName());
-            description(other.getDescription());
             validationType(other.getValidationType());
             definition(other.getDefinition());
             enumOptions(other.getEnumOptions());
@@ -278,20 +222,8 @@ public final class IntelligentFieldBase implements IIntelligentFieldBase, IIntel
          */
         @java.lang.Override
         @JsonSetter("entityType")
-        public NameStage entityType(@NotNull EntityType entityType) {
+        public ValidationTypeStage entityType(@NotNull EntityType entityType) {
             this.entityType = Objects.requireNonNull(entityType, "entityType must not be null");
-            return this;
-        }
-
-        /**
-         * <p>Display name for the intelligent field</p>
-         * <p>Display name for the intelligent field</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("name")
-        public ValidationTypeStage name(@NotNull String name) {
-            this.name = Objects.requireNonNull(name, "name must not be null");
             return this;
         }
 
@@ -358,26 +290,6 @@ public final class IntelligentFieldBase implements IIntelligentFieldBase, IIntel
         }
 
         /**
-         * <p>A plain text description of the intelligent field.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage description(String description) {
-            this.description = Optional.ofNullable(description);
-            return this;
-        }
-
-        /**
-         * <p>A plain text description of the intelligent field.</p>
-         */
-        @java.lang.Override
-        @JsonSetter(value = "description", nulls = Nulls.SKIP)
-        public _FinalStage description(Optional<String> description) {
-            this.description = description;
-            return this;
-        }
-
-        /**
          * <p>ID of the agent variant this field belongs to, if applicable</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -400,14 +312,7 @@ public final class IntelligentFieldBase implements IIntelligentFieldBase, IIntel
         @java.lang.Override
         public IntelligentFieldBase build() {
             return new IntelligentFieldBase(
-                    entityType,
-                    variantId,
-                    name,
-                    description,
-                    validationType,
-                    definition,
-                    enumOptions,
-                    additionalProperties);
+                    entityType, variantId, validationType, definition, enumOptions, additionalProperties);
         }
     }
 }

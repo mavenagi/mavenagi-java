@@ -39,14 +39,29 @@ public class RawTriggersClient {
         this.clientOptions = clientOptions;
     }
 
+    /**
+     * Deprecated. Use <code>POST /v1/capabilities/search</code>, which searches every kind of capability
+     * at once. It returns the fields every capability shares rather than the whole Event
+     * Trigger; fetch one by its kind and reference ID for the rest.
+     */
     public MavenAGIHttpResponse<EventTriggersSearchResponse> search() {
         return search(EventTriggersSearchRequest.builder().build());
     }
 
+    /**
+     * Deprecated. Use <code>POST /v1/capabilities/search</code>, which searches every kind of capability
+     * at once. It returns the fields every capability shares rather than the whole Event
+     * Trigger; fetch one by its kind and reference ID for the rest.
+     */
     public MavenAGIHttpResponse<EventTriggersSearchResponse> search(EventTriggersSearchRequest request) {
         return search(request, null);
     }
 
+    /**
+     * Deprecated. Use <code>POST /v1/capabilities/search</code>, which searches every kind of capability
+     * at once. It returns the fields every capability shares rather than the whole Event
+     * Trigger; fetch one by its kind and reference ID for the rest.
+     */
     public MavenAGIHttpResponse<EventTriggersSearchResponse> search(
             EventTriggersSearchRequest request, RequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
@@ -184,14 +199,18 @@ public class RawTriggersClient {
     }
 
     /**
-     * Get an event trigger by its supplied ID
+     * Deprecated. Use <code>GET /v1/capabilities/TRIGGER/{referenceId}</code>, which returns this same
+     * object for a trigger and the equivalent for every other kind of capability.
+     * <p>Get an event trigger by its supplied ID</p>
      */
     public MavenAGIHttpResponse<EventTriggerResponse> get(String triggerReferenceId) {
         return get(triggerReferenceId, null);
     }
 
     /**
-     * Get an event trigger by its supplied ID
+     * Deprecated. Use <code>GET /v1/capabilities/TRIGGER/{referenceId}</code>, which returns this same
+     * object for a trigger and the equivalent for every other kind of capability.
+     * <p>Get an event trigger by its supplied ID</p>
      */
     public MavenAGIHttpResponse<EventTriggerResponse> get(String triggerReferenceId, RequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
@@ -249,14 +268,18 @@ public class RawTriggersClient {
     }
 
     /**
-     * Delete an event trigger
+     * Deprecated. Use <code>DELETE /v1/capabilities/TRIGGER/{referenceId}</code>, which deletes any kind
+     * of capability the same way.
+     * <p>Delete an event trigger</p>
      */
     public MavenAGIHttpResponse<Void> delete(String triggerReferenceId) {
         return delete(triggerReferenceId, null);
     }
 
     /**
-     * Delete an event trigger
+     * Deprecated. Use <code>DELETE /v1/capabilities/TRIGGER/{referenceId}</code>, which deletes any kind
+     * of capability the same way.
+     * <p>Delete an event trigger</p>
      */
     public MavenAGIHttpResponse<Void> delete(String triggerReferenceId, RequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
@@ -312,7 +335,9 @@ public class RawTriggersClient {
     }
 
     /**
-     * Updates an event trigger. Only the enabled field is editable.
+     * Deprecated. Use <code>PATCH /v1/capabilities/TRIGGER/{referenceId}</code> with a <code>status</code>, which
+     * publishes and unpublishes any kind of capability the same way.
+     * <p>Updates an event trigger. Only the enabled field is editable.</p>
      */
     public MavenAGIHttpResponse<EventTriggerResponse> partialUpdate(
             String triggerReferenceId, PartialUpdateRequest request) {
@@ -320,7 +345,9 @@ public class RawTriggersClient {
     }
 
     /**
-     * Updates an event trigger. Only the enabled field is editable.
+     * Deprecated. Use <code>PATCH /v1/capabilities/TRIGGER/{referenceId}</code> with a <code>status</code>, which
+     * publishes and unpublishes any kind of capability the same way.
+     * <p>Updates an event trigger. Only the enabled field is editable.</p>
      */
     public MavenAGIHttpResponse<EventTriggerResponse> partialUpdate(
             String triggerReferenceId, PartialUpdateRequest request, RequestOptions requestOptions) {

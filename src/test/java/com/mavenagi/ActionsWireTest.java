@@ -49,7 +49,7 @@ public class ActionsWireTest {
     public void testSearch() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"actions\":[{\"actionId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"instructions\":\"instructions\",\"llmInclusionStatus\":\"ALWAYS\",\"segmentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"preconditionExplanation\":\"preconditionExplanation\",\"deleted\":true,\"name\":\"name\",\"description\":\"description\",\"userInteractionRequired\":true,\"buttonName\":\"buttonName\",\"precondition\":{\"preconditionType\":\"user\",\"key\":\"key\",\"value\":\"value\",\"values\":[\"values\",\"values\"],\"operator\":\"NOT\"},\"userFormParameters\":[{\"id\":\"id\",\"label\":\"label\",\"description\":\"description\",\"required\":true,\"hidden\":true,\"type\":\"STRING\",\"enumOptions\":[{\"label\":\"label\",\"value\":{\"key\":\"value\"}},{\"label\":\"label\",\"value\":{\"key\":\"value\"}}],\"schema\":\"schema\",\"oauthConfiguration\":{\"authorizationUrl\":\"authorizationUrl\",\"tokenUrl\":\"tokenUrl\",\"clientId\":\"clientId\",\"clientSecret\":\"clientSecret\",\"scopes\":[\"scopes\",\"scopes\"],\"extraAuthParams\":{\"extraAuthParams\":\"extraAuthParams\"},\"extraTokenParams\":{\"extraTokenParams\":\"extraTokenParams\"}}},{\"id\":\"id\",\"label\":\"label\",\"description\":\"description\",\"required\":true,\"hidden\":true,\"type\":\"STRING\",\"enumOptions\":[{\"label\":\"label\",\"value\":{\"key\":\"value\"}},{\"label\":\"label\",\"value\":{\"key\":\"value\"}}],\"schema\":\"schema\",\"oauthConfiguration\":{\"authorizationUrl\":\"authorizationUrl\",\"tokenUrl\":\"tokenUrl\",\"clientId\":\"clientId\",\"clientSecret\":\"clientSecret\",\"scopes\":[\"scopes\",\"scopes\"],\"extraAuthParams\":{\"extraAuthParams\":\"extraAuthParams\"},\"extraTokenParams\":{\"extraTokenParams\":\"extraTokenParams\"}}}],\"language\":\"language\",\"sideEffects\":\"NONE\"},{\"actionId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"instructions\":\"instructions\",\"llmInclusionStatus\":\"ALWAYS\",\"segmentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"preconditionExplanation\":\"preconditionExplanation\",\"deleted\":true,\"name\":\"name\",\"description\":\"description\",\"userInteractionRequired\":true,\"buttonName\":\"buttonName\",\"precondition\":{\"preconditionType\":\"user\",\"key\":\"key\",\"value\":\"value\",\"values\":[\"values\",\"values\"],\"operator\":\"NOT\"},\"userFormParameters\":[{\"id\":\"id\",\"label\":\"label\",\"description\":\"description\",\"required\":true,\"hidden\":true,\"type\":\"STRING\",\"enumOptions\":[{\"label\":\"label\",\"value\":{\"key\":\"value\"}},{\"label\":\"label\",\"value\":{\"key\":\"value\"}}],\"schema\":\"schema\",\"oauthConfiguration\":{\"authorizationUrl\":\"authorizationUrl\",\"tokenUrl\":\"tokenUrl\",\"clientId\":\"clientId\",\"clientSecret\":\"clientSecret\",\"scopes\":[\"scopes\",\"scopes\"],\"extraAuthParams\":{\"extraAuthParams\":\"extraAuthParams\"},\"extraTokenParams\":{\"extraTokenParams\":\"extraTokenParams\"}}},{\"id\":\"id\",\"label\":\"label\",\"description\":\"description\",\"required\":true,\"hidden\":true,\"type\":\"STRING\",\"enumOptions\":[{\"label\":\"label\",\"value\":{\"key\":\"value\"}},{\"label\":\"label\",\"value\":{\"key\":\"value\"}}],\"schema\":\"schema\",\"oauthConfiguration\":{\"authorizationUrl\":\"authorizationUrl\",\"tokenUrl\":\"tokenUrl\",\"clientId\":\"clientId\",\"clientSecret\":\"clientSecret\",\"scopes\":[\"scopes\",\"scopes\"],\"extraAuthParams\":{\"extraAuthParams\":\"extraAuthParams\"},\"extraTokenParams\":{\"extraTokenParams\":\"extraTokenParams\"}}}],\"language\":\"language\",\"sideEffects\":\"NONE\"}],\"number\":1,\"size\":1,\"totalElements\":1000000,\"totalPages\":1}"));
+            .setBody("{\"actions\":[{\"actionId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"instructions\":\"instructions\",\"llmInclusionStatus\":\"ALWAYS\",\"segmentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"preconditionExplanation\":\"preconditionExplanation\",\"deleted\":true,\"userInteractionRequired\":true,\"buttonName\":\"buttonName\",\"precondition\":{\"preconditionType\":\"user\",\"key\":\"key\",\"value\":\"value\",\"values\":[\"values\",\"values\"],\"operator\":\"NOT\"},\"userFormParameters\":[{\"id\":\"id\",\"label\":\"label\",\"description\":\"description\",\"required\":true,\"hidden\":true,\"type\":\"STRING\",\"enumOptions\":[{\"label\":\"label\",\"value\":{\"key\":\"value\"}},{\"label\":\"label\",\"value\":{\"key\":\"value\"}}],\"schema\":\"schema\",\"oauthConfiguration\":{\"authorizationUrl\":\"authorizationUrl\",\"tokenUrl\":\"tokenUrl\",\"clientId\":\"clientId\",\"clientSecret\":\"clientSecret\",\"scopes\":[\"scopes\",\"scopes\"],\"extraAuthParams\":{\"extraAuthParams\":\"extraAuthParams\"},\"extraTokenParams\":{\"extraTokenParams\":\"extraTokenParams\"}}},{\"id\":\"id\",\"label\":\"label\",\"description\":\"description\",\"required\":true,\"hidden\":true,\"type\":\"STRING\",\"enumOptions\":[{\"label\":\"label\",\"value\":{\"key\":\"value\"}},{\"label\":\"label\",\"value\":{\"key\":\"value\"}}],\"schema\":\"schema\",\"oauthConfiguration\":{\"authorizationUrl\":\"authorizationUrl\",\"tokenUrl\":\"tokenUrl\",\"clientId\":\"clientId\",\"clientSecret\":\"clientSecret\",\"scopes\":[\"scopes\",\"scopes\"],\"extraAuthParams\":{\"extraAuthParams\":\"extraAuthParams\"},\"extraTokenParams\":{\"extraTokenParams\":\"extraTokenParams\"}}}],\"language\":\"language\",\"sideEffects\":\"NONE\",\"name\":\"name\",\"description\":\"description\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"status\":\"ACTIVE\"},{\"actionId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"instructions\":\"instructions\",\"llmInclusionStatus\":\"ALWAYS\",\"segmentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"preconditionExplanation\":\"preconditionExplanation\",\"deleted\":true,\"userInteractionRequired\":true,\"buttonName\":\"buttonName\",\"precondition\":{\"preconditionType\":\"user\",\"key\":\"key\",\"value\":\"value\",\"values\":[\"values\",\"values\"],\"operator\":\"NOT\"},\"userFormParameters\":[{\"id\":\"id\",\"label\":\"label\",\"description\":\"description\",\"required\":true,\"hidden\":true,\"type\":\"STRING\",\"enumOptions\":[{\"label\":\"label\",\"value\":{\"key\":\"value\"}},{\"label\":\"label\",\"value\":{\"key\":\"value\"}}],\"schema\":\"schema\",\"oauthConfiguration\":{\"authorizationUrl\":\"authorizationUrl\",\"tokenUrl\":\"tokenUrl\",\"clientId\":\"clientId\",\"clientSecret\":\"clientSecret\",\"scopes\":[\"scopes\",\"scopes\"],\"extraAuthParams\":{\"extraAuthParams\":\"extraAuthParams\"},\"extraTokenParams\":{\"extraTokenParams\":\"extraTokenParams\"}}},{\"id\":\"id\",\"label\":\"label\",\"description\":\"description\",\"required\":true,\"hidden\":true,\"type\":\"STRING\",\"enumOptions\":[{\"label\":\"label\",\"value\":{\"key\":\"value\"}},{\"label\":\"label\",\"value\":{\"key\":\"value\"}}],\"schema\":\"schema\",\"oauthConfiguration\":{\"authorizationUrl\":\"authorizationUrl\",\"tokenUrl\":\"tokenUrl\",\"clientId\":\"clientId\",\"clientSecret\":\"clientSecret\",\"scopes\":[\"scopes\",\"scopes\"],\"extraAuthParams\":{\"extraAuthParams\":\"extraAuthParams\"},\"extraTokenParams\":{\"extraTokenParams\":\"extraTokenParams\"}}}],\"language\":\"language\",\"sideEffects\":\"NONE\",\"name\":\"name\",\"description\":\"description\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"status\":\"ACTIVE\"}],\"number\":1,\"size\":1,\"totalElements\":1000000,\"totalPages\":1}"));
         ActionsResponse response = client.actions().search(
             ActionsSearchRequest
                 .builder()
@@ -110,8 +110,6 @@ public class ActionsWireTest {
             + "      },\n"
             + "      \"preconditionExplanation\": \"preconditionExplanation\",\n"
             + "      \"deleted\": true,\n"
-            + "      \"name\": \"name\",\n"
-            + "      \"description\": \"description\",\n"
             + "      \"userInteractionRequired\": true,\n"
             + "      \"buttonName\": \"buttonName\",\n"
             + "      \"precondition\": {\n"
@@ -205,7 +203,12 @@ public class ActionsWireTest {
             + "        }\n"
             + "      ],\n"
             + "      \"language\": \"language\",\n"
-            + "      \"sideEffects\": \"NONE\"\n"
+            + "      \"sideEffects\": \"NONE\",\n"
+            + "      \"name\": \"name\",\n"
+            + "      \"description\": \"description\",\n"
+            + "      \"createdAt\": \"2024-01-15T09:30:00Z\",\n"
+            + "      \"updatedAt\": \"2024-01-15T09:30:00Z\",\n"
+            + "      \"status\": \"ACTIVE\"\n"
             + "    },\n"
             + "    {\n"
             + "      \"actionId\": {\n"
@@ -226,8 +229,6 @@ public class ActionsWireTest {
             + "      },\n"
             + "      \"preconditionExplanation\": \"preconditionExplanation\",\n"
             + "      \"deleted\": true,\n"
-            + "      \"name\": \"name\",\n"
-            + "      \"description\": \"description\",\n"
             + "      \"userInteractionRequired\": true,\n"
             + "      \"buttonName\": \"buttonName\",\n"
             + "      \"precondition\": {\n"
@@ -321,7 +322,12 @@ public class ActionsWireTest {
             + "        }\n"
             + "      ],\n"
             + "      \"language\": \"language\",\n"
-            + "      \"sideEffects\": \"NONE\"\n"
+            + "      \"sideEffects\": \"NONE\",\n"
+            + "      \"name\": \"name\",\n"
+            + "      \"description\": \"description\",\n"
+            + "      \"createdAt\": \"2024-01-15T09:30:00Z\",\n"
+            + "      \"updatedAt\": \"2024-01-15T09:30:00Z\",\n"
+            + "      \"status\": \"ACTIVE\"\n"
             + "    }\n"
             + "  ],\n"
             + "  \"number\": 1,\n"
@@ -356,7 +362,7 @@ public class ActionsWireTest {
     public void testCreateOrUpdate() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"actionId\":{\"referenceId\":\"get-balance\",\"appId\":\"my-billing-system\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"ACTION\"},\"name\":\"Get the user's balance\",\"description\":\"This action calls an API to get the user's current balance.\",\"instructions\":\"This action calls an API to get the user's current balance.\",\"llmInclusionStatus\":\"WHEN_RELEVANT\",\"userInteractionRequired\":false,\"userFormParameters\":[],\"precondition\":{\"preconditionType\":\"group\",\"operator\":\"AND\",\"preconditions\":[{\"preconditionType\":\"user\",\"key\":\"userKey\"},{\"preconditionType\":\"user\",\"key\":\"userKey2\"}]},\"segmentId\":{\"referenceId\":\"premium-users\",\"appId\":\"my-billing-system\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"SEGMENT\"},\"language\":\"en\",\"deleted\":false}"));
+            .setBody("{\"createdAt\":\"2026-01-15T10:30:00Z\",\"updatedAt\":\"2026-01-15T10:30:00Z\",\"status\":\"ACTIVE\",\"actionId\":{\"referenceId\":\"get-balance\",\"appId\":\"my-billing-system\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"ACTION\"},\"name\":\"Get the user's balance\",\"description\":\"This action calls an API to get the user's current balance.\",\"instructions\":\"This action calls an API to get the user's current balance.\",\"llmInclusionStatus\":\"WHEN_RELEVANT\",\"userInteractionRequired\":false,\"userFormParameters\":[],\"precondition\":{\"preconditionType\":\"group\",\"operator\":\"AND\",\"preconditions\":[{\"preconditionType\":\"user\",\"key\":\"userKey\"},{\"preconditionType\":\"user\",\"key\":\"userKey2\"}]},\"segmentId\":{\"referenceId\":\"premium-users\",\"appId\":\"my-billing-system\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"SEGMENT\"},\"language\":\"en\",\"deleted\":false}"));
         ActionResponse response = client.actions().createOrUpdate(
             ActionRequest
                 .builder()
@@ -457,6 +463,9 @@ public class ActionsWireTest {
         String actualResponseJson = objectMapper.writeValueAsString(response);
         String expectedResponseBody = ""
             + "{\n"
+            + "  \"createdAt\": \"2026-01-15T10:30:00Z\",\n"
+            + "  \"updatedAt\": \"2026-01-15T10:30:00Z\",\n"
+            + "  \"status\": \"ACTIVE\",\n"
             + "  \"actionId\": {\n"
             + "    \"referenceId\": \"get-balance\",\n"
             + "    \"appId\": \"my-billing-system\",\n"
@@ -521,7 +530,7 @@ public class ActionsWireTest {
     public void testGet() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"actionId\":{\"referenceId\":\"get-balance\",\"appId\":\"my-billing-system\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"ACTION\"},\"name\":\"Get the user's balance\",\"description\":\"This action calls an API to get the user's current balance.\",\"instructions\":\"This action calls an API to get the user's current balance.\",\"llmInclusionStatus\":\"WHEN_RELEVANT\",\"userInteractionRequired\":false,\"userFormParameters\":[],\"precondition\":{\"preconditionType\":\"group\",\"operator\":\"AND\",\"preconditions\":[{\"preconditionType\":\"user\",\"key\":\"userKey\"},{\"preconditionType\":\"user\",\"key\":\"userKey2\"}]},\"segmentId\":{\"referenceId\":\"premium-users\",\"appId\":\"my-billing-system\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"SEGMENT\"},\"language\":\"en\",\"deleted\":false}"));
+            .setBody("{\"createdAt\":\"2026-01-15T10:30:00Z\",\"updatedAt\":\"2026-01-15T10:30:00Z\",\"status\":\"ACTIVE\",\"actionId\":{\"referenceId\":\"get-balance\",\"appId\":\"my-billing-system\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"ACTION\"},\"name\":\"Get the user's balance\",\"description\":\"This action calls an API to get the user's current balance.\",\"instructions\":\"This action calls an API to get the user's current balance.\",\"llmInclusionStatus\":\"WHEN_RELEVANT\",\"userInteractionRequired\":false,\"userFormParameters\":[],\"precondition\":{\"preconditionType\":\"group\",\"operator\":\"AND\",\"preconditions\":[{\"preconditionType\":\"user\",\"key\":\"userKey\"},{\"preconditionType\":\"user\",\"key\":\"userKey2\"}]},\"segmentId\":{\"referenceId\":\"premium-users\",\"appId\":\"my-billing-system\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"SEGMENT\"},\"language\":\"en\",\"deleted\":false}"));
         ActionResponse response = client.actions().get(
             "get-balance",
             ActionGetRequest
@@ -537,6 +546,9 @@ public class ActionsWireTest {
         String actualResponseJson = objectMapper.writeValueAsString(response);
         String expectedResponseBody = ""
             + "{\n"
+            + "  \"createdAt\": \"2026-01-15T10:30:00Z\",\n"
+            + "  \"updatedAt\": \"2026-01-15T10:30:00Z\",\n"
+            + "  \"status\": \"ACTIVE\",\n"
             + "  \"actionId\": {\n"
             + "    \"referenceId\": \"get-balance\",\n"
             + "    \"appId\": \"my-billing-system\",\n"
@@ -601,7 +613,7 @@ public class ActionsWireTest {
     public void testPatch() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"actionId\":{\"referenceId\":\"get-balance\",\"appId\":\"my-billing-system\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"ACTION\"},\"name\":\"Get the user's balance\",\"description\":\"This action calls an API to get the user's current balance.\",\"instructions\":\"This action calls an API to get the user's current balance.\",\"llmInclusionStatus\":\"WHEN_RELEVANT\",\"userInteractionRequired\":false,\"userFormParameters\":[],\"precondition\":{\"preconditionType\":\"group\",\"operator\":\"AND\",\"preconditions\":[{\"preconditionType\":\"user\",\"key\":\"userKey\"},{\"preconditionType\":\"user\",\"key\":\"userKey2\"}]},\"segmentId\":{\"referenceId\":\"premium-users\",\"appId\":\"my-billing-system\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"SEGMENT\"},\"language\":\"en\",\"deleted\":false}"));
+            .setBody("{\"createdAt\":\"2026-01-15T10:30:00Z\",\"updatedAt\":\"2026-01-15T10:30:00Z\",\"status\":\"ACTIVE\",\"actionId\":{\"referenceId\":\"get-balance\",\"appId\":\"my-billing-system\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"ACTION\"},\"name\":\"Get the user's balance\",\"description\":\"This action calls an API to get the user's current balance.\",\"instructions\":\"This action calls an API to get the user's current balance.\",\"llmInclusionStatus\":\"WHEN_RELEVANT\",\"userInteractionRequired\":false,\"userFormParameters\":[],\"precondition\":{\"preconditionType\":\"group\",\"operator\":\"AND\",\"preconditions\":[{\"preconditionType\":\"user\",\"key\":\"userKey\"},{\"preconditionType\":\"user\",\"key\":\"userKey2\"}]},\"segmentId\":{\"referenceId\":\"premium-users\",\"appId\":\"my-billing-system\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"SEGMENT\"},\"language\":\"en\",\"deleted\":false}"));
         ActionResponse response = client.actions().patch(
             "get-balance",
             ActionPatchRequest
@@ -665,6 +677,9 @@ public class ActionsWireTest {
         String actualResponseJson = objectMapper.writeValueAsString(response);
         String expectedResponseBody = ""
             + "{\n"
+            + "  \"createdAt\": \"2026-01-15T10:30:00Z\",\n"
+            + "  \"updatedAt\": \"2026-01-15T10:30:00Z\",\n"
+            + "  \"status\": \"ACTIVE\",\n"
             + "  \"actionId\": {\n"
             + "    \"referenceId\": \"get-balance\",\n"
             + "    \"appId\": \"my-billing-system\",\n"

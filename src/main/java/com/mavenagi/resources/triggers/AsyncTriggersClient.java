@@ -29,14 +29,29 @@ public class AsyncTriggersClient {
         return this.rawClient;
     }
 
+    /**
+     * Deprecated. Use <code>POST /v1/capabilities/search</code>, which searches every kind of capability
+     * at once. It returns the fields every capability shares rather than the whole Event
+     * Trigger; fetch one by its kind and reference ID for the rest.
+     */
     public CompletableFuture<EventTriggersSearchResponse> search() {
         return this.rawClient.search().thenApply(response -> response.body());
     }
 
+    /**
+     * Deprecated. Use <code>POST /v1/capabilities/search</code>, which searches every kind of capability
+     * at once. It returns the fields every capability shares rather than the whole Event
+     * Trigger; fetch one by its kind and reference ID for the rest.
+     */
     public CompletableFuture<EventTriggersSearchResponse> search(EventTriggersSearchRequest request) {
         return this.rawClient.search(request).thenApply(response -> response.body());
     }
 
+    /**
+     * Deprecated. Use <code>POST /v1/capabilities/search</code>, which searches every kind of capability
+     * at once. It returns the fields every capability shares rather than the whole Event
+     * Trigger; fetch one by its kind and reference ID for the rest.
+     */
     public CompletableFuture<EventTriggersSearchResponse> search(
             EventTriggersSearchRequest request, RequestOptions requestOptions) {
         return this.rawClient.search(request, requestOptions).thenApply(response -> response.body());
@@ -58,35 +73,45 @@ public class AsyncTriggersClient {
     }
 
     /**
-     * Get an event trigger by its supplied ID
+     * Deprecated. Use <code>GET /v1/capabilities/TRIGGER/{referenceId}</code>, which returns this same
+     * object for a trigger and the equivalent for every other kind of capability.
+     * <p>Get an event trigger by its supplied ID</p>
      */
     public CompletableFuture<EventTriggerResponse> get(String triggerReferenceId) {
         return this.rawClient.get(triggerReferenceId).thenApply(response -> response.body());
     }
 
     /**
-     * Get an event trigger by its supplied ID
+     * Deprecated. Use <code>GET /v1/capabilities/TRIGGER/{referenceId}</code>, which returns this same
+     * object for a trigger and the equivalent for every other kind of capability.
+     * <p>Get an event trigger by its supplied ID</p>
      */
     public CompletableFuture<EventTriggerResponse> get(String triggerReferenceId, RequestOptions requestOptions) {
         return this.rawClient.get(triggerReferenceId, requestOptions).thenApply(response -> response.body());
     }
 
     /**
-     * Delete an event trigger
+     * Deprecated. Use <code>DELETE /v1/capabilities/TRIGGER/{referenceId}</code>, which deletes any kind
+     * of capability the same way.
+     * <p>Delete an event trigger</p>
      */
     public CompletableFuture<Void> delete(String triggerReferenceId) {
         return this.rawClient.delete(triggerReferenceId).thenApply(response -> response.body());
     }
 
     /**
-     * Delete an event trigger
+     * Deprecated. Use <code>DELETE /v1/capabilities/TRIGGER/{referenceId}</code>, which deletes any kind
+     * of capability the same way.
+     * <p>Delete an event trigger</p>
      */
     public CompletableFuture<Void> delete(String triggerReferenceId, RequestOptions requestOptions) {
         return this.rawClient.delete(triggerReferenceId, requestOptions).thenApply(response -> response.body());
     }
 
     /**
-     * Updates an event trigger. Only the enabled field is editable.
+     * Deprecated. Use <code>PATCH /v1/capabilities/TRIGGER/{referenceId}</code> with a <code>status</code>, which
+     * publishes and unpublishes any kind of capability the same way.
+     * <p>Updates an event trigger. Only the enabled field is editable.</p>
      */
     public CompletableFuture<EventTriggerResponse> partialUpdate(
             String triggerReferenceId, PartialUpdateRequest request) {
@@ -94,7 +119,9 @@ public class AsyncTriggersClient {
     }
 
     /**
-     * Updates an event trigger. Only the enabled field is editable.
+     * Deprecated. Use <code>PATCH /v1/capabilities/TRIGGER/{referenceId}</code> with a <code>status</code>, which
+     * publishes and unpublishes any kind of capability the same way.
+     * <p>Updates an event trigger. Only the enabled field is editable.</p>
      */
     public CompletableFuture<EventTriggerResponse> partialUpdate(
             String triggerReferenceId, PartialUpdateRequest request, RequestOptions requestOptions) {

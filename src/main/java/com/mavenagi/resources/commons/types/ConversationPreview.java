@@ -59,6 +59,8 @@ public final class ConversationPreview implements IBaseConversationResponse {
 
     private final Optional<ConversationMode> conversationMode;
 
+    private final Optional<EntityId> variantId;
+
     private final Map<String, Object> additionalProperties;
 
     private ConversationPreview(
@@ -79,6 +81,7 @@ public final class ConversationPreview implements IBaseConversationResponse {
             Optional<SimulationContext> simulationContext,
             Optional<Map<RelationshipType, List<EntityId>>> relatedEntities,
             Optional<ConversationMode> conversationMode,
+            Optional<EntityId> variantId,
             Map<String, Object> additionalProperties) {
         this.responseConfig = responseConfig;
         this.subject = subject;
@@ -97,6 +100,7 @@ public final class ConversationPreview implements IBaseConversationResponse {
         this.simulationContext = simulationContext;
         this.relatedEntities = relatedEntities;
         this.conversationMode = conversationMode;
+        this.variantId = variantId;
         this.additionalProperties = additionalProperties;
     }
 
@@ -262,6 +266,17 @@ public final class ConversationPreview implements IBaseConversationResponse {
         return conversationMode;
     }
 
+    /**
+     * @return The agent variant this conversation is pinned to. Chosen by the agent's traffic rules when
+     * the conversation is created and fixed for its lifetime. Absent when the conversation was
+     * not routed to a variant, for example one created before the agent had variants.
+     */
+    @JsonProperty("variantId")
+    @java.lang.Override
+    public Optional<EntityId> getVariantId() {
+        return variantId;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -290,7 +305,8 @@ public final class ConversationPreview implements IBaseConversationResponse {
                 && llmEnabled == other.llmEnabled
                 && simulationContext.equals(other.simulationContext)
                 && relatedEntities.equals(other.relatedEntities)
-                && conversationMode.equals(other.conversationMode);
+                && conversationMode.equals(other.conversationMode)
+                && variantId.equals(other.variantId);
     }
 
     @java.lang.Override
@@ -312,7 +328,8 @@ public final class ConversationPreview implements IBaseConversationResponse {
                 this.llmEnabled,
                 this.simulationContext,
                 this.relatedEntities,
-                this.conversationMode);
+                this.conversationMode,
+                this.variantId);
     }
 
     @java.lang.Override
@@ -458,6 +475,15 @@ public final class ConversationPreview implements IBaseConversationResponse {
         _FinalStage conversationMode(Optional<ConversationMode> conversationMode);
 
         _FinalStage conversationMode(ConversationMode conversationMode);
+
+        /**
+         * <p>The agent variant this conversation is pinned to. Chosen by the agent's traffic rules when
+         * the conversation is created and fixed for its lifetime. Absent when the conversation was
+         * not routed to a variant, for example one created before the agent had variants.</p>
+         */
+        _FinalStage variantId(Optional<EntityId> variantId);
+
+        _FinalStage variantId(EntityId variantId);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -480,6 +506,8 @@ public final class ConversationPreview implements IBaseConversationResponse {
         private boolean open;
 
         private boolean llmEnabled;
+
+        private Optional<EntityId> variantId = Optional.empty();
 
         private Optional<ConversationMode> conversationMode = Optional.empty();
 
@@ -527,6 +555,7 @@ public final class ConversationPreview implements IBaseConversationResponse {
             simulationContext(other.getSimulationContext());
             relatedEntities(other.getRelatedEntities());
             conversationMode(other.getConversationMode());
+            variantId(other.getVariantId());
             return this;
         }
 
@@ -605,6 +634,30 @@ public final class ConversationPreview implements IBaseConversationResponse {
         @JsonSetter("llmEnabled")
         public _FinalStage llmEnabled(boolean llmEnabled) {
             this.llmEnabled = llmEnabled;
+            return this;
+        }
+
+        /**
+         * <p>The agent variant this conversation is pinned to. Chosen by the agent's traffic rules when
+         * the conversation is created and fixed for its lifetime. Absent when the conversation was
+         * not routed to a variant, for example one created before the agent had variants.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage variantId(EntityId variantId) {
+            this.variantId = Optional.ofNullable(variantId);
+            return this;
+        }
+
+        /**
+         * <p>The agent variant this conversation is pinned to. Chosen by the agent's traffic rules when
+         * the conversation is created and fixed for its lifetime. Absent when the conversation was
+         * not routed to a variant, for example one created before the agent had variants.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "variantId", nulls = Nulls.SKIP)
+        public _FinalStage variantId(Optional<EntityId> variantId) {
+            this.variantId = variantId;
             return this;
         }
 
@@ -875,6 +928,7 @@ public final class ConversationPreview implements IBaseConversationResponse {
                     simulationContext,
                     relatedEntities,
                     conversationMode,
+                    variantId,
                     additionalProperties);
         }
     }

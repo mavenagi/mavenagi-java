@@ -12,8 +12,11 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
+import com.mavenagi.resources.commons.types.CapabilityStatus;
 import com.mavenagi.resources.commons.types.EntityId;
 import com.mavenagi.resources.commons.types.EventTriggerType;
+import com.mavenagi.resources.commons.types.ICapabilityBase;
+import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -22,12 +25,18 @@ import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = EventTriggerResponse.Builder.class)
-public final class EventTriggerResponse implements IEventTriggerBase {
-    private final Optional<String> name;
-
-    private final String description;
-
+public final class EventTriggerResponse implements IEventTriggerBase, ICapabilityBase {
     private final EventTriggerType type;
+
+    private final String name;
+
+    private final Optional<String> description;
+
+    private final OffsetDateTime createdAt;
+
+    private final OffsetDateTime updatedAt;
+
+    private final CapabilityStatus status;
 
     private final EntityId triggerId;
 
@@ -36,36 +45,24 @@ public final class EventTriggerResponse implements IEventTriggerBase {
     private final Map<String, Object> additionalProperties;
 
     private EventTriggerResponse(
-            Optional<String> name,
-            String description,
             EventTriggerType type,
+            String name,
+            Optional<String> description,
+            OffsetDateTime createdAt,
+            OffsetDateTime updatedAt,
+            CapabilityStatus status,
             EntityId triggerId,
             boolean enabled,
             Map<String, Object> additionalProperties) {
+        this.type = type;
         this.name = name;
         this.description = description;
-        this.type = type;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.status = status;
         this.triggerId = triggerId;
         this.enabled = enabled;
         this.additionalProperties = additionalProperties;
-    }
-
-    /**
-     * @return The name of the trigger, displayed to end users. If not set, a name is derived from the app ID and trigger type.
-     */
-    @JsonProperty("name")
-    @java.lang.Override
-    public Optional<String> getName() {
-        return name;
-    }
-
-    /**
-     * @return The description of what the event trigger does, shown in the Maven Dashboard
-     */
-    @JsonProperty("description")
-    @java.lang.Override
-    public String getDescription() {
-        return description;
     }
 
     /**
@@ -82,6 +79,53 @@ public final class EventTriggerResponse implements IEventTriggerBase {
     }
 
     /**
+     * @return The capability's display name, shown to whoever manages the agent. A trigger registered
+     * without one is named after the app that registered it and the event it fires on.
+     */
+    @JsonProperty("name")
+    @java.lang.Override
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * @return What the capability does. Shown to whoever manages the agent, and for the types the LLM
+     * can choose between, used to decide when the capability applies.
+     */
+    @JsonProperty("description")
+    @java.lang.Override
+    public Optional<String> getDescription() {
+        return description;
+    }
+
+    /**
+     * @return When the capability was created.
+     */
+    @JsonProperty("createdAt")
+    @java.lang.Override
+    public OffsetDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    /**
+     * @return When the capability was last modified.
+     */
+    @JsonProperty("updatedAt")
+    @java.lang.Override
+    public OffsetDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    /**
+     * @return Whether the agent uses this capability, and whether it still exists.
+     */
+    @JsonProperty("status")
+    @java.lang.Override
+    public CapabilityStatus getStatus() {
+        return status;
+    }
+
+    /**
      * @return ID that uniquely identifies this event trigger
      */
     @JsonProperty("triggerId")
@@ -90,7 +134,8 @@ public final class EventTriggerResponse implements IEventTriggerBase {
     }
 
     /**
-     * @return Whether this trigger will be called by Maven.
+     * @return Deprecated. Superseded by <code>status</code>, which says the same thing for every capability type.
+     * <p>Whether this trigger will be called by Maven.</p>
      */
     @JsonProperty("enabled")
     public boolean getEnabled() {
@@ -109,16 +154,27 @@ public final class EventTriggerResponse implements IEventTriggerBase {
     }
 
     private boolean equalTo(EventTriggerResponse other) {
-        return name.equals(other.name)
+        return type.equals(other.type)
+                && name.equals(other.name)
                 && description.equals(other.description)
-                && type.equals(other.type)
+                && createdAt.equals(other.createdAt)
+                && updatedAt.equals(other.updatedAt)
+                && status.equals(other.status)
                 && triggerId.equals(other.triggerId)
                 && enabled == other.enabled;
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.name, this.description, this.type, this.triggerId, this.enabled);
+        return Objects.hash(
+                this.type,
+                this.name,
+                this.description,
+                this.createdAt,
+                this.updatedAt,
+                this.status,
+                this.triggerId,
+                this.enabled);
     }
 
     @java.lang.Override
@@ -126,17 +182,8 @@ public final class EventTriggerResponse implements IEventTriggerBase {
         return ObjectMappers.stringify(this);
     }
 
-    public static DescriptionStage builder() {
+    public static TypeStage builder() {
         return new Builder();
-    }
-
-    public interface DescriptionStage {
-        /**
-         * <p>The description of what the event trigger does, shown in the Maven Dashboard</p>
-         */
-        TypeStage description(@NotNull String description);
-
-        Builder from(EventTriggerResponse other);
     }
 
     public interface TypeStage {
@@ -147,7 +194,38 @@ public final class EventTriggerResponse implements IEventTriggerBase {
          * <p>Events are immutable, so an event trigger fires immediately after the event is created.</p>
          * <p>Inbox triggers fire when an inbox item is created or updated.</p>
          */
-        TriggerIdStage type(@NotNull EventTriggerType type);
+        NameStage type(@NotNull EventTriggerType type);
+
+        Builder from(EventTriggerResponse other);
+    }
+
+    public interface NameStage {
+        /**
+         * <p>The capability's display name, shown to whoever manages the agent. A trigger registered
+         * without one is named after the app that registered it and the event it fires on.</p>
+         */
+        CreatedAtStage name(@NotNull String name);
+    }
+
+    public interface CreatedAtStage {
+        /**
+         * <p>When the capability was created.</p>
+         */
+        UpdatedAtStage createdAt(@NotNull OffsetDateTime createdAt);
+    }
+
+    public interface UpdatedAtStage {
+        /**
+         * <p>When the capability was last modified.</p>
+         */
+        StatusStage updatedAt(@NotNull OffsetDateTime updatedAt);
+    }
+
+    public interface StatusStage {
+        /**
+         * <p>Whether the agent uses this capability, and whether it still exists.</p>
+         */
+        TriggerIdStage status(@NotNull CapabilityStatus status);
     }
 
     public interface TriggerIdStage {
@@ -159,6 +237,7 @@ public final class EventTriggerResponse implements IEventTriggerBase {
 
     public interface EnabledStage {
         /**
+         * <p>Deprecated. Superseded by <code>status</code>, which says the same thing for every capability type.</p>
          * <p>Whether this trigger will be called by Maven.</p>
          */
         _FinalStage enabled(boolean enabled);
@@ -168,25 +247,39 @@ public final class EventTriggerResponse implements IEventTriggerBase {
         EventTriggerResponse build();
 
         /**
-         * <p>The name of the trigger, displayed to end users. If not set, a name is derived from the app ID and trigger type.</p>
+         * <p>What the capability does. Shown to whoever manages the agent, and for the types the LLM
+         * can choose between, used to decide when the capability applies.</p>
          */
-        _FinalStage name(Optional<String> name);
+        _FinalStage description(Optional<String> description);
 
-        _FinalStage name(String name);
+        _FinalStage description(String description);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
-            implements DescriptionStage, TypeStage, TriggerIdStage, EnabledStage, _FinalStage {
-        private String description;
-
+            implements TypeStage,
+                    NameStage,
+                    CreatedAtStage,
+                    UpdatedAtStage,
+                    StatusStage,
+                    TriggerIdStage,
+                    EnabledStage,
+                    _FinalStage {
         private EventTriggerType type;
+
+        private String name;
+
+        private OffsetDateTime createdAt;
+
+        private OffsetDateTime updatedAt;
+
+        private CapabilityStatus status;
 
         private EntityId triggerId;
 
         private boolean enabled;
 
-        private Optional<String> name = Optional.empty();
+        private Optional<String> description = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -195,23 +288,14 @@ public final class EventTriggerResponse implements IEventTriggerBase {
 
         @java.lang.Override
         public Builder from(EventTriggerResponse other) {
+            type(other.getType());
             name(other.getName());
             description(other.getDescription());
-            type(other.getType());
+            createdAt(other.getCreatedAt());
+            updatedAt(other.getUpdatedAt());
+            status(other.getStatus());
             triggerId(other.getTriggerId());
             enabled(other.getEnabled());
-            return this;
-        }
-
-        /**
-         * <p>The description of what the event trigger does, shown in the Maven Dashboard</p>
-         * <p>The description of what the event trigger does, shown in the Maven Dashboard</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("description")
-        public TypeStage description(@NotNull String description) {
-            this.description = Objects.requireNonNull(description, "description must not be null");
             return this;
         }
 
@@ -230,8 +314,58 @@ public final class EventTriggerResponse implements IEventTriggerBase {
          */
         @java.lang.Override
         @JsonSetter("type")
-        public TriggerIdStage type(@NotNull EventTriggerType type) {
+        public NameStage type(@NotNull EventTriggerType type) {
             this.type = Objects.requireNonNull(type, "type must not be null");
+            return this;
+        }
+
+        /**
+         * <p>The capability's display name, shown to whoever manages the agent. A trigger registered
+         * without one is named after the app that registered it and the event it fires on.</p>
+         * <p>The capability's display name, shown to whoever manages the agent. A trigger registered
+         * without one is named after the app that registered it and the event it fires on.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("name")
+        public CreatedAtStage name(@NotNull String name) {
+            this.name = Objects.requireNonNull(name, "name must not be null");
+            return this;
+        }
+
+        /**
+         * <p>When the capability was created.</p>
+         * <p>When the capability was created.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("createdAt")
+        public UpdatedAtStage createdAt(@NotNull OffsetDateTime createdAt) {
+            this.createdAt = Objects.requireNonNull(createdAt, "createdAt must not be null");
+            return this;
+        }
+
+        /**
+         * <p>When the capability was last modified.</p>
+         * <p>When the capability was last modified.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("updatedAt")
+        public StatusStage updatedAt(@NotNull OffsetDateTime updatedAt) {
+            this.updatedAt = Objects.requireNonNull(updatedAt, "updatedAt must not be null");
+            return this;
+        }
+
+        /**
+         * <p>Whether the agent uses this capability, and whether it still exists.</p>
+         * <p>Whether the agent uses this capability, and whether it still exists.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("status")
+        public TriggerIdStage status(@NotNull CapabilityStatus status) {
+            this.status = Objects.requireNonNull(status, "status must not be null");
             return this;
         }
 
@@ -248,7 +382,9 @@ public final class EventTriggerResponse implements IEventTriggerBase {
         }
 
         /**
+         * <p>Deprecated. Superseded by <code>status</code>, which says the same thing for every capability type.</p>
          * <p>Whether this trigger will be called by Maven.</p>
+         * <p>Deprecated. Superseded by <code>status</code>, which says the same thing for every capability type.</p>
          * <p>Whether this trigger will be called by Maven.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -260,28 +396,31 @@ public final class EventTriggerResponse implements IEventTriggerBase {
         }
 
         /**
-         * <p>The name of the trigger, displayed to end users. If not set, a name is derived from the app ID and trigger type.</p>
+         * <p>What the capability does. Shown to whoever manages the agent, and for the types the LLM
+         * can choose between, used to decide when the capability applies.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage name(String name) {
-            this.name = Optional.ofNullable(name);
+        public _FinalStage description(String description) {
+            this.description = Optional.ofNullable(description);
             return this;
         }
 
         /**
-         * <p>The name of the trigger, displayed to end users. If not set, a name is derived from the app ID and trigger type.</p>
+         * <p>What the capability does. Shown to whoever manages the agent, and for the types the LLM
+         * can choose between, used to decide when the capability applies.</p>
          */
         @java.lang.Override
-        @JsonSetter(value = "name", nulls = Nulls.SKIP)
-        public _FinalStage name(Optional<String> name) {
-            this.name = name;
+        @JsonSetter(value = "description", nulls = Nulls.SKIP)
+        public _FinalStage description(Optional<String> description) {
+            this.description = description;
             return this;
         }
 
         @java.lang.Override
         public EventTriggerResponse build() {
-            return new EventTriggerResponse(name, description, type, triggerId, enabled, additionalProperties);
+            return new EventTriggerResponse(
+                    type, name, description, createdAt, updatedAt, status, triggerId, enabled, additionalProperties);
         }
     }
 }

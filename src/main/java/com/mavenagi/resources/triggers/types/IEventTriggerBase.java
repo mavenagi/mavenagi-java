@@ -4,12 +4,7 @@
 package com.mavenagi.resources.triggers.types;
 
 import com.mavenagi.resources.commons.types.EventTriggerType;
-import java.util.Optional;
 
 public interface IEventTriggerBase {
-    Optional<String> getName();
-
-    String getDescription();
-
     EventTriggerType getType();
 }

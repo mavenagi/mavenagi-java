@@ -43,4 +43,6 @@ public interface IBaseConversationResponse {
     Optional<Map<RelationshipType, List<EntityId>>> getRelatedEntities();
 
     Optional<ConversationMode> getConversationMode();
+
+    Optional<EntityId> getVariantId();
 }

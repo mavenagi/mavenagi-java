@@ -4,15 +4,8 @@
 package com.mavenagi.resources.intelligentfields.types;
 
 import com.mavenagi.resources.commons.types.EntityId;
-import java.time.OffsetDateTime;
-import java.util.Optional;
+import com.mavenagi.resources.commons.types.ICapabilityBase;
 
-public interface IIntelligentFieldResponse extends IIntelligentFieldBase {
+public interface IIntelligentFieldResponse extends IIntelligentFieldBase, ICapabilityBase {
     EntityId getFieldId();
-
-    IntelligentFieldStatus getStatus();
-
-    Optional<OffsetDateTime> getCreatedAt();
-
-    Optional<OffsetDateTime> getUpdatedAt();
 }

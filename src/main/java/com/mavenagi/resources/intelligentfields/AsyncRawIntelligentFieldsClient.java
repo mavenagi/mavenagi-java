@@ -154,14 +154,20 @@ public class AsyncRawIntelligentFieldsClient {
     }
 
     /**
-     * Get an intelligent field by its supplied ID
+     * Deprecated. Use <code>GET /v1/capabilities/INTELLIGENT_FIELD/{referenceId}</code>, which reads any
+     * kind of capability the same way. It does not carry <code>referencingCharters</code>; search
+     * charters to find the ones that reference a capability.
+     * <p>Get an intelligent field by its supplied ID</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<IntelligentFieldDetailResponse>> get(String fieldReferenceId) {
         return get(fieldReferenceId, IntelligentFieldGetRequest.builder().build());
     }
 
     /**
-     * Get an intelligent field by its supplied ID
+     * Deprecated. Use <code>GET /v1/capabilities/INTELLIGENT_FIELD/{referenceId}</code>, which reads any
+     * kind of capability the same way. It does not carry <code>referencingCharters</code>; search
+     * charters to find the ones that reference a capability.
+     * <p>Get an intelligent field by its supplied ID</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<IntelligentFieldDetailResponse>> get(
             String fieldReferenceId, IntelligentFieldGetRequest request) {
@@ -169,7 +175,10 @@ public class AsyncRawIntelligentFieldsClient {
     }
 
     /**
-     * Get an intelligent field by its supplied ID
+     * Deprecated. Use <code>GET /v1/capabilities/INTELLIGENT_FIELD/{referenceId}</code>, which reads any
+     * kind of capability the same way. It does not carry <code>referencingCharters</code>; search
+     * charters to find the ones that reference a capability.
+     * <p>Get an intelligent field by its supplied ID</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<IntelligentFieldDetailResponse>> get(
             String fieldReferenceId, IntelligentFieldGetRequest request, RequestOptions requestOptions) {
@@ -385,7 +394,9 @@ public class AsyncRawIntelligentFieldsClient {
     }
 
     /**
-     * Soft delete an intelligent field. Only INACTIVE fields can be deleted.
+     * Deprecated. Use <code>DELETE /v1/capabilities/INTELLIGENT_FIELD/{referenceId}</code>, which
+     * deletes any kind of capability the same way. That endpoint returns no body.
+     * <p>Soft delete an intelligent field. Only INACTIVE fields can be deleted.</p>
      * <p>Deleted fields are excluded from search results but can still be retrieved by ID.
      * Creating a new field with the same referenceId as a deleted field will overwrite
      * the deleted field and restore it to INACTIVE status.</p>
@@ -396,7 +407,9 @@ public class AsyncRawIntelligentFieldsClient {
     }
 
     /**
-     * Soft delete an intelligent field. Only INACTIVE fields can be deleted.
+     * Deprecated. Use <code>DELETE /v1/capabilities/INTELLIGENT_FIELD/{referenceId}</code>, which
+     * deletes any kind of capability the same way. That endpoint returns no body.
+     * <p>Soft delete an intelligent field. Only INACTIVE fields can be deleted.</p>
      * <p>Deleted fields are excluded from search results but can still be retrieved by ID.
      * Creating a new field with the same referenceId as a deleted field will overwrite
      * the deleted field and restore it to INACTIVE status.</p>
@@ -408,7 +421,9 @@ public class AsyncRawIntelligentFieldsClient {
     }
 
     /**
-     * Soft delete an intelligent field. Only INACTIVE fields can be deleted.
+     * Deprecated. Use <code>DELETE /v1/capabilities/INTELLIGENT_FIELD/{referenceId}</code>, which
+     * deletes any kind of capability the same way. That endpoint returns no body.
+     * <p>Soft delete an intelligent field. Only INACTIVE fields can be deleted.</p>
      * <p>Deleted fields are excluded from search results but can still be retrieved by ID.
      * Creating a new field with the same referenceId as a deleted field will overwrite
      * the deleted field and restore it to INACTIVE status.</p>

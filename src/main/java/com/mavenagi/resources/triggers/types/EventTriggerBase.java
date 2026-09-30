@@ -9,54 +9,24 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
 import com.mavenagi.resources.commons.types.EventTriggerType;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = EventTriggerBase.Builder.class)
 public final class EventTriggerBase implements IEventTriggerBase {
-    private final Optional<String> name;
-
-    private final String description;
-
     private final EventTriggerType type;
 
     private final Map<String, Object> additionalProperties;
 
-    private EventTriggerBase(
-            Optional<String> name,
-            String description,
-            EventTriggerType type,
-            Map<String, Object> additionalProperties) {
-        this.name = name;
-        this.description = description;
+    private EventTriggerBase(EventTriggerType type, Map<String, Object> additionalProperties) {
         this.type = type;
         this.additionalProperties = additionalProperties;
-    }
-
-    /**
-     * @return The name of the trigger, displayed to end users. If not set, a name is derived from the app ID and trigger type.
-     */
-    @JsonProperty("name")
-    @java.lang.Override
-    public Optional<String> getName() {
-        return name;
-    }
-
-    /**
-     * @return The description of what the event trigger does, shown in the Maven Dashboard
-     */
-    @JsonProperty("description")
-    @java.lang.Override
-    public String getDescription() {
-        return description;
     }
 
     /**
@@ -84,12 +54,12 @@ public final class EventTriggerBase implements IEventTriggerBase {
     }
 
     private boolean equalTo(EventTriggerBase other) {
-        return name.equals(other.name) && description.equals(other.description) && type.equals(other.type);
+        return type.equals(other.type);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.name, this.description, this.type);
+        return Objects.hash(this.type);
     }
 
     @java.lang.Override
@@ -97,17 +67,8 @@ public final class EventTriggerBase implements IEventTriggerBase {
         return ObjectMappers.stringify(this);
     }
 
-    public static DescriptionStage builder() {
+    public static TypeStage builder() {
         return new Builder();
-    }
-
-    public interface DescriptionStage {
-        /**
-         * <p>The description of what the event trigger does, shown in the Maven Dashboard</p>
-         */
-        TypeStage description(@NotNull String description);
-
-        Builder from(EventTriggerBase other);
     }
 
     public interface TypeStage {
@@ -119,26 +80,17 @@ public final class EventTriggerBase implements IEventTriggerBase {
          * <p>Inbox triggers fire when an inbox item is created or updated.</p>
          */
         _FinalStage type(@NotNull EventTriggerType type);
+
+        Builder from(EventTriggerBase other);
     }
 
     public interface _FinalStage {
         EventTriggerBase build();
-
-        /**
-         * <p>The name of the trigger, displayed to end users. If not set, a name is derived from the app ID and trigger type.</p>
-         */
-        _FinalStage name(Optional<String> name);
-
-        _FinalStage name(String name);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements DescriptionStage, TypeStage, _FinalStage {
-        private String description;
-
+    public static final class Builder implements TypeStage, _FinalStage {
         private EventTriggerType type;
-
-        private Optional<String> name = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -147,21 +99,7 @@ public final class EventTriggerBase implements IEventTriggerBase {
 
         @java.lang.Override
         public Builder from(EventTriggerBase other) {
-            name(other.getName());
-            description(other.getDescription());
             type(other.getType());
-            return this;
-        }
-
-        /**
-         * <p>The description of what the event trigger does, shown in the Maven Dashboard</p>
-         * <p>The description of what the event trigger does, shown in the Maven Dashboard</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("description")
-        public TypeStage description(@NotNull String description) {
-            this.description = Objects.requireNonNull(description, "description must not be null");
             return this;
         }
 
@@ -185,29 +123,9 @@ public final class EventTriggerBase implements IEventTriggerBase {
             return this;
         }
 
-        /**
-         * <p>The name of the trigger, displayed to end users. If not set, a name is derived from the app ID and trigger type.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage name(String name) {
-            this.name = Optional.ofNullable(name);
-            return this;
-        }
-
-        /**
-         * <p>The name of the trigger, displayed to end users. If not set, a name is derived from the app ID and trigger type.</p>
-         */
-        @java.lang.Override
-        @JsonSetter(value = "name", nulls = Nulls.SKIP)
-        public _FinalStage name(Optional<String> name) {
-            this.name = name;
-            return this;
-        }
-
         @java.lang.Override
         public EventTriggerBase build() {
-            return new EventTriggerBase(name, description, type, additionalProperties);
+            return new EventTriggerBase(type, additionalProperties);
         }
     }
 }

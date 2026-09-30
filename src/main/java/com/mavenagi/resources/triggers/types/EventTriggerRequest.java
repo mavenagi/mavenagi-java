@@ -23,45 +23,27 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = EventTriggerRequest.Builder.class)
 public final class EventTriggerRequest implements IEventTriggerBase {
+    private final EventTriggerType type;
+
     private final Optional<String> name;
 
     private final String description;
-
-    private final EventTriggerType type;
 
     private final EntityIdBase triggerId;
 
     private final Map<String, Object> additionalProperties;
 
     private EventTriggerRequest(
+            EventTriggerType type,
             Optional<String> name,
             String description,
-            EventTriggerType type,
             EntityIdBase triggerId,
             Map<String, Object> additionalProperties) {
+        this.type = type;
         this.name = name;
         this.description = description;
-        this.type = type;
         this.triggerId = triggerId;
         this.additionalProperties = additionalProperties;
-    }
-
-    /**
-     * @return The name of the trigger, displayed to end users. If not set, a name is derived from the app ID and trigger type.
-     */
-    @JsonProperty("name")
-    @java.lang.Override
-    public Optional<String> getName() {
-        return name;
-    }
-
-    /**
-     * @return The description of what the event trigger does, shown in the Maven Dashboard
-     */
-    @JsonProperty("description")
-    @java.lang.Override
-    public String getDescription() {
-        return description;
     }
 
     /**
@@ -75,6 +57,22 @@ public final class EventTriggerRequest implements IEventTriggerBase {
     @java.lang.Override
     public EventTriggerType getType() {
         return type;
+    }
+
+    /**
+     * @return The name of the trigger, displayed to end users. If not set, a name is derived from the app ID and trigger type.
+     */
+    @JsonProperty("name")
+    public Optional<String> getName() {
+        return name;
+    }
+
+    /**
+     * @return The description of what the event trigger does, shown in the Maven Dashboard
+     */
+    @JsonProperty("description")
+    public String getDescription() {
+        return description;
     }
 
     /**
@@ -97,15 +95,15 @@ public final class EventTriggerRequest implements IEventTriggerBase {
     }
 
     private boolean equalTo(EventTriggerRequest other) {
-        return name.equals(other.name)
+        return type.equals(other.type)
+                && name.equals(other.name)
                 && description.equals(other.description)
-                && type.equals(other.type)
                 && triggerId.equals(other.triggerId);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.name, this.description, this.type, this.triggerId);
+        return Objects.hash(this.type, this.name, this.description, this.triggerId);
     }
 
     @java.lang.Override
@@ -113,17 +111,8 @@ public final class EventTriggerRequest implements IEventTriggerBase {
         return ObjectMappers.stringify(this);
     }
 
-    public static DescriptionStage builder() {
+    public static TypeStage builder() {
         return new Builder();
-    }
-
-    public interface DescriptionStage {
-        /**
-         * <p>The description of what the event trigger does, shown in the Maven Dashboard</p>
-         */
-        TypeStage description(@NotNull String description);
-
-        Builder from(EventTriggerRequest other);
     }
 
     public interface TypeStage {
@@ -134,7 +123,16 @@ public final class EventTriggerRequest implements IEventTriggerBase {
          * <p>Events are immutable, so an event trigger fires immediately after the event is created.</p>
          * <p>Inbox triggers fire when an inbox item is created or updated.</p>
          */
-        TriggerIdStage type(@NotNull EventTriggerType type);
+        DescriptionStage type(@NotNull EventTriggerType type);
+
+        Builder from(EventTriggerRequest other);
+    }
+
+    public interface DescriptionStage {
+        /**
+         * <p>The description of what the event trigger does, shown in the Maven Dashboard</p>
+         */
+        TriggerIdStage description(@NotNull String description);
     }
 
     public interface TriggerIdStage {
@@ -156,10 +154,10 @@ public final class EventTriggerRequest implements IEventTriggerBase {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements DescriptionStage, TypeStage, TriggerIdStage, _FinalStage {
-        private String description;
-
+    public static final class Builder implements TypeStage, DescriptionStage, TriggerIdStage, _FinalStage {
         private EventTriggerType type;
+
+        private String description;
 
         private EntityIdBase triggerId;
 
@@ -172,22 +170,10 @@ public final class EventTriggerRequest implements IEventTriggerBase {
 
         @java.lang.Override
         public Builder from(EventTriggerRequest other) {
+            type(other.getType());
             name(other.getName());
             description(other.getDescription());
-            type(other.getType());
             triggerId(other.getTriggerId());
-            return this;
-        }
-
-        /**
-         * <p>The description of what the event trigger does, shown in the Maven Dashboard</p>
-         * <p>The description of what the event trigger does, shown in the Maven Dashboard</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("description")
-        public TypeStage description(@NotNull String description) {
-            this.description = Objects.requireNonNull(description, "description must not be null");
             return this;
         }
 
@@ -206,8 +192,20 @@ public final class EventTriggerRequest implements IEventTriggerBase {
          */
         @java.lang.Override
         @JsonSetter("type")
-        public TriggerIdStage type(@NotNull EventTriggerType type) {
+        public DescriptionStage type(@NotNull EventTriggerType type) {
             this.type = Objects.requireNonNull(type, "type must not be null");
+            return this;
+        }
+
+        /**
+         * <p>The description of what the event trigger does, shown in the Maven Dashboard</p>
+         * <p>The description of what the event trigger does, shown in the Maven Dashboard</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("description")
+        public TriggerIdStage description(@NotNull String description) {
+            this.description = Objects.requireNonNull(description, "description must not be null");
             return this;
         }
 
@@ -245,7 +243,7 @@ public final class EventTriggerRequest implements IEventTriggerBase {
 
         @java.lang.Override
         public EventTriggerRequest build() {
-            return new EventTriggerRequest(name, description, type, triggerId, additionalProperties);
+            return new EventTriggerRequest(type, name, description, triggerId, additionalProperties);
         }
     }
 }

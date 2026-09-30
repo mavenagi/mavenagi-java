@@ -73,6 +73,7 @@ public class IntelligentFieldsWireTest {
                                 .builder()
                                 .value("HIGH")
                                 .label("High Priority")
+                                .description("The customer is blocked or reports an outage.")
                                 .build(),
                             EnumOption
                                 .builder()
@@ -106,7 +107,8 @@ public class IntelligentFieldsWireTest {
             + "  \"enumOptions\": [\n"
             + "    {\n"
             + "      \"value\": \"HIGH\",\n"
-            + "      \"label\": \"High Priority\"\n"
+            + "      \"label\": \"High Priority\",\n"
+            + "      \"description\": \"The customer is blocked or reports an outage.\"\n"
             + "    },\n"
             + "    {\n"
             + "      \"value\": \"MEDIUM\",\n"

@@ -64,6 +64,8 @@ public final class InitializeConversationResponse implements IConversationRespon
 
     private final Optional<ConversationMode> conversationMode;
 
+    private final Optional<EntityId> variantId;
+
     private final List<ConversationKickoffExecutionResponse> conversationKickoffResults;
 
     private final Map<String, Object> additionalProperties;
@@ -88,6 +90,7 @@ public final class InitializeConversationResponse implements IConversationRespon
             Optional<SimulationContext> simulationContext,
             Optional<Map<RelationshipType, List<EntityId>>> relatedEntities,
             Optional<ConversationMode> conversationMode,
+            Optional<EntityId> variantId,
             List<ConversationKickoffExecutionResponse> conversationKickoffResults,
             Map<String, Object> additionalProperties) {
         this.messages = messages;
@@ -109,6 +112,7 @@ public final class InitializeConversationResponse implements IConversationRespon
         this.simulationContext = simulationContext;
         this.relatedEntities = relatedEntities;
         this.conversationMode = conversationMode;
+        this.variantId = variantId;
         this.conversationKickoffResults = conversationKickoffResults;
         this.additionalProperties = additionalProperties;
     }
@@ -295,6 +299,17 @@ public final class InitializeConversationResponse implements IConversationRespon
     }
 
     /**
+     * @return The agent variant this conversation is pinned to. Chosen by the agent's traffic rules when
+     * the conversation is created and fixed for its lifetime. Absent when the conversation was
+     * not routed to a variant, for example one created before the agent had variants.
+     */
+    @JsonProperty("variantId")
+    @java.lang.Override
+    public Optional<EntityId> getVariantId() {
+        return variantId;
+    }
+
+    /**
      * @return Results of the Conversation Kickoffs that ran during conversation initialization, one
      * entry per kickoff in the order they were recorded. Empty when no kickoff ran. Only
      * present on this initialize response; other endpoints that return a conversation do not
@@ -336,6 +351,7 @@ public final class InitializeConversationResponse implements IConversationRespon
                 && simulationContext.equals(other.simulationContext)
                 && relatedEntities.equals(other.relatedEntities)
                 && conversationMode.equals(other.conversationMode)
+                && variantId.equals(other.variantId)
                 && conversationKickoffResults.equals(other.conversationKickoffResults);
     }
 
@@ -361,6 +377,7 @@ public final class InitializeConversationResponse implements IConversationRespon
                 this.simulationContext,
                 this.relatedEntities,
                 this.conversationMode,
+                this.variantId,
                 this.conversationKickoffResults);
     }
 
@@ -528,6 +545,15 @@ public final class InitializeConversationResponse implements IConversationRespon
         _FinalStage conversationMode(ConversationMode conversationMode);
 
         /**
+         * <p>The agent variant this conversation is pinned to. Chosen by the agent's traffic rules when
+         * the conversation is created and fixed for its lifetime. Absent when the conversation was
+         * not routed to a variant, for example one created before the agent had variants.</p>
+         */
+        _FinalStage variantId(Optional<EntityId> variantId);
+
+        _FinalStage variantId(EntityId variantId);
+
+        /**
          * <p>Results of the Conversation Kickoffs that ran during conversation initialization, one
          * entry per kickoff in the order they were recorded. Empty when no kickoff ran. Only
          * present on this initialize response; other endpoints that return a conversation do not
@@ -563,6 +589,8 @@ public final class InitializeConversationResponse implements IConversationRespon
         private boolean llmEnabled;
 
         private List<ConversationKickoffExecutionResponse> conversationKickoffResults = new ArrayList<>();
+
+        private Optional<EntityId> variantId = Optional.empty();
 
         private Optional<ConversationMode> conversationMode = Optional.empty();
 
@@ -616,6 +644,7 @@ public final class InitializeConversationResponse implements IConversationRespon
             simulationContext(other.getSimulationContext());
             relatedEntities(other.getRelatedEntities());
             conversationMode(other.getConversationMode());
+            variantId(other.getVariantId());
             conversationKickoffResults(other.getConversationKickoffResults());
             return this;
         }
@@ -742,6 +771,30 @@ public final class InitializeConversationResponse implements IConversationRespon
             if (conversationKickoffResults != null) {
                 this.conversationKickoffResults.addAll(conversationKickoffResults);
             }
+            return this;
+        }
+
+        /**
+         * <p>The agent variant this conversation is pinned to. Chosen by the agent's traffic rules when
+         * the conversation is created and fixed for its lifetime. Absent when the conversation was
+         * not routed to a variant, for example one created before the agent had variants.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage variantId(EntityId variantId) {
+            this.variantId = Optional.ofNullable(variantId);
+            return this;
+        }
+
+        /**
+         * <p>The agent variant this conversation is pinned to. Chosen by the agent's traffic rules when
+         * the conversation is created and fixed for its lifetime. Absent when the conversation was
+         * not routed to a variant, for example one created before the agent had variants.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "variantId", nulls = Nulls.SKIP)
+        public _FinalStage variantId(Optional<EntityId> variantId) {
+            this.variantId = variantId;
             return this;
         }
 
@@ -1087,6 +1140,7 @@ public final class InitializeConversationResponse implements IConversationRespon
                     simulationContext,
                     relatedEntities,
                     conversationMode,
+                    variantId,
                     conversationKickoffResults,
                     additionalProperties);
         }

@@ -26,21 +26,23 @@ public final class CharterSearchFilter {
 
     private final Optional<List<EntityId>> knowledgeBaseIds;
 
+    private final Optional<List<EntityId>> intelligentFieldIds;
+
     private final Map<String, Object> additionalProperties;
 
     private CharterSearchFilter(
             Optional<List<EntityId>> actionIds,
             Optional<List<EntityId>> knowledgeBaseIds,
+            Optional<List<EntityId>> intelligentFieldIds,
             Map<String, Object> additionalProperties) {
         this.actionIds = actionIds;
         this.knowledgeBaseIds = knowledgeBaseIds;
+        this.intelligentFieldIds = intelligentFieldIds;
         this.additionalProperties = additionalProperties;
     }
 
     /**
-     * @return Filter to charters that reference any of the specified actions (OR within this field).
-     * When combined with knowledgeBaseIds, both filters must match (AND across fields).
-     * An empty list is equivalent to omitting the field. Maximum 50 IDs.
+     * @return Only return charters referencing these actions. At most 50.
      */
     @JsonProperty("actionIds")
     public Optional<List<EntityId>> getActionIds() {
@@ -48,13 +50,21 @@ public final class CharterSearchFilter {
     }
 
     /**
-     * @return Filter to charters that reference any of the specified knowledge bases (OR within this field).
-     * When combined with actionIds, both filters must match (AND across fields).
-     * An empty list is equivalent to omitting the field. Maximum 50 IDs.
+     * @return Only return charters referencing these knowledge bases. At most 50.
      */
     @JsonProperty("knowledgeBaseIds")
     public Optional<List<EntityId>> getKnowledgeBaseIds() {
         return knowledgeBaseIds;
+    }
+
+    /**
+     * @return Only return charters whose precondition references these intelligent fields. At most 50.
+     * A charter reaches an intelligent field through its precondition, not by referencing it
+     * directly the way it does an action or a knowledge base.
+     */
+    @JsonProperty("intelligentFieldIds")
+    public Optional<List<EntityId>> getIntelligentFieldIds() {
+        return intelligentFieldIds;
     }
 
     @java.lang.Override
@@ -69,12 +79,14 @@ public final class CharterSearchFilter {
     }
 
     private boolean equalTo(CharterSearchFilter other) {
-        return actionIds.equals(other.actionIds) && knowledgeBaseIds.equals(other.knowledgeBaseIds);
+        return actionIds.equals(other.actionIds)
+                && knowledgeBaseIds.equals(other.knowledgeBaseIds)
+                && intelligentFieldIds.equals(other.intelligentFieldIds);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.actionIds, this.knowledgeBaseIds);
+        return Objects.hash(this.actionIds, this.knowledgeBaseIds, this.intelligentFieldIds);
     }
 
     @java.lang.Override
@@ -92,6 +104,8 @@ public final class CharterSearchFilter {
 
         private Optional<List<EntityId>> knowledgeBaseIds = Optional.empty();
 
+        private Optional<List<EntityId>> intelligentFieldIds = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -100,13 +114,12 @@ public final class CharterSearchFilter {
         public Builder from(CharterSearchFilter other) {
             actionIds(other.getActionIds());
             knowledgeBaseIds(other.getKnowledgeBaseIds());
+            intelligentFieldIds(other.getIntelligentFieldIds());
             return this;
         }
 
         /**
-         * <p>Filter to charters that reference any of the specified actions (OR within this field).
-         * When combined with knowledgeBaseIds, both filters must match (AND across fields).
-         * An empty list is equivalent to omitting the field. Maximum 50 IDs.</p>
+         * <p>Only return charters referencing these actions. At most 50.</p>
          */
         @JsonSetter(value = "actionIds", nulls = Nulls.SKIP)
         public Builder actionIds(Optional<List<EntityId>> actionIds) {
@@ -120,9 +133,7 @@ public final class CharterSearchFilter {
         }
 
         /**
-         * <p>Filter to charters that reference any of the specified knowledge bases (OR within this field).
-         * When combined with actionIds, both filters must match (AND across fields).
-         * An empty list is equivalent to omitting the field. Maximum 50 IDs.</p>
+         * <p>Only return charters referencing these knowledge bases. At most 50.</p>
          */
         @JsonSetter(value = "knowledgeBaseIds", nulls = Nulls.SKIP)
         public Builder knowledgeBaseIds(Optional<List<EntityId>> knowledgeBaseIds) {
@@ -135,8 +146,24 @@ public final class CharterSearchFilter {
             return this;
         }
 
+        /**
+         * <p>Only return charters whose precondition references these intelligent fields. At most 50.
+         * A charter reaches an intelligent field through its precondition, not by referencing it
+         * directly the way it does an action or a knowledge base.</p>
+         */
+        @JsonSetter(value = "intelligentFieldIds", nulls = Nulls.SKIP)
+        public Builder intelligentFieldIds(Optional<List<EntityId>> intelligentFieldIds) {
+            this.intelligentFieldIds = intelligentFieldIds;
+            return this;
+        }
+
+        public Builder intelligentFieldIds(List<EntityId> intelligentFieldIds) {
+            this.intelligentFieldIds = Optional.ofNullable(intelligentFieldIds);
+            return this;
+        }
+
         public CharterSearchFilter build() {
-            return new CharterSearchFilter(actionIds, knowledgeBaseIds, additionalProperties);
+            return new CharterSearchFilter(actionIds, knowledgeBaseIds, intelligentFieldIds, additionalProperties);
         }
     }
 }
