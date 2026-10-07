@@ -3,8 +3,12 @@
  */
 package com.mavenagi.resources.triggers.types;
 
+import com.mavenagi.resources.commons.types.EventCondition;
 import com.mavenagi.resources.commons.types.EventTriggerType;
+import java.util.Optional;
 
 public interface IEventTriggerBase {
     EventTriggerType getType();
+
+    Optional<EventCondition> getCondition();
 }

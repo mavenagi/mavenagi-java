@@ -42,13 +42,13 @@ public final class CharterRequest implements ICharterContent, ICharterBase {
 
     private final String name;
 
+    private final Optional<EntityIdWithoutAgent> variantId;
+
     private final Optional<String> description;
 
     private final Optional<String> manual;
 
     private final EntityIdBase charterId;
-
-    private final Optional<EntityIdWithoutAgent> variantId;
 
     private final Map<String, Object> additionalProperties;
 
@@ -60,10 +60,10 @@ public final class CharterRequest implements ICharterContent, ICharterBase {
             Optional<Integer> userRank,
             CharterReferences references,
             String name,
+            Optional<EntityIdWithoutAgent> variantId,
             Optional<String> description,
             Optional<String> manual,
             EntityIdBase charterId,
-            Optional<EntityIdWithoutAgent> variantId,
             Map<String, Object> additionalProperties) {
         this.parentCharterId = parentCharterId;
         this.precondition = precondition;
@@ -72,10 +72,10 @@ public final class CharterRequest implements ICharterContent, ICharterBase {
         this.userRank = userRank;
         this.references = references;
         this.name = name;
+        this.variantId = variantId;
         this.description = description;
         this.manual = manual;
         this.charterId = charterId;
-        this.variantId = variantId;
         this.additionalProperties = additionalProperties;
     }
 
@@ -172,6 +172,18 @@ public final class CharterRequest implements ICharterContent, ICharterBase {
     }
 
     /**
+     * @return ID of the agent variant this charter belongs to, if applicable.
+     * <p>On a write this is validated -- an unknown variant is rejected, as is any
+     * variant while variant scoping is off for charters -- but not yet applied: the
+     * write reaches the agent's live configuration either way.</p>
+     */
+    @JsonProperty("variantId")
+    @java.lang.Override
+    public Optional<EntityIdWithoutAgent> getVariantId() {
+        return variantId;
+    }
+
+    /**
      * @return A plain text description of this charter. If not set, existing description is preserved if present.
      */
     @JsonProperty("description")
@@ -198,17 +210,6 @@ public final class CharterRequest implements ICharterContent, ICharterBase {
     @JsonProperty("charterId")
     public EntityIdBase getCharterId() {
         return charterId;
-    }
-
-    /**
-     * @return The agent variant this write is scoped to. When set, the charter content is staged in
-     * that variant's working set instead of being applied to the agent's live configuration.
-     * <p>Omit this field to write directly to the agent. Variant scoping is not active yet: a
-     * variant supplied today is accepted and ignored, and the write applies to the agent.</p>
-     */
-    @JsonProperty("variantId")
-    public Optional<EntityIdWithoutAgent> getVariantId() {
-        return variantId;
     }
 
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
@@ -242,10 +243,10 @@ public final class CharterRequest implements ICharterContent, ICharterBase {
                 && userRank.equals(other.userRank)
                 && references.equals(other.references)
                 && name.equals(other.name)
+                && variantId.equals(other.variantId)
                 && description.equals(other.description)
                 && manual.equals(other.manual)
-                && charterId.equals(other.charterId)
-                && variantId.equals(other.variantId);
+                && charterId.equals(other.charterId);
     }
 
     @java.lang.Override
@@ -258,10 +259,10 @@ public final class CharterRequest implements ICharterContent, ICharterBase {
                 this.userRank,
                 this.references,
                 this.name,
+                this.variantId,
                 this.description,
                 this.manual,
-                this.charterId,
-                this.variantId);
+                this.charterId);
     }
 
     @java.lang.Override
@@ -362,6 +363,16 @@ public final class CharterRequest implements ICharterContent, ICharterBase {
         _FinalStage userRank(Integer userRank);
 
         /**
+         * <p>ID of the agent variant this charter belongs to, if applicable.</p>
+         * <p>On a write this is validated -- an unknown variant is rejected, as is any
+         * variant while variant scoping is off for charters -- but not yet applied: the
+         * write reaches the agent's live configuration either way.</p>
+         */
+        _FinalStage variantId(Optional<EntityIdWithoutAgent> variantId);
+
+        _FinalStage variantId(EntityIdWithoutAgent variantId);
+
+        /**
          * <p>A plain text description of this charter. If not set, existing description is preserved if present.</p>
          */
         _FinalStage description(Optional<String> description);
@@ -377,16 +388,6 @@ public final class CharterRequest implements ICharterContent, ICharterBase {
         _FinalStage manual(Optional<String> manual);
 
         _FinalStage manual(String manual);
-
-        /**
-         * <p>The agent variant this write is scoped to. When set, the charter content is staged in
-         * that variant's working set instead of being applied to the agent's live configuration.</p>
-         * <p>Omit this field to write directly to the agent. Variant scoping is not active yet: a
-         * variant supplied today is accepted and ignored, and the write applies to the agent.</p>
-         */
-        _FinalStage variantId(Optional<EntityIdWithoutAgent> variantId);
-
-        _FinalStage variantId(EntityIdWithoutAgent variantId);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -399,11 +400,11 @@ public final class CharterRequest implements ICharterContent, ICharterBase {
 
         private EntityIdBase charterId;
 
-        private Optional<EntityIdWithoutAgent> variantId = Optional.empty();
-
         private Optional<String> manual = Optional.empty();
 
         private Optional<String> description = Optional.empty();
+
+        private Optional<EntityIdWithoutAgent> variantId = Optional.empty();
 
         private Optional<Integer> userRank = Optional.empty();
 
@@ -427,10 +428,10 @@ public final class CharterRequest implements ICharterContent, ICharterBase {
             userRank(other.getUserRank());
             references(other.getReferences());
             name(other.getName());
+            variantId(other.getVariantId());
             description(other.getDescription());
             manual(other.getManual());
             charterId(other.getCharterId());
-            variantId(other.getVariantId());
             return this;
         }
 
@@ -485,32 +486,6 @@ public final class CharterRequest implements ICharterContent, ICharterBase {
         }
 
         /**
-         * <p>The agent variant this write is scoped to. When set, the charter content is staged in
-         * that variant's working set instead of being applied to the agent's live configuration.</p>
-         * <p>Omit this field to write directly to the agent. Variant scoping is not active yet: a
-         * variant supplied today is accepted and ignored, and the write applies to the agent.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage variantId(EntityIdWithoutAgent variantId) {
-            this.variantId = Optional.ofNullable(variantId);
-            return this;
-        }
-
-        /**
-         * <p>The agent variant this write is scoped to. When set, the charter content is staged in
-         * that variant's working set instead of being applied to the agent's live configuration.</p>
-         * <p>Omit this field to write directly to the agent. Variant scoping is not active yet: a
-         * variant supplied today is accepted and ignored, and the write applies to the agent.</p>
-         */
-        @java.lang.Override
-        @JsonSetter(value = "variantId", nulls = Nulls.SKIP)
-        public _FinalStage variantId(Optional<EntityIdWithoutAgent> variantId) {
-            this.variantId = variantId;
-            return this;
-        }
-
-        /**
          * <p>Optional additional natural language instruction text when this
          * charter matches. Manuals concatenate with ancestor charter manuals
          * before delivery.</p>
@@ -553,6 +528,32 @@ public final class CharterRequest implements ICharterContent, ICharterBase {
         @JsonSetter(value = "description", nulls = Nulls.SKIP)
         public _FinalStage description(Optional<String> description) {
             this.description = description;
+            return this;
+        }
+
+        /**
+         * <p>ID of the agent variant this charter belongs to, if applicable.</p>
+         * <p>On a write this is validated -- an unknown variant is rejected, as is any
+         * variant while variant scoping is off for charters -- but not yet applied: the
+         * write reaches the agent's live configuration either way.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage variantId(EntityIdWithoutAgent variantId) {
+            this.variantId = Optional.ofNullable(variantId);
+            return this;
+        }
+
+        /**
+         * <p>ID of the agent variant this charter belongs to, if applicable.</p>
+         * <p>On a write this is validated -- an unknown variant is rejected, as is any
+         * variant while variant scoping is off for charters -- but not yet applied: the
+         * write reaches the agent's live configuration either way.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "variantId", nulls = Nulls.SKIP)
+        public _FinalStage variantId(Optional<EntityIdWithoutAgent> variantId) {
+            this.variantId = variantId;
             return this;
         }
 
@@ -730,10 +731,10 @@ public final class CharterRequest implements ICharterContent, ICharterBase {
                     userRank,
                     references,
                     name,
+                    variantId,
                     description,
                     manual,
                     charterId,
-                    variantId,
                     additionalProperties);
         }
     }

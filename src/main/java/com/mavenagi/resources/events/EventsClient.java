@@ -30,14 +30,14 @@ public class EventsClient {
     }
 
     /**
-     * Create a new event
+     * Create a new event. Events are immutable, so a create that reuses the <code>referenceId</code> of an existing event in the same app is rejected with a 409 and leaves that event unchanged.
      */
     public EventResponse create(EventRequest request) {
         return this.rawClient.create(request).body();
     }
 
     /**
-     * Create a new event
+     * Create a new event. Events are immutable, so a create that reuses the <code>referenceId</code> of an existing event in the same app is rejected with a 409 and leaves that event unchanged.
      */
     public EventResponse create(EventRequest request, RequestOptions requestOptions) {
         return this.rawClient.create(request, requestOptions).body();

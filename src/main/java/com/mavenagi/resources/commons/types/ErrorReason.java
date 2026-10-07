@@ -7,6 +7,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public final class ErrorReason {
+    public static final ErrorReason INTELLIGENT_FIELD_TYPE_CHANGED =
+            new ErrorReason(Value.INTELLIGENT_FIELD_TYPE_CHANGED, "INTELLIGENT_FIELD_TYPE_CHANGED");
+
     public static final ErrorReason VARIANT_HAS_STAGED_EDITS =
             new ErrorReason(Value.VARIANT_HAS_STAGED_EDITS, "VARIANT_HAS_STAGED_EDITS");
 
@@ -61,6 +64,8 @@ public final class ErrorReason {
 
     public <T> T visit(Visitor<T> visitor) {
         switch (value) {
+            case INTELLIGENT_FIELD_TYPE_CHANGED:
+                return visitor.visitIntelligentFieldTypeChanged();
             case VARIANT_HAS_STAGED_EDITS:
                 return visitor.visitVariantHasStagedEdits();
             case VARIANT_LIVE:
@@ -88,6 +93,8 @@ public final class ErrorReason {
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static ErrorReason valueOf(String value) {
         switch (value) {
+            case "INTELLIGENT_FIELD_TYPE_CHANGED":
+                return INTELLIGENT_FIELD_TYPE_CHANGED;
             case "VARIANT_HAS_STAGED_EDITS":
                 return VARIANT_HAS_STAGED_EDITS;
             case "VARIANT_LIVE":
@@ -130,6 +137,8 @@ public final class ErrorReason {
 
         VARIANT_REQUIRED,
 
+        INTELLIGENT_FIELD_TYPE_CHANGED,
+
         UNKNOWN
     }
 
@@ -151,6 +160,8 @@ public final class ErrorReason {
         T visitVariantHasStagedEdits();
 
         T visitVariantRequired();
+
+        T visitIntelligentFieldTypeChanged();
 
         T visitUnknown(String unknownType);
     }

@@ -109,9 +109,18 @@ public class AsyncTriggersClient {
     }
 
     /**
-     * Deprecated. Use <code>PATCH /v1/capabilities/TRIGGER/{referenceId}</code> with a <code>status</code>, which
-     * publishes and unpublishes any kind of capability the same way.
-     * <p>Updates an event trigger. Only the enabled field is editable.</p>
+     * Updates an event trigger. <code>enabled</code> and <code>condition</code> are the editable fields.
+     * <p><code>PATCH /v1/capabilities/TRIGGER/{referenceId}</code> with a <code>status</code> also turns a trigger on and
+     * off, the same way it publishes and unpublishes any kind of capability.</p>
+     */
+    public CompletableFuture<EventTriggerResponse> partialUpdate(String triggerReferenceId) {
+        return this.rawClient.partialUpdate(triggerReferenceId).thenApply(response -> response.body());
+    }
+
+    /**
+     * Updates an event trigger. <code>enabled</code> and <code>condition</code> are the editable fields.
+     * <p><code>PATCH /v1/capabilities/TRIGGER/{referenceId}</code> with a <code>status</code> also turns a trigger on and
+     * off, the same way it publishes and unpublishes any kind of capability.</p>
      */
     public CompletableFuture<EventTriggerResponse> partialUpdate(
             String triggerReferenceId, PartialUpdateRequest request) {
@@ -119,9 +128,9 @@ public class AsyncTriggersClient {
     }
 
     /**
-     * Deprecated. Use <code>PATCH /v1/capabilities/TRIGGER/{referenceId}</code> with a <code>status</code>, which
-     * publishes and unpublishes any kind of capability the same way.
-     * <p>Updates an event trigger. Only the enabled field is editable.</p>
+     * Updates an event trigger. <code>enabled</code> and <code>condition</code> are the editable fields.
+     * <p><code>PATCH /v1/capabilities/TRIGGER/{referenceId}</code> with a <code>status</code> also turns a trigger on and
+     * off, the same way it publishes and unpublishes any kind of capability.</p>
      */
     public CompletableFuture<EventTriggerResponse> partialUpdate(
             String triggerReferenceId, PartialUpdateRequest request, RequestOptions requestOptions) {

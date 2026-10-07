@@ -54,7 +54,7 @@ public final class ConversationPatchRequest {
     }
 
     /**
-     * @return Whether the conversation is able to receive asynchronous messages. Only valid for conversations with the <code>ASYNC</code> capability.
+     * @return Whether the conversation is open. Set it to false to close the conversation, which records a <code>CONVERSATION_CLOSED</code> system event. Closing is final: a closed conversation cannot be reopened and takes no new questions, form submissions, messages or metadata. It can still be read, deleted, and patched otherwise, for example to add attachments. For a conversation with the <code>ASYNC</code> capability, only an open conversation can receive asynchronous messages.
      */
     @JsonProperty("open")
     public Optional<Boolean> getOpen() {
@@ -147,7 +147,7 @@ public final class ConversationPatchRequest {
         }
 
         /**
-         * <p>Whether the conversation is able to receive asynchronous messages. Only valid for conversations with the <code>ASYNC</code> capability.</p>
+         * <p>Whether the conversation is open. Set it to false to close the conversation, which records a <code>CONVERSATION_CLOSED</code> system event. Closing is final: a closed conversation cannot be reopened and takes no new questions, form submissions, messages or metadata. It can still be read, deleted, and patched otherwise, for example to add attachments. For a conversation with the <code>ASYNC</code> capability, only an open conversation can receive asynchronous messages.</p>
          */
         @JsonSetter(value = "open", nulls = Nulls.SKIP)
         public Builder open(Optional<Boolean> open) {

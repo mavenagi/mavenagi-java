@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
 import com.mavenagi.resources.commons.types.EntityId;
+import com.mavenagi.resources.commons.types.EntityIdWithoutAgent;
 import com.mavenagi.resources.commons.types.PreconditionResponse;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
@@ -27,6 +28,8 @@ import org.jetbrains.annotations.NotNull;
 @JsonDeserialize(builder = CharterResponse.Builder.class)
 public final class CharterResponse implements ICharterBase {
     private final String name;
+
+    private final Optional<EntityIdWithoutAgent> variantId;
 
     private final Optional<String> description;
 
@@ -58,6 +61,7 @@ public final class CharterResponse implements ICharterBase {
 
     private CharterResponse(
             String name,
+            Optional<EntityIdWithoutAgent> variantId,
             Optional<String> description,
             Optional<String> manual,
             EntityId charterId,
@@ -73,6 +77,7 @@ public final class CharterResponse implements ICharterBase {
             OffsetDateTime updatedAt,
             Map<String, Object> additionalProperties) {
         this.name = name;
+        this.variantId = variantId;
         this.description = description;
         this.manual = manual;
         this.charterId = charterId;
@@ -96,6 +101,18 @@ public final class CharterResponse implements ICharterBase {
     @java.lang.Override
     public String getName() {
         return name;
+    }
+
+    /**
+     * @return ID of the agent variant this charter belongs to, if applicable.
+     * <p>On a write this is validated -- an unknown variant is rejected, as is any
+     * variant while variant scoping is off for charters -- but not yet applied: the
+     * write reaches the agent's live configuration either way.</p>
+     */
+    @JsonProperty("variantId")
+    @java.lang.Override
+    public Optional<EntityIdWithoutAgent> getVariantId() {
+        return variantId;
     }
 
     /**
@@ -225,6 +242,7 @@ public final class CharterResponse implements ICharterBase {
 
     private boolean equalTo(CharterResponse other) {
         return name.equals(other.name)
+                && variantId.equals(other.variantId)
                 && description.equals(other.description)
                 && manual.equals(other.manual)
                 && charterId.equals(other.charterId)
@@ -244,6 +262,7 @@ public final class CharterResponse implements ICharterBase {
     public int hashCode() {
         return Objects.hash(
                 this.name,
+                this.variantId,
                 this.description,
                 this.manual,
                 this.charterId,
@@ -323,6 +342,16 @@ public final class CharterResponse implements ICharterBase {
 
     public interface _FinalStage {
         CharterResponse build();
+
+        /**
+         * <p>ID of the agent variant this charter belongs to, if applicable.</p>
+         * <p>On a write this is validated -- an unknown variant is rejected, as is any
+         * variant while variant scoping is off for charters -- but not yet applied: the
+         * write reaches the agent's live configuration either way.</p>
+         */
+        _FinalStage variantId(Optional<EntityIdWithoutAgent> variantId);
+
+        _FinalStage variantId(EntityIdWithoutAgent variantId);
 
         /**
          * <p>A plain text description of this charter. If not set, existing description is preserved if present.</p>
@@ -420,6 +449,8 @@ public final class CharterResponse implements ICharterBase {
 
         private Optional<String> description = Optional.empty();
 
+        private Optional<EntityIdWithoutAgent> variantId = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -428,6 +459,7 @@ public final class CharterResponse implements ICharterBase {
         @java.lang.Override
         public Builder from(CharterResponse other) {
             name(other.getName());
+            variantId(other.getVariantId());
             description(other.getDescription());
             manual(other.getManual());
             charterId(other.getCharterId());
@@ -699,10 +731,37 @@ public final class CharterResponse implements ICharterBase {
             return this;
         }
 
+        /**
+         * <p>ID of the agent variant this charter belongs to, if applicable.</p>
+         * <p>On a write this is validated -- an unknown variant is rejected, as is any
+         * variant while variant scoping is off for charters -- but not yet applied: the
+         * write reaches the agent's live configuration either way.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage variantId(EntityIdWithoutAgent variantId) {
+            this.variantId = Optional.ofNullable(variantId);
+            return this;
+        }
+
+        /**
+         * <p>ID of the agent variant this charter belongs to, if applicable.</p>
+         * <p>On a write this is validated -- an unknown variant is rejected, as is any
+         * variant while variant scoping is off for charters -- but not yet applied: the
+         * write reaches the agent's live configuration either way.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "variantId", nulls = Nulls.SKIP)
+        public _FinalStage variantId(Optional<EntityIdWithoutAgent> variantId) {
+            this.variantId = variantId;
+            return this;
+        }
+
         @java.lang.Override
         public CharterResponse build() {
             return new CharterResponse(
                     name,
+                    variantId,
                     description,
                     manual,
                     charterId,

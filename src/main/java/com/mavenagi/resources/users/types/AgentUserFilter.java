@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
+import com.mavenagi.resources.commons.types.IntelligentFieldFilter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +30,8 @@ public final class AgentUserFilter {
 
     private final Optional<Boolean> isAnonymous;
 
+    private final Optional<IntelligentFieldFilter> intelligentFields;
+
     private final Map<String, Object> additionalProperties;
 
     private AgentUserFilter(
@@ -36,11 +39,13 @@ public final class AgentUserFilter {
             Optional<List<String>> identifiers,
             Optional<String> displayName,
             Optional<Boolean> isAnonymous,
+            Optional<IntelligentFieldFilter> intelligentFields,
             Map<String, Object> additionalProperties) {
         this.search = search;
         this.identifiers = identifiers;
         this.displayName = displayName;
         this.isAnonymous = isAnonymous;
+        this.intelligentFields = intelligentFields;
         this.additionalProperties = additionalProperties;
     }
 
@@ -79,6 +84,14 @@ public final class AgentUserFilter {
         return isAnonymous;
     }
 
+    /**
+     * @return Filter by intelligent field values. All conditions are ANDed together.
+     */
+    @JsonProperty("intelligentFields")
+    public Optional<IntelligentFieldFilter> getIntelligentFields() {
+        return intelligentFields;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -94,12 +107,13 @@ public final class AgentUserFilter {
         return search.equals(other.search)
                 && identifiers.equals(other.identifiers)
                 && displayName.equals(other.displayName)
-                && isAnonymous.equals(other.isAnonymous);
+                && isAnonymous.equals(other.isAnonymous)
+                && intelligentFields.equals(other.intelligentFields);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.search, this.identifiers, this.displayName, this.isAnonymous);
+        return Objects.hash(this.search, this.identifiers, this.displayName, this.isAnonymous, this.intelligentFields);
     }
 
     @java.lang.Override
@@ -121,6 +135,8 @@ public final class AgentUserFilter {
 
         private Optional<Boolean> isAnonymous = Optional.empty();
 
+        private Optional<IntelligentFieldFilter> intelligentFields = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -131,6 +147,7 @@ public final class AgentUserFilter {
             identifiers(other.getIdentifiers());
             displayName(other.getDisplayName());
             isAnonymous(other.getIsAnonymous());
+            intelligentFields(other.getIntelligentFields());
             return this;
         }
 
@@ -193,8 +210,23 @@ public final class AgentUserFilter {
             return this;
         }
 
+        /**
+         * <p>Filter by intelligent field values. All conditions are ANDed together.</p>
+         */
+        @JsonSetter(value = "intelligentFields", nulls = Nulls.SKIP)
+        public Builder intelligentFields(Optional<IntelligentFieldFilter> intelligentFields) {
+            this.intelligentFields = intelligentFields;
+            return this;
+        }
+
+        public Builder intelligentFields(IntelligentFieldFilter intelligentFields) {
+            this.intelligentFields = Optional.ofNullable(intelligentFields);
+            return this;
+        }
+
         public AgentUserFilter build() {
-            return new AgentUserFilter(search, identifiers, displayName, isAnonymous, additionalProperties);
+            return new AgentUserFilter(
+                    search, identifiers, displayName, isAnonymous, intelligentFields, additionalProperties);
         }
     }
 }

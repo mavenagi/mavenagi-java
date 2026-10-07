@@ -11,7 +11,6 @@ import com.mavenagi.resources.triggers.types.EventTriggerRequest;
 import com.mavenagi.resources.triggers.types.EventTriggerResponse;
 import com.mavenagi.resources.triggers.types.EventTriggersSearchRequest;
 import com.mavenagi.resources.triggers.types.EventTriggersSearchResponse;
-import com.mavenagi.resources.triggers.types.TriggerPartialUpdate;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
@@ -41,7 +40,7 @@ public class TriggersWireTest {
     public void testSearch() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"triggers\":[{\"triggerId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"enabled\":true,\"type\":\"CONVERSATION_CREATED\",\"name\":\"name\",\"description\":\"description\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"status\":\"ACTIVE\"},{\"triggerId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"enabled\":true,\"type\":\"CONVERSATION_CREATED\",\"name\":\"name\",\"description\":\"description\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"status\":\"ACTIVE\"}],\"number\":1,\"size\":1,\"totalElements\":1000000,\"totalPages\":1}"));
+            .setBody("{\"triggers\":[{\"triggerId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"enabled\":true,\"type\":\"CONVERSATION_CREATED\",\"condition\":{\"eventConditionType\":\"userEventName\",\"operator\":\"IN\",\"names\":[\"BUTTON_CLICKED\",\"BUTTON_CLICKED\"]},\"name\":\"name\",\"description\":\"description\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"status\":\"ACTIVE\"},{\"triggerId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"enabled\":true,\"type\":\"CONVERSATION_CREATED\",\"condition\":{\"eventConditionType\":\"userEventName\",\"operator\":\"IN\",\"names\":[\"BUTTON_CLICKED\",\"BUTTON_CLICKED\"]},\"name\":\"name\",\"description\":\"description\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"status\":\"ACTIVE\"}],\"number\":1,\"size\":1,\"totalElements\":1000000,\"totalPages\":1}"));
         EventTriggersSearchResponse response = client.triggers().search(
             EventTriggersSearchRequest
                 .builder()
@@ -93,6 +92,14 @@ public class TriggersWireTest {
             + "      },\n"
             + "      \"enabled\": true,\n"
             + "      \"type\": \"CONVERSATION_CREATED\",\n"
+            + "      \"condition\": {\n"
+            + "        \"eventConditionType\": \"userEventName\",\n"
+            + "        \"operator\": \"IN\",\n"
+            + "        \"names\": [\n"
+            + "          \"BUTTON_CLICKED\",\n"
+            + "          \"BUTTON_CLICKED\"\n"
+            + "        ]\n"
+            + "      },\n"
             + "      \"name\": \"name\",\n"
             + "      \"description\": \"description\",\n"
             + "      \"createdAt\": \"2024-01-15T09:30:00Z\",\n"
@@ -109,6 +116,14 @@ public class TriggersWireTest {
             + "      },\n"
             + "      \"enabled\": true,\n"
             + "      \"type\": \"CONVERSATION_CREATED\",\n"
+            + "      \"condition\": {\n"
+            + "        \"eventConditionType\": \"userEventName\",\n"
+            + "        \"operator\": \"IN\",\n"
+            + "        \"names\": [\n"
+            + "          \"BUTTON_CLICKED\",\n"
+            + "          \"BUTTON_CLICKED\"\n"
+            + "        ]\n"
+            + "      },\n"
             + "      \"name\": \"name\",\n"
             + "      \"description\": \"description\",\n"
             + "      \"createdAt\": \"2024-01-15T09:30:00Z\",\n"
@@ -308,16 +323,11 @@ public class TriggersWireTest {
     public void testPartialUpdate() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"triggerId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"enabled\":true,\"type\":\"CONVERSATION_CREATED\",\"name\":\"name\",\"description\":\"description\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"status\":\"ACTIVE\"}"));
+            .setBody("{\"triggerId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"enabled\":true,\"type\":\"CONVERSATION_CREATED\",\"condition\":{\"eventConditionType\":\"userEventName\",\"operator\":\"IN\",\"names\":[\"BUTTON_CLICKED\",\"BUTTON_CLICKED\"]},\"name\":\"name\",\"description\":\"description\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"status\":\"ACTIVE\"}"));
         EventTriggerResponse response = client.triggers().partialUpdate(
             "triggerReferenceId",
             PartialUpdateRequest
                 .builder()
-                .body(
-                    TriggerPartialUpdate
-                        .builder()
-                        .build()
-                )
                 .build()
         );
         RecordedRequest request = server.takeRequest();
@@ -364,6 +374,14 @@ public class TriggersWireTest {
             + "  },\n"
             + "  \"enabled\": true,\n"
             + "  \"type\": \"CONVERSATION_CREATED\",\n"
+            + "  \"condition\": {\n"
+            + "    \"eventConditionType\": \"userEventName\",\n"
+            + "    \"operator\": \"IN\",\n"
+            + "    \"names\": [\n"
+            + "      \"BUTTON_CLICKED\",\n"
+            + "      \"BUTTON_CLICKED\"\n"
+            + "    ]\n"
+            + "  },\n"
             + "  \"name\": \"name\",\n"
             + "  \"description\": \"description\",\n"
             + "  \"createdAt\": \"2024-01-15T09:30:00Z\",\n"

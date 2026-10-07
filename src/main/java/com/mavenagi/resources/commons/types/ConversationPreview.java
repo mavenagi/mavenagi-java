@@ -267,9 +267,10 @@ public final class ConversationPreview implements IBaseConversationResponse {
     }
 
     /**
-     * @return The agent variant this conversation is pinned to. Chosen by the agent's traffic rules when
-     * the conversation is created and fixed for its lifetime. Absent when the conversation was
-     * not routed to a variant, for example one created before the agent had variants.
+     * @return The agent variant this conversation is pinned to. Chosen when the conversation is created,
+     * by the agent's traffic rules or by the simulation's <code>simulationContext.variantId</code>, and fixed
+     * for its lifetime. Absent when the conversation was not routed to a variant, for example one
+     * created before the agent had variants.
      */
     @JsonProperty("variantId")
     @java.lang.Override
@@ -477,9 +478,10 @@ public final class ConversationPreview implements IBaseConversationResponse {
         _FinalStage conversationMode(ConversationMode conversationMode);
 
         /**
-         * <p>The agent variant this conversation is pinned to. Chosen by the agent's traffic rules when
-         * the conversation is created and fixed for its lifetime. Absent when the conversation was
-         * not routed to a variant, for example one created before the agent had variants.</p>
+         * <p>The agent variant this conversation is pinned to. Chosen when the conversation is created,
+         * by the agent's traffic rules or by the simulation's <code>simulationContext.variantId</code>, and fixed
+         * for its lifetime. Absent when the conversation was not routed to a variant, for example one
+         * created before the agent had variants.</p>
          */
         _FinalStage variantId(Optional<EntityId> variantId);
 
@@ -638,9 +640,10 @@ public final class ConversationPreview implements IBaseConversationResponse {
         }
 
         /**
-         * <p>The agent variant this conversation is pinned to. Chosen by the agent's traffic rules when
-         * the conversation is created and fixed for its lifetime. Absent when the conversation was
-         * not routed to a variant, for example one created before the agent had variants.</p>
+         * <p>The agent variant this conversation is pinned to. Chosen when the conversation is created,
+         * by the agent's traffic rules or by the simulation's <code>simulationContext.variantId</code>, and fixed
+         * for its lifetime. Absent when the conversation was not routed to a variant, for example one
+         * created before the agent had variants.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -650,9 +653,10 @@ public final class ConversationPreview implements IBaseConversationResponse {
         }
 
         /**
-         * <p>The agent variant this conversation is pinned to. Chosen by the agent's traffic rules when
-         * the conversation is created and fixed for its lifetime. Absent when the conversation was
-         * not routed to a variant, for example one created before the agent had variants.</p>
+         * <p>The agent variant this conversation is pinned to. Chosen when the conversation is created,
+         * by the agent's traffic rules or by the simulation's <code>simulationContext.variantId</code>, and fixed
+         * for its lifetime. Absent when the conversation was not routed to a variant, for example one
+         * created before the agent had variants.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "variantId", nulls = Nulls.SKIP)

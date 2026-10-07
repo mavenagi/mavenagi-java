@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
 import com.mavenagi.resources.commons.types.CapabilityStatus;
-import com.mavenagi.resources.commons.types.EntityIdBase;
+import com.mavenagi.resources.commons.types.EntityIdWithoutAgent;
 import com.mavenagi.resources.intelligentfields.types.EnumOption;
 import java.util.HashMap;
 import java.util.List;
@@ -34,7 +34,7 @@ public final class IntelligentFieldPatchRequest {
 
     private final Optional<List<EnumOption>> enumOptions;
 
-    private final Optional<EntityIdBase> variantId;
+    private final Optional<EntityIdWithoutAgent> variantId;
 
     private final Optional<String> variantAppId;
 
@@ -46,7 +46,7 @@ public final class IntelligentFieldPatchRequest {
             Optional<CapabilityStatus> status,
             Optional<String> description,
             Optional<List<EnumOption>> enumOptions,
-            Optional<EntityIdBase> variantId,
+            Optional<EntityIdWithoutAgent> variantId,
             Optional<String> variantAppId,
             Map<String, Object> additionalProperties) {
         this.appId = appId;
@@ -104,15 +104,15 @@ public final class IntelligentFieldPatchRequest {
     }
 
     /**
-     * @return The agent variant to stage this patch in, by reference ID. Its owning app is <code>variantAppId</code>. Required on an agent with versioned intelligent fields; a patch that omits it there is rejected with reason <code>VARIANT_REQUIRED</code>.
+     * @return The agent variant to stage this patch in. Required on an agent with versioned intelligent fields; a patch that omits it there is rejected with reason <code>VARIANT_REQUIRED</code>.
      */
     @JsonProperty("variantId")
-    public Optional<EntityIdBase> getVariantId() {
+    public Optional<EntityIdWithoutAgent> getVariantId() {
         return variantId;
     }
 
     /**
-     * @return The App ID of the agent variant named by <code>variantId</code>. If not provided, the ID of the calling app will be used — name the owning app to patch in a variant the caller does not own, as the platform's own seeded variants are.
+     * @return Deprecated, use <code>variantId.appId</code>, which wins when both are set.
      */
     @JsonProperty("variantAppId")
     public Optional<String> getVariantAppId() {
@@ -173,7 +173,7 @@ public final class IntelligentFieldPatchRequest {
 
         private Optional<List<EnumOption>> enumOptions = Optional.empty();
 
-        private Optional<EntityIdBase> variantId = Optional.empty();
+        private Optional<EntityIdWithoutAgent> variantId = Optional.empty();
 
         private Optional<String> variantAppId = Optional.empty();
 
@@ -268,21 +268,21 @@ public final class IntelligentFieldPatchRequest {
         }
 
         /**
-         * <p>The agent variant to stage this patch in, by reference ID. Its owning app is <code>variantAppId</code>. Required on an agent with versioned intelligent fields; a patch that omits it there is rejected with reason <code>VARIANT_REQUIRED</code>.</p>
+         * <p>The agent variant to stage this patch in. Required on an agent with versioned intelligent fields; a patch that omits it there is rejected with reason <code>VARIANT_REQUIRED</code>.</p>
          */
         @JsonSetter(value = "variantId", nulls = Nulls.SKIP)
-        public Builder variantId(Optional<EntityIdBase> variantId) {
+        public Builder variantId(Optional<EntityIdWithoutAgent> variantId) {
             this.variantId = variantId;
             return this;
         }
 
-        public Builder variantId(EntityIdBase variantId) {
+        public Builder variantId(EntityIdWithoutAgent variantId) {
             this.variantId = Optional.ofNullable(variantId);
             return this;
         }
 
         /**
-         * <p>The App ID of the agent variant named by <code>variantId</code>. If not provided, the ID of the calling app will be used — name the owning app to patch in a variant the caller does not own, as the platform's own seeded variants are.</p>
+         * <p>Deprecated, use <code>variantId.appId</code>, which wins when both are set.</p>
          */
         @JsonSetter(value = "variantAppId", nulls = Nulls.SKIP)
         public Builder variantAppId(Optional<String> variantAppId) {

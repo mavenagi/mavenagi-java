@@ -46,14 +46,14 @@ public class AsyncRawEventsClient {
     }
 
     /**
-     * Create a new event
+     * Create a new event. Events are immutable, so a create that reuses the <code>referenceId</code> of an existing event in the same app is rejected with a 409 and leaves that event unchanged.
      */
     public CompletableFuture<MavenAGIHttpResponse<EventResponse>> create(EventRequest request) {
         return create(request, null);
     }
 
     /**
-     * Create a new event
+     * Create a new event. Events are immutable, so a create that reuses the <code>referenceId</code> of an existing event in the same app is rejected with a 409 and leaves that event unchanged.
      */
     public CompletableFuture<MavenAGIHttpResponse<EventResponse>> create(
             EventRequest request, RequestOptions requestOptions) {

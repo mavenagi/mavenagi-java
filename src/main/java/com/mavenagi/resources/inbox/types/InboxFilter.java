@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
+import com.mavenagi.resources.commons.types.EntityIdFilter;
 import com.mavenagi.resources.commons.types.InboxItemStatus;
 import com.mavenagi.resources.commons.types.InboxItemType;
 import java.time.OffsetDateTime;
@@ -35,6 +36,8 @@ public final class InboxFilter {
 
     private final Optional<OffsetDateTime> createdBefore;
 
+    private final Optional<List<EntityIdFilter>> variantIds;
+
     private final Map<String, Object> additionalProperties;
 
     private InboxFilter(
@@ -43,12 +46,14 @@ public final class InboxFilter {
             Optional<Set<String>> tags,
             Optional<OffsetDateTime> createdAfter,
             Optional<OffsetDateTime> createdBefore,
+            Optional<List<EntityIdFilter>> variantIds,
             Map<String, Object> additionalProperties) {
         this.statuses = statuses;
         this.type = type;
         this.tags = tags;
         this.createdAfter = createdAfter;
         this.createdBefore = createdBefore;
+        this.variantIds = variantIds;
         this.additionalProperties = additionalProperties;
     }
 
@@ -92,6 +97,20 @@ public final class InboxFilter {
         return createdBefore;
     }
 
+    /**
+     * @return Filter for items raised from conversations pinned to any of these agent variants, by
+     * reference ID and owning app. Only missing-knowledge items are raised from
+     * conversations, so no other item type matches a variant. Simulation conversations don't
+     * count. Omit it to match items whatever variant their conversations ran on.
+     * <p>Reads those conversations, so it needs permission to read conversations as well as the
+     * inbox. At most 10,000 items are considered: those referenced by the most of the
+     * variants' conversations.</p>
+     */
+    @JsonProperty("variantIds")
+    public Optional<List<EntityIdFilter>> getVariantIds() {
+        return variantIds;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -108,12 +127,14 @@ public final class InboxFilter {
                 && type.equals(other.type)
                 && tags.equals(other.tags)
                 && createdAfter.equals(other.createdAfter)
-                && createdBefore.equals(other.createdBefore);
+                && createdBefore.equals(other.createdBefore)
+                && variantIds.equals(other.variantIds);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.statuses, this.type, this.tags, this.createdAfter, this.createdBefore);
+        return Objects.hash(
+                this.statuses, this.type, this.tags, this.createdAfter, this.createdBefore, this.variantIds);
     }
 
     @java.lang.Override
@@ -137,6 +158,8 @@ public final class InboxFilter {
 
         private Optional<OffsetDateTime> createdBefore = Optional.empty();
 
+        private Optional<List<EntityIdFilter>> variantIds = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -148,6 +171,7 @@ public final class InboxFilter {
             tags(other.getTags());
             createdAfter(other.getCreatedAfter());
             createdBefore(other.getCreatedBefore());
+            variantIds(other.getVariantIds());
             return this;
         }
 
@@ -221,8 +245,28 @@ public final class InboxFilter {
             return this;
         }
 
+        /**
+         * <p>Filter for items raised from conversations pinned to any of these agent variants, by
+         * reference ID and owning app. Only missing-knowledge items are raised from
+         * conversations, so no other item type matches a variant. Simulation conversations don't
+         * count. Omit it to match items whatever variant their conversations ran on.</p>
+         * <p>Reads those conversations, so it needs permission to read conversations as well as the
+         * inbox. At most 10,000 items are considered: those referenced by the most of the
+         * variants' conversations.</p>
+         */
+        @JsonSetter(value = "variantIds", nulls = Nulls.SKIP)
+        public Builder variantIds(Optional<List<EntityIdFilter>> variantIds) {
+            this.variantIds = variantIds;
+            return this;
+        }
+
+        public Builder variantIds(List<EntityIdFilter> variantIds) {
+            this.variantIds = Optional.ofNullable(variantIds);
+            return this;
+        }
+
         public InboxFilter build() {
-            return new InboxFilter(statuses, type, tags, createdAfter, createdBefore, additionalProperties);
+            return new InboxFilter(statuses, type, tags, createdAfter, createdBefore, variantIds, additionalProperties);
         }
     }
 }

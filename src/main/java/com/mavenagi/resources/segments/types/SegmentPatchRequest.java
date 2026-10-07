@@ -12,7 +12,6 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
-import com.mavenagi.resources.commons.types.EntityIdWithoutAgent;
 import com.mavenagi.resources.commons.types.Precondition;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,8 +31,6 @@ public final class SegmentPatchRequest {
 
     private final Optional<SegmentStatus> status;
 
-    private final Optional<EntityIdWithoutAgent> variantId;
-
     private final Map<String, Object> additionalProperties;
 
     private SegmentPatchRequest(
@@ -42,14 +39,12 @@ public final class SegmentPatchRequest {
             Optional<String> description,
             Optional<Precondition> precondition,
             Optional<SegmentStatus> status,
-            Optional<EntityIdWithoutAgent> variantId,
             Map<String, Object> additionalProperties) {
         this.appId = appId;
         this.name = name;
         this.description = description;
         this.precondition = precondition;
         this.status = status;
-        this.variantId = variantId;
         this.additionalProperties = additionalProperties;
     }
 
@@ -93,17 +88,6 @@ public final class SegmentPatchRequest {
         return status;
     }
 
-    /**
-     * @return The agent variant this patch is scoped to. When set, the patch is staged in that
-     * variant's working set instead of being applied to the agent's live configuration.
-     * <p>Omit this field to patch the agent directly. Variant scoping is not active yet: a
-     * variant supplied today is accepted and ignored, and the patch applies to the agent.</p>
-     */
-    @JsonProperty("variantId")
-    public Optional<EntityIdWithoutAgent> getVariantId() {
-        return variantId;
-    }
-
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -120,13 +104,12 @@ public final class SegmentPatchRequest {
                 && name.equals(other.name)
                 && description.equals(other.description)
                 && precondition.equals(other.precondition)
-                && status.equals(other.status)
-                && variantId.equals(other.variantId);
+                && status.equals(other.status);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.appId, this.name, this.description, this.precondition, this.status, this.variantId);
+        return Objects.hash(this.appId, this.name, this.description, this.precondition, this.status);
     }
 
     @java.lang.Override
@@ -150,8 +133,6 @@ public final class SegmentPatchRequest {
 
         private Optional<SegmentStatus> status = Optional.empty();
 
-        private Optional<EntityIdWithoutAgent> variantId = Optional.empty();
-
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -163,7 +144,6 @@ public final class SegmentPatchRequest {
             description(other.getDescription());
             precondition(other.getPrecondition());
             status(other.getStatus());
-            variantId(other.getVariantId());
             return this;
         }
 
@@ -237,26 +217,8 @@ public final class SegmentPatchRequest {
             return this;
         }
 
-        /**
-         * <p>The agent variant this patch is scoped to. When set, the patch is staged in that
-         * variant's working set instead of being applied to the agent's live configuration.</p>
-         * <p>Omit this field to patch the agent directly. Variant scoping is not active yet: a
-         * variant supplied today is accepted and ignored, and the patch applies to the agent.</p>
-         */
-        @JsonSetter(value = "variantId", nulls = Nulls.SKIP)
-        public Builder variantId(Optional<EntityIdWithoutAgent> variantId) {
-            this.variantId = variantId;
-            return this;
-        }
-
-        public Builder variantId(EntityIdWithoutAgent variantId) {
-            this.variantId = Optional.ofNullable(variantId);
-            return this;
-        }
-
         public SegmentPatchRequest build() {
-            return new SegmentPatchRequest(
-                    appId, name, description, precondition, status, variantId, additionalProperties);
+            return new SegmentPatchRequest(appId, name, description, precondition, status, additionalProperties);
         }
     }
 }

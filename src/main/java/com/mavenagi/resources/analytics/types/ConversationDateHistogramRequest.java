@@ -87,6 +87,8 @@ public final class ConversationDateHistogramRequest implements IConversationAnal
      * <li><code>ErroredActions</code>: &quot;Action Name - App Name&quot; (e.g., &quot;Get Balance - Core Banking&quot;)</li>
      * <li><code>Users</code>: User identifier value (e.g., &quot;user@example.com&quot;)</li>
      * <li><code>InboxItems</code>: Inbox item title</li>
+     * <li><code>Variant</code>: Variant title, or its reference ID when it has none; <code>BEFORE_VERSIONING</code> for conversations with no variant</li>
+     * <li><code>IntelligentFields</code>: Intelligent field name</li>
      * <li><code>HumanAgents</code>: Human agent display name</li>
      * <li><code>HumanAgentsWithInserts</code>: Human agent display name (for agents who made inserts)</li>
      * <li>Other fields: Field value as stored (e.g., &quot;GOOD&quot;, &quot;NEEDS_IMPROVEMENT&quot; for Quality)</li>
@@ -183,6 +185,8 @@ public final class ConversationDateHistogramRequest implements IConversationAnal
          * <li><code>ErroredActions</code>: &quot;Action Name - App Name&quot; (e.g., &quot;Get Balance - Core Banking&quot;)</li>
          * <li><code>Users</code>: User identifier value (e.g., &quot;user@example.com&quot;)</li>
          * <li><code>InboxItems</code>: Inbox item title</li>
+         * <li><code>Variant</code>: Variant title, or its reference ID when it has none; <code>BEFORE_VERSIONING</code> for conversations with no variant</li>
+         * <li><code>IntelligentFields</code>: Intelligent field name</li>
          * <li><code>HumanAgents</code>: Human agent display name</li>
          * <li><code>HumanAgentsWithInserts</code>: Human agent display name (for agents who made inserts)</li>
          * <li>Other fields: Field value as stored (e.g., &quot;GOOD&quot;, &quot;NEEDS_IMPROVEMENT&quot; for Quality)</li>
@@ -254,6 +258,8 @@ public final class ConversationDateHistogramRequest implements IConversationAnal
          * <li><code>ErroredActions</code>: &quot;Action Name - App Name&quot; (e.g., &quot;Get Balance - Core Banking&quot;)</li>
          * <li><code>Users</code>: User identifier value (e.g., &quot;user@example.com&quot;)</li>
          * <li><code>InboxItems</code>: Inbox item title</li>
+         * <li><code>Variant</code>: Variant title, or its reference ID when it has none; <code>BEFORE_VERSIONING</code> for conversations with no variant</li>
+         * <li><code>IntelligentFields</code>: Intelligent field name</li>
          * <li><code>HumanAgents</code>: Human agent display name</li>
          * <li><code>HumanAgentsWithInserts</code>: Human agent display name (for agents who made inserts)</li>
          * <li>Other fields: Field value as stored (e.g., &quot;GOOD&quot;, &quot;NEEDS_IMPROVEMENT&quot; for Quality)</li>
@@ -276,6 +282,8 @@ public final class ConversationDateHistogramRequest implements IConversationAnal
          * <li><code>ErroredActions</code>: &quot;Action Name - App Name&quot; (e.g., &quot;Get Balance - Core Banking&quot;)</li>
          * <li><code>Users</code>: User identifier value (e.g., &quot;user@example.com&quot;)</li>
          * <li><code>InboxItems</code>: Inbox item title</li>
+         * <li><code>Variant</code>: Variant title, or its reference ID when it has none; <code>BEFORE_VERSIONING</code> for conversations with no variant</li>
+         * <li><code>IntelligentFields</code>: Intelligent field name</li>
          * <li><code>HumanAgents</code>: Human agent display name</li>
          * <li><code>HumanAgentsWithInserts</code>: Human agent display name (for agents who made inserts)</li>
          * <li>Other fields: Field value as stored (e.g., &quot;GOOD&quot;, &quot;NEEDS_IMPROVEMENT&quot; for Quality)</li>

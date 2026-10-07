@@ -83,6 +83,8 @@ public class AsyncConversationClient {
      * Update mutable conversation fields.
      * <p>The <code>appId</code> field can be provided to update a conversation owned by a different app.
      * All other fields will overwrite the existing value on the conversation only if provided.</p>
+     * <p>A closed conversation (<code>open</code> set to false) cannot be reopened: a patch setting <code>open</code> to true
+     * returns a 400. Its other fields can still be patched.</p>
      */
     public CompletableFuture<ConversationResponse> patch(String conversationId) {
         return this.rawClient.patch(conversationId).thenApply(response -> response.body());
@@ -92,6 +94,8 @@ public class AsyncConversationClient {
      * Update mutable conversation fields.
      * <p>The <code>appId</code> field can be provided to update a conversation owned by a different app.
      * All other fields will overwrite the existing value on the conversation only if provided.</p>
+     * <p>A closed conversation (<code>open</code> set to false) cannot be reopened: a patch setting <code>open</code> to true
+     * returns a 400. Its other fields can still be patched.</p>
      */
     public CompletableFuture<ConversationResponse> patch(String conversationId, ConversationPatchRequest request) {
         return this.rawClient.patch(conversationId, request).thenApply(response -> response.body());
@@ -101,6 +105,8 @@ public class AsyncConversationClient {
      * Update mutable conversation fields.
      * <p>The <code>appId</code> field can be provided to update a conversation owned by a different app.
      * All other fields will overwrite the existing value on the conversation only if provided.</p>
+     * <p>A closed conversation (<code>open</code> set to false) cannot be reopened: a patch setting <code>open</code> to true
+     * returns a 400. Its other fields can still be patched.</p>
      */
     public CompletableFuture<ConversationResponse> patch(
             String conversationId, ConversationPatchRequest request, RequestOptions requestOptions) {
@@ -162,6 +168,7 @@ public class AsyncConversationClient {
 
     /**
      * Append messages to an existing conversation. The conversation must be initialized first. If a message with the same ID already exists, it will be ignored. Messages do not allow modification.
+     * <p>A closed conversation (<code>open</code> set to false) takes no new messages and returns a 400.</p>
      */
     public CompletableFuture<ConversationResponse> appendNewMessages(
             String conversationId, List<ConversationMessageRequest> request) {
@@ -170,6 +177,7 @@ public class AsyncConversationClient {
 
     /**
      * Append messages to an existing conversation. The conversation must be initialized first. If a message with the same ID already exists, it will be ignored. Messages do not allow modification.
+     * <p>A closed conversation (<code>open</code> set to false) takes no new messages and returns a 400.</p>
      */
     public CompletableFuture<ConversationResponse> appendNewMessages(
             String conversationId, List<ConversationMessageRequest> request, RequestOptions requestOptions) {
@@ -181,6 +189,7 @@ public class AsyncConversationClient {
     /**
      * Get an answer from Maven for a given user question. If the user question or its answer already exists,
      * they will be reused and will not be updated. Messages do not allow modification once generated.
+     * <p>A closed conversation (<code>open</code> set to false) takes no new questions and returns a 400.</p>
      * <p>Concurrency Behavior:</p>
      * <ul>
      * <li>If another API call is made for the same user question while a response is mid-stream, partial answers may be returned.</li>
@@ -198,6 +207,7 @@ public class AsyncConversationClient {
     /**
      * Get an answer from Maven for a given user question. If the user question or its answer already exists,
      * they will be reused and will not be updated. Messages do not allow modification once generated.
+     * <p>A closed conversation (<code>open</code> set to false) takes no new questions and returns a 400.</p>
      * <p>Concurrency Behavior:</p>
      * <ul>
      * <li>If another API call is made for the same user question while a response is mid-stream, partial answers may be returned.</li>
@@ -219,6 +229,7 @@ public class AsyncConversationClient {
      * Action and metadata events should overwrite past data and do not need concatenation.
      * <p>If the user question or its answer already exists, they will be reused and will not be updated.
      * Messages do not allow modification once generated.</p>
+     * <p>A closed conversation (<code>open</code> set to false) takes no new questions and returns a 400.</p>
      * <p>Concurrency Behavior:</p>
      * <ul>
      * <li>If another API call is made for the same user question while a response is mid-stream, partial answers may be returned.</li>
@@ -239,6 +250,7 @@ public class AsyncConversationClient {
      * Action and metadata events should overwrite past data and do not need concatenation.
      * <p>If the user question or its answer already exists, they will be reused and will not be updated.
      * Messages do not allow modification once generated.</p>
+     * <p>A closed conversation (<code>open</code> set to false) takes no new questions and returns a 400.</p>
      * <p>Concurrency Behavior:</p>
      * <ul>
      * <li>If another API call is made for the same user question while a response is mid-stream, partial answers may be returned.</li>
@@ -293,6 +305,7 @@ public class AsyncConversationClient {
      * Action forms can not be submitted more than once, attempting to do so will result in an error.
      * <p>Additionally, form submission is only allowed when the form is the last message in the conversation.
      * Forms should be disabled in surface UI if a conversation continues and they remain unsubmitted.</p>
+     * <p>A form cannot be submitted on a closed conversation (<code>open</code> set to false): that returns a 400.</p>
      */
     public CompletableFuture<ConversationResponse> submitActionForm(
             String conversationId, SubmitActionFormRequest request) {
@@ -304,6 +317,7 @@ public class AsyncConversationClient {
      * Action forms can not be submitted more than once, attempting to do so will result in an error.
      * <p>Additionally, form submission is only allowed when the form is the last message in the conversation.
      * Forms should be disabled in surface UI if a conversation continues and they remain unsubmitted.</p>
+     * <p>A form cannot be submitted on a closed conversation (<code>open</code> set to false): that returns a 400.</p>
      */
     public CompletableFuture<ConversationResponse> submitActionForm(
             String conversationId, SubmitActionFormRequest request, RequestOptions requestOptions) {
@@ -315,6 +329,7 @@ public class AsyncConversationClient {
     /**
      * Replaced by <code>updateConversationMetadata</code>.
      * <p>Adds metadata to an existing conversation. If a metadata field already exists, it will be overwritten.</p>
+     * <p>A closed conversation (<code>open</code> set to false) takes no new metadata and returns a 400.</p>
      */
     public CompletableFuture<Map<String, String>> addConversationMetadata(
             String conversationId, Map<String, String> request) {
@@ -324,6 +339,7 @@ public class AsyncConversationClient {
     /**
      * Replaced by <code>updateConversationMetadata</code>.
      * <p>Adds metadata to an existing conversation. If a metadata field already exists, it will be overwritten.</p>
+     * <p>A closed conversation (<code>open</code> set to false) takes no new metadata and returns a 400.</p>
      */
     public CompletableFuture<Map<String, String>> addConversationMetadata(
             String conversationId, Map<String, String> request, RequestOptions requestOptions) {
@@ -338,6 +354,7 @@ public class AsyncConversationClient {
      * <p>If a metadata field already exists for the calling app, it will be overwritten.
      * If it does not exist, it will be added. Will not remove metadata fields.</p>
      * <p>Returns all metadata saved by any app on the conversation.</p>
+     * <p>A closed conversation (<code>open</code> set to false) takes no new metadata and returns a 400.</p>
      */
     public CompletableFuture<ConversationMetadata> updateConversationMetadata(
             String conversationId, UpdateMetadataRequest request) {
@@ -352,6 +369,7 @@ public class AsyncConversationClient {
      * <p>If a metadata field already exists for the calling app, it will be overwritten.
      * If it does not exist, it will be added. Will not remove metadata fields.</p>
      * <p>Returns all metadata saved by any app on the conversation.</p>
+     * <p>A closed conversation (<code>open</code> set to false) takes no new metadata and returns a 400.</p>
      */
     public CompletableFuture<ConversationMetadata> updateConversationMetadata(
             String conversationId, UpdateMetadataRequest request, RequestOptions requestOptions) {

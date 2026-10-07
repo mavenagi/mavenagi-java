@@ -15,6 +15,7 @@ import com.mavenagi.core.ObjectMappers;
 import com.mavenagi.resources.capabilities.types.CapabilitySortField;
 import com.mavenagi.resources.commons.types.CapabilityStatus;
 import com.mavenagi.resources.commons.types.CapabilityType;
+import com.mavenagi.resources.commons.types.EntityIdWithoutAgent;
 import com.mavenagi.resources.commons.types.IBaseCappedPaginatedRequest;
 import java.util.HashMap;
 import java.util.List;
@@ -45,6 +46,8 @@ public final class CapabilitiesSearchRequest implements IBaseCappedPaginatedRequ
 
     private final Optional<CapabilitySortField> sortId;
 
+    private final Optional<EntityIdWithoutAgent> variantId;
+
     private final Optional<String> variantReferenceId;
 
     private final Optional<String> variantAppId;
@@ -62,6 +65,7 @@ public final class CapabilitiesSearchRequest implements IBaseCappedPaginatedRequ
             Optional<String> description,
             Optional<Boolean> userInteractionRequired,
             Optional<CapabilitySortField> sortId,
+            Optional<EntityIdWithoutAgent> variantId,
             Optional<String> variantReferenceId,
             Optional<String> variantAppId,
             Map<String, Object> additionalProperties) {
@@ -75,6 +79,7 @@ public final class CapabilitiesSearchRequest implements IBaseCappedPaginatedRequ
         this.description = description;
         this.userInteractionRequired = userInteractionRequired;
         this.sortId = sortId;
+        this.variantId = variantId;
         this.variantReferenceId = variantReferenceId;
         this.variantAppId = variantAppId;
         this.additionalProperties = additionalProperties;
@@ -171,13 +176,21 @@ public final class CapabilitiesSearchRequest implements IBaseCappedPaginatedRequ
      * request that omits it there is rejected with reason <code>VARIANT_REQUIRED</code>. Otherwise,
      * if omitted, the agent's only variant is used.
      */
+    @JsonProperty("variantId")
+    public Optional<EntityIdWithoutAgent> getVariantId() {
+        return variantId;
+    }
+
+    /**
+     * @return Deprecated, use <code>variantId</code>, which wins when both are set.
+     */
     @JsonProperty("variantReferenceId")
     public Optional<String> getVariantReferenceId() {
         return variantReferenceId;
     }
 
     /**
-     * @return The app that owns the agent variant. Defaults to the calling app.
+     * @return Deprecated, use <code>variantId</code>, which wins when both are set.
      */
     @JsonProperty("variantAppId")
     public Optional<String> getVariantAppId() {
@@ -206,6 +219,7 @@ public final class CapabilitiesSearchRequest implements IBaseCappedPaginatedRequ
                 && description.equals(other.description)
                 && userInteractionRequired.equals(other.userInteractionRequired)
                 && sortId.equals(other.sortId)
+                && variantId.equals(other.variantId)
                 && variantReferenceId.equals(other.variantReferenceId)
                 && variantAppId.equals(other.variantAppId);
     }
@@ -223,6 +237,7 @@ public final class CapabilitiesSearchRequest implements IBaseCappedPaginatedRequ
                 this.description,
                 this.userInteractionRequired,
                 this.sortId,
+                this.variantId,
                 this.variantReferenceId,
                 this.variantAppId);
     }
@@ -258,6 +273,8 @@ public final class CapabilitiesSearchRequest implements IBaseCappedPaginatedRequ
 
         private Optional<CapabilitySortField> sortId = Optional.empty();
 
+        private Optional<EntityIdWithoutAgent> variantId = Optional.empty();
+
         private Optional<String> variantReferenceId = Optional.empty();
 
         private Optional<String> variantAppId = Optional.empty();
@@ -278,6 +295,7 @@ public final class CapabilitiesSearchRequest implements IBaseCappedPaginatedRequ
             description(other.getDescription());
             userInteractionRequired(other.getUserInteractionRequired());
             sortId(other.getSortId());
+            variantId(other.getVariantId());
             variantReferenceId(other.getVariantReferenceId());
             variantAppId(other.getVariantAppId());
             return this;
@@ -431,6 +449,20 @@ public final class CapabilitiesSearchRequest implements IBaseCappedPaginatedRequ
          * request that omits it there is rejected with reason <code>VARIANT_REQUIRED</code>. Otherwise,
          * if omitted, the agent's only variant is used.</p>
          */
+        @JsonSetter(value = "variantId", nulls = Nulls.SKIP)
+        public Builder variantId(Optional<EntityIdWithoutAgent> variantId) {
+            this.variantId = variantId;
+            return this;
+        }
+
+        public Builder variantId(EntityIdWithoutAgent variantId) {
+            this.variantId = Optional.ofNullable(variantId);
+            return this;
+        }
+
+        /**
+         * <p>Deprecated, use <code>variantId</code>, which wins when both are set.</p>
+         */
         @JsonSetter(value = "variantReferenceId", nulls = Nulls.SKIP)
         public Builder variantReferenceId(Optional<String> variantReferenceId) {
             this.variantReferenceId = variantReferenceId;
@@ -443,7 +475,7 @@ public final class CapabilitiesSearchRequest implements IBaseCappedPaginatedRequ
         }
 
         /**
-         * <p>The app that owns the agent variant. Defaults to the calling app.</p>
+         * <p>Deprecated, use <code>variantId</code>, which wins when both are set.</p>
          */
         @JsonSetter(value = "variantAppId", nulls = Nulls.SKIP)
         public Builder variantAppId(Optional<String> variantAppId) {
@@ -468,6 +500,7 @@ public final class CapabilitiesSearchRequest implements IBaseCappedPaginatedRequ
                     description,
                     userInteractionRequired,
                     sortId,
+                    variantId,
                     variantReferenceId,
                     variantAppId,
                     additionalProperties);

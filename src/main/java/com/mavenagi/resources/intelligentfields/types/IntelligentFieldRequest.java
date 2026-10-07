@@ -65,7 +65,7 @@ public final class IntelligentFieldRequest implements IIntelligentFieldBase, IIn
     }
 
     /**
-     * @return Target entity type for evaluation. Only CONVERSATION is supported at this time. The backend will return an error for other types.
+     * @return Target entity type for evaluation. CONVERSATION is supported, and AGENT_USER is supported for agents with user-level intelligent fields enabled. The backend will return an error for other types.
      */
     @JsonProperty("entityType")
     @java.lang.Override
@@ -74,7 +74,7 @@ public final class IntelligentFieldRequest implements IIntelligentFieldBase, IIn
     }
 
     /**
-     * @return ID of the agent variant this field belongs to, if applicable
+     * @return On a request, the agent variant to stage the write in. On a response, the variant the request named, if any; absent when it named none.
      */
     @JsonProperty("variantId")
     @java.lang.Override
@@ -189,7 +189,7 @@ public final class IntelligentFieldRequest implements IIntelligentFieldBase, IIn
 
     public interface EntityTypeStage {
         /**
-         * <p>Target entity type for evaluation. Only CONVERSATION is supported at this time. The backend will return an error for other types.</p>
+         * <p>Target entity type for evaluation. CONVERSATION is supported, and AGENT_USER is supported for agents with user-level intelligent fields enabled. The backend will return an error for other types.</p>
          */
         ValidationTypeStage entityType(@NotNull EntityType entityType);
 
@@ -237,7 +237,7 @@ public final class IntelligentFieldRequest implements IIntelligentFieldBase, IIn
         IntelligentFieldRequest build();
 
         /**
-         * <p>ID of the agent variant this field belongs to, if applicable</p>
+         * <p>On a request, the agent variant to stage the write in. On a response, the variant the request named, if any; absent when it named none.</p>
          */
         _FinalStage variantId(Optional<EntityIdWithoutAgent> variantId);
 
@@ -297,8 +297,8 @@ public final class IntelligentFieldRequest implements IIntelligentFieldBase, IIn
         }
 
         /**
-         * <p>Target entity type for evaluation. Only CONVERSATION is supported at this time. The backend will return an error for other types.</p>
-         * <p>Target entity type for evaluation. Only CONVERSATION is supported at this time. The backend will return an error for other types.</p>
+         * <p>Target entity type for evaluation. CONVERSATION is supported, and AGENT_USER is supported for agents with user-level intelligent fields enabled. The backend will return an error for other types.</p>
+         * <p>Target entity type for evaluation. CONVERSATION is supported, and AGENT_USER is supported for agents with user-level intelligent fields enabled. The backend will return an error for other types.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -417,7 +417,7 @@ public final class IntelligentFieldRequest implements IIntelligentFieldBase, IIn
         }
 
         /**
-         * <p>ID of the agent variant this field belongs to, if applicable</p>
+         * <p>On a request, the agent variant to stage the write in. On a response, the variant the request named, if any; absent when it named none.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -427,7 +427,7 @@ public final class IntelligentFieldRequest implements IIntelligentFieldBase, IIn
         }
 
         /**
-         * <p>ID of the agent variant this field belongs to, if applicable</p>
+         * <p>On a request, the agent variant to stage the write in. On a response, the variant the request named, if any; absent when it named none.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "variantId", nulls = Nulls.SKIP)

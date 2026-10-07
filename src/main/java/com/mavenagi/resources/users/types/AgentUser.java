@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
 import com.mavenagi.resources.commons.types.AppUserIdentifier;
+import com.mavenagi.resources.commons.types.IntelligentFieldValueResponse;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,6 +40,8 @@ public final class AgentUser {
 
     private final List<AppUserSummary> users;
 
+    private final Optional<List<IntelligentFieldValueResponse>> intelligentFieldValues;
+
     private final Map<String, Object> additionalProperties;
 
     private AgentUser(
@@ -48,6 +51,7 @@ public final class AgentUser {
             Set<AppUserIdentifier> identifiers,
             Optional<String> defaultName,
             List<AppUserSummary> users,
+            Optional<List<IntelligentFieldValueResponse>> intelligentFieldValues,
             Map<String, Object> additionalProperties) {
         this.id = id;
         this.createdAt = createdAt;
@@ -55,6 +59,7 @@ public final class AgentUser {
         this.identifiers = identifiers;
         this.defaultName = defaultName;
         this.users = users;
+        this.intelligentFieldValues = intelligentFieldValues;
         this.additionalProperties = additionalProperties;
     }
 
@@ -108,6 +113,14 @@ public final class AgentUser {
         return users;
     }
 
+    /**
+     * @return Latest successful values of the agent user's intelligent fields.
+     */
+    @JsonProperty("intelligentFieldValues")
+    public Optional<List<IntelligentFieldValueResponse>> getIntelligentFieldValues() {
+        return intelligentFieldValues;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -125,12 +138,20 @@ public final class AgentUser {
                 && updatedAt.equals(other.updatedAt)
                 && identifiers.equals(other.identifiers)
                 && defaultName.equals(other.defaultName)
-                && users.equals(other.users);
+                && users.equals(other.users)
+                && intelligentFieldValues.equals(other.intelligentFieldValues);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.id, this.createdAt, this.updatedAt, this.identifiers, this.defaultName, this.users);
+        return Objects.hash(
+                this.id,
+                this.createdAt,
+                this.updatedAt,
+                this.identifiers,
+                this.defaultName,
+                this.users,
+                this.intelligentFieldValues);
     }
 
     @java.lang.Override
@@ -194,6 +215,13 @@ public final class AgentUser {
         _FinalStage addUsers(AppUserSummary users);
 
         _FinalStage addAllUsers(List<AppUserSummary> users);
+
+        /**
+         * <p>Latest successful values of the agent user's intelligent fields.</p>
+         */
+        _FinalStage intelligentFieldValues(Optional<List<IntelligentFieldValueResponse>> intelligentFieldValues);
+
+        _FinalStage intelligentFieldValues(List<IntelligentFieldValueResponse> intelligentFieldValues);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -203,6 +231,8 @@ public final class AgentUser {
         private OffsetDateTime createdAt;
 
         private OffsetDateTime updatedAt;
+
+        private Optional<List<IntelligentFieldValueResponse>> intelligentFieldValues = Optional.empty();
 
         private List<AppUserSummary> users = new ArrayList<>();
 
@@ -223,6 +253,7 @@ public final class AgentUser {
             identifiers(other.getIdentifiers());
             defaultName(other.getDefaultName());
             users(other.getUsers());
+            intelligentFieldValues(other.getIntelligentFieldValues());
             return this;
         }
 
@@ -259,6 +290,27 @@ public final class AgentUser {
         @JsonSetter("updatedAt")
         public _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt) {
             this.updatedAt = Objects.requireNonNull(updatedAt, "updatedAt must not be null");
+            return this;
+        }
+
+        /**
+         * <p>Latest successful values of the agent user's intelligent fields.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage intelligentFieldValues(List<IntelligentFieldValueResponse> intelligentFieldValues) {
+            this.intelligentFieldValues = Optional.ofNullable(intelligentFieldValues);
+            return this;
+        }
+
+        /**
+         * <p>Latest successful values of the agent user's intelligent fields.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "intelligentFieldValues", nulls = Nulls.SKIP)
+        public _FinalStage intelligentFieldValues(
+                Optional<List<IntelligentFieldValueResponse>> intelligentFieldValues) {
+            this.intelligentFieldValues = intelligentFieldValues;
             return this;
         }
 
@@ -359,7 +411,15 @@ public final class AgentUser {
 
         @java.lang.Override
         public AgentUser build() {
-            return new AgentUser(id, createdAt, updatedAt, identifiers, defaultName, users, additionalProperties);
+            return new AgentUser(
+                    id,
+                    createdAt,
+                    updatedAt,
+                    identifiers,
+                    defaultName,
+                    users,
+                    intelligentFieldValues,
+                    additionalProperties);
         }
     }
 }

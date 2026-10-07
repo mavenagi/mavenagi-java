@@ -9,13 +9,15 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public final class ConversationField {
     public static final ConversationField ACTIONS = new ConversationField(Value.ACTIONS, "Actions");
 
+    public static final ConversationField INTELLIGENT_FIELDS =
+            new ConversationField(Value.INTELLIGENT_FIELDS, "IntelligentFields");
+
     public static final ConversationField USER_MESSAGE_COUNT =
             new ConversationField(Value.USER_MESSAGE_COUNT, "UserMessageCount");
 
     public static final ConversationField CHARTERS = new ConversationField(Value.CHARTERS, "Charters");
 
-    public static final ConversationField INTELLIGENT_FIELD =
-            new ConversationField(Value.INTELLIGENT_FIELD, "IntelligentField");
+    public static final ConversationField VARIANT = new ConversationField(Value.VARIANT, "Variant");
 
     public static final ConversationField FIRST_RESPONSE_TIME =
             new ConversationField(Value.FIRST_RESPONSE_TIME, "FirstResponseTime");
@@ -29,6 +31,9 @@ public final class ConversationField {
     public static final ConversationField TAGS = new ConversationField(Value.TAGS, "Tags");
 
     public static final ConversationField CSAT = new ConversationField(Value.CSAT, "Csat");
+
+    public static final ConversationField INTELLIGENT_FIELD =
+            new ConversationField(Value.INTELLIGENT_FIELD, "IntelligentField");
 
     public static final ConversationField THUMBS_UP_COUNT =
             new ConversationField(Value.THUMBS_UP_COUNT, "ThumbsUpCount");
@@ -129,12 +134,14 @@ public final class ConversationField {
         switch (value) {
             case ACTIONS:
                 return visitor.visitActions();
+            case INTELLIGENT_FIELDS:
+                return visitor.visitIntelligentFields();
             case USER_MESSAGE_COUNT:
                 return visitor.visitUserMessageCount();
             case CHARTERS:
                 return visitor.visitCharters();
-            case INTELLIGENT_FIELD:
-                return visitor.visitIntelligentField();
+            case VARIANT:
+                return visitor.visitVariant();
             case FIRST_RESPONSE_TIME:
                 return visitor.visitFirstResponseTime();
             case HUMAN_AGENTS_WITH_INSERTS:
@@ -145,6 +152,8 @@ public final class ConversationField {
                 return visitor.visitTags();
             case CSAT:
                 return visitor.visitCsat();
+            case INTELLIGENT_FIELD:
+                return visitor.visitIntelligentField();
             case THUMBS_UP_COUNT:
                 return visitor.visitThumbsUpCount();
             case ACTION_EXECUTION_COUNT:
@@ -210,12 +219,14 @@ public final class ConversationField {
         switch (value) {
             case "Actions":
                 return ACTIONS;
+            case "IntelligentFields":
+                return INTELLIGENT_FIELDS;
             case "UserMessageCount":
                 return USER_MESSAGE_COUNT;
             case "Charters":
                 return CHARTERS;
-            case "IntelligentField":
-                return INTELLIGENT_FIELD;
+            case "Variant":
+                return VARIANT;
             case "FirstResponseTime":
                 return FIRST_RESPONSE_TIME;
             case "HumanAgentsWithInserts":
@@ -226,6 +237,8 @@ public final class ConversationField {
                 return TAGS;
             case "Csat":
                 return CSAT;
+            case "IntelligentField":
+                return INTELLIGENT_FIELD;
             case "ThumbsUpCount":
                 return THUMBS_UP_COUNT;
             case "ActionExecutionCount":
@@ -356,7 +369,11 @@ public final class ConversationField {
 
         INVOLVED_APPS,
 
+        VARIANT,
+
         INTELLIGENT_FIELD,
+
+        INTELLIGENT_FIELDS,
 
         UNKNOWN
     }
@@ -432,7 +449,11 @@ public final class ConversationField {
 
         T visitInvolvedApps();
 
+        T visitVariant();
+
         T visitIntelligentField();
+
+        T visitIntelligentFields();
 
         T visitUnknown(String unknownType);
     }

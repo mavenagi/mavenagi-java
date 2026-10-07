@@ -15,6 +15,7 @@ import com.mavenagi.core.ObjectMappers;
 import com.mavenagi.resources.commons.types.ConversationMode;
 import com.mavenagi.resources.commons.types.EntityIdFilter;
 import com.mavenagi.resources.commons.types.FeedbackType;
+import com.mavenagi.resources.commons.types.IntelligentFieldFilter;
 import com.mavenagi.resources.commons.types.NumberRange;
 import com.mavenagi.resources.commons.types.Quality;
 import com.mavenagi.resources.commons.types.QualityReason;
@@ -65,6 +66,8 @@ public final class ConversationFilter {
 
     private final Optional<List<ConversationMode>> conversationMode;
 
+    private final Optional<Boolean> deleted;
+
     private final Optional<List<String>> tags;
 
     private final Optional<List<String>> agentUserIds;
@@ -84,6 +87,8 @@ public final class ConversationFilter {
     private final Optional<Boolean> anyMsgCharterMode;
 
     private final Optional<List<EntityIdFilter>> inboxItemIds;
+
+    private final Optional<List<EntityIdFilter>> variantIds;
 
     private final Optional<SimulationFilter> simulationFilter;
 
@@ -111,6 +116,7 @@ public final class ConversationFilter {
             Optional<List<ResponseLength>> responseLength,
             Optional<List<Sentiment>> sentiment,
             Optional<List<ConversationMode>> conversationMode,
+            Optional<Boolean> deleted,
             Optional<List<String>> tags,
             Optional<List<String>> agentUserIds,
             Optional<List<ResolutionStatus>> resolutionStatus,
@@ -121,6 +127,7 @@ public final class ConversationFilter {
             Optional<List<EntityIdFilter>> matchedCharterIds,
             Optional<Boolean> anyMsgCharterMode,
             Optional<List<EntityIdFilter>> inboxItemIds,
+            Optional<List<EntityIdFilter>> variantIds,
             Optional<SimulationFilter> simulationFilter,
             Optional<IntelligentFieldFilter> intelligentFields,
             Optional<List<BillableFilterField>> billable,
@@ -142,6 +149,7 @@ public final class ConversationFilter {
         this.responseLength = responseLength;
         this.sentiment = sentiment;
         this.conversationMode = conversationMode;
+        this.deleted = deleted;
         this.tags = tags;
         this.agentUserIds = agentUserIds;
         this.resolutionStatus = resolutionStatus;
@@ -152,6 +160,7 @@ public final class ConversationFilter {
         this.matchedCharterIds = matchedCharterIds;
         this.anyMsgCharterMode = anyMsgCharterMode;
         this.inboxItemIds = inboxItemIds;
+        this.variantIds = variantIds;
         this.simulationFilter = simulationFilter;
         this.intelligentFields = intelligentFields;
         this.billable = billable;
@@ -318,6 +327,17 @@ public final class ConversationFilter {
     }
 
     /**
+     * @return Filter by whether the conversation has been deleted with <code>deleteConversation</code>. <code>true</code>
+     * returns only deleted conversations, <code>false</code> excludes them. When unset, both are returned.
+     * <p>The filter reads the search index, which is updated shortly after a deletion. Use the
+     * <code>deleted</code> field on each result to confirm.</p>
+     */
+    @JsonProperty("deleted")
+    public Optional<Boolean> getDeleted() {
+        return deleted;
+    }
+
+    /**
      * @return Filter by tags applied to the conversation
      */
     @JsonProperty("tags")
@@ -409,6 +429,19 @@ public final class ConversationFilter {
     }
 
     /**
+     * @return Filter by the agent variant each conversation is pinned to (its <code>variantId</code>), by
+     * reference ID and owning app, resolved against the calling agent. Matches conversations
+     * pinned to any of them.
+     * <p>Omit it to match every conversation in the window, whichever variant it ran on. A
+     * conversation from before the agent's conversations were pinned has no variant, so it
+     * matches no list; grouping by <code>Variant</code> reports those as <code>BEFORE_VERSIONING</code>.</p>
+     */
+    @JsonProperty("variantIds")
+    public Optional<List<EntityIdFilter>> getVariantIds() {
+        return variantIds;
+    }
+
+    /**
      * @return Whether to include simulation conversations in search results. Defaults to only non-simulation conversations.
      */
     @JsonProperty("simulationFilter")
@@ -467,6 +500,7 @@ public final class ConversationFilter {
                 && responseLength.equals(other.responseLength)
                 && sentiment.equals(other.sentiment)
                 && conversationMode.equals(other.conversationMode)
+                && deleted.equals(other.deleted)
                 && tags.equals(other.tags)
                 && agentUserIds.equals(other.agentUserIds)
                 && resolutionStatus.equals(other.resolutionStatus)
@@ -477,6 +511,7 @@ public final class ConversationFilter {
                 && matchedCharterIds.equals(other.matchedCharterIds)
                 && anyMsgCharterMode.equals(other.anyMsgCharterMode)
                 && inboxItemIds.equals(other.inboxItemIds)
+                && variantIds.equals(other.variantIds)
                 && simulationFilter.equals(other.simulationFilter)
                 && intelligentFields.equals(other.intelligentFields)
                 && billable.equals(other.billable);
@@ -502,6 +537,7 @@ public final class ConversationFilter {
                 this.responseLength,
                 this.sentiment,
                 this.conversationMode,
+                this.deleted,
                 this.tags,
                 this.agentUserIds,
                 this.resolutionStatus,
@@ -512,6 +548,7 @@ public final class ConversationFilter {
                 this.matchedCharterIds,
                 this.anyMsgCharterMode,
                 this.inboxItemIds,
+                this.variantIds,
                 this.simulationFilter,
                 this.intelligentFields,
                 this.billable);
@@ -562,6 +599,8 @@ public final class ConversationFilter {
 
         private Optional<List<ConversationMode>> conversationMode = Optional.empty();
 
+        private Optional<Boolean> deleted = Optional.empty();
+
         private Optional<List<String>> tags = Optional.empty();
 
         private Optional<List<String>> agentUserIds = Optional.empty();
@@ -581,6 +620,8 @@ public final class ConversationFilter {
         private Optional<Boolean> anyMsgCharterMode = Optional.empty();
 
         private Optional<List<EntityIdFilter>> inboxItemIds = Optional.empty();
+
+        private Optional<List<EntityIdFilter>> variantIds = Optional.empty();
 
         private Optional<SimulationFilter> simulationFilter = Optional.empty();
 
@@ -611,6 +652,7 @@ public final class ConversationFilter {
             responseLength(other.getResponseLength());
             sentiment(other.getSentiment());
             conversationMode(other.getConversationMode());
+            deleted(other.getDeleted());
             tags(other.getTags());
             agentUserIds(other.getAgentUserIds());
             resolutionStatus(other.getResolutionStatus());
@@ -621,6 +663,7 @@ public final class ConversationFilter {
             matchedCharterIds(other.getMatchedCharterIds());
             anyMsgCharterMode(other.getAnyMsgCharterMode());
             inboxItemIds(other.getInboxItemIds());
+            variantIds(other.getVariantIds());
             simulationFilter(other.getSimulationFilter());
             intelligentFields(other.getIntelligentFields());
             billable(other.getBillable());
@@ -889,6 +932,23 @@ public final class ConversationFilter {
         }
 
         /**
+         * <p>Filter by whether the conversation has been deleted with <code>deleteConversation</code>. <code>true</code>
+         * returns only deleted conversations, <code>false</code> excludes them. When unset, both are returned.</p>
+         * <p>The filter reads the search index, which is updated shortly after a deletion. Use the
+         * <code>deleted</code> field on each result to confirm.</p>
+         */
+        @JsonSetter(value = "deleted", nulls = Nulls.SKIP)
+        public Builder deleted(Optional<Boolean> deleted) {
+            this.deleted = deleted;
+            return this;
+        }
+
+        public Builder deleted(Boolean deleted) {
+            this.deleted = Optional.ofNullable(deleted);
+            return this;
+        }
+
+        /**
          * <p>Filter by tags applied to the conversation</p>
          */
         @JsonSetter(value = "tags", nulls = Nulls.SKIP)
@@ -1040,6 +1100,25 @@ public final class ConversationFilter {
         }
 
         /**
+         * <p>Filter by the agent variant each conversation is pinned to (its <code>variantId</code>), by
+         * reference ID and owning app, resolved against the calling agent. Matches conversations
+         * pinned to any of them.</p>
+         * <p>Omit it to match every conversation in the window, whichever variant it ran on. A
+         * conversation from before the agent's conversations were pinned has no variant, so it
+         * matches no list; grouping by <code>Variant</code> reports those as <code>BEFORE_VERSIONING</code>.</p>
+         */
+        @JsonSetter(value = "variantIds", nulls = Nulls.SKIP)
+        public Builder variantIds(Optional<List<EntityIdFilter>> variantIds) {
+            this.variantIds = variantIds;
+            return this;
+        }
+
+        public Builder variantIds(List<EntityIdFilter> variantIds) {
+            this.variantIds = Optional.ofNullable(variantIds);
+            return this;
+        }
+
+        /**
          * <p>Whether to include simulation conversations in search results. Defaults to only non-simulation conversations.</p>
          */
         @JsonSetter(value = "simulationFilter", nulls = Nulls.SKIP)
@@ -1106,6 +1185,7 @@ public final class ConversationFilter {
                     responseLength,
                     sentiment,
                     conversationMode,
+                    deleted,
                     tags,
                     agentUserIds,
                     resolutionStatus,
@@ -1116,6 +1196,7 @@ public final class ConversationFilter {
                     matchedCharterIds,
                     anyMsgCharterMode,
                     inboxItemIds,
+                    variantIds,
                     simulationFilter,
                     intelligentFields,
                     billable,

@@ -16,6 +16,7 @@ import com.mavenagi.core.Nullable;
 import com.mavenagi.core.NullableNonemptyFilter;
 import com.mavenagi.core.ObjectMappers;
 import com.mavenagi.resources.commons.types.EntityId;
+import com.mavenagi.resources.commons.types.EntityIdWithoutAgent;
 import com.mavenagi.resources.commons.types.Precondition;
 import java.util.HashMap;
 import java.util.Map;
@@ -40,6 +41,8 @@ public final class CharterContent implements ICharterContent, ICharterBase {
 
     private final String name;
 
+    private final Optional<EntityIdWithoutAgent> variantId;
+
     private final Optional<String> description;
 
     private final Optional<String> manual;
@@ -54,6 +57,7 @@ public final class CharterContent implements ICharterContent, ICharterBase {
             Optional<Integer> userRank,
             CharterReferences references,
             String name,
+            Optional<EntityIdWithoutAgent> variantId,
             Optional<String> description,
             Optional<String> manual,
             Map<String, Object> additionalProperties) {
@@ -64,6 +68,7 @@ public final class CharterContent implements ICharterContent, ICharterBase {
         this.userRank = userRank;
         this.references = references;
         this.name = name;
+        this.variantId = variantId;
         this.description = description;
         this.manual = manual;
         this.additionalProperties = additionalProperties;
@@ -162,6 +167,18 @@ public final class CharterContent implements ICharterContent, ICharterBase {
     }
 
     /**
+     * @return ID of the agent variant this charter belongs to, if applicable.
+     * <p>On a write this is validated -- an unknown variant is rejected, as is any
+     * variant while variant scoping is off for charters -- but not yet applied: the
+     * write reaches the agent's live configuration either way.</p>
+     */
+    @JsonProperty("variantId")
+    @java.lang.Override
+    public Optional<EntityIdWithoutAgent> getVariantId() {
+        return variantId;
+    }
+
+    /**
      * @return A plain text description of this charter. If not set, existing description is preserved if present.
      */
     @JsonProperty("description")
@@ -213,6 +230,7 @@ public final class CharterContent implements ICharterContent, ICharterBase {
                 && userRank.equals(other.userRank)
                 && references.equals(other.references)
                 && name.equals(other.name)
+                && variantId.equals(other.variantId)
                 && description.equals(other.description)
                 && manual.equals(other.manual);
     }
@@ -227,6 +245,7 @@ public final class CharterContent implements ICharterContent, ICharterBase {
                 this.userRank,
                 this.references,
                 this.name,
+                this.variantId,
                 this.description,
                 this.manual);
     }
@@ -322,6 +341,16 @@ public final class CharterContent implements ICharterContent, ICharterBase {
         _FinalStage userRank(Integer userRank);
 
         /**
+         * <p>ID of the agent variant this charter belongs to, if applicable.</p>
+         * <p>On a write this is validated -- an unknown variant is rejected, as is any
+         * variant while variant scoping is off for charters -- but not yet applied: the
+         * write reaches the agent's live configuration either way.</p>
+         */
+        _FinalStage variantId(Optional<EntityIdWithoutAgent> variantId);
+
+        _FinalStage variantId(EntityIdWithoutAgent variantId);
+
+        /**
          * <p>A plain text description of this charter. If not set, existing description is preserved if present.</p>
          */
         _FinalStage description(Optional<String> description);
@@ -351,6 +380,8 @@ public final class CharterContent implements ICharterContent, ICharterBase {
 
         private Optional<String> description = Optional.empty();
 
+        private Optional<EntityIdWithoutAgent> variantId = Optional.empty();
+
         private Optional<Integer> userRank = Optional.empty();
 
         private Optional<CharterType> type = Optional.empty();
@@ -373,6 +404,7 @@ public final class CharterContent implements ICharterContent, ICharterBase {
             userRank(other.getUserRank());
             references(other.getReferences());
             name(other.getName());
+            variantId(other.getVariantId());
             description(other.getDescription());
             manual(other.getManual());
             return this;
@@ -459,6 +491,32 @@ public final class CharterContent implements ICharterContent, ICharterBase {
         @JsonSetter(value = "description", nulls = Nulls.SKIP)
         public _FinalStage description(Optional<String> description) {
             this.description = description;
+            return this;
+        }
+
+        /**
+         * <p>ID of the agent variant this charter belongs to, if applicable.</p>
+         * <p>On a write this is validated -- an unknown variant is rejected, as is any
+         * variant while variant scoping is off for charters -- but not yet applied: the
+         * write reaches the agent's live configuration either way.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage variantId(EntityIdWithoutAgent variantId) {
+            this.variantId = Optional.ofNullable(variantId);
+            return this;
+        }
+
+        /**
+         * <p>ID of the agent variant this charter belongs to, if applicable.</p>
+         * <p>On a write this is validated -- an unknown variant is rejected, as is any
+         * variant while variant scoping is off for charters -- but not yet applied: the
+         * write reaches the agent's live configuration either way.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "variantId", nulls = Nulls.SKIP)
+        public _FinalStage variantId(Optional<EntityIdWithoutAgent> variantId) {
+            this.variantId = variantId;
             return this;
         }
 
@@ -636,6 +694,7 @@ public final class CharterContent implements ICharterContent, ICharterBase {
                     userRank,
                     references,
                     name,
+                    variantId,
                     description,
                     manual,
                     additionalProperties);

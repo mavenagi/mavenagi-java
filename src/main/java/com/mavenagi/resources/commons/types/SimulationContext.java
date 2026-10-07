@@ -27,16 +27,20 @@ public final class SimulationContext {
 
     private final Optional<Set<EntityId>> availableKnowledgeBases;
 
+    private final Optional<EntityIdWithoutAgent> variantId;
+
     private final Map<String, Object> additionalProperties;
 
     private SimulationContext(
             Optional<String> additionalPromptText,
             Optional<LlmPersona> persona,
             Optional<Set<EntityId>> availableKnowledgeBases,
+            Optional<EntityIdWithoutAgent> variantId,
             Map<String, Object> additionalProperties) {
         this.additionalPromptText = additionalPromptText;
         this.persona = persona;
         this.availableKnowledgeBases = availableKnowledgeBases;
+        this.variantId = variantId;
         this.additionalProperties = additionalProperties;
     }
 
@@ -65,6 +69,21 @@ public final class SimulationContext {
         return availableKnowledgeBases;
     }
 
+    /**
+     * @return The agent variant to run the simulation on, instead of the one the agent's traffic rules
+     * would choose. Any ACTIVE variant of the agent with no staged edits can be named, including
+     * one with no traffic. The conversation is pinned to it when created, like any other
+     * conversation; the conversation's <code>variantId</code> reports it, and this field is not returned.
+     * <p>Rejected with reason <code>VARIANT_NOT_ACTIVE</code> for an archived or deleted variant, and
+     * <code>VARIANT_HAS_STAGED_EDITS</code> for one with staged edits (publish them first). Rejected too
+     * while agent variants aren't enabled for the agent. A conversation that already exists
+     * keeps the variant it was created with.</p>
+     */
+    @JsonProperty("variantId")
+    public Optional<EntityIdWithoutAgent> getVariantId() {
+        return variantId;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -79,12 +98,13 @@ public final class SimulationContext {
     private boolean equalTo(SimulationContext other) {
         return additionalPromptText.equals(other.additionalPromptText)
                 && persona.equals(other.persona)
-                && availableKnowledgeBases.equals(other.availableKnowledgeBases);
+                && availableKnowledgeBases.equals(other.availableKnowledgeBases)
+                && variantId.equals(other.variantId);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.additionalPromptText, this.persona, this.availableKnowledgeBases);
+        return Objects.hash(this.additionalPromptText, this.persona, this.availableKnowledgeBases, this.variantId);
     }
 
     @java.lang.Override
@@ -104,6 +124,8 @@ public final class SimulationContext {
 
         private Optional<Set<EntityId>> availableKnowledgeBases = Optional.empty();
 
+        private Optional<EntityIdWithoutAgent> variantId = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -113,6 +135,7 @@ public final class SimulationContext {
             additionalPromptText(other.getAdditionalPromptText());
             persona(other.getPersona());
             availableKnowledgeBases(other.getAvailableKnowledgeBases());
+            variantId(other.getVariantId());
             return this;
         }
 
@@ -159,8 +182,30 @@ public final class SimulationContext {
             return this;
         }
 
+        /**
+         * <p>The agent variant to run the simulation on, instead of the one the agent's traffic rules
+         * would choose. Any ACTIVE variant of the agent with no staged edits can be named, including
+         * one with no traffic. The conversation is pinned to it when created, like any other
+         * conversation; the conversation's <code>variantId</code> reports it, and this field is not returned.</p>
+         * <p>Rejected with reason <code>VARIANT_NOT_ACTIVE</code> for an archived or deleted variant, and
+         * <code>VARIANT_HAS_STAGED_EDITS</code> for one with staged edits (publish them first). Rejected too
+         * while agent variants aren't enabled for the agent. A conversation that already exists
+         * keeps the variant it was created with.</p>
+         */
+        @JsonSetter(value = "variantId", nulls = Nulls.SKIP)
+        public Builder variantId(Optional<EntityIdWithoutAgent> variantId) {
+            this.variantId = variantId;
+            return this;
+        }
+
+        public Builder variantId(EntityIdWithoutAgent variantId) {
+            this.variantId = Optional.ofNullable(variantId);
+            return this;
+        }
+
         public SimulationContext build() {
-            return new SimulationContext(additionalPromptText, persona, availableKnowledgeBases, additionalProperties);
+            return new SimulationContext(
+                    additionalPromptText, persona, availableKnowledgeBases, variantId, additionalProperties);
         }
     }
 }

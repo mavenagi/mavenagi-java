@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
 import com.mavenagi.resources.commons.types.EntityIdBase;
+import com.mavenagi.resources.commons.types.EventCondition;
 import com.mavenagi.resources.commons.types.EventTriggerType;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,6 +26,8 @@ import org.jetbrains.annotations.NotNull;
 public final class EventTriggerRequest implements IEventTriggerBase {
     private final EventTriggerType type;
 
+    private final Optional<EventCondition> condition;
+
     private final Optional<String> name;
 
     private final String description;
@@ -35,11 +38,13 @@ public final class EventTriggerRequest implements IEventTriggerBase {
 
     private EventTriggerRequest(
             EventTriggerType type,
+            Optional<EventCondition> condition,
             Optional<String> name,
             String description,
             EntityIdBase triggerId,
             Map<String, Object> additionalProperties) {
         this.type = type;
+        this.condition = condition;
         this.name = name;
         this.description = description;
         this.triggerId = triggerId;
@@ -57,6 +62,18 @@ public final class EventTriggerRequest implements IEventTriggerBase {
     @java.lang.Override
     public EventTriggerType getType() {
         return type;
+    }
+
+    /**
+     * @return Narrows which events fire this trigger. Without one the trigger fires for every event on
+     * the agent. Re-registering writes whatever condition the request carries, so omitting it
+     * removes one; PATCH changes or removes a condition without re-registering.
+     * <p>Only allowed on <code>EVENT_CREATED</code>; the other trigger types reject it.</p>
+     */
+    @JsonProperty("condition")
+    @java.lang.Override
+    public Optional<EventCondition> getCondition() {
+        return condition;
     }
 
     /**
@@ -96,6 +113,7 @@ public final class EventTriggerRequest implements IEventTriggerBase {
 
     private boolean equalTo(EventTriggerRequest other) {
         return type.equals(other.type)
+                && condition.equals(other.condition)
                 && name.equals(other.name)
                 && description.equals(other.description)
                 && triggerId.equals(other.triggerId);
@@ -103,7 +121,7 @@ public final class EventTriggerRequest implements IEventTriggerBase {
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.type, this.name, this.description, this.triggerId);
+        return Objects.hash(this.type, this.condition, this.name, this.description, this.triggerId);
     }
 
     @java.lang.Override
@@ -146,6 +164,16 @@ public final class EventTriggerRequest implements IEventTriggerBase {
         EventTriggerRequest build();
 
         /**
+         * <p>Narrows which events fire this trigger. Without one the trigger fires for every event on
+         * the agent. Re-registering writes whatever condition the request carries, so omitting it
+         * removes one; PATCH changes or removes a condition without re-registering.</p>
+         * <p>Only allowed on <code>EVENT_CREATED</code>; the other trigger types reject it.</p>
+         */
+        _FinalStage condition(Optional<EventCondition> condition);
+
+        _FinalStage condition(EventCondition condition);
+
+        /**
          * <p>The name of the trigger, displayed to end users. If not set, a name is derived from the app ID and trigger type.</p>
          */
         _FinalStage name(Optional<String> name);
@@ -163,6 +191,8 @@ public final class EventTriggerRequest implements IEventTriggerBase {
 
         private Optional<String> name = Optional.empty();
 
+        private Optional<EventCondition> condition = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -171,6 +201,7 @@ public final class EventTriggerRequest implements IEventTriggerBase {
         @java.lang.Override
         public Builder from(EventTriggerRequest other) {
             type(other.getType());
+            condition(other.getCondition());
             name(other.getName());
             description(other.getDescription());
             triggerId(other.getTriggerId());
@@ -241,9 +272,35 @@ public final class EventTriggerRequest implements IEventTriggerBase {
             return this;
         }
 
+        /**
+         * <p>Narrows which events fire this trigger. Without one the trigger fires for every event on
+         * the agent. Re-registering writes whatever condition the request carries, so omitting it
+         * removes one; PATCH changes or removes a condition without re-registering.</p>
+         * <p>Only allowed on <code>EVENT_CREATED</code>; the other trigger types reject it.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage condition(EventCondition condition) {
+            this.condition = Optional.ofNullable(condition);
+            return this;
+        }
+
+        /**
+         * <p>Narrows which events fire this trigger. Without one the trigger fires for every event on
+         * the agent. Re-registering writes whatever condition the request carries, so omitting it
+         * removes one; PATCH changes or removes a condition without re-registering.</p>
+         * <p>Only allowed on <code>EVENT_CREATED</code>; the other trigger types reject it.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "condition", nulls = Nulls.SKIP)
+        public _FinalStage condition(Optional<EventCondition> condition) {
+            this.condition = condition;
+            return this;
+        }
+
         @java.lang.Override
         public EventTriggerRequest build() {
-            return new EventTriggerRequest(type, name, description, triggerId, additionalProperties);
+            return new EventTriggerRequest(type, condition, name, description, triggerId, additionalProperties);
         }
     }
 }

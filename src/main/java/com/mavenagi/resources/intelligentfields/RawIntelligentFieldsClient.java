@@ -48,7 +48,14 @@ public class RawIntelligentFieldsClient {
      * <code>fieldId.referenceId</code>. Intelligent fields hold LLM-generated values computed for
      * entities such as conversations.
      * <p>New fields are created with <code>status: INACTIVE</code> and are not evaluated until activated
-     * with the patch endpoint. <code>definition</code> is limited to 5,000 characters.</p>
+     * with the patch endpoint. A new field created in a <code>variantId</code> starts <code>ACTIVE</code> instead,
+     * since it is evaluated only once that variant is published and given traffic; it starts
+     * <code>INACTIVE</code> while the agent is at its limit of active fields. <code>definition</code> is limited
+     * to 5,000 characters.</p>
+     * <p>A replace that names a <code>variantId</code> must keep the field's <code>validationType</code> as that
+     * variant has it, or it is rejected with reason <code>INTELLIGENT_FIELD_TYPE_CHANGED</code>. To use
+     * a different type, create a new field. A field deleted in the variant may be recreated
+     * with any type.</p>
      */
     public MavenAGIHttpResponse<IntelligentFieldResponse> createOrUpdate(IntelligentFieldRequest request) {
         return createOrUpdate(request, null);
@@ -59,7 +66,14 @@ public class RawIntelligentFieldsClient {
      * <code>fieldId.referenceId</code>. Intelligent fields hold LLM-generated values computed for
      * entities such as conversations.
      * <p>New fields are created with <code>status: INACTIVE</code> and are not evaluated until activated
-     * with the patch endpoint. <code>definition</code> is limited to 5,000 characters.</p>
+     * with the patch endpoint. A new field created in a <code>variantId</code> starts <code>ACTIVE</code> instead,
+     * since it is evaluated only once that variant is published and given traffic; it starts
+     * <code>INACTIVE</code> while the agent is at its limit of active fields. <code>definition</code> is limited
+     * to 5,000 characters.</p>
+     * <p>A replace that names a <code>variantId</code> must keep the field's <code>validationType</code> as that
+     * variant has it, or it is rejected with reason <code>INTELLIGENT_FIELD_TYPE_CHANGED</code>. To use
+     * a different type, create a new field. A field deleted in the variant may be recreated
+     * with any type.</p>
      */
     public MavenAGIHttpResponse<IntelligentFieldResponse> createOrUpdate(
             IntelligentFieldRequest request, RequestOptions requestOptions) {
@@ -323,7 +337,7 @@ public class RawIntelligentFieldsClient {
      * <p>Soft delete an intelligent field. Only INACTIVE fields can be deleted.</p>
      * <p>Deleted fields are excluded from search results but can still be retrieved by ID.
      * Creating a new field with the same referenceId as a deleted field will overwrite
-     * the deleted field and restore it to INACTIVE status.</p>
+     * the deleted field and restore it with the status a new field gets.</p>
      * <p>Deleted fields cannot be modified.</p>
      */
     public MavenAGIHttpResponse<IntelligentFieldResponse> delete(String fieldReferenceId) {
@@ -336,7 +350,7 @@ public class RawIntelligentFieldsClient {
      * <p>Soft delete an intelligent field. Only INACTIVE fields can be deleted.</p>
      * <p>Deleted fields are excluded from search results but can still be retrieved by ID.
      * Creating a new field with the same referenceId as a deleted field will overwrite
-     * the deleted field and restore it to INACTIVE status.</p>
+     * the deleted field and restore it with the status a new field gets.</p>
      * <p>Deleted fields cannot be modified.</p>
      */
     public MavenAGIHttpResponse<IntelligentFieldResponse> delete(
@@ -350,7 +364,7 @@ public class RawIntelligentFieldsClient {
      * <p>Soft delete an intelligent field. Only INACTIVE fields can be deleted.</p>
      * <p>Deleted fields are excluded from search results but can still be retrieved by ID.
      * Creating a new field with the same referenceId as a deleted field will overwrite
-     * the deleted field and restore it to INACTIVE status.</p>
+     * the deleted field and restore it with the status a new field gets.</p>
      * <p>Deleted fields cannot be modified.</p>
      */
     public MavenAGIHttpResponse<IntelligentFieldResponse> delete(

@@ -5,33 +5,41 @@ package com.mavenagi.resources.triggers.requests;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.mavenagi.core.Nullable;
+import com.mavenagi.core.NullableNonemptyFilter;
 import com.mavenagi.core.ObjectMappers;
-import com.mavenagi.resources.triggers.types.TriggerPartialUpdate;
+import com.mavenagi.resources.commons.types.EventCondition;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = PartialUpdateRequest.Builder.class)
 public final class PartialUpdateRequest {
     private final Optional<String> appId;
 
-    private final TriggerPartialUpdate body;
+    private final Optional<Boolean> enabled;
+
+    private final Optional<EventCondition> condition;
 
     private final Map<String, Object> additionalProperties;
 
     private PartialUpdateRequest(
-            Optional<String> appId, TriggerPartialUpdate body, Map<String, Object> additionalProperties) {
+            Optional<String> appId,
+            Optional<Boolean> enabled,
+            Optional<EventCondition> condition,
+            Map<String, Object> additionalProperties) {
         this.appId = appId;
-        this.body = body;
+        this.enabled = enabled;
+        this.condition = condition;
         this.additionalProperties = additionalProperties;
     }
 
@@ -43,9 +51,29 @@ public final class PartialUpdateRequest {
         return appId;
     }
 
-    @JsonProperty("body")
-    public TriggerPartialUpdate getBody() {
-        return body;
+    /**
+     * @return Whether the trigger will be called by Maven.
+     */
+    @JsonProperty("enabled")
+    public Optional<Boolean> getEnabled() {
+        return enabled;
+    }
+
+    /**
+     * @return Narrows which events fire this trigger. Omitted leaves the current condition alone; an explicit null removes it, so the trigger fires for every event again.
+     */
+    @JsonIgnore
+    public Optional<EventCondition> getCondition() {
+        if (condition == null) {
+            return Optional.empty();
+        }
+        return condition;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("condition")
+    private Optional<EventCondition> _getCondition() {
+        return condition;
     }
 
     @java.lang.Override
@@ -60,12 +88,12 @@ public final class PartialUpdateRequest {
     }
 
     private boolean equalTo(PartialUpdateRequest other) {
-        return appId.equals(other.appId) && body.equals(other.body);
+        return appId.equals(other.appId) && enabled.equals(other.enabled) && condition.equals(other.condition);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.appId, this.body);
+        return Objects.hash(this.appId, this.enabled, this.condition);
     }
 
     @java.lang.Override
@@ -73,75 +101,85 @@ public final class PartialUpdateRequest {
         return ObjectMappers.stringify(this);
     }
 
-    public static BodyStage builder() {
+    public static Builder builder() {
         return new Builder();
     }
 
-    public interface BodyStage {
-        _FinalStage body(@NotNull TriggerPartialUpdate body);
-
-        Builder from(PartialUpdateRequest other);
-    }
-
-    public interface _FinalStage {
-        PartialUpdateRequest build();
-
-        /**
-         * <p>The App ID of the trigger to update. If not provided, the ID of the calling app will be used.</p>
-         */
-        _FinalStage appId(Optional<String> appId);
-
-        _FinalStage appId(String appId);
-    }
-
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements BodyStage, _FinalStage {
-        private TriggerPartialUpdate body;
-
+    public static final class Builder {
         private Optional<String> appId = Optional.empty();
+
+        private Optional<Boolean> enabled = Optional.empty();
+
+        private Optional<EventCondition> condition = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
 
-        @java.lang.Override
         public Builder from(PartialUpdateRequest other) {
             appId(other.getAppId());
-            body(other.getBody());
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter("body")
-        public _FinalStage body(@NotNull TriggerPartialUpdate body) {
-            this.body = Objects.requireNonNull(body, "body must not be null");
+            enabled(other.getEnabled());
+            condition(other.getCondition());
             return this;
         }
 
         /**
          * <p>The App ID of the trigger to update. If not provided, the ID of the calling app will be used.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
          */
-        @java.lang.Override
-        public _FinalStage appId(String appId) {
+        @JsonSetter(value = "appId", nulls = Nulls.SKIP)
+        public Builder appId(Optional<String> appId) {
+            this.appId = appId;
+            return this;
+        }
+
+        public Builder appId(String appId) {
             this.appId = Optional.ofNullable(appId);
             return this;
         }
 
         /**
-         * <p>The App ID of the trigger to update. If not provided, the ID of the calling app will be used.</p>
+         * <p>Whether the trigger will be called by Maven.</p>
          */
-        @java.lang.Override
-        @JsonSetter(value = "appId", nulls = Nulls.SKIP)
-        public _FinalStage appId(Optional<String> appId) {
-            this.appId = appId;
+        @JsonSetter(value = "enabled", nulls = Nulls.SKIP)
+        public Builder enabled(Optional<Boolean> enabled) {
+            this.enabled = enabled;
             return this;
         }
 
-        @java.lang.Override
+        public Builder enabled(Boolean enabled) {
+            this.enabled = Optional.ofNullable(enabled);
+            return this;
+        }
+
+        /**
+         * <p>Narrows which events fire this trigger. Omitted leaves the current condition alone; an explicit null removes it, so the trigger fires for every event again.</p>
+         */
+        @JsonSetter(value = "condition", nulls = Nulls.SKIP)
+        public Builder condition(Optional<EventCondition> condition) {
+            this.condition = condition;
+            return this;
+        }
+
+        public Builder condition(EventCondition condition) {
+            this.condition = Optional.ofNullable(condition);
+            return this;
+        }
+
+        public Builder condition(Nullable<EventCondition> condition) {
+            if (condition.isNull()) {
+                this.condition = null;
+            } else if (condition.isEmpty()) {
+                this.condition = Optional.empty();
+            } else {
+                this.condition = Optional.of(condition.get());
+            }
+            return this;
+        }
+
         public PartialUpdateRequest build() {
-            return new PartialUpdateRequest(appId, body, additionalProperties);
+            return new PartialUpdateRequest(appId, enabled, condition, additionalProperties);
         }
     }
 }

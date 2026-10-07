@@ -39,7 +39,8 @@ public final class ConversationBasicMetric implements IConversationBasicMetric {
     }
 
     /**
-     * @return Field to apply the metric to.
+     * @return Field to apply the metric to. <code>IntelligentFields</code> is a grouping only and is rejected
+     * here with a 400.
      */
     @JsonProperty("targetField")
     @java.lang.Override
@@ -88,7 +89,8 @@ public final class ConversationBasicMetric implements IConversationBasicMetric {
 
     public interface TargetFieldStage {
         /**
-         * <p>Field to apply the metric to.</p>
+         * <p>Field to apply the metric to. <code>IntelligentFields</code> is a grouping only and is rejected
+         * here with a 400.</p>
          */
         _FinalStage targetField(@NotNull ConversationField targetField);
 
@@ -126,8 +128,10 @@ public final class ConversationBasicMetric implements IConversationBasicMetric {
         }
 
         /**
-         * <p>Field to apply the metric to.</p>
-         * <p>Field to apply the metric to.</p>
+         * <p>Field to apply the metric to. <code>IntelligentFields</code> is a grouping only and is rejected
+         * here with a 400.</p>
+         * <p>Field to apply the metric to. <code>IntelligentFields</code> is a grouping only and is rejected
+         * here with a 400.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override

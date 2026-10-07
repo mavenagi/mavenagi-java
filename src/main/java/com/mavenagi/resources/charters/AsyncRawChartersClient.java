@@ -196,6 +196,17 @@ public class AsyncRawChartersClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "appId", request.getAppId().get(), false);
         }
+        if (request.getVariantReferenceId().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl,
+                    "variantReferenceId",
+                    request.getVariantReferenceId().get(),
+                    false);
+        }
+        if (request.getVariantAppId().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "variantAppId", request.getVariantAppId().get(), false);
+        }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)

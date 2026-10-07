@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
 import com.mavenagi.resources.commons.types.CapabilityStatus;
 import com.mavenagi.resources.commons.types.EntityId;
+import com.mavenagi.resources.commons.types.EventCondition;
 import com.mavenagi.resources.commons.types.EventTriggerType;
 import com.mavenagi.resources.commons.types.ICapabilityBase;
 import java.time.OffsetDateTime;
@@ -27,6 +28,8 @@ import org.jetbrains.annotations.NotNull;
 @JsonDeserialize(builder = EventTriggerResponse.Builder.class)
 public final class EventTriggerResponse implements IEventTriggerBase, ICapabilityBase {
     private final EventTriggerType type;
+
+    private final Optional<EventCondition> condition;
 
     private final String name;
 
@@ -46,6 +49,7 @@ public final class EventTriggerResponse implements IEventTriggerBase, ICapabilit
 
     private EventTriggerResponse(
             EventTriggerType type,
+            Optional<EventCondition> condition,
             String name,
             Optional<String> description,
             OffsetDateTime createdAt,
@@ -55,6 +59,7 @@ public final class EventTriggerResponse implements IEventTriggerBase, ICapabilit
             boolean enabled,
             Map<String, Object> additionalProperties) {
         this.type = type;
+        this.condition = condition;
         this.name = name;
         this.description = description;
         this.createdAt = createdAt;
@@ -76,6 +81,18 @@ public final class EventTriggerResponse implements IEventTriggerBase, ICapabilit
     @java.lang.Override
     public EventTriggerType getType() {
         return type;
+    }
+
+    /**
+     * @return Narrows which events fire this trigger. Without one the trigger fires for every event on
+     * the agent. Re-registering writes whatever condition the request carries, so omitting it
+     * removes one; PATCH changes or removes a condition without re-registering.
+     * <p>Only allowed on <code>EVENT_CREATED</code>; the other trigger types reject it.</p>
+     */
+    @JsonProperty("condition")
+    @java.lang.Override
+    public Optional<EventCondition> getCondition() {
+        return condition;
     }
 
     /**
@@ -155,6 +172,7 @@ public final class EventTriggerResponse implements IEventTriggerBase, ICapabilit
 
     private boolean equalTo(EventTriggerResponse other) {
         return type.equals(other.type)
+                && condition.equals(other.condition)
                 && name.equals(other.name)
                 && description.equals(other.description)
                 && createdAt.equals(other.createdAt)
@@ -168,6 +186,7 @@ public final class EventTriggerResponse implements IEventTriggerBase, ICapabilit
     public int hashCode() {
         return Objects.hash(
                 this.type,
+                this.condition,
                 this.name,
                 this.description,
                 this.createdAt,
@@ -247,6 +266,16 @@ public final class EventTriggerResponse implements IEventTriggerBase, ICapabilit
         EventTriggerResponse build();
 
         /**
+         * <p>Narrows which events fire this trigger. Without one the trigger fires for every event on
+         * the agent. Re-registering writes whatever condition the request carries, so omitting it
+         * removes one; PATCH changes or removes a condition without re-registering.</p>
+         * <p>Only allowed on <code>EVENT_CREATED</code>; the other trigger types reject it.</p>
+         */
+        _FinalStage condition(Optional<EventCondition> condition);
+
+        _FinalStage condition(EventCondition condition);
+
+        /**
          * <p>What the capability does. Shown to whoever manages the agent, and for the types the LLM
          * can choose between, used to decide when the capability applies.</p>
          */
@@ -281,6 +310,8 @@ public final class EventTriggerResponse implements IEventTriggerBase, ICapabilit
 
         private Optional<String> description = Optional.empty();
 
+        private Optional<EventCondition> condition = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -289,6 +320,7 @@ public final class EventTriggerResponse implements IEventTriggerBase, ICapabilit
         @java.lang.Override
         public Builder from(EventTriggerResponse other) {
             type(other.getType());
+            condition(other.getCondition());
             name(other.getName());
             description(other.getDescription());
             createdAt(other.getCreatedAt());
@@ -417,10 +449,45 @@ public final class EventTriggerResponse implements IEventTriggerBase, ICapabilit
             return this;
         }
 
+        /**
+         * <p>Narrows which events fire this trigger. Without one the trigger fires for every event on
+         * the agent. Re-registering writes whatever condition the request carries, so omitting it
+         * removes one; PATCH changes or removes a condition without re-registering.</p>
+         * <p>Only allowed on <code>EVENT_CREATED</code>; the other trigger types reject it.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage condition(EventCondition condition) {
+            this.condition = Optional.ofNullable(condition);
+            return this;
+        }
+
+        /**
+         * <p>Narrows which events fire this trigger. Without one the trigger fires for every event on
+         * the agent. Re-registering writes whatever condition the request carries, so omitting it
+         * removes one; PATCH changes or removes a condition without re-registering.</p>
+         * <p>Only allowed on <code>EVENT_CREATED</code>; the other trigger types reject it.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "condition", nulls = Nulls.SKIP)
+        public _FinalStage condition(Optional<EventCondition> condition) {
+            this.condition = condition;
+            return this;
+        }
+
         @java.lang.Override
         public EventTriggerResponse build() {
             return new EventTriggerResponse(
-                    type, name, description, createdAt, updatedAt, status, triggerId, enabled, additionalProperties);
+                    type,
+                    condition,
+                    name,
+                    description,
+                    createdAt,
+                    updatedAt,
+                    status,
+                    triggerId,
+                    enabled,
+                    additionalProperties);
         }
     }
 }

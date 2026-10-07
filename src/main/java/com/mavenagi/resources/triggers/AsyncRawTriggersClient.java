@@ -24,11 +24,14 @@ import com.mavenagi.resources.triggers.types.EventTriggerResponse;
 import com.mavenagi.resources.triggers.types.EventTriggersSearchRequest;
 import com.mavenagi.resources.triggers.types.EventTriggersSearchResponse;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Headers;
 import okhttp3.HttpUrl;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -435,9 +438,18 @@ public class AsyncRawTriggersClient {
     }
 
     /**
-     * Deprecated. Use <code>PATCH /v1/capabilities/TRIGGER/{referenceId}</code> with a <code>status</code>, which
-     * publishes and unpublishes any kind of capability the same way.
-     * <p>Updates an event trigger. Only the enabled field is editable.</p>
+     * Updates an event trigger. <code>enabled</code> and <code>condition</code> are the editable fields.
+     * <p><code>PATCH /v1/capabilities/TRIGGER/{referenceId}</code> with a <code>status</code> also turns a trigger on and
+     * off, the same way it publishes and unpublishes any kind of capability.</p>
+     */
+    public CompletableFuture<MavenAGIHttpResponse<EventTriggerResponse>> partialUpdate(String triggerReferenceId) {
+        return partialUpdate(triggerReferenceId, PartialUpdateRequest.builder().build());
+    }
+
+    /**
+     * Updates an event trigger. <code>enabled</code> and <code>condition</code> are the editable fields.
+     * <p><code>PATCH /v1/capabilities/TRIGGER/{referenceId}</code> with a <code>status</code> also turns a trigger on and
+     * off, the same way it publishes and unpublishes any kind of capability.</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<EventTriggerResponse>> partialUpdate(
             String triggerReferenceId, PartialUpdateRequest request) {
@@ -445,9 +457,9 @@ public class AsyncRawTriggersClient {
     }
 
     /**
-     * Deprecated. Use <code>PATCH /v1/capabilities/TRIGGER/{referenceId}</code> with a <code>status</code>, which
-     * publishes and unpublishes any kind of capability the same way.
-     * <p>Updates an event trigger. Only the enabled field is editable.</p>
+     * Updates an event trigger. <code>enabled</code> and <code>condition</code> are the editable fields.
+     * <p><code>PATCH /v1/capabilities/TRIGGER/{referenceId}</code> with a <code>status</code> also turns a trigger on and
+     * off, the same way it publishes and unpublishes any kind of capability.</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<EventTriggerResponse>> partialUpdate(
             String triggerReferenceId, PartialUpdateRequest request, RequestOptions requestOptions) {
@@ -459,10 +471,18 @@ public class AsyncRawTriggersClient {
             QueryStringMapper.addQueryParameter(
                     httpUrl, "appId", request.getAppId().get(), false);
         }
+        Map<String, Object> properties = new HashMap<>();
+        if (request.getEnabled().isPresent()) {
+            properties.put("enabled", request.getEnabled());
+        }
+        if (request.getCondition().isPresent()) {
+            properties.put("condition", request.getCondition());
+        }
         RequestBody body;
         try {
             body = RequestBody.create(
-                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request.getBody()), MediaTypes.APPLICATION_JSON);
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(properties),
+                    MediaType.parse("application/merge-patch+json"));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -470,7 +490,7 @@ public class AsyncRawTriggersClient {
                 .url(httpUrl.build())
                 .method("PATCH", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
+                .addHeader("Content-Type", "application/merge-patch+json")
                 .addHeader("Accept", "application/json");
         Request okhttpRequest = _requestBuilder.build();
         OkHttpClient client = clientOptions.httpClient();

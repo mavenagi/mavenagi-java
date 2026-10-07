@@ -31,14 +31,14 @@ public class AsyncEventsClient {
     }
 
     /**
-     * Create a new event
+     * Create a new event. Events are immutable, so a create that reuses the <code>referenceId</code> of an existing event in the same app is rejected with a 409 and leaves that event unchanged.
      */
     public CompletableFuture<EventResponse> create(EventRequest request) {
         return this.rawClient.create(request).thenApply(response -> response.body());
     }
 
     /**
-     * Create a new event
+     * Create a new event. Events are immutable, so a create that reuses the <code>referenceId</code> of an existing event in the same app is rejected with a 409 and leaves that event unchanged.
      */
     public CompletableFuture<EventResponse> create(EventRequest request, RequestOptions requestOptions) {
         return this.rawClient.create(request, requestOptions).thenApply(response -> response.body());

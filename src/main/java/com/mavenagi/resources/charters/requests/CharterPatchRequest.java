@@ -181,7 +181,7 @@ public final class CharterPatchRequest {
      * @return The agent variant this patch is scoped to. When set, the patch is staged in that
      * variant's working set instead of being applied to the agent's live configuration.
      * <p>Omit this field to patch the agent directly. Variant scoping is not active yet:
-     * a variant supplied today is accepted and ignored, and the patch applies to the
+     * a variant supplied today is validated but not applied, and the patch applies to the
      * agent.</p>
      */
     @JsonProperty("variantId")
@@ -472,7 +472,7 @@ public final class CharterPatchRequest {
          * <p>The agent variant this patch is scoped to. When set, the patch is staged in that
          * variant's working set instead of being applied to the agent's live configuration.</p>
          * <p>Omit this field to patch the agent directly. Variant scoping is not active yet:
-         * a variant supplied today is accepted and ignored, and the patch applies to the
+         * a variant supplied today is validated but not applied, and the patch applies to the
          * agent.</p>
          */
         @JsonSetter(value = "variantId", nulls = Nulls.SKIP)

@@ -9,12 +9,15 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
+import com.mavenagi.resources.commons.types.EventCondition;
 import com.mavenagi.resources.commons.types.EventTriggerType;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
@@ -22,10 +25,14 @@ import org.jetbrains.annotations.NotNull;
 public final class EventTriggerBase implements IEventTriggerBase {
     private final EventTriggerType type;
 
+    private final Optional<EventCondition> condition;
+
     private final Map<String, Object> additionalProperties;
 
-    private EventTriggerBase(EventTriggerType type, Map<String, Object> additionalProperties) {
+    private EventTriggerBase(
+            EventTriggerType type, Optional<EventCondition> condition, Map<String, Object> additionalProperties) {
         this.type = type;
+        this.condition = condition;
         this.additionalProperties = additionalProperties;
     }
 
@@ -42,6 +49,18 @@ public final class EventTriggerBase implements IEventTriggerBase {
         return type;
     }
 
+    /**
+     * @return Narrows which events fire this trigger. Without one the trigger fires for every event on
+     * the agent. Re-registering writes whatever condition the request carries, so omitting it
+     * removes one; PATCH changes or removes a condition without re-registering.
+     * <p>Only allowed on <code>EVENT_CREATED</code>; the other trigger types reject it.</p>
+     */
+    @JsonProperty("condition")
+    @java.lang.Override
+    public Optional<EventCondition> getCondition() {
+        return condition;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -54,12 +73,12 @@ public final class EventTriggerBase implements IEventTriggerBase {
     }
 
     private boolean equalTo(EventTriggerBase other) {
-        return type.equals(other.type);
+        return type.equals(other.type) && condition.equals(other.condition);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.type);
+        return Objects.hash(this.type, this.condition);
     }
 
     @java.lang.Override
@@ -86,11 +105,23 @@ public final class EventTriggerBase implements IEventTriggerBase {
 
     public interface _FinalStage {
         EventTriggerBase build();
+
+        /**
+         * <p>Narrows which events fire this trigger. Without one the trigger fires for every event on
+         * the agent. Re-registering writes whatever condition the request carries, so omitting it
+         * removes one; PATCH changes or removes a condition without re-registering.</p>
+         * <p>Only allowed on <code>EVENT_CREATED</code>; the other trigger types reject it.</p>
+         */
+        _FinalStage condition(Optional<EventCondition> condition);
+
+        _FinalStage condition(EventCondition condition);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements TypeStage, _FinalStage {
         private EventTriggerType type;
+
+        private Optional<EventCondition> condition = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -100,6 +131,7 @@ public final class EventTriggerBase implements IEventTriggerBase {
         @java.lang.Override
         public Builder from(EventTriggerBase other) {
             type(other.getType());
+            condition(other.getCondition());
             return this;
         }
 
@@ -123,9 +155,35 @@ public final class EventTriggerBase implements IEventTriggerBase {
             return this;
         }
 
+        /**
+         * <p>Narrows which events fire this trigger. Without one the trigger fires for every event on
+         * the agent. Re-registering writes whatever condition the request carries, so omitting it
+         * removes one; PATCH changes or removes a condition without re-registering.</p>
+         * <p>Only allowed on <code>EVENT_CREATED</code>; the other trigger types reject it.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage condition(EventCondition condition) {
+            this.condition = Optional.ofNullable(condition);
+            return this;
+        }
+
+        /**
+         * <p>Narrows which events fire this trigger. Without one the trigger fires for every event on
+         * the agent. Re-registering writes whatever condition the request carries, so omitting it
+         * removes one; PATCH changes or removes a condition without re-registering.</p>
+         * <p>Only allowed on <code>EVENT_CREATED</code>; the other trigger types reject it.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "condition", nulls = Nulls.SKIP)
+        public _FinalStage condition(Optional<EventCondition> condition) {
+            this.condition = condition;
+            return this;
+        }
+
         @java.lang.Override
         public EventTriggerBase build() {
-            return new EventTriggerBase(type, additionalProperties);
+            return new EventTriggerBase(type, condition, additionalProperties);
         }
     }
 }

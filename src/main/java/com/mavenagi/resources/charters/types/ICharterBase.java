@@ -3,10 +3,13 @@
  */
 package com.mavenagi.resources.charters.types;
 
+import com.mavenagi.resources.commons.types.EntityIdWithoutAgent;
 import java.util.Optional;
 
 public interface ICharterBase {
     String getName();
+
+    Optional<EntityIdWithoutAgent> getVariantId();
 
     Optional<String> getDescription();
 

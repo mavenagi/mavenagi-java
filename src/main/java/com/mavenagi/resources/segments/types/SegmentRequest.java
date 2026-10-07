@@ -13,7 +13,6 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
 import com.mavenagi.resources.commons.types.EntityIdBase;
-import com.mavenagi.resources.commons.types.EntityIdWithoutAgent;
 import com.mavenagi.resources.commons.types.Precondition;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,8 +29,6 @@ public final class SegmentRequest implements ISegmentBase {
 
     private final EntityIdBase segmentId;
 
-    private final Optional<EntityIdWithoutAgent> variantId;
-
     private final Precondition precondition;
 
     private final Optional<SegmentStatus> status;
@@ -42,14 +39,12 @@ public final class SegmentRequest implements ISegmentBase {
             String name,
             Optional<String> description,
             EntityIdBase segmentId,
-            Optional<EntityIdWithoutAgent> variantId,
             Precondition precondition,
             Optional<SegmentStatus> status,
             Map<String, Object> additionalProperties) {
         this.name = name;
         this.description = description;
         this.segmentId = segmentId;
-        this.variantId = variantId;
         this.precondition = precondition;
         this.status = status;
         this.additionalProperties = additionalProperties;
@@ -79,17 +74,6 @@ public final class SegmentRequest implements ISegmentBase {
     @JsonProperty("segmentId")
     public EntityIdBase getSegmentId() {
         return segmentId;
-    }
-
-    /**
-     * @return The agent variant this write is scoped to. When set, the segment content is staged in
-     * that variant's working set instead of being applied to the agent's live configuration.
-     * <p>Omit this field to write directly to the agent. Variant scoping is not active yet: a
-     * variant supplied today is accepted and ignored, and the write applies to the agent.</p>
-     */
-    @JsonProperty("variantId")
-    public Optional<EntityIdWithoutAgent> getVariantId() {
-        return variantId;
     }
 
     /**
@@ -123,15 +107,13 @@ public final class SegmentRequest implements ISegmentBase {
         return name.equals(other.name)
                 && description.equals(other.description)
                 && segmentId.equals(other.segmentId)
-                && variantId.equals(other.variantId)
                 && precondition.equals(other.precondition)
                 && status.equals(other.status);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(
-                this.name, this.description, this.segmentId, this.variantId, this.precondition, this.status);
+        return Objects.hash(this.name, this.description, this.segmentId, this.precondition, this.status);
     }
 
     @java.lang.Override
@@ -177,16 +159,6 @@ public final class SegmentRequest implements ISegmentBase {
         _FinalStage description(String description);
 
         /**
-         * <p>The agent variant this write is scoped to. When set, the segment content is staged in
-         * that variant's working set instead of being applied to the agent's live configuration.</p>
-         * <p>Omit this field to write directly to the agent. Variant scoping is not active yet: a
-         * variant supplied today is accepted and ignored, and the write applies to the agent.</p>
-         */
-        _FinalStage variantId(Optional<EntityIdWithoutAgent> variantId);
-
-        _FinalStage variantId(EntityIdWithoutAgent variantId);
-
-        /**
          * <p>Desired status for the segment. If omitted, defaults to ACTIVE. In the future this will become required, so specify ACTIVE or INACTIVE if possible.</p>
          */
         _FinalStage status(Optional<SegmentStatus> status);
@@ -204,8 +176,6 @@ public final class SegmentRequest implements ISegmentBase {
 
         private Optional<SegmentStatus> status = Optional.empty();
 
-        private Optional<EntityIdWithoutAgent> variantId = Optional.empty();
-
         private Optional<String> description = Optional.empty();
 
         @JsonAnySetter
@@ -218,7 +188,6 @@ public final class SegmentRequest implements ISegmentBase {
             name(other.getName());
             description(other.getDescription());
             segmentId(other.getSegmentId());
-            variantId(other.getVariantId());
             precondition(other.getPrecondition());
             status(other.getStatus());
             return this;
@@ -281,32 +250,6 @@ public final class SegmentRequest implements ISegmentBase {
         }
 
         /**
-         * <p>The agent variant this write is scoped to. When set, the segment content is staged in
-         * that variant's working set instead of being applied to the agent's live configuration.</p>
-         * <p>Omit this field to write directly to the agent. Variant scoping is not active yet: a
-         * variant supplied today is accepted and ignored, and the write applies to the agent.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage variantId(EntityIdWithoutAgent variantId) {
-            this.variantId = Optional.ofNullable(variantId);
-            return this;
-        }
-
-        /**
-         * <p>The agent variant this write is scoped to. When set, the segment content is staged in
-         * that variant's working set instead of being applied to the agent's live configuration.</p>
-         * <p>Omit this field to write directly to the agent. Variant scoping is not active yet: a
-         * variant supplied today is accepted and ignored, and the write applies to the agent.</p>
-         */
-        @java.lang.Override
-        @JsonSetter(value = "variantId", nulls = Nulls.SKIP)
-        public _FinalStage variantId(Optional<EntityIdWithoutAgent> variantId) {
-            this.variantId = variantId;
-            return this;
-        }
-
-        /**
          * <p>A plain text description of the segment.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -328,8 +271,7 @@ public final class SegmentRequest implements ISegmentBase {
 
         @java.lang.Override
         public SegmentRequest build() {
-            return new SegmentRequest(
-                    name, description, segmentId, variantId, precondition, status, additionalProperties);
+            return new SegmentRequest(name, description, segmentId, precondition, status, additionalProperties);
         }
     }
 }
