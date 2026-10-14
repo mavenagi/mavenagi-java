@@ -22,10 +22,20 @@ import java.util.Optional;
 public final class CharterGetAncestorsRequest {
     private final Optional<String> appId;
 
+    private final Optional<String> variantReferenceId;
+
+    private final Optional<String> variantAppId;
+
     private final Map<String, Object> additionalProperties;
 
-    private CharterGetAncestorsRequest(Optional<String> appId, Map<String, Object> additionalProperties) {
+    private CharterGetAncestorsRequest(
+            Optional<String> appId,
+            Optional<String> variantReferenceId,
+            Optional<String> variantAppId,
+            Map<String, Object> additionalProperties) {
         this.appId = appId;
+        this.variantReferenceId = variantReferenceId;
+        this.variantAppId = variantAppId;
         this.additionalProperties = additionalProperties;
     }
 
@@ -35,6 +45,28 @@ public final class CharterGetAncestorsRequest {
     @JsonProperty("appId")
     public Optional<String> getAppId() {
         return appId;
+    }
+
+    /**
+     * @return The agent variant reference ID to read the ancestors through. Its staged edits are
+     * included: a charter with a staged edit is read at that edit, a charter created in the
+     * variant is included, and a charter deleted in the variant, whether the delete is
+     * staged or already in its snapshot, is a 404, as is one the variant doesn't carry. If
+     * not provided, the request is rejected with <code>VARIANT_REQUIRED</code> while charters are
+     * versioned for the agent, and otherwise reads through the agent's single variant, as
+     * its snapshot has it, or the published charters while variant reads are off.
+     */
+    @JsonProperty("variantReferenceId")
+    public Optional<String> getVariantReferenceId() {
+        return variantReferenceId;
+    }
+
+    /**
+     * @return The App ID of the agent variant reference. If not provided, the ID of the calling app will be used.
+     */
+    @JsonProperty("variantAppId")
+    public Optional<String> getVariantAppId() {
+        return variantAppId;
     }
 
     @java.lang.Override
@@ -49,12 +81,14 @@ public final class CharterGetAncestorsRequest {
     }
 
     private boolean equalTo(CharterGetAncestorsRequest other) {
-        return appId.equals(other.appId);
+        return appId.equals(other.appId)
+                && variantReferenceId.equals(other.variantReferenceId)
+                && variantAppId.equals(other.variantAppId);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.appId);
+        return Objects.hash(this.appId, this.variantReferenceId, this.variantAppId);
     }
 
     @java.lang.Override
@@ -70,6 +104,10 @@ public final class CharterGetAncestorsRequest {
     public static final class Builder {
         private Optional<String> appId = Optional.empty();
 
+        private Optional<String> variantReferenceId = Optional.empty();
+
+        private Optional<String> variantAppId = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -77,6 +115,8 @@ public final class CharterGetAncestorsRequest {
 
         public Builder from(CharterGetAncestorsRequest other) {
             appId(other.getAppId());
+            variantReferenceId(other.getVariantReferenceId());
+            variantAppId(other.getVariantAppId());
             return this;
         }
 
@@ -94,8 +134,42 @@ public final class CharterGetAncestorsRequest {
             return this;
         }
 
+        /**
+         * <p>The agent variant reference ID to read the ancestors through. Its staged edits are
+         * included: a charter with a staged edit is read at that edit, a charter created in the
+         * variant is included, and a charter deleted in the variant, whether the delete is
+         * staged or already in its snapshot, is a 404, as is one the variant doesn't carry. If
+         * not provided, the request is rejected with <code>VARIANT_REQUIRED</code> while charters are
+         * versioned for the agent, and otherwise reads through the agent's single variant, as
+         * its snapshot has it, or the published charters while variant reads are off.</p>
+         */
+        @JsonSetter(value = "variantReferenceId", nulls = Nulls.SKIP)
+        public Builder variantReferenceId(Optional<String> variantReferenceId) {
+            this.variantReferenceId = variantReferenceId;
+            return this;
+        }
+
+        public Builder variantReferenceId(String variantReferenceId) {
+            this.variantReferenceId = Optional.ofNullable(variantReferenceId);
+            return this;
+        }
+
+        /**
+         * <p>The App ID of the agent variant reference. If not provided, the ID of the calling app will be used.</p>
+         */
+        @JsonSetter(value = "variantAppId", nulls = Nulls.SKIP)
+        public Builder variantAppId(Optional<String> variantAppId) {
+            this.variantAppId = variantAppId;
+            return this;
+        }
+
+        public Builder variantAppId(String variantAppId) {
+            this.variantAppId = Optional.ofNullable(variantAppId);
+            return this;
+        }
+
         public CharterGetAncestorsRequest build() {
-            return new CharterGetAncestorsRequest(appId, additionalProperties);
+            return new CharterGetAncestorsRequest(appId, variantReferenceId, variantAppId, additionalProperties);
         }
     }
 }

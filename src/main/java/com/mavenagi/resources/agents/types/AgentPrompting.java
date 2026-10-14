@@ -66,7 +66,8 @@ public final class AgentPrompting {
     }
 
     /**
-     * @return LLM prompt for category generation.
+     * @return Deprecated. Use <code>categoryIntelligentFieldId</code> instead. Not supported on new agents, and ignored while <code>categoryIntelligentFieldId</code> is set.
+     * <p>LLM prompt for category generation.</p>
      * <p>Use this to specify a fixed set of categories that an LLM should choose from when analyzing a conversation.
      * When not set uses a default prompt which gives the LLM flexibility to determine appropriate categories on its own.</p>
      */
@@ -160,6 +161,7 @@ public final class AgentPrompting {
         _FinalStage additionalPromptText(String additionalPromptText);
 
         /**
+         * <p>Deprecated. Use <code>categoryIntelligentFieldId</code> instead. Not supported on new agents, and ignored while <code>categoryIntelligentFieldId</code> is set.</p>
          * <p>LLM prompt for category generation.</p>
          * <p>Use this to specify a fixed set of categories that an LLM should choose from when analyzing a conversation.
          * When not set uses a default prompt which gives the LLM flexibility to determine appropriate categories on its own.</p>
@@ -258,6 +260,7 @@ public final class AgentPrompting {
         }
 
         /**
+         * <p>Deprecated. Use <code>categoryIntelligentFieldId</code> instead. Not supported on new agents, and ignored while <code>categoryIntelligentFieldId</code> is set.</p>
          * <p>LLM prompt for category generation.</p>
          * <p>Use this to specify a fixed set of categories that an LLM should choose from when analyzing a conversation.
          * When not set uses a default prompt which gives the LLM flexibility to determine appropriate categories on its own.</p>
@@ -270,6 +273,7 @@ public final class AgentPrompting {
         }
 
         /**
+         * <p>Deprecated. Use <code>categoryIntelligentFieldId</code> instead. Not supported on new agents, and ignored while <code>categoryIntelligentFieldId</code> is set.</p>
          * <p>LLM prompt for category generation.</p>
          * <p>Use this to specify a fixed set of categories that an LLM should choose from when analyzing a conversation.
          * When not set uses a default prompt which gives the LLM flexibility to determine appropriate categories on its own.</p>

@@ -48,12 +48,12 @@ public final class CharterDeleteRequest {
     }
 
     /**
-     * @return The reference ID of the agent variant this delete is scoped to. When set, the
-     * deletion is staged in that variant's working set instead of being applied to the
-     * agent's live configuration.
-     * <p>Omit this parameter to delete directly from the agent. Variant scoping is not
-     * active yet: a variant supplied today is validated but not applied, and the delete applies
-     * to the agent.</p>
+     * @return The reference ID of the agent variant this delete is scoped to. While charters are
+     * versioned for the agent, the deletion is staged in that variant's working set
+     * instead of being applied to the agent's live configuration, and a delete that names
+     * no variant is rejected with <code>VARIANT_REQUIRED</code>.
+     * <p>While they aren't, omit this parameter to delete directly from the agent; naming a
+     * variant then is rejected.</p>
      */
     @JsonProperty("variantReferenceId")
     public Optional<String> getVariantReferenceId() {
@@ -134,12 +134,12 @@ public final class CharterDeleteRequest {
         }
 
         /**
-         * <p>The reference ID of the agent variant this delete is scoped to. When set, the
-         * deletion is staged in that variant's working set instead of being applied to the
-         * agent's live configuration.</p>
-         * <p>Omit this parameter to delete directly from the agent. Variant scoping is not
-         * active yet: a variant supplied today is validated but not applied, and the delete applies
-         * to the agent.</p>
+         * <p>The reference ID of the agent variant this delete is scoped to. While charters are
+         * versioned for the agent, the deletion is staged in that variant's working set
+         * instead of being applied to the agent's live configuration, and a delete that names
+         * no variant is rejected with <code>VARIANT_REQUIRED</code>.</p>
+         * <p>While they aren't, omit this parameter to delete directly from the agent; naming a
+         * variant then is rejected.</p>
          */
         @JsonSetter(value = "variantReferenceId", nulls = Nulls.SKIP)
         public Builder variantReferenceId(Optional<String> variantReferenceId) {

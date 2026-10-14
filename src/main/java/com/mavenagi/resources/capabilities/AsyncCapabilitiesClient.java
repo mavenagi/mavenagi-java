@@ -6,10 +6,12 @@ package com.mavenagi.resources.capabilities;
 import com.mavenagi.core.ClientOptions;
 import com.mavenagi.core.RequestOptions;
 import com.mavenagi.resources.capabilities.requests.CapabilitiesSearchRequest;
+import com.mavenagi.resources.capabilities.requests.CapabilityExecutionsSearchRequest;
 import com.mavenagi.resources.capabilities.requests.DeleteCapabilityByTypeRequest;
 import com.mavenagi.resources.capabilities.requests.GetCapabilityByTypeRequest;
 import com.mavenagi.resources.capabilities.requests.PatchCapabilityByTypeRequest;
 import com.mavenagi.resources.capabilities.types.CapabilitiesSearchResponse;
+import com.mavenagi.resources.capabilities.types.CapabilityExecutionsSearchResponse;
 import com.mavenagi.resources.capabilities.types.CapabilityResponse;
 import com.mavenagi.resources.commons.types.CapabilityType;
 import java.util.concurrent.CompletableFuture;
@@ -192,5 +194,48 @@ public class AsyncCapabilitiesClient {
     public CompletableFuture<CapabilitiesSearchResponse> searchCapabilities(
             CapabilitiesSearchRequest request, RequestOptions requestOptions) {
         return this.rawClient.searchCapabilities(request, requestOptions).thenApply(response -> response.body());
+    }
+
+    /**
+     * Search the recorded runs of an agent's capabilities, newest first by default. An execution
+     * is one run of one capability for one subject, with its outcome and timing: an Event
+     * Trigger notifying its app, or a Conversation Kickoff running when a conversation started.
+     * <p>Pass a conversation in <code>subjectIds</code> to get the executions recorded against it. An
+     * <code>EVENT_CREATED</code> trigger records the event as its subject, so pass the event's ID to find
+     * those.</p>
+     * <p>Results can trail a run by a few seconds. Executions are searchable for 90 days.</p>
+     */
+    public CompletableFuture<CapabilityExecutionsSearchResponse> searchCapabilityExecutions() {
+        return this.rawClient.searchCapabilityExecutions().thenApply(response -> response.body());
+    }
+
+    /**
+     * Search the recorded runs of an agent's capabilities, newest first by default. An execution
+     * is one run of one capability for one subject, with its outcome and timing: an Event
+     * Trigger notifying its app, or a Conversation Kickoff running when a conversation started.
+     * <p>Pass a conversation in <code>subjectIds</code> to get the executions recorded against it. An
+     * <code>EVENT_CREATED</code> trigger records the event as its subject, so pass the event's ID to find
+     * those.</p>
+     * <p>Results can trail a run by a few seconds. Executions are searchable for 90 days.</p>
+     */
+    public CompletableFuture<CapabilityExecutionsSearchResponse> searchCapabilityExecutions(
+            CapabilityExecutionsSearchRequest request) {
+        return this.rawClient.searchCapabilityExecutions(request).thenApply(response -> response.body());
+    }
+
+    /**
+     * Search the recorded runs of an agent's capabilities, newest first by default. An execution
+     * is one run of one capability for one subject, with its outcome and timing: an Event
+     * Trigger notifying its app, or a Conversation Kickoff running when a conversation started.
+     * <p>Pass a conversation in <code>subjectIds</code> to get the executions recorded against it. An
+     * <code>EVENT_CREATED</code> trigger records the event as its subject, so pass the event's ID to find
+     * those.</p>
+     * <p>Results can trail a run by a few seconds. Executions are searchable for 90 days.</p>
+     */
+    public CompletableFuture<CapabilityExecutionsSearchResponse> searchCapabilityExecutions(
+            CapabilityExecutionsSearchRequest request, RequestOptions requestOptions) {
+        return this.rawClient
+                .searchCapabilityExecutions(request, requestOptions)
+                .thenApply(response -> response.body());
     }
 }

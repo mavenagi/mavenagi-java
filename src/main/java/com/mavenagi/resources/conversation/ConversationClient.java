@@ -262,14 +262,18 @@ public class ConversationClient {
     }
 
     /**
-     * Uses an LLM flow to categorize the conversation. Experimental.
+     * Deprecated. Set the agent's <code>categoryIntelligentFieldId</code> and read that intelligent field's value instead.
+     * <p>Uses an LLM flow to categorize the conversation.</p>
+     * <p>Returns a 400 for new agents and for any agent with a <code>categoryIntelligentFieldId</code>. Their conversation categories come only from that intelligent field: read the field's value, or react to it changing with an <code>EVENT_CREATED</code> trigger on the <code>INTELLIGENT_FIELD_VALUE_CHANGED</code> system event.</p>
      */
     public CategorizationResponse categorize(String conversationId) {
         return this.rawClient.categorize(conversationId).body();
     }
 
     /**
-     * Uses an LLM flow to categorize the conversation. Experimental.
+     * Deprecated. Set the agent's <code>categoryIntelligentFieldId</code> and read that intelligent field's value instead.
+     * <p>Uses an LLM flow to categorize the conversation.</p>
+     * <p>Returns a 400 for new agents and for any agent with a <code>categoryIntelligentFieldId</code>. Their conversation categories come only from that intelligent field: read the field's value, or react to it changing with an <code>EVENT_CREATED</code> trigger on the <code>INTELLIGENT_FIELD_VALUE_CHANGED</code> system event.</p>
      */
     public CategorizationResponse categorize(String conversationId, RequestOptions requestOptions) {
         return this.rawClient.categorize(conversationId, requestOptions).body();

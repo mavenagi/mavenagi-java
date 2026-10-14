@@ -61,7 +61,7 @@ public final class BotLogicCharterDetail {
     }
 
     /**
-     * @return The segment that gates this charter, if any. Absent for wildcard charters.
+     * @return Deprecated, read the charter's <code>precondition</code> from the charters API instead.
      */
     @JsonProperty("segmentId")
     public Optional<EntityIdWithoutAgent> getSegmentId() {
@@ -128,7 +128,7 @@ public final class BotLogicCharterDetail {
         BotLogicCharterDetail build();
 
         /**
-         * <p>The segment that gates this charter, if any. Absent for wildcard charters.</p>
+         * <p>Deprecated, read the charter's <code>precondition</code> from the charters API instead.</p>
          */
         _FinalStage segmentId(Optional<EntityIdWithoutAgent> segmentId);
 
@@ -211,7 +211,7 @@ public final class BotLogicCharterDetail {
         }
 
         /**
-         * <p>The segment that gates this charter, if any. Absent for wildcard charters.</p>
+         * <p>Deprecated, read the charter's <code>precondition</code> from the charters API instead.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -221,7 +221,7 @@ public final class BotLogicCharterDetail {
         }
 
         /**
-         * <p>The segment that gates this charter, if any. Absent for wildcard charters.</p>
+         * <p>Deprecated, read the charter's <code>precondition</code> from the charters API instead.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "segmentId", nulls = Nulls.SKIP)

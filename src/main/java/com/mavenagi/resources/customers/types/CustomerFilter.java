@@ -45,7 +45,18 @@ public final class CustomerFilter {
     }
 
     /**
-     * @return The search query to apply to the customers' name and description.
+     * @return The search query to apply to the customers. Matches any part of a customer's name or
+     * description.
+     * <p>This field also supports a syntax for advanced filtering the <code>metadata</code> field.</p>
+     * <p>Metadata examples:</p>
+     * <ul>
+     * <li><code>metadata:myvalue</code> - matches customers with any metadata field set to <code>myvalue</code></li>
+     * <li><code>metadata.mykey:myvalue</code> - matches customers with a metadata field <code>mykey</code> set to <code>myvalue</code></li>
+     * <li><code>metadata.mykey:(myvalue OR anothervalue)</code> - matches customers with a metadata field <code>mykey</code> set to <code>myvalue</code> or <code>anothervalue</code></li>
+     * <li><code>metadata.mykey:*</code> - matches customers with a metadata field <code>mykey</code></li>
+     * <li><code>-metadata:myvalue</code> - matches customers that do not have any metadata field set to <code>myvalue</code></li>
+     * <li><code>_exists_:metadata</code> - matches customers that have any metadata field set</li>
+     * </ul>
      */
     @JsonProperty("search")
     public Optional<String> getSearch() {
@@ -132,7 +143,18 @@ public final class CustomerFilter {
         }
 
         /**
-         * <p>The search query to apply to the customers' name and description.</p>
+         * <p>The search query to apply to the customers. Matches any part of a customer's name or
+         * description.</p>
+         * <p>This field also supports a syntax for advanced filtering the <code>metadata</code> field.</p>
+         * <p>Metadata examples:</p>
+         * <ul>
+         * <li><code>metadata:myvalue</code> - matches customers with any metadata field set to <code>myvalue</code></li>
+         * <li><code>metadata.mykey:myvalue</code> - matches customers with a metadata field <code>mykey</code> set to <code>myvalue</code></li>
+         * <li><code>metadata.mykey:(myvalue OR anothervalue)</code> - matches customers with a metadata field <code>mykey</code> set to <code>myvalue</code> or <code>anothervalue</code></li>
+         * <li><code>metadata.mykey:*</code> - matches customers with a metadata field <code>mykey</code></li>
+         * <li><code>-metadata:myvalue</code> - matches customers that do not have any metadata field set to <code>myvalue</code></li>
+         * <li><code>_exists_:metadata</code> - matches customers that have any metadata field set</li>
+         * </ul>
          */
         @JsonSetter(value = "search", nulls = Nulls.SKIP)
         public Builder search(Optional<String> search) {

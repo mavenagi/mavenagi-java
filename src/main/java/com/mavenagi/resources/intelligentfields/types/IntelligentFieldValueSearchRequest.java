@@ -146,10 +146,11 @@ public final class IntelligentFieldValueSearchRequest implements IBaseCappedPagi
     }
 
     /**
-     * @return <p>values of the fields in this agent variant's scope: its published snapshot plus
-     * its staged edits, matched by field. A value is included whichever variant's conversation
-     * produced it, and is named as this variant names the field. If not provided, returns
-     * values from all variants.</p>
+     * @return <p>values of the fields in this agent variant's scope: its snapshot with its staged
+     * edits applied, matched by field, so a field deleted in the variant, by a staged edit or in
+     * its snapshot, is left out. A
+     * value is included whichever variant's conversation produced it, and is named as this
+     * variant names the field. If not provided, returns values from all variants.</p>
      * <p>To see values from the conversations pinned to a variant, filter conversations by
      * <code>variantIds</code> in conversation search or the analytics APIs.</p>
      */
@@ -375,10 +376,11 @@ public final class IntelligentFieldValueSearchRequest implements IBaseCappedPagi
         }
 
         /**
-         * <p>Returns values of the fields in this agent variant's scope: its published snapshot plus
-         * its staged edits, matched by field. A value is included whichever variant's conversation
-         * produced it, and is named as this variant names the field. If not provided, returns
-         * values from all variants.</p>
+         * <p>Returns values of the fields in this agent variant's scope: its snapshot with its staged
+         * edits applied, matched by field, so a field deleted in the variant, by a staged edit or in
+         * its snapshot, is left out. A
+         * value is included whichever variant's conversation produced it, and is named as this
+         * variant names the field. If not provided, returns values from all variants.</p>
          * <p>To see values from the conversations pinned to a variant, filter conversations by
          * <code>variantIds</code> in conversation search or the analytics APIs.</p>
          */

@@ -335,7 +335,7 @@ public class RawIntelligentFieldsClient {
      * Deprecated. Use <code>DELETE /v1/capabilities/INTELLIGENT_FIELD/{referenceId}</code>, which
      * deletes any kind of capability the same way. That endpoint returns no body.
      * <p>Soft delete an intelligent field. Only INACTIVE fields can be deleted.</p>
-     * <p>Deleted fields are excluded from search results but can still be retrieved by ID.
+     * <p>Deleted fields are excluded from search results, and getting one by ID returns 404.
      * Creating a new field with the same referenceId as a deleted field will overwrite
      * the deleted field and restore it with the status a new field gets.</p>
      * <p>Deleted fields cannot be modified.</p>
@@ -348,7 +348,7 @@ public class RawIntelligentFieldsClient {
      * Deprecated. Use <code>DELETE /v1/capabilities/INTELLIGENT_FIELD/{referenceId}</code>, which
      * deletes any kind of capability the same way. That endpoint returns no body.
      * <p>Soft delete an intelligent field. Only INACTIVE fields can be deleted.</p>
-     * <p>Deleted fields are excluded from search results but can still be retrieved by ID.
+     * <p>Deleted fields are excluded from search results, and getting one by ID returns 404.
      * Creating a new field with the same referenceId as a deleted field will overwrite
      * the deleted field and restore it with the status a new field gets.</p>
      * <p>Deleted fields cannot be modified.</p>
@@ -362,7 +362,7 @@ public class RawIntelligentFieldsClient {
      * Deprecated. Use <code>DELETE /v1/capabilities/INTELLIGENT_FIELD/{referenceId}</code>, which
      * deletes any kind of capability the same way. That endpoint returns no body.
      * <p>Soft delete an intelligent field. Only INACTIVE fields can be deleted.</p>
-     * <p>Deleted fields are excluded from search results but can still be retrieved by ID.
+     * <p>Deleted fields are excluded from search results, and getting one by ID returns 404.
      * Creating a new field with the same referenceId as a deleted field will overwrite
      * the deleted field and restore it with the status a new field gets.</p>
      * <p>Deleted fields cannot be modified.</p>

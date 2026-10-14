@@ -178,11 +178,11 @@ public final class CharterPatchRequest {
     }
 
     /**
-     * @return The agent variant this patch is scoped to. When set, the patch is staged in that
-     * variant's working set instead of being applied to the agent's live configuration.
-     * <p>Omit this field to patch the agent directly. Variant scoping is not active yet:
-     * a variant supplied today is validated but not applied, and the patch applies to the
-     * agent.</p>
+     * @return The agent variant this patch is scoped to. While charters are versioned for the
+     * agent, the patch is applied to the charter as this variant sees it and staged in
+     * its working set rather than applied to the agent's live configuration, and a patch
+     * that names no variant is rejected with <code>VARIANT_REQUIRED</code>. While they aren't, a
+     * patch that names a variant is rejected. An unknown variant is a 404.
      */
     @JsonProperty("variantId")
     public Optional<EntityIdWithoutAgent> getVariantId() {
@@ -469,11 +469,11 @@ public final class CharterPatchRequest {
         }
 
         /**
-         * <p>The agent variant this patch is scoped to. When set, the patch is staged in that
-         * variant's working set instead of being applied to the agent's live configuration.</p>
-         * <p>Omit this field to patch the agent directly. Variant scoping is not active yet:
-         * a variant supplied today is validated but not applied, and the patch applies to the
-         * agent.</p>
+         * <p>The agent variant this patch is scoped to. While charters are versioned for the
+         * agent, the patch is applied to the charter as this variant sees it and staged in
+         * its working set rather than applied to the agent's live configuration, and a patch
+         * that names no variant is rejected with <code>VARIANT_REQUIRED</code>. While they aren't, a
+         * patch that names a variant is rejected. An unknown variant is a 404.</p>
          */
         @JsonSetter(value = "variantId", nulls = Nulls.SKIP)
         public Builder variantId(Optional<EntityIdWithoutAgent> variantId) {

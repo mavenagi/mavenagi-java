@@ -174,7 +174,10 @@ public final class CapabilitiesSearchRequest implements IBaseCappedPaginatedRequ
      * @return The agent variant to read intelligent field versions through. Required on an agent
      * with versioned intelligent fields unless <code>capabilityTypes</code> excludes them; a
      * request that omits it there is rejected with reason <code>VARIANT_REQUIRED</code>. Otherwise,
-     * if omitted, the agent's only variant is used.
+     * if omitted, the agent's only variant is used, as its snapshot has it. When a
+     * variant is named, its staged edits are included: each field is listed once, at its
+     * staged edit if it has one, and a field deleted in the variant, whether the delete is
+     * staged or already in its snapshot, is left out.
      */
     @JsonProperty("variantId")
     public Optional<EntityIdWithoutAgent> getVariantId() {
@@ -447,7 +450,10 @@ public final class CapabilitiesSearchRequest implements IBaseCappedPaginatedRequ
          * <p>The agent variant to read intelligent field versions through. Required on an agent
          * with versioned intelligent fields unless <code>capabilityTypes</code> excludes them; a
          * request that omits it there is rejected with reason <code>VARIANT_REQUIRED</code>. Otherwise,
-         * if omitted, the agent's only variant is used.</p>
+         * if omitted, the agent's only variant is used, as its snapshot has it. When a
+         * variant is named, its staged edits are included: each field is listed once, at its
+         * staged edit if it has one, and a field deleted in the variant, whether the delete is
+         * staged or already in its snapshot, is left out.</p>
          */
         @JsonSetter(value = "variantId", nulls = Nulls.SKIP)
         public Builder variantId(Optional<EntityIdWithoutAgent> variantId) {

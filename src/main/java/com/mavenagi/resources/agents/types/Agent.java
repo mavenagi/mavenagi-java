@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
 import com.mavenagi.resources.commons.types.EntityId;
+import com.mavenagi.resources.commons.types.EntityIdWithoutAgent;
 import com.mavenagi.resources.commons.types.PiiCategory;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
@@ -42,6 +43,8 @@ public final class Agent {
 
     private final AgentPrompting prompting;
 
+    private final Optional<EntityIdWithoutAgent> categoryIntelligentFieldId;
+
     private final Map<String, Object> additionalProperties;
 
     private Agent(
@@ -53,6 +56,7 @@ public final class Agent {
             Set<PiiCategory> enabledPiiCategories,
             Optional<String> systemFallbackMessage,
             AgentPrompting prompting,
+            Optional<EntityIdWithoutAgent> categoryIntelligentFieldId,
             Map<String, Object> additionalProperties) {
         this.agentId = agentId;
         this.name = name;
@@ -62,6 +66,7 @@ public final class Agent {
         this.enabledPiiCategories = enabledPiiCategories;
         this.systemFallbackMessage = systemFallbackMessage;
         this.prompting = prompting;
+        this.categoryIntelligentFieldId = categoryIntelligentFieldId;
         this.additionalProperties = additionalProperties;
     }
 
@@ -135,6 +140,16 @@ public final class Agent {
         return prompting;
     }
 
+    /**
+     * @return The intelligent field whose value becomes each conversation's category.
+     * When set, its value replaces the category generated from <code>prompting.categoryGenerationPromptText</code>.
+     * An inactive field produces no values, so conversations get no category until it is activated.
+     */
+    @JsonProperty("categoryIntelligentFieldId")
+    public Optional<EntityIdWithoutAgent> getCategoryIntelligentFieldId() {
+        return categoryIntelligentFieldId;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -154,7 +169,8 @@ public final class Agent {
                 && defaultTimezone.equals(other.defaultTimezone)
                 && enabledPiiCategories.equals(other.enabledPiiCategories)
                 && systemFallbackMessage.equals(other.systemFallbackMessage)
-                && prompting.equals(other.prompting);
+                && prompting.equals(other.prompting)
+                && categoryIntelligentFieldId.equals(other.categoryIntelligentFieldId);
     }
 
     @java.lang.Override
@@ -167,7 +183,8 @@ public final class Agent {
                 this.defaultTimezone,
                 this.enabledPiiCategories,
                 this.systemFallbackMessage,
-                this.prompting);
+                this.prompting,
+                this.categoryIntelligentFieldId);
     }
 
     @java.lang.Override
@@ -247,6 +264,15 @@ public final class Agent {
         _FinalStage systemFallbackMessage(Optional<String> systemFallbackMessage);
 
         _FinalStage systemFallbackMessage(String systemFallbackMessage);
+
+        /**
+         * <p>The intelligent field whose value becomes each conversation's category.
+         * When set, its value replaces the category generated from <code>prompting.categoryGenerationPromptText</code>.
+         * An inactive field produces no values, so conversations get no category until it is activated.</p>
+         */
+        _FinalStage categoryIntelligentFieldId(Optional<EntityIdWithoutAgent> categoryIntelligentFieldId);
+
+        _FinalStage categoryIntelligentFieldId(EntityIdWithoutAgent categoryIntelligentFieldId);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -270,6 +296,8 @@ public final class Agent {
 
         private AgentPrompting prompting;
 
+        private Optional<EntityIdWithoutAgent> categoryIntelligentFieldId = Optional.empty();
+
         private Optional<String> systemFallbackMessage = Optional.empty();
 
         private Set<PiiCategory> enabledPiiCategories = new LinkedHashSet<>();
@@ -289,6 +317,7 @@ public final class Agent {
             enabledPiiCategories(other.getEnabledPiiCategories());
             systemFallbackMessage(other.getSystemFallbackMessage());
             prompting(other.getPrompting());
+            categoryIntelligentFieldId(other.getCategoryIntelligentFieldId());
             return this;
         }
 
@@ -361,6 +390,30 @@ public final class Agent {
         @JsonSetter("prompting")
         public _FinalStage prompting(@NotNull AgentPrompting prompting) {
             this.prompting = Objects.requireNonNull(prompting, "prompting must not be null");
+            return this;
+        }
+
+        /**
+         * <p>The intelligent field whose value becomes each conversation's category.
+         * When set, its value replaces the category generated from <code>prompting.categoryGenerationPromptText</code>.
+         * An inactive field produces no values, so conversations get no category until it is activated.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage categoryIntelligentFieldId(EntityIdWithoutAgent categoryIntelligentFieldId) {
+            this.categoryIntelligentFieldId = Optional.ofNullable(categoryIntelligentFieldId);
+            return this;
+        }
+
+        /**
+         * <p>The intelligent field whose value becomes each conversation's category.
+         * When set, its value replaces the category generated from <code>prompting.categoryGenerationPromptText</code>.
+         * An inactive field produces no values, so conversations get no category until it is activated.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "categoryIntelligentFieldId", nulls = Nulls.SKIP)
+        public _FinalStage categoryIntelligentFieldId(Optional<EntityIdWithoutAgent> categoryIntelligentFieldId) {
+            this.categoryIntelligentFieldId = categoryIntelligentFieldId;
             return this;
         }
 
@@ -447,6 +500,7 @@ public final class Agent {
                     enabledPiiCategories,
                     systemFallbackMessage,
                     prompting,
+                    categoryIntelligentFieldId,
                     additionalProperties);
         }
     }

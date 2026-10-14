@@ -5,12 +5,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mavenagi.MavenAGI;
 import com.mavenagi.core.ObjectMappers;
 import com.mavenagi.resources.capabilities.requests.CapabilitiesSearchRequest;
+import com.mavenagi.resources.capabilities.requests.CapabilityExecutionsSearchRequest;
 import com.mavenagi.resources.capabilities.requests.DeleteCapabilityByTypeRequest;
 import com.mavenagi.resources.capabilities.requests.GetCapabilityByTypeRequest;
 import com.mavenagi.resources.capabilities.requests.PatchCapabilityByTypeRequest;
 import com.mavenagi.resources.capabilities.types.CapabilitiesSearchResponse;
+import com.mavenagi.resources.capabilities.types.CapabilityExecutionsSearchResponse;
 import com.mavenagi.resources.capabilities.types.CapabilityResponse;
 import com.mavenagi.resources.commons.types.CapabilityType;
+import com.mavenagi.resources.commons.types.EntityId;
+import com.mavenagi.resources.commons.types.EntityType;
+import java.util.Arrays;
+import java.util.Optional;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
@@ -485,6 +491,154 @@ public class CapabilitiesWireTest {
             + "  \"size\": 1,\n"
             + "  \"totalElements\": 1000000,\n"
             + "  \"totalPages\": 1\n"
+            + "}";
+        JsonNode actualResponseNode = objectMapper.readTree(actualResponseJson);
+        JsonNode expectedResponseNode = objectMapper.readTree(expectedResponseBody);
+        Assertions.assertEquals(expectedResponseNode, actualResponseNode, "Response body structure does not match expected");
+        if (actualResponseNode.has("type") || actualResponseNode.has("_type") || actualResponseNode.has("kind")) {
+            String discriminator = null;
+            if (actualResponseNode.has("type")) discriminator = actualResponseNode.get("type").asText();
+            else if (actualResponseNode.has("_type")) discriminator = actualResponseNode.get("_type").asText();
+            else if (actualResponseNode.has("kind")) discriminator = actualResponseNode.get("kind").asText();
+            Assertions.assertNotNull(discriminator, "Union type should have a discriminator field");
+            Assertions.assertFalse(discriminator.isEmpty(), "Union discriminator should not be empty");
+        }
+        
+        if (!actualResponseNode.isNull()) {
+            Assertions.assertTrue(actualResponseNode.isObject() || actualResponseNode.isArray() || actualResponseNode.isValueNode(), "response should be a valid JSON value");
+        }
+        
+        if (actualResponseNode.isArray()) {
+            Assertions.assertTrue(actualResponseNode.size() >= 0, "Array should have valid size");
+        }
+        if (actualResponseNode.isObject()) {
+            Assertions.assertTrue(actualResponseNode.size() >= 0, "Object should have valid field count");
+        }
+    }
+    @Test
+    public void testSearchCapabilityExecutions() throws Exception {
+        server.enqueue(new MockResponse()
+            .setResponseCode(200)
+            .setBody("{\"number\":0,\"size\":2,\"totalElements\":2,\"totalPages\":1,\"executions\":[{\"capabilityType\":\"TRIGGER\",\"capabilityId\":{\"referenceId\":\"store-in-snowflake\",\"appId\":\"snowflake\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"EVENT_TRIGGER\"},\"subjectId\":{\"referenceId\":\"conversation-123\",\"appId\":\"zendesk\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"CONVERSATION\"},\"status\":\"SUCCESS\",\"completionReason\":\"SUCCESS\",\"startedAt\":\"2026-08-31T10:30:05Z\",\"completedAt\":\"2026-08-31T10:30:06Z\",\"durationMs\":1120,\"createdAt\":\"2026-08-31T10:30:05Z\",\"eventType\":\"CONVERSATION_CREATED\",\"attempt\":1},{\"capabilityType\":\"CONVERSATION_KICKOFF\",\"capabilityId\":{\"referenceId\":\"greet-returning-customer\",\"appId\":\"my-billing-system\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"CONVERSATION_KICKOFF\"},\"subjectId\":{\"referenceId\":\"conversation-123\",\"appId\":\"zendesk\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"CONVERSATION\"},\"status\":\"FAILED\",\"completionReason\":\"TIMEOUT\",\"message\":\"Conversation Kickoff timed out\",\"startedAt\":\"2026-08-31T10:30:00Z\",\"completedAt\":\"2026-08-31T10:30:04Z\",\"durationMs\":4000,\"createdAt\":\"2026-08-31T10:30:00Z\"}]}"));
+        CapabilityExecutionsSearchResponse response = client.capabilities().searchCapabilityExecutions(
+            CapabilityExecutionsSearchRequest
+                .builder()
+                .subjectIds(
+                    Optional.of(
+                        Arrays.asList(
+                            EntityId
+                                .builder()
+                                .referenceId("conversation-123")
+                                .appId("zendesk")
+                                .organizationId("acme")
+                                .agentId("support")
+                                .type(EntityType.CONVERSATION)
+                                .build()
+                        )
+                    )
+                )
+                .build()
+        );
+        RecordedRequest request = server.takeRequest();
+        Assertions.assertNotNull(request);
+        Assertions.assertEquals("POST", request.getMethod());
+        // Validate request body
+        String actualRequestBody = request.getBody().readUtf8();
+        String expectedRequestBody = ""
+            + "{\n"
+            + "  \"subjectIds\": [\n"
+            + "    {\n"
+            + "      \"referenceId\": \"conversation-123\",\n"
+            + "      \"appId\": \"zendesk\",\n"
+            + "      \"organizationId\": \"acme\",\n"
+            + "      \"agentId\": \"support\",\n"
+            + "      \"type\": \"CONVERSATION\"\n"
+            + "    }\n"
+            + "  ]\n"
+            + "}";
+        JsonNode actualJson = objectMapper.readTree(actualRequestBody);
+        JsonNode expectedJson = objectMapper.readTree(expectedRequestBody);
+        Assertions.assertEquals(expectedJson, actualJson, "Request body structure does not match expected");
+        if (actualJson.has("type") || actualJson.has("_type") || actualJson.has("kind")) {
+            String discriminator = null;
+            if (actualJson.has("type")) discriminator = actualJson.get("type").asText();
+            else if (actualJson.has("_type")) discriminator = actualJson.get("_type").asText();
+            else if (actualJson.has("kind")) discriminator = actualJson.get("kind").asText();
+            Assertions.assertNotNull(discriminator, "Union type should have a discriminator field");
+            Assertions.assertFalse(discriminator.isEmpty(), "Union discriminator should not be empty");
+        }
+        
+        if (!actualJson.isNull()) {
+            Assertions.assertTrue(actualJson.isObject() || actualJson.isArray() || actualJson.isValueNode(), "request should be a valid JSON value");
+        }
+        
+        if (actualJson.isArray()) {
+            Assertions.assertTrue(actualJson.size() >= 0, "Array should have valid size");
+        }
+        if (actualJson.isObject()) {
+            Assertions.assertTrue(actualJson.size() >= 0, "Object should have valid field count");
+        }
+        
+        // Validate response body
+        Assertions.assertNotNull(response, "Response should not be null");
+        String actualResponseJson = objectMapper.writeValueAsString(response);
+        String expectedResponseBody = ""
+            + "{\n"
+            + "  \"number\": 0,\n"
+            + "  \"size\": 2,\n"
+            + "  \"totalElements\": 2,\n"
+            + "  \"totalPages\": 1,\n"
+            + "  \"executions\": [\n"
+            + "    {\n"
+            + "      \"capabilityType\": \"TRIGGER\",\n"
+            + "      \"capabilityId\": {\n"
+            + "        \"referenceId\": \"store-in-snowflake\",\n"
+            + "        \"appId\": \"snowflake\",\n"
+            + "        \"organizationId\": \"acme\",\n"
+            + "        \"agentId\": \"support\",\n"
+            + "        \"type\": \"EVENT_TRIGGER\"\n"
+            + "      },\n"
+            + "      \"subjectId\": {\n"
+            + "        \"referenceId\": \"conversation-123\",\n"
+            + "        \"appId\": \"zendesk\",\n"
+            + "        \"organizationId\": \"acme\",\n"
+            + "        \"agentId\": \"support\",\n"
+            + "        \"type\": \"CONVERSATION\"\n"
+            + "      },\n"
+            + "      \"status\": \"SUCCESS\",\n"
+            + "      \"completionReason\": \"SUCCESS\",\n"
+            + "      \"startedAt\": \"2026-08-31T10:30:05Z\",\n"
+            + "      \"completedAt\": \"2026-08-31T10:30:06Z\",\n"
+            + "      \"durationMs\": 1120,\n"
+            + "      \"createdAt\": \"2026-08-31T10:30:05Z\",\n"
+            + "      \"eventType\": \"CONVERSATION_CREATED\",\n"
+            + "      \"attempt\": 1\n"
+            + "    },\n"
+            + "    {\n"
+            + "      \"capabilityType\": \"CONVERSATION_KICKOFF\",\n"
+            + "      \"capabilityId\": {\n"
+            + "        \"referenceId\": \"greet-returning-customer\",\n"
+            + "        \"appId\": \"my-billing-system\",\n"
+            + "        \"organizationId\": \"acme\",\n"
+            + "        \"agentId\": \"support\",\n"
+            + "        \"type\": \"CONVERSATION_KICKOFF\"\n"
+            + "      },\n"
+            + "      \"subjectId\": {\n"
+            + "        \"referenceId\": \"conversation-123\",\n"
+            + "        \"appId\": \"zendesk\",\n"
+            + "        \"organizationId\": \"acme\",\n"
+            + "        \"agentId\": \"support\",\n"
+            + "        \"type\": \"CONVERSATION\"\n"
+            + "      },\n"
+            + "      \"status\": \"FAILED\",\n"
+            + "      \"completionReason\": \"TIMEOUT\",\n"
+            + "      \"message\": \"Conversation Kickoff timed out\",\n"
+            + "      \"startedAt\": \"2026-08-31T10:30:00Z\",\n"
+            + "      \"completedAt\": \"2026-08-31T10:30:04Z\",\n"
+            + "      \"durationMs\": 4000,\n"
+            + "      \"createdAt\": \"2026-08-31T10:30:00Z\"\n"
+            + "    }\n"
+            + "  ]\n"
             + "}";
         JsonNode actualResponseNode = objectMapper.readTree(actualResponseJson);
         JsonNode expectedResponseNode = objectMapper.readTree(expectedResponseBody);

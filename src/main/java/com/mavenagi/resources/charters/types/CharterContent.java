@@ -168,9 +168,10 @@ public final class CharterContent implements ICharterContent, ICharterBase {
 
     /**
      * @return ID of the agent variant this charter belongs to, if applicable.
-     * <p>On a write this is validated -- an unknown variant is rejected, as is any
-     * variant while variant scoping is off for charters -- but not yet applied: the
-     * write reaches the agent's live configuration either way.</p>
+     * <p>While charters are versioned for the agent, a write is staged in this variant's
+     * working set rather than applied to the agent's live configuration, and a write that
+     * names no variant is rejected with <code>VARIANT_REQUIRED</code>. While they aren't, a write that
+     * names a variant is rejected. An unknown variant is a 404.</p>
      */
     @JsonProperty("variantId")
     @java.lang.Override
@@ -342,9 +343,10 @@ public final class CharterContent implements ICharterContent, ICharterBase {
 
         /**
          * <p>ID of the agent variant this charter belongs to, if applicable.</p>
-         * <p>On a write this is validated -- an unknown variant is rejected, as is any
-         * variant while variant scoping is off for charters -- but not yet applied: the
-         * write reaches the agent's live configuration either way.</p>
+         * <p>While charters are versioned for the agent, a write is staged in this variant's
+         * working set rather than applied to the agent's live configuration, and a write that
+         * names no variant is rejected with <code>VARIANT_REQUIRED</code>. While they aren't, a write that
+         * names a variant is rejected. An unknown variant is a 404.</p>
          */
         _FinalStage variantId(Optional<EntityIdWithoutAgent> variantId);
 
@@ -496,9 +498,10 @@ public final class CharterContent implements ICharterContent, ICharterBase {
 
         /**
          * <p>ID of the agent variant this charter belongs to, if applicable.</p>
-         * <p>On a write this is validated -- an unknown variant is rejected, as is any
-         * variant while variant scoping is off for charters -- but not yet applied: the
-         * write reaches the agent's live configuration either way.</p>
+         * <p>While charters are versioned for the agent, a write is staged in this variant's
+         * working set rather than applied to the agent's live configuration, and a write that
+         * names no variant is rejected with <code>VARIANT_REQUIRED</code>. While they aren't, a write that
+         * names a variant is rejected. An unknown variant is a 404.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -509,9 +512,10 @@ public final class CharterContent implements ICharterContent, ICharterBase {
 
         /**
          * <p>ID of the agent variant this charter belongs to, if applicable.</p>
-         * <p>On a write this is validated -- an unknown variant is rejected, as is any
-         * variant while variant scoping is off for charters -- but not yet applied: the
-         * write reaches the agent's live configuration either way.</p>
+         * <p>While charters are versioned for the agent, a write is staged in this variant's
+         * working set rather than applied to the agent's live configuration, and a write that
+         * names no variant is rejected with <code>VARIANT_REQUIRED</code>. While they aren't, a write that
+         * names a variant is rejected. An unknown variant is a 404.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "variantId", nulls = Nulls.SKIP)

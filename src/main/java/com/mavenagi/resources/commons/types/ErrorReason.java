@@ -17,6 +17,9 @@ public final class ErrorReason {
 
     public static final ErrorReason VARIANT_REQUIRED = new ErrorReason(Value.VARIANT_REQUIRED, "VARIANT_REQUIRED");
 
+    public static final ErrorReason WORKING_SET_HAS_UNVERSIONED_EDITS =
+            new ErrorReason(Value.WORKING_SET_HAS_UNVERSIONED_EDITS, "WORKING_SET_HAS_UNVERSIONED_EDITS");
+
     public static final ErrorReason STALE_TRAFFIC_REVISION =
             new ErrorReason(Value.STALE_TRAFFIC_REVISION, "STALE_TRAFFIC_REVISION");
 
@@ -72,6 +75,8 @@ public final class ErrorReason {
                 return visitor.visitVariantLive();
             case VARIANT_REQUIRED:
                 return visitor.visitVariantRequired();
+            case WORKING_SET_HAS_UNVERSIONED_EDITS:
+                return visitor.visitWorkingSetHasUnversionedEdits();
             case STALE_TRAFFIC_REVISION:
                 return visitor.visitStaleTrafficRevision();
             case STALE_WORKING_SET:
@@ -101,6 +106,8 @@ public final class ErrorReason {
                 return VARIANT_LIVE;
             case "VARIANT_REQUIRED":
                 return VARIANT_REQUIRED;
+            case "WORKING_SET_HAS_UNVERSIONED_EDITS":
+                return WORKING_SET_HAS_UNVERSIONED_EDITS;
             case "STALE_TRAFFIC_REVISION":
                 return STALE_TRAFFIC_REVISION;
             case "STALE_WORKING_SET":
@@ -139,6 +146,8 @@ public final class ErrorReason {
 
         INTELLIGENT_FIELD_TYPE_CHANGED,
 
+        WORKING_SET_HAS_UNVERSIONED_EDITS,
+
         UNKNOWN
     }
 
@@ -162,6 +171,8 @@ public final class ErrorReason {
         T visitVariantRequired();
 
         T visitIntelligentFieldTypeChanged();
+
+        T visitWorkingSetHasUnversionedEdits();
 
         T visitUnknown(String unknownType);
     }

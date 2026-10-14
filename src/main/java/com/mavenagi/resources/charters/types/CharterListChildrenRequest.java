@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
 import com.mavenagi.resources.commons.types.EntityId;
+import com.mavenagi.resources.commons.types.EntityIdWithoutAgent;
 import com.mavenagi.resources.commons.types.IBaseCappedPaginatedRequest;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,6 +33,8 @@ public final class CharterListChildrenRequest implements IBaseCappedPaginatedReq
 
     private final List<EntityId> parentIds;
 
+    private final Optional<EntityIdWithoutAgent> variantId;
+
     private final Map<String, Object> additionalProperties;
 
     private CharterListChildrenRequest(
@@ -39,11 +42,13 @@ public final class CharterListChildrenRequest implements IBaseCappedPaginatedReq
             Optional<Integer> size,
             Optional<Boolean> sortDesc,
             List<EntityId> parentIds,
+            Optional<EntityIdWithoutAgent> variantId,
             Map<String, Object> additionalProperties) {
         this.page = page;
         this.size = size;
         this.sortDesc = sortDesc;
         this.parentIds = parentIds;
+        this.variantId = variantId;
         this.additionalProperties = additionalProperties;
     }
 
@@ -84,6 +89,20 @@ public final class CharterListChildrenRequest implements IBaseCappedPaginatedReq
         return parentIds;
     }
 
+    /**
+     * @return List the charters as this agent variant sees them, parents and children alike. Its staged
+     * edits are included: a charter with a staged edit is read at that edit, a charter created
+     * in the variant is included, and a charter deleted in the variant, whether the delete is
+     * staged or already in its snapshot, is left out; naming one as a parent is rejected with a
+     * 400. A parent the variant doesn't carry has no children. If not provided, the request is rejected with <code>VARIANT_REQUIRED</code> while charters
+     * are versioned for the agent, and otherwise reads through the agent's single variant, as
+     * its snapshot has it, or the published charters while variant reads are off.
+     */
+    @JsonProperty("variantId")
+    public Optional<EntityIdWithoutAgent> getVariantId() {
+        return variantId;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -99,12 +118,13 @@ public final class CharterListChildrenRequest implements IBaseCappedPaginatedReq
         return page.equals(other.page)
                 && size.equals(other.size)
                 && sortDesc.equals(other.sortDesc)
-                && parentIds.equals(other.parentIds);
+                && parentIds.equals(other.parentIds)
+                && variantId.equals(other.variantId);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.page, this.size, this.sortDesc, this.parentIds);
+        return Objects.hash(this.page, this.size, this.sortDesc, this.parentIds, this.variantId);
     }
 
     @java.lang.Override
@@ -126,6 +146,8 @@ public final class CharterListChildrenRequest implements IBaseCappedPaginatedReq
 
         private List<EntityId> parentIds = new ArrayList<>();
 
+        private Optional<EntityIdWithoutAgent> variantId = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -136,6 +158,7 @@ public final class CharterListChildrenRequest implements IBaseCappedPaginatedReq
             size(other.getSize());
             sortDesc(other.getSortDesc());
             parentIds(other.getParentIds());
+            variantId(other.getVariantId());
             return this;
         }
 
@@ -207,8 +230,28 @@ public final class CharterListChildrenRequest implements IBaseCappedPaginatedReq
             return this;
         }
 
+        /**
+         * <p>List the charters as this agent variant sees them, parents and children alike. Its staged
+         * edits are included: a charter with a staged edit is read at that edit, a charter created
+         * in the variant is included, and a charter deleted in the variant, whether the delete is
+         * staged or already in its snapshot, is left out; naming one as a parent is rejected with a
+         * 400. A parent the variant doesn't carry has no children. If not provided, the request is rejected with <code>VARIANT_REQUIRED</code> while charters
+         * are versioned for the agent, and otherwise reads through the agent's single variant, as
+         * its snapshot has it, or the published charters while variant reads are off.</p>
+         */
+        @JsonSetter(value = "variantId", nulls = Nulls.SKIP)
+        public Builder variantId(Optional<EntityIdWithoutAgent> variantId) {
+            this.variantId = variantId;
+            return this;
+        }
+
+        public Builder variantId(EntityIdWithoutAgent variantId) {
+            this.variantId = Optional.ofNullable(variantId);
+            return this;
+        }
+
         public CharterListChildrenRequest build() {
-            return new CharterListChildrenRequest(page, size, sortDesc, parentIds, additionalProperties);
+            return new CharterListChildrenRequest(page, size, sortDesc, parentIds, variantId, additionalProperties);
         }
     }
 }

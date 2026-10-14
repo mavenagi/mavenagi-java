@@ -101,7 +101,7 @@ public final class ConversationAnalysis {
     }
 
     /**
-     * @return Generated category of the conversation
+     * @return Generated category of the conversation. For agents with a <code>categoryIntelligentFieldId</code>, this is that intelligent field's value. New agents without one have no category.
      */
     @JsonProperty("category")
     public Optional<String> getCategory() {
@@ -314,7 +314,7 @@ public final class ConversationAnalysis {
         }
 
         /**
-         * <p>Generated category of the conversation</p>
+         * <p>Generated category of the conversation. For agents with a <code>categoryIntelligentFieldId</code>, this is that intelligent field's value. New agents without one have no category.</p>
          */
         @JsonSetter(value = "category", nulls = Nulls.SKIP)
         public Builder category(Optional<String> category) {

@@ -16,6 +16,7 @@ import com.mavenagi.core.Nullable;
 import com.mavenagi.core.NullableNonemptyFilter;
 import com.mavenagi.core.ObjectMappers;
 import com.mavenagi.resources.agents.types.AgentEnvironment;
+import com.mavenagi.resources.commons.types.EntityIdWithoutAgent;
 import com.mavenagi.resources.commons.types.LlmPersona;
 import com.mavenagi.resources.commons.types.PiiCategory;
 import java.util.HashMap;
@@ -43,6 +44,8 @@ public final class AgentPatchRequest {
 
     private final Optional<String> categoryGenerationPromptText;
 
+    private final Optional<EntityIdWithoutAgent> categoryIntelligentFieldId;
+
     private final Optional<String> contentSafetyViolationResponsePromptText;
 
     private final Optional<Boolean> rejectQuestionsWithoutKnowledge;
@@ -58,6 +61,7 @@ public final class AgentPatchRequest {
             Optional<LlmPersona> persona,
             Optional<String> additionalPromptText,
             Optional<String> categoryGenerationPromptText,
+            Optional<EntityIdWithoutAgent> categoryIntelligentFieldId,
             Optional<String> contentSafetyViolationResponsePromptText,
             Optional<Boolean> rejectQuestionsWithoutKnowledge,
             Map<String, Object> additionalProperties) {
@@ -69,6 +73,7 @@ public final class AgentPatchRequest {
         this.persona = persona;
         this.additionalPromptText = additionalPromptText;
         this.categoryGenerationPromptText = categoryGenerationPromptText;
+        this.categoryIntelligentFieldId = categoryIntelligentFieldId;
         this.contentSafetyViolationResponsePromptText = contentSafetyViolationResponsePromptText;
         this.rejectQuestionsWithoutKnowledge = rejectQuestionsWithoutKnowledge;
         this.additionalProperties = additionalProperties;
@@ -137,7 +142,8 @@ public final class AgentPatchRequest {
     }
 
     /**
-     * @return LLM prompt for category generation.
+     * @return Deprecated. Use <code>categoryIntelligentFieldId</code> instead. Not supported on new agents, and ignored while <code>categoryIntelligentFieldId</code> is set.
+     * <p>LLM prompt for category generation.</p>
      */
     @JsonIgnore
     public Optional<String> getCategoryGenerationPromptText() {
@@ -145,6 +151,19 @@ public final class AgentPatchRequest {
             return Optional.empty();
         }
         return categoryGenerationPromptText;
+    }
+
+    /**
+     * @return The intelligent field whose value becomes each conversation's category. Send null to clear it.
+     * <p>Must be a <code>STRING</code> conversation field on this agent. Giving the field <code>enumOptions</code> is highly recommended, so the category comes from a fixed list.</p>
+     * <p>The field must be <code>ACTIVE</code> to produce values. While it is inactive, conversations get no category. With agent variants, a conversation gets a category only if the field is active in its variant. Categories are capped at 280 characters.</p>
+     */
+    @JsonIgnore
+    public Optional<EntityIdWithoutAgent> getCategoryIntelligentFieldId() {
+        if (categoryIntelligentFieldId == null) {
+            return Optional.empty();
+        }
+        return categoryIntelligentFieldId;
     }
 
     /**
@@ -186,6 +205,12 @@ public final class AgentPatchRequest {
     }
 
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
+    @JsonProperty("categoryIntelligentFieldId")
+    private Optional<EntityIdWithoutAgent> _getCategoryIntelligentFieldId() {
+        return categoryIntelligentFieldId;
+    }
+
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = NullableNonemptyFilter.class)
     @JsonProperty("contentSafetyViolationResponsePromptText")
     private Optional<String> _getContentSafetyViolationResponsePromptText() {
         return contentSafetyViolationResponsePromptText;
@@ -211,6 +236,7 @@ public final class AgentPatchRequest {
                 && persona.equals(other.persona)
                 && additionalPromptText.equals(other.additionalPromptText)
                 && categoryGenerationPromptText.equals(other.categoryGenerationPromptText)
+                && categoryIntelligentFieldId.equals(other.categoryIntelligentFieldId)
                 && contentSafetyViolationResponsePromptText.equals(other.contentSafetyViolationResponsePromptText)
                 && rejectQuestionsWithoutKnowledge.equals(other.rejectQuestionsWithoutKnowledge);
     }
@@ -226,6 +252,7 @@ public final class AgentPatchRequest {
                 this.persona,
                 this.additionalPromptText,
                 this.categoryGenerationPromptText,
+                this.categoryIntelligentFieldId,
                 this.contentSafetyViolationResponsePromptText,
                 this.rejectQuestionsWithoutKnowledge);
     }
@@ -257,6 +284,8 @@ public final class AgentPatchRequest {
 
         private Optional<String> categoryGenerationPromptText = Optional.empty();
 
+        private Optional<EntityIdWithoutAgent> categoryIntelligentFieldId = Optional.empty();
+
         private Optional<String> contentSafetyViolationResponsePromptText = Optional.empty();
 
         private Optional<Boolean> rejectQuestionsWithoutKnowledge = Optional.empty();
@@ -275,6 +304,7 @@ public final class AgentPatchRequest {
             persona(other.getPersona());
             additionalPromptText(other.getAdditionalPromptText());
             categoryGenerationPromptText(other.getCategoryGenerationPromptText());
+            categoryIntelligentFieldId(other.getCategoryIntelligentFieldId());
             contentSafetyViolationResponsePromptText(other.getContentSafetyViolationResponsePromptText());
             rejectQuestionsWithoutKnowledge(other.getRejectQuestionsWithoutKnowledge());
             return this;
@@ -401,6 +431,7 @@ public final class AgentPatchRequest {
         }
 
         /**
+         * <p>Deprecated. Use <code>categoryIntelligentFieldId</code> instead. Not supported on new agents, and ignored while <code>categoryIntelligentFieldId</code> is set.</p>
          * <p>LLM prompt for category generation.</p>
          */
         @JsonSetter(value = "categoryGenerationPromptText", nulls = Nulls.SKIP)
@@ -421,6 +452,33 @@ public final class AgentPatchRequest {
                 this.categoryGenerationPromptText = Optional.empty();
             } else {
                 this.categoryGenerationPromptText = Optional.of(categoryGenerationPromptText.get());
+            }
+            return this;
+        }
+
+        /**
+         * <p>The intelligent field whose value becomes each conversation's category. Send null to clear it.</p>
+         * <p>Must be a <code>STRING</code> conversation field on this agent. Giving the field <code>enumOptions</code> is highly recommended, so the category comes from a fixed list.</p>
+         * <p>The field must be <code>ACTIVE</code> to produce values. While it is inactive, conversations get no category. With agent variants, a conversation gets a category only if the field is active in its variant. Categories are capped at 280 characters.</p>
+         */
+        @JsonSetter(value = "categoryIntelligentFieldId", nulls = Nulls.SKIP)
+        public Builder categoryIntelligentFieldId(Optional<EntityIdWithoutAgent> categoryIntelligentFieldId) {
+            this.categoryIntelligentFieldId = categoryIntelligentFieldId;
+            return this;
+        }
+
+        public Builder categoryIntelligentFieldId(EntityIdWithoutAgent categoryIntelligentFieldId) {
+            this.categoryIntelligentFieldId = Optional.ofNullable(categoryIntelligentFieldId);
+            return this;
+        }
+
+        public Builder categoryIntelligentFieldId(Nullable<EntityIdWithoutAgent> categoryIntelligentFieldId) {
+            if (categoryIntelligentFieldId.isNull()) {
+                this.categoryIntelligentFieldId = null;
+            } else if (categoryIntelligentFieldId.isEmpty()) {
+                this.categoryIntelligentFieldId = Optional.empty();
+            } else {
+                this.categoryIntelligentFieldId = Optional.of(categoryIntelligentFieldId.get());
             }
             return this;
         }
@@ -479,6 +537,7 @@ public final class AgentPatchRequest {
                     persona,
                     additionalPromptText,
                     categoryGenerationPromptText,
+                    categoryIntelligentFieldId,
                     contentSafetyViolationResponsePromptText,
                     rejectQuestionsWithoutKnowledge,
                     additionalProperties);

@@ -48,7 +48,13 @@ public final class CharterGetRequest {
     }
 
     /**
-     * @return The agent variant reference ID to resolve the charter's version through. If not provided, defaults to the agent's production variant. Currently, validated but not applied.
+     * @return The agent variant reference ID to read the charter through. Its staged edits are
+     * included: a charter with a staged edit is read at that edit, a charter created in the
+     * variant is included, and a charter deleted in the variant, whether the delete is
+     * staged or already in its snapshot, is a 404, as is one the variant doesn't carry. If
+     * not provided, the request is rejected with <code>VARIANT_REQUIRED</code> while charters are
+     * versioned for the agent, and otherwise reads through the agent's single variant, as
+     * its snapshot has it, or the published charters while variant reads are off.
      */
     @JsonProperty("variantReferenceId")
     public Optional<String> getVariantReferenceId() {
@@ -129,7 +135,13 @@ public final class CharterGetRequest {
         }
 
         /**
-         * <p>The agent variant reference ID to resolve the charter's version through. If not provided, defaults to the agent's production variant. Currently, validated but not applied.</p>
+         * <p>The agent variant reference ID to read the charter through. Its staged edits are
+         * included: a charter with a staged edit is read at that edit, a charter created in the
+         * variant is included, and a charter deleted in the variant, whether the delete is
+         * staged or already in its snapshot, is a 404, as is one the variant doesn't carry. If
+         * not provided, the request is rejected with <code>VARIANT_REQUIRED</code> while charters are
+         * versioned for the agent, and otherwise reads through the agent's single variant, as
+         * its snapshot has it, or the published charters while variant reads are off.</p>
          */
         @JsonSetter(value = "variantReferenceId", nulls = Nulls.SKIP)
         public Builder variantReferenceId(Optional<String> variantReferenceId) {

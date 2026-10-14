@@ -52,7 +52,10 @@ public final class GetCapabilityByTypeRequest {
      * @return The agent variant to read an intelligent field through, by reference ID.
      * Required for an intelligent field on an agent with versioned intelligent fields; a
      * request that omits it there is rejected with reason <code>VARIANT_REQUIRED</code>. Otherwise,
-     * if omitted, the agent's only variant is used.
+     * if omitted, the agent's only variant is used, as its snapshot has it. When a variant
+     * is named, its staged edits are included: a field with a staged edit is returned at
+     * that edit, a field created in the variant is returned, and a field deleted in the
+     * variant, whether the delete is staged or already in its snapshot, returns 404.
      * The other capability types aren't versioned and are the same in every variant,
      * though a named variant must still exist.
      */
@@ -139,7 +142,10 @@ public final class GetCapabilityByTypeRequest {
          * <p>The agent variant to read an intelligent field through, by reference ID.
          * Required for an intelligent field on an agent with versioned intelligent fields; a
          * request that omits it there is rejected with reason <code>VARIANT_REQUIRED</code>. Otherwise,
-         * if omitted, the agent's only variant is used.
+         * if omitted, the agent's only variant is used, as its snapshot has it. When a variant
+         * is named, its staged edits are included: a field with a staged edit is returned at
+         * that edit, a field created in the variant is returned, and a field deleted in the
+         * variant, whether the delete is staged or already in its snapshot, returns 404.
          * The other capability types aren't versioned and are the same in every variant,
          * though a named variant must still exist.</p>
          */
