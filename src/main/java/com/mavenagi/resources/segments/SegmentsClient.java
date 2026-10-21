@@ -107,7 +107,7 @@ public class SegmentsClient {
 
     /**
      * Soft delete a segment. Only INACTIVE segments can be deleted.
-     * <p>Deleted segments are excluded from search results but can still be retrieved by ID for archival purposes. Creating a new segment with the same referenceId as a deleted segment will overwrite the deleted segment and restore it to ACTIVE status.</p>
+     * <p>Deleted segments are excluded from search results but can still be retrieved by ID for archival purposes. Creating a segment with the same referenceId as a deleted segment reclaims it: the segment keeps its identity, and every other setting comes from the request.</p>
      * <p>Deleted segments cannot be modified.</p>
      */
     public SegmentResponse delete(String segmentReferenceId) {
@@ -116,7 +116,7 @@ public class SegmentsClient {
 
     /**
      * Soft delete a segment. Only INACTIVE segments can be deleted.
-     * <p>Deleted segments are excluded from search results but can still be retrieved by ID for archival purposes. Creating a new segment with the same referenceId as a deleted segment will overwrite the deleted segment and restore it to ACTIVE status.</p>
+     * <p>Deleted segments are excluded from search results but can still be retrieved by ID for archival purposes. Creating a segment with the same referenceId as a deleted segment reclaims it: the segment keeps its identity, and every other setting comes from the request.</p>
      * <p>Deleted segments cannot be modified.</p>
      */
     public SegmentResponse delete(String segmentReferenceId, SegmentDeleteRequest request) {
@@ -125,7 +125,7 @@ public class SegmentsClient {
 
     /**
      * Soft delete a segment. Only INACTIVE segments can be deleted.
-     * <p>Deleted segments are excluded from search results but can still be retrieved by ID for archival purposes. Creating a new segment with the same referenceId as a deleted segment will overwrite the deleted segment and restore it to ACTIVE status.</p>
+     * <p>Deleted segments are excluded from search results but can still be retrieved by ID for archival purposes. Creating a segment with the same referenceId as a deleted segment reclaims it: the segment keeps its identity, and every other setting comes from the request.</p>
      * <p>Deleted segments cannot be modified.</p>
      */
     public SegmentResponse delete(

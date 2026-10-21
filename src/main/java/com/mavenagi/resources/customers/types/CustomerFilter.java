@@ -57,6 +57,7 @@ public final class CustomerFilter {
      * <li><code>-metadata:myvalue</code> - matches customers that do not have any metadata field set to <code>myvalue</code></li>
      * <li><code>_exists_:metadata</code> - matches customers that have any metadata field set</li>
      * </ul>
+     * <p>Shown in Agent Designer as &quot;Name or description&quot;.</p>
      */
     @JsonProperty("search")
     public Optional<String> getSearch() {
@@ -155,6 +156,7 @@ public final class CustomerFilter {
          * <li><code>-metadata:myvalue</code> - matches customers that do not have any metadata field set to <code>myvalue</code></li>
          * <li><code>_exists_:metadata</code> - matches customers that have any metadata field set</li>
          * </ul>
+         * <p>Shown in Agent Designer as &quot;Name or description&quot;.</p>
          */
         @JsonSetter(value = "search", nulls = Nulls.SKIP)
         public Builder search(Optional<String> search) {

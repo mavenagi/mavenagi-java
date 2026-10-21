@@ -69,6 +69,7 @@ public final class EventTriggerRequest implements IEventTriggerBase {
      * the agent. Re-registering writes whatever condition the request carries, so omitting it
      * removes one; PATCH changes or removes a condition without re-registering.
      * <p>Only allowed on <code>EVENT_CREATED</code>; the other trigger types reject it.</p>
+     * <p>Shown in Agent Designer as &quot;When&quot;.</p>
      */
     @JsonProperty("condition")
     @java.lang.Override
@@ -168,6 +169,7 @@ public final class EventTriggerRequest implements IEventTriggerBase {
          * the agent. Re-registering writes whatever condition the request carries, so omitting it
          * removes one; PATCH changes or removes a condition without re-registering.</p>
          * <p>Only allowed on <code>EVENT_CREATED</code>; the other trigger types reject it.</p>
+         * <p>Shown in Agent Designer as &quot;When&quot;.</p>
          */
         _FinalStage condition(Optional<EventCondition> condition);
 
@@ -277,6 +279,7 @@ public final class EventTriggerRequest implements IEventTriggerBase {
          * the agent. Re-registering writes whatever condition the request carries, so omitting it
          * removes one; PATCH changes or removes a condition without re-registering.</p>
          * <p>Only allowed on <code>EVENT_CREATED</code>; the other trigger types reject it.</p>
+         * <p>Shown in Agent Designer as &quot;When&quot;.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -290,6 +293,7 @@ public final class EventTriggerRequest implements IEventTriggerBase {
          * the agent. Re-registering writes whatever condition the request carries, so omitting it
          * removes one; PATCH changes or removes a condition without re-registering.</p>
          * <p>Only allowed on <code>EVENT_CREATED</code>; the other trigger types reject it.</p>
+         * <p>Shown in Agent Designer as &quot;When&quot;.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "condition", nulls = Nulls.SKIP)

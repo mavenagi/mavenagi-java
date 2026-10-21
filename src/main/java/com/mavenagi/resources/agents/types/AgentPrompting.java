@@ -59,6 +59,7 @@ public final class AgentPrompting {
 
     /**
      * @return Deprecated. Superseded by charters, which determine agent behavior per round. Has no effect for agents using charters.
+     * <p>Shown in Agent Designer as &quot;Additional persona instructions&quot;.</p>
      */
     @JsonProperty("additionalPromptText")
     public Optional<String> getAdditionalPromptText() {
@@ -70,6 +71,7 @@ public final class AgentPrompting {
      * <p>LLM prompt for category generation.</p>
      * <p>Use this to specify a fixed set of categories that an LLM should choose from when analyzing a conversation.
      * When not set uses a default prompt which gives the LLM flexibility to determine appropriate categories on its own.</p>
+     * <p>Shown in Agent Designer as &quot;Category prompt override&quot;.</p>
      */
     @JsonProperty("categoryGenerationPromptText")
     public Optional<String> getCategoryGenerationPromptText() {
@@ -79,7 +81,8 @@ public final class AgentPrompting {
     /**
      * @return LLM prompt for generating a response when the user's question has been detected as unsafe.
      * <p>Use this to provide custom LLM generated replies when dealing with content safety violations.
-     * When not set, the system fallback message will be used and replies will not be personalized by the LLM as it will not be involved.</p>
+     * When not set, a default response is sent and replies will not be personalized by the LLM as it will not be involved.</p>
+     * <p>Omitted while <code>CONTENT_SAFETY_VIOLATION_RESPONSE_PROMPT_TEXT</code> is in <code>getVersionedEntityTypes</code>; read it through <code>getVersionedSettings</code>.</p>
      */
     @JsonProperty("contentSafetyViolationResponsePromptText")
     public Optional<String> getContentSafetyViolationResponsePromptText() {
@@ -89,6 +92,7 @@ public final class AgentPrompting {
     /**
      * @return Deprecated. Superseded by charters, which determine agent behavior per round. Has no effect for agents using charters.
      * <p>Return the system fallback message on all questions that have no relevant knowledge bases or actions.</p>
+     * <p>Shown in Agent Designer as &quot;Only return answers for existing knowledge&quot;.</p>
      */
     @JsonProperty("rejectQuestionsWithoutKnowledge")
     public boolean getRejectQuestionsWithoutKnowledge() {
@@ -146,6 +150,7 @@ public final class AgentPrompting {
         /**
          * <p>Deprecated. Superseded by charters, which determine agent behavior per round. Has no effect for agents using charters.</p>
          * <p>Return the system fallback message on all questions that have no relevant knowledge bases or actions.</p>
+         * <p>Shown in Agent Designer as &quot;Only return answers for existing knowledge&quot;.</p>
          */
         _FinalStage rejectQuestionsWithoutKnowledge(boolean rejectQuestionsWithoutKnowledge);
     }
@@ -155,6 +160,7 @@ public final class AgentPrompting {
 
         /**
          * <p>Deprecated. Superseded by charters, which determine agent behavior per round. Has no effect for agents using charters.</p>
+         * <p>Shown in Agent Designer as &quot;Additional persona instructions&quot;.</p>
          */
         _FinalStage additionalPromptText(Optional<String> additionalPromptText);
 
@@ -165,6 +171,7 @@ public final class AgentPrompting {
          * <p>LLM prompt for category generation.</p>
          * <p>Use this to specify a fixed set of categories that an LLM should choose from when analyzing a conversation.
          * When not set uses a default prompt which gives the LLM flexibility to determine appropriate categories on its own.</p>
+         * <p>Shown in Agent Designer as &quot;Category prompt override&quot;.</p>
          */
         _FinalStage categoryGenerationPromptText(Optional<String> categoryGenerationPromptText);
 
@@ -173,7 +180,8 @@ public final class AgentPrompting {
         /**
          * <p>LLM prompt for generating a response when the user's question has been detected as unsafe.</p>
          * <p>Use this to provide custom LLM generated replies when dealing with content safety violations.
-         * When not set, the system fallback message will be used and replies will not be personalized by the LLM as it will not be involved.</p>
+         * When not set, a default response is sent and replies will not be personalized by the LLM as it will not be involved.</p>
+         * <p>Omitted while <code>CONTENT_SAFETY_VIOLATION_RESPONSE_PROMPT_TEXT</code> is in <code>getVersionedEntityTypes</code>; read it through <code>getVersionedSettings</code>.</p>
          */
         _FinalStage contentSafetyViolationResponsePromptText(Optional<String> contentSafetyViolationResponsePromptText);
 
@@ -222,8 +230,10 @@ public final class AgentPrompting {
         /**
          * <p>Deprecated. Superseded by charters, which determine agent behavior per round. Has no effect for agents using charters.</p>
          * <p>Return the system fallback message on all questions that have no relevant knowledge bases or actions.</p>
+         * <p>Shown in Agent Designer as &quot;Only return answers for existing knowledge&quot;.</p>
          * <p>Deprecated. Superseded by charters, which determine agent behavior per round. Has no effect for agents using charters.</p>
          * <p>Return the system fallback message on all questions that have no relevant knowledge bases or actions.</p>
+         * <p>Shown in Agent Designer as &quot;Only return answers for existing knowledge&quot;.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -236,7 +246,8 @@ public final class AgentPrompting {
         /**
          * <p>LLM prompt for generating a response when the user's question has been detected as unsafe.</p>
          * <p>Use this to provide custom LLM generated replies when dealing with content safety violations.
-         * When not set, the system fallback message will be used and replies will not be personalized by the LLM as it will not be involved.</p>
+         * When not set, a default response is sent and replies will not be personalized by the LLM as it will not be involved.</p>
+         * <p>Omitted while <code>CONTENT_SAFETY_VIOLATION_RESPONSE_PROMPT_TEXT</code> is in <code>getVersionedEntityTypes</code>; read it through <code>getVersionedSettings</code>.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -249,7 +260,8 @@ public final class AgentPrompting {
         /**
          * <p>LLM prompt for generating a response when the user's question has been detected as unsafe.</p>
          * <p>Use this to provide custom LLM generated replies when dealing with content safety violations.
-         * When not set, the system fallback message will be used and replies will not be personalized by the LLM as it will not be involved.</p>
+         * When not set, a default response is sent and replies will not be personalized by the LLM as it will not be involved.</p>
+         * <p>Omitted while <code>CONTENT_SAFETY_VIOLATION_RESPONSE_PROMPT_TEXT</code> is in <code>getVersionedEntityTypes</code>; read it through <code>getVersionedSettings</code>.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "contentSafetyViolationResponsePromptText", nulls = Nulls.SKIP)
@@ -264,6 +276,7 @@ public final class AgentPrompting {
          * <p>LLM prompt for category generation.</p>
          * <p>Use this to specify a fixed set of categories that an LLM should choose from when analyzing a conversation.
          * When not set uses a default prompt which gives the LLM flexibility to determine appropriate categories on its own.</p>
+         * <p>Shown in Agent Designer as &quot;Category prompt override&quot;.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -277,6 +290,7 @@ public final class AgentPrompting {
          * <p>LLM prompt for category generation.</p>
          * <p>Use this to specify a fixed set of categories that an LLM should choose from when analyzing a conversation.
          * When not set uses a default prompt which gives the LLM flexibility to determine appropriate categories on its own.</p>
+         * <p>Shown in Agent Designer as &quot;Category prompt override&quot;.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "categoryGenerationPromptText", nulls = Nulls.SKIP)
@@ -287,6 +301,7 @@ public final class AgentPrompting {
 
         /**
          * <p>Deprecated. Superseded by charters, which determine agent behavior per round. Has no effect for agents using charters.</p>
+         * <p>Shown in Agent Designer as &quot;Additional persona instructions&quot;.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -297,6 +312,7 @@ public final class AgentPrompting {
 
         /**
          * <p>Deprecated. Superseded by charters, which determine agent behavior per round. Has no effect for agents using charters.</p>
+         * <p>Shown in Agent Designer as &quot;Additional persona instructions&quot;.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "additionalPromptText", nulls = Nulls.SKIP)

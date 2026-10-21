@@ -9,6 +9,12 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public final class SystemEventName {
     public static final SystemEventName SYNC_FAILED = new SystemEventName(Value.SYNC_FAILED, "SYNC_FAILED");
 
+    public static final SystemEventName BOT_REPLY_CREATED =
+            new SystemEventName(Value.BOT_REPLY_CREATED, "BOT_REPLY_CREATED");
+
+    public static final SystemEventName INTELLIGENT_FIELD_VALUE_CHANGED =
+            new SystemEventName(Value.INTELLIGENT_FIELD_VALUE_CHANGED, "INTELLIGENT_FIELD_VALUE_CHANGED");
+
     public static final SystemEventName APP_UNINSTALLED = new SystemEventName(Value.APP_UNINSTALLED, "APP_UNINSTALLED");
 
     public static final SystemEventName APP_INSTALLED = new SystemEventName(Value.APP_INSTALLED, "APP_INSTALLED");
@@ -32,13 +38,10 @@ public final class SystemEventName {
 
     public static final SystemEventName SYNC_STARTED = new SystemEventName(Value.SYNC_STARTED, "SYNC_STARTED");
 
-    public static final SystemEventName CONVERSATION_CLOSED =
-            new SystemEventName(Value.CONVERSATION_CLOSED, "CONVERSATION_CLOSED");
-
     public static final SystemEventName SYNC_COMPLETED = new SystemEventName(Value.SYNC_COMPLETED, "SYNC_COMPLETED");
 
-    public static final SystemEventName INTELLIGENT_FIELD_VALUE_CHANGED =
-            new SystemEventName(Value.INTELLIGENT_FIELD_VALUE_CHANGED, "INTELLIGENT_FIELD_VALUE_CHANGED");
+    public static final SystemEventName CONVERSATION_CLOSED =
+            new SystemEventName(Value.CONVERSATION_CLOSED, "CONVERSATION_CLOSED");
 
     private final Value value;
 
@@ -74,6 +77,10 @@ public final class SystemEventName {
         switch (value) {
             case SYNC_FAILED:
                 return visitor.visitSyncFailed();
+            case BOT_REPLY_CREATED:
+                return visitor.visitBotReplyCreated();
+            case INTELLIGENT_FIELD_VALUE_CHANGED:
+                return visitor.visitIntelligentFieldValueChanged();
             case APP_UNINSTALLED:
                 return visitor.visitAppUninstalled();
             case APP_INSTALLED:
@@ -92,12 +99,10 @@ public final class SystemEventName {
                 return visitor.visitNotificationFailed();
             case SYNC_STARTED:
                 return visitor.visitSyncStarted();
-            case CONVERSATION_CLOSED:
-                return visitor.visitConversationClosed();
             case SYNC_COMPLETED:
                 return visitor.visitSyncCompleted();
-            case INTELLIGENT_FIELD_VALUE_CHANGED:
-                return visitor.visitIntelligentFieldValueChanged();
+            case CONVERSATION_CLOSED:
+                return visitor.visitConversationClosed();
             case UNKNOWN:
             default:
                 return visitor.visitUnknown(string);
@@ -109,6 +114,10 @@ public final class SystemEventName {
         switch (value) {
             case "SYNC_FAILED":
                 return SYNC_FAILED;
+            case "BOT_REPLY_CREATED":
+                return BOT_REPLY_CREATED;
+            case "INTELLIGENT_FIELD_VALUE_CHANGED":
+                return INTELLIGENT_FIELD_VALUE_CHANGED;
             case "APP_UNINSTALLED":
                 return APP_UNINSTALLED;
             case "APP_INSTALLED":
@@ -127,12 +136,10 @@ public final class SystemEventName {
                 return NOTIFICATION_FAILED;
             case "SYNC_STARTED":
                 return SYNC_STARTED;
-            case "CONVERSATION_CLOSED":
-                return CONVERSATION_CLOSED;
             case "SYNC_COMPLETED":
                 return SYNC_COMPLETED;
-            case "INTELLIGENT_FIELD_VALUE_CHANGED":
-                return INTELLIGENT_FIELD_VALUE_CHANGED;
+            case "CONVERSATION_CLOSED":
+                return CONVERSATION_CLOSED;
             default:
                 return new SystemEventName(Value.UNKNOWN, value);
         }
@@ -163,6 +170,8 @@ public final class SystemEventName {
 
         CONVERSATION_CLOSED,
 
+        BOT_REPLY_CREATED,
+
         INTELLIGENT_FIELD_VALUE_CHANGED,
 
         UNKNOWN
@@ -192,6 +201,8 @@ public final class SystemEventName {
         T visitSyncFailed();
 
         T visitConversationClosed();
+
+        T visitBotReplyCreated();
 
         T visitIntelligentFieldValueChanged();
 

@@ -12,15 +12,14 @@ public final class ConversationField {
     public static final ConversationField INTELLIGENT_FIELDS =
             new ConversationField(Value.INTELLIGENT_FIELDS, "IntelligentFields");
 
-    public static final ConversationField USER_MESSAGE_COUNT =
-            new ConversationField(Value.USER_MESSAGE_COUNT, "UserMessageCount");
-
     public static final ConversationField CHARTERS = new ConversationField(Value.CHARTERS, "Charters");
 
     public static final ConversationField VARIANT = new ConversationField(Value.VARIANT, "Variant");
 
     public static final ConversationField FIRST_RESPONSE_TIME =
             new ConversationField(Value.FIRST_RESPONSE_TIME, "FirstResponseTime");
+
+    public static final ConversationField HUMAN_AGENTS = new ConversationField(Value.HUMAN_AGENTS, "HumanAgents");
 
     public static final ConversationField HUMAN_AGENTS_WITH_INSERTS =
             new ConversationField(Value.HUMAN_AGENTS_WITH_INSERTS, "HumanAgentsWithInserts");
@@ -34,6 +33,8 @@ public final class ConversationField {
 
     public static final ConversationField INTELLIGENT_FIELD =
             new ConversationField(Value.INTELLIGENT_FIELD, "IntelligentField");
+
+    public static final ConversationField USERS = new ConversationField(Value.USERS, "Users");
 
     public static final ConversationField THUMBS_UP_COUNT =
             new ConversationField(Value.THUMBS_UP_COUNT, "ThumbsUpCount");
@@ -59,7 +60,7 @@ public final class ConversationField {
 
     public static final ConversationField QUALITY_REASON = new ConversationField(Value.QUALITY_REASON, "QualityReason");
 
-    public static final ConversationField USERS = new ConversationField(Value.USERS, "Users");
+    public static final ConversationField SOURCES = new ConversationField(Value.SOURCES, "Sources");
 
     public static final ConversationField SENTIMENT = new ConversationField(Value.SENTIMENT, "Sentiment");
 
@@ -73,6 +74,9 @@ public final class ConversationField {
 
     public static final ConversationField QUALITY = new ConversationField(Value.QUALITY, "Quality");
 
+    public static final ConversationField USER_MESSAGE_COUNT =
+            new ConversationField(Value.USER_MESSAGE_COUNT, "UserMessageCount");
+
     public static final ConversationField INCOMPLETE_ACTIONS =
             new ConversationField(Value.INCOMPLETE_ACTIONS, "IncompleteActions");
 
@@ -81,8 +85,6 @@ public final class ConversationField {
     public static final ConversationField APP = new ConversationField(Value.APP, "App");
 
     public static final ConversationField AGENT_ID = new ConversationField(Value.AGENT_ID, "AgentId");
-
-    public static final ConversationField SOURCES = new ConversationField(Value.SOURCES, "Sources");
 
     public static final ConversationField PREDICTED_NPS = new ConversationField(Value.PREDICTED_NPS, "PredictedNPS");
 
@@ -97,8 +99,6 @@ public final class ConversationField {
 
     public static final ConversationField ERRORED_ACTIONS =
             new ConversationField(Value.ERRORED_ACTIONS, "ErroredActions");
-
-    public static final ConversationField HUMAN_AGENTS = new ConversationField(Value.HUMAN_AGENTS, "HumanAgents");
 
     private final Value value;
 
@@ -136,14 +136,14 @@ public final class ConversationField {
                 return visitor.visitActions();
             case INTELLIGENT_FIELDS:
                 return visitor.visitIntelligentFields();
-            case USER_MESSAGE_COUNT:
-                return visitor.visitUserMessageCount();
             case CHARTERS:
                 return visitor.visitCharters();
             case VARIANT:
                 return visitor.visitVariant();
             case FIRST_RESPONSE_TIME:
                 return visitor.visitFirstResponseTime();
+            case HUMAN_AGENTS:
+                return visitor.visitHumanAgents();
             case HUMAN_AGENTS_WITH_INSERTS:
                 return visitor.visitHumanAgentsWithInserts();
             case RESOLVED_BY_MAVEN:
@@ -154,6 +154,8 @@ public final class ConversationField {
                 return visitor.visitCsat();
             case INTELLIGENT_FIELD:
                 return visitor.visitIntelligentField();
+            case USERS:
+                return visitor.visitUsers();
             case THUMBS_UP_COUNT:
                 return visitor.visitThumbsUpCount();
             case ACTION_EXECUTION_COUNT:
@@ -174,8 +176,8 @@ public final class ConversationField {
                 return visitor.visitAgentEnvironment();
             case QUALITY_REASON:
                 return visitor.visitQualityReason();
-            case USERS:
-                return visitor.visitUsers();
+            case SOURCES:
+                return visitor.visitSources();
             case SENTIMENT:
                 return visitor.visitSentiment();
             case ORGANIZATION_ID:
@@ -186,6 +188,8 @@ public final class ConversationField {
                 return visitor.visitThumbsDownCount();
             case QUALITY:
                 return visitor.visitQuality();
+            case USER_MESSAGE_COUNT:
+                return visitor.visitUserMessageCount();
             case INCOMPLETE_ACTIONS:
                 return visitor.visitIncompleteActions();
             case HANDLE_TIME:
@@ -194,8 +198,6 @@ public final class ConversationField {
                 return visitor.visitApp();
             case AGENT_ID:
                 return visitor.visitAgentId();
-            case SOURCES:
-                return visitor.visitSources();
             case PREDICTED_NPS:
                 return visitor.visitPredictedNps();
             case BOT_MESSAGE_COUNT:
@@ -206,8 +208,6 @@ public final class ConversationField {
                 return visitor.visitResolutionStatus();
             case ERRORED_ACTIONS:
                 return visitor.visitErroredActions();
-            case HUMAN_AGENTS:
-                return visitor.visitHumanAgents();
             case UNKNOWN:
             default:
                 return visitor.visitUnknown(string);
@@ -221,14 +221,14 @@ public final class ConversationField {
                 return ACTIONS;
             case "IntelligentFields":
                 return INTELLIGENT_FIELDS;
-            case "UserMessageCount":
-                return USER_MESSAGE_COUNT;
             case "Charters":
                 return CHARTERS;
             case "Variant":
                 return VARIANT;
             case "FirstResponseTime":
                 return FIRST_RESPONSE_TIME;
+            case "HumanAgents":
+                return HUMAN_AGENTS;
             case "HumanAgentsWithInserts":
                 return HUMAN_AGENTS_WITH_INSERTS;
             case "ResolvedByMaven":
@@ -239,6 +239,8 @@ public final class ConversationField {
                 return CSAT;
             case "IntelligentField":
                 return INTELLIGENT_FIELD;
+            case "Users":
+                return USERS;
             case "ThumbsUpCount":
                 return THUMBS_UP_COUNT;
             case "ActionExecutionCount":
@@ -259,8 +261,8 @@ public final class ConversationField {
                 return AGENT_ENVIRONMENT;
             case "QualityReason":
                 return QUALITY_REASON;
-            case "Users":
-                return USERS;
+            case "Sources":
+                return SOURCES;
             case "Sentiment":
                 return SENTIMENT;
             case "OrganizationId":
@@ -271,6 +273,8 @@ public final class ConversationField {
                 return THUMBS_DOWN_COUNT;
             case "Quality":
                 return QUALITY;
+            case "UserMessageCount":
+                return USER_MESSAGE_COUNT;
             case "IncompleteActions":
                 return INCOMPLETE_ACTIONS;
             case "HandleTime":
@@ -279,8 +283,6 @@ public final class ConversationField {
                 return APP;
             case "AgentId":
                 return AGENT_ID;
-            case "Sources":
-                return SOURCES;
             case "PredictedNPS":
                 return PREDICTED_NPS;
             case "BotMessageCount":
@@ -291,8 +293,6 @@ public final class ConversationField {
                 return RESOLUTION_STATUS;
             case "ErroredActions":
                 return ERRORED_ACTIONS;
-            case "HumanAgents":
-                return HUMAN_AGENTS;
             default:
                 return new ConversationField(Value.UNKNOWN, value);
         }

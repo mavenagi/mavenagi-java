@@ -51,6 +51,7 @@ public final class IntelligentFieldCore implements IIntelligentFieldCore {
      * <li>NUMBER: a number</li>
      * </ul>
      * <p>For a single select, use STRING or NUMBER together with <code>enumOptions</code>.</p>
+     * <p>Shown in Agent Designer as &quot;Value format&quot; or &quot;Field type&quot;.</p>
      */
     @JsonProperty("validationType")
     @java.lang.Override
@@ -59,7 +60,7 @@ public final class IntelligentFieldCore implements IIntelligentFieldCore {
     }
 
     /**
-     * @return Definition used by the LLM when generating this field's value
+     * @return Definition used by the LLM when generating this field's value. Shown in Agent Designer as &quot;Define this field&quot; (the evaluation instructions).
      */
     @JsonProperty("definition")
     @java.lang.Override
@@ -70,6 +71,7 @@ public final class IntelligentFieldCore implements IIntelligentFieldCore {
     /**
      * @return The finite set of values this field may take. Omit to let the LLM produce any value of
      * the <code>validationType</code>. Options may be added later with the patch endpoint, but not removed.
+     * <p>Shown in Agent Designer as &quot;Select Options&quot;.</p>
      */
     @JsonProperty("enumOptions")
     @java.lang.Override
@@ -119,6 +121,7 @@ public final class IntelligentFieldCore implements IIntelligentFieldCore {
          * <li>NUMBER: a number</li>
          * </ul>
          * <p>For a single select, use STRING or NUMBER together with <code>enumOptions</code>.</p>
+         * <p>Shown in Agent Designer as &quot;Value format&quot; or &quot;Field type&quot;.</p>
          */
         DefinitionStage validationType(@NotNull IntelligentFieldType validationType);
 
@@ -127,7 +130,7 @@ public final class IntelligentFieldCore implements IIntelligentFieldCore {
 
     public interface DefinitionStage {
         /**
-         * <p>Definition used by the LLM when generating this field's value</p>
+         * <p>Definition used by the LLM when generating this field's value. Shown in Agent Designer as &quot;Define this field&quot; (the evaluation instructions).</p>
          */
         _FinalStage definition(@NotNull String definition);
     }
@@ -138,6 +141,7 @@ public final class IntelligentFieldCore implements IIntelligentFieldCore {
         /**
          * <p>The finite set of values this field may take. Omit to let the LLM produce any value of
          * the <code>validationType</code>. Options may be added later with the patch endpoint, but not removed.</p>
+         * <p>Shown in Agent Designer as &quot;Select Options&quot;.</p>
          */
         _FinalStage enumOptions(Optional<List<EnumOption>> enumOptions);
 
@@ -175,6 +179,7 @@ public final class IntelligentFieldCore implements IIntelligentFieldCore {
          * <li>NUMBER: a number</li>
          * </ul>
          * <p>For a single select, use STRING or NUMBER together with <code>enumOptions</code>.</p>
+         * <p>Shown in Agent Designer as &quot;Value format&quot; or &quot;Field type&quot;.</p>
          * <p>The type of value this field holds. It constrains the schema the LLM is asked to fill
          * and the JSON type of the computed <code>value</code>.</p>
          * <ul>
@@ -184,6 +189,7 @@ public final class IntelligentFieldCore implements IIntelligentFieldCore {
          * <li>NUMBER: a number</li>
          * </ul>
          * <p>For a single select, use STRING or NUMBER together with <code>enumOptions</code>.</p>
+         * <p>Shown in Agent Designer as &quot;Value format&quot; or &quot;Field type&quot;.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -194,8 +200,8 @@ public final class IntelligentFieldCore implements IIntelligentFieldCore {
         }
 
         /**
-         * <p>Definition used by the LLM when generating this field's value</p>
-         * <p>Definition used by the LLM when generating this field's value</p>
+         * <p>Definition used by the LLM when generating this field's value. Shown in Agent Designer as &quot;Define this field&quot; (the evaluation instructions).</p>
+         * <p>Definition used by the LLM when generating this field's value. Shown in Agent Designer as &quot;Define this field&quot; (the evaluation instructions).</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -208,6 +214,7 @@ public final class IntelligentFieldCore implements IIntelligentFieldCore {
         /**
          * <p>The finite set of values this field may take. Omit to let the LLM produce any value of
          * the <code>validationType</code>. Options may be added later with the patch endpoint, but not removed.</p>
+         * <p>Shown in Agent Designer as &quot;Select Options&quot;.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -219,6 +226,7 @@ public final class IntelligentFieldCore implements IIntelligentFieldCore {
         /**
          * <p>The finite set of values this field may take. Omit to let the LLM produce any value of
          * the <code>validationType</code>. Options may be added later with the patch endpoint, but not removed.</p>
+         * <p>Shown in Agent Designer as &quot;Select Options&quot;.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "enumOptions", nulls = Nulls.SKIP)

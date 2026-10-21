@@ -54,6 +54,7 @@ public final class CharterReferences {
     /**
      * @return The IDs of actions this charter makes available.
      * Maximum 50 actions per charter.
+     * <p>Shown in Agent Designer as &quot;Capabilities&quot;.</p>
      */
     @JsonProperty("actionIds")
     public Set<EntityId> getActionIds() {
@@ -127,6 +128,7 @@ public final class CharterReferences {
         /**
          * <p>The IDs of actions this charter makes available.
          * Maximum 50 actions per charter.</p>
+         * <p>Shown in Agent Designer as &quot;Capabilities&quot;.</p>
          */
         @JsonSetter(value = "actionIds", nulls = Nulls.SKIP)
         public Builder actionIds(Set<EntityId> actionIds) {

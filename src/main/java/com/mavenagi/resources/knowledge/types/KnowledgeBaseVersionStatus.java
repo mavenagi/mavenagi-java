@@ -7,14 +7,14 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public final class KnowledgeBaseVersionStatus {
-    public static final KnowledgeBaseVersionStatus IN_PROGRESS =
-            new KnowledgeBaseVersionStatus(Value.IN_PROGRESS, "IN_PROGRESS");
-
     public static final KnowledgeBaseVersionStatus CANCELED =
             new KnowledgeBaseVersionStatus(Value.CANCELED, "CANCELED");
 
     public static final KnowledgeBaseVersionStatus SUCCEEDED =
             new KnowledgeBaseVersionStatus(Value.SUCCEEDED, "SUCCEEDED");
+
+    public static final KnowledgeBaseVersionStatus IN_PROGRESS =
+            new KnowledgeBaseVersionStatus(Value.IN_PROGRESS, "IN_PROGRESS");
 
     public static final KnowledgeBaseVersionStatus FAILED = new KnowledgeBaseVersionStatus(Value.FAILED, "FAILED");
 
@@ -51,12 +51,12 @@ public final class KnowledgeBaseVersionStatus {
 
     public <T> T visit(Visitor<T> visitor) {
         switch (value) {
-            case IN_PROGRESS:
-                return visitor.visitInProgress();
             case CANCELED:
                 return visitor.visitCanceled();
             case SUCCEEDED:
                 return visitor.visitSucceeded();
+            case IN_PROGRESS:
+                return visitor.visitInProgress();
             case FAILED:
                 return visitor.visitFailed();
             case UNKNOWN:
@@ -68,12 +68,12 @@ public final class KnowledgeBaseVersionStatus {
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static KnowledgeBaseVersionStatus valueOf(String value) {
         switch (value) {
-            case "IN_PROGRESS":
-                return IN_PROGRESS;
             case "CANCELED":
                 return CANCELED;
             case "SUCCEEDED":
                 return SUCCEEDED;
+            case "IN_PROGRESS":
+                return IN_PROGRESS;
             case "FAILED":
                 return FAILED;
             default:

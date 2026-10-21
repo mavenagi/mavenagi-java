@@ -7,15 +7,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public final class EntityType {
-    public static final EntityType AGENT = new EntityType(Value.AGENT, "AGENT");
-
     public static final EntityType ACTION = new EntityType(Value.ACTION, "ACTION");
 
     public static final EntityType ASSET = new EntityType(Value.ASSET, "ASSET");
-
-    public static final EntityType USER = new EntityType(Value.USER, "USER");
-
-    public static final EntityType KNOWLEDGE_BASE = new EntityType(Value.KNOWLEDGE_BASE, "KNOWLEDGE_BASE");
 
     public static final EntityType AGENT_VARIANT = new EntityType(Value.AGENT_VARIANT, "AGENT_VARIANT");
 
@@ -24,25 +18,23 @@ public final class EntityType {
     public static final EntityType CONVERSATION_KICKOFF =
             new EntityType(Value.CONVERSATION_KICKOFF, "CONVERSATION_KICKOFF");
 
+    public static final EntityType SCENARIO = new EntityType(Value.SCENARIO, "SCENARIO");
+
     public static final EntityType CONVERSATION = new EntityType(Value.CONVERSATION, "CONVERSATION");
 
     public static final EntityType EVENT_TRIGGER = new EntityType(Value.EVENT_TRIGGER, "EVENT_TRIGGER");
 
+    public static final EntityType SCENARIO_SUITE = new EntityType(Value.SCENARIO_SUITE, "SCENARIO_SUITE");
+
     public static final EntityType CONVERSATION_MESSAGE =
             new EntityType(Value.CONVERSATION_MESSAGE, "CONVERSATION_MESSAGE");
-
-    public static final EntityType CUSTOMER = new EntityType(Value.CUSTOMER, "CUSTOMER");
 
     public static final EntityType KNOWLEDGE_BASE_VERSION =
             new EntityType(Value.KNOWLEDGE_BASE_VERSION, "KNOWLEDGE_BASE_VERSION");
 
-    public static final EntityType SEGMENT = new EntityType(Value.SEGMENT, "SEGMENT");
-
     public static final EntityType INTELLIGENT_FIELD = new EntityType(Value.INTELLIGENT_FIELD, "INTELLIGENT_FIELD");
 
     public static final EntityType TRAFFIC_CONFIG = new EntityType(Value.TRAFFIC_CONFIG, "TRAFFIC_CONFIG");
-
-    public static final EntityType AGENT_USER = new EntityType(Value.AGENT_USER, "AGENT_USER");
 
     public static final EntityType KNOWLEDGE_DOCUMENT = new EntityType(Value.KNOWLEDGE_DOCUMENT, "KNOWLEDGE_DOCUMENT");
 
@@ -52,9 +44,27 @@ public final class EntityType {
 
     public static final EntityType USER_PROFILE = new EntityType(Value.USER_PROFILE, "USER_PROFILE");
 
+    public static final EntityType INBOX_ITEM_FIX = new EntityType(Value.INBOX_ITEM_FIX, "INBOX_ITEM_FIX");
+
+    public static final EntityType AGENT = new EntityType(Value.AGENT, "AGENT");
+
+    public static final EntityType FUNCTION = new EntityType(Value.FUNCTION, "FUNCTION");
+
+    public static final EntityType SCENARIO_RUN = new EntityType(Value.SCENARIO_RUN, "SCENARIO_RUN");
+
+    public static final EntityType USER = new EntityType(Value.USER, "USER");
+
+    public static final EntityType KNOWLEDGE_BASE = new EntityType(Value.KNOWLEDGE_BASE, "KNOWLEDGE_BASE");
+
+    public static final EntityType CUSTOMER = new EntityType(Value.CUSTOMER, "CUSTOMER");
+
+    public static final EntityType SEGMENT = new EntityType(Value.SEGMENT, "SEGMENT");
+
+    public static final EntityType AGENT_USER = new EntityType(Value.AGENT_USER, "AGENT_USER");
+
     public static final EntityType INBOX_ITEM = new EntityType(Value.INBOX_ITEM, "INBOX_ITEM");
 
-    public static final EntityType INBOX_ITEM_FIX = new EntityType(Value.INBOX_ITEM_FIX, "INBOX_ITEM_FIX");
+    public static final EntityType FUNCTION_VERSION = new EntityType(Value.FUNCTION_VERSION, "FUNCTION_VERSION");
 
     private final Value value;
 
@@ -87,40 +97,32 @@ public final class EntityType {
 
     public <T> T visit(Visitor<T> visitor) {
         switch (value) {
-            case AGENT:
-                return visitor.visitAgent();
             case ACTION:
                 return visitor.visitAction();
             case ASSET:
                 return visitor.visitAsset();
-            case USER:
-                return visitor.visitUser();
-            case KNOWLEDGE_BASE:
-                return visitor.visitKnowledgeBase();
             case AGENT_VARIANT:
                 return visitor.visitAgentVariant();
             case CHARTER:
                 return visitor.visitCharter();
             case CONVERSATION_KICKOFF:
                 return visitor.visitConversationKickoff();
+            case SCENARIO:
+                return visitor.visitScenario();
             case CONVERSATION:
                 return visitor.visitConversation();
             case EVENT_TRIGGER:
                 return visitor.visitEventTrigger();
+            case SCENARIO_SUITE:
+                return visitor.visitScenarioSuite();
             case CONVERSATION_MESSAGE:
                 return visitor.visitConversationMessage();
-            case CUSTOMER:
-                return visitor.visitCustomer();
             case KNOWLEDGE_BASE_VERSION:
                 return visitor.visitKnowledgeBaseVersion();
-            case SEGMENT:
-                return visitor.visitSegment();
             case INTELLIGENT_FIELD:
                 return visitor.visitIntelligentField();
             case TRAFFIC_CONFIG:
                 return visitor.visitTrafficConfig();
-            case AGENT_USER:
-                return visitor.visitAgentUser();
             case KNOWLEDGE_DOCUMENT:
                 return visitor.visitKnowledgeDocument();
             case EVENT:
@@ -129,10 +131,28 @@ public final class EntityType {
                 return visitor.visitFeedback();
             case USER_PROFILE:
                 return visitor.visitUserProfile();
-            case INBOX_ITEM:
-                return visitor.visitInboxItem();
             case INBOX_ITEM_FIX:
                 return visitor.visitInboxItemFix();
+            case AGENT:
+                return visitor.visitAgent();
+            case FUNCTION:
+                return visitor.visitFunction();
+            case SCENARIO_RUN:
+                return visitor.visitScenarioRun();
+            case USER:
+                return visitor.visitUser();
+            case KNOWLEDGE_BASE:
+                return visitor.visitKnowledgeBase();
+            case CUSTOMER:
+                return visitor.visitCustomer();
+            case SEGMENT:
+                return visitor.visitSegment();
+            case AGENT_USER:
+                return visitor.visitAgentUser();
+            case INBOX_ITEM:
+                return visitor.visitInboxItem();
+            case FUNCTION_VERSION:
+                return visitor.visitFunctionVersion();
             case UNKNOWN:
             default:
                 return visitor.visitUnknown(string);
@@ -142,40 +162,32 @@ public final class EntityType {
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static EntityType valueOf(String value) {
         switch (value) {
-            case "AGENT":
-                return AGENT;
             case "ACTION":
                 return ACTION;
             case "ASSET":
                 return ASSET;
-            case "USER":
-                return USER;
-            case "KNOWLEDGE_BASE":
-                return KNOWLEDGE_BASE;
             case "AGENT_VARIANT":
                 return AGENT_VARIANT;
             case "CHARTER":
                 return CHARTER;
             case "CONVERSATION_KICKOFF":
                 return CONVERSATION_KICKOFF;
+            case "SCENARIO":
+                return SCENARIO;
             case "CONVERSATION":
                 return CONVERSATION;
             case "EVENT_TRIGGER":
                 return EVENT_TRIGGER;
+            case "SCENARIO_SUITE":
+                return SCENARIO_SUITE;
             case "CONVERSATION_MESSAGE":
                 return CONVERSATION_MESSAGE;
-            case "CUSTOMER":
-                return CUSTOMER;
             case "KNOWLEDGE_BASE_VERSION":
                 return KNOWLEDGE_BASE_VERSION;
-            case "SEGMENT":
-                return SEGMENT;
             case "INTELLIGENT_FIELD":
                 return INTELLIGENT_FIELD;
             case "TRAFFIC_CONFIG":
                 return TRAFFIC_CONFIG;
-            case "AGENT_USER":
-                return AGENT_USER;
             case "KNOWLEDGE_DOCUMENT":
                 return KNOWLEDGE_DOCUMENT;
             case "EVENT":
@@ -184,10 +196,28 @@ public final class EntityType {
                 return FEEDBACK;
             case "USER_PROFILE":
                 return USER_PROFILE;
-            case "INBOX_ITEM":
-                return INBOX_ITEM;
             case "INBOX_ITEM_FIX":
                 return INBOX_ITEM_FIX;
+            case "AGENT":
+                return AGENT;
+            case "FUNCTION":
+                return FUNCTION;
+            case "SCENARIO_RUN":
+                return SCENARIO_RUN;
+            case "USER":
+                return USER;
+            case "KNOWLEDGE_BASE":
+                return KNOWLEDGE_BASE;
+            case "CUSTOMER":
+                return CUSTOMER;
+            case "SEGMENT":
+                return SEGMENT;
+            case "AGENT_USER":
+                return AGENT_USER;
+            case "INBOX_ITEM":
+                return INBOX_ITEM;
+            case "FUNCTION_VERSION":
+                return FUNCTION_VERSION;
             default:
                 return new EntityType(Value.UNKNOWN, value);
         }
@@ -240,6 +270,16 @@ public final class EntityType {
 
         TRAFFIC_CONFIG,
 
+        SCENARIO,
+
+        SCENARIO_SUITE,
+
+        SCENARIO_RUN,
+
+        FUNCTION,
+
+        FUNCTION_VERSION,
+
         UNKNOWN
     }
 
@@ -289,6 +329,16 @@ public final class EntityType {
         T visitAsset();
 
         T visitTrafficConfig();
+
+        T visitScenario();
+
+        T visitScenarioSuite();
+
+        T visitScenarioRun();
+
+        T visitFunction();
+
+        T visitFunctionVersion();
 
         T visitUnknown(String unknownType);
     }

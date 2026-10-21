@@ -158,6 +158,7 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
      * @return The status of the most recent version of the knowledge base.
      * The <code>activeVersionId</code> will only be populated if this status is <code>SUCCEEDED</code>.
      * Use the <code>listKnowledgeBaseVersions</code> endpoint to get the full list of versions.
+     * <p>Shown in Agent Designer as &quot;Refresh status&quot;.</p>
      */
     @JsonProperty("mostRecentVersionStatus")
     public KnowledgeBaseVersionStatus getMostRecentVersionStatus() {
@@ -165,7 +166,7 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
     }
 
     /**
-     * @return The type of the knowledge base. Can not be changed once created.
+     * @return The type of the knowledge base. Can not be changed once created. Shown in Agent Designer as &quot;Source&quot;.
      */
     @JsonProperty("type")
     public KnowledgeBaseType getType() {
@@ -345,13 +346,14 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
          * <p>The status of the most recent version of the knowledge base.
          * The <code>activeVersionId</code> will only be populated if this status is <code>SUCCEEDED</code>.
          * Use the <code>listKnowledgeBaseVersions</code> endpoint to get the full list of versions.</p>
+         * <p>Shown in Agent Designer as &quot;Refresh status&quot;.</p>
          */
         TypeStage mostRecentVersionStatus(@NotNull KnowledgeBaseVersionStatus mostRecentVersionStatus);
     }
 
     public interface TypeStage {
         /**
-         * <p>The type of the knowledge base. Can not be changed once created.</p>
+         * <p>The type of the knowledge base. Can not be changed once created. Shown in Agent Designer as &quot;Source&quot;.</p>
          */
         LlmInclusionStatusStage type(@NotNull KnowledgeBaseType type);
     }
@@ -572,9 +574,11 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
          * <p>The status of the most recent version of the knowledge base.
          * The <code>activeVersionId</code> will only be populated if this status is <code>SUCCEEDED</code>.
          * Use the <code>listKnowledgeBaseVersions</code> endpoint to get the full list of versions.</p>
+         * <p>Shown in Agent Designer as &quot;Refresh status&quot;.</p>
          * <p>The status of the most recent version of the knowledge base.
          * The <code>activeVersionId</code> will only be populated if this status is <code>SUCCEEDED</code>.
          * Use the <code>listKnowledgeBaseVersions</code> endpoint to get the full list of versions.</p>
+         * <p>Shown in Agent Designer as &quot;Refresh status&quot;.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -586,8 +590,8 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
         }
 
         /**
-         * <p>The type of the knowledge base. Can not be changed once created.</p>
-         * <p>The type of the knowledge base. Can not be changed once created.</p>
+         * <p>The type of the knowledge base. Can not be changed once created. Shown in Agent Designer as &quot;Source&quot;.</p>
+         * <p>The type of the knowledge base. Can not be changed once created. Shown in Agent Designer as &quot;Source&quot;.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override

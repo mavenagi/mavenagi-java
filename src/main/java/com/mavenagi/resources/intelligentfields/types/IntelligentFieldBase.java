@@ -52,7 +52,7 @@ public final class IntelligentFieldBase implements IIntelligentFieldBase, IIntel
     }
 
     /**
-     * @return Target entity type for evaluation. CONVERSATION is supported, and AGENT_USER is supported for agents with user-level intelligent fields enabled. The backend will return an error for other types.
+     * @return Target entity type for evaluation. CONVERSATION is supported, and AGENT_USER is supported for agents with user-level intelligent fields enabled. The backend will return an error for other types. Shown in Agent Designer as &quot;Target&quot;, with <code>CONVERSATION</code> as &quot;On conversations&quot; and <code>AGENT_USER</code> as &quot;On users&quot;.
      */
     @JsonProperty("entityType")
     @java.lang.Override
@@ -79,6 +79,7 @@ public final class IntelligentFieldBase implements IIntelligentFieldBase, IIntel
      * <li>NUMBER: a number</li>
      * </ul>
      * <p>For a single select, use STRING or NUMBER together with <code>enumOptions</code>.</p>
+     * <p>Shown in Agent Designer as &quot;Value format&quot; or &quot;Field type&quot;.</p>
      */
     @JsonProperty("validationType")
     @java.lang.Override
@@ -87,7 +88,7 @@ public final class IntelligentFieldBase implements IIntelligentFieldBase, IIntel
     }
 
     /**
-     * @return Definition used by the LLM when generating this field's value
+     * @return Definition used by the LLM when generating this field's value. Shown in Agent Designer as &quot;Define this field&quot; (the evaluation instructions).
      */
     @JsonProperty("definition")
     @java.lang.Override
@@ -98,6 +99,7 @@ public final class IntelligentFieldBase implements IIntelligentFieldBase, IIntel
     /**
      * @return The finite set of values this field may take. Omit to let the LLM produce any value of
      * the <code>validationType</code>. Options may be added later with the patch endpoint, but not removed.
+     * <p>Shown in Agent Designer as &quot;Select Options&quot;.</p>
      */
     @JsonProperty("enumOptions")
     @java.lang.Override
@@ -140,7 +142,7 @@ public final class IntelligentFieldBase implements IIntelligentFieldBase, IIntel
 
     public interface EntityTypeStage {
         /**
-         * <p>Target entity type for evaluation. CONVERSATION is supported, and AGENT_USER is supported for agents with user-level intelligent fields enabled. The backend will return an error for other types.</p>
+         * <p>Target entity type for evaluation. CONVERSATION is supported, and AGENT_USER is supported for agents with user-level intelligent fields enabled. The backend will return an error for other types. Shown in Agent Designer as &quot;Target&quot;, with <code>CONVERSATION</code> as &quot;On conversations&quot; and <code>AGENT_USER</code> as &quot;On users&quot;.</p>
          */
         ValidationTypeStage entityType(@NotNull EntityType entityType);
 
@@ -158,13 +160,14 @@ public final class IntelligentFieldBase implements IIntelligentFieldBase, IIntel
          * <li>NUMBER: a number</li>
          * </ul>
          * <p>For a single select, use STRING or NUMBER together with <code>enumOptions</code>.</p>
+         * <p>Shown in Agent Designer as &quot;Value format&quot; or &quot;Field type&quot;.</p>
          */
         DefinitionStage validationType(@NotNull IntelligentFieldType validationType);
     }
 
     public interface DefinitionStage {
         /**
-         * <p>Definition used by the LLM when generating this field's value</p>
+         * <p>Definition used by the LLM when generating this field's value. Shown in Agent Designer as &quot;Define this field&quot; (the evaluation instructions).</p>
          */
         _FinalStage definition(@NotNull String definition);
     }
@@ -182,6 +185,7 @@ public final class IntelligentFieldBase implements IIntelligentFieldBase, IIntel
         /**
          * <p>The finite set of values this field may take. Omit to let the LLM produce any value of
          * the <code>validationType</code>. Options may be added later with the patch endpoint, but not removed.</p>
+         * <p>Shown in Agent Designer as &quot;Select Options&quot;.</p>
          */
         _FinalStage enumOptions(Optional<List<EnumOption>> enumOptions);
 
@@ -216,8 +220,8 @@ public final class IntelligentFieldBase implements IIntelligentFieldBase, IIntel
         }
 
         /**
-         * <p>Target entity type for evaluation. CONVERSATION is supported, and AGENT_USER is supported for agents with user-level intelligent fields enabled. The backend will return an error for other types.</p>
-         * <p>Target entity type for evaluation. CONVERSATION is supported, and AGENT_USER is supported for agents with user-level intelligent fields enabled. The backend will return an error for other types.</p>
+         * <p>Target entity type for evaluation. CONVERSATION is supported, and AGENT_USER is supported for agents with user-level intelligent fields enabled. The backend will return an error for other types. Shown in Agent Designer as &quot;Target&quot;, with <code>CONVERSATION</code> as &quot;On conversations&quot; and <code>AGENT_USER</code> as &quot;On users&quot;.</p>
+         * <p>Target entity type for evaluation. CONVERSATION is supported, and AGENT_USER is supported for agents with user-level intelligent fields enabled. The backend will return an error for other types. Shown in Agent Designer as &quot;Target&quot;, with <code>CONVERSATION</code> as &quot;On conversations&quot; and <code>AGENT_USER</code> as &quot;On users&quot;.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -237,6 +241,7 @@ public final class IntelligentFieldBase implements IIntelligentFieldBase, IIntel
          * <li>NUMBER: a number</li>
          * </ul>
          * <p>For a single select, use STRING or NUMBER together with <code>enumOptions</code>.</p>
+         * <p>Shown in Agent Designer as &quot;Value format&quot; or &quot;Field type&quot;.</p>
          * <p>The type of value this field holds. It constrains the schema the LLM is asked to fill
          * and the JSON type of the computed <code>value</code>.</p>
          * <ul>
@@ -246,6 +251,7 @@ public final class IntelligentFieldBase implements IIntelligentFieldBase, IIntel
          * <li>NUMBER: a number</li>
          * </ul>
          * <p>For a single select, use STRING or NUMBER together with <code>enumOptions</code>.</p>
+         * <p>Shown in Agent Designer as &quot;Value format&quot; or &quot;Field type&quot;.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -256,8 +262,8 @@ public final class IntelligentFieldBase implements IIntelligentFieldBase, IIntel
         }
 
         /**
-         * <p>Definition used by the LLM when generating this field's value</p>
-         * <p>Definition used by the LLM when generating this field's value</p>
+         * <p>Definition used by the LLM when generating this field's value. Shown in Agent Designer as &quot;Define this field&quot; (the evaluation instructions).</p>
+         * <p>Definition used by the LLM when generating this field's value. Shown in Agent Designer as &quot;Define this field&quot; (the evaluation instructions).</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -270,6 +276,7 @@ public final class IntelligentFieldBase implements IIntelligentFieldBase, IIntel
         /**
          * <p>The finite set of values this field may take. Omit to let the LLM produce any value of
          * the <code>validationType</code>. Options may be added later with the patch endpoint, but not removed.</p>
+         * <p>Shown in Agent Designer as &quot;Select Options&quot;.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -281,6 +288,7 @@ public final class IntelligentFieldBase implements IIntelligentFieldBase, IIntel
         /**
          * <p>The finite set of values this field may take. Omit to let the LLM produce any value of
          * the <code>validationType</code>. Options may be added later with the patch endpoint, but not removed.</p>
+         * <p>Shown in Agent Designer as &quot;Select Options&quot;.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "enumOptions", nulls = Nulls.SKIP)

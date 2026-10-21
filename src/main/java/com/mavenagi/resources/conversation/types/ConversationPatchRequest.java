@@ -54,7 +54,7 @@ public final class ConversationPatchRequest {
     }
 
     /**
-     * @return Whether the conversation is open. Set it to false to close the conversation, which records a <code>CONVERSATION_CLOSED</code> system event. Closing is final: a closed conversation cannot be reopened and takes no new questions, form submissions, messages or metadata. It can still be read, deleted, and patched otherwise, for example to add attachments. For a conversation with the <code>ASYNC</code> capability, only an open conversation can receive asynchronous messages.
+     * @return Whether the conversation is open. Set it to false to close the conversation, which records a <code>CONVERSATION_CLOSED</code> system event. Closing is final: a closed conversation cannot be reopened and takes no new questions, form submissions, messages or metadata. It can still be read, deleted, and patched otherwise, for example to add attachments. For a conversation with the <code>ASYNC</code> capability, only an open conversation can receive asynchronous messages. Close a conversation only after its ask calls have returned. An answer still being generated when the conversation closes is saved anyway, and the <code>CONVERSATION_CLOSED</code> event can then go out before that answer is in the conversation's data.
      */
     @JsonProperty("open")
     public Optional<Boolean> getOpen() {
@@ -147,7 +147,7 @@ public final class ConversationPatchRequest {
         }
 
         /**
-         * <p>Whether the conversation is open. Set it to false to close the conversation, which records a <code>CONVERSATION_CLOSED</code> system event. Closing is final: a closed conversation cannot be reopened and takes no new questions, form submissions, messages or metadata. It can still be read, deleted, and patched otherwise, for example to add attachments. For a conversation with the <code>ASYNC</code> capability, only an open conversation can receive asynchronous messages.</p>
+         * <p>Whether the conversation is open. Set it to false to close the conversation, which records a <code>CONVERSATION_CLOSED</code> system event. Closing is final: a closed conversation cannot be reopened and takes no new questions, form submissions, messages or metadata. It can still be read, deleted, and patched otherwise, for example to add attachments. For a conversation with the <code>ASYNC</code> capability, only an open conversation can receive asynchronous messages. Close a conversation only after its ask calls have returned. An answer still being generated when the conversation closes is saved anyway, and the <code>CONVERSATION_CLOSED</code> event can then go out before that answer is in the conversation's data.</p>
          */
         @JsonSetter(value = "open", nulls = Nulls.SKIP)
         public Builder open(Optional<Boolean> open) {

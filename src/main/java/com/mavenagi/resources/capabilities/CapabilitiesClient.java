@@ -10,9 +10,11 @@ import com.mavenagi.resources.capabilities.requests.CapabilityExecutionsSearchRe
 import com.mavenagi.resources.capabilities.requests.DeleteCapabilityByTypeRequest;
 import com.mavenagi.resources.capabilities.requests.GetCapabilityByTypeRequest;
 import com.mavenagi.resources.capabilities.requests.PatchCapabilityByTypeRequest;
+import com.mavenagi.resources.capabilities.requests.SimulateCapabilityByTypeRequest;
 import com.mavenagi.resources.capabilities.types.CapabilitiesSearchResponse;
 import com.mavenagi.resources.capabilities.types.CapabilityExecutionsSearchResponse;
 import com.mavenagi.resources.capabilities.types.CapabilityResponse;
+import com.mavenagi.resources.capabilities.types.CapabilitySimulationResult;
 import com.mavenagi.resources.commons.types.CapabilityType;
 
 public class CapabilitiesClient {
@@ -153,6 +155,41 @@ public class CapabilitiesClient {
             RequestOptions requestOptions) {
         this.rawClient
                 .deleteCapability(capabilityType, referenceId, request, requestOptions)
+                .body();
+    }
+
+    /**
+     * Run one of an agent's capabilities once, as a simulation, and return what it produced.
+     * <p>The caller supplies everything the capability reads, so it runs in isolation: no
+     * conversation or agent user has to exist first. The capability is told its mode is
+     * <code>SIMULATION</code>, the same as in a test suite run, so an app that honours it can avoid side
+     * effects in real systems. Nothing here runs a capability live.</p>
+     * <p>Only actions can be simulated today. Triggers and conversation kickoffs are rejected with a
+     * 400 until they can run as simulations. Intelligent fields cannot be simulated.</p>
+     */
+    public CapabilitySimulationResult simulateCapability(
+            CapabilityType capabilityType, String referenceId, SimulateCapabilityByTypeRequest request) {
+        return this.rawClient
+                .simulateCapability(capabilityType, referenceId, request)
+                .body();
+    }
+
+    /**
+     * Run one of an agent's capabilities once, as a simulation, and return what it produced.
+     * <p>The caller supplies everything the capability reads, so it runs in isolation: no
+     * conversation or agent user has to exist first. The capability is told its mode is
+     * <code>SIMULATION</code>, the same as in a test suite run, so an app that honours it can avoid side
+     * effects in real systems. Nothing here runs a capability live.</p>
+     * <p>Only actions can be simulated today. Triggers and conversation kickoffs are rejected with a
+     * 400 until they can run as simulations. Intelligent fields cannot be simulated.</p>
+     */
+    public CapabilitySimulationResult simulateCapability(
+            CapabilityType capabilityType,
+            String referenceId,
+            SimulateCapabilityByTypeRequest request,
+            RequestOptions requestOptions) {
+        return this.rawClient
+                .simulateCapability(capabilityType, referenceId, request, requestOptions)
                 .body();
     }
 

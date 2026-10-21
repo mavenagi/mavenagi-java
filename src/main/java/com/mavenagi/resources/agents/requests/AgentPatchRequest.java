@@ -113,6 +113,7 @@ public final class AgentPatchRequest {
 
     /**
      * @return The system fallback message.
+     * <p>Rejected with reason <code>VARIANT_REQUIRED</code> while <code>SYSTEM_FALLBACK_MESSAGE</code> is in <code>getVersionedEntityTypes</code>; set it through <code>patchVersionedSettings</code>.</p>
      */
     @JsonIgnore
     public Optional<String> getSystemFallbackMessage() {
@@ -168,6 +169,7 @@ public final class AgentPatchRequest {
 
     /**
      * @return LLM prompt for generating a response when the user's question has been detected as unsafe.
+     * <p>Rejected with reason <code>VARIANT_REQUIRED</code> while <code>CONTENT_SAFETY_VIOLATION_RESPONSE_PROMPT_TEXT</code> is in <code>getVersionedEntityTypes</code>; set it through <code>patchVersionedSettings</code>.</p>
      */
     @JsonIgnore
     public Optional<String> getContentSafetyViolationResponsePromptText() {
@@ -368,6 +370,7 @@ public final class AgentPatchRequest {
 
         /**
          * <p>The system fallback message.</p>
+         * <p>Rejected with reason <code>VARIANT_REQUIRED</code> while <code>SYSTEM_FALLBACK_MESSAGE</code> is in <code>getVersionedEntityTypes</code>; set it through <code>patchVersionedSettings</code>.</p>
          */
         @JsonSetter(value = "systemFallbackMessage", nulls = Nulls.SKIP)
         public Builder systemFallbackMessage(Optional<String> systemFallbackMessage) {
@@ -485,6 +488,7 @@ public final class AgentPatchRequest {
 
         /**
          * <p>LLM prompt for generating a response when the user's question has been detected as unsafe.</p>
+         * <p>Rejected with reason <code>VARIANT_REQUIRED</code> while <code>CONTENT_SAFETY_VIOLATION_RESPONSE_PROMPT_TEXT</code> is in <code>getVersionedEntityTypes</code>; set it through <code>patchVersionedSettings</code>.</p>
          */
         @JsonSetter(value = "contentSafetyViolationResponsePromptText", nulls = Nulls.SKIP)
         public Builder contentSafetyViolationResponsePromptText(

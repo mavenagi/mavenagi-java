@@ -15,6 +15,9 @@ public final class ErrorReason {
 
     public static final ErrorReason VARIANT_LIVE = new ErrorReason(Value.VARIANT_LIVE, "VARIANT_LIVE");
 
+    public static final ErrorReason VARIANT_LIMIT_REACHED =
+            new ErrorReason(Value.VARIANT_LIMIT_REACHED, "VARIANT_LIMIT_REACHED");
+
     public static final ErrorReason VARIANT_REQUIRED = new ErrorReason(Value.VARIANT_REQUIRED, "VARIANT_REQUIRED");
 
     public static final ErrorReason WORKING_SET_HAS_UNVERSIONED_EDITS =
@@ -73,6 +76,8 @@ public final class ErrorReason {
                 return visitor.visitVariantHasStagedEdits();
             case VARIANT_LIVE:
                 return visitor.visitVariantLive();
+            case VARIANT_LIMIT_REACHED:
+                return visitor.visitVariantLimitReached();
             case VARIANT_REQUIRED:
                 return visitor.visitVariantRequired();
             case WORKING_SET_HAS_UNVERSIONED_EDITS:
@@ -104,6 +109,8 @@ public final class ErrorReason {
                 return VARIANT_HAS_STAGED_EDITS;
             case "VARIANT_LIVE":
                 return VARIANT_LIVE;
+            case "VARIANT_LIMIT_REACHED":
+                return VARIANT_LIMIT_REACHED;
             case "VARIANT_REQUIRED":
                 return VARIANT_REQUIRED;
             case "WORKING_SET_HAS_UNVERSIONED_EDITS":
@@ -138,6 +145,8 @@ public final class ErrorReason {
 
         VARIANT_ALREADY_EXISTS,
 
+        VARIANT_LIMIT_REACHED,
+
         CANNOT_ARCHIVE_LIVE_VARIANT,
 
         VARIANT_HAS_STAGED_EDITS,
@@ -163,6 +172,8 @@ public final class ErrorReason {
         T visitNothingToCommit();
 
         T visitVariantAlreadyExists();
+
+        T visitVariantLimitReached();
 
         T visitCannotArchiveLiveVariant();
 

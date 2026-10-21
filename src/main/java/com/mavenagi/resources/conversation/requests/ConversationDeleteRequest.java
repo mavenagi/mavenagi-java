@@ -42,7 +42,7 @@ public final class ConversationDeleteRequest {
     }
 
     /**
-     * @return The reason for deleting the conversation. This message will replace all user messages in the conversation.
+     * @return The reason for deleting the conversation. It replaces the text of every message in the conversation, and the conversation's <code>analysis.userRequest</code>.
      */
     @JsonProperty("reason")
     public String getReason() {
@@ -80,7 +80,7 @@ public final class ConversationDeleteRequest {
 
     public interface ReasonStage {
         /**
-         * <p>The reason for deleting the conversation. This message will replace all user messages in the conversation.</p>
+         * <p>The reason for deleting the conversation. It replaces the text of every message in the conversation, and the conversation's <code>analysis.userRequest</code>.</p>
          */
         _FinalStage reason(@NotNull String reason);
 
@@ -117,8 +117,8 @@ public final class ConversationDeleteRequest {
         }
 
         /**
-         * <p>The reason for deleting the conversation. This message will replace all user messages in the conversation.</p>
-         * <p>The reason for deleting the conversation. This message will replace all user messages in the conversation.</p>
+         * <p>The reason for deleting the conversation. It replaces the text of every message in the conversation, and the conversation's <code>analysis.userRequest</code>.</p>
+         * <p>The reason for deleting the conversation. It replaces the text of every message in the conversation, and the conversation's <code>analysis.userRequest</code>.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override

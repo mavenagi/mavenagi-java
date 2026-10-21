@@ -134,30 +134,34 @@ public class ConversationClient {
     }
 
     /**
-     * Wipes a conversation of all user data.
-     * The conversation ID will still exist and non-user specific data will still be retained.
-     * Attempts to modify or add messages to the conversation will throw an error.
-     * The conversation is sealed against further writes as soon as this call returns. A <code>202 Accepted</code> response means the wipe is still completing and will finish on its own.
+     * Wipes the user content from a conversation.
+     * The conversation and its ID still exist afterwards, and so does its non-content data, so it still counts in metrics.
+     * The conversation is sealed against further writes as soon as this call returns: adding or changing messages fails with <code>409 Conflict</code>, and so does deleting it again once the wipe has finished.
+     * A <code>202 Accepted</code> response means the wipe is still completing and will finish on its own.
      * <p>Simulation conversations will no longer be visible in search results nor metrics.
-     * Non-simulation conversations will remain visible - they can not be fully removed from the system.</p>
+     * Non-simulation conversations remain visible; they cannot be fully removed from the system.</p>
      * <p>&lt;Warning&gt;This is a destructive operation and cannot be undone. &lt;br/&gt;&lt;br/&gt;
-     * The exact fields cleared include: the conversation subject, userRequest, agentResponse.
-     * As well as the text response, followup questions, and backend LLM prompt of all messages.&lt;/Warning&gt;</p>
+     * What is wiped: the conversation's <code>subject</code> and <code>analysis.agentResponse</code> are cleared, and <code>analysis.userRequest</code> is replaced with <code>reason</code>.
+     * Every message's text, from the user and the agent alike, is replaced with <code>reason</code>, and its attachments, follow-up questions, backend LLM prompt and history, the data actions returned, and action arguments are cleared.
+     * Evaluation results for the conversation are deleted, and the payloads recorded on its trigger and action executions are cleared. &lt;br/&gt;&lt;br/&gt;
+     * What is kept: the conversation's metadata, each message's charts, structured answer and app-supplied metadata, the conversation's intelligent field values, its feedback and events, and the users who took part. To wipe a user's data, use <code>DELETE /users/{userId}</code> or <code>DELETE /agentusers/{agentUserId}</code>.&lt;/Warning&gt;</p>
      */
     public void delete(String conversationId, ConversationDeleteRequest request) {
         this.rawClient.delete(conversationId, request).body();
     }
 
     /**
-     * Wipes a conversation of all user data.
-     * The conversation ID will still exist and non-user specific data will still be retained.
-     * Attempts to modify or add messages to the conversation will throw an error.
-     * The conversation is sealed against further writes as soon as this call returns. A <code>202 Accepted</code> response means the wipe is still completing and will finish on its own.
+     * Wipes the user content from a conversation.
+     * The conversation and its ID still exist afterwards, and so does its non-content data, so it still counts in metrics.
+     * The conversation is sealed against further writes as soon as this call returns: adding or changing messages fails with <code>409 Conflict</code>, and so does deleting it again once the wipe has finished.
+     * A <code>202 Accepted</code> response means the wipe is still completing and will finish on its own.
      * <p>Simulation conversations will no longer be visible in search results nor metrics.
-     * Non-simulation conversations will remain visible - they can not be fully removed from the system.</p>
+     * Non-simulation conversations remain visible; they cannot be fully removed from the system.</p>
      * <p>&lt;Warning&gt;This is a destructive operation and cannot be undone. &lt;br/&gt;&lt;br/&gt;
-     * The exact fields cleared include: the conversation subject, userRequest, agentResponse.
-     * As well as the text response, followup questions, and backend LLM prompt of all messages.&lt;/Warning&gt;</p>
+     * What is wiped: the conversation's <code>subject</code> and <code>analysis.agentResponse</code> are cleared, and <code>analysis.userRequest</code> is replaced with <code>reason</code>.
+     * Every message's text, from the user and the agent alike, is replaced with <code>reason</code>, and its attachments, follow-up questions, backend LLM prompt and history, the data actions returned, and action arguments are cleared.
+     * Evaluation results for the conversation are deleted, and the payloads recorded on its trigger and action executions are cleared. &lt;br/&gt;&lt;br/&gt;
+     * What is kept: the conversation's metadata, each message's charts, structured answer and app-supplied metadata, the conversation's intelligent field values, its feedback and events, and the users who took part. To wipe a user's data, use <code>DELETE /users/{userId}</code> or <code>DELETE /agentusers/{agentUserId}</code>.&lt;/Warning&gt;</p>
      */
     public void delete(String conversationId, ConversationDeleteRequest request, RequestOptions requestOptions) {
         this.rawClient.delete(conversationId, request, requestOptions).body();
@@ -477,6 +481,7 @@ public class ConversationClient {
      * Each row will generate one simulation conversation, using the provided response config, if present.</p>
      * <p>This API is offered for backwards compatibility.
      * Most API callers should create simulations programmatically to allow for more flexibility.</p>
+     * <p>Shown in Agent Designer as &quot;Import questions&quot;.</p>
      */
     public void importSimulations(File file, SimulationImportRequest request) {
         this.rawClient.importSimulations(file, request).body();
@@ -488,6 +493,7 @@ public class ConversationClient {
      * Each row will generate one simulation conversation, using the provided response config, if present.</p>
      * <p>This API is offered for backwards compatibility.
      * Most API callers should create simulations programmatically to allow for more flexibility.</p>
+     * <p>Shown in Agent Designer as &quot;Import questions&quot;.</p>
      */
     public void importSimulations(File file, SimulationImportRequest request, RequestOptions requestOptions) {
         this.rawClient.importSimulations(file, request, requestOptions).body();

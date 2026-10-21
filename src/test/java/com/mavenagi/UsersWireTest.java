@@ -48,7 +48,7 @@ public class UsersWireTest {
     public void testSearch() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"agentUsers\":[{\"id\":\"id\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"identifiers\":[{\"value\":\"value\",\"type\":\"EMAIL\"}],\"defaultName\":\"defaultName\",\"users\":[{\"userId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"identifiers\":[{\"value\":\"value\",\"type\":\"EMAIL\"}],\"visibleData\":{\"visibleData\":\"visibleData\"}},{\"userId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"identifiers\":[{\"value\":\"value\",\"type\":\"EMAIL\"}],\"visibleData\":{\"visibleData\":\"visibleData\"}}],\"intelligentFieldValues\":[{\"fieldId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"name\":\"name\",\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"value\":{\"key\":\"value\"},\"confidence\":1.1,\"rationale\":\"rationale\",\"createdAt\":\"2024-01-15T09:30:00Z\"},{\"fieldId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"name\":\"name\",\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"value\":{\"key\":\"value\"},\"confidence\":1.1,\"rationale\":\"rationale\",\"createdAt\":\"2024-01-15T09:30:00Z\"}]},{\"id\":\"id\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"identifiers\":[{\"value\":\"value\",\"type\":\"EMAIL\"}],\"defaultName\":\"defaultName\",\"users\":[{\"userId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"identifiers\":[{\"value\":\"value\",\"type\":\"EMAIL\"}],\"visibleData\":{\"visibleData\":\"visibleData\"}},{\"userId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"identifiers\":[{\"value\":\"value\",\"type\":\"EMAIL\"}],\"visibleData\":{\"visibleData\":\"visibleData\"}}],\"intelligentFieldValues\":[{\"fieldId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"name\":\"name\",\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"value\":{\"key\":\"value\"},\"confidence\":1.1,\"rationale\":\"rationale\",\"createdAt\":\"2024-01-15T09:30:00Z\"},{\"fieldId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"name\":\"name\",\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"value\":{\"key\":\"value\"},\"confidence\":1.1,\"rationale\":\"rationale\",\"createdAt\":\"2024-01-15T09:30:00Z\"}]}],\"number\":1,\"size\":1,\"totalElements\":1000000,\"totalPages\":1}"));
+            .setBody("{\"agentUsers\":[{\"id\":\"id\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"identifiers\":[{\"value\":\"value\",\"type\":\"EMAIL\"}],\"defaultName\":\"defaultName\",\"users\":[{\"userId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"identifiers\":[{\"value\":\"value\",\"type\":\"EMAIL\"}],\"visibleData\":{\"visibleData\":\"visibleData\"}},{\"userId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"identifiers\":[{\"value\":\"value\",\"type\":\"EMAIL\"}],\"visibleData\":{\"visibleData\":\"visibleData\"}}],\"intelligentFieldValues\":[{\"fieldId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"name\":\"name\",\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"value\":{\"key\":\"value\"},\"confidence\":1.1,\"rationale\":\"rationale\",\"createdAt\":\"2024-01-15T09:30:00Z\"},{\"fieldId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"name\":\"name\",\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"value\":{\"key\":\"value\"},\"confidence\":1.1,\"rationale\":\"rationale\",\"createdAt\":\"2024-01-15T09:30:00Z\"}],\"executionMode\":\"LIVE\"},{\"id\":\"id\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"identifiers\":[{\"value\":\"value\",\"type\":\"EMAIL\"}],\"defaultName\":\"defaultName\",\"users\":[{\"userId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"identifiers\":[{\"value\":\"value\",\"type\":\"EMAIL\"}],\"visibleData\":{\"visibleData\":\"visibleData\"}},{\"userId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"identifiers\":[{\"value\":\"value\",\"type\":\"EMAIL\"}],\"visibleData\":{\"visibleData\":\"visibleData\"}}],\"intelligentFieldValues\":[{\"fieldId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"name\":\"name\",\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"value\":{\"key\":\"value\"},\"confidence\":1.1,\"rationale\":\"rationale\",\"createdAt\":\"2024-01-15T09:30:00Z\"},{\"fieldId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"name\":\"name\",\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"value\":{\"key\":\"value\"},\"confidence\":1.1,\"rationale\":\"rationale\",\"createdAt\":\"2024-01-15T09:30:00Z\"}],\"executionMode\":\"LIVE\"}],\"number\":1,\"size\":1,\"totalElements\":1000000,\"totalPages\":1}"));
         AgentUserSearchResponse response = client.users().search(
             AgentUserSearchRequest
                 .builder()
@@ -186,7 +186,8 @@ public class UsersWireTest {
             + "          \"rationale\": \"rationale\",\n"
             + "          \"createdAt\": \"2024-01-15T09:30:00Z\"\n"
             + "        }\n"
-            + "      ]\n"
+            + "      ],\n"
+            + "      \"executionMode\": \"LIVE\"\n"
             + "    },\n"
             + "    {\n"
             + "      \"id\": \"id\",\n"
@@ -284,7 +285,8 @@ public class UsersWireTest {
             + "          \"rationale\": \"rationale\",\n"
             + "          \"createdAt\": \"2024-01-15T09:30:00Z\"\n"
             + "        }\n"
-            + "      ]\n"
+            + "      ],\n"
+            + "      \"executionMode\": \"LIVE\"\n"
             + "    }\n"
             + "  ],\n"
             + "  \"number\": 1,\n"
@@ -319,7 +321,7 @@ public class UsersWireTest {
     public void testGetAgentUser() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"id\":\"aus_1234567890\",\"createdAt\":\"2021-01-01T00:00:00Z\",\"updatedAt\":\"2021-01-01T00:00:00Z\",\"identifiers\":[{\"value\":\"joe@myapp.com\",\"type\":\"EMAIL\"}],\"defaultName\":\"Joe\",\"users\":[{\"userId\":{\"type\":\"USER_PROFILE\",\"appId\":\"myapp\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"referenceId\":\"user-0\"},\"identifiers\":[],\"visibleData\":{\"name\":\"Joe\"}},{\"userId\":{\"type\":\"USER_PROFILE\",\"appId\":\"myapp2\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"referenceId\":\"user-abc\"},\"identifiers\":[{\"value\":\"joe@myapp2.com\",\"type\":\"EMAIL\"}],\"visibleData\":{\"name\":\"Joe Doe\"}}]}"));
+            .setBody("{\"id\":\"aus_1234567890\",\"createdAt\":\"2021-01-01T00:00:00Z\",\"updatedAt\":\"2021-01-01T00:00:00Z\",\"identifiers\":[{\"value\":\"joe@myapp.com\",\"type\":\"EMAIL\"}],\"defaultName\":\"Joe\",\"executionMode\":\"LIVE\",\"users\":[{\"userId\":{\"type\":\"USER_PROFILE\",\"appId\":\"myapp\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"referenceId\":\"user-0\"},\"identifiers\":[],\"visibleData\":{\"name\":\"Joe\"}},{\"userId\":{\"type\":\"USER_PROFILE\",\"appId\":\"myapp2\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"referenceId\":\"user-abc\"},\"identifiers\":[{\"value\":\"joe@myapp2.com\",\"type\":\"EMAIL\"}],\"visibleData\":{\"name\":\"Joe Doe\"}}]}"));
         AgentUser response = client.users().getAgentUser("aus_1234567890");
         RecordedRequest request = server.takeRequest();
         Assertions.assertNotNull(request);
@@ -340,6 +342,7 @@ public class UsersWireTest {
             + "    }\n"
             + "  ],\n"
             + "  \"defaultName\": \"Joe\",\n"
+            + "  \"executionMode\": \"LIVE\",\n"
             + "  \"users\": [\n"
             + "    {\n"
             + "      \"userId\": {\n"
@@ -396,6 +399,16 @@ public class UsersWireTest {
         if (actualResponseNode.isObject()) {
             Assertions.assertTrue(actualResponseNode.size() >= 0, "Object should have valid field count");
         }
+    }
+    @Test
+    public void testDeleteAgentUser() throws Exception {
+        server.enqueue(new MockResponse()
+            .setResponseCode(200)
+            .setBody("{}"));
+        client.users().deleteAgentUser("aus_1234567890");
+        RecordedRequest request = server.takeRequest();
+        Assertions.assertNotNull(request);
+        Assertions.assertEquals("DELETE", request.getMethod());
     }
     @Test
     public void testCreateOrUpdate() throws Exception {

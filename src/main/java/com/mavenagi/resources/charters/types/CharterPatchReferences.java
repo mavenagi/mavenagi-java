@@ -55,6 +55,7 @@ public final class CharterPatchReferences {
      * Replaces the entire set when provided. Omit to leave unchanged.
      * An empty set removes all action associations.
      * Maximum 50 actions per charter.
+     * <p>Shown in Agent Designer as &quot;Capabilities&quot;.</p>
      */
     @JsonProperty("actionIds")
     public Optional<Set<EntityId>> getActionIds() {
@@ -130,6 +131,7 @@ public final class CharterPatchReferences {
          * Replaces the entire set when provided. Omit to leave unchanged.
          * An empty set removes all action associations.
          * Maximum 50 actions per charter.</p>
+         * <p>Shown in Agent Designer as &quot;Capabilities&quot;.</p>
          */
         @JsonSetter(value = "actionIds", nulls = Nulls.SKIP)
         public Builder actionIds(Optional<Set<EntityId>> actionIds) {

@@ -188,7 +188,7 @@ public final class ConversationSummary {
     }
 
     /**
-     * @return The number of messages of type <code>USER</code> in the conversation.
+     * @return The number of messages of type <code>USER</code> in the conversation. Shown in Agent Designer as &quot;Customer interactions&quot;.
      */
     @JsonProperty("userMessageCount")
     public int getUserMessageCount() {
@@ -225,6 +225,7 @@ public final class ConversationSummary {
      * Calculated by taking the timestamp of the first message of type <code>HUMAN_AGENT</code>
      * minus the timestamp of the first message in the conversation.
      * <p>Will not be provided if the conversation does not have a message of type <code>HUMAN_AGENT</code>.</p>
+     * <p>Shown in Agent Designer as &quot;First response time&quot;.</p>
      */
     @JsonProperty("humanAgentResponseDelay")
     public Optional<Long> getHumanAgentResponseDelay() {
@@ -232,7 +233,7 @@ public final class ConversationSummary {
     }
 
     /**
-     * @return The names of all users that have a message of type <code>HUMAN_AGENT</code> on the conversation.
+     * @return The names of all users that have a message of type <code>HUMAN_AGENT</code> on the conversation. Shown in Agent Designer as &quot;Agents involved&quot;.
      */
     @JsonProperty("humanAgents")
     public List<String> getHumanAgents() {
@@ -240,7 +241,7 @@ public final class ConversationSummary {
     }
 
     /**
-     * @return The names of all users that have an associated insert event on the conversation.
+     * @return The names of all users that have an associated insert event on the conversation. Shown in Agent Designer as &quot;Inserted by&quot;.
      */
     @JsonProperty("humanAgentsWithInserts")
     public List<String> getHumanAgentsWithInserts() {
@@ -395,7 +396,7 @@ public final class ConversationSummary {
 
     public interface UserMessageCountStage {
         /**
-         * <p>The number of messages of type <code>USER</code> in the conversation.</p>
+         * <p>The number of messages of type <code>USER</code> in the conversation. Shown in Agent Designer as &quot;Customer interactions&quot;.</p>
          */
         BotMessageCountStage userMessageCount(int userMessageCount);
     }
@@ -475,13 +476,14 @@ public final class ConversationSummary {
          * Calculated by taking the timestamp of the first message of type <code>HUMAN_AGENT</code>
          * minus the timestamp of the first message in the conversation.</p>
          * <p>Will not be provided if the conversation does not have a message of type <code>HUMAN_AGENT</code>.</p>
+         * <p>Shown in Agent Designer as &quot;First response time&quot;.</p>
          */
         _FinalStage humanAgentResponseDelay(Optional<Long> humanAgentResponseDelay);
 
         _FinalStage humanAgentResponseDelay(Long humanAgentResponseDelay);
 
         /**
-         * <p>The names of all users that have a message of type <code>HUMAN_AGENT</code> on the conversation.</p>
+         * <p>The names of all users that have a message of type <code>HUMAN_AGENT</code> on the conversation. Shown in Agent Designer as &quot;Agents involved&quot;.</p>
          */
         _FinalStage humanAgents(List<String> humanAgents);
 
@@ -490,7 +492,7 @@ public final class ConversationSummary {
         _FinalStage addAllHumanAgents(List<String> humanAgents);
 
         /**
-         * <p>The names of all users that have an associated insert event on the conversation.</p>
+         * <p>The names of all users that have an associated insert event on the conversation. Shown in Agent Designer as &quot;Inserted by&quot;.</p>
          */
         _FinalStage humanAgentsWithInserts(List<String> humanAgentsWithInserts);
 
@@ -677,8 +679,8 @@ public final class ConversationSummary {
         }
 
         /**
-         * <p>The number of messages of type <code>USER</code> in the conversation.</p>
-         * <p>The number of messages of type <code>USER</code> in the conversation.</p>
+         * <p>The number of messages of type <code>USER</code> in the conversation. Shown in Agent Designer as &quot;Customer interactions&quot;.</p>
+         * <p>The number of messages of type <code>USER</code> in the conversation. Shown in Agent Designer as &quot;Customer interactions&quot;.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -864,7 +866,7 @@ public final class ConversationSummary {
         }
 
         /**
-         * <p>The names of all users that have an associated insert event on the conversation.</p>
+         * <p>The names of all users that have an associated insert event on the conversation. Shown in Agent Designer as &quot;Inserted by&quot;.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -876,7 +878,7 @@ public final class ConversationSummary {
         }
 
         /**
-         * <p>The names of all users that have an associated insert event on the conversation.</p>
+         * <p>The names of all users that have an associated insert event on the conversation. Shown in Agent Designer as &quot;Inserted by&quot;.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -886,7 +888,7 @@ public final class ConversationSummary {
         }
 
         /**
-         * <p>The names of all users that have an associated insert event on the conversation.</p>
+         * <p>The names of all users that have an associated insert event on the conversation. Shown in Agent Designer as &quot;Inserted by&quot;.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "humanAgentsWithInserts", nulls = Nulls.SKIP)
@@ -899,7 +901,7 @@ public final class ConversationSummary {
         }
 
         /**
-         * <p>The names of all users that have a message of type <code>HUMAN_AGENT</code> on the conversation.</p>
+         * <p>The names of all users that have a message of type <code>HUMAN_AGENT</code> on the conversation. Shown in Agent Designer as &quot;Agents involved&quot;.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -911,7 +913,7 @@ public final class ConversationSummary {
         }
 
         /**
-         * <p>The names of all users that have a message of type <code>HUMAN_AGENT</code> on the conversation.</p>
+         * <p>The names of all users that have a message of type <code>HUMAN_AGENT</code> on the conversation. Shown in Agent Designer as &quot;Agents involved&quot;.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -921,7 +923,7 @@ public final class ConversationSummary {
         }
 
         /**
-         * <p>The names of all users that have a message of type <code>HUMAN_AGENT</code> on the conversation.</p>
+         * <p>The names of all users that have a message of type <code>HUMAN_AGENT</code> on the conversation. Shown in Agent Designer as &quot;Agents involved&quot;.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "humanAgents", nulls = Nulls.SKIP)
@@ -938,6 +940,7 @@ public final class ConversationSummary {
          * Calculated by taking the timestamp of the first message of type <code>HUMAN_AGENT</code>
          * minus the timestamp of the first message in the conversation.</p>
          * <p>Will not be provided if the conversation does not have a message of type <code>HUMAN_AGENT</code>.</p>
+         * <p>Shown in Agent Designer as &quot;First response time&quot;.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -951,6 +954,7 @@ public final class ConversationSummary {
          * Calculated by taking the timestamp of the first message of type <code>HUMAN_AGENT</code>
          * minus the timestamp of the first message in the conversation.</p>
          * <p>Will not be provided if the conversation does not have a message of type <code>HUMAN_AGENT</code>.</p>
+         * <p>Shown in Agent Designer as &quot;First response time&quot;.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "humanAgentResponseDelay", nulls = Nulls.SKIP)

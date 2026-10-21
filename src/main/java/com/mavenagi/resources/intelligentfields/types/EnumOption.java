@@ -49,7 +49,7 @@ public final class EnumOption {
     }
 
     /**
-     * @return Display label for the option
+     * @return Display label for the option. Shown in Agent Designer as &quot;Option Name&quot;.
      */
     @JsonProperty("label")
     public Optional<String> getLabel() {
@@ -107,7 +107,7 @@ public final class EnumOption {
         EnumOption build();
 
         /**
-         * <p>Display label for the option</p>
+         * <p>Display label for the option. Shown in Agent Designer as &quot;Option Name&quot;.</p>
          */
         _FinalStage label(Optional<String> label);
 
@@ -178,7 +178,7 @@ public final class EnumOption {
         }
 
         /**
-         * <p>Display label for the option</p>
+         * <p>Display label for the option. Shown in Agent Designer as &quot;Option Name&quot;.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -188,7 +188,7 @@ public final class EnumOption {
         }
 
         /**
-         * <p>Display label for the option</p>
+         * <p>Display label for the option. Shown in Agent Designer as &quot;Option Name&quot;.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "label", nulls = Nulls.SKIP)

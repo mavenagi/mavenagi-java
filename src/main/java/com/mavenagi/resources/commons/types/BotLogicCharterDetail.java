@@ -29,6 +29,8 @@ public final class BotLogicCharterDetail {
 
     private final Optional<EntityIdWithoutAgent> parentId;
 
+    private final Optional<CharterType> type;
+
     private final Map<String, Object> additionalProperties;
 
     private BotLogicCharterDetail(
@@ -36,11 +38,13 @@ public final class BotLogicCharterDetail {
             String name,
             Optional<EntityIdWithoutAgent> segmentId,
             Optional<EntityIdWithoutAgent> parentId,
+            Optional<CharterType> type,
             Map<String, Object> additionalProperties) {
         this.charterId = charterId;
         this.name = name;
         this.segmentId = segmentId;
         this.parentId = parentId;
+        this.type = type;
         this.additionalProperties = additionalProperties;
     }
 
@@ -76,6 +80,14 @@ public final class BotLogicCharterDetail {
         return parentId;
     }
 
+    /**
+     * @return The charter's type when the response was generated. A matched <code>STRICT_RETURN</code> charter's manual is the whole response.
+     */
+    @JsonProperty("type")
+    public Optional<CharterType> getType() {
+        return type;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -91,12 +103,13 @@ public final class BotLogicCharterDetail {
         return charterId.equals(other.charterId)
                 && name.equals(other.name)
                 && segmentId.equals(other.segmentId)
-                && parentId.equals(other.parentId);
+                && parentId.equals(other.parentId)
+                && type.equals(other.type);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.charterId, this.name, this.segmentId, this.parentId);
+        return Objects.hash(this.charterId, this.name, this.segmentId, this.parentId, this.type);
     }
 
     @java.lang.Override
@@ -140,6 +153,13 @@ public final class BotLogicCharterDetail {
         _FinalStage parentId(Optional<EntityIdWithoutAgent> parentId);
 
         _FinalStage parentId(EntityIdWithoutAgent parentId);
+
+        /**
+         * <p>The charter's type when the response was generated. A matched <code>STRICT_RETURN</code> charter's manual is the whole response.</p>
+         */
+        _FinalStage type(Optional<CharterType> type);
+
+        _FinalStage type(CharterType type);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -147,6 +167,8 @@ public final class BotLogicCharterDetail {
         private EntityIdWithoutAgent charterId;
 
         private String name;
+
+        private Optional<CharterType> type = Optional.empty();
 
         private Optional<EntityIdWithoutAgent> parentId = Optional.empty();
 
@@ -163,6 +185,7 @@ public final class BotLogicCharterDetail {
             name(other.getName());
             segmentId(other.getSegmentId());
             parentId(other.getParentId());
+            type(other.getType());
             return this;
         }
 
@@ -187,6 +210,26 @@ public final class BotLogicCharterDetail {
         @JsonSetter("name")
         public _FinalStage name(@NotNull String name) {
             this.name = Objects.requireNonNull(name, "name must not be null");
+            return this;
+        }
+
+        /**
+         * <p>The charter's type when the response was generated. A matched <code>STRICT_RETURN</code> charter's manual is the whole response.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage type(CharterType type) {
+            this.type = Optional.ofNullable(type);
+            return this;
+        }
+
+        /**
+         * <p>The charter's type when the response was generated. A matched <code>STRICT_RETURN</code> charter's manual is the whole response.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "type", nulls = Nulls.SKIP)
+        public _FinalStage type(Optional<CharterType> type) {
+            this.type = type;
             return this;
         }
 
@@ -232,7 +275,7 @@ public final class BotLogicCharterDetail {
 
         @java.lang.Override
         public BotLogicCharterDetail build() {
-            return new BotLogicCharterDetail(charterId, name, segmentId, parentId, additionalProperties);
+            return new BotLogicCharterDetail(charterId, name, segmentId, parentId, type, additionalProperties);
         }
     }
 }

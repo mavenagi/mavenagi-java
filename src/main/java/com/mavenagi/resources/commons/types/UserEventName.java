@@ -13,8 +13,6 @@ public final class UserEventName {
 
     public static final UserEventName PAYMENT_FAILED = new UserEventName(Value.PAYMENT_FAILED, "PAYMENT_FAILED");
 
-    public static final UserEventName TEXT_INSERTED = new UserEventName(Value.TEXT_INSERTED, "TEXT_INSERTED");
-
     public static final UserEventName ACCOUNT_CREATED = new UserEventName(Value.ACCOUNT_CREATED, "ACCOUNT_CREATED");
 
     public static final UserEventName FLOW_STEP_COMPLETED =
@@ -74,6 +72,8 @@ public final class UserEventName {
     public static final UserEventName SUGGESTION_CLICKED =
             new UserEventName(Value.SUGGESTION_CLICKED, "SUGGESTION_CLICKED");
 
+    public static final UserEventName TEXT_INSERTED = new UserEventName(Value.TEXT_INSERTED, "TEXT_INSERTED");
+
     public static final UserEventName ORDER_PLACED = new UserEventName(Value.ORDER_PLACED, "ORDER_PLACED");
 
     public static final UserEventName SEARCH_RESULT_CLICKED =
@@ -121,8 +121,6 @@ public final class UserEventName {
                 return visitor.visitSignedOut();
             case PAYMENT_FAILED:
                 return visitor.visitPaymentFailed();
-            case TEXT_INSERTED:
-                return visitor.visitTextInserted();
             case ACCOUNT_CREATED:
                 return visitor.visitAccountCreated();
             case FLOW_STEP_COMPLETED:
@@ -175,6 +173,8 @@ public final class UserEventName {
                 return visitor.visitFormSubmitted();
             case SUGGESTION_CLICKED:
                 return visitor.visitSuggestionClicked();
+            case TEXT_INSERTED:
+                return visitor.visitTextInserted();
             case ORDER_PLACED:
                 return visitor.visitOrderPlaced();
             case SEARCH_RESULT_CLICKED:
@@ -198,8 +198,6 @@ public final class UserEventName {
                 return SIGNED_OUT;
             case "PAYMENT_FAILED":
                 return PAYMENT_FAILED;
-            case "TEXT_INSERTED":
-                return TEXT_INSERTED;
             case "ACCOUNT_CREATED":
                 return ACCOUNT_CREATED;
             case "FLOW_STEP_COMPLETED":
@@ -252,6 +250,8 @@ public final class UserEventName {
                 return FORM_SUBMITTED;
             case "SUGGESTION_CLICKED":
                 return SUGGESTION_CLICKED;
+            case "TEXT_INSERTED":
+                return TEXT_INSERTED;
             case "ORDER_PLACED":
                 return ORDER_PLACED;
             case "SEARCH_RESULT_CLICKED":

@@ -188,6 +188,7 @@ public final class ConversationFilter {
      * <li><code>-tags:myvalue</code> - matches conversations that do not have the tag <code>myvalue</code></li>
      * <li><code>_exists_:tags</code> - matches conversations that have any tags field set</li>
      * </ul>
+     * <p>Shown in Agent Designer as &quot;Content includes&quot;.</p>
      */
     @JsonProperty("search")
     public Optional<String> getSearch() {
@@ -255,6 +256,7 @@ public final class ConversationFilter {
      * <code>BUTTON_CLICKED</code> events by their <code>feedbackInfo.thumbUp</code> value, and <code>Insert</code> matches
      * <code>TEXT_INSERTED</code> events. <code>Handoff</code> matches bot responses that returned the system fallback
      * message.
+     * <p>Shown in Agent Designer as &quot;Event&quot;.</p>
      */
     @JsonProperty("feedback")
     public Optional<List<FeedbackType>> getFeedback() {
@@ -346,7 +348,7 @@ public final class ConversationFilter {
     }
 
     /**
-     * @return Filter by agent user IDs associated with the conversation
+     * @return Filter by agent user IDs associated with the conversation. Shown in Agent Designer as &quot;Users&quot;, where the user enters identifiers such as an email.
      */
     @JsonProperty("agentUserIds")
     public Optional<List<String>> getAgentUserIds() {
@@ -465,6 +467,7 @@ public final class ConversationFilter {
      * and then <code>billable</code>.</p>
      * <p>If billable is <code>null</code> or <code>[]</code> then defaults to all eligible conversations,
      * which means ELIGIBLE_AND_BILLABLE and ELIGIBLE_AND_NOT_BILLABLE.</p>
+     * <p>Shown in Agent Designer as &quot;Billing status&quot;.</p>
      */
     @JsonProperty("billable")
     public Optional<List<BillableFilterField>> getBillable() {
@@ -691,6 +694,7 @@ public final class ConversationFilter {
          * <li><code>-tags:myvalue</code> - matches conversations that do not have the tag <code>myvalue</code></li>
          * <li><code>_exists_:tags</code> - matches conversations that have any tags field set</li>
          * </ul>
+         * <p>Shown in Agent Designer as &quot;Content includes&quot;.</p>
          */
         @JsonSetter(value = "search", nulls = Nulls.SKIP)
         public Builder search(Optional<String> search) {
@@ -806,6 +810,7 @@ public final class ConversationFilter {
          * <code>BUTTON_CLICKED</code> events by their <code>feedbackInfo.thumbUp</code> value, and <code>Insert</code> matches
          * <code>TEXT_INSERTED</code> events. <code>Handoff</code> matches bot responses that returned the system fallback
          * message.</p>
+         * <p>Shown in Agent Designer as &quot;Event&quot;.</p>
          */
         @JsonSetter(value = "feedback", nulls = Nulls.SKIP)
         public Builder feedback(Optional<List<FeedbackType>> feedback) {
@@ -963,7 +968,7 @@ public final class ConversationFilter {
         }
 
         /**
-         * <p>Filter by agent user IDs associated with the conversation</p>
+         * <p>Filter by agent user IDs associated with the conversation. Shown in Agent Designer as &quot;Users&quot;, where the user enters identifiers such as an email.</p>
          */
         @JsonSetter(value = "agentUserIds", nulls = Nulls.SKIP)
         public Builder agentUserIds(Optional<List<String>> agentUserIds) {
@@ -1154,6 +1159,7 @@ public final class ConversationFilter {
          * and then <code>billable</code>.</p>
          * <p>If billable is <code>null</code> or <code>[]</code> then defaults to all eligible conversations,
          * which means ELIGIBLE_AND_BILLABLE and ELIGIBLE_AND_NOT_BILLABLE.</p>
+         * <p>Shown in Agent Designer as &quot;Billing status&quot;.</p>
          */
         @JsonSetter(value = "billable", nulls = Nulls.SKIP)
         public Builder billable(Optional<List<BillableFilterField>> billable) {

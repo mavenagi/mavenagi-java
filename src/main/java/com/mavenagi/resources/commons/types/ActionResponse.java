@@ -100,7 +100,7 @@ public final class ActionResponse implements IActionProperties, ICapabilityBase 
     }
 
     /**
-     * @return Whether the action requires user interaction to execute. If false, and all of the required action parameters are known, the LLM may call the action automatically. If true, an conversations ask call will return a BotActionFormResponse which must be submitted by an API caller. API callers must display a button with the buttonName label to confirm the user's intent.
+     * @return Whether the action requires user interaction to execute. If false, and all of the required action parameters are known, the LLM may call the action automatically. If true, an conversations ask call will return a BotActionFormResponse which must be submitted by an API caller. API callers must display a button with the buttonName label to confirm the user's intent. Shown in Agent Designer as &quot;User Confirmation&quot;.
      */
     @JsonProperty("userInteractionRequired")
     @java.lang.Override
@@ -324,7 +324,7 @@ public final class ActionResponse implements IActionProperties, ICapabilityBase 
 
     public interface UserInteractionRequiredStage {
         /**
-         * <p>Whether the action requires user interaction to execute. If false, and all of the required action parameters are known, the LLM may call the action automatically. If true, an conversations ask call will return a BotActionFormResponse which must be submitted by an API caller. API callers must display a button with the buttonName label to confirm the user's intent.</p>
+         * <p>Whether the action requires user interaction to execute. If false, and all of the required action parameters are known, the LLM may call the action automatically. If true, an conversations ask call will return a BotActionFormResponse which must be submitted by an API caller. API callers must display a button with the buttonName label to confirm the user's intent. Shown in Agent Designer as &quot;User Confirmation&quot;.</p>
          */
         NameStage userInteractionRequired(boolean userInteractionRequired);
 
@@ -536,8 +536,8 @@ public final class ActionResponse implements IActionProperties, ICapabilityBase 
         }
 
         /**
-         * <p>Whether the action requires user interaction to execute. If false, and all of the required action parameters are known, the LLM may call the action automatically. If true, an conversations ask call will return a BotActionFormResponse which must be submitted by an API caller. API callers must display a button with the buttonName label to confirm the user's intent.</p>
-         * <p>Whether the action requires user interaction to execute. If false, and all of the required action parameters are known, the LLM may call the action automatically. If true, an conversations ask call will return a BotActionFormResponse which must be submitted by an API caller. API callers must display a button with the buttonName label to confirm the user's intent.</p>
+         * <p>Whether the action requires user interaction to execute. If false, and all of the required action parameters are known, the LLM may call the action automatically. If true, an conversations ask call will return a BotActionFormResponse which must be submitted by an API caller. API callers must display a button with the buttonName label to confirm the user's intent. Shown in Agent Designer as &quot;User Confirmation&quot;.</p>
+         * <p>Whether the action requires user interaction to execute. If false, and all of the required action parameters are known, the LLM may call the action automatically. If true, an conversations ask call will return a BotActionFormResponse which must be submitted by an API caller. API callers must display a button with the buttonName label to confirm the user's intent. Shown in Agent Designer as &quot;User Confirmation&quot;.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override

@@ -43,6 +43,9 @@ public final class AdditionalDataKey {
     public static final AdditionalDataKey SOURCE_LANGUAGE =
             new AdditionalDataKey(Value.SOURCE_LANGUAGE, "sourceLanguage");
 
+    public static final AdditionalDataKey BOT_MESSAGE_TYPE =
+            new AdditionalDataKey(Value.BOT_MESSAGE_TYPE, "botMessageType");
+
     private final Value value;
 
     private final String string;
@@ -109,6 +112,8 @@ public final class AdditionalDataKey {
                 return visitor.visitName();
             case SOURCE_LANGUAGE:
                 return visitor.visitSourceLanguage();
+            case BOT_MESSAGE_TYPE:
+                return visitor.visitBotMessageType();
             case UNKNOWN:
             default:
                 return visitor.visitUnknown(string);
@@ -152,6 +157,8 @@ public final class AdditionalDataKey {
                 return NAME;
             case "sourceLanguage":
                 return SOURCE_LANGUAGE;
+            case "botMessageType":
+                return BOT_MESSAGE_TYPE;
             default:
                 return new AdditionalDataKey(Value.UNKNOWN, value);
         }
@@ -177,6 +184,8 @@ public final class AdditionalDataKey {
         QUERY,
 
         POSITION,
+
+        BOT_MESSAGE_TYPE,
 
         AMOUNT,
 
@@ -215,6 +224,8 @@ public final class AdditionalDataKey {
         T visitQuery();
 
         T visitPosition();
+
+        T visitBotMessageType();
 
         T visitAmount();
 

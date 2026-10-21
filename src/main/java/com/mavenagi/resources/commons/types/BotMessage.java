@@ -42,6 +42,8 @@ public final class BotMessage implements IConversationMessageBase {
 
     private final Optional<BotLogic> logic;
 
+    private final Optional<BotMessageStatusReason> statusReason;
+
     private final Map<String, Object> additionalProperties;
 
     private BotMessage(
@@ -54,6 +56,7 @@ public final class BotMessage implements IConversationMessageBase {
             BotResponseMetadata metadata,
             MessageStatus status,
             Optional<BotLogic> logic,
+            Optional<BotMessageStatusReason> statusReason,
             Map<String, Object> additionalProperties) {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -64,6 +67,7 @@ public final class BotMessage implements IConversationMessageBase {
         this.metadata = metadata;
         this.status = status;
         this.logic = logic;
+        this.statusReason = statusReason;
         this.additionalProperties = additionalProperties;
     }
 
@@ -134,6 +138,15 @@ public final class BotMessage implements IConversationMessageBase {
         return logic;
     }
 
+    /**
+     * @return Why the agent could not answer. Present only when <code>status</code> is <code>REJECTED</code> or <code>FAILED</code>, and absent for every other status.
+     * A <code>FAILED</code> message without a reason failed for some other cause, such as the model returning no answer.
+     */
+    @JsonProperty("statusReason")
+    public Optional<BotMessageStatusReason> getStatusReason() {
+        return statusReason;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -154,7 +167,8 @@ public final class BotMessage implements IConversationMessageBase {
                 && responses.equals(other.responses)
                 && metadata.equals(other.metadata)
                 && status.equals(other.status)
-                && logic.equals(other.logic);
+                && logic.equals(other.logic)
+                && statusReason.equals(other.statusReason);
     }
 
     @java.lang.Override
@@ -168,7 +182,8 @@ public final class BotMessage implements IConversationMessageBase {
                 this.responses,
                 this.metadata,
                 this.status,
-                this.logic);
+                this.logic,
+                this.statusReason);
     }
 
     @java.lang.Override
@@ -241,6 +256,14 @@ public final class BotMessage implements IConversationMessageBase {
         _FinalStage logic(Optional<BotLogic> logic);
 
         _FinalStage logic(BotLogic logic);
+
+        /**
+         * <p>Why the agent could not answer. Present only when <code>status</code> is <code>REJECTED</code> or <code>FAILED</code>, and absent for every other status.
+         * A <code>FAILED</code> message without a reason failed for some other cause, such as the model returning no answer.</p>
+         */
+        _FinalStage statusReason(Optional<BotMessageStatusReason> statusReason);
+
+        _FinalStage statusReason(BotMessageStatusReason statusReason);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -253,6 +276,8 @@ public final class BotMessage implements IConversationMessageBase {
         private BotResponseMetadata metadata;
 
         private MessageStatus status;
+
+        private Optional<BotMessageStatusReason> statusReason = Optional.empty();
 
         private Optional<BotLogic> logic = Optional.empty();
 
@@ -280,6 +305,7 @@ public final class BotMessage implements IConversationMessageBase {
             metadata(other.getMetadata());
             status(other.getStatus());
             logic(other.getLogic());
+            statusReason(other.getStatusReason());
             return this;
         }
 
@@ -314,6 +340,28 @@ public final class BotMessage implements IConversationMessageBase {
         @JsonSetter("status")
         public _FinalStage status(@NotNull MessageStatus status) {
             this.status = Objects.requireNonNull(status, "status must not be null");
+            return this;
+        }
+
+        /**
+         * <p>Why the agent could not answer. Present only when <code>status</code> is <code>REJECTED</code> or <code>FAILED</code>, and absent for every other status.
+         * A <code>FAILED</code> message without a reason failed for some other cause, such as the model returning no answer.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage statusReason(BotMessageStatusReason statusReason) {
+            this.statusReason = Optional.ofNullable(statusReason);
+            return this;
+        }
+
+        /**
+         * <p>Why the agent could not answer. Present only when <code>status</code> is <code>REJECTED</code> or <code>FAILED</code>, and absent for every other status.
+         * A <code>FAILED</code> message without a reason failed for some other cause, such as the model returning no answer.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "statusReason", nulls = Nulls.SKIP)
+        public _FinalStage statusReason(Optional<BotMessageStatusReason> statusReason) {
+            this.statusReason = statusReason;
             return this;
         }
 
@@ -441,6 +489,7 @@ public final class BotMessage implements IConversationMessageBase {
                     metadata,
                     status,
                     logic,
+                    statusReason,
                     additionalProperties);
         }
     }

@@ -94,6 +94,9 @@ public final class EventFilter {
         return eventTypes;
     }
 
+    /**
+     * @return Shown in Agent Designer as &quot;Event type&quot;.
+     */
     @JsonProperty("userEventNames")
     public Optional<List<UserEventName>> getUserEventNames() {
         return userEventNames;
@@ -268,6 +271,9 @@ public final class EventFilter {
             return this;
         }
 
+        /**
+         * <p>Shown in Agent Designer as &quot;Event type&quot;.</p>
+         */
         @JsonSetter(value = "userEventNames", nulls = Nulls.SKIP)
         public Builder userEventNames(Optional<List<UserEventName>> userEventNames) {
             this.userEventNames = userEventNames;

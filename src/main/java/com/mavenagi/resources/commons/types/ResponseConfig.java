@@ -56,6 +56,7 @@ public final class ResponseConfig {
      * <li><code>ASYNC</code>: Whether the app that created this conversation supports asynchronous message delivery. If provided, messages may be sent to the app via the <code>handleMessage</code> function.</li>
      * <li><code>OAUTH_BUTTONS</code>: Whether the response should include OAuth buttons. If provided, the caller needs to render OAuth buttons when returned from the ask API and allow the user to click the buttons to initiate the OAuth flow. If not provided, then actions which require OAuth authorization will not be considered by the LLM. This capability is not recommended for surfaces which can not display links (e.g. voice).</li>
      * </ul>
+     * <p>Shown in Agent Designer as &quot;Response type&quot;.</p>
      */
     @JsonProperty("capabilities")
     public List<Capability> getCapabilities() {
@@ -153,6 +154,7 @@ public final class ResponseConfig {
          * <li><code>ASYNC</code>: Whether the app that created this conversation supports asynchronous message delivery. If provided, messages may be sent to the app via the <code>handleMessage</code> function.</li>
          * <li><code>OAUTH_BUTTONS</code>: Whether the response should include OAuth buttons. If provided, the caller needs to render OAuth buttons when returned from the ask API and allow the user to click the buttons to initiate the OAuth flow. If not provided, then actions which require OAuth authorization will not be considered by the LLM. This capability is not recommended for surfaces which can not display links (e.g. voice).</li>
          * </ul>
+         * <p>Shown in Agent Designer as &quot;Response type&quot;.</p>
          */
         _FinalStage capabilities(List<Capability> capabilities);
 
@@ -264,6 +266,7 @@ public final class ResponseConfig {
          * <li><code>ASYNC</code>: Whether the app that created this conversation supports asynchronous message delivery. If provided, messages may be sent to the app via the <code>handleMessage</code> function.</li>
          * <li><code>OAUTH_BUTTONS</code>: Whether the response should include OAuth buttons. If provided, the caller needs to render OAuth buttons when returned from the ask API and allow the user to click the buttons to initiate the OAuth flow. If not provided, then actions which require OAuth authorization will not be considered by the LLM. This capability is not recommended for surfaces which can not display links (e.g. voice).</li>
          * </ul>
+         * <p>Shown in Agent Designer as &quot;Response type&quot;.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -284,6 +287,7 @@ public final class ResponseConfig {
          * <li><code>ASYNC</code>: Whether the app that created this conversation supports asynchronous message delivery. If provided, messages may be sent to the app via the <code>handleMessage</code> function.</li>
          * <li><code>OAUTH_BUTTONS</code>: Whether the response should include OAuth buttons. If provided, the caller needs to render OAuth buttons when returned from the ask API and allow the user to click the buttons to initiate the OAuth flow. If not provided, then actions which require OAuth authorization will not be considered by the LLM. This capability is not recommended for surfaces which can not display links (e.g. voice).</li>
          * </ul>
+         * <p>Shown in Agent Designer as &quot;Response type&quot;.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -302,6 +306,7 @@ public final class ResponseConfig {
          * <li><code>ASYNC</code>: Whether the app that created this conversation supports asynchronous message delivery. If provided, messages may be sent to the app via the <code>handleMessage</code> function.</li>
          * <li><code>OAUTH_BUTTONS</code>: Whether the response should include OAuth buttons. If provided, the caller needs to render OAuth buttons when returned from the ask API and allow the user to click the buttons to initiate the OAuth flow. If not provided, then actions which require OAuth authorization will not be considered by the LLM. This capability is not recommended for surfaces which can not display links (e.g. voice).</li>
          * </ul>
+         * <p>Shown in Agent Designer as &quot;Response type&quot;.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "capabilities", nulls = Nulls.SKIP)

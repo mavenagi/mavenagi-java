@@ -104,7 +104,7 @@ public final class CustomerResponse implements ICustomerBase {
     }
 
     /**
-     * @return Set of agent user IDs assigned to this customer
+     * @return Set of agent user IDs assigned to this customer. Shown in Agent Designer under &quot;People&quot;, together with <code>members</code>.
      */
     @JsonProperty("assignees")
     public Set<String> getAssignees() {
@@ -112,7 +112,7 @@ public final class CustomerResponse implements ICustomerBase {
     }
 
     /**
-     * @return Set of agent user IDs who are members of this customer
+     * @return Set of agent user IDs who are members of this customer. Shown in Agent Designer under &quot;People&quot;, together with <code>assignees</code>.
      */
     @JsonProperty("members")
     public Set<String> getMembers() {
@@ -197,7 +197,7 @@ public final class CustomerResponse implements ICustomerBase {
         _FinalStage metadata(String key, String value);
 
         /**
-         * <p>Set of agent user IDs assigned to this customer</p>
+         * <p>Set of agent user IDs assigned to this customer. Shown in Agent Designer under &quot;People&quot;, together with <code>members</code>.</p>
          */
         _FinalStage assignees(Set<String> assignees);
 
@@ -206,7 +206,7 @@ public final class CustomerResponse implements ICustomerBase {
         _FinalStage addAllAssignees(Set<String> assignees);
 
         /**
-         * <p>Set of agent user IDs who are members of this customer</p>
+         * <p>Set of agent user IDs who are members of this customer. Shown in Agent Designer under &quot;People&quot;, together with <code>assignees</code>.</p>
          */
         _FinalStage members(Set<String> members);
 
@@ -282,7 +282,7 @@ public final class CustomerResponse implements ICustomerBase {
         }
 
         /**
-         * <p>Set of agent user IDs who are members of this customer</p>
+         * <p>Set of agent user IDs who are members of this customer. Shown in Agent Designer under &quot;People&quot;, together with <code>assignees</code>.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -294,7 +294,7 @@ public final class CustomerResponse implements ICustomerBase {
         }
 
         /**
-         * <p>Set of agent user IDs who are members of this customer</p>
+         * <p>Set of agent user IDs who are members of this customer. Shown in Agent Designer under &quot;People&quot;, together with <code>assignees</code>.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -304,7 +304,7 @@ public final class CustomerResponse implements ICustomerBase {
         }
 
         /**
-         * <p>Set of agent user IDs who are members of this customer</p>
+         * <p>Set of agent user IDs who are members of this customer. Shown in Agent Designer under &quot;People&quot;, together with <code>assignees</code>.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "members", nulls = Nulls.SKIP)
@@ -317,7 +317,7 @@ public final class CustomerResponse implements ICustomerBase {
         }
 
         /**
-         * <p>Set of agent user IDs assigned to this customer</p>
+         * <p>Set of agent user IDs assigned to this customer. Shown in Agent Designer under &quot;People&quot;, together with <code>members</code>.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -329,7 +329,7 @@ public final class CustomerResponse implements ICustomerBase {
         }
 
         /**
-         * <p>Set of agent user IDs assigned to this customer</p>
+         * <p>Set of agent user IDs assigned to this customer. Shown in Agent Designer under &quot;People&quot;, together with <code>members</code>.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -339,7 +339,7 @@ public final class CustomerResponse implements ICustomerBase {
         }
 
         /**
-         * <p>Set of agent user IDs assigned to this customer</p>
+         * <p>Set of agent user IDs assigned to this customer. Shown in Agent Designer under &quot;People&quot;, together with <code>members</code>.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "assignees", nulls = Nulls.SKIP)

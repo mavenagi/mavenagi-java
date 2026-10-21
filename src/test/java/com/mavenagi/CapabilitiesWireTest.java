@@ -9,9 +9,13 @@ import com.mavenagi.resources.capabilities.requests.CapabilityExecutionsSearchRe
 import com.mavenagi.resources.capabilities.requests.DeleteCapabilityByTypeRequest;
 import com.mavenagi.resources.capabilities.requests.GetCapabilityByTypeRequest;
 import com.mavenagi.resources.capabilities.requests.PatchCapabilityByTypeRequest;
+import com.mavenagi.resources.capabilities.requests.SimulateCapabilityByTypeRequest;
+import com.mavenagi.resources.capabilities.types.ActionSimulationInput;
 import com.mavenagi.resources.capabilities.types.CapabilitiesSearchResponse;
 import com.mavenagi.resources.capabilities.types.CapabilityExecutionsSearchResponse;
 import com.mavenagi.resources.capabilities.types.CapabilityResponse;
+import com.mavenagi.resources.capabilities.types.CapabilitySimulationInput;
+import com.mavenagi.resources.capabilities.types.CapabilitySimulationResult;
 import com.mavenagi.resources.commons.types.CapabilityType;
 import com.mavenagi.resources.commons.types.EntityId;
 import com.mavenagi.resources.commons.types.EntityType;
@@ -46,7 +50,7 @@ public class CapabilitiesWireTest {
     public void testGetCapability() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"capabilityType\":\"ACTION\",\"actionId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"instructions\":\"instructions\",\"llmInclusionStatus\":\"ALWAYS\",\"segmentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"preconditionExplanation\":\"preconditionExplanation\",\"deleted\":true,\"userInteractionRequired\":true,\"buttonName\":\"buttonName\",\"precondition\":{\"preconditionType\":\"user\",\"key\":\"key\",\"value\":\"value\",\"values\":[\"values\",\"values\"],\"operator\":\"NOT\"},\"userFormParameters\":[{\"id\":\"id\",\"label\":\"label\",\"description\":\"description\",\"required\":true,\"hidden\":true,\"type\":\"STRING\",\"enumOptions\":[{\"label\":\"label\",\"value\":{\"key\":\"value\"}},{\"label\":\"label\",\"value\":{\"key\":\"value\"}}],\"schema\":\"schema\",\"oauthConfiguration\":{\"authorizationUrl\":\"authorizationUrl\",\"tokenUrl\":\"tokenUrl\",\"clientId\":\"clientId\",\"clientSecret\":\"clientSecret\",\"scopes\":[\"scopes\",\"scopes\"],\"extraAuthParams\":{\"extraAuthParams\":\"extraAuthParams\"},\"extraTokenParams\":{\"extraTokenParams\":\"extraTokenParams\"}}},{\"id\":\"id\",\"label\":\"label\",\"description\":\"description\",\"required\":true,\"hidden\":true,\"type\":\"STRING\",\"enumOptions\":[{\"label\":\"label\",\"value\":{\"key\":\"value\"}},{\"label\":\"label\",\"value\":{\"key\":\"value\"}}],\"schema\":\"schema\",\"oauthConfiguration\":{\"authorizationUrl\":\"authorizationUrl\",\"tokenUrl\":\"tokenUrl\",\"clientId\":\"clientId\",\"clientSecret\":\"clientSecret\",\"scopes\":[\"scopes\",\"scopes\"],\"extraAuthParams\":{\"extraAuthParams\":\"extraAuthParams\"},\"extraTokenParams\":{\"extraTokenParams\":\"extraTokenParams\"}}}],\"language\":\"language\",\"sideEffects\":\"NONE\",\"name\":\"name\",\"description\":\"description\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"status\":\"ACTIVE\"}"));
+            .setBody("{\"capabilityType\":\"ACTION\",\"actionId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"functionBinding\":{\"functionId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"versionId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}},\"instructions\":\"instructions\",\"llmInclusionStatus\":\"ALWAYS\",\"segmentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"preconditionExplanation\":\"preconditionExplanation\",\"deleted\":true,\"userInteractionRequired\":true,\"buttonName\":\"buttonName\",\"precondition\":{\"preconditionType\":\"user\",\"key\":\"key\",\"value\":\"value\",\"values\":[\"values\",\"values\"],\"operator\":\"NOT\"},\"userFormParameters\":[{\"id\":\"id\",\"label\":\"label\",\"description\":\"description\",\"required\":true,\"hidden\":true,\"type\":\"STRING\",\"enumOptions\":[{\"label\":\"label\",\"value\":{\"key\":\"value\"}},{\"label\":\"label\",\"value\":{\"key\":\"value\"}}],\"schema\":\"schema\",\"oauthConfiguration\":{\"authorizationUrl\":\"authorizationUrl\",\"tokenUrl\":\"tokenUrl\",\"clientId\":\"clientId\",\"clientSecret\":\"clientSecret\",\"scopes\":[\"scopes\",\"scopes\"],\"extraAuthParams\":{\"extraAuthParams\":\"extraAuthParams\"},\"extraTokenParams\":{\"extraTokenParams\":\"extraTokenParams\"}}},{\"id\":\"id\",\"label\":\"label\",\"description\":\"description\",\"required\":true,\"hidden\":true,\"type\":\"STRING\",\"enumOptions\":[{\"label\":\"label\",\"value\":{\"key\":\"value\"}},{\"label\":\"label\",\"value\":{\"key\":\"value\"}}],\"schema\":\"schema\",\"oauthConfiguration\":{\"authorizationUrl\":\"authorizationUrl\",\"tokenUrl\":\"tokenUrl\",\"clientId\":\"clientId\",\"clientSecret\":\"clientSecret\",\"scopes\":[\"scopes\",\"scopes\"],\"extraAuthParams\":{\"extraAuthParams\":\"extraAuthParams\"},\"extraTokenParams\":{\"extraTokenParams\":\"extraTokenParams\"}}}],\"language\":\"language\",\"sideEffects\":\"NONE\",\"name\":\"name\",\"description\":\"description\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"status\":\"ACTIVE\"}"));
         CapabilityResponse response = client.capabilities().getCapability(
             CapabilityType.ACTION,
             "referenceId",
@@ -70,6 +74,18 @@ public class CapabilitiesWireTest {
             + "    \"type\": \"AGENT\",\n"
             + "    \"appId\": \"appId\",\n"
             + "    \"referenceId\": \"x\"\n"
+            + "  },\n"
+            + "  \"functionBinding\": {\n"
+            + "    \"functionId\": {\n"
+            + "      \"type\": \"AGENT\",\n"
+            + "      \"appId\": \"appId\",\n"
+            + "      \"referenceId\": \"x\"\n"
+            + "    },\n"
+            + "    \"versionId\": {\n"
+            + "      \"type\": \"AGENT\",\n"
+            + "      \"appId\": \"appId\",\n"
+            + "      \"referenceId\": \"x\"\n"
+            + "    }\n"
             + "  },\n"
             + "  \"instructions\": \"instructions\",\n"
             + "  \"llmInclusionStatus\": \"ALWAYS\",\n"
@@ -209,7 +225,7 @@ public class CapabilitiesWireTest {
     public void testPatchCapability() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"capabilityType\":\"ACTION\",\"actionId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"instructions\":\"instructions\",\"llmInclusionStatus\":\"ALWAYS\",\"segmentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"preconditionExplanation\":\"preconditionExplanation\",\"deleted\":true,\"userInteractionRequired\":true,\"buttonName\":\"buttonName\",\"precondition\":{\"preconditionType\":\"user\",\"key\":\"key\",\"value\":\"value\",\"values\":[\"values\",\"values\"],\"operator\":\"NOT\"},\"userFormParameters\":[{\"id\":\"id\",\"label\":\"label\",\"description\":\"description\",\"required\":true,\"hidden\":true,\"type\":\"STRING\",\"enumOptions\":[{\"label\":\"label\",\"value\":{\"key\":\"value\"}},{\"label\":\"label\",\"value\":{\"key\":\"value\"}}],\"schema\":\"schema\",\"oauthConfiguration\":{\"authorizationUrl\":\"authorizationUrl\",\"tokenUrl\":\"tokenUrl\",\"clientId\":\"clientId\",\"clientSecret\":\"clientSecret\",\"scopes\":[\"scopes\",\"scopes\"],\"extraAuthParams\":{\"extraAuthParams\":\"extraAuthParams\"},\"extraTokenParams\":{\"extraTokenParams\":\"extraTokenParams\"}}},{\"id\":\"id\",\"label\":\"label\",\"description\":\"description\",\"required\":true,\"hidden\":true,\"type\":\"STRING\",\"enumOptions\":[{\"label\":\"label\",\"value\":{\"key\":\"value\"}},{\"label\":\"label\",\"value\":{\"key\":\"value\"}}],\"schema\":\"schema\",\"oauthConfiguration\":{\"authorizationUrl\":\"authorizationUrl\",\"tokenUrl\":\"tokenUrl\",\"clientId\":\"clientId\",\"clientSecret\":\"clientSecret\",\"scopes\":[\"scopes\",\"scopes\"],\"extraAuthParams\":{\"extraAuthParams\":\"extraAuthParams\"},\"extraTokenParams\":{\"extraTokenParams\":\"extraTokenParams\"}}}],\"language\":\"language\",\"sideEffects\":\"NONE\",\"name\":\"name\",\"description\":\"description\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"status\":\"ACTIVE\"}"));
+            .setBody("{\"capabilityType\":\"ACTION\",\"actionId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"functionBinding\":{\"functionId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"versionId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}},\"instructions\":\"instructions\",\"llmInclusionStatus\":\"ALWAYS\",\"segmentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"preconditionExplanation\":\"preconditionExplanation\",\"deleted\":true,\"userInteractionRequired\":true,\"buttonName\":\"buttonName\",\"precondition\":{\"preconditionType\":\"user\",\"key\":\"key\",\"value\":\"value\",\"values\":[\"values\",\"values\"],\"operator\":\"NOT\"},\"userFormParameters\":[{\"id\":\"id\",\"label\":\"label\",\"description\":\"description\",\"required\":true,\"hidden\":true,\"type\":\"STRING\",\"enumOptions\":[{\"label\":\"label\",\"value\":{\"key\":\"value\"}},{\"label\":\"label\",\"value\":{\"key\":\"value\"}}],\"schema\":\"schema\",\"oauthConfiguration\":{\"authorizationUrl\":\"authorizationUrl\",\"tokenUrl\":\"tokenUrl\",\"clientId\":\"clientId\",\"clientSecret\":\"clientSecret\",\"scopes\":[\"scopes\",\"scopes\"],\"extraAuthParams\":{\"extraAuthParams\":\"extraAuthParams\"},\"extraTokenParams\":{\"extraTokenParams\":\"extraTokenParams\"}}},{\"id\":\"id\",\"label\":\"label\",\"description\":\"description\",\"required\":true,\"hidden\":true,\"type\":\"STRING\",\"enumOptions\":[{\"label\":\"label\",\"value\":{\"key\":\"value\"}},{\"label\":\"label\",\"value\":{\"key\":\"value\"}}],\"schema\":\"schema\",\"oauthConfiguration\":{\"authorizationUrl\":\"authorizationUrl\",\"tokenUrl\":\"tokenUrl\",\"clientId\":\"clientId\",\"clientSecret\":\"clientSecret\",\"scopes\":[\"scopes\",\"scopes\"],\"extraAuthParams\":{\"extraAuthParams\":\"extraAuthParams\"},\"extraTokenParams\":{\"extraTokenParams\":\"extraTokenParams\"}}}],\"language\":\"language\",\"sideEffects\":\"NONE\",\"name\":\"name\",\"description\":\"description\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"status\":\"ACTIVE\"}"));
         CapabilityResponse response = client.capabilities().patchCapability(
             CapabilityType.ACTION,
             "referenceId",
@@ -259,6 +275,18 @@ public class CapabilitiesWireTest {
             + "    \"type\": \"AGENT\",\n"
             + "    \"appId\": \"appId\",\n"
             + "    \"referenceId\": \"x\"\n"
+            + "  },\n"
+            + "  \"functionBinding\": {\n"
+            + "    \"functionId\": {\n"
+            + "      \"type\": \"AGENT\",\n"
+            + "      \"appId\": \"appId\",\n"
+            + "      \"referenceId\": \"x\"\n"
+            + "    },\n"
+            + "    \"versionId\": {\n"
+            + "      \"type\": \"AGENT\",\n"
+            + "      \"appId\": \"appId\",\n"
+            + "      \"referenceId\": \"x\"\n"
+            + "    }\n"
             + "  },\n"
             + "  \"instructions\": \"instructions\",\n"
             + "  \"llmInclusionStatus\": \"ALWAYS\",\n"
@@ -409,6 +437,95 @@ public class CapabilitiesWireTest {
         RecordedRequest request = server.takeRequest();
         Assertions.assertNotNull(request);
         Assertions.assertEquals("DELETE", request.getMethod());
+    }
+    @Test
+    public void testSimulateCapability() throws Exception {
+        server.enqueue(new MockResponse()
+            .setResponseCode(200)
+            .setBody("{\"capabilityType\":\"ACTION\",\"response\":\"response\",\"data\":{\"data\":{\"key\":\"value\"}},\"status\":\"SUCCESS\",\"errorMessage\":\"errorMessage\"}"));
+        CapabilitySimulationResult response = client.capabilities().simulateCapability(
+            CapabilityType.ACTION,
+            "referenceId",
+            SimulateCapabilityByTypeRequest
+                .builder()
+                .body(
+                    CapabilitySimulationInput.action(
+                        ActionSimulationInput
+                            .builder()
+                            .build()
+                    )
+                )
+                .build()
+        );
+        RecordedRequest request = server.takeRequest();
+        Assertions.assertNotNull(request);
+        Assertions.assertEquals("POST", request.getMethod());
+        // Validate request body
+        String actualRequestBody = request.getBody().readUtf8();
+        String expectedRequestBody = ""
+            + "{\n"
+            + "  \"capabilityType\": \"ACTION\"\n"
+            + "}";
+        JsonNode actualJson = objectMapper.readTree(actualRequestBody);
+        JsonNode expectedJson = objectMapper.readTree(expectedRequestBody);
+        Assertions.assertEquals(expectedJson, actualJson, "Request body structure does not match expected");
+        if (actualJson.has("type") || actualJson.has("_type") || actualJson.has("kind")) {
+            String discriminator = null;
+            if (actualJson.has("type")) discriminator = actualJson.get("type").asText();
+            else if (actualJson.has("_type")) discriminator = actualJson.get("_type").asText();
+            else if (actualJson.has("kind")) discriminator = actualJson.get("kind").asText();
+            Assertions.assertNotNull(discriminator, "Union type should have a discriminator field");
+            Assertions.assertFalse(discriminator.isEmpty(), "Union discriminator should not be empty");
+        }
+        
+        if (!actualJson.isNull()) {
+            Assertions.assertTrue(actualJson.isObject() || actualJson.isArray() || actualJson.isValueNode(), "request should be a valid JSON value");
+        }
+        
+        if (actualJson.isArray()) {
+            Assertions.assertTrue(actualJson.size() >= 0, "Array should have valid size");
+        }
+        if (actualJson.isObject()) {
+            Assertions.assertTrue(actualJson.size() >= 0, "Object should have valid field count");
+        }
+        
+        // Validate response body
+        Assertions.assertNotNull(response, "Response should not be null");
+        String actualResponseJson = objectMapper.writeValueAsString(response);
+        String expectedResponseBody = ""
+            + "{\n"
+            + "  \"capabilityType\": \"ACTION\",\n"
+            + "  \"response\": \"response\",\n"
+            + "  \"data\": {\n"
+            + "    \"data\": {\n"
+            + "      \"key\": \"value\"\n"
+            + "    }\n"
+            + "  },\n"
+            + "  \"status\": \"SUCCESS\",\n"
+            + "  \"errorMessage\": \"errorMessage\"\n"
+            + "}";
+        JsonNode actualResponseNode = objectMapper.readTree(actualResponseJson);
+        JsonNode expectedResponseNode = objectMapper.readTree(expectedResponseBody);
+        Assertions.assertEquals(expectedResponseNode, actualResponseNode, "Response body structure does not match expected");
+        if (actualResponseNode.has("type") || actualResponseNode.has("_type") || actualResponseNode.has("kind")) {
+            String discriminator = null;
+            if (actualResponseNode.has("type")) discriminator = actualResponseNode.get("type").asText();
+            else if (actualResponseNode.has("_type")) discriminator = actualResponseNode.get("_type").asText();
+            else if (actualResponseNode.has("kind")) discriminator = actualResponseNode.get("kind").asText();
+            Assertions.assertNotNull(discriminator, "Union type should have a discriminator field");
+            Assertions.assertFalse(discriminator.isEmpty(), "Union discriminator should not be empty");
+        }
+        
+        if (!actualResponseNode.isNull()) {
+            Assertions.assertTrue(actualResponseNode.isObject() || actualResponseNode.isArray() || actualResponseNode.isValueNode(), "response should be a valid JSON value");
+        }
+        
+        if (actualResponseNode.isArray()) {
+            Assertions.assertTrue(actualResponseNode.size() >= 0, "Array should have valid size");
+        }
+        if (actualResponseNode.isObject()) {
+            Assertions.assertTrue(actualResponseNode.size() >= 0, "Object should have valid field count");
+        }
     }
     @Test
     public void testSearchCapabilities() throws Exception {

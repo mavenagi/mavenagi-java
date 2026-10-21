@@ -3,6 +3,7 @@
  */
 package com.mavenagi.resources.charters.types;
 
+import com.mavenagi.resources.commons.types.CharterType;
 import com.mavenagi.resources.commons.types.EntityId;
 import com.mavenagi.resources.commons.types.Precondition;
 import java.util.Optional;

@@ -18,7 +18,7 @@ import com.mavenagi.resources.charters.types.CharterResponse;
 import com.mavenagi.resources.charters.types.CharterSearchRequest;
 import com.mavenagi.resources.charters.types.CharterSearchResponse;
 import com.mavenagi.resources.charters.types.CharterStatus;
-import com.mavenagi.resources.charters.types.CharterType;
+import com.mavenagi.resources.commons.types.CharterType;
 import com.mavenagi.resources.commons.types.EntityId;
 import com.mavenagi.resources.commons.types.EntityIdBase;
 import com.mavenagi.resources.commons.types.Precondition;

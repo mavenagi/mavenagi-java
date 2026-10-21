@@ -336,8 +336,9 @@ public class RawIntelligentFieldsClient {
      * deletes any kind of capability the same way. That endpoint returns no body.
      * <p>Soft delete an intelligent field. Only INACTIVE fields can be deleted.</p>
      * <p>Deleted fields are excluded from search results, and getting one by ID returns 404.
-     * Creating a new field with the same referenceId as a deleted field will overwrite
-     * the deleted field and restore it with the status a new field gets.</p>
+     * Creating a field with the same referenceId as a deleted field reclaims it: the field keeps
+     * its identity and entityType, every other setting comes from the request, and it gets the
+     * status a new field gets.</p>
      * <p>Deleted fields cannot be modified.</p>
      */
     public MavenAGIHttpResponse<IntelligentFieldResponse> delete(String fieldReferenceId) {
@@ -349,8 +350,9 @@ public class RawIntelligentFieldsClient {
      * deletes any kind of capability the same way. That endpoint returns no body.
      * <p>Soft delete an intelligent field. Only INACTIVE fields can be deleted.</p>
      * <p>Deleted fields are excluded from search results, and getting one by ID returns 404.
-     * Creating a new field with the same referenceId as a deleted field will overwrite
-     * the deleted field and restore it with the status a new field gets.</p>
+     * Creating a field with the same referenceId as a deleted field reclaims it: the field keeps
+     * its identity and entityType, every other setting comes from the request, and it gets the
+     * status a new field gets.</p>
      * <p>Deleted fields cannot be modified.</p>
      */
     public MavenAGIHttpResponse<IntelligentFieldResponse> delete(
@@ -363,8 +365,9 @@ public class RawIntelligentFieldsClient {
      * deletes any kind of capability the same way. That endpoint returns no body.
      * <p>Soft delete an intelligent field. Only INACTIVE fields can be deleted.</p>
      * <p>Deleted fields are excluded from search results, and getting one by ID returns 404.
-     * Creating a new field with the same referenceId as a deleted field will overwrite
-     * the deleted field and restore it with the status a new field gets.</p>
+     * Creating a field with the same referenceId as a deleted field reclaims it: the field keeps
+     * its identity and entityType, every other setting comes from the request, and it gets the
+     * status a new field gets.</p>
      * <p>Deleted fields cannot be modified.</p>
      */
     public MavenAGIHttpResponse<IntelligentFieldResponse> delete(

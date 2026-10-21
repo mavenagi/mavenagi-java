@@ -7,8 +7,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public final class KnowledgeBaseType {
-    public static final KnowledgeBaseType API = new KnowledgeBaseType(Value.API, "API");
-
     public static final KnowledgeBaseType URL = new KnowledgeBaseType(Value.URL, "URL");
 
     public static final KnowledgeBaseType LEGACY = new KnowledgeBaseType(Value.LEGACY, "LEGACY");
@@ -16,6 +14,8 @@ public final class KnowledgeBaseType {
     public static final KnowledgeBaseType MANUAL = new KnowledgeBaseType(Value.MANUAL, "MANUAL");
 
     public static final KnowledgeBaseType RSS = new KnowledgeBaseType(Value.RSS, "RSS");
+
+    public static final KnowledgeBaseType API = new KnowledgeBaseType(Value.API, "API");
 
     private final Value value;
 
@@ -49,8 +49,6 @@ public final class KnowledgeBaseType {
 
     public <T> T visit(Visitor<T> visitor) {
         switch (value) {
-            case API:
-                return visitor.visitApi();
             case URL:
                 return visitor.visitUrl();
             case LEGACY:
@@ -59,6 +57,8 @@ public final class KnowledgeBaseType {
                 return visitor.visitManual();
             case RSS:
                 return visitor.visitRss();
+            case API:
+                return visitor.visitApi();
             case UNKNOWN:
             default:
                 return visitor.visitUnknown(string);
@@ -68,8 +68,6 @@ public final class KnowledgeBaseType {
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static KnowledgeBaseType valueOf(String value) {
         switch (value) {
-            case "API":
-                return API;
             case "URL":
                 return URL;
             case "LEGACY":
@@ -78,6 +76,8 @@ public final class KnowledgeBaseType {
                 return MANUAL;
             case "RSS":
                 return RSS;
+            case "API":
+                return API;
             default:
                 return new KnowledgeBaseType(Value.UNKNOWN, value);
         }

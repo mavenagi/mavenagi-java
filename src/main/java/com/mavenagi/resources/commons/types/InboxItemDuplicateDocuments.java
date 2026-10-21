@@ -143,7 +143,7 @@ public final class InboxItemDuplicateDocuments implements IInboxItemBase {
     }
 
     /**
-     * @return Information about the source document associated with the inbox item.
+     * @return Information about the source document associated with the inbox item. Shown in Agent Designer as &quot;Reference Document&quot;.
      */
     @JsonProperty("sourceDocument")
     public DocumentInformation getSourceDocument() {
@@ -245,7 +245,7 @@ public final class InboxItemDuplicateDocuments implements IInboxItemBase {
 
     public interface SourceDocumentStage {
         /**
-         * <p>Information about the source document associated with the inbox item.</p>
+         * <p>Information about the source document associated with the inbox item. Shown in Agent Designer as &quot;Reference Document&quot;.</p>
          */
         _FinalStage sourceDocument(@NotNull DocumentInformation sourceDocument);
     }
@@ -398,8 +398,8 @@ public final class InboxItemDuplicateDocuments implements IInboxItemBase {
         }
 
         /**
-         * <p>Information about the source document associated with the inbox item.</p>
-         * <p>Information about the source document associated with the inbox item.</p>
+         * <p>Information about the source document associated with the inbox item. Shown in Agent Designer as &quot;Reference Document&quot;.</p>
+         * <p>Information about the source document associated with the inbox item. Shown in Agent Designer as &quot;Reference Document&quot;.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override

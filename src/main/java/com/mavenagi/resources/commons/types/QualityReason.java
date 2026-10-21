@@ -7,10 +7,10 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public final class QualityReason {
+    public static final QualityReason NO_BOT_REPLIES = new QualityReason(Value.NO_BOT_REPLIES, "NO_BOT_REPLIES");
+
     public static final QualityReason NEEDS_USER_CLARIFICATION =
             new QualityReason(Value.NEEDS_USER_CLARIFICATION, "NEEDS_USER_CLARIFICATION");
-
-    public static final QualityReason NO_BOT_REPLIES = new QualityReason(Value.NO_BOT_REPLIES, "NO_BOT_REPLIES");
 
     public static final QualityReason INTERRUPTED = new QualityReason(Value.INTERRUPTED, "INTERRUPTED");
 
@@ -62,10 +62,10 @@ public final class QualityReason {
 
     public <T> T visit(Visitor<T> visitor) {
         switch (value) {
-            case NEEDS_USER_CLARIFICATION:
-                return visitor.visitNeedsUserClarification();
             case NO_BOT_REPLIES:
                 return visitor.visitNoBotReplies();
+            case NEEDS_USER_CLARIFICATION:
+                return visitor.visitNeedsUserClarification();
             case INTERRUPTED:
                 return visitor.visitInterrupted();
             case UNSUPPORTED_USER_BEHAVIOR:
@@ -89,10 +89,10 @@ public final class QualityReason {
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static QualityReason valueOf(String value) {
         switch (value) {
-            case "NEEDS_USER_CLARIFICATION":
-                return NEEDS_USER_CLARIFICATION;
             case "NO_BOT_REPLIES":
                 return NO_BOT_REPLIES;
+            case "NEEDS_USER_CLARIFICATION":
+                return NEEDS_USER_CLARIFICATION;
             case "INTERRUPTED":
                 return INTERRUPTED;
             case "UNSUPPORTED_USER_BEHAVIOR":

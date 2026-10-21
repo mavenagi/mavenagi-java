@@ -15,6 +15,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.Nullable;
 import com.mavenagi.core.NullableNonemptyFilter;
 import com.mavenagi.core.ObjectMappers;
+import com.mavenagi.resources.commons.types.CharterType;
 import com.mavenagi.resources.commons.types.EntityId;
 import com.mavenagi.resources.commons.types.PreconditionResponse;
 import java.time.OffsetDateTime;
@@ -88,6 +89,7 @@ public final class CharterSummary {
 
     /**
      * @return The rule controlling when this charter applies. Null means wildcard (always matches).
+     * <p>Shown in Agent Designer as the charter's &quot;Segment&quot;. A null precondition shows as &quot;All conversations&quot;.</p>
      */
     @JsonIgnore
     public Optional<PreconditionResponse> getPrecondition() {
@@ -248,6 +250,7 @@ public final class CharterSummary {
 
         /**
          * <p>The rule controlling when this charter applies. Null means wildcard (always matches).</p>
+         * <p>Shown in Agent Designer as the charter's &quot;Segment&quot;. A null precondition shows as &quot;All conversations&quot;.</p>
          */
         _FinalStage precondition(Optional<PreconditionResponse> precondition);
 
@@ -457,6 +460,7 @@ public final class CharterSummary {
 
         /**
          * <p>The rule controlling when this charter applies. Null means wildcard (always matches).</p>
+         * <p>Shown in Agent Designer as the charter's &quot;Segment&quot;. A null precondition shows as &quot;All conversations&quot;.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -473,6 +477,7 @@ public final class CharterSummary {
 
         /**
          * <p>The rule controlling when this charter applies. Null means wildcard (always matches).</p>
+         * <p>Shown in Agent Designer as the charter's &quot;Segment&quot;. A null precondition shows as &quot;All conversations&quot;.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -483,6 +488,7 @@ public final class CharterSummary {
 
         /**
          * <p>The rule controlling when this charter applies. Null means wildcard (always matches).</p>
+         * <p>Shown in Agent Designer as the charter's &quot;Segment&quot;. A null precondition shows as &quot;All conversations&quot;.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "precondition", nulls = Nulls.SKIP)

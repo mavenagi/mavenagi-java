@@ -55,7 +55,9 @@ public final class CharterBase implements ICharterBase {
     }
 
     /**
-     * @return ID of the agent variant this charter belongs to, if applicable.
+     * @return On a write request, the agent variant to stage the write in. On a response, it is set
+     * only on each side of a working-set diff, naming the variant that side comes from; every
+     * other charter response, and every staged-edit payload, leaves it unset.
      * <p>While charters are versioned for the agent, a write is staged in this variant's
      * working set rather than applied to the agent's live configuration, and a write that
      * names no variant is rejected with <code>VARIANT_REQUIRED</code>. While they aren't, a write that
@@ -81,6 +83,7 @@ public final class CharterBase implements ICharterBase {
      * charter matches. Manuals concatenate with ancestor charter manuals
      * before delivery.
      * <p>If not set, existing manual is preserved if present.</p>
+     * <p>Shown in Agent Designer as &quot;Manual&quot;, or &quot;Return text&quot; when <code>type</code> is <code>STRICT_RETURN</code>.</p>
      */
     @JsonProperty("manual")
     @java.lang.Override
@@ -133,7 +136,9 @@ public final class CharterBase implements ICharterBase {
         CharterBase build();
 
         /**
-         * <p>ID of the agent variant this charter belongs to, if applicable.</p>
+         * <p>On a write request, the agent variant to stage the write in. On a response, it is set
+         * only on each side of a working-set diff, naming the variant that side comes from; every
+         * other charter response, and every staged-edit payload, leaves it unset.</p>
          * <p>While charters are versioned for the agent, a write is staged in this variant's
          * working set rather than applied to the agent's live configuration, and a write that
          * names no variant is rejected with <code>VARIANT_REQUIRED</code>. While they aren't, a write that
@@ -155,6 +160,7 @@ public final class CharterBase implements ICharterBase {
          * charter matches. Manuals concatenate with ancestor charter manuals
          * before delivery.</p>
          * <p>If not set, existing manual is preserved if present.</p>
+         * <p>Shown in Agent Designer as &quot;Manual&quot;, or &quot;Return text&quot; when <code>type</code> is <code>STRICT_RETURN</code>.</p>
          */
         _FinalStage manual(Optional<String> manual);
 
@@ -202,6 +208,7 @@ public final class CharterBase implements ICharterBase {
          * charter matches. Manuals concatenate with ancestor charter manuals
          * before delivery.</p>
          * <p>If not set, existing manual is preserved if present.</p>
+         * <p>Shown in Agent Designer as &quot;Manual&quot;, or &quot;Return text&quot; when <code>type</code> is <code>STRICT_RETURN</code>.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -215,6 +222,7 @@ public final class CharterBase implements ICharterBase {
          * charter matches. Manuals concatenate with ancestor charter manuals
          * before delivery.</p>
          * <p>If not set, existing manual is preserved if present.</p>
+         * <p>Shown in Agent Designer as &quot;Manual&quot;, or &quot;Return text&quot; when <code>type</code> is <code>STRICT_RETURN</code>.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "manual", nulls = Nulls.SKIP)
@@ -244,7 +252,9 @@ public final class CharterBase implements ICharterBase {
         }
 
         /**
-         * <p>ID of the agent variant this charter belongs to, if applicable.</p>
+         * <p>On a write request, the agent variant to stage the write in. On a response, it is set
+         * only on each side of a working-set diff, naming the variant that side comes from; every
+         * other charter response, and every staged-edit payload, leaves it unset.</p>
          * <p>While charters are versioned for the agent, a write is staged in this variant's
          * working set rather than applied to the agent's live configuration, and a write that
          * names no variant is rejected with <code>VARIANT_REQUIRED</code>. While they aren't, a write that
@@ -258,7 +268,9 @@ public final class CharterBase implements ICharterBase {
         }
 
         /**
-         * <p>ID of the agent variant this charter belongs to, if applicable.</p>
+         * <p>On a write request, the agent variant to stage the write in. On a response, it is set
+         * only on each side of a working-set diff, naming the variant that side comes from; every
+         * other charter response, and every staged-edit payload, leaves it unset.</p>
          * <p>While charters are versioned for the agent, a write is staged in this variant's
          * working set rather than applied to the agent's live configuration, and a write that
          * names no variant is rejected with <code>VARIANT_REQUIRED</code>. While they aren't, a write that

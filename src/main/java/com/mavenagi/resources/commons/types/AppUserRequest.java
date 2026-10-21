@@ -17,6 +17,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 
@@ -29,16 +30,20 @@ public final class AppUserRequest implements IAppUser {
 
     private final EntityIdBase userId;
 
+    private final Optional<ExecutionMode> executionMode;
+
     private final Map<String, Object> additionalProperties;
 
     private AppUserRequest(
             Set<AppUserIdentifier> identifiers,
             Map<String, UserData> data,
             EntityIdBase userId,
+            Optional<ExecutionMode> executionMode,
             Map<String, Object> additionalProperties) {
         this.identifiers = identifiers;
         this.data = data;
         this.userId = userId;
+        this.executionMode = executionMode;
         this.additionalProperties = additionalProperties;
     }
 
@@ -65,6 +70,20 @@ public final class AppUserRequest implements IAppUser {
         return userId;
     }
 
+    /**
+     * @return The execution mode the user lives in. Defaults to <code>LIVE</code> for a new user, and to the existing
+     * user's execution mode on update; an update can't move a user to a different one.
+     * <p>A <code>SIMULATION</code> user is only linked to other <code>SIMULATION</code> users, is excluded from user search
+     * unless <code>simulationFilter</code> asks for it, and may only talk in simulation conversations. A <code>LIVE</code>
+     * user can't talk in a simulation conversation either, so give each simulation its own user ids
+     * rather than reusing live ones.
+     * Creating one needs the same permission as creating a simulation conversation.</p>
+     */
+    @JsonProperty("executionMode")
+    public Optional<ExecutionMode> getExecutionMode() {
+        return executionMode;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -77,12 +96,15 @@ public final class AppUserRequest implements IAppUser {
     }
 
     private boolean equalTo(AppUserRequest other) {
-        return identifiers.equals(other.identifiers) && data.equals(other.data) && userId.equals(other.userId);
+        return identifiers.equals(other.identifiers)
+                && data.equals(other.data)
+                && userId.equals(other.userId)
+                && executionMode.equals(other.executionMode);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.identifiers, this.data, this.userId);
+        return Objects.hash(this.identifiers, this.data, this.userId, this.executionMode);
     }
 
     @java.lang.Override
@@ -120,11 +142,26 @@ public final class AppUserRequest implements IAppUser {
         _FinalStage putAllData(Map<String, UserData> data);
 
         _FinalStage data(String key, UserData value);
+
+        /**
+         * <p>The execution mode the user lives in. Defaults to <code>LIVE</code> for a new user, and to the existing
+         * user's execution mode on update; an update can't move a user to a different one.</p>
+         * <p>A <code>SIMULATION</code> user is only linked to other <code>SIMULATION</code> users, is excluded from user search
+         * unless <code>simulationFilter</code> asks for it, and may only talk in simulation conversations. A <code>LIVE</code>
+         * user can't talk in a simulation conversation either, so give each simulation its own user ids
+         * rather than reusing live ones.
+         * Creating one needs the same permission as creating a simulation conversation.</p>
+         */
+        _FinalStage executionMode(Optional<ExecutionMode> executionMode);
+
+        _FinalStage executionMode(ExecutionMode executionMode);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements UserIdStage, _FinalStage {
         private EntityIdBase userId;
+
+        private Optional<ExecutionMode> executionMode = Optional.empty();
 
         private Map<String, UserData> data = new LinkedHashMap<>();
 
@@ -140,6 +177,7 @@ public final class AppUserRequest implements IAppUser {
             identifiers(other.getIdentifiers());
             data(other.getData());
             userId(other.getUserId());
+            executionMode(other.getExecutionMode());
             return this;
         }
 
@@ -152,6 +190,38 @@ public final class AppUserRequest implements IAppUser {
         @JsonSetter("userId")
         public _FinalStage userId(@NotNull EntityIdBase userId) {
             this.userId = Objects.requireNonNull(userId, "userId must not be null");
+            return this;
+        }
+
+        /**
+         * <p>The execution mode the user lives in. Defaults to <code>LIVE</code> for a new user, and to the existing
+         * user's execution mode on update; an update can't move a user to a different one.</p>
+         * <p>A <code>SIMULATION</code> user is only linked to other <code>SIMULATION</code> users, is excluded from user search
+         * unless <code>simulationFilter</code> asks for it, and may only talk in simulation conversations. A <code>LIVE</code>
+         * user can't talk in a simulation conversation either, so give each simulation its own user ids
+         * rather than reusing live ones.
+         * Creating one needs the same permission as creating a simulation conversation.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage executionMode(ExecutionMode executionMode) {
+            this.executionMode = Optional.ofNullable(executionMode);
+            return this;
+        }
+
+        /**
+         * <p>The execution mode the user lives in. Defaults to <code>LIVE</code> for a new user, and to the existing
+         * user's execution mode on update; an update can't move a user to a different one.</p>
+         * <p>A <code>SIMULATION</code> user is only linked to other <code>SIMULATION</code> users, is excluded from user search
+         * unless <code>simulationFilter</code> asks for it, and may only talk in simulation conversations. A <code>LIVE</code>
+         * user can't talk in a simulation conversation either, so give each simulation its own user ids
+         * rather than reusing live ones.
+         * Creating one needs the same permission as creating a simulation conversation.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "executionMode", nulls = Nulls.SKIP)
+        public _FinalStage executionMode(Optional<ExecutionMode> executionMode) {
+            this.executionMode = executionMode;
             return this;
         }
 
@@ -216,7 +286,7 @@ public final class AppUserRequest implements IAppUser {
 
         @java.lang.Override
         public AppUserRequest build() {
-            return new AppUserRequest(identifiers, data, userId, additionalProperties);
+            return new AppUserRequest(identifiers, data, userId, executionMode, additionalProperties);
         }
     }
 }

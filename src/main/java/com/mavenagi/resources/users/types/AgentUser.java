@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
 import com.mavenagi.resources.commons.types.AppUserIdentifier;
+import com.mavenagi.resources.commons.types.ExecutionMode;
 import com.mavenagi.resources.commons.types.IntelligentFieldValueResponse;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
@@ -42,6 +43,8 @@ public final class AgentUser {
 
     private final Optional<List<IntelligentFieldValueResponse>> intelligentFieldValues;
 
+    private final ExecutionMode executionMode;
+
     private final Map<String, Object> additionalProperties;
 
     private AgentUser(
@@ -52,6 +55,7 @@ public final class AgentUser {
             Optional<String> defaultName,
             List<AppUserSummary> users,
             Optional<List<IntelligentFieldValueResponse>> intelligentFieldValues,
+            ExecutionMode executionMode,
             Map<String, Object> additionalProperties) {
         this.id = id;
         this.createdAt = createdAt;
@@ -60,6 +64,7 @@ public final class AgentUser {
         this.defaultName = defaultName;
         this.users = users;
         this.intelligentFieldValues = intelligentFieldValues;
+        this.executionMode = executionMode;
         this.additionalProperties = additionalProperties;
     }
 
@@ -121,6 +126,14 @@ public final class AgentUser {
         return intelligentFieldValues;
     }
 
+    /**
+     * @return The execution mode the agent user lives in. Its app users all share it.
+     */
+    @JsonProperty("executionMode")
+    public ExecutionMode getExecutionMode() {
+        return executionMode;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -139,7 +152,8 @@ public final class AgentUser {
                 && identifiers.equals(other.identifiers)
                 && defaultName.equals(other.defaultName)
                 && users.equals(other.users)
-                && intelligentFieldValues.equals(other.intelligentFieldValues);
+                && intelligentFieldValues.equals(other.intelligentFieldValues)
+                && executionMode.equals(other.executionMode);
     }
 
     @java.lang.Override
@@ -151,7 +165,8 @@ public final class AgentUser {
                 this.identifiers,
                 this.defaultName,
                 this.users,
-                this.intelligentFieldValues);
+                this.intelligentFieldValues,
+                this.executionMode);
     }
 
     @java.lang.Override
@@ -183,7 +198,14 @@ public final class AgentUser {
         /**
          * <p>The date and time the agent user was last updated</p>
          */
-        _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt);
+        ExecutionModeStage updatedAt(@NotNull OffsetDateTime updatedAt);
+    }
+
+    public interface ExecutionModeStage {
+        /**
+         * <p>The execution mode the agent user lives in. Its app users all share it.</p>
+         */
+        _FinalStage executionMode(@NotNull ExecutionMode executionMode);
     }
 
     public interface _FinalStage {
@@ -225,12 +247,15 @@ public final class AgentUser {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements IdStage, CreatedAtStage, UpdatedAtStage, _FinalStage {
+    public static final class Builder
+            implements IdStage, CreatedAtStage, UpdatedAtStage, ExecutionModeStage, _FinalStage {
         private String id;
 
         private OffsetDateTime createdAt;
 
         private OffsetDateTime updatedAt;
+
+        private ExecutionMode executionMode;
 
         private Optional<List<IntelligentFieldValueResponse>> intelligentFieldValues = Optional.empty();
 
@@ -254,6 +279,7 @@ public final class AgentUser {
             defaultName(other.getDefaultName());
             users(other.getUsers());
             intelligentFieldValues(other.getIntelligentFieldValues());
+            executionMode(other.getExecutionMode());
             return this;
         }
 
@@ -288,8 +314,20 @@ public final class AgentUser {
          */
         @java.lang.Override
         @JsonSetter("updatedAt")
-        public _FinalStage updatedAt(@NotNull OffsetDateTime updatedAt) {
+        public ExecutionModeStage updatedAt(@NotNull OffsetDateTime updatedAt) {
             this.updatedAt = Objects.requireNonNull(updatedAt, "updatedAt must not be null");
+            return this;
+        }
+
+        /**
+         * <p>The execution mode the agent user lives in. Its app users all share it.</p>
+         * <p>The execution mode the agent user lives in. Its app users all share it.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("executionMode")
+        public _FinalStage executionMode(@NotNull ExecutionMode executionMode) {
+            this.executionMode = Objects.requireNonNull(executionMode, "executionMode must not be null");
             return this;
         }
 
@@ -419,6 +457,7 @@ public final class AgentUser {
                     defaultName,
                     users,
                     intelligentFieldValues,
+                    executionMode,
                     additionalProperties);
         }
     }

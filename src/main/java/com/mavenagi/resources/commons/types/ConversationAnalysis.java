@@ -77,7 +77,7 @@ public final class ConversationAnalysis {
     }
 
     /**
-     * @return Generated user request summary of the conversation
+     * @return Generated user request summary of the conversation. Shown in Agent Designer as &quot;Subject&quot; in the conversations table and &quot;Customer request&quot; on a conversation.
      */
     @JsonProperty("userRequest")
     public Optional<String> getUserRequest() {
@@ -272,7 +272,7 @@ public final class ConversationAnalysis {
         }
 
         /**
-         * <p>Generated user request summary of the conversation</p>
+         * <p>Generated user request summary of the conversation. Shown in Agent Designer as &quot;Subject&quot; in the conversations table and &quot;Customer request&quot; on a conversation.</p>
          */
         @JsonSetter(value = "userRequest", nulls = Nulls.SKIP)
         public Builder userRequest(Optional<String> userRequest) {

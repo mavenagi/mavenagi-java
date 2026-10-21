@@ -40,7 +40,7 @@ public class TriggersWireTest {
     public void testSearch() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"triggers\":[{\"triggerId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"enabled\":true,\"type\":\"CONVERSATION_CREATED\",\"condition\":{\"eventConditionType\":\"userEventName\",\"operator\":\"IN\",\"names\":[\"BUTTON_CLICKED\",\"BUTTON_CLICKED\"]},\"name\":\"name\",\"description\":\"description\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"status\":\"ACTIVE\"},{\"triggerId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"enabled\":true,\"type\":\"CONVERSATION_CREATED\",\"condition\":{\"eventConditionType\":\"userEventName\",\"operator\":\"IN\",\"names\":[\"BUTTON_CLICKED\",\"BUTTON_CLICKED\"]},\"name\":\"name\",\"description\":\"description\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"status\":\"ACTIVE\"}],\"number\":1,\"size\":1,\"totalElements\":1000000,\"totalPages\":1}"));
+            .setBody("{\"triggers\":[{\"triggerId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"enabled\":true,\"functionBinding\":{\"functionId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"versionId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}},\"type\":\"CONVERSATION_CREATED\",\"condition\":{\"eventConditionType\":\"userEventName\",\"operator\":\"IN\",\"names\":[\"BUTTON_CLICKED\",\"BUTTON_CLICKED\"]},\"name\":\"name\",\"description\":\"description\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"status\":\"ACTIVE\"},{\"triggerId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"enabled\":true,\"functionBinding\":{\"functionId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"versionId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}},\"type\":\"CONVERSATION_CREATED\",\"condition\":{\"eventConditionType\":\"userEventName\",\"operator\":\"IN\",\"names\":[\"BUTTON_CLICKED\",\"BUTTON_CLICKED\"]},\"name\":\"name\",\"description\":\"description\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"status\":\"ACTIVE\"}],\"number\":1,\"size\":1,\"totalElements\":1000000,\"totalPages\":1}"));
         EventTriggersSearchResponse response = client.triggers().search(
             EventTriggersSearchRequest
                 .builder()
@@ -91,6 +91,18 @@ public class TriggersWireTest {
             + "        \"referenceId\": \"x\"\n"
             + "      },\n"
             + "      \"enabled\": true,\n"
+            + "      \"functionBinding\": {\n"
+            + "        \"functionId\": {\n"
+            + "          \"type\": \"AGENT\",\n"
+            + "          \"appId\": \"appId\",\n"
+            + "          \"referenceId\": \"x\"\n"
+            + "        },\n"
+            + "        \"versionId\": {\n"
+            + "          \"type\": \"AGENT\",\n"
+            + "          \"appId\": \"appId\",\n"
+            + "          \"referenceId\": \"x\"\n"
+            + "        }\n"
+            + "      },\n"
             + "      \"type\": \"CONVERSATION_CREATED\",\n"
             + "      \"condition\": {\n"
             + "        \"eventConditionType\": \"userEventName\",\n"
@@ -115,6 +127,18 @@ public class TriggersWireTest {
             + "        \"referenceId\": \"x\"\n"
             + "      },\n"
             + "      \"enabled\": true,\n"
+            + "      \"functionBinding\": {\n"
+            + "        \"functionId\": {\n"
+            + "          \"type\": \"AGENT\",\n"
+            + "          \"appId\": \"appId\",\n"
+            + "          \"referenceId\": \"x\"\n"
+            + "        },\n"
+            + "        \"versionId\": {\n"
+            + "          \"type\": \"AGENT\",\n"
+            + "          \"appId\": \"appId\",\n"
+            + "          \"referenceId\": \"x\"\n"
+            + "        }\n"
+            + "      },\n"
             + "      \"type\": \"CONVERSATION_CREATED\",\n"
             + "      \"condition\": {\n"
             + "        \"eventConditionType\": \"userEventName\",\n"

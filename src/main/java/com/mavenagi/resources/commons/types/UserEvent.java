@@ -126,7 +126,7 @@ public final class UserEvent implements IEventBaseNoId {
     }
 
     /**
-     * @return The name of the event
+     * @return The name of the event. Shown in Agent Designer as &quot;Event type&quot;.
      */
     @JsonProperty("eventName")
     public UserEventName getEventName() {
@@ -229,7 +229,7 @@ public final class UserEvent implements IEventBaseNoId {
 
     public interface EventNameStage {
         /**
-         * <p>The name of the event</p>
+         * <p>The name of the event. Shown in Agent Designer as &quot;Event type&quot;.</p>
          */
         UserInfoStage eventName(@NotNull UserEventName eventName);
     }
@@ -355,8 +355,8 @@ public final class UserEvent implements IEventBaseNoId {
         }
 
         /**
-         * <p>The name of the event</p>
-         * <p>The name of the event</p>
+         * <p>The name of the event. Shown in Agent Designer as &quot;Event type&quot;.</p>
+         * <p>The name of the event. Shown in Agent Designer as &quot;Event type&quot;.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override

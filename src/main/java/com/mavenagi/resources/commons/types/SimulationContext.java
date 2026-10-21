@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -29,6 +30,10 @@ public final class SimulationContext {
 
     private final Optional<EntityIdWithoutAgent> variantId;
 
+    private final Optional<List<SimulationActionMock>> actionMocks;
+
+    private final Optional<SimulationActionBehavior> defaultActionBehavior;
+
     private final Map<String, Object> additionalProperties;
 
     private SimulationContext(
@@ -36,17 +41,22 @@ public final class SimulationContext {
             Optional<LlmPersona> persona,
             Optional<Set<EntityId>> availableKnowledgeBases,
             Optional<EntityIdWithoutAgent> variantId,
+            Optional<List<SimulationActionMock>> actionMocks,
+            Optional<SimulationActionBehavior> defaultActionBehavior,
             Map<String, Object> additionalProperties) {
         this.additionalPromptText = additionalPromptText;
         this.persona = persona;
         this.availableKnowledgeBases = availableKnowledgeBases;
         this.variantId = variantId;
+        this.actionMocks = actionMocks;
+        this.defaultActionBehavior = defaultActionBehavior;
         this.additionalProperties = additionalProperties;
     }
 
     /**
      * @return Deprecated. Superseded by charters, which determine agent behavior per round. Has no effect for agents using charters.
      * <p>If provided, overrides the agent's default additional prompt text during the simulation.</p>
+     * <p>Shown in Agent Designer as &quot;Additional persona instructions&quot;.</p>
      */
     @JsonProperty("additionalPromptText")
     public Optional<String> getAdditionalPromptText() {
@@ -84,6 +94,28 @@ public final class SimulationContext {
         return variantId;
     }
 
+    /**
+     * @return What the platform does when the agent executes each action during this simulation. At
+     * most one entry per action; a request that names an action twice is rejected. An action
+     * with no entry follows <code>defaultActionBehavior</code>. A conversation that already exists keeps
+     * the mocks and default it was created with.
+     */
+    @JsonProperty("actionMocks")
+    public Optional<List<SimulationActionMock>> getActionMocks() {
+        return actionMocks;
+    }
+
+    /**
+     * @return What the platform does when the agent executes an action that has no <code>actionMocks</code>
+     * entry. When absent, the action's app is called as usual. A <code>fixedResponse</code> here keeps the
+     * simulation from calling any action's app that <code>actionMocks</code> doesn't name with <code>callApp</code>;
+     * its templates are rendered over the parameters of whichever action was called.
+     */
+    @JsonProperty("defaultActionBehavior")
+    public Optional<SimulationActionBehavior> getDefaultActionBehavior() {
+        return defaultActionBehavior;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -99,12 +131,20 @@ public final class SimulationContext {
         return additionalPromptText.equals(other.additionalPromptText)
                 && persona.equals(other.persona)
                 && availableKnowledgeBases.equals(other.availableKnowledgeBases)
-                && variantId.equals(other.variantId);
+                && variantId.equals(other.variantId)
+                && actionMocks.equals(other.actionMocks)
+                && defaultActionBehavior.equals(other.defaultActionBehavior);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.additionalPromptText, this.persona, this.availableKnowledgeBases, this.variantId);
+        return Objects.hash(
+                this.additionalPromptText,
+                this.persona,
+                this.availableKnowledgeBases,
+                this.variantId,
+                this.actionMocks,
+                this.defaultActionBehavior);
     }
 
     @java.lang.Override
@@ -126,6 +166,10 @@ public final class SimulationContext {
 
         private Optional<EntityIdWithoutAgent> variantId = Optional.empty();
 
+        private Optional<List<SimulationActionMock>> actionMocks = Optional.empty();
+
+        private Optional<SimulationActionBehavior> defaultActionBehavior = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -136,12 +180,15 @@ public final class SimulationContext {
             persona(other.getPersona());
             availableKnowledgeBases(other.getAvailableKnowledgeBases());
             variantId(other.getVariantId());
+            actionMocks(other.getActionMocks());
+            defaultActionBehavior(other.getDefaultActionBehavior());
             return this;
         }
 
         /**
          * <p>Deprecated. Superseded by charters, which determine agent behavior per round. Has no effect for agents using charters.</p>
          * <p>If provided, overrides the agent's default additional prompt text during the simulation.</p>
+         * <p>Shown in Agent Designer as &quot;Additional persona instructions&quot;.</p>
          */
         @JsonSetter(value = "additionalPromptText", nulls = Nulls.SKIP)
         public Builder additionalPromptText(Optional<String> additionalPromptText) {
@@ -203,9 +250,49 @@ public final class SimulationContext {
             return this;
         }
 
+        /**
+         * <p>What the platform does when the agent executes each action during this simulation. At
+         * most one entry per action; a request that names an action twice is rejected. An action
+         * with no entry follows <code>defaultActionBehavior</code>. A conversation that already exists keeps
+         * the mocks and default it was created with.</p>
+         */
+        @JsonSetter(value = "actionMocks", nulls = Nulls.SKIP)
+        public Builder actionMocks(Optional<List<SimulationActionMock>> actionMocks) {
+            this.actionMocks = actionMocks;
+            return this;
+        }
+
+        public Builder actionMocks(List<SimulationActionMock> actionMocks) {
+            this.actionMocks = Optional.ofNullable(actionMocks);
+            return this;
+        }
+
+        /**
+         * <p>What the platform does when the agent executes an action that has no <code>actionMocks</code>
+         * entry. When absent, the action's app is called as usual. A <code>fixedResponse</code> here keeps the
+         * simulation from calling any action's app that <code>actionMocks</code> doesn't name with <code>callApp</code>;
+         * its templates are rendered over the parameters of whichever action was called.</p>
+         */
+        @JsonSetter(value = "defaultActionBehavior", nulls = Nulls.SKIP)
+        public Builder defaultActionBehavior(Optional<SimulationActionBehavior> defaultActionBehavior) {
+            this.defaultActionBehavior = defaultActionBehavior;
+            return this;
+        }
+
+        public Builder defaultActionBehavior(SimulationActionBehavior defaultActionBehavior) {
+            this.defaultActionBehavior = Optional.ofNullable(defaultActionBehavior);
+            return this;
+        }
+
         public SimulationContext build() {
             return new SimulationContext(
-                    additionalPromptText, persona, availableKnowledgeBases, variantId, additionalProperties);
+                    additionalPromptText,
+                    persona,
+                    availableKnowledgeBases,
+                    variantId,
+                    actionMocks,
+                    defaultActionBehavior,
+                    additionalProperties);
         }
     }
 }

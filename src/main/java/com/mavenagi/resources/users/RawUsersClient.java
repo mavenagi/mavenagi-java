@@ -193,6 +193,88 @@ public class RawUsersClient {
     }
 
     /**
+     * Deletes the identifiers and user data that every app has saved for an agent user.
+     * This is the same as calling <code>DELETE /users/{userId}</code> for each of the agent user's app users.
+     * <p>The agent user and its app users still exist afterwards, with no identifiers or user data.
+     * Apps can keep writing to them; a later create or update adds data back to the same users.</p>
+     * <p>Conversations, their messages and events are not modified, apart from the intelligent field values below. To wipe a conversation, use <code>DELETE /conversations/{conversationId}</code>.</p>
+     * <p>If the ID belongs to an agent user that has been merged into another, the agent user it was merged into is wiped.</p>
+     * <p>&lt;Warning&gt;This is a destructive operation and cannot be undone.&lt;/Warning&gt;</p>
+     * <h3>Intelligent fields</h3>
+     * <p>The agent user's intelligent field values are deleted too, and removed from their <code>INTELLIGENT_FIELD_VALUE_CHANGED</code> events; the events themselves are kept.
+     * Unlike <code>DELETE /users/{userId}</code>, the wipe does not recompute the values. They can be computed again later from the user's remaining conversations, for example after the user sends another message; wipe those conversations first to prevent that.</p>
+     */
+    public MavenAGIHttpResponse<Void> deleteAgentUser(String agentUserId) {
+        return deleteAgentUser(agentUserId, null);
+    }
+
+    /**
+     * Deletes the identifiers and user data that every app has saved for an agent user.
+     * This is the same as calling <code>DELETE /users/{userId}</code> for each of the agent user's app users.
+     * <p>The agent user and its app users still exist afterwards, with no identifiers or user data.
+     * Apps can keep writing to them; a later create or update adds data back to the same users.</p>
+     * <p>Conversations, their messages and events are not modified, apart from the intelligent field values below. To wipe a conversation, use <code>DELETE /conversations/{conversationId}</code>.</p>
+     * <p>If the ID belongs to an agent user that has been merged into another, the agent user it was merged into is wiped.</p>
+     * <p>&lt;Warning&gt;This is a destructive operation and cannot be undone.&lt;/Warning&gt;</p>
+     * <h3>Intelligent fields</h3>
+     * <p>The agent user's intelligent field values are deleted too, and removed from their <code>INTELLIGENT_FIELD_VALUE_CHANGED</code> events; the events themselves are kept.
+     * Unlike <code>DELETE /users/{userId}</code>, the wipe does not recompute the values. They can be computed again later from the user's remaining conversations, for example after the user sends another message; wipe those conversations first to prevent that.</p>
+     */
+    public MavenAGIHttpResponse<Void> deleteAgentUser(String agentUserId, RequestOptions requestOptions) {
+        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("v1")
+                .addPathSegments("agentusers")
+                .addPathSegment(agentUserId)
+                .build();
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl)
+                .method("DELETE", null)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Accept", "application/json")
+                .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            if (response.isSuccessful()) {
+                return new MavenAGIHttpResponse<>(null, response);
+            }
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            try {
+                switch (response.code()) {
+                    case 400:
+                        throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                    case 413:
+                        throw new PayloadTooLargeError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                    case 429:
+                        throw new TooManyRequestsError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                    case 500:
+                        throw new ServerError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            throw new MavenAGIApiException(
+                    "Error with status code " + response.code(),
+                    response.code(),
+                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                    response);
+        } catch (IOException e) {
+            throw new MavenAGIException("Network error executing HTTP request", e);
+        }
+    }
+
+    /**
      * Update an app user or create it if it doesn't exist.
      */
     public MavenAGIHttpResponse<AppUserResponse> createOrUpdate(AppUserRequest request) {
@@ -341,8 +423,12 @@ public class RawUsersClient {
     }
 
     /**
-     * Deletes all identifiers and user data saved by the specified app.
+     * Deletes all identifiers and user data saved by the specified app for this user.
      * Does not modify data or identifiers saved by other apps.
+     * <p>The app user still exists afterwards, with no identifiers or user data, and the app can keep writing to it.
+     * Conversations, their messages and events are not modified.
+     * The agent user's intelligent field values are not deleted; they are recomputed without this app's data.
+     * To wipe a conversation, use <code>DELETE /conversations/{conversationId}</code>. To wipe every app's data for a user, use <code>DELETE /agentusers/{agentUserId}</code>.</p>
      * <p>If this user is linked to a user from another app, it will not be unlinked. Unlinking of users is not yet supported.</p>
      * <p>&lt;Warning&gt;This is a destructive operation and cannot be undone.&lt;/Warning&gt;</p>
      */
@@ -351,8 +437,12 @@ public class RawUsersClient {
     }
 
     /**
-     * Deletes all identifiers and user data saved by the specified app.
+     * Deletes all identifiers and user data saved by the specified app for this user.
      * Does not modify data or identifiers saved by other apps.
+     * <p>The app user still exists afterwards, with no identifiers or user data, and the app can keep writing to it.
+     * Conversations, their messages and events are not modified.
+     * The agent user's intelligent field values are not deleted; they are recomputed without this app's data.
+     * To wipe a conversation, use <code>DELETE /conversations/{conversationId}</code>. To wipe every app's data for a user, use <code>DELETE /agentusers/{agentUserId}</code>.</p>
      * <p>If this user is linked to a user from another app, it will not be unlinked. Unlinking of users is not yet supported.</p>
      * <p>&lt;Warning&gt;This is a destructive operation and cannot be undone.&lt;/Warning&gt;</p>
      */
@@ -361,8 +451,12 @@ public class RawUsersClient {
     }
 
     /**
-     * Deletes all identifiers and user data saved by the specified app.
+     * Deletes all identifiers and user data saved by the specified app for this user.
      * Does not modify data or identifiers saved by other apps.
+     * <p>The app user still exists afterwards, with no identifiers or user data, and the app can keep writing to it.
+     * Conversations, their messages and events are not modified.
+     * The agent user's intelligent field values are not deleted; they are recomputed without this app's data.
+     * To wipe a conversation, use <code>DELETE /conversations/{conversationId}</code>. To wipe every app's data for a user, use <code>DELETE /agentusers/{agentUserId}</code>.</p>
      * <p>If this user is linked to a user from another app, it will not be unlinked. Unlinking of users is not yet supported.</p>
      * <p>&lt;Warning&gt;This is a destructive operation and cannot be undone.&lt;/Warning&gt;</p>
      */

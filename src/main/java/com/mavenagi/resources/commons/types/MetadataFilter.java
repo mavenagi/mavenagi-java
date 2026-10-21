@@ -30,12 +30,20 @@ public final class MetadataFilter {
         return new MetadataFilter(new EntryValue(value));
     }
 
+    public static MetadataFilter conversationValue(MetadataConversationValueFilter value) {
+        return new MetadataFilter(new ConversationValueValue(value));
+    }
+
     public static MetadataFilter group(MetadataFilterGroup value) {
         return new MetadataFilter(new GroupValue(value));
     }
 
     public boolean isEntry() {
         return value instanceof EntryValue;
+    }
+
+    public boolean isConversationValue() {
+        return value instanceof ConversationValueValue;
     }
 
     public boolean isGroup() {
@@ -49,6 +57,13 @@ public final class MetadataFilter {
     public Optional<MetadataEntryCondition> getEntry() {
         if (isEntry()) {
             return Optional.of(((EntryValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<MetadataConversationValueFilter> getConversationValue() {
+        if (isConversationValue()) {
+            return Optional.of(((ConversationValueValue) value).value);
         }
         return Optional.empty();
     }
@@ -75,6 +90,8 @@ public final class MetadataFilter {
     public interface Visitor<T> {
         T visitEntry(MetadataEntryCondition entry);
 
+        T visitConversationValue(MetadataConversationValueFilter conversationValue);
+
         T visitGroup(MetadataFilterGroup group);
 
         T _visitUnknown(Object unknownType);
@@ -85,7 +102,11 @@ public final class MetadataFilter {
             property = "metadataFilterType",
             visible = true,
             defaultImpl = _UnknownValue.class)
-    @JsonSubTypes({@JsonSubTypes.Type(EntryValue.class), @JsonSubTypes.Type(GroupValue.class)})
+    @JsonSubTypes({
+        @JsonSubTypes.Type(EntryValue.class),
+        @JsonSubTypes.Type(ConversationValueValue.class),
+        @JsonSubTypes.Type(GroupValue.class)
+    })
     @JsonIgnoreProperties(ignoreUnknown = true)
     private interface Value {
         <T> T visit(Visitor<T> visitor);
@@ -116,6 +137,45 @@ public final class MetadataFilter {
         }
 
         private boolean equalTo(EntryValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "MetadataFilter{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("conversationValue")
+    @JsonIgnoreProperties("metadataFilterType")
+    private static final class ConversationValueValue implements Value {
+        @JsonUnwrapped
+        private MetadataConversationValueFilter value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private ConversationValueValue() {}
+
+        private ConversationValueValue(MetadataConversationValueFilter value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitConversationValue(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof ConversationValueValue && equalTo((ConversationValueValue) other);
+        }
+
+        private boolean equalTo(ConversationValueValue other) {
             return value.equals(other.value);
         }
 

@@ -16,14 +16,14 @@ public final class ResolutionStatus {
 
     public static final ResolutionStatus ESCALATED = new ResolutionStatus(Value.ESCALATED, "ESCALATED");
 
-    public static final ResolutionStatus RESOLVED = new ResolutionStatus(Value.RESOLVED, "RESOLVED");
-
     public static final ResolutionStatus CONTENT_SAFETY_FLAGGED =
             new ResolutionStatus(Value.CONTENT_SAFETY_FLAGGED, "CONTENT_SAFETY_FLAGGED");
 
     public static final ResolutionStatus HANGUP = new ResolutionStatus(Value.HANGUP, "HANGUP");
 
     public static final ResolutionStatus INELIGIBLE = new ResolutionStatus(Value.INELIGIBLE, "INELIGIBLE");
+
+    public static final ResolutionStatus RESOLVED = new ResolutionStatus(Value.RESOLVED, "RESOLVED");
 
     public static final ResolutionStatus PROMPT_ATTACK_FLAGGED =
             new ResolutionStatus(Value.PROMPT_ATTACK_FLAGGED, "PROMPT_ATTACK_FLAGGED");
@@ -72,14 +72,14 @@ public final class ResolutionStatus {
                 return visitor.visitInProgress();
             case ESCALATED:
                 return visitor.visitEscalated();
-            case RESOLVED:
-                return visitor.visitResolved();
             case CONTENT_SAFETY_FLAGGED:
                 return visitor.visitContentSafetyFlagged();
             case HANGUP:
                 return visitor.visitHangup();
             case INELIGIBLE:
                 return visitor.visitIneligible();
+            case RESOLVED:
+                return visitor.visitResolved();
             case PROMPT_ATTACK_FLAGGED:
                 return visitor.visitPromptAttackFlagged();
             case UNKNOWN:
@@ -103,14 +103,14 @@ public final class ResolutionStatus {
                 return IN_PROGRESS;
             case "ESCALATED":
                 return ESCALATED;
-            case "RESOLVED":
-                return RESOLVED;
             case "CONTENT_SAFETY_FLAGGED":
                 return CONTENT_SAFETY_FLAGGED;
             case "HANGUP":
                 return HANGUP;
             case "INELIGIBLE":
                 return INELIGIBLE;
+            case "RESOLVED":
+                return RESOLVED;
             case "PROMPT_ATTACK_FLAGGED":
                 return PROMPT_ATTACK_FLAGGED;
             case "UNKNOWN":

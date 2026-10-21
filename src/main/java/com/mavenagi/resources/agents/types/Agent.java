@@ -117,6 +117,7 @@ public final class Agent {
      * <p>Defaults to <code>AbaRoutingNumber</code>, <code>CreditCardNumber</code>, <code>IpAddress</code>, <code>PhoneNumber</code>, <code>SwiftCode</code>,
      * <code>UsBankAccountNumber</code>, <code>UsDriversLicenseNumber</code>, <code>UsIndividualTaxpayerIdentification</code>,
      * <code>UsUkPassportNumber</code>, <code>UsSocialSecurityNumber</code>.</p>
+     * <p>Shown in Agent Designer as &quot;PII Redaction&quot;.</p>
      */
     @JsonProperty("enabledPiiCategories")
     public Set<PiiCategory> getEnabledPiiCategories() {
@@ -125,7 +126,7 @@ public final class Agent {
 
     /**
      * @return Text shown to end users when the system encounters an error while generating a bot response message.
-     * <p>This text is also used when a content safety violation is detected, unless <code>contentSafetyViolationPromptText</code> is set.</p>
+     * <p>Omitted while <code>SYSTEM_FALLBACK_MESSAGE</code> is in <code>getVersionedEntityTypes</code>; read it through <code>getVersionedSettings</code>.</p>
      */
     @JsonProperty("systemFallbackMessage")
     public Optional<String> getSystemFallbackMessage() {
@@ -250,6 +251,7 @@ public final class Agent {
          * <p>Defaults to <code>AbaRoutingNumber</code>, <code>CreditCardNumber</code>, <code>IpAddress</code>, <code>PhoneNumber</code>, <code>SwiftCode</code>,
          * <code>UsBankAccountNumber</code>, <code>UsDriversLicenseNumber</code>, <code>UsIndividualTaxpayerIdentification</code>,
          * <code>UsUkPassportNumber</code>, <code>UsSocialSecurityNumber</code>.</p>
+         * <p>Shown in Agent Designer as &quot;PII Redaction&quot;.</p>
          */
         _FinalStage enabledPiiCategories(Set<PiiCategory> enabledPiiCategories);
 
@@ -259,7 +261,7 @@ public final class Agent {
 
         /**
          * <p>Text shown to end users when the system encounters an error while generating a bot response message.</p>
-         * <p>This text is also used when a content safety violation is detected, unless <code>contentSafetyViolationPromptText</code> is set.</p>
+         * <p>Omitted while <code>SYSTEM_FALLBACK_MESSAGE</code> is in <code>getVersionedEntityTypes</code>; read it through <code>getVersionedSettings</code>.</p>
          */
         _FinalStage systemFallbackMessage(Optional<String> systemFallbackMessage);
 
@@ -419,7 +421,7 @@ public final class Agent {
 
         /**
          * <p>Text shown to end users when the system encounters an error while generating a bot response message.</p>
-         * <p>This text is also used when a content safety violation is detected, unless <code>contentSafetyViolationPromptText</code> is set.</p>
+         * <p>Omitted while <code>SYSTEM_FALLBACK_MESSAGE</code> is in <code>getVersionedEntityTypes</code>; read it through <code>getVersionedSettings</code>.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -430,7 +432,7 @@ public final class Agent {
 
         /**
          * <p>Text shown to end users when the system encounters an error while generating a bot response message.</p>
-         * <p>This text is also used when a content safety violation is detected, unless <code>contentSafetyViolationPromptText</code> is set.</p>
+         * <p>Omitted while <code>SYSTEM_FALLBACK_MESSAGE</code> is in <code>getVersionedEntityTypes</code>; read it through <code>getVersionedSettings</code>.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "systemFallbackMessage", nulls = Nulls.SKIP)
@@ -446,6 +448,7 @@ public final class Agent {
          * <p>Defaults to <code>AbaRoutingNumber</code>, <code>CreditCardNumber</code>, <code>IpAddress</code>, <code>PhoneNumber</code>, <code>SwiftCode</code>,
          * <code>UsBankAccountNumber</code>, <code>UsDriversLicenseNumber</code>, <code>UsIndividualTaxpayerIdentification</code>,
          * <code>UsUkPassportNumber</code>, <code>UsSocialSecurityNumber</code>.</p>
+         * <p>Shown in Agent Designer as &quot;PII Redaction&quot;.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -463,6 +466,7 @@ public final class Agent {
          * <p>Defaults to <code>AbaRoutingNumber</code>, <code>CreditCardNumber</code>, <code>IpAddress</code>, <code>PhoneNumber</code>, <code>SwiftCode</code>,
          * <code>UsBankAccountNumber</code>, <code>UsDriversLicenseNumber</code>, <code>UsIndividualTaxpayerIdentification</code>,
          * <code>UsUkPassportNumber</code>, <code>UsSocialSecurityNumber</code>.</p>
+         * <p>Shown in Agent Designer as &quot;PII Redaction&quot;.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -478,6 +482,7 @@ public final class Agent {
          * <p>Defaults to <code>AbaRoutingNumber</code>, <code>CreditCardNumber</code>, <code>IpAddress</code>, <code>PhoneNumber</code>, <code>SwiftCode</code>,
          * <code>UsBankAccountNumber</code>, <code>UsDriversLicenseNumber</code>, <code>UsIndividualTaxpayerIdentification</code>,
          * <code>UsUkPassportNumber</code>, <code>UsSocialSecurityNumber</code>.</p>
+         * <p>Shown in Agent Designer as &quot;PII Redaction&quot;.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "enabledPiiCategories", nulls = Nulls.SKIP)

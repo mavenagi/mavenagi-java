@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
 import com.mavenagi.resources.commons.types.IntelligentFieldFilter;
+import com.mavenagi.resources.conversation.types.SimulationFilter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +33,8 @@ public final class AgentUserFilter {
 
     private final Optional<IntelligentFieldFilter> intelligentFields;
 
+    private final Optional<SimulationFilter> simulationFilter;
+
     private final Map<String, Object> additionalProperties;
 
     private AgentUserFilter(
@@ -40,18 +43,21 @@ public final class AgentUserFilter {
             Optional<String> displayName,
             Optional<Boolean> isAnonymous,
             Optional<IntelligentFieldFilter> intelligentFields,
+            Optional<SimulationFilter> simulationFilter,
             Map<String, Object> additionalProperties) {
         this.search = search;
         this.identifiers = identifiers;
         this.displayName = displayName;
         this.isAnonymous = isAnonymous;
         this.intelligentFields = intelligentFields;
+        this.simulationFilter = simulationFilter;
         this.additionalProperties = additionalProperties;
     }
 
     /**
      * @return Full-text search query for matching agent users by content.
      * When you search with this parameter, you're performing a full-text search across the user identifiers.
+     * <p>Shown in Agent Designer as &quot;Content includes&quot;.</p>
      */
     @JsonProperty("search")
     public Optional<String> getSearch() {
@@ -92,6 +98,14 @@ public final class AgentUserFilter {
         return intelligentFields;
     }
 
+    /**
+     * @return Whether to include simulation users in search results. Defaults to only non-simulation users.
+     */
+    @JsonProperty("simulationFilter")
+    public Optional<SimulationFilter> getSimulationFilter() {
+        return simulationFilter;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -108,12 +122,19 @@ public final class AgentUserFilter {
                 && identifiers.equals(other.identifiers)
                 && displayName.equals(other.displayName)
                 && isAnonymous.equals(other.isAnonymous)
-                && intelligentFields.equals(other.intelligentFields);
+                && intelligentFields.equals(other.intelligentFields)
+                && simulationFilter.equals(other.simulationFilter);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.search, this.identifiers, this.displayName, this.isAnonymous, this.intelligentFields);
+        return Objects.hash(
+                this.search,
+                this.identifiers,
+                this.displayName,
+                this.isAnonymous,
+                this.intelligentFields,
+                this.simulationFilter);
     }
 
     @java.lang.Override
@@ -137,6 +158,8 @@ public final class AgentUserFilter {
 
         private Optional<IntelligentFieldFilter> intelligentFields = Optional.empty();
 
+        private Optional<SimulationFilter> simulationFilter = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -148,12 +171,14 @@ public final class AgentUserFilter {
             displayName(other.getDisplayName());
             isAnonymous(other.getIsAnonymous());
             intelligentFields(other.getIntelligentFields());
+            simulationFilter(other.getSimulationFilter());
             return this;
         }
 
         /**
          * <p>Full-text search query for matching agent users by content.
          * When you search with this parameter, you're performing a full-text search across the user identifiers.</p>
+         * <p>Shown in Agent Designer as &quot;Content includes&quot;.</p>
          */
         @JsonSetter(value = "search", nulls = Nulls.SKIP)
         public Builder search(Optional<String> search) {
@@ -224,9 +249,29 @@ public final class AgentUserFilter {
             return this;
         }
 
+        /**
+         * <p>Whether to include simulation users in search results. Defaults to only non-simulation users.</p>
+         */
+        @JsonSetter(value = "simulationFilter", nulls = Nulls.SKIP)
+        public Builder simulationFilter(Optional<SimulationFilter> simulationFilter) {
+            this.simulationFilter = simulationFilter;
+            return this;
+        }
+
+        public Builder simulationFilter(SimulationFilter simulationFilter) {
+            this.simulationFilter = Optional.ofNullable(simulationFilter);
+            return this;
+        }
+
         public AgentUserFilter build() {
             return new AgentUserFilter(
-                    search, identifiers, displayName, isAnonymous, intelligentFields, additionalProperties);
+                    search,
+                    identifiers,
+                    displayName,
+                    isAnonymous,
+                    intelligentFields,
+                    simulationFilter,
+                    additionalProperties);
         }
     }
 }

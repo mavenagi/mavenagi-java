@@ -7,11 +7,11 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public final class CharterChildrenExclusionPolicy {
-    public static final CharterChildrenExclusionPolicy DEFAULT =
-            new CharterChildrenExclusionPolicy(Value.DEFAULT, "DEFAULT");
-
     public static final CharterChildrenExclusionPolicy ALLOW_OVERLAP =
             new CharterChildrenExclusionPolicy(Value.ALLOW_OVERLAP, "ALLOW_OVERLAP");
+
+    public static final CharterChildrenExclusionPolicy DEFAULT =
+            new CharterChildrenExclusionPolicy(Value.DEFAULT, "DEFAULT");
 
     private final Value value;
 
@@ -46,10 +46,10 @@ public final class CharterChildrenExclusionPolicy {
 
     public <T> T visit(Visitor<T> visitor) {
         switch (value) {
-            case DEFAULT:
-                return visitor.visitDefault();
             case ALLOW_OVERLAP:
                 return visitor.visitAllowOverlap();
+            case DEFAULT:
+                return visitor.visitDefault();
             case UNKNOWN:
             default:
                 return visitor.visitUnknown(string);
@@ -59,10 +59,10 @@ public final class CharterChildrenExclusionPolicy {
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static CharterChildrenExclusionPolicy valueOf(String value) {
         switch (value) {
-            case "DEFAULT":
-                return DEFAULT;
             case "ALLOW_OVERLAP":
                 return ALLOW_OVERLAP;
+            case "DEFAULT":
+                return DEFAULT;
             default:
                 return new CharterChildrenExclusionPolicy(Value.UNKNOWN, value);
         }

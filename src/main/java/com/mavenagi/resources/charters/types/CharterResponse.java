@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
+import com.mavenagi.resources.commons.types.CharterType;
 import com.mavenagi.resources.commons.types.EntityId;
 import com.mavenagi.resources.commons.types.EntityIdWithoutAgent;
 import com.mavenagi.resources.commons.types.PreconditionResponse;
@@ -104,7 +105,9 @@ public final class CharterResponse implements ICharterBase {
     }
 
     /**
-     * @return ID of the agent variant this charter belongs to, if applicable.
+     * @return On a write request, the agent variant to stage the write in. On a response, it is set
+     * only on each side of a working-set diff, naming the variant that side comes from; every
+     * other charter response, and every staged-edit payload, leaves it unset.
      * <p>While charters are versioned for the agent, a write is staged in this variant's
      * working set rather than applied to the agent's live configuration, and a write that
      * names no variant is rejected with <code>VARIANT_REQUIRED</code>. While they aren't, a write that
@@ -130,6 +133,7 @@ public final class CharterResponse implements ICharterBase {
      * charter matches. Manuals concatenate with ancestor charter manuals
      * before delivery.
      * <p>If not set, existing manual is preserved if present.</p>
+     * <p>Shown in Agent Designer as &quot;Manual&quot;, or &quot;Return text&quot; when <code>type</code> is <code>STRICT_RETURN</code>.</p>
      */
     @JsonProperty("manual")
     @java.lang.Override
@@ -166,6 +170,7 @@ public final class CharterResponse implements ICharterBase {
 
     /**
      * @return The rule controlling when this charter applies. Empty means wildcard (always matches).
+     * <p>Shown in Agent Designer as the charter's &quot;Segment&quot;. A null precondition shows as &quot;All conversations&quot;.</p>
      */
     @JsonProperty("precondition")
     public Optional<PreconditionResponse> getPrecondition() {
@@ -345,7 +350,9 @@ public final class CharterResponse implements ICharterBase {
         CharterResponse build();
 
         /**
-         * <p>ID of the agent variant this charter belongs to, if applicable.</p>
+         * <p>On a write request, the agent variant to stage the write in. On a response, it is set
+         * only on each side of a working-set diff, naming the variant that side comes from; every
+         * other charter response, and every staged-edit payload, leaves it unset.</p>
          * <p>While charters are versioned for the agent, a write is staged in this variant's
          * working set rather than applied to the agent's live configuration, and a write that
          * names no variant is rejected with <code>VARIANT_REQUIRED</code>. While they aren't, a write that
@@ -367,6 +374,7 @@ public final class CharterResponse implements ICharterBase {
          * charter matches. Manuals concatenate with ancestor charter manuals
          * before delivery.</p>
          * <p>If not set, existing manual is preserved if present.</p>
+         * <p>Shown in Agent Designer as &quot;Manual&quot;, or &quot;Return text&quot; when <code>type</code> is <code>STRICT_RETURN</code>.</p>
          */
         _FinalStage manual(Optional<String> manual);
 
@@ -393,6 +401,7 @@ public final class CharterResponse implements ICharterBase {
 
         /**
          * <p>The rule controlling when this charter applies. Empty means wildcard (always matches).</p>
+         * <p>Shown in Agent Designer as the charter's &quot;Segment&quot;. A null precondition shows as &quot;All conversations&quot;.</p>
          */
         _FinalStage precondition(Optional<PreconditionResponse> precondition);
 
@@ -608,6 +617,7 @@ public final class CharterResponse implements ICharterBase {
 
         /**
          * <p>The rule controlling when this charter applies. Empty means wildcard (always matches).</p>
+         * <p>Shown in Agent Designer as the charter's &quot;Segment&quot;. A null precondition shows as &quot;All conversations&quot;.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -618,6 +628,7 @@ public final class CharterResponse implements ICharterBase {
 
         /**
          * <p>The rule controlling when this charter applies. Empty means wildcard (always matches).</p>
+         * <p>Shown in Agent Designer as the charter's &quot;Segment&quot;. A null precondition shows as &quot;All conversations&quot;.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "precondition", nulls = Nulls.SKIP)
@@ -692,6 +703,7 @@ public final class CharterResponse implements ICharterBase {
          * charter matches. Manuals concatenate with ancestor charter manuals
          * before delivery.</p>
          * <p>If not set, existing manual is preserved if present.</p>
+         * <p>Shown in Agent Designer as &quot;Manual&quot;, or &quot;Return text&quot; when <code>type</code> is <code>STRICT_RETURN</code>.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -705,6 +717,7 @@ public final class CharterResponse implements ICharterBase {
          * charter matches. Manuals concatenate with ancestor charter manuals
          * before delivery.</p>
          * <p>If not set, existing manual is preserved if present.</p>
+         * <p>Shown in Agent Designer as &quot;Manual&quot;, or &quot;Return text&quot; when <code>type</code> is <code>STRICT_RETURN</code>.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "manual", nulls = Nulls.SKIP)
@@ -734,7 +747,9 @@ public final class CharterResponse implements ICharterBase {
         }
 
         /**
-         * <p>ID of the agent variant this charter belongs to, if applicable.</p>
+         * <p>On a write request, the agent variant to stage the write in. On a response, it is set
+         * only on each side of a working-set diff, naming the variant that side comes from; every
+         * other charter response, and every staged-edit payload, leaves it unset.</p>
          * <p>While charters are versioned for the agent, a write is staged in this variant's
          * working set rather than applied to the agent's live configuration, and a write that
          * names no variant is rejected with <code>VARIANT_REQUIRED</code>. While they aren't, a write that
@@ -748,7 +763,9 @@ public final class CharterResponse implements ICharterBase {
         }
 
         /**
-         * <p>ID of the agent variant this charter belongs to, if applicable.</p>
+         * <p>On a write request, the agent variant to stage the write in. On a response, it is set
+         * only on each side of a working-set diff, naming the variant that side comes from; every
+         * other charter response, and every staged-edit payload, leaves it unset.</p>
          * <p>While charters are versioned for the agent, a write is staged in this variant's
          * working set rather than applied to the agent's live configuration, and a write that
          * names no variant is rejected with <code>VARIANT_REQUIRED</code>. While they aren't, a write that

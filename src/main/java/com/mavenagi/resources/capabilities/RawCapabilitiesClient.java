@@ -17,9 +17,11 @@ import com.mavenagi.resources.capabilities.requests.CapabilityExecutionsSearchRe
 import com.mavenagi.resources.capabilities.requests.DeleteCapabilityByTypeRequest;
 import com.mavenagi.resources.capabilities.requests.GetCapabilityByTypeRequest;
 import com.mavenagi.resources.capabilities.requests.PatchCapabilityByTypeRequest;
+import com.mavenagi.resources.capabilities.requests.SimulateCapabilityByTypeRequest;
 import com.mavenagi.resources.capabilities.types.CapabilitiesSearchResponse;
 import com.mavenagi.resources.capabilities.types.CapabilityExecutionsSearchResponse;
 import com.mavenagi.resources.capabilities.types.CapabilityResponse;
+import com.mavenagi.resources.capabilities.types.CapabilitySimulationResult;
 import com.mavenagi.resources.commons.errors.BadRequestError;
 import com.mavenagi.resources.commons.errors.NotFoundError;
 import com.mavenagi.resources.commons.errors.PayloadTooLargeError;
@@ -346,6 +348,102 @@ public class RawCapabilitiesClient {
             ResponseBody responseBody = response.body();
             if (response.isSuccessful()) {
                 return new MavenAGIHttpResponse<>(null, response);
+            }
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            try {
+                switch (response.code()) {
+                    case 400:
+                        throw new BadRequestError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                    case 404:
+                        throw new NotFoundError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                    case 413:
+                        throw new PayloadTooLargeError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                    case 429:
+                        throw new TooManyRequestsError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                    case 500:
+                        throw new ServerError(
+                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, ErrorMessage.class), response);
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            throw new MavenAGIApiException(
+                    "Error with status code " + response.code(),
+                    response.code(),
+                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class),
+                    response);
+        } catch (IOException e) {
+            throw new MavenAGIException("Network error executing HTTP request", e);
+        }
+    }
+
+    /**
+     * Run one of an agent's capabilities once, as a simulation, and return what it produced.
+     * <p>The caller supplies everything the capability reads, so it runs in isolation: no
+     * conversation or agent user has to exist first. The capability is told its mode is
+     * <code>SIMULATION</code>, the same as in a test suite run, so an app that honours it can avoid side
+     * effects in real systems. Nothing here runs a capability live.</p>
+     * <p>Only actions can be simulated today. Triggers and conversation kickoffs are rejected with a
+     * 400 until they can run as simulations. Intelligent fields cannot be simulated.</p>
+     */
+    public MavenAGIHttpResponse<CapabilitySimulationResult> simulateCapability(
+            CapabilityType capabilityType, String referenceId, SimulateCapabilityByTypeRequest request) {
+        return simulateCapability(capabilityType, referenceId, request, null);
+    }
+
+    /**
+     * Run one of an agent's capabilities once, as a simulation, and return what it produced.
+     * <p>The caller supplies everything the capability reads, so it runs in isolation: no
+     * conversation or agent user has to exist first. The capability is told its mode is
+     * <code>SIMULATION</code>, the same as in a test suite run, so an app that honours it can avoid side
+     * effects in real systems. Nothing here runs a capability live.</p>
+     * <p>Only actions can be simulated today. Triggers and conversation kickoffs are rejected with a
+     * 400 until they can run as simulations. Intelligent fields cannot be simulated.</p>
+     */
+    public MavenAGIHttpResponse<CapabilitySimulationResult> simulateCapability(
+            CapabilityType capabilityType,
+            String referenceId,
+            SimulateCapabilityByTypeRequest request,
+            RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("v1")
+                .addPathSegments("capabilities")
+                .addPathSegment(capabilityType.toString())
+                .addPathSegment(referenceId)
+                .addPathSegments("simulate");
+        if (request.getAppId().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "appId", request.getAppId().get(), false);
+        }
+        RequestBody body;
+        try {
+            body = RequestBody.create(
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request.getBody()), MediaTypes.APPLICATION_JSON);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        Request.Builder _requestBuilder = new Request.Builder()
+                .url(httpUrl.build())
+                .method("POST", body)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Accept", "application/json");
+        Request okhttpRequest = _requestBuilder.build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            if (response.isSuccessful()) {
+                return new MavenAGIHttpResponse<>(
+                        ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), CapabilitySimulationResult.class),
+                        response);
             }
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {
