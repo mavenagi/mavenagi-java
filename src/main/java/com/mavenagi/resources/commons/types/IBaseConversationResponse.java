@@ -40,6 +40,8 @@ public interface IBaseConversationResponse {
 
     Optional<SimulationContext> getSimulationContext();
 
+    ExecutionMode getExecutionMode();
+
     Optional<Map<RelationshipType, List<EntityId>>> getRelatedEntities();
 
     Optional<ConversationMode> getConversationMode();

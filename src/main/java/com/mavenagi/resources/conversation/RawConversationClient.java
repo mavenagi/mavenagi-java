@@ -282,6 +282,10 @@ public class RawConversationClient {
                     request.getTranslationLanguage().get(),
                     false);
         }
+        if (request.getIncludeLogic().isPresent()) {
+            QueryStringMapper.addQueryParameter(
+                    httpUrl, "includeLogic", request.getIncludeLogic().get(), false);
+        }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)
@@ -1463,9 +1467,10 @@ public class RawConversationClient {
 
     /**
      * Deliver a message to a user or conversation.
+     * <p>A closed conversation (<code>open</code> set to false) takes no new messages and returns a 400.</p>
      * <p>&lt;Warning&gt;
-     * Currently, messages can only be successfully delivered to conversations with the `ASYNC` capability that are `open`.
-     * User message delivery is not yet supported.
+     * Currently, messages can only be successfully delivered to conversations with the `ASYNC` capability.
+     * User message delivery is not yet supported and returns a 400.
      * &lt;/Warning&gt;</p>
      */
     public MavenAGIHttpResponse<DeliverMessageResponse> deliverMessage(DeliverMessageRequest request) {
@@ -1474,9 +1479,10 @@ public class RawConversationClient {
 
     /**
      * Deliver a message to a user or conversation.
+     * <p>A closed conversation (<code>open</code> set to false) takes no new messages and returns a 400.</p>
      * <p>&lt;Warning&gt;
-     * Currently, messages can only be successfully delivered to conversations with the `ASYNC` capability that are `open`.
-     * User message delivery is not yet supported.
+     * Currently, messages can only be successfully delivered to conversations with the `ASYNC` capability.
+     * User message delivery is not yet supported and returns a 400.
      * &lt;/Warning&gt;</p>
      */
     public MavenAGIHttpResponse<DeliverMessageResponse> deliverMessage(

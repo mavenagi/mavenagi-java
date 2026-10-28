@@ -42,9 +42,8 @@ public class RawOrganizationsClient {
 
     /**
      * Create a new organization.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>Only Maven staff hold this permission.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>create:organization</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<Organization> create(
             String organizationReferenceId, CreateOrganizationRequest request) {
@@ -53,9 +52,8 @@ public class RawOrganizationsClient {
 
     /**
      * Create a new organization.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>Only Maven staff hold this permission.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>create:organization</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<Organization> create(
             String organizationReferenceId, CreateOrganizationRequest request, RequestOptions requestOptions) {
@@ -122,6 +120,7 @@ public class RawOrganizationsClient {
 
     /**
      * Get an organization by ID
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:organization</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<Organization> get(String organizationReferenceId) {
         return get(organizationReferenceId, null);
@@ -129,6 +128,7 @@ public class RawOrganizationsClient {
 
     /**
      * Get an organization by ID
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:organization</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<Organization> get(String organizationReferenceId, RequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
@@ -187,9 +187,7 @@ public class RawOrganizationsClient {
     /**
      * Update mutable organization fields.
      * All fields will overwrite the existing value on the organization only if provided.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:organization</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<Organization> patch(String organizationReferenceId) {
         return patch(organizationReferenceId, OrganizationPatchRequest.builder().build());
@@ -198,9 +196,7 @@ public class RawOrganizationsClient {
     /**
      * Update mutable organization fields.
      * All fields will overwrite the existing value on the organization only if provided.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:organization</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<Organization> patch(String organizationReferenceId, OrganizationPatchRequest request) {
         return patch(organizationReferenceId, request, null);
@@ -209,9 +205,7 @@ public class RawOrganizationsClient {
     /**
      * Update mutable organization fields.
      * All fields will overwrite the existing value on the organization only if provided.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:organization</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<Organization> patch(
             String organizationReferenceId, OrganizationPatchRequest request, RequestOptions requestOptions) {
@@ -278,9 +272,7 @@ public class RawOrganizationsClient {
 
     /**
      * Delete an organization.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>delete:organization</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<Void> delete(String organizationReferenceId) {
         return delete(organizationReferenceId, null);
@@ -288,9 +280,7 @@ public class RawOrganizationsClient {
 
     /**
      * Delete an organization.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>delete:organization</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<Void> delete(String organizationReferenceId, RequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
@@ -348,9 +338,8 @@ public class RawOrganizationsClient {
     /**
      * Retrieves structured conversation data across all organizations, formatted as a table,
      * allowing users to group, filter, and define specific metrics to display as columns.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>Only Maven staff hold this permission.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:all-organizations</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<ConversationTableResponse> getConversationTable(ConversationTableRequest request) {
         return getConversationTable(request, null);
@@ -359,9 +348,8 @@ public class RawOrganizationsClient {
     /**
      * Retrieves structured conversation data across all organizations, formatted as a table,
      * allowing users to group, filter, and define specific metrics to display as columns.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>Only Maven staff hold this permission.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:all-organizations</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<ConversationTableResponse> getConversationTable(
             ConversationTableRequest request, RequestOptions requestOptions) {
@@ -430,9 +418,8 @@ public class RawOrganizationsClient {
     /**
      * Fetches conversation data across all organizations, visualized in a chart format.
      * Supported chart types include pie chart, date histogram, and stacked bar charts.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>Only Maven staff hold this permission.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:all-organizations</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<ChartResponse> getConversationChart(ConversationChartRequest request) {
         return getConversationChart(request, null);
@@ -441,9 +428,8 @@ public class RawOrganizationsClient {
     /**
      * Fetches conversation data across all organizations, visualized in a chart format.
      * Supported chart types include pie chart, date histogram, and stacked bar charts.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>Only Maven staff hold this permission.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:all-organizations</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<ChartResponse> getConversationChart(
             ConversationChartRequest request, RequestOptions requestOptions) {

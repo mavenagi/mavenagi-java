@@ -30,8 +30,16 @@ public final class ConversationValueSource {
         return new ConversationValueSource(new ConversationMetadataValue(value));
     }
 
+    public static ConversationValueSource userData(UserDataValueSource value) {
+        return new ConversationValueSource(new UserDataValue(value));
+    }
+
     public boolean isConversationMetadata() {
         return value instanceof ConversationMetadataValue;
+    }
+
+    public boolean isUserData() {
+        return value instanceof UserDataValue;
     }
 
     public boolean _isUnknown() {
@@ -41,6 +49,13 @@ public final class ConversationValueSource {
     public Optional<ConversationMetadataValueSource> getConversationMetadata() {
         if (isConversationMetadata()) {
             return Optional.of(((ConversationMetadataValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<UserDataValueSource> getUserData() {
+        if (isUserData()) {
+            return Optional.of(((UserDataValue) value).value);
         }
         return Optional.empty();
     }
@@ -60,11 +75,13 @@ public final class ConversationValueSource {
     public interface Visitor<T> {
         T visitConversationMetadata(ConversationMetadataValueSource conversationMetadata);
 
+        T visitUserData(UserDataValueSource userData);
+
         T _visitUnknown(Object unknownType);
     }
 
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", visible = true, defaultImpl = _UnknownValue.class)
-    @JsonSubTypes(@JsonSubTypes.Type(ConversationMetadataValue.class))
+    @JsonSubTypes({@JsonSubTypes.Type(ConversationMetadataValue.class), @JsonSubTypes.Type(UserDataValue.class)})
     @JsonIgnoreProperties(ignoreUnknown = true)
     private interface Value {
         <T> T visit(Visitor<T> visitor);
@@ -95,6 +112,45 @@ public final class ConversationValueSource {
         }
 
         private boolean equalTo(ConversationMetadataValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "ConversationValueSource{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("userData")
+    @JsonIgnoreProperties("type")
+    private static final class UserDataValue implements Value {
+        @JsonUnwrapped
+        private UserDataValueSource value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private UserDataValue() {}
+
+        private UserDataValue(UserDataValueSource value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitUserData(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof UserDataValue && equalTo((UserDataValue) other);
+        }
+
+        private boolean equalTo(UserDataValue other) {
             return value.equals(other.value);
         }
 

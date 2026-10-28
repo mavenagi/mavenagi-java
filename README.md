@@ -38,7 +38,7 @@ public class Example {
     public static void main(String[] args) {
         MavenAGI client = MavenAGI
             .builder()
-            .credentials("<username>", "<password>")
+            .token("<token>")
             .build();
 
         client.actions().search(
@@ -200,7 +200,7 @@ Add the dependency in your `build.gradle` file:
 
 ```groovy
 dependencies {
-  implementation 'com.mavenagi:mavenagi-java:1.2.65'
+  implementation 'com.mavenagi:mavenagi-java:1.2.66'
 }
 ```
 
@@ -212,6 +212,6 @@ Add the dependency in your `pom.xml` file:
 <dependency>
   <groupId>com.mavenagi</groupId>
   <artifactId>mavenagi-java</artifactId>
-  <version>1.2.65</version>
+  <version>1.2.66</version>
 </dependency>
 ```

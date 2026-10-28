@@ -48,10 +48,6 @@ public final class CapabilitiesSearchRequest implements IBaseCappedPaginatedRequ
 
     private final Optional<EntityIdWithoutAgent> variantId;
 
-    private final Optional<String> variantReferenceId;
-
-    private final Optional<String> variantAppId;
-
     private final Map<String, Object> additionalProperties;
 
     private CapabilitiesSearchRequest(
@@ -66,8 +62,6 @@ public final class CapabilitiesSearchRequest implements IBaseCappedPaginatedRequ
             Optional<Boolean> userInteractionRequired,
             Optional<CapabilitySortField> sortId,
             Optional<EntityIdWithoutAgent> variantId,
-            Optional<String> variantReferenceId,
-            Optional<String> variantAppId,
             Map<String, Object> additionalProperties) {
         this.page = page;
         this.size = size;
@@ -80,8 +74,6 @@ public final class CapabilitiesSearchRequest implements IBaseCappedPaginatedRequ
         this.userInteractionRequired = userInteractionRequired;
         this.sortId = sortId;
         this.variantId = variantId;
-        this.variantReferenceId = variantReferenceId;
-        this.variantAppId = variantAppId;
         this.additionalProperties = additionalProperties;
     }
 
@@ -184,22 +176,6 @@ public final class CapabilitiesSearchRequest implements IBaseCappedPaginatedRequ
         return variantId;
     }
 
-    /**
-     * @return Deprecated, use <code>variantId</code>, which wins when both are set.
-     */
-    @JsonProperty("variantReferenceId")
-    public Optional<String> getVariantReferenceId() {
-        return variantReferenceId;
-    }
-
-    /**
-     * @return Deprecated, use <code>variantId</code>, which wins when both are set.
-     */
-    @JsonProperty("variantAppId")
-    public Optional<String> getVariantAppId() {
-        return variantAppId;
-    }
-
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -222,9 +198,7 @@ public final class CapabilitiesSearchRequest implements IBaseCappedPaginatedRequ
                 && description.equals(other.description)
                 && userInteractionRequired.equals(other.userInteractionRequired)
                 && sortId.equals(other.sortId)
-                && variantId.equals(other.variantId)
-                && variantReferenceId.equals(other.variantReferenceId)
-                && variantAppId.equals(other.variantAppId);
+                && variantId.equals(other.variantId);
     }
 
     @java.lang.Override
@@ -240,9 +214,7 @@ public final class CapabilitiesSearchRequest implements IBaseCappedPaginatedRequ
                 this.description,
                 this.userInteractionRequired,
                 this.sortId,
-                this.variantId,
-                this.variantReferenceId,
-                this.variantAppId);
+                this.variantId);
     }
 
     @java.lang.Override
@@ -278,10 +250,6 @@ public final class CapabilitiesSearchRequest implements IBaseCappedPaginatedRequ
 
         private Optional<EntityIdWithoutAgent> variantId = Optional.empty();
 
-        private Optional<String> variantReferenceId = Optional.empty();
-
-        private Optional<String> variantAppId = Optional.empty();
-
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -299,8 +267,6 @@ public final class CapabilitiesSearchRequest implements IBaseCappedPaginatedRequ
             userInteractionRequired(other.getUserInteractionRequired());
             sortId(other.getSortId());
             variantId(other.getVariantId());
-            variantReferenceId(other.getVariantReferenceId());
-            variantAppId(other.getVariantAppId());
             return this;
         }
 
@@ -466,34 +432,6 @@ public final class CapabilitiesSearchRequest implements IBaseCappedPaginatedRequ
             return this;
         }
 
-        /**
-         * <p>Deprecated, use <code>variantId</code>, which wins when both are set.</p>
-         */
-        @JsonSetter(value = "variantReferenceId", nulls = Nulls.SKIP)
-        public Builder variantReferenceId(Optional<String> variantReferenceId) {
-            this.variantReferenceId = variantReferenceId;
-            return this;
-        }
-
-        public Builder variantReferenceId(String variantReferenceId) {
-            this.variantReferenceId = Optional.ofNullable(variantReferenceId);
-            return this;
-        }
-
-        /**
-         * <p>Deprecated, use <code>variantId</code>, which wins when both are set.</p>
-         */
-        @JsonSetter(value = "variantAppId", nulls = Nulls.SKIP)
-        public Builder variantAppId(Optional<String> variantAppId) {
-            this.variantAppId = variantAppId;
-            return this;
-        }
-
-        public Builder variantAppId(String variantAppId) {
-            this.variantAppId = Optional.ofNullable(variantAppId);
-            return this;
-        }
-
         public CapabilitiesSearchRequest build() {
             return new CapabilitiesSearchRequest(
                     page,
@@ -507,8 +445,6 @@ public final class CapabilitiesSearchRequest implements IBaseCappedPaginatedRequ
                     userInteractionRequired,
                     sortId,
                     variantId,
-                    variantReferenceId,
-                    variantAppId,
                     additionalProperties);
         }
     }

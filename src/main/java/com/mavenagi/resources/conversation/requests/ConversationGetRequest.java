@@ -24,12 +24,18 @@ public final class ConversationGetRequest {
 
     private final Optional<String> translationLanguage;
 
+    private final Optional<Boolean> includeLogic;
+
     private final Map<String, Object> additionalProperties;
 
     private ConversationGetRequest(
-            Optional<String> appId, Optional<String> translationLanguage, Map<String, Object> additionalProperties) {
+            Optional<String> appId,
+            Optional<String> translationLanguage,
+            Optional<Boolean> includeLogic,
+            Map<String, Object> additionalProperties) {
         this.appId = appId;
         this.translationLanguage = translationLanguage;
+        this.includeLogic = includeLogic;
         this.additionalProperties = additionalProperties;
     }
 
@@ -49,6 +55,14 @@ public final class ConversationGetRequest {
         return translationLanguage;
     }
 
+    /**
+     * @return Whether to return <code>logic</code> on each bot message. Defaults to <code>true</code>. Pass <code>false</code> to leave it out, which makes the response much smaller.
+     */
+    @JsonProperty("includeLogic")
+    public Optional<Boolean> getIncludeLogic() {
+        return includeLogic;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -61,12 +75,14 @@ public final class ConversationGetRequest {
     }
 
     private boolean equalTo(ConversationGetRequest other) {
-        return appId.equals(other.appId) && translationLanguage.equals(other.translationLanguage);
+        return appId.equals(other.appId)
+                && translationLanguage.equals(other.translationLanguage)
+                && includeLogic.equals(other.includeLogic);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.appId, this.translationLanguage);
+        return Objects.hash(this.appId, this.translationLanguage, this.includeLogic);
     }
 
     @java.lang.Override
@@ -84,6 +100,8 @@ public final class ConversationGetRequest {
 
         private Optional<String> translationLanguage = Optional.empty();
 
+        private Optional<Boolean> includeLogic = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -92,6 +110,7 @@ public final class ConversationGetRequest {
         public Builder from(ConversationGetRequest other) {
             appId(other.getAppId());
             translationLanguage(other.getTranslationLanguage());
+            includeLogic(other.getIncludeLogic());
             return this;
         }
 
@@ -123,8 +142,22 @@ public final class ConversationGetRequest {
             return this;
         }
 
+        /**
+         * <p>Whether to return <code>logic</code> on each bot message. Defaults to <code>true</code>. Pass <code>false</code> to leave it out, which makes the response much smaller.</p>
+         */
+        @JsonSetter(value = "includeLogic", nulls = Nulls.SKIP)
+        public Builder includeLogic(Optional<Boolean> includeLogic) {
+            this.includeLogic = includeLogic;
+            return this;
+        }
+
+        public Builder includeLogic(Boolean includeLogic) {
+            this.includeLogic = Optional.ofNullable(includeLogic);
+            return this;
+        }
+
         public ConversationGetRequest build() {
-            return new ConversationGetRequest(appId, translationLanguage, additionalProperties);
+            return new ConversationGetRequest(appId, translationLanguage, includeLogic, additionalProperties);
         }
     }
 }

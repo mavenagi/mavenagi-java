@@ -55,6 +55,8 @@ public final class ConversationPreview implements IBaseConversationResponse {
 
     private final Optional<SimulationContext> simulationContext;
 
+    private final ExecutionMode executionMode;
+
     private final Optional<Map<RelationshipType, List<EntityId>>> relatedEntities;
 
     private final Optional<ConversationMode> conversationMode;
@@ -79,6 +81,7 @@ public final class ConversationPreview implements IBaseConversationResponse {
             boolean open,
             boolean llmEnabled,
             Optional<SimulationContext> simulationContext,
+            ExecutionMode executionMode,
             Optional<Map<RelationshipType, List<EntityId>>> relatedEntities,
             Optional<ConversationMode> conversationMode,
             Optional<EntityId> variantId,
@@ -98,6 +101,7 @@ public final class ConversationPreview implements IBaseConversationResponse {
         this.open = open;
         this.llmEnabled = llmEnabled;
         this.simulationContext = simulationContext;
+        this.executionMode = executionMode;
         this.relatedEntities = relatedEntities;
         this.conversationMode = conversationMode;
         this.variantId = variantId;
@@ -244,6 +248,17 @@ public final class ConversationPreview implements IBaseConversationResponse {
     }
 
     /**
+     * @return Whether the conversation runs on live data or is a simulation. A conversation created
+     * with a <code>simulationContext</code> is a <code>SIMULATION</code>, and so are the conversations Maven runs
+     * itself, such as evaluations, which have no <code>simulationContext</code>.
+     */
+    @JsonProperty("executionMode")
+    @java.lang.Override
+    public ExecutionMode getExecutionMode() {
+        return executionMode;
+    }
+
+    /**
      * @return Related entity ids grouped by relationship type.
      * <ul>
      * <li><code>SPAWN_FROM</code>: the conversation this one was spawned from (set via <code>ConversationCreateRequest.spawnedFromConversationId</code>).</li>
@@ -305,6 +320,7 @@ public final class ConversationPreview implements IBaseConversationResponse {
                 && open == other.open
                 && llmEnabled == other.llmEnabled
                 && simulationContext.equals(other.simulationContext)
+                && executionMode.equals(other.executionMode)
                 && relatedEntities.equals(other.relatedEntities)
                 && conversationMode.equals(other.conversationMode)
                 && variantId.equals(other.variantId);
@@ -328,6 +344,7 @@ public final class ConversationPreview implements IBaseConversationResponse {
                 this.open,
                 this.llmEnabled,
                 this.simulationContext,
+                this.executionMode,
                 this.relatedEntities,
                 this.conversationMode,
                 this.variantId);
@@ -386,7 +403,16 @@ public final class ConversationPreview implements IBaseConversationResponse {
          * If true, <code>USER</code> messages sent via the ask API will be sent to the LLM and a <code>BOT_RESPONSE</code> or <code>BOT_SUGGESTION</code> message will be generated.
          * If false, <code>USER</code> messages will not be sent to the LLM.</p>
          */
-        _FinalStage llmEnabled(boolean llmEnabled);
+        ExecutionModeStage llmEnabled(boolean llmEnabled);
+    }
+
+    public interface ExecutionModeStage {
+        /**
+         * <p>Whether the conversation runs on live data or is a simulation. A conversation created
+         * with a <code>simulationContext</code> is a <code>SIMULATION</code>, and so are the conversations Maven runs
+         * itself, such as evaluations, which have no <code>simulationContext</code>.</p>
+         */
+        _FinalStage executionMode(@NotNull ExecutionMode executionMode);
     }
 
     public interface _FinalStage {
@@ -496,6 +522,7 @@ public final class ConversationPreview implements IBaseConversationResponse {
                     DeletedStage,
                     OpenStage,
                     LlmEnabledStage,
+                    ExecutionModeStage,
                     _FinalStage {
         private EntityId conversationId;
 
@@ -508,6 +535,8 @@ public final class ConversationPreview implements IBaseConversationResponse {
         private boolean open;
 
         private boolean llmEnabled;
+
+        private ExecutionMode executionMode;
 
         private Optional<EntityId> variantId = Optional.empty();
 
@@ -555,6 +584,7 @@ public final class ConversationPreview implements IBaseConversationResponse {
             open(other.getOpen());
             llmEnabled(other.getLlmEnabled());
             simulationContext(other.getSimulationContext());
+            executionMode(other.getExecutionMode());
             relatedEntities(other.getRelatedEntities());
             conversationMode(other.getConversationMode());
             variantId(other.getVariantId());
@@ -634,8 +664,24 @@ public final class ConversationPreview implements IBaseConversationResponse {
          */
         @java.lang.Override
         @JsonSetter("llmEnabled")
-        public _FinalStage llmEnabled(boolean llmEnabled) {
+        public ExecutionModeStage llmEnabled(boolean llmEnabled) {
             this.llmEnabled = llmEnabled;
+            return this;
+        }
+
+        /**
+         * <p>Whether the conversation runs on live data or is a simulation. A conversation created
+         * with a <code>simulationContext</code> is a <code>SIMULATION</code>, and so are the conversations Maven runs
+         * itself, such as evaluations, which have no <code>simulationContext</code>.</p>
+         * <p>Whether the conversation runs on live data or is a simulation. A conversation created
+         * with a <code>simulationContext</code> is a <code>SIMULATION</code>, and so are the conversations Maven runs
+         * itself, such as evaluations, which have no <code>simulationContext</code>.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("executionMode")
+        public _FinalStage executionMode(@NotNull ExecutionMode executionMode) {
+            this.executionMode = Objects.requireNonNull(executionMode, "executionMode must not be null");
             return this;
         }
 
@@ -930,6 +976,7 @@ public final class ConversationPreview implements IBaseConversationResponse {
                     open,
                     llmEnabled,
                     simulationContext,
+                    executionMode,
                     relatedEntities,
                     conversationMode,
                     variantId,

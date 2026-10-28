@@ -15,9 +15,6 @@ public final class ErrorReason {
 
     public static final ErrorReason VARIANT_LIVE = new ErrorReason(Value.VARIANT_LIVE, "VARIANT_LIVE");
 
-    public static final ErrorReason VARIANT_LIMIT_REACHED =
-            new ErrorReason(Value.VARIANT_LIMIT_REACHED, "VARIANT_LIMIT_REACHED");
-
     public static final ErrorReason VARIANT_REQUIRED = new ErrorReason(Value.VARIANT_REQUIRED, "VARIANT_REQUIRED");
 
     public static final ErrorReason WORKING_SET_HAS_UNVERSIONED_EDITS =
@@ -32,6 +29,9 @@ public final class ErrorReason {
 
     public static final ErrorReason VARIANT_ALREADY_EXISTS =
             new ErrorReason(Value.VARIANT_ALREADY_EXISTS, "VARIANT_ALREADY_EXISTS");
+
+    public static final ErrorReason VARIANT_LIMIT_REACHED =
+            new ErrorReason(Value.VARIANT_LIMIT_REACHED, "VARIANT_LIMIT_REACHED");
 
     public static final ErrorReason CANNOT_ARCHIVE_LIVE_VARIANT =
             new ErrorReason(Value.CANNOT_ARCHIVE_LIVE_VARIANT, "CANNOT_ARCHIVE_LIVE_VARIANT");
@@ -76,8 +76,6 @@ public final class ErrorReason {
                 return visitor.visitVariantHasStagedEdits();
             case VARIANT_LIVE:
                 return visitor.visitVariantLive();
-            case VARIANT_LIMIT_REACHED:
-                return visitor.visitVariantLimitReached();
             case VARIANT_REQUIRED:
                 return visitor.visitVariantRequired();
             case WORKING_SET_HAS_UNVERSIONED_EDITS:
@@ -90,6 +88,8 @@ public final class ErrorReason {
                 return visitor.visitNothingToCommit();
             case VARIANT_ALREADY_EXISTS:
                 return visitor.visitVariantAlreadyExists();
+            case VARIANT_LIMIT_REACHED:
+                return visitor.visitVariantLimitReached();
             case CANNOT_ARCHIVE_LIVE_VARIANT:
                 return visitor.visitCannotArchiveLiveVariant();
             case VARIANT_NOT_ACTIVE:
@@ -109,8 +109,6 @@ public final class ErrorReason {
                 return VARIANT_HAS_STAGED_EDITS;
             case "VARIANT_LIVE":
                 return VARIANT_LIVE;
-            case "VARIANT_LIMIT_REACHED":
-                return VARIANT_LIMIT_REACHED;
             case "VARIANT_REQUIRED":
                 return VARIANT_REQUIRED;
             case "WORKING_SET_HAS_UNVERSIONED_EDITS":
@@ -123,6 +121,8 @@ public final class ErrorReason {
                 return NOTHING_TO_COMMIT;
             case "VARIANT_ALREADY_EXISTS":
                 return VARIANT_ALREADY_EXISTS;
+            case "VARIANT_LIMIT_REACHED":
+                return VARIANT_LIMIT_REACHED;
             case "CANNOT_ARCHIVE_LIVE_VARIANT":
                 return CANNOT_ARCHIVE_LIVE_VARIANT;
             case "VARIANT_NOT_ACTIVE":

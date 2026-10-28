@@ -14,8 +14,6 @@ import com.mavenagi.resources.analytics.types.ConversationTableResponse;
 import com.mavenagi.resources.analytics.types.EventChartRequest;
 import com.mavenagi.resources.analytics.types.EventTableRequest;
 import com.mavenagi.resources.analytics.types.EventTableResponse;
-import com.mavenagi.resources.analytics.types.FeedbackTableRequest;
-import com.mavenagi.resources.analytics.types.FeedbackTableResponse;
 import java.io.InputStream;
 import java.util.concurrent.CompletableFuture;
 
@@ -81,27 +79,6 @@ public class AsyncAnalyticsClient {
     public CompletableFuture<InputStream> exportConversationTable(
             ConversationTableRequest request, RequestOptions requestOptions) {
         return this.rawClient.exportConversationTable(request, requestOptions).thenApply(response -> response.body());
-    }
-
-    /**
-     * Deprecated. Use <code>getEventTable</code> instead, which reports the same thumbs up/down and insert
-     * activity as user events.
-     * <p>Retrieves structured feedback data formatted as a table, allowing users to group, filter,
-     * and define specific metrics to display as columns.</p>
-     */
-    public CompletableFuture<FeedbackTableResponse> getFeedbackTable(FeedbackTableRequest request) {
-        return this.rawClient.getFeedbackTable(request).thenApply(response -> response.body());
-    }
-
-    /**
-     * Deprecated. Use <code>getEventTable</code> instead, which reports the same thumbs up/down and insert
-     * activity as user events.
-     * <p>Retrieves structured feedback data formatted as a table, allowing users to group, filter,
-     * and define specific metrics to display as columns.</p>
-     */
-    public CompletableFuture<FeedbackTableResponse> getFeedbackTable(
-            FeedbackTableRequest request, RequestOptions requestOptions) {
-        return this.rawClient.getFeedbackTable(request, requestOptions).thenApply(response -> response.body());
     }
 
     /**

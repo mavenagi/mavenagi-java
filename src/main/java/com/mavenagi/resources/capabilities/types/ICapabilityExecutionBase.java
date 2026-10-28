@@ -4,6 +4,7 @@
 package com.mavenagi.resources.capabilities.types;
 
 import com.mavenagi.resources.commons.types.EntityId;
+import com.mavenagi.resources.commons.types.ExecutionMode;
 import java.time.OffsetDateTime;
 import java.util.Optional;
 
@@ -25,4 +26,6 @@ public interface ICapabilityExecutionBase {
     Optional<Long> getDurationMs();
 
     OffsetDateTime getCreatedAt();
+
+    ExecutionMode getExecutionMode();
 }

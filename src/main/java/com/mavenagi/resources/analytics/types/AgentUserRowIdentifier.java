@@ -9,12 +9,15 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
+import com.mavenagi.resources.commons.types.EntityId;
 import com.mavenagi.resources.users.types.AgentUserField;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
@@ -24,11 +27,18 @@ public final class AgentUserRowIdentifier implements IRowIdentifierBase {
 
     private final AgentUserField field;
 
+    private final Optional<EntityId> intelligentFieldId;
+
     private final Map<String, Object> additionalProperties;
 
-    private AgentUserRowIdentifier(FieldValue value, AgentUserField field, Map<String, Object> additionalProperties) {
+    private AgentUserRowIdentifier(
+            FieldValue value,
+            AgentUserField field,
+            Optional<EntityId> intelligentFieldId,
+            Map<String, Object> additionalProperties) {
         this.value = value;
         this.field = field;
+        this.intelligentFieldId = intelligentFieldId;
         this.additionalProperties = additionalProperties;
     }
 
@@ -49,6 +59,14 @@ public final class AgentUserRowIdentifier implements IRowIdentifierBase {
         return field;
     }
 
+    /**
+     * @return Which intelligent field this grouping was on, set when <code>field</code> is <code>IntelligentField</code>.
+     */
+    @JsonProperty("intelligentFieldId")
+    public Optional<EntityId> getIntelligentFieldId() {
+        return intelligentFieldId;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -61,12 +79,14 @@ public final class AgentUserRowIdentifier implements IRowIdentifierBase {
     }
 
     private boolean equalTo(AgentUserRowIdentifier other) {
-        return value.equals(other.value) && field.equals(other.field);
+        return value.equals(other.value)
+                && field.equals(other.field)
+                && intelligentFieldId.equals(other.intelligentFieldId);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.value, this.field);
+        return Objects.hash(this.value, this.field, this.intelligentFieldId);
     }
 
     @java.lang.Override
@@ -96,6 +116,13 @@ public final class AgentUserRowIdentifier implements IRowIdentifierBase {
 
     public interface _FinalStage {
         AgentUserRowIdentifier build();
+
+        /**
+         * <p>Which intelligent field this grouping was on, set when <code>field</code> is <code>IntelligentField</code>.</p>
+         */
+        _FinalStage intelligentFieldId(Optional<EntityId> intelligentFieldId);
+
+        _FinalStage intelligentFieldId(EntityId intelligentFieldId);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -103,6 +130,8 @@ public final class AgentUserRowIdentifier implements IRowIdentifierBase {
         private FieldValue value;
 
         private AgentUserField field;
+
+        private Optional<EntityId> intelligentFieldId = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -113,6 +142,7 @@ public final class AgentUserRowIdentifier implements IRowIdentifierBase {
         public Builder from(AgentUserRowIdentifier other) {
             value(other.getValue());
             field(other.getField());
+            intelligentFieldId(other.getIntelligentFieldId());
             return this;
         }
 
@@ -140,9 +170,29 @@ public final class AgentUserRowIdentifier implements IRowIdentifierBase {
             return this;
         }
 
+        /**
+         * <p>Which intelligent field this grouping was on, set when <code>field</code> is <code>IntelligentField</code>.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage intelligentFieldId(EntityId intelligentFieldId) {
+            this.intelligentFieldId = Optional.ofNullable(intelligentFieldId);
+            return this;
+        }
+
+        /**
+         * <p>Which intelligent field this grouping was on, set when <code>field</code> is <code>IntelligentField</code>.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "intelligentFieldId", nulls = Nulls.SKIP)
+        public _FinalStage intelligentFieldId(Optional<EntityId> intelligentFieldId) {
+            this.intelligentFieldId = intelligentFieldId;
+            return this;
+        }
+
         @java.lang.Override
         public AgentUserRowIdentifier build() {
-            return new AgentUserRowIdentifier(value, field, additionalProperties);
+            return new AgentUserRowIdentifier(value, field, intelligentFieldId, additionalProperties);
         }
     }
 }

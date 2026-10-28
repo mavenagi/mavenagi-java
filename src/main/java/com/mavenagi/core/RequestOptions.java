@@ -10,6 +10,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
 public final class RequestOptions {
+    private final String token;
+
     private final String organizationId;
 
     private final String agentId;
@@ -23,12 +25,14 @@ public final class RequestOptions {
     private final Map<String, Supplier<String>> headerSuppliers;
 
     private RequestOptions(
+            String token,
             String organizationId,
             String agentId,
             Optional<Integer> timeout,
             TimeUnit timeoutTimeUnit,
             Map<String, String> headers,
             Map<String, Supplier<String>> headerSuppliers) {
+        this.token = token;
         this.organizationId = organizationId;
         this.agentId = agentId;
         this.timeout = timeout;
@@ -47,6 +51,9 @@ public final class RequestOptions {
 
     public Map<String, String> getHeaders() {
         Map<String, String> headers = new HashMap<>();
+        if (this.token != null) {
+            headers.put("Authorization", "Bearer " + this.token);
+        }
         if (this.organizationId != null) {
             headers.put("X-Organization-Id", this.organizationId);
         }
@@ -65,6 +72,8 @@ public final class RequestOptions {
     }
 
     public static class Builder {
+        private String token = null;
+
         private String organizationId = null;
 
         private String agentId = null;
@@ -76,6 +85,11 @@ public final class RequestOptions {
         private final Map<String, String> headers = new HashMap<>();
 
         private final Map<String, Supplier<String>> headerSuppliers = new HashMap<>();
+
+        public Builder token(String token) {
+            this.token = token;
+            return this;
+        }
 
         public Builder organizationId(String organizationId) {
             this.organizationId = organizationId;
@@ -109,7 +123,8 @@ public final class RequestOptions {
         }
 
         public RequestOptions build() {
-            return new RequestOptions(organizationId, agentId, timeout, timeoutTimeUnit, headers, headerSuppliers);
+            return new RequestOptions(
+                    token, organizationId, agentId, timeout, timeoutTimeUnit, headers, headerSuppliers);
         }
     }
 }

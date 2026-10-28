@@ -28,21 +28,12 @@ import com.mavenagi.resources.analytics.types.EventMetric;
 import com.mavenagi.resources.analytics.types.EventPieChartRequest;
 import com.mavenagi.resources.analytics.types.EventTableRequest;
 import com.mavenagi.resources.analytics.types.EventTableResponse;
-import com.mavenagi.resources.analytics.types.FeedbackColumnDefinition;
-import com.mavenagi.resources.analytics.types.FeedbackCount;
-import com.mavenagi.resources.analytics.types.FeedbackGroupBy;
-import com.mavenagi.resources.analytics.types.FeedbackMetric;
-import com.mavenagi.resources.analytics.types.FeedbackTableRequest;
-import com.mavenagi.resources.analytics.types.FeedbackTableResponse;
 import com.mavenagi.resources.analytics.types.TimeInterval;
 import com.mavenagi.resources.commons.types.EventField;
 import com.mavenagi.resources.commons.types.EventFilter;
 import com.mavenagi.resources.commons.types.EventType;
-import com.mavenagi.resources.commons.types.FeedbackType;
 import com.mavenagi.resources.conversation.types.ConversationField;
 import com.mavenagi.resources.conversation.types.ConversationFilter;
-import com.mavenagi.resources.conversation.types.FeedbackField;
-import com.mavenagi.resources.conversation.types.FeedbackFilter;
 import com.mavenagi.resources.conversation.types.NumericConversationField;
 import com.mavenagi.resources.users.types.AgentUserFilter;
 import java.util.Arrays;
@@ -65,7 +56,7 @@ public class AnalyticsWireTest {
         server.start();
         client = MavenAGI.builder()
             .url(server.url("/").toString())
-            .credentials("testuser", "testpass")
+            .token("test-token")
             .build();
     }
     @AfterEach
@@ -509,180 +500,6 @@ public class AnalyticsWireTest {
             + "      }\n"
             + "    ]\n"
             + "  }\n"
-            + "}";
-        JsonNode actualResponseNode = objectMapper.readTree(actualResponseJson);
-        JsonNode expectedResponseNode = objectMapper.readTree(expectedResponseBody);
-        Assertions.assertEquals(expectedResponseNode, actualResponseNode, "Response body structure does not match expected");
-        if (actualResponseNode.has("type") || actualResponseNode.has("_type") || actualResponseNode.has("kind")) {
-            String discriminator = null;
-            if (actualResponseNode.has("type")) discriminator = actualResponseNode.get("type").asText();
-            else if (actualResponseNode.has("_type")) discriminator = actualResponseNode.get("_type").asText();
-            else if (actualResponseNode.has("kind")) discriminator = actualResponseNode.get("kind").asText();
-            Assertions.assertNotNull(discriminator, "Union type should have a discriminator field");
-            Assertions.assertFalse(discriminator.isEmpty(), "Union discriminator should not be empty");
-        }
-        
-        if (!actualResponseNode.isNull()) {
-            Assertions.assertTrue(actualResponseNode.isObject() || actualResponseNode.isArray() || actualResponseNode.isValueNode(), "response should be a valid JSON value");
-        }
-        
-        if (actualResponseNode.isArray()) {
-            Assertions.assertTrue(actualResponseNode.size() >= 0, "Array should have valid size");
-        }
-        if (actualResponseNode.isObject()) {
-            Assertions.assertTrue(actualResponseNode.size() >= 0, "Object should have valid field count");
-        }
-    }
-    @Test
-    public void testGetFeedbackTable() throws Exception {
-        server.enqueue(new MockResponse()
-            .setResponseCode(200)
-            .setBody("{\"headers\":[\"feedback_count\",\"unique_users\"],\"rows\":[{\"identifier\":{\"CreatedBy\":{\"type\":\"string\",\"value\":\"John Doe\"}},\"identifiers\":[{\"field\":\"CreatedBy\",\"value\":{\"type\":\"string\",\"value\":\"John Doe\"}}],\"data\":{\"feedback_count\":{\"type\":\"double\",\"value\":5}}},{\"identifier\":{\"CreatedBy\":{\"type\":\"string\",\"value\":\"Jane Smith\"}},\"identifiers\":[{\"field\":\"CreatedBy\",\"value\":{\"type\":\"string\",\"value\":\"Jane Smith\"}}],\"data\":{\"feedback_count\":{\"type\":\"double\",\"value\":3}}}]}"));
-        FeedbackTableResponse response = client.analytics().getFeedbackTable(
-            FeedbackTableRequest
-                .builder()
-                .fieldGroupings(
-                    Arrays.asList(
-                        FeedbackGroupBy
-                            .builder()
-                            .field(FeedbackField.CREATED_BY)
-                            .build()
-                    )
-                )
-                .columnDefinitions(
-                    Arrays.asList(
-                        FeedbackColumnDefinition
-                            .builder()
-                            .header("feedback_count")
-                            .metric(
-                                FeedbackMetric.count(
-                                    FeedbackCount
-                                        .builder()
-                                        .build()
-                                )
-                            )
-                            .build()
-                    )
-                )
-                .feedbackFilter(
-                    FeedbackFilter
-                        .builder()
-                        .types(
-                            Optional.of(
-                                Arrays.asList(FeedbackType.THUMBS_UP, FeedbackType.INSERT)
-                            )
-                        )
-                        .build()
-                )
-                .build()
-        );
-        RecordedRequest request = server.takeRequest();
-        Assertions.assertNotNull(request);
-        Assertions.assertEquals("POST", request.getMethod());
-        // Validate request body
-        String actualRequestBody = request.getBody().readUtf8();
-        String expectedRequestBody = ""
-            + "{\n"
-            + "  \"feedbackFilter\": {\n"
-            + "    \"types\": [\n"
-            + "      \"THUMBS_UP\",\n"
-            + "      \"INSERT\"\n"
-            + "    ]\n"
-            + "  },\n"
-            + "  \"fieldGroupings\": [\n"
-            + "    {\n"
-            + "      \"field\": \"CreatedBy\"\n"
-            + "    }\n"
-            + "  ],\n"
-            + "  \"columnDefinitions\": [\n"
-            + "    {\n"
-            + "      \"header\": \"feedback_count\",\n"
-            + "      \"metric\": {\n"
-            + "        \"type\": \"count\"\n"
-            + "      }\n"
-            + "    }\n"
-            + "  ]\n"
-            + "}";
-        JsonNode actualJson = objectMapper.readTree(actualRequestBody);
-        JsonNode expectedJson = objectMapper.readTree(expectedRequestBody);
-        Assertions.assertEquals(expectedJson, actualJson, "Request body structure does not match expected");
-        if (actualJson.has("type") || actualJson.has("_type") || actualJson.has("kind")) {
-            String discriminator = null;
-            if (actualJson.has("type")) discriminator = actualJson.get("type").asText();
-            else if (actualJson.has("_type")) discriminator = actualJson.get("_type").asText();
-            else if (actualJson.has("kind")) discriminator = actualJson.get("kind").asText();
-            Assertions.assertNotNull(discriminator, "Union type should have a discriminator field");
-            Assertions.assertFalse(discriminator.isEmpty(), "Union discriminator should not be empty");
-        }
-        
-        if (!actualJson.isNull()) {
-            Assertions.assertTrue(actualJson.isObject() || actualJson.isArray() || actualJson.isValueNode(), "request should be a valid JSON value");
-        }
-        
-        if (actualJson.isArray()) {
-            Assertions.assertTrue(actualJson.size() >= 0, "Array should have valid size");
-        }
-        if (actualJson.isObject()) {
-            Assertions.assertTrue(actualJson.size() >= 0, "Object should have valid field count");
-        }
-        
-        // Validate response body
-        Assertions.assertNotNull(response, "Response should not be null");
-        String actualResponseJson = objectMapper.writeValueAsString(response);
-        String expectedResponseBody = ""
-            + "{\n"
-            + "  \"headers\": [\n"
-            + "    \"feedback_count\",\n"
-            + "    \"unique_users\"\n"
-            + "  ],\n"
-            + "  \"rows\": [\n"
-            + "    {\n"
-            + "      \"identifier\": {\n"
-            + "        \"CreatedBy\": {\n"
-            + "          \"type\": \"string\",\n"
-            + "          \"value\": \"John Doe\"\n"
-            + "        }\n"
-            + "      },\n"
-            + "      \"identifiers\": [\n"
-            + "        {\n"
-            + "          \"field\": \"CreatedBy\",\n"
-            + "          \"value\": {\n"
-            + "            \"type\": \"string\",\n"
-            + "            \"value\": \"John Doe\"\n"
-            + "          }\n"
-            + "        }\n"
-            + "      ],\n"
-            + "      \"data\": {\n"
-            + "        \"feedback_count\": {\n"
-            + "          \"type\": \"double\",\n"
-            + "          \"value\": 5\n"
-            + "        }\n"
-            + "      }\n"
-            + "    },\n"
-            + "    {\n"
-            + "      \"identifier\": {\n"
-            + "        \"CreatedBy\": {\n"
-            + "          \"type\": \"string\",\n"
-            + "          \"value\": \"Jane Smith\"\n"
-            + "        }\n"
-            + "      },\n"
-            + "      \"identifiers\": [\n"
-            + "        {\n"
-            + "          \"field\": \"CreatedBy\",\n"
-            + "          \"value\": {\n"
-            + "            \"type\": \"string\",\n"
-            + "            \"value\": \"Jane Smith\"\n"
-            + "          }\n"
-            + "        }\n"
-            + "      ],\n"
-            + "      \"data\": {\n"
-            + "        \"feedback_count\": {\n"
-            + "          \"type\": \"double\",\n"
-            + "          \"value\": 3\n"
-            + "        }\n"
-            + "      }\n"
-            + "    }\n"
-            + "  ]\n"
             + "}";
         JsonNode actualResponseNode = objectMapper.readTree(actualResponseJson);
         JsonNode expectedResponseNode = objectMapper.readTree(expectedResponseBody);

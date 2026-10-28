@@ -35,6 +35,8 @@ public final class NovelSystemEventNoId implements INovelSystemEventNoId, IEvent
 
     private final Optional<ContextInfo> contextInfo;
 
+    private final Optional<ExecutionMode> executionMode;
+
     private final Map<String, Object> additionalProperties;
 
     private NovelSystemEventNoId(
@@ -44,6 +46,7 @@ public final class NovelSystemEventNoId implements INovelSystemEventNoId, IEvent
             Optional<SourceInfo> sourceInfo,
             Optional<SessionInfo> sessionInfo,
             Optional<ContextInfo> contextInfo,
+            Optional<ExecutionMode> executionMode,
             Map<String, Object> additionalProperties) {
         this.eventName = eventName;
         this.timestamp = timestamp;
@@ -51,6 +54,7 @@ public final class NovelSystemEventNoId implements INovelSystemEventNoId, IEvent
         this.sourceInfo = sourceInfo;
         this.sessionInfo = sessionInfo;
         this.contextInfo = contextInfo;
+        this.executionMode = executionMode;
         this.additionalProperties = additionalProperties;
     }
 
@@ -93,6 +97,17 @@ public final class NovelSystemEventNoId implements INovelSystemEventNoId, IEvent
         return contextInfo;
     }
 
+    /**
+     * @return Whether the event happened on live data or in a simulation. Defaults to <code>LIVE</code> when
+     * creating an event, and is always set on a returned event. Creating a <code>SIMULATION</code> event
+     * requires the <code>create:simulations</code> permission.
+     */
+    @JsonProperty("executionMode")
+    @java.lang.Override
+    public Optional<ExecutionMode> getExecutionMode() {
+        return executionMode;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -110,13 +125,20 @@ public final class NovelSystemEventNoId implements INovelSystemEventNoId, IEvent
                 && references.equals(other.references)
                 && sourceInfo.equals(other.sourceInfo)
                 && sessionInfo.equals(other.sessionInfo)
-                && contextInfo.equals(other.contextInfo);
+                && contextInfo.equals(other.contextInfo)
+                && executionMode.equals(other.executionMode);
     }
 
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.eventName, this.timestamp, this.references, this.sourceInfo, this.sessionInfo, this.contextInfo);
+                this.eventName,
+                this.timestamp,
+                this.references,
+                this.sourceInfo,
+                this.sessionInfo,
+                this.contextInfo,
+                this.executionMode);
     }
 
     @java.lang.Override
@@ -159,11 +181,22 @@ public final class NovelSystemEventNoId implements INovelSystemEventNoId, IEvent
         _FinalStage contextInfo(Optional<ContextInfo> contextInfo);
 
         _FinalStage contextInfo(ContextInfo contextInfo);
+
+        /**
+         * <p>Whether the event happened on live data or in a simulation. Defaults to <code>LIVE</code> when
+         * creating an event, and is always set on a returned event. Creating a <code>SIMULATION</code> event
+         * requires the <code>create:simulations</code> permission.</p>
+         */
+        _FinalStage executionMode(Optional<ExecutionMode> executionMode);
+
+        _FinalStage executionMode(ExecutionMode executionMode);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements EventNameStage, _FinalStage {
         private SystemEventName eventName;
+
+        private Optional<ExecutionMode> executionMode = Optional.empty();
 
         private Optional<ContextInfo> contextInfo = Optional.empty();
 
@@ -188,6 +221,7 @@ public final class NovelSystemEventNoId implements INovelSystemEventNoId, IEvent
             sourceInfo(other.getSourceInfo());
             sessionInfo(other.getSessionInfo());
             contextInfo(other.getContextInfo());
+            executionMode(other.getExecutionMode());
             return this;
         }
 
@@ -200,6 +234,30 @@ public final class NovelSystemEventNoId implements INovelSystemEventNoId, IEvent
         @JsonSetter("eventName")
         public _FinalStage eventName(@NotNull SystemEventName eventName) {
             this.eventName = Objects.requireNonNull(eventName, "eventName must not be null");
+            return this;
+        }
+
+        /**
+         * <p>Whether the event happened on live data or in a simulation. Defaults to <code>LIVE</code> when
+         * creating an event, and is always set on a returned event. Creating a <code>SIMULATION</code> event
+         * requires the <code>create:simulations</code> permission.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage executionMode(ExecutionMode executionMode) {
+            this.executionMode = Optional.ofNullable(executionMode);
+            return this;
+        }
+
+        /**
+         * <p>Whether the event happened on live data or in a simulation. Defaults to <code>LIVE</code> when
+         * creating an event, and is always set on a returned event. Creating a <code>SIMULATION</code> event
+         * requires the <code>create:simulations</code> permission.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "executionMode", nulls = Nulls.SKIP)
+        public _FinalStage executionMode(Optional<ExecutionMode> executionMode) {
+            this.executionMode = executionMode;
             return this;
         }
 
@@ -271,7 +329,14 @@ public final class NovelSystemEventNoId implements INovelSystemEventNoId, IEvent
         @java.lang.Override
         public NovelSystemEventNoId build() {
             return new NovelSystemEventNoId(
-                    eventName, timestamp, references, sourceInfo, sessionInfo, contextInfo, additionalProperties);
+                    eventName,
+                    timestamp,
+                    references,
+                    sourceInfo,
+                    sessionInfo,
+                    contextInfo,
+                    executionMode,
+                    additionalProperties);
         }
     }
 }

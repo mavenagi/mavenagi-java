@@ -32,9 +32,8 @@ public class OrganizationsClient {
 
     /**
      * Create a new organization.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>Only Maven staff hold this permission.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>create:organization</code>&lt;/Note&gt;</p>
      */
     public Organization create(String organizationReferenceId, CreateOrganizationRequest request) {
         return this.rawClient.create(organizationReferenceId, request).body();
@@ -42,9 +41,8 @@ public class OrganizationsClient {
 
     /**
      * Create a new organization.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>Only Maven staff hold this permission.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>create:organization</code>&lt;/Note&gt;</p>
      */
     public Organization create(
             String organizationReferenceId, CreateOrganizationRequest request, RequestOptions requestOptions) {
@@ -55,6 +53,7 @@ public class OrganizationsClient {
 
     /**
      * Get an organization by ID
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:organization</code>&lt;/Note&gt;</p>
      */
     public Organization get(String organizationReferenceId) {
         return this.rawClient.get(organizationReferenceId).body();
@@ -62,6 +61,7 @@ public class OrganizationsClient {
 
     /**
      * Get an organization by ID
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:organization</code>&lt;/Note&gt;</p>
      */
     public Organization get(String organizationReferenceId, RequestOptions requestOptions) {
         return this.rawClient.get(organizationReferenceId, requestOptions).body();
@@ -70,9 +70,7 @@ public class OrganizationsClient {
     /**
      * Update mutable organization fields.
      * All fields will overwrite the existing value on the organization only if provided.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:organization</code>&lt;/Note&gt;</p>
      */
     public Organization patch(String organizationReferenceId) {
         return this.rawClient.patch(organizationReferenceId).body();
@@ -81,9 +79,7 @@ public class OrganizationsClient {
     /**
      * Update mutable organization fields.
      * All fields will overwrite the existing value on the organization only if provided.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:organization</code>&lt;/Note&gt;</p>
      */
     public Organization patch(String organizationReferenceId, OrganizationPatchRequest request) {
         return this.rawClient.patch(organizationReferenceId, request).body();
@@ -92,9 +88,7 @@ public class OrganizationsClient {
     /**
      * Update mutable organization fields.
      * All fields will overwrite the existing value on the organization only if provided.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:organization</code>&lt;/Note&gt;</p>
      */
     public Organization patch(
             String organizationReferenceId, OrganizationPatchRequest request, RequestOptions requestOptions) {
@@ -105,9 +99,7 @@ public class OrganizationsClient {
 
     /**
      * Delete an organization.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>delete:organization</code>&lt;/Note&gt;</p>
      */
     public void delete(String organizationReferenceId) {
         this.rawClient.delete(organizationReferenceId).body();
@@ -115,9 +107,7 @@ public class OrganizationsClient {
 
     /**
      * Delete an organization.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>delete:organization</code>&lt;/Note&gt;</p>
      */
     public void delete(String organizationReferenceId, RequestOptions requestOptions) {
         this.rawClient.delete(organizationReferenceId, requestOptions).body();
@@ -126,9 +116,8 @@ public class OrganizationsClient {
     /**
      * Retrieves structured conversation data across all organizations, formatted as a table,
      * allowing users to group, filter, and define specific metrics to display as columns.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>Only Maven staff hold this permission.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:all-organizations</code>&lt;/Note&gt;</p>
      */
     public ConversationTableResponse getConversationTable(ConversationTableRequest request) {
         return this.rawClient.getConversationTable(request).body();
@@ -137,9 +126,8 @@ public class OrganizationsClient {
     /**
      * Retrieves structured conversation data across all organizations, formatted as a table,
      * allowing users to group, filter, and define specific metrics to display as columns.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>Only Maven staff hold this permission.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:all-organizations</code>&lt;/Note&gt;</p>
      */
     public ConversationTableResponse getConversationTable(
             ConversationTableRequest request, RequestOptions requestOptions) {
@@ -149,9 +137,8 @@ public class OrganizationsClient {
     /**
      * Fetches conversation data across all organizations, visualized in a chart format.
      * Supported chart types include pie chart, date histogram, and stacked bar charts.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>Only Maven staff hold this permission.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:all-organizations</code>&lt;/Note&gt;</p>
      */
     public ChartResponse getConversationChart(ConversationChartRequest request) {
         return this.rawClient.getConversationChart(request).body();
@@ -160,9 +147,8 @@ public class OrganizationsClient {
     /**
      * Fetches conversation data across all organizations, visualized in a chart format.
      * Supported chart types include pie chart, date histogram, and stacked bar charts.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>Only Maven staff hold this permission.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:all-organizations</code>&lt;/Note&gt;</p>
      */
     public ChartResponse getConversationChart(ConversationChartRequest request, RequestOptions requestOptions) {
         return this.rawClient.getConversationChart(request, requestOptions).body();

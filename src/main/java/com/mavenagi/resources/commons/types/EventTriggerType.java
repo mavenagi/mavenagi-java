@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public final class EventTriggerType {
+    public static final EventTriggerType EVENT_CREATED = new EventTriggerType(Value.EVENT_CREATED, "EVENT_CREATED");
+
     public static final EventTriggerType FEEDBACK_CREATED =
             new EventTriggerType(Value.FEEDBACK_CREATED, "FEEDBACK_CREATED");
 
@@ -15,8 +17,6 @@ public final class EventTriggerType {
 
     public static final EventTriggerType INBOX_ITEM_CREATED =
             new EventTriggerType(Value.INBOX_ITEM_CREATED, "INBOX_ITEM_CREATED");
-
-    public static final EventTriggerType EVENT_CREATED = new EventTriggerType(Value.EVENT_CREATED, "EVENT_CREATED");
 
     private final Value value;
 
@@ -50,14 +50,14 @@ public final class EventTriggerType {
 
     public <T> T visit(Visitor<T> visitor) {
         switch (value) {
+            case EVENT_CREATED:
+                return visitor.visitEventCreated();
             case FEEDBACK_CREATED:
                 return visitor.visitFeedbackCreated();
             case CONVERSATION_CREATED:
                 return visitor.visitConversationCreated();
             case INBOX_ITEM_CREATED:
                 return visitor.visitInboxItemCreated();
-            case EVENT_CREATED:
-                return visitor.visitEventCreated();
             case UNKNOWN:
             default:
                 return visitor.visitUnknown(string);
@@ -67,14 +67,14 @@ public final class EventTriggerType {
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static EventTriggerType valueOf(String value) {
         switch (value) {
+            case "EVENT_CREATED":
+                return EVENT_CREATED;
             case "FEEDBACK_CREATED":
                 return FEEDBACK_CREATED;
             case "CONVERSATION_CREATED":
                 return CONVERSATION_CREATED;
             case "INBOX_ITEM_CREATED":
                 return INBOX_ITEM_CREATED;
-            case "EVENT_CREATED":
-                return EVENT_CREATED;
             default:
                 return new EventTriggerType(Value.UNKNOWN, value);
         }

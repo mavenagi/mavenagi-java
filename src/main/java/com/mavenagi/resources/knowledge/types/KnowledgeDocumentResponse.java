@@ -219,7 +219,7 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
     }
 
     /**
-     * @return The content of the document in markdown format. Not shown directly to users. May be absent for asset-backed documents that have not yet been processed.
+     * @return The content of the document in markdown format. Not shown directly to users. May be absent for asset-backed documents that have not yet been processed, or on a document GET when the document's processed form is larger than 20,000,000 bytes. When content is absent, asset.url (if present) links to the original uploaded file.
      */
     @JsonProperty("content")
     public Optional<String> getContent() {
@@ -403,7 +403,7 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
         _FinalStage processingStatus(KnowledgeDocumentStatus processingStatus);
 
         /**
-         * <p>The content of the document in markdown format. Not shown directly to users. May be absent for asset-backed documents that have not yet been processed.</p>
+         * <p>The content of the document in markdown format. Not shown directly to users. May be absent for asset-backed documents that have not yet been processed, or on a document GET when the document's processed form is larger than 20,000,000 bytes. When content is absent, asset.url (if present) links to the original uploaded file.</p>
          */
         _FinalStage content(Optional<String> content);
 
@@ -624,7 +624,7 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
         }
 
         /**
-         * <p>The content of the document in markdown format. Not shown directly to users. May be absent for asset-backed documents that have not yet been processed.</p>
+         * <p>The content of the document in markdown format. Not shown directly to users. May be absent for asset-backed documents that have not yet been processed, or on a document GET when the document's processed form is larger than 20,000,000 bytes. When content is absent, asset.url (if present) links to the original uploaded file.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -634,7 +634,7 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
         }
 
         /**
-         * <p>The content of the document in markdown format. Not shown directly to users. May be absent for asset-backed documents that have not yet been processed.</p>
+         * <p>The content of the document in markdown format. Not shown directly to users. May be absent for asset-backed documents that have not yet been processed, or on a document GET when the document's processed form is larger than 20,000,000 bytes. When content is absent, asset.url (if present) links to the original uploaded file.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "content", nulls = Nulls.SKIP)

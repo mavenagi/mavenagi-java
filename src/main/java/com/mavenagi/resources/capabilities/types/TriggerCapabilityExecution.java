@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
 import com.mavenagi.resources.commons.types.EntityId;
 import com.mavenagi.resources.commons.types.EventTriggerType;
+import com.mavenagi.resources.commons.types.ExecutionMode;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -42,6 +43,8 @@ public final class TriggerCapabilityExecution implements ICapabilityExecutionBas
 
     private final OffsetDateTime createdAt;
 
+    private final ExecutionMode executionMode;
+
     private final EventTriggerType eventType;
 
     private final int attempt;
@@ -62,6 +65,7 @@ public final class TriggerCapabilityExecution implements ICapabilityExecutionBas
             Optional<OffsetDateTime> completedAt,
             Optional<Long> durationMs,
             OffsetDateTime createdAt,
+            ExecutionMode executionMode,
             EventTriggerType eventType,
             int attempt,
             Optional<CapabilityExecutionRetryability> retryability,
@@ -76,6 +80,7 @@ public final class TriggerCapabilityExecution implements ICapabilityExecutionBas
         this.completedAt = completedAt;
         this.durationMs = durationMs;
         this.createdAt = createdAt;
+        this.executionMode = executionMode;
         this.eventType = eventType;
         this.attempt = attempt;
         this.retryability = retryability;
@@ -167,6 +172,16 @@ public final class TriggerCapabilityExecution implements ICapabilityExecutionBas
     }
 
     /**
+     * @return Whether the execution ran on live data or in a simulation. A Conversation Kickoff takes
+     * its conversation's mode, and an Event Trigger its event's.
+     */
+    @JsonProperty("executionMode")
+    @java.lang.Override
+    public ExecutionMode getExecutionMode() {
+        return executionMode;
+    }
+
+    /**
      * @return The kind of event that caused this run.
      */
     @JsonProperty("eventType")
@@ -221,6 +236,7 @@ public final class TriggerCapabilityExecution implements ICapabilityExecutionBas
                 && completedAt.equals(other.completedAt)
                 && durationMs.equals(other.durationMs)
                 && createdAt.equals(other.createdAt)
+                && executionMode.equals(other.executionMode)
                 && eventType.equals(other.eventType)
                 && attempt == other.attempt
                 && retryability.equals(other.retryability)
@@ -239,6 +255,7 @@ public final class TriggerCapabilityExecution implements ICapabilityExecutionBas
                 this.completedAt,
                 this.durationMs,
                 this.createdAt,
+                this.executionMode,
                 this.eventType,
                 this.attempt,
                 this.retryability,
@@ -288,7 +305,15 @@ public final class TriggerCapabilityExecution implements ICapabilityExecutionBas
         /**
          * <p>When the execution was recorded. Results are ordered by this field.</p>
          */
-        EventTypeStage createdAt(@NotNull OffsetDateTime createdAt);
+        ExecutionModeStage createdAt(@NotNull OffsetDateTime createdAt);
+    }
+
+    public interface ExecutionModeStage {
+        /**
+         * <p>Whether the execution ran on live data or in a simulation. A Conversation Kickoff takes
+         * its conversation's mode, and an Event Trigger its event's.</p>
+         */
+        EventTypeStage executionMode(@NotNull ExecutionMode executionMode);
     }
 
     public interface EventTypeStage {
@@ -362,6 +387,7 @@ public final class TriggerCapabilityExecution implements ICapabilityExecutionBas
                     StatusStage,
                     StartedAtStage,
                     CreatedAtStage,
+                    ExecutionModeStage,
                     EventTypeStage,
                     AttemptStage,
                     _FinalStage {
@@ -374,6 +400,8 @@ public final class TriggerCapabilityExecution implements ICapabilityExecutionBas
         private OffsetDateTime startedAt;
 
         private OffsetDateTime createdAt;
+
+        private ExecutionMode executionMode;
 
         private EventTriggerType eventType;
 
@@ -407,6 +435,7 @@ public final class TriggerCapabilityExecution implements ICapabilityExecutionBas
             completedAt(other.getCompletedAt());
             durationMs(other.getDurationMs());
             createdAt(other.getCreatedAt());
+            executionMode(other.getExecutionMode());
             eventType(other.getEventType());
             attempt(other.getAttempt());
             retryability(other.getRetryability());
@@ -470,8 +499,22 @@ public final class TriggerCapabilityExecution implements ICapabilityExecutionBas
          */
         @java.lang.Override
         @JsonSetter("createdAt")
-        public EventTypeStage createdAt(@NotNull OffsetDateTime createdAt) {
+        public ExecutionModeStage createdAt(@NotNull OffsetDateTime createdAt) {
             this.createdAt = Objects.requireNonNull(createdAt, "createdAt must not be null");
+            return this;
+        }
+
+        /**
+         * <p>Whether the execution ran on live data or in a simulation. A Conversation Kickoff takes
+         * its conversation's mode, and an Event Trigger its event's.</p>
+         * <p>Whether the execution ran on live data or in a simulation. A Conversation Kickoff takes
+         * its conversation's mode, and an Event Trigger its event's.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("executionMode")
+        public EventTypeStage executionMode(@NotNull ExecutionMode executionMode) {
+            this.executionMode = Objects.requireNonNull(executionMode, "executionMode must not be null");
             return this;
         }
 
@@ -639,6 +682,7 @@ public final class TriggerCapabilityExecution implements ICapabilityExecutionBas
                     completedAt,
                     durationMs,
                     createdAt,
+                    executionMode,
                     eventType,
                     attempt,
                     retryability,

@@ -35,13 +35,16 @@ public final class SimulationActionMock {
     }
 
     /**
-     * @return The action this entry applies to.
+     * @return The action this entry applies to. Its <code>type</code> must be <code>ACTION</code>.
      */
     @JsonProperty("actionId")
     public EntityIdWithoutAgent getActionId() {
         return actionId;
     }
 
+    /**
+     * @return What the platform does when the agent executes this action.
+     */
     @JsonProperty("behavior")
     public SimulationActionBehavior getBehavior() {
         return behavior;
@@ -78,7 +81,7 @@ public final class SimulationActionMock {
 
     public interface ActionIdStage {
         /**
-         * <p>The action this entry applies to.</p>
+         * <p>The action this entry applies to. Its <code>type</code> must be <code>ACTION</code>.</p>
          */
         BehaviorStage actionId(@NotNull EntityIdWithoutAgent actionId);
 
@@ -86,6 +89,9 @@ public final class SimulationActionMock {
     }
 
     public interface BehaviorStage {
+        /**
+         * <p>What the platform does when the agent executes this action.</p>
+         */
         _FinalStage behavior(@NotNull SimulationActionBehavior behavior);
     }
 
@@ -112,8 +118,8 @@ public final class SimulationActionMock {
         }
 
         /**
-         * <p>The action this entry applies to.</p>
-         * <p>The action this entry applies to.</p>
+         * <p>The action this entry applies to. Its <code>type</code> must be <code>ACTION</code>.</p>
+         * <p>The action this entry applies to. Its <code>type</code> must be <code>ACTION</code>.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -123,6 +129,11 @@ public final class SimulationActionMock {
             return this;
         }
 
+        /**
+         * <p>What the platform does when the agent executes this action.</p>
+         * <p>What the platform does when the agent executes this action.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
         @JsonSetter("behavior")
         public _FinalStage behavior(@NotNull SimulationActionBehavior behavior) {

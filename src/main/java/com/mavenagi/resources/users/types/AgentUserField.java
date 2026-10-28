@@ -7,9 +7,14 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public final class AgentUserField {
+    public static final AgentUserField INTELLIGENT_FIELD =
+            new AgentUserField(Value.INTELLIGENT_FIELD, "IntelligentField");
+
     public static final AgentUserField UPDATED_AT = new AgentUserField(Value.UPDATED_AT, "UpdatedAt");
 
     public static final AgentUserField CREATED_AT = new AgentUserField(Value.CREATED_AT, "CreatedAt");
+
+    public static final AgentUserField ANONYMOUS = new AgentUserField(Value.ANONYMOUS, "Anonymous");
 
     private final Value value;
 
@@ -43,10 +48,14 @@ public final class AgentUserField {
 
     public <T> T visit(Visitor<T> visitor) {
         switch (value) {
+            case INTELLIGENT_FIELD:
+                return visitor.visitIntelligentField();
             case UPDATED_AT:
                 return visitor.visitUpdatedAt();
             case CREATED_AT:
                 return visitor.visitCreatedAt();
+            case ANONYMOUS:
+                return visitor.visitAnonymous();
             case UNKNOWN:
             default:
                 return visitor.visitUnknown(string);
@@ -56,10 +65,14 @@ public final class AgentUserField {
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static AgentUserField valueOf(String value) {
         switch (value) {
+            case "IntelligentField":
+                return INTELLIGENT_FIELD;
             case "UpdatedAt":
                 return UPDATED_AT;
             case "CreatedAt":
                 return CREATED_AT;
+            case "Anonymous":
+                return ANONYMOUS;
             default:
                 return new AgentUserField(Value.UNKNOWN, value);
         }
@@ -70,6 +83,10 @@ public final class AgentUserField {
 
         UPDATED_AT,
 
+        ANONYMOUS,
+
+        INTELLIGENT_FIELD,
+
         UNKNOWN
     }
 
@@ -77,6 +94,10 @@ public final class AgentUserField {
         T visitCreatedAt();
 
         T visitUpdatedAt();
+
+        T visitAnonymous();
+
+        T visitIntelligentField();
 
         T visitUnknown(String unknownType);
     }

@@ -34,6 +34,8 @@ public final class UserEvent implements IEventBaseNoId {
 
     private final Optional<ContextInfo> contextInfo;
 
+    private final Optional<ExecutionMode> executionMode;
+
     private final EntityId id;
 
     private final Optional<OffsetDateTime> createdAt;
@@ -56,6 +58,7 @@ public final class UserEvent implements IEventBaseNoId {
             Optional<SourceInfo> sourceInfo,
             Optional<SessionInfo> sessionInfo,
             Optional<ContextInfo> contextInfo,
+            Optional<ExecutionMode> executionMode,
             EntityId id,
             Optional<OffsetDateTime> createdAt,
             UserEventName eventName,
@@ -69,6 +72,7 @@ public final class UserEvent implements IEventBaseNoId {
         this.sourceInfo = sourceInfo;
         this.sessionInfo = sessionInfo;
         this.contextInfo = contextInfo;
+        this.executionMode = executionMode;
         this.id = id;
         this.createdAt = createdAt;
         this.eventName = eventName;
@@ -107,6 +111,17 @@ public final class UserEvent implements IEventBaseNoId {
     @java.lang.Override
     public Optional<ContextInfo> getContextInfo() {
         return contextInfo;
+    }
+
+    /**
+     * @return Whether the event happened on live data or in a simulation. Defaults to <code>LIVE</code> when
+     * creating an event, and is always set on a returned event. Creating a <code>SIMULATION</code> event
+     * requires the <code>create:simulations</code> permission.
+     */
+    @JsonProperty("executionMode")
+    @java.lang.Override
+    public Optional<ExecutionMode> getExecutionMode() {
+        return executionMode;
     }
 
     /**
@@ -183,6 +198,7 @@ public final class UserEvent implements IEventBaseNoId {
                 && sourceInfo.equals(other.sourceInfo)
                 && sessionInfo.equals(other.sessionInfo)
                 && contextInfo.equals(other.contextInfo)
+                && executionMode.equals(other.executionMode)
                 && id.equals(other.id)
                 && createdAt.equals(other.createdAt)
                 && eventName.equals(other.eventName)
@@ -200,6 +216,7 @@ public final class UserEvent implements IEventBaseNoId {
                 this.sourceInfo,
                 this.sessionInfo,
                 this.contextInfo,
+                this.executionMode,
                 this.id,
                 this.createdAt,
                 this.eventName,
@@ -265,6 +282,15 @@ public final class UserEvent implements IEventBaseNoId {
         _FinalStage contextInfo(ContextInfo contextInfo);
 
         /**
+         * <p>Whether the event happened on live data or in a simulation. Defaults to <code>LIVE</code> when
+         * creating an event, and is always set on a returned event. Creating a <code>SIMULATION</code> event
+         * requires the <code>create:simulations</code> permission.</p>
+         */
+        _FinalStage executionMode(Optional<ExecutionMode> executionMode);
+
+        _FinalStage executionMode(ExecutionMode executionMode);
+
+        /**
          * <p>The date and time the event was created</p>
          */
         _FinalStage createdAt(Optional<OffsetDateTime> createdAt);
@@ -310,6 +336,8 @@ public final class UserEvent implements IEventBaseNoId {
 
         private Optional<OffsetDateTime> createdAt = Optional.empty();
 
+        private Optional<ExecutionMode> executionMode = Optional.empty();
+
         private Optional<ContextInfo> contextInfo = Optional.empty();
 
         private Optional<SessionInfo> sessionInfo = Optional.empty();
@@ -332,6 +360,7 @@ public final class UserEvent implements IEventBaseNoId {
             sourceInfo(other.getSourceInfo());
             sessionInfo(other.getSessionInfo());
             contextInfo(other.getContextInfo());
+            executionMode(other.getExecutionMode());
             id(other.getId());
             createdAt(other.getCreatedAt());
             eventName(other.getEventName());
@@ -460,6 +489,30 @@ public final class UserEvent implements IEventBaseNoId {
             return this;
         }
 
+        /**
+         * <p>Whether the event happened on live data or in a simulation. Defaults to <code>LIVE</code> when
+         * creating an event, and is always set on a returned event. Creating a <code>SIMULATION</code> event
+         * requires the <code>create:simulations</code> permission.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage executionMode(ExecutionMode executionMode) {
+            this.executionMode = Optional.ofNullable(executionMode);
+            return this;
+        }
+
+        /**
+         * <p>Whether the event happened on live data or in a simulation. Defaults to <code>LIVE</code> when
+         * creating an event, and is always set on a returned event. Creating a <code>SIMULATION</code> event
+         * requires the <code>create:simulations</code> permission.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "executionMode", nulls = Nulls.SKIP)
+        public _FinalStage executionMode(Optional<ExecutionMode> executionMode) {
+            this.executionMode = executionMode;
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage contextInfo(ContextInfo contextInfo) {
             this.contextInfo = Optional.ofNullable(contextInfo);
@@ -533,6 +586,7 @@ public final class UserEvent implements IEventBaseNoId {
                     sourceInfo,
                     sessionInfo,
                     contextInfo,
+                    executionMode,
                     id,
                     createdAt,
                     eventName,

@@ -29,6 +29,8 @@ public final class AgentUserTableRequest implements IAgentUserAnalyticsRequest {
 
     private final Optional<TimeInterval> timeGrouping;
 
+    private final Optional<List<AgentUserGroupBy>> fieldGroupings;
+
     private final List<AgentUserColumnDefinition> columnDefinitions;
 
     private final Map<String, Object> additionalProperties;
@@ -37,11 +39,13 @@ public final class AgentUserTableRequest implements IAgentUserAnalyticsRequest {
             Optional<AgentUserFilter> agentUserFilter,
             Optional<String> timezone,
             Optional<TimeInterval> timeGrouping,
+            Optional<List<AgentUserGroupBy>> fieldGroupings,
             List<AgentUserColumnDefinition> columnDefinitions,
             Map<String, Object> additionalProperties) {
         this.agentUserFilter = agentUserFilter;
         this.timezone = timezone;
         this.timeGrouping = timeGrouping;
+        this.fieldGroupings = fieldGroupings;
         this.columnDefinitions = columnDefinitions;
         this.additionalProperties = additionalProperties;
     }
@@ -76,6 +80,17 @@ public final class AgentUserTableRequest implements IAgentUserAnalyticsRequest {
     }
 
     /**
+     * @return Specifies the fields by which data should be grouped. Each unique combination forms a row.
+     * If multiple fields are provided, the result is grouped by their unique value combinations.
+     * If omitted or empty, all data is aggregated into a single row.
+     * <code>CreatedAt</code> and <code>UpdatedAt</code> are rejected here; group by time with <code>timeGrouping</code>.
+     */
+    @JsonProperty("fieldGroupings")
+    public Optional<List<AgentUserGroupBy>> getFieldGroupings() {
+        return fieldGroupings;
+    }
+
+    /**
      * @return Specifies the metrics to be displayed as columns.
      * Only the <code>count</code> metric is supported for agent user tables, so each table will have a single column definition using <code>count</code>.
      */
@@ -99,12 +114,14 @@ public final class AgentUserTableRequest implements IAgentUserAnalyticsRequest {
         return agentUserFilter.equals(other.agentUserFilter)
                 && timezone.equals(other.timezone)
                 && timeGrouping.equals(other.timeGrouping)
+                && fieldGroupings.equals(other.fieldGroupings)
                 && columnDefinitions.equals(other.columnDefinitions);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.agentUserFilter, this.timezone, this.timeGrouping, this.columnDefinitions);
+        return Objects.hash(
+                this.agentUserFilter, this.timezone, this.timeGrouping, this.fieldGroupings, this.columnDefinitions);
     }
 
     @java.lang.Override
@@ -124,6 +141,8 @@ public final class AgentUserTableRequest implements IAgentUserAnalyticsRequest {
 
         private Optional<TimeInterval> timeGrouping = Optional.empty();
 
+        private Optional<List<AgentUserGroupBy>> fieldGroupings = Optional.empty();
+
         private List<AgentUserColumnDefinition> columnDefinitions = new ArrayList<>();
 
         @JsonAnySetter
@@ -135,6 +154,7 @@ public final class AgentUserTableRequest implements IAgentUserAnalyticsRequest {
             agentUserFilter(other.getAgentUserFilter());
             timezone(other.getTimezone());
             timeGrouping(other.getTimeGrouping());
+            fieldGroupings(other.getFieldGroupings());
             columnDefinitions(other.getColumnDefinitions());
             return this;
         }
@@ -185,6 +205,23 @@ public final class AgentUserTableRequest implements IAgentUserAnalyticsRequest {
         }
 
         /**
+         * <p>Specifies the fields by which data should be grouped. Each unique combination forms a row.
+         * If multiple fields are provided, the result is grouped by their unique value combinations.
+         * If omitted or empty, all data is aggregated into a single row.
+         * <code>CreatedAt</code> and <code>UpdatedAt</code> are rejected here; group by time with <code>timeGrouping</code>.</p>
+         */
+        @JsonSetter(value = "fieldGroupings", nulls = Nulls.SKIP)
+        public Builder fieldGroupings(Optional<List<AgentUserGroupBy>> fieldGroupings) {
+            this.fieldGroupings = fieldGroupings;
+            return this;
+        }
+
+        public Builder fieldGroupings(List<AgentUserGroupBy> fieldGroupings) {
+            this.fieldGroupings = Optional.ofNullable(fieldGroupings);
+            return this;
+        }
+
+        /**
          * <p>Specifies the metrics to be displayed as columns.
          * Only the <code>count</code> metric is supported for agent user tables, so each table will have a single column definition using <code>count</code>.</p>
          */
@@ -211,7 +248,7 @@ public final class AgentUserTableRequest implements IAgentUserAnalyticsRequest {
 
         public AgentUserTableRequest build() {
             return new AgentUserTableRequest(
-                    agentUserFilter, timezone, timeGrouping, columnDefinitions, additionalProperties);
+                    agentUserFilter, timezone, timeGrouping, fieldGroupings, columnDefinitions, additionalProperties);
         }
     }
 }

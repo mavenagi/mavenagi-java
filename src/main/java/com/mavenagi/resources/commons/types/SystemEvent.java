@@ -35,6 +35,8 @@ public final class SystemEvent implements INovelSystemEventNoId, IEventBaseNoId 
 
     private final Optional<ContextInfo> contextInfo;
 
+    private final Optional<ExecutionMode> executionMode;
+
     private final EntityId id;
 
     private final Map<String, Object> additionalProperties;
@@ -46,6 +48,7 @@ public final class SystemEvent implements INovelSystemEventNoId, IEventBaseNoId 
             Optional<SourceInfo> sourceInfo,
             Optional<SessionInfo> sessionInfo,
             Optional<ContextInfo> contextInfo,
+            Optional<ExecutionMode> executionMode,
             EntityId id,
             Map<String, Object> additionalProperties) {
         this.eventName = eventName;
@@ -54,6 +57,7 @@ public final class SystemEvent implements INovelSystemEventNoId, IEventBaseNoId 
         this.sourceInfo = sourceInfo;
         this.sessionInfo = sessionInfo;
         this.contextInfo = contextInfo;
+        this.executionMode = executionMode;
         this.id = id;
         this.additionalProperties = additionalProperties;
     }
@@ -98,6 +102,17 @@ public final class SystemEvent implements INovelSystemEventNoId, IEventBaseNoId 
     }
 
     /**
+     * @return Whether the event happened on live data or in a simulation. Defaults to <code>LIVE</code> when
+     * creating an event, and is always set on a returned event. Creating a <code>SIMULATION</code> event
+     * requires the <code>create:simulations</code> permission.
+     */
+    @JsonProperty("executionMode")
+    @java.lang.Override
+    public Optional<ExecutionMode> getExecutionMode() {
+        return executionMode;
+    }
+
+    /**
      * @return The unique ID of the event
      */
     @JsonProperty("id")
@@ -123,6 +138,7 @@ public final class SystemEvent implements INovelSystemEventNoId, IEventBaseNoId 
                 && sourceInfo.equals(other.sourceInfo)
                 && sessionInfo.equals(other.sessionInfo)
                 && contextInfo.equals(other.contextInfo)
+                && executionMode.equals(other.executionMode)
                 && id.equals(other.id);
     }
 
@@ -135,6 +151,7 @@ public final class SystemEvent implements INovelSystemEventNoId, IEventBaseNoId 
                 this.sourceInfo,
                 this.sessionInfo,
                 this.contextInfo,
+                this.executionMode,
                 this.id);
     }
 
@@ -185,6 +202,15 @@ public final class SystemEvent implements INovelSystemEventNoId, IEventBaseNoId 
         _FinalStage contextInfo(Optional<ContextInfo> contextInfo);
 
         _FinalStage contextInfo(ContextInfo contextInfo);
+
+        /**
+         * <p>Whether the event happened on live data or in a simulation. Defaults to <code>LIVE</code> when
+         * creating an event, and is always set on a returned event. Creating a <code>SIMULATION</code> event
+         * requires the <code>create:simulations</code> permission.</p>
+         */
+        _FinalStage executionMode(Optional<ExecutionMode> executionMode);
+
+        _FinalStage executionMode(ExecutionMode executionMode);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -192,6 +218,8 @@ public final class SystemEvent implements INovelSystemEventNoId, IEventBaseNoId 
         private SystemEventName eventName;
 
         private EntityId id;
+
+        private Optional<ExecutionMode> executionMode = Optional.empty();
 
         private Optional<ContextInfo> contextInfo = Optional.empty();
 
@@ -216,6 +244,7 @@ public final class SystemEvent implements INovelSystemEventNoId, IEventBaseNoId 
             sourceInfo(other.getSourceInfo());
             sessionInfo(other.getSessionInfo());
             contextInfo(other.getContextInfo());
+            executionMode(other.getExecutionMode());
             id(other.getId());
             return this;
         }
@@ -241,6 +270,30 @@ public final class SystemEvent implements INovelSystemEventNoId, IEventBaseNoId 
         @JsonSetter("id")
         public _FinalStage id(@NotNull EntityId id) {
             this.id = Objects.requireNonNull(id, "id must not be null");
+            return this;
+        }
+
+        /**
+         * <p>Whether the event happened on live data or in a simulation. Defaults to <code>LIVE</code> when
+         * creating an event, and is always set on a returned event. Creating a <code>SIMULATION</code> event
+         * requires the <code>create:simulations</code> permission.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage executionMode(ExecutionMode executionMode) {
+            this.executionMode = Optional.ofNullable(executionMode);
+            return this;
+        }
+
+        /**
+         * <p>Whether the event happened on live data or in a simulation. Defaults to <code>LIVE</code> when
+         * creating an event, and is always set on a returned event. Creating a <code>SIMULATION</code> event
+         * requires the <code>create:simulations</code> permission.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "executionMode", nulls = Nulls.SKIP)
+        public _FinalStage executionMode(Optional<ExecutionMode> executionMode) {
+            this.executionMode = executionMode;
             return this;
         }
 
@@ -312,7 +365,15 @@ public final class SystemEvent implements INovelSystemEventNoId, IEventBaseNoId 
         @java.lang.Override
         public SystemEvent build() {
             return new SystemEvent(
-                    eventName, timestamp, references, sourceInfo, sessionInfo, contextInfo, id, additionalProperties);
+                    eventName,
+                    timestamp,
+                    references,
+                    sourceInfo,
+                    sessionInfo,
+                    contextInfo,
+                    executionMode,
+                    id,
+                    additionalProperties);
         }
     }
 }

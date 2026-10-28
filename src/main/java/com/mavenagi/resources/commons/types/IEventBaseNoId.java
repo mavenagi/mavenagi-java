@@ -17,4 +17,6 @@ public interface IEventBaseNoId {
     Optional<SessionInfo> getSessionInfo();
 
     Optional<ContextInfo> getContextInfo();
+
+    Optional<ExecutionMode> getExecutionMode();
 }

@@ -24,6 +24,8 @@ import java.util.Optional;
 public final class EventFilter {
     private final Optional<String> search;
 
+    private final Optional<SimulationFilter> simulationFilter;
+
     private final Optional<OffsetDateTime> createdAfter;
 
     private final Optional<OffsetDateTime> createdBefore;
@@ -46,6 +48,7 @@ public final class EventFilter {
 
     private EventFilter(
             Optional<String> search,
+            Optional<SimulationFilter> simulationFilter,
             Optional<OffsetDateTime> createdAfter,
             Optional<OffsetDateTime> createdBefore,
             Optional<List<ScopedEntity>> references,
@@ -57,6 +60,7 @@ public final class EventFilter {
             Optional<Boolean> hasEventText,
             Map<String, Object> additionalProperties) {
         this.search = search;
+        this.simulationFilter = simulationFilter;
         this.createdAfter = createdAfter;
         this.createdBefore = createdBefore;
         this.references = references;
@@ -72,6 +76,14 @@ public final class EventFilter {
     @JsonProperty("search")
     public Optional<String> getSearch() {
         return search;
+    }
+
+    /**
+     * @return Whether to include simulation events in search results. Defaults to only non-simulation events.
+     */
+    @JsonProperty("simulationFilter")
+    public Optional<SimulationFilter> getSimulationFilter() {
+        return simulationFilter;
     }
 
     @JsonProperty("createdAfter")
@@ -140,6 +152,7 @@ public final class EventFilter {
 
     private boolean equalTo(EventFilter other) {
         return search.equals(other.search)
+                && simulationFilter.equals(other.simulationFilter)
                 && createdAfter.equals(other.createdAfter)
                 && createdBefore.equals(other.createdBefore)
                 && references.equals(other.references)
@@ -155,6 +168,7 @@ public final class EventFilter {
     public int hashCode() {
         return Objects.hash(
                 this.search,
+                this.simulationFilter,
                 this.createdAfter,
                 this.createdBefore,
                 this.references,
@@ -178,6 +192,8 @@ public final class EventFilter {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
         private Optional<String> search = Optional.empty();
+
+        private Optional<SimulationFilter> simulationFilter = Optional.empty();
 
         private Optional<OffsetDateTime> createdAfter = Optional.empty();
 
@@ -204,6 +220,7 @@ public final class EventFilter {
 
         public Builder from(EventFilter other) {
             search(other.getSearch());
+            simulationFilter(other.getSimulationFilter());
             createdAfter(other.getCreatedAfter());
             createdBefore(other.getCreatedBefore());
             references(other.getReferences());
@@ -224,6 +241,20 @@ public final class EventFilter {
 
         public Builder search(String search) {
             this.search = Optional.ofNullable(search);
+            return this;
+        }
+
+        /**
+         * <p>Whether to include simulation events in search results. Defaults to only non-simulation events.</p>
+         */
+        @JsonSetter(value = "simulationFilter", nulls = Nulls.SKIP)
+        public Builder simulationFilter(Optional<SimulationFilter> simulationFilter) {
+            this.simulationFilter = simulationFilter;
+            return this;
+        }
+
+        public Builder simulationFilter(SimulationFilter simulationFilter) {
+            this.simulationFilter = Optional.ofNullable(simulationFilter);
             return this;
         }
 
@@ -337,6 +368,7 @@ public final class EventFilter {
         public EventFilter build() {
             return new EventFilter(
                     search,
+                    simulationFilter,
                     createdAfter,
                     createdBefore,
                     references,

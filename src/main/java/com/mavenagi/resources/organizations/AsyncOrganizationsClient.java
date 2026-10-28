@@ -33,9 +33,8 @@ public class AsyncOrganizationsClient {
 
     /**
      * Create a new organization.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>Only Maven staff hold this permission.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>create:organization</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<Organization> create(String organizationReferenceId, CreateOrganizationRequest request) {
         return this.rawClient.create(organizationReferenceId, request).thenApply(response -> response.body());
@@ -43,9 +42,8 @@ public class AsyncOrganizationsClient {
 
     /**
      * Create a new organization.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>Only Maven staff hold this permission.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>create:organization</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<Organization> create(
             String organizationReferenceId, CreateOrganizationRequest request, RequestOptions requestOptions) {
@@ -56,6 +54,7 @@ public class AsyncOrganizationsClient {
 
     /**
      * Get an organization by ID
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:organization</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<Organization> get(String organizationReferenceId) {
         return this.rawClient.get(organizationReferenceId).thenApply(response -> response.body());
@@ -63,6 +62,7 @@ public class AsyncOrganizationsClient {
 
     /**
      * Get an organization by ID
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:organization</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<Organization> get(String organizationReferenceId, RequestOptions requestOptions) {
         return this.rawClient.get(organizationReferenceId, requestOptions).thenApply(response -> response.body());
@@ -71,9 +71,7 @@ public class AsyncOrganizationsClient {
     /**
      * Update mutable organization fields.
      * All fields will overwrite the existing value on the organization only if provided.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:organization</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<Organization> patch(String organizationReferenceId) {
         return this.rawClient.patch(organizationReferenceId).thenApply(response -> response.body());
@@ -82,9 +80,7 @@ public class AsyncOrganizationsClient {
     /**
      * Update mutable organization fields.
      * All fields will overwrite the existing value on the organization only if provided.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:organization</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<Organization> patch(String organizationReferenceId, OrganizationPatchRequest request) {
         return this.rawClient.patch(organizationReferenceId, request).thenApply(response -> response.body());
@@ -93,9 +89,7 @@ public class AsyncOrganizationsClient {
     /**
      * Update mutable organization fields.
      * All fields will overwrite the existing value on the organization only if provided.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:organization</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<Organization> patch(
             String organizationReferenceId, OrganizationPatchRequest request, RequestOptions requestOptions) {
@@ -106,9 +100,7 @@ public class AsyncOrganizationsClient {
 
     /**
      * Delete an organization.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>delete:organization</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<Void> delete(String organizationReferenceId) {
         return this.rawClient.delete(organizationReferenceId).thenApply(response -> response.body());
@@ -116,9 +108,7 @@ public class AsyncOrganizationsClient {
 
     /**
      * Delete an organization.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>delete:organization</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<Void> delete(String organizationReferenceId, RequestOptions requestOptions) {
         return this.rawClient.delete(organizationReferenceId, requestOptions).thenApply(response -> response.body());
@@ -127,9 +117,8 @@ public class AsyncOrganizationsClient {
     /**
      * Retrieves structured conversation data across all organizations, formatted as a table,
      * allowing users to group, filter, and define specific metrics to display as columns.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>Only Maven staff hold this permission.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:all-organizations</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<ConversationTableResponse> getConversationTable(ConversationTableRequest request) {
         return this.rawClient.getConversationTable(request).thenApply(response -> response.body());
@@ -138,9 +127,8 @@ public class AsyncOrganizationsClient {
     /**
      * Retrieves structured conversation data across all organizations, formatted as a table,
      * allowing users to group, filter, and define specific metrics to display as columns.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>Only Maven staff hold this permission.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:all-organizations</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<ConversationTableResponse> getConversationTable(
             ConversationTableRequest request, RequestOptions requestOptions) {
@@ -150,9 +138,8 @@ public class AsyncOrganizationsClient {
     /**
      * Fetches conversation data across all organizations, visualized in a chart format.
      * Supported chart types include pie chart, date histogram, and stacked bar charts.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>Only Maven staff hold this permission.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:all-organizations</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<ChartResponse> getConversationChart(ConversationChartRequest request) {
         return this.rawClient.getConversationChart(request).thenApply(response -> response.body());
@@ -161,9 +148,8 @@ public class AsyncOrganizationsClient {
     /**
      * Fetches conversation data across all organizations, visualized in a chart format.
      * Supported chart types include pie chart, date histogram, and stacked bar charts.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>Only Maven staff hold this permission.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:all-organizations</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<ChartResponse> getConversationChart(
             ConversationChartRequest request, RequestOptions requestOptions) {

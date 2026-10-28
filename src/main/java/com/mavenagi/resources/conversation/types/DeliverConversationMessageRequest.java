@@ -36,7 +36,7 @@ public final class DeliverConversationMessageRequest {
     }
 
     /**
-     * @return The ID of the conversation to deliver the message to. Message delivery will fail if the conversation does not have the <code>ASYNC</code> capability or if it is not <code>open</code>.
+     * @return The ID of the conversation to deliver the message to. Message delivery will fail if the conversation does not have the <code>ASYNC</code> capability, and a closed conversation (<code>open</code> set to false) returns a 400.
      */
     @JsonProperty("conversationId")
     public EntityIdWithoutAgent getConversationId() {
@@ -82,7 +82,7 @@ public final class DeliverConversationMessageRequest {
 
     public interface ConversationIdStage {
         /**
-         * <p>The ID of the conversation to deliver the message to. Message delivery will fail if the conversation does not have the <code>ASYNC</code> capability or if it is not <code>open</code>.</p>
+         * <p>The ID of the conversation to deliver the message to. Message delivery will fail if the conversation does not have the <code>ASYNC</code> capability, and a closed conversation (<code>open</code> set to false) returns a 400.</p>
          */
         MessageStage conversationId(@NotNull EntityIdWithoutAgent conversationId);
 
@@ -119,8 +119,8 @@ public final class DeliverConversationMessageRequest {
         }
 
         /**
-         * <p>The ID of the conversation to deliver the message to. Message delivery will fail if the conversation does not have the <code>ASYNC</code> capability or if it is not <code>open</code>.</p>
-         * <p>The ID of the conversation to deliver the message to. Message delivery will fail if the conversation does not have the <code>ASYNC</code> capability or if it is not <code>open</code>.</p>
+         * <p>The ID of the conversation to deliver the message to. Message delivery will fail if the conversation does not have the <code>ASYNC</code> capability, and a closed conversation (<code>open</code> set to false) returns a 400.</p>
+         * <p>The ID of the conversation to deliver the message to. Message delivery will fail if the conversation does not have the <code>ASYNC</code> capability, and a closed conversation (<code>open</code> set to false) returns a 400.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override

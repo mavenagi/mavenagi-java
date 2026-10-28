@@ -34,6 +34,8 @@ public final class NovelUserEvent implements IEventBaseNoId {
 
     private final Optional<ContextInfo> contextInfo;
 
+    private final Optional<ExecutionMode> executionMode;
+
     private final EntityIdBase id;
 
     private final UserEventName eventName;
@@ -54,6 +56,7 @@ public final class NovelUserEvent implements IEventBaseNoId {
             Optional<SourceInfo> sourceInfo,
             Optional<SessionInfo> sessionInfo,
             Optional<ContextInfo> contextInfo,
+            Optional<ExecutionMode> executionMode,
             EntityIdBase id,
             UserEventName eventName,
             EventUserInfoBase userInfo,
@@ -66,6 +69,7 @@ public final class NovelUserEvent implements IEventBaseNoId {
         this.sourceInfo = sourceInfo;
         this.sessionInfo = sessionInfo;
         this.contextInfo = contextInfo;
+        this.executionMode = executionMode;
         this.id = id;
         this.eventName = eventName;
         this.userInfo = userInfo;
@@ -103,6 +107,17 @@ public final class NovelUserEvent implements IEventBaseNoId {
     @java.lang.Override
     public Optional<ContextInfo> getContextInfo() {
         return contextInfo;
+    }
+
+    /**
+     * @return Whether the event happened on live data or in a simulation. Defaults to <code>LIVE</code> when
+     * creating an event, and is always set on a returned event. Creating a <code>SIMULATION</code> event
+     * requires the <code>create:simulations</code> permission.
+     */
+    @JsonProperty("executionMode")
+    @java.lang.Override
+    public Optional<ExecutionMode> getExecutionMode() {
+        return executionMode;
     }
 
     /**
@@ -171,6 +186,7 @@ public final class NovelUserEvent implements IEventBaseNoId {
                 && sourceInfo.equals(other.sourceInfo)
                 && sessionInfo.equals(other.sessionInfo)
                 && contextInfo.equals(other.contextInfo)
+                && executionMode.equals(other.executionMode)
                 && id.equals(other.id)
                 && eventName.equals(other.eventName)
                 && userInfo.equals(other.userInfo)
@@ -187,6 +203,7 @@ public final class NovelUserEvent implements IEventBaseNoId {
                 this.sourceInfo,
                 this.sessionInfo,
                 this.contextInfo,
+                this.executionMode,
                 this.id,
                 this.eventName,
                 this.userInfo,
@@ -251,6 +268,15 @@ public final class NovelUserEvent implements IEventBaseNoId {
         _FinalStage contextInfo(ContextInfo contextInfo);
 
         /**
+         * <p>Whether the event happened on live data or in a simulation. Defaults to <code>LIVE</code> when
+         * creating an event, and is always set on a returned event. Creating a <code>SIMULATION</code> event
+         * requires the <code>create:simulations</code> permission.</p>
+         */
+        _FinalStage executionMode(Optional<ExecutionMode> executionMode);
+
+        _FinalStage executionMode(ExecutionMode executionMode);
+
+        /**
          * <p>Information about any CSAT associated with the event</p>
          */
         _FinalStage csatInfo(Optional<CsatInfo> csatInfo);
@@ -287,6 +313,8 @@ public final class NovelUserEvent implements IEventBaseNoId {
 
         private Optional<CsatInfo> csatInfo = Optional.empty();
 
+        private Optional<ExecutionMode> executionMode = Optional.empty();
+
         private Optional<ContextInfo> contextInfo = Optional.empty();
 
         private Optional<SessionInfo> sessionInfo = Optional.empty();
@@ -309,6 +337,7 @@ public final class NovelUserEvent implements IEventBaseNoId {
             sourceInfo(other.getSourceInfo());
             sessionInfo(other.getSessionInfo());
             contextInfo(other.getContextInfo());
+            executionMode(other.getExecutionMode());
             id(other.getId());
             eventName(other.getEventName());
             userInfo(other.getUserInfo());
@@ -416,6 +445,30 @@ public final class NovelUserEvent implements IEventBaseNoId {
             return this;
         }
 
+        /**
+         * <p>Whether the event happened on live data or in a simulation. Defaults to <code>LIVE</code> when
+         * creating an event, and is always set on a returned event. Creating a <code>SIMULATION</code> event
+         * requires the <code>create:simulations</code> permission.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage executionMode(ExecutionMode executionMode) {
+            this.executionMode = Optional.ofNullable(executionMode);
+            return this;
+        }
+
+        /**
+         * <p>Whether the event happened on live data or in a simulation. Defaults to <code>LIVE</code> when
+         * creating an event, and is always set on a returned event. Creating a <code>SIMULATION</code> event
+         * requires the <code>create:simulations</code> permission.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "executionMode", nulls = Nulls.SKIP)
+        public _FinalStage executionMode(Optional<ExecutionMode> executionMode) {
+            this.executionMode = executionMode;
+            return this;
+        }
+
         @java.lang.Override
         public _FinalStage contextInfo(ContextInfo contextInfo) {
             this.contextInfo = Optional.ofNullable(contextInfo);
@@ -489,6 +542,7 @@ public final class NovelUserEvent implements IEventBaseNoId {
                     sourceInfo,
                     sessionInfo,
                     contextInfo,
+                    executionMode,
                     id,
                     eventName,
                     userInfo,

@@ -53,7 +53,7 @@ public final class Link {
     }
 
     /**
-     * @return Destination URL.
+     * @return Destination URL. May use <a href="https://developers.mavenagi.com/docs/documentation/configuration-and-integration/placeholders">placeholders</a> such as <code>${appHost}</code>.
      */
     @JsonProperty("url")
     public String getUrl() {
@@ -100,7 +100,7 @@ public final class Link {
 
     public interface UrlStage {
         /**
-         * <p>Destination URL.</p>
+         * <p>Destination URL. May use <a href="https://developers.mavenagi.com/docs/documentation/configuration-and-integration/placeholders">placeholders</a> such as <code>${appHost}</code>.</p>
          */
         _FinalStage url(@NotNull String url);
     }
@@ -150,8 +150,8 @@ public final class Link {
         }
 
         /**
-         * <p>Destination URL.</p>
-         * <p>Destination URL.</p>
+         * <p>Destination URL. May use <a href="https://developers.mavenagi.com/docs/documentation/configuration-and-integration/placeholders">placeholders</a> such as <code>${appHost}</code>.</p>
+         * <p>Destination URL. May use <a href="https://developers.mavenagi.com/docs/documentation/configuration-and-integration/placeholders">placeholders</a> such as <code>${appHost}</code>.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override

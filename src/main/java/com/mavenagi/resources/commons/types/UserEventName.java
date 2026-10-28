@@ -13,26 +13,73 @@ public final class UserEventName {
 
     public static final UserEventName PAYMENT_FAILED = new UserEventName(Value.PAYMENT_FAILED, "PAYMENT_FAILED");
 
-    public static final UserEventName ACCOUNT_CREATED = new UserEventName(Value.ACCOUNT_CREATED, "ACCOUNT_CREATED");
+    public static final UserEventName SHARE = new UserEventName(Value.SHARE, "SHARE");
+
+    public static final UserEventName ORDER_PLACED = new UserEventName(Value.ORDER_PLACED, "ORDER_PLACED");
+
+    public static final UserEventName CLOSE_UNCONVERT_LEAD =
+            new UserEventName(Value.CLOSE_UNCONVERT_LEAD, "CLOSE_UNCONVERT_LEAD");
 
     public static final UserEventName FLOW_STEP_COMPLETED =
             new UserEventName(Value.FLOW_STEP_COMPLETED, "FLOW_STEP_COMPLETED");
+
+    public static final UserEventName LINK_CLICKED = new UserEventName(Value.LINK_CLICKED, "LINK_CLICKED");
+
+    public static final UserEventName ERROR_DISPLAYED = new UserEventName(Value.ERROR_DISPLAYED, "ERROR_DISPLAYED");
+
+    public static final UserEventName FLOW_STARTED = new UserEventName(Value.FLOW_STARTED, "FLOW_STARTED");
+
+    public static final UserEventName QUALIFY_LEAD = new UserEventName(Value.QUALIFY_LEAD, "QUALIFY_LEAD");
+
+    public static final UserEventName SPEND_VIRTUAL_CURRENCY =
+            new UserEventName(Value.SPEND_VIRTUAL_CURRENCY, "SPEND_VIRTUAL_CURRENCY");
+
+    public static final UserEventName ADD_PAYMENT_INFO = new UserEventName(Value.ADD_PAYMENT_INFO, "ADD_PAYMENT_INFO");
+
+    public static final UserEventName AD_IMPRESSION = new UserEventName(Value.AD_IMPRESSION, "AD_IMPRESSION");
+
+    public static final UserEventName VIEW_PROMOTION = new UserEventName(Value.VIEW_PROMOTION, "VIEW_PROMOTION");
+
+    public static final UserEventName FLOW_COMPLETED = new UserEventName(Value.FLOW_COMPLETED, "FLOW_COMPLETED");
+
+    public static final UserEventName CONTENT_TRANSLATED =
+            new UserEventName(Value.CONTENT_TRANSLATED, "CONTENT_TRANSLATED");
+
+    public static final UserEventName DISQUALIFY_LEAD = new UserEventName(Value.DISQUALIFY_LEAD, "DISQUALIFY_LEAD");
+
+    public static final UserEventName GENERATE_LEAD = new UserEventName(Value.GENERATE_LEAD, "GENERATE_LEAD");
+
+    public static final UserEventName ADD_TO_WISHLIST = new UserEventName(Value.ADD_TO_WISHLIST, "ADD_TO_WISHLIST");
+
+    public static final UserEventName TEXT_INSERTED = new UserEventName(Value.TEXT_INSERTED, "TEXT_INSERTED");
+
+    public static final UserEventName CLOSE_CONVERT_LEAD =
+            new UserEventName(Value.CLOSE_CONVERT_LEAD, "CLOSE_CONVERT_LEAD");
+
+    public static final UserEventName SEARCH_RESULT_CLICKED =
+            new UserEventName(Value.SEARCH_RESULT_CLICKED, "SEARCH_RESULT_CLICKED");
+
+    public static final UserEventName VIEW_CART = new UserEventName(Value.VIEW_CART, "VIEW_CART");
+
+    public static final UserEventName REFUND = new UserEventName(Value.REFUND, "REFUND");
 
     public static final UserEventName ARTICLE_VIEWED = new UserEventName(Value.ARTICLE_VIEWED, "ARTICLE_VIEWED");
 
     public static final UserEventName SUBSCRIPTION_STARTED =
             new UserEventName(Value.SUBSCRIPTION_STARTED, "SUBSCRIPTION_STARTED");
 
-    public static final UserEventName LINK_CLICKED = new UserEventName(Value.LINK_CLICKED, "LINK_CLICKED");
+    public static final UserEventName SIGNED_IN = new UserEventName(Value.SIGNED_IN, "SIGNED_IN");
 
-    public static final UserEventName ERROR_DISPLAYED = new UserEventName(Value.ERROR_DISPLAYED, "ERROR_DISPLAYED");
+    public static final UserEventName VIEW_ITEM = new UserEventName(Value.VIEW_ITEM, "VIEW_ITEM");
 
     public static final UserEventName FLOW_ABANDONED = new UserEventName(Value.FLOW_ABANDONED, "FLOW_ABANDONED");
 
     public static final UserEventName HANDOFF_REQUESTED =
             new UserEventName(Value.HANDOFF_REQUESTED, "HANDOFF_REQUESTED");
 
-    public static final UserEventName FLOW_STARTED = new UserEventName(Value.FLOW_STARTED, "FLOW_STARTED");
+    public static final UserEventName SELECT_PROMOTION = new UserEventName(Value.SELECT_PROMOTION, "SELECT_PROMOTION");
+
+    public static final UserEventName SELECT_CONTENT = new UserEventName(Value.SELECT_CONTENT, "SELECT_CONTENT");
 
     public static final UserEventName PAGE_VIEWED = new UserEventName(Value.PAGE_VIEWED, "PAGE_VIEWED");
 
@@ -40,12 +87,15 @@ public final class UserEventName {
 
     public static final UserEventName CHAT_CLOSED = new UserEventName(Value.CHAT_CLOSED, "CHAT_CLOSED");
 
-    public static final UserEventName SIGNED_IN = new UserEventName(Value.SIGNED_IN, "SIGNED_IN");
-
-    public static final UserEventName FLOW_COMPLETED = new UserEventName(Value.FLOW_COMPLETED, "FLOW_COMPLETED");
+    public static final UserEventName ADD_SHIPPING_INFO =
+            new UserEventName(Value.ADD_SHIPPING_INFO, "ADD_SHIPPING_INFO");
 
     public static final UserEventName SUBSCRIPTION_CANCELLED =
             new UserEventName(Value.SUBSCRIPTION_CANCELLED, "SUBSCRIPTION_CANCELLED");
+
+    public static final UserEventName ACCOUNT_CREATED = new UserEventName(Value.ACCOUNT_CREATED, "ACCOUNT_CREATED");
+
+    public static final UserEventName BEGIN_CHECKOUT = new UserEventName(Value.BEGIN_CHECKOUT, "BEGIN_CHECKOUT");
 
     public static final UserEventName BUTTON_CLICKED = new UserEventName(Value.BUTTON_CLICKED, "BUTTON_CLICKED");
 
@@ -53,12 +103,17 @@ public final class UserEventName {
 
     public static final UserEventName TICKET_CREATED = new UserEventName(Value.TICKET_CREATED, "TICKET_CREATED");
 
-    public static final UserEventName CONTENT_TRANSLATED =
-            new UserEventName(Value.CONTENT_TRANSLATED, "CONTENT_TRANSLATED");
+    public static final UserEventName SEARCH_SUBMITTED = new UserEventName(Value.SEARCH_SUBMITTED, "SEARCH_SUBMITTED");
+
+    public static final UserEventName JOIN_GROUP = new UserEventName(Value.JOIN_GROUP, "JOIN_GROUP");
 
     public static final UserEventName FORM_STARTED = new UserEventName(Value.FORM_STARTED, "FORM_STARTED");
 
-    public static final UserEventName SEARCH_SUBMITTED = new UserEventName(Value.SEARCH_SUBMITTED, "SEARCH_SUBMITTED");
+    public static final UserEventName REMOVE_FROM_CART = new UserEventName(Value.REMOVE_FROM_CART, "REMOVE_FROM_CART");
+
+    public static final UserEventName ADD_TO_CART = new UserEventName(Value.ADD_TO_CART, "ADD_TO_CART");
+
+    public static final UserEventName WORKING_LEAD = new UserEventName(Value.WORKING_LEAD, "WORKING_LEAD");
 
     public static final UserEventName CHAT_OPENED = new UserEventName(Value.CHAT_OPENED, "CHAT_OPENED");
 
@@ -67,17 +122,17 @@ public final class UserEventName {
 
     public static final UserEventName TEXT_COPIED = new UserEventName(Value.TEXT_COPIED, "TEXT_COPIED");
 
+    public static final UserEventName EARN_VIRTUAL_CURRENCY =
+            new UserEventName(Value.EARN_VIRTUAL_CURRENCY, "EARN_VIRTUAL_CURRENCY");
+
+    public static final UserEventName SELECT_ITEM = new UserEventName(Value.SELECT_ITEM, "SELECT_ITEM");
+
     public static final UserEventName FORM_SUBMITTED = new UserEventName(Value.FORM_SUBMITTED, "FORM_SUBMITTED");
 
     public static final UserEventName SUGGESTION_CLICKED =
             new UserEventName(Value.SUGGESTION_CLICKED, "SUGGESTION_CLICKED");
 
-    public static final UserEventName TEXT_INSERTED = new UserEventName(Value.TEXT_INSERTED, "TEXT_INSERTED");
-
-    public static final UserEventName ORDER_PLACED = new UserEventName(Value.ORDER_PLACED, "ORDER_PLACED");
-
-    public static final UserEventName SEARCH_RESULT_CLICKED =
-            new UserEventName(Value.SEARCH_RESULT_CLICKED, "SEARCH_RESULT_CLICKED");
+    public static final UserEventName VIEW_ITEM_LIST = new UserEventName(Value.VIEW_ITEM_LIST, "VIEW_ITEM_LIST");
 
     public static final UserEventName FILE_UPLOADED = new UserEventName(Value.FILE_UPLOADED, "FILE_UPLOADED");
 
@@ -121,64 +176,114 @@ public final class UserEventName {
                 return visitor.visitSignedOut();
             case PAYMENT_FAILED:
                 return visitor.visitPaymentFailed();
-            case ACCOUNT_CREATED:
-                return visitor.visitAccountCreated();
+            case SHARE:
+                return visitor.visitShare();
+            case ORDER_PLACED:
+                return visitor.visitOrderPlaced();
+            case CLOSE_UNCONVERT_LEAD:
+                return visitor.visitCloseUnconvertLead();
             case FLOW_STEP_COMPLETED:
                 return visitor.visitFlowStepCompleted();
-            case ARTICLE_VIEWED:
-                return visitor.visitArticleViewed();
-            case SUBSCRIPTION_STARTED:
-                return visitor.visitSubscriptionStarted();
             case LINK_CLICKED:
                 return visitor.visitLinkClicked();
             case ERROR_DISPLAYED:
                 return visitor.visitErrorDisplayed();
+            case FLOW_STARTED:
+                return visitor.visitFlowStarted();
+            case QUALIFY_LEAD:
+                return visitor.visitQualifyLead();
+            case SPEND_VIRTUAL_CURRENCY:
+                return visitor.visitSpendVirtualCurrency();
+            case ADD_PAYMENT_INFO:
+                return visitor.visitAddPaymentInfo();
+            case AD_IMPRESSION:
+                return visitor.visitAdImpression();
+            case VIEW_PROMOTION:
+                return visitor.visitViewPromotion();
+            case FLOW_COMPLETED:
+                return visitor.visitFlowCompleted();
+            case CONTENT_TRANSLATED:
+                return visitor.visitContentTranslated();
+            case DISQUALIFY_LEAD:
+                return visitor.visitDisqualifyLead();
+            case GENERATE_LEAD:
+                return visitor.visitGenerateLead();
+            case ADD_TO_WISHLIST:
+                return visitor.visitAddToWishlist();
+            case TEXT_INSERTED:
+                return visitor.visitTextInserted();
+            case CLOSE_CONVERT_LEAD:
+                return visitor.visitCloseConvertLead();
+            case SEARCH_RESULT_CLICKED:
+                return visitor.visitSearchResultClicked();
+            case VIEW_CART:
+                return visitor.visitViewCart();
+            case REFUND:
+                return visitor.visitRefund();
+            case ARTICLE_VIEWED:
+                return visitor.visitArticleViewed();
+            case SUBSCRIPTION_STARTED:
+                return visitor.visitSubscriptionStarted();
+            case SIGNED_IN:
+                return visitor.visitSignedIn();
+            case VIEW_ITEM:
+                return visitor.visitViewItem();
             case FLOW_ABANDONED:
                 return visitor.visitFlowAbandoned();
             case HANDOFF_REQUESTED:
                 return visitor.visitHandoffRequested();
-            case FLOW_STARTED:
-                return visitor.visitFlowStarted();
+            case SELECT_PROMOTION:
+                return visitor.visitSelectPromotion();
+            case SELECT_CONTENT:
+                return visitor.visitSelectContent();
             case PAGE_VIEWED:
                 return visitor.visitPageViewed();
             case ORDER_CANCELLED:
                 return visitor.visitOrderCancelled();
             case CHAT_CLOSED:
                 return visitor.visitChatClosed();
-            case SIGNED_IN:
-                return visitor.visitSignedIn();
-            case FLOW_COMPLETED:
-                return visitor.visitFlowCompleted();
+            case ADD_SHIPPING_INFO:
+                return visitor.visitAddShippingInfo();
             case SUBSCRIPTION_CANCELLED:
                 return visitor.visitSubscriptionCancelled();
+            case ACCOUNT_CREATED:
+                return visitor.visitAccountCreated();
+            case BEGIN_CHECKOUT:
+                return visitor.visitBeginCheckout();
             case BUTTON_CLICKED:
                 return visitor.visitButtonClicked();
             case FILE_DOWNLOADED:
                 return visitor.visitFileDownloaded();
             case TICKET_CREATED:
                 return visitor.visitTicketCreated();
-            case CONTENT_TRANSLATED:
-                return visitor.visitContentTranslated();
-            case FORM_STARTED:
-                return visitor.visitFormStarted();
             case SEARCH_SUBMITTED:
                 return visitor.visitSearchSubmitted();
+            case JOIN_GROUP:
+                return visitor.visitJoinGroup();
+            case FORM_STARTED:
+                return visitor.visitFormStarted();
+            case REMOVE_FROM_CART:
+                return visitor.visitRemoveFromCart();
+            case ADD_TO_CART:
+                return visitor.visitAddToCart();
+            case WORKING_LEAD:
+                return visitor.visitWorkingLead();
             case CHAT_OPENED:
                 return visitor.visitChatOpened();
             case CONVERSATION_ENDED:
                 return visitor.visitConversationEnded();
             case TEXT_COPIED:
                 return visitor.visitTextCopied();
+            case EARN_VIRTUAL_CURRENCY:
+                return visitor.visitEarnVirtualCurrency();
+            case SELECT_ITEM:
+                return visitor.visitSelectItem();
             case FORM_SUBMITTED:
                 return visitor.visitFormSubmitted();
             case SUGGESTION_CLICKED:
                 return visitor.visitSuggestionClicked();
-            case TEXT_INSERTED:
-                return visitor.visitTextInserted();
-            case ORDER_PLACED:
-                return visitor.visitOrderPlaced();
-            case SEARCH_RESULT_CLICKED:
-                return visitor.visitSearchResultClicked();
+            case VIEW_ITEM_LIST:
+                return visitor.visitViewItemList();
             case FILE_UPLOADED:
                 return visitor.visitFileUploaded();
             case FORM_ABANDONED:
@@ -198,64 +303,114 @@ public final class UserEventName {
                 return SIGNED_OUT;
             case "PAYMENT_FAILED":
                 return PAYMENT_FAILED;
-            case "ACCOUNT_CREATED":
-                return ACCOUNT_CREATED;
+            case "SHARE":
+                return SHARE;
+            case "ORDER_PLACED":
+                return ORDER_PLACED;
+            case "CLOSE_UNCONVERT_LEAD":
+                return CLOSE_UNCONVERT_LEAD;
             case "FLOW_STEP_COMPLETED":
                 return FLOW_STEP_COMPLETED;
-            case "ARTICLE_VIEWED":
-                return ARTICLE_VIEWED;
-            case "SUBSCRIPTION_STARTED":
-                return SUBSCRIPTION_STARTED;
             case "LINK_CLICKED":
                 return LINK_CLICKED;
             case "ERROR_DISPLAYED":
                 return ERROR_DISPLAYED;
+            case "FLOW_STARTED":
+                return FLOW_STARTED;
+            case "QUALIFY_LEAD":
+                return QUALIFY_LEAD;
+            case "SPEND_VIRTUAL_CURRENCY":
+                return SPEND_VIRTUAL_CURRENCY;
+            case "ADD_PAYMENT_INFO":
+                return ADD_PAYMENT_INFO;
+            case "AD_IMPRESSION":
+                return AD_IMPRESSION;
+            case "VIEW_PROMOTION":
+                return VIEW_PROMOTION;
+            case "FLOW_COMPLETED":
+                return FLOW_COMPLETED;
+            case "CONTENT_TRANSLATED":
+                return CONTENT_TRANSLATED;
+            case "DISQUALIFY_LEAD":
+                return DISQUALIFY_LEAD;
+            case "GENERATE_LEAD":
+                return GENERATE_LEAD;
+            case "ADD_TO_WISHLIST":
+                return ADD_TO_WISHLIST;
+            case "TEXT_INSERTED":
+                return TEXT_INSERTED;
+            case "CLOSE_CONVERT_LEAD":
+                return CLOSE_CONVERT_LEAD;
+            case "SEARCH_RESULT_CLICKED":
+                return SEARCH_RESULT_CLICKED;
+            case "VIEW_CART":
+                return VIEW_CART;
+            case "REFUND":
+                return REFUND;
+            case "ARTICLE_VIEWED":
+                return ARTICLE_VIEWED;
+            case "SUBSCRIPTION_STARTED":
+                return SUBSCRIPTION_STARTED;
+            case "SIGNED_IN":
+                return SIGNED_IN;
+            case "VIEW_ITEM":
+                return VIEW_ITEM;
             case "FLOW_ABANDONED":
                 return FLOW_ABANDONED;
             case "HANDOFF_REQUESTED":
                 return HANDOFF_REQUESTED;
-            case "FLOW_STARTED":
-                return FLOW_STARTED;
+            case "SELECT_PROMOTION":
+                return SELECT_PROMOTION;
+            case "SELECT_CONTENT":
+                return SELECT_CONTENT;
             case "PAGE_VIEWED":
                 return PAGE_VIEWED;
             case "ORDER_CANCELLED":
                 return ORDER_CANCELLED;
             case "CHAT_CLOSED":
                 return CHAT_CLOSED;
-            case "SIGNED_IN":
-                return SIGNED_IN;
-            case "FLOW_COMPLETED":
-                return FLOW_COMPLETED;
+            case "ADD_SHIPPING_INFO":
+                return ADD_SHIPPING_INFO;
             case "SUBSCRIPTION_CANCELLED":
                 return SUBSCRIPTION_CANCELLED;
+            case "ACCOUNT_CREATED":
+                return ACCOUNT_CREATED;
+            case "BEGIN_CHECKOUT":
+                return BEGIN_CHECKOUT;
             case "BUTTON_CLICKED":
                 return BUTTON_CLICKED;
             case "FILE_DOWNLOADED":
                 return FILE_DOWNLOADED;
             case "TICKET_CREATED":
                 return TICKET_CREATED;
-            case "CONTENT_TRANSLATED":
-                return CONTENT_TRANSLATED;
-            case "FORM_STARTED":
-                return FORM_STARTED;
             case "SEARCH_SUBMITTED":
                 return SEARCH_SUBMITTED;
+            case "JOIN_GROUP":
+                return JOIN_GROUP;
+            case "FORM_STARTED":
+                return FORM_STARTED;
+            case "REMOVE_FROM_CART":
+                return REMOVE_FROM_CART;
+            case "ADD_TO_CART":
+                return ADD_TO_CART;
+            case "WORKING_LEAD":
+                return WORKING_LEAD;
             case "CHAT_OPENED":
                 return CHAT_OPENED;
             case "CONVERSATION_ENDED":
                 return CONVERSATION_ENDED;
             case "TEXT_COPIED":
                 return TEXT_COPIED;
+            case "EARN_VIRTUAL_CURRENCY":
+                return EARN_VIRTUAL_CURRENCY;
+            case "SELECT_ITEM":
+                return SELECT_ITEM;
             case "FORM_SUBMITTED":
                 return FORM_SUBMITTED;
             case "SUGGESTION_CLICKED":
                 return SUGGESTION_CLICKED;
-            case "TEXT_INSERTED":
-                return TEXT_INSERTED;
-            case "ORDER_PLACED":
-                return ORDER_PLACED;
-            case "SEARCH_RESULT_CLICKED":
-                return SEARCH_RESULT_CLICKED;
+            case "VIEW_ITEM_LIST":
+                return VIEW_ITEM_LIST;
             case "FILE_UPLOADED":
                 return FILE_UPLOADED;
             case "FORM_ABANDONED":
@@ -334,6 +489,56 @@ public final class UserEventName {
 
         ERROR_DISPLAYED,
 
+        AD_IMPRESSION,
+
+        EARN_VIRTUAL_CURRENCY,
+
+        JOIN_GROUP,
+
+        SELECT_CONTENT,
+
+        SHARE,
+
+        SPEND_VIRTUAL_CURRENCY,
+
+        VIEW_ITEM_LIST,
+
+        SELECT_ITEM,
+
+        VIEW_ITEM,
+
+        VIEW_PROMOTION,
+
+        SELECT_PROMOTION,
+
+        ADD_TO_WISHLIST,
+
+        ADD_TO_CART,
+
+        REMOVE_FROM_CART,
+
+        VIEW_CART,
+
+        BEGIN_CHECKOUT,
+
+        ADD_SHIPPING_INFO,
+
+        ADD_PAYMENT_INFO,
+
+        REFUND,
+
+        GENERATE_LEAD,
+
+        QUALIFY_LEAD,
+
+        DISQUALIFY_LEAD,
+
+        WORKING_LEAD,
+
+        CLOSE_CONVERT_LEAD,
+
+        CLOSE_UNCONVERT_LEAD,
+
         UNKNOWN
     }
 
@@ -405,6 +610,56 @@ public final class UserEventName {
         T visitPaymentFailed();
 
         T visitErrorDisplayed();
+
+        T visitAdImpression();
+
+        T visitEarnVirtualCurrency();
+
+        T visitJoinGroup();
+
+        T visitSelectContent();
+
+        T visitShare();
+
+        T visitSpendVirtualCurrency();
+
+        T visitViewItemList();
+
+        T visitSelectItem();
+
+        T visitViewItem();
+
+        T visitViewPromotion();
+
+        T visitSelectPromotion();
+
+        T visitAddToWishlist();
+
+        T visitAddToCart();
+
+        T visitRemoveFromCart();
+
+        T visitViewCart();
+
+        T visitBeginCheckout();
+
+        T visitAddShippingInfo();
+
+        T visitAddPaymentInfo();
+
+        T visitRefund();
+
+        T visitGenerateLead();
+
+        T visitQualifyLead();
+
+        T visitDisqualifyLead();
+
+        T visitWorkingLead();
+
+        T visitCloseConvertLead();
+
+        T visitCloseUnconvertLead();
 
         T visitUnknown(String unknownType);
     }

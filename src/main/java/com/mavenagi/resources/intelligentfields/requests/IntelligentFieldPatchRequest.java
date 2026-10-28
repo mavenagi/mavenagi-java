@@ -36,8 +36,6 @@ public final class IntelligentFieldPatchRequest {
 
     private final Optional<EntityIdWithoutAgent> variantId;
 
-    private final Optional<String> variantAppId;
-
     private final Map<String, Object> additionalProperties;
 
     private IntelligentFieldPatchRequest(
@@ -47,7 +45,6 @@ public final class IntelligentFieldPatchRequest {
             Optional<String> description,
             Optional<List<EnumOption>> enumOptions,
             Optional<EntityIdWithoutAgent> variantId,
-            Optional<String> variantAppId,
             Map<String, Object> additionalProperties) {
         this.appId = appId;
         this.definition = definition;
@@ -55,7 +52,6 @@ public final class IntelligentFieldPatchRequest {
         this.description = description;
         this.enumOptions = enumOptions;
         this.variantId = variantId;
-        this.variantAppId = variantAppId;
         this.additionalProperties = additionalProperties;
     }
 
@@ -111,14 +107,6 @@ public final class IntelligentFieldPatchRequest {
         return variantId;
     }
 
-    /**
-     * @return Deprecated, use <code>variantId.appId</code>, which wins when both are set.
-     */
-    @JsonProperty("variantAppId")
-    public Optional<String> getVariantAppId() {
-        return variantAppId;
-    }
-
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -136,20 +124,13 @@ public final class IntelligentFieldPatchRequest {
                 && status.equals(other.status)
                 && description.equals(other.description)
                 && enumOptions.equals(other.enumOptions)
-                && variantId.equals(other.variantId)
-                && variantAppId.equals(other.variantAppId);
+                && variantId.equals(other.variantId);
     }
 
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.appId,
-                this.definition,
-                this.status,
-                this.description,
-                this.enumOptions,
-                this.variantId,
-                this.variantAppId);
+                this.appId, this.definition, this.status, this.description, this.enumOptions, this.variantId);
     }
 
     @java.lang.Override
@@ -175,8 +156,6 @@ public final class IntelligentFieldPatchRequest {
 
         private Optional<EntityIdWithoutAgent> variantId = Optional.empty();
 
-        private Optional<String> variantAppId = Optional.empty();
-
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -189,7 +168,6 @@ public final class IntelligentFieldPatchRequest {
             description(other.getDescription());
             enumOptions(other.getEnumOptions());
             variantId(other.getVariantId());
-            variantAppId(other.getVariantAppId());
             return this;
         }
 
@@ -281,23 +259,9 @@ public final class IntelligentFieldPatchRequest {
             return this;
         }
 
-        /**
-         * <p>Deprecated, use <code>variantId.appId</code>, which wins when both are set.</p>
-         */
-        @JsonSetter(value = "variantAppId", nulls = Nulls.SKIP)
-        public Builder variantAppId(Optional<String> variantAppId) {
-            this.variantAppId = variantAppId;
-            return this;
-        }
-
-        public Builder variantAppId(String variantAppId) {
-            this.variantAppId = Optional.ofNullable(variantAppId);
-            return this;
-        }
-
         public IntelligentFieldPatchRequest build() {
             return new IntelligentFieldPatchRequest(
-                    appId, definition, status, description, enumOptions, variantId, variantAppId, additionalProperties);
+                    appId, definition, status, description, enumOptions, variantId, additionalProperties);
         }
     }
 }

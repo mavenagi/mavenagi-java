@@ -501,9 +501,10 @@ public class ConversationClient {
 
     /**
      * Deliver a message to a user or conversation.
+     * <p>A closed conversation (<code>open</code> set to false) takes no new messages and returns a 400.</p>
      * <p>&lt;Warning&gt;
-     * Currently, messages can only be successfully delivered to conversations with the `ASYNC` capability that are `open`.
-     * User message delivery is not yet supported.
+     * Currently, messages can only be successfully delivered to conversations with the `ASYNC` capability.
+     * User message delivery is not yet supported and returns a 400.
      * &lt;/Warning&gt;</p>
      */
     public DeliverMessageResponse deliverMessage(DeliverMessageRequest request) {
@@ -512,9 +513,10 @@ public class ConversationClient {
 
     /**
      * Deliver a message to a user or conversation.
+     * <p>A closed conversation (<code>open</code> set to false) takes no new messages and returns a 400.</p>
      * <p>&lt;Warning&gt;
-     * Currently, messages can only be successfully delivered to conversations with the `ASYNC` capability that are `open`.
-     * User message delivery is not yet supported.
+     * Currently, messages can only be successfully delivered to conversations with the `ASYNC` capability.
+     * User message delivery is not yet supported and returns a 400.
      * &lt;/Warning&gt;</p>
      */
     public DeliverMessageResponse deliverMessage(DeliverMessageRequest request, RequestOptions requestOptions) {

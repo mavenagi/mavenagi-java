@@ -7,6 +7,10 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public final class AdditionalDataKey {
+    public static final AdditionalDataKey TRANSACTION_ID = new AdditionalDataKey(Value.TRANSACTION_ID, "transactionId");
+
+    public static final AdditionalDataKey AD_PLATFORM = new AdditionalDataKey(Value.AD_PLATFORM, "adPlatform");
+
     public static final AdditionalDataKey STEP = new AdditionalDataKey(Value.STEP, "step");
 
     public static final AdditionalDataKey TARGET_LANGUAGE =
@@ -16,7 +20,50 @@ public final class AdditionalDataKey {
 
     public static final AdditionalDataKey REASON = new AdditionalDataKey(Value.REASON, "reason");
 
+    public static final AdditionalDataKey PAYMENT_TYPE = new AdditionalDataKey(Value.PAYMENT_TYPE, "paymentType");
+
+    public static final AdditionalDataKey AD_FORMAT = new AdditionalDataKey(Value.AD_FORMAT, "adFormat");
+
+    public static final AdditionalDataKey LEAD_STATUS = new AdditionalDataKey(Value.LEAD_STATUS, "leadStatus");
+
+    public static final AdditionalDataKey LEAD_SOURCE = new AdditionalDataKey(Value.LEAD_SOURCE, "leadSource");
+
+    public static final AdditionalDataKey ITEMS = new AdditionalDataKey(Value.ITEMS, "items");
+
+    public static final AdditionalDataKey TAX = new AdditionalDataKey(Value.TAX, "tax");
+
+    public static final AdditionalDataKey PREVIOUS_VALUE = new AdditionalDataKey(Value.PREVIOUS_VALUE, "previousValue");
+
+    public static final AdditionalDataKey CONTENT_TYPE = new AdditionalDataKey(Value.CONTENT_TYPE, "contentType");
+
+    public static final AdditionalDataKey METHOD = new AdditionalDataKey(Value.METHOD, "method");
+
+    public static final AdditionalDataKey BOT_MESSAGE_TYPE =
+            new AdditionalDataKey(Value.BOT_MESSAGE_TYPE, "botMessageType");
+
+    public static final AdditionalDataKey SHIPPING = new AdditionalDataKey(Value.SHIPPING, "shipping");
+
+    public static final AdditionalDataKey AMOUNT = new AdditionalDataKey(Value.AMOUNT, "amount");
+
+    public static final AdditionalDataKey CREATIVE_SLOT = new AdditionalDataKey(Value.CREATIVE_SLOT, "creativeSlot");
+
+    public static final AdditionalDataKey AD_SOURCE = new AdditionalDataKey(Value.AD_SOURCE, "adSource");
+
+    public static final AdditionalDataKey AD_UNIT_NAME = new AdditionalDataKey(Value.AD_UNIT_NAME, "adUnitName");
+
+    public static final AdditionalDataKey NAME = new AdditionalDataKey(Value.NAME, "name");
+
+    public static final AdditionalDataKey ITEM_LIST_NAME = new AdditionalDataKey(Value.ITEM_LIST_NAME, "itemListName");
+
     public static final AdditionalDataKey QUERY = new AdditionalDataKey(Value.QUERY, "query");
+
+    public static final AdditionalDataKey VALUE = new AdditionalDataKey(Value.VALUE, "value");
+
+    public static final AdditionalDataKey PROMOTION_NAME = new AdditionalDataKey(Value.PROMOTION_NAME, "promotionName");
+
+    public static final AdditionalDataKey CONTENT_ID = new AdditionalDataKey(Value.CONTENT_ID, "contentId");
+
+    public static final AdditionalDataKey GROUP_ID = new AdditionalDataKey(Value.GROUP_ID, "groupId");
 
     public static final AdditionalDataKey ERROR_CODE = new AdditionalDataKey(Value.ERROR_CODE, "errorCode");
 
@@ -24,27 +71,34 @@ public final class AdditionalDataKey {
 
     public static final AdditionalDataKey MIME_TYPE = new AdditionalDataKey(Value.MIME_TYPE, "mimeType");
 
+    public static final AdditionalDataKey SHIPPING_TIER = new AdditionalDataKey(Value.SHIPPING_TIER, "shippingTier");
+
+    public static final AdditionalDataKey PROMOTION_ID = new AdditionalDataKey(Value.PROMOTION_ID, "promotionId");
+
     public static final AdditionalDataKey URL = new AdditionalDataKey(Value.URL, "url");
 
     public static final AdditionalDataKey SIZE_BYTES = new AdditionalDataKey(Value.SIZE_BYTES, "sizeBytes");
+
+    public static final AdditionalDataKey CREATIVE_NAME = new AdditionalDataKey(Value.CREATIVE_NAME, "creativeName");
 
     public static final AdditionalDataKey POSITION = new AdditionalDataKey(Value.POSITION, "position");
 
     public static final AdditionalDataKey CHANNEL = new AdditionalDataKey(Value.CHANNEL, "channel");
 
-    public static final AdditionalDataKey PREVIOUS_VALUE = new AdditionalDataKey(Value.PREVIOUS_VALUE, "previousValue");
+    public static final AdditionalDataKey CUSTOMER_TYPE = new AdditionalDataKey(Value.CUSTOMER_TYPE, "customerType");
 
-    public static final AdditionalDataKey AMOUNT = new AdditionalDataKey(Value.AMOUNT, "amount");
+    public static final AdditionalDataKey ITEM_LIST_ID = new AdditionalDataKey(Value.ITEM_LIST_ID, "itemListId");
 
-    public static final AdditionalDataKey VALUE = new AdditionalDataKey(Value.VALUE, "value");
+    public static final AdditionalDataKey VIRTUAL_CURRENCY_NAME =
+            new AdditionalDataKey(Value.VIRTUAL_CURRENCY_NAME, "virtualCurrencyName");
 
-    public static final AdditionalDataKey NAME = new AdditionalDataKey(Value.NAME, "name");
+    public static final AdditionalDataKey VIRTUAL_CURRENCY_AMOUNT =
+            new AdditionalDataKey(Value.VIRTUAL_CURRENCY_AMOUNT, "virtualCurrencyAmount");
 
     public static final AdditionalDataKey SOURCE_LANGUAGE =
             new AdditionalDataKey(Value.SOURCE_LANGUAGE, "sourceLanguage");
 
-    public static final AdditionalDataKey BOT_MESSAGE_TYPE =
-            new AdditionalDataKey(Value.BOT_MESSAGE_TYPE, "botMessageType");
+    public static final AdditionalDataKey COUPON = new AdditionalDataKey(Value.COUPON, "coupon");
 
     private final Value value;
 
@@ -78,6 +132,10 @@ public final class AdditionalDataKey {
 
     public <T> T visit(Visitor<T> visitor) {
         switch (value) {
+            case TRANSACTION_ID:
+                return visitor.visitTransactionId();
+            case AD_PLATFORM:
+                return visitor.visitAdPlatform();
             case STEP:
                 return visitor.visitStep();
             case TARGET_LANGUAGE:
@@ -86,34 +144,82 @@ public final class AdditionalDataKey {
                 return visitor.visitErrorMessage();
             case REASON:
                 return visitor.visitReason();
+            case PAYMENT_TYPE:
+                return visitor.visitPaymentType();
+            case AD_FORMAT:
+                return visitor.visitAdFormat();
+            case LEAD_STATUS:
+                return visitor.visitLeadStatus();
+            case LEAD_SOURCE:
+                return visitor.visitLeadSource();
+            case ITEMS:
+                return visitor.visitItems();
+            case TAX:
+                return visitor.visitTax();
+            case PREVIOUS_VALUE:
+                return visitor.visitPreviousValue();
+            case CONTENT_TYPE:
+                return visitor.visitContentType();
+            case METHOD:
+                return visitor.visitMethod();
+            case BOT_MESSAGE_TYPE:
+                return visitor.visitBotMessageType();
+            case SHIPPING:
+                return visitor.visitShipping();
+            case AMOUNT:
+                return visitor.visitAmount();
+            case CREATIVE_SLOT:
+                return visitor.visitCreativeSlot();
+            case AD_SOURCE:
+                return visitor.visitAdSource();
+            case AD_UNIT_NAME:
+                return visitor.visitAdUnitName();
+            case NAME:
+                return visitor.visitName();
+            case ITEM_LIST_NAME:
+                return visitor.visitItemListName();
             case QUERY:
                 return visitor.visitQuery();
+            case VALUE:
+                return visitor.visitValue();
+            case PROMOTION_NAME:
+                return visitor.visitPromotionName();
+            case CONTENT_ID:
+                return visitor.visitContentId();
+            case GROUP_ID:
+                return visitor.visitGroupId();
             case ERROR_CODE:
                 return visitor.visitErrorCode();
             case CURRENCY:
                 return visitor.visitCurrency();
             case MIME_TYPE:
                 return visitor.visitMimeType();
+            case SHIPPING_TIER:
+                return visitor.visitShippingTier();
+            case PROMOTION_ID:
+                return visitor.visitPromotionId();
             case URL:
                 return visitor.visitUrl();
             case SIZE_BYTES:
                 return visitor.visitSizeBytes();
+            case CREATIVE_NAME:
+                return visitor.visitCreativeName();
             case POSITION:
                 return visitor.visitPosition();
             case CHANNEL:
                 return visitor.visitChannel();
-            case PREVIOUS_VALUE:
-                return visitor.visitPreviousValue();
-            case AMOUNT:
-                return visitor.visitAmount();
-            case VALUE:
-                return visitor.visitValue();
-            case NAME:
-                return visitor.visitName();
+            case CUSTOMER_TYPE:
+                return visitor.visitCustomerType();
+            case ITEM_LIST_ID:
+                return visitor.visitItemListId();
+            case VIRTUAL_CURRENCY_NAME:
+                return visitor.visitVirtualCurrencyName();
+            case VIRTUAL_CURRENCY_AMOUNT:
+                return visitor.visitVirtualCurrencyAmount();
             case SOURCE_LANGUAGE:
                 return visitor.visitSourceLanguage();
-            case BOT_MESSAGE_TYPE:
-                return visitor.visitBotMessageType();
+            case COUPON:
+                return visitor.visitCoupon();
             case UNKNOWN:
             default:
                 return visitor.visitUnknown(string);
@@ -123,6 +229,10 @@ public final class AdditionalDataKey {
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static AdditionalDataKey valueOf(String value) {
         switch (value) {
+            case "transactionId":
+                return TRANSACTION_ID;
+            case "adPlatform":
+                return AD_PLATFORM;
             case "step":
                 return STEP;
             case "targetLanguage":
@@ -131,34 +241,82 @@ public final class AdditionalDataKey {
                 return ERROR_MESSAGE;
             case "reason":
                 return REASON;
+            case "paymentType":
+                return PAYMENT_TYPE;
+            case "adFormat":
+                return AD_FORMAT;
+            case "leadStatus":
+                return LEAD_STATUS;
+            case "leadSource":
+                return LEAD_SOURCE;
+            case "items":
+                return ITEMS;
+            case "tax":
+                return TAX;
+            case "previousValue":
+                return PREVIOUS_VALUE;
+            case "contentType":
+                return CONTENT_TYPE;
+            case "method":
+                return METHOD;
+            case "botMessageType":
+                return BOT_MESSAGE_TYPE;
+            case "shipping":
+                return SHIPPING;
+            case "amount":
+                return AMOUNT;
+            case "creativeSlot":
+                return CREATIVE_SLOT;
+            case "adSource":
+                return AD_SOURCE;
+            case "adUnitName":
+                return AD_UNIT_NAME;
+            case "name":
+                return NAME;
+            case "itemListName":
+                return ITEM_LIST_NAME;
             case "query":
                 return QUERY;
+            case "value":
+                return VALUE;
+            case "promotionName":
+                return PROMOTION_NAME;
+            case "contentId":
+                return CONTENT_ID;
+            case "groupId":
+                return GROUP_ID;
             case "errorCode":
                 return ERROR_CODE;
             case "currency":
                 return CURRENCY;
             case "mimeType":
                 return MIME_TYPE;
+            case "shippingTier":
+                return SHIPPING_TIER;
+            case "promotionId":
+                return PROMOTION_ID;
             case "url":
                 return URL;
             case "sizeBytes":
                 return SIZE_BYTES;
+            case "creativeName":
+                return CREATIVE_NAME;
             case "position":
                 return POSITION;
             case "channel":
                 return CHANNEL;
-            case "previousValue":
-                return PREVIOUS_VALUE;
-            case "amount":
-                return AMOUNT;
-            case "value":
-                return VALUE;
-            case "name":
-                return NAME;
+            case "customerType":
+                return CUSTOMER_TYPE;
+            case "itemListId":
+                return ITEM_LIST_ID;
+            case "virtualCurrencyName":
+                return VIRTUAL_CURRENCY_NAME;
+            case "virtualCurrencyAmount":
+                return VIRTUAL_CURRENCY_AMOUNT;
             case "sourceLanguage":
                 return SOURCE_LANGUAGE;
-            case "botMessageType":
-                return BOT_MESSAGE_TYPE;
+            case "coupon":
+                return COUPON;
             default:
                 return new AdditionalDataKey(Value.UNKNOWN, value);
         }
@@ -201,6 +359,58 @@ public final class AdditionalDataKey {
 
         SIZE_BYTES,
 
+        METHOD,
+
+        ITEMS,
+
+        TRANSACTION_ID,
+
+        COUPON,
+
+        SHIPPING,
+
+        TAX,
+
+        CUSTOMER_TYPE,
+
+        PAYMENT_TYPE,
+
+        SHIPPING_TIER,
+
+        ITEM_LIST_ID,
+
+        ITEM_LIST_NAME,
+
+        PROMOTION_ID,
+
+        PROMOTION_NAME,
+
+        CREATIVE_NAME,
+
+        CREATIVE_SLOT,
+
+        LEAD_SOURCE,
+
+        LEAD_STATUS,
+
+        CONTENT_TYPE,
+
+        CONTENT_ID,
+
+        GROUP_ID,
+
+        VIRTUAL_CURRENCY_NAME,
+
+        VIRTUAL_CURRENCY_AMOUNT,
+
+        AD_PLATFORM,
+
+        AD_SOURCE,
+
+        AD_FORMAT,
+
+        AD_UNIT_NAME,
+
         UNKNOWN
     }
 
@@ -240,6 +450,58 @@ public final class AdditionalDataKey {
         T visitMimeType();
 
         T visitSizeBytes();
+
+        T visitMethod();
+
+        T visitItems();
+
+        T visitTransactionId();
+
+        T visitCoupon();
+
+        T visitShipping();
+
+        T visitTax();
+
+        T visitCustomerType();
+
+        T visitPaymentType();
+
+        T visitShippingTier();
+
+        T visitItemListId();
+
+        T visitItemListName();
+
+        T visitPromotionId();
+
+        T visitPromotionName();
+
+        T visitCreativeName();
+
+        T visitCreativeSlot();
+
+        T visitLeadSource();
+
+        T visitLeadStatus();
+
+        T visitContentType();
+
+        T visitContentId();
+
+        T visitGroupId();
+
+        T visitVirtualCurrencyName();
+
+        T visitVirtualCurrencyAmount();
+
+        T visitAdPlatform();
+
+        T visitAdSource();
+
+        T visitAdFormat();
+
+        T visitAdUnitName();
 
         T visitUnknown(String unknownType);
     }

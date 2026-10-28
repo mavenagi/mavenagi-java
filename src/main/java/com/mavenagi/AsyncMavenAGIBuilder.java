@@ -18,6 +18,8 @@ public class AsyncMavenAGIBuilder {
 
     private final Map<String, String> customHeaders = new HashMap<>();
 
+    private String token = System.getenv("MAVENAGI_TOKEN");
+
     private String appId = System.getenv("MAVENAGI_APP_ID");
 
     private String appSecret = System.getenv("MAVENAGI_APP_SECRET");
@@ -29,6 +31,15 @@ public class AsyncMavenAGIBuilder {
     private Environment environment = Environment.PRODUCTION;
 
     private OkHttpClient httpClient;
+
+    /**
+     * Sets token.
+     * Defaults to the MAVENAGI_TOKEN environment variable.
+     */
+    public AsyncMavenAGIBuilder token(String token) {
+        this.token = token;
+        return this;
+    }
 
     public AsyncMavenAGIBuilder credentials(String appId, String appSecret) {
         this.appId = appId;
@@ -140,6 +151,9 @@ public class AsyncMavenAGIBuilder {
      * }</pre>
      */
     protected void setAuthentication(ClientOptions.Builder builder) {
+        if (this.token != null) {
+            builder.addHeader("Authorization", "Bearer " + this.token);
+        }
         if (this.appId != null && this.appSecret != null) {
             String unencodedToken = this.appId + ":" + this.appSecret;
             String encodedToken = Base64.getEncoder().encodeToString(unencodedToken.getBytes());

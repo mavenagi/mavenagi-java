@@ -97,6 +97,7 @@ public final class BaseDetailApp implements IBaseDetailApp, IBaseApp {
 
     /**
      * @return Guidance shown while installing the app, for example how to obtain the credentials it asks for.
+     * May use <a href="https://developers.mavenagi.com/docs/documentation/configuration-and-integration/placeholders">placeholders</a> such as <code>${agentId}</code>.
      */
     @JsonProperty("installationInstructions")
     @java.lang.Override
@@ -105,7 +106,7 @@ public final class BaseDetailApp implements IBaseDetailApp, IBaseApp {
     }
 
     /**
-     * @return Guidance shown once the app is installed.
+     * @return Guidance shown once the app is installed. May use <a href="https://developers.mavenagi.com/docs/documentation/configuration-and-integration/placeholders">placeholders</a>, settings included.
      */
     @JsonProperty("instructions")
     @java.lang.Override
@@ -114,7 +115,8 @@ public final class BaseDetailApp implements IBaseDetailApp, IBaseApp {
     }
 
     /**
-     * @return URL of a preview image or demo for the app's detail page.
+     * @return URL of a preview image or demo for the app's detail page. May use <a href="https://developers.mavenagi.com/docs/documentation/configuration-and-integration/placeholders">placeholders</a> such as
+     * <code>${appHost}</code> and <code>${settings.region}</code>.
      */
     @JsonProperty("previewUrl")
     @java.lang.Override
@@ -123,7 +125,8 @@ public final class BaseDetailApp implements IBaseDetailApp, IBaseApp {
     }
 
     /**
-     * @return Supporting links published by the author, such as documentation or a privacy policy.
+     * @return Supporting links published by the author, such as documentation or a privacy policy. Their URLs
+     * may use <a href="https://developers.mavenagi.com/docs/documentation/configuration-and-integration/placeholders">placeholders</a> such as <code>${appHost}</code>, but never settings: links are public.
      */
     @JsonProperty("links")
     @java.lang.Override
@@ -346,28 +349,31 @@ public final class BaseDetailApp implements IBaseDetailApp, IBaseApp {
         BaseDetailApp build();
 
         /**
-         * <p>Guidance shown while installing the app, for example how to obtain the credentials it asks for.</p>
+         * <p>Guidance shown while installing the app, for example how to obtain the credentials it asks for.
+         * May use <a href="https://developers.mavenagi.com/docs/documentation/configuration-and-integration/placeholders">placeholders</a> such as <code>${agentId}</code>.</p>
          */
         _FinalStage installationInstructions(Optional<String> installationInstructions);
 
         _FinalStage installationInstructions(String installationInstructions);
 
         /**
-         * <p>Guidance shown once the app is installed.</p>
+         * <p>Guidance shown once the app is installed. May use <a href="https://developers.mavenagi.com/docs/documentation/configuration-and-integration/placeholders">placeholders</a>, settings included.</p>
          */
         _FinalStage instructions(Optional<String> instructions);
 
         _FinalStage instructions(String instructions);
 
         /**
-         * <p>URL of a preview image or demo for the app's detail page.</p>
+         * <p>URL of a preview image or demo for the app's detail page. May use <a href="https://developers.mavenagi.com/docs/documentation/configuration-and-integration/placeholders">placeholders</a> such as
+         * <code>${appHost}</code> and <code>${settings.region}</code>.</p>
          */
         _FinalStage previewUrl(Optional<String> previewUrl);
 
         _FinalStage previewUrl(String previewUrl);
 
         /**
-         * <p>Supporting links published by the author, such as documentation or a privacy policy.</p>
+         * <p>Supporting links published by the author, such as documentation or a privacy policy. Their URLs
+         * may use <a href="https://developers.mavenagi.com/docs/documentation/configuration-and-integration/placeholders">placeholders</a> such as <code>${appHost}</code>, but never settings: links are public.</p>
          */
         _FinalStage links(List<Link> links);
 
@@ -733,7 +739,8 @@ public final class BaseDetailApp implements IBaseDetailApp, IBaseApp {
         }
 
         /**
-         * <p>Supporting links published by the author, such as documentation or a privacy policy.</p>
+         * <p>Supporting links published by the author, such as documentation or a privacy policy. Their URLs
+         * may use <a href="https://developers.mavenagi.com/docs/documentation/configuration-and-integration/placeholders">placeholders</a> such as <code>${appHost}</code>, but never settings: links are public.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -745,7 +752,8 @@ public final class BaseDetailApp implements IBaseDetailApp, IBaseApp {
         }
 
         /**
-         * <p>Supporting links published by the author, such as documentation or a privacy policy.</p>
+         * <p>Supporting links published by the author, such as documentation or a privacy policy. Their URLs
+         * may use <a href="https://developers.mavenagi.com/docs/documentation/configuration-and-integration/placeholders">placeholders</a> such as <code>${appHost}</code>, but never settings: links are public.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -755,7 +763,8 @@ public final class BaseDetailApp implements IBaseDetailApp, IBaseApp {
         }
 
         /**
-         * <p>Supporting links published by the author, such as documentation or a privacy policy.</p>
+         * <p>Supporting links published by the author, such as documentation or a privacy policy. Their URLs
+         * may use <a href="https://developers.mavenagi.com/docs/documentation/configuration-and-integration/placeholders">placeholders</a> such as <code>${appHost}</code>, but never settings: links are public.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "links", nulls = Nulls.SKIP)
@@ -768,7 +777,8 @@ public final class BaseDetailApp implements IBaseDetailApp, IBaseApp {
         }
 
         /**
-         * <p>URL of a preview image or demo for the app's detail page.</p>
+         * <p>URL of a preview image or demo for the app's detail page. May use <a href="https://developers.mavenagi.com/docs/documentation/configuration-and-integration/placeholders">placeholders</a> such as
+         * <code>${appHost}</code> and <code>${settings.region}</code>.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -778,7 +788,8 @@ public final class BaseDetailApp implements IBaseDetailApp, IBaseApp {
         }
 
         /**
-         * <p>URL of a preview image or demo for the app's detail page.</p>
+         * <p>URL of a preview image or demo for the app's detail page. May use <a href="https://developers.mavenagi.com/docs/documentation/configuration-and-integration/placeholders">placeholders</a> such as
+         * <code>${appHost}</code> and <code>${settings.region}</code>.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "previewUrl", nulls = Nulls.SKIP)
@@ -788,7 +799,7 @@ public final class BaseDetailApp implements IBaseDetailApp, IBaseApp {
         }
 
         /**
-         * <p>Guidance shown once the app is installed.</p>
+         * <p>Guidance shown once the app is installed. May use <a href="https://developers.mavenagi.com/docs/documentation/configuration-and-integration/placeholders">placeholders</a>, settings included.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -798,7 +809,7 @@ public final class BaseDetailApp implements IBaseDetailApp, IBaseApp {
         }
 
         /**
-         * <p>Guidance shown once the app is installed.</p>
+         * <p>Guidance shown once the app is installed. May use <a href="https://developers.mavenagi.com/docs/documentation/configuration-and-integration/placeholders">placeholders</a>, settings included.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "instructions", nulls = Nulls.SKIP)
@@ -808,7 +819,8 @@ public final class BaseDetailApp implements IBaseDetailApp, IBaseApp {
         }
 
         /**
-         * <p>Guidance shown while installing the app, for example how to obtain the credentials it asks for.</p>
+         * <p>Guidance shown while installing the app, for example how to obtain the credentials it asks for.
+         * May use <a href="https://developers.mavenagi.com/docs/documentation/configuration-and-integration/placeholders">placeholders</a> such as <code>${agentId}</code>.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -818,7 +830,8 @@ public final class BaseDetailApp implements IBaseDetailApp, IBaseApp {
         }
 
         /**
-         * <p>Guidance shown while installing the app, for example how to obtain the credentials it asks for.</p>
+         * <p>Guidance shown while installing the app, for example how to obtain the credentials it asks for.
+         * May use <a href="https://developers.mavenagi.com/docs/documentation/configuration-and-integration/placeholders">placeholders</a> such as <code>${agentId}</code>.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "installationInstructions", nulls = Nulls.SKIP)

@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
 import com.mavenagi.resources.commons.types.EntityId;
+import com.mavenagi.resources.commons.types.ExecutionMode;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,6 +42,8 @@ public final class ConversationKickoffCapabilityExecution implements ICapability
 
     private final OffsetDateTime createdAt;
 
+    private final ExecutionMode executionMode;
+
     private final Map<String, Object> additionalProperties;
 
     private ConversationKickoffCapabilityExecution(
@@ -53,6 +56,7 @@ public final class ConversationKickoffCapabilityExecution implements ICapability
             Optional<OffsetDateTime> completedAt,
             Optional<Long> durationMs,
             OffsetDateTime createdAt,
+            ExecutionMode executionMode,
             Map<String, Object> additionalProperties) {
         this.capabilityId = capabilityId;
         this.subjectId = subjectId;
@@ -63,6 +67,7 @@ public final class ConversationKickoffCapabilityExecution implements ICapability
         this.completedAt = completedAt;
         this.durationMs = durationMs;
         this.createdAt = createdAt;
+        this.executionMode = executionMode;
         this.additionalProperties = additionalProperties;
     }
 
@@ -149,6 +154,16 @@ public final class ConversationKickoffCapabilityExecution implements ICapability
         return createdAt;
     }
 
+    /**
+     * @return Whether the execution ran on live data or in a simulation. A Conversation Kickoff takes
+     * its conversation's mode, and an Event Trigger its event's.
+     */
+    @JsonProperty("executionMode")
+    @java.lang.Override
+    public ExecutionMode getExecutionMode() {
+        return executionMode;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -170,7 +185,8 @@ public final class ConversationKickoffCapabilityExecution implements ICapability
                 && startedAt.equals(other.startedAt)
                 && completedAt.equals(other.completedAt)
                 && durationMs.equals(other.durationMs)
-                && createdAt.equals(other.createdAt);
+                && createdAt.equals(other.createdAt)
+                && executionMode.equals(other.executionMode);
     }
 
     @java.lang.Override
@@ -184,7 +200,8 @@ public final class ConversationKickoffCapabilityExecution implements ICapability
                 this.startedAt,
                 this.completedAt,
                 this.durationMs,
-                this.createdAt);
+                this.createdAt,
+                this.executionMode);
     }
 
     @java.lang.Override
@@ -230,7 +247,15 @@ public final class ConversationKickoffCapabilityExecution implements ICapability
         /**
          * <p>When the execution was recorded. Results are ordered by this field.</p>
          */
-        _FinalStage createdAt(@NotNull OffsetDateTime createdAt);
+        ExecutionModeStage createdAt(@NotNull OffsetDateTime createdAt);
+    }
+
+    public interface ExecutionModeStage {
+        /**
+         * <p>Whether the execution ran on live data or in a simulation. A Conversation Kickoff takes
+         * its conversation's mode, and an Event Trigger its event's.</p>
+         */
+        _FinalStage executionMode(@NotNull ExecutionMode executionMode);
     }
 
     public interface _FinalStage {
@@ -269,7 +294,13 @@ public final class ConversationKickoffCapabilityExecution implements ICapability
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
-            implements CapabilityIdStage, SubjectIdStage, StatusStage, StartedAtStage, CreatedAtStage, _FinalStage {
+            implements CapabilityIdStage,
+                    SubjectIdStage,
+                    StatusStage,
+                    StartedAtStage,
+                    CreatedAtStage,
+                    ExecutionModeStage,
+                    _FinalStage {
         private EntityId capabilityId;
 
         private EntityId subjectId;
@@ -279,6 +310,8 @@ public final class ConversationKickoffCapabilityExecution implements ICapability
         private OffsetDateTime startedAt;
 
         private OffsetDateTime createdAt;
+
+        private ExecutionMode executionMode;
 
         private Optional<Long> durationMs = Optional.empty();
 
@@ -304,6 +337,7 @@ public final class ConversationKickoffCapabilityExecution implements ICapability
             completedAt(other.getCompletedAt());
             durationMs(other.getDurationMs());
             createdAt(other.getCreatedAt());
+            executionMode(other.getExecutionMode());
             return this;
         }
 
@@ -363,8 +397,22 @@ public final class ConversationKickoffCapabilityExecution implements ICapability
          */
         @java.lang.Override
         @JsonSetter("createdAt")
-        public _FinalStage createdAt(@NotNull OffsetDateTime createdAt) {
+        public ExecutionModeStage createdAt(@NotNull OffsetDateTime createdAt) {
             this.createdAt = Objects.requireNonNull(createdAt, "createdAt must not be null");
+            return this;
+        }
+
+        /**
+         * <p>Whether the execution ran on live data or in a simulation. A Conversation Kickoff takes
+         * its conversation's mode, and an Event Trigger its event's.</p>
+         * <p>Whether the execution ran on live data or in a simulation. A Conversation Kickoff takes
+         * its conversation's mode, and an Event Trigger its event's.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("executionMode")
+        public _FinalStage executionMode(@NotNull ExecutionMode executionMode) {
+            this.executionMode = Objects.requireNonNull(executionMode, "executionMode must not be null");
             return this;
         }
 
@@ -464,6 +512,7 @@ public final class ConversationKickoffCapabilityExecution implements ICapability
                     completedAt,
                     durationMs,
                     createdAt,
+                    executionMode,
                     additionalProperties);
         }
     }

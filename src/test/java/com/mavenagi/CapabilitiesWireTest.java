@@ -39,7 +39,7 @@ public class CapabilitiesWireTest {
         server.start();
         client = MavenAGI.builder()
             .url(server.url("/").toString())
-            .credentials("testuser", "testpass")
+            .token("test-token")
             .build();
     }
     @AfterEach
@@ -636,7 +636,7 @@ public class CapabilitiesWireTest {
     public void testSearchCapabilityExecutions() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"number\":0,\"size\":2,\"totalElements\":2,\"totalPages\":1,\"executions\":[{\"capabilityType\":\"TRIGGER\",\"capabilityId\":{\"referenceId\":\"store-in-snowflake\",\"appId\":\"snowflake\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"EVENT_TRIGGER\"},\"subjectId\":{\"referenceId\":\"conversation-123\",\"appId\":\"zendesk\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"CONVERSATION\"},\"status\":\"SUCCESS\",\"completionReason\":\"SUCCESS\",\"startedAt\":\"2026-08-31T10:30:05Z\",\"completedAt\":\"2026-08-31T10:30:06Z\",\"durationMs\":1120,\"createdAt\":\"2026-08-31T10:30:05Z\",\"eventType\":\"CONVERSATION_CREATED\",\"attempt\":1},{\"capabilityType\":\"CONVERSATION_KICKOFF\",\"capabilityId\":{\"referenceId\":\"greet-returning-customer\",\"appId\":\"my-billing-system\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"CONVERSATION_KICKOFF\"},\"subjectId\":{\"referenceId\":\"conversation-123\",\"appId\":\"zendesk\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"CONVERSATION\"},\"status\":\"FAILED\",\"completionReason\":\"TIMEOUT\",\"message\":\"Conversation Kickoff timed out\",\"startedAt\":\"2026-08-31T10:30:00Z\",\"completedAt\":\"2026-08-31T10:30:04Z\",\"durationMs\":4000,\"createdAt\":\"2026-08-31T10:30:00Z\"}]}"));
+            .setBody("{\"number\":0,\"size\":2,\"totalElements\":2,\"totalPages\":1,\"executions\":[{\"capabilityType\":\"TRIGGER\",\"capabilityId\":{\"referenceId\":\"store-in-snowflake\",\"appId\":\"snowflake\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"EVENT_TRIGGER\"},\"subjectId\":{\"referenceId\":\"conversation-123\",\"appId\":\"zendesk\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"CONVERSATION\"},\"status\":\"SUCCESS\",\"completionReason\":\"SUCCESS\",\"startedAt\":\"2026-08-31T10:30:05Z\",\"completedAt\":\"2026-08-31T10:30:06Z\",\"durationMs\":1120,\"createdAt\":\"2026-08-31T10:30:05Z\",\"executionMode\":\"LIVE\",\"eventType\":\"CONVERSATION_CREATED\",\"attempt\":1},{\"capabilityType\":\"CONVERSATION_KICKOFF\",\"capabilityId\":{\"referenceId\":\"greet-returning-customer\",\"appId\":\"my-billing-system\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"CONVERSATION_KICKOFF\"},\"subjectId\":{\"referenceId\":\"conversation-123\",\"appId\":\"zendesk\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"CONVERSATION\"},\"status\":\"FAILED\",\"completionReason\":\"TIMEOUT\",\"message\":\"Conversation Kickoff timed out\",\"startedAt\":\"2026-08-31T10:30:00Z\",\"completedAt\":\"2026-08-31T10:30:04Z\",\"durationMs\":4000,\"createdAt\":\"2026-08-31T10:30:00Z\",\"executionMode\":\"LIVE\"}]}"));
         CapabilityExecutionsSearchResponse response = client.capabilities().searchCapabilityExecutions(
             CapabilityExecutionsSearchRequest
                 .builder()
@@ -728,6 +728,7 @@ public class CapabilitiesWireTest {
             + "      \"completedAt\": \"2026-08-31T10:30:06Z\",\n"
             + "      \"durationMs\": 1120,\n"
             + "      \"createdAt\": \"2026-08-31T10:30:05Z\",\n"
+            + "      \"executionMode\": \"LIVE\",\n"
             + "      \"eventType\": \"CONVERSATION_CREATED\",\n"
             + "      \"attempt\": 1\n"
             + "    },\n"
@@ -753,7 +754,8 @@ public class CapabilitiesWireTest {
             + "      \"startedAt\": \"2026-08-31T10:30:00Z\",\n"
             + "      \"completedAt\": \"2026-08-31T10:30:04Z\",\n"
             + "      \"durationMs\": 4000,\n"
-            + "      \"createdAt\": \"2026-08-31T10:30:00Z\"\n"
+            + "      \"createdAt\": \"2026-08-31T10:30:00Z\",\n"
+            + "      \"executionMode\": \"LIVE\"\n"
             + "    }\n"
             + "  ]\n"
             + "}";

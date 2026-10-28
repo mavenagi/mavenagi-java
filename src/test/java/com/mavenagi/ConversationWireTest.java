@@ -54,7 +54,7 @@ public class ConversationWireTest {
         server.start();
         client = MavenAGI.builder()
             .url(server.url("/").toString())
-            .credentials("testuser", "testpass")
+            .token("test-token")
             .build();
     }
     @AfterEach
@@ -65,53 +65,18 @@ public class ConversationWireTest {
     public void testInitialize() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"conversationKickoffResults\":[{\"referenceId\":\"referenceId\",\"appId\":\"appId\",\"status\":\"SUCCESS\",\"message\":\"message\",\"startedAt\":\"2024-01-15T09:30:00Z\",\"completedAt\":\"2024-01-15T09:30:00Z\",\"durationMs\":1000000},{\"referenceId\":\"referenceId\",\"appId\":\"appId\",\"status\":\"SUCCESS\",\"message\":\"message\",\"startedAt\":\"2024-01-15T09:30:00Z\",\"completedAt\":\"2024-01-15T09:30:00Z\",\"durationMs\":1000000}],\"messages\":[{\"type\":\"user\",\"conversationMessageId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"language\":\"language\",\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"agentUserId\":\"agentUserId\",\"userDisplayName\":\"userDisplayName\",\"status\":\"SENDING\",\"responseState\":\"NOT_ASKED\",\"timezone\":\"timezone\",\"userId\":{\"referenceId\":\"x\"},\"text\":\"text\",\"userMessageType\":\"USER\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"appMetadata\":{\"appMetadata\":\"appMetadata\"}},{\"type\":\"user\",\"conversationMessageId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"language\":\"language\",\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"agentUserId\":\"agentUserId\",\"userDisplayName\":\"userDisplayName\",\"status\":\"SENDING\",\"responseState\":\"NOT_ASKED\",\"timezone\":\"timezone\",\"userId\":{\"referenceId\":\"x\"},\"text\":\"text\",\"userMessageType\":\"USER\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"appMetadata\":{\"appMetadata\":\"appMetadata\"}}],\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"responseConfig\":{\"capabilities\":[\"MARKDOWN\",\"MARKDOWN\"],\"isCopilot\":true,\"responseLength\":\"SHORT\",\"contextFilter\":{\"scopeType\":\"byEntities\",\"entities\":[{\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"scopeEntityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}}]}},\"subject\":\"subject\",\"url\":\"url\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"tags\":[\"tags\"],\"metadata\":{\"metadata\":\"metadata\"},\"allMetadata\":{\"allMetadata\":{\"allMetadata\":\"allMetadata\"}},\"conversationId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"analysis\":{\"userRequest\":\"userRequest\",\"agentResponse\":\"agentResponse\",\"resolutionStatus\":\"UNKNOWN\",\"category\":\"category\",\"sentiment\":\"POSITIVE\",\"quality\":\"GOOD\",\"qualityReason\":\"MISSING_KNOWLEDGE\",\"resolvedByMaven\":true,\"primaryLanguage\":\"primaryLanguage\",\"predictedNps\":1.1,\"csat\":1.1,\"intelligentFieldValues\":[{\"fieldId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"name\":\"name\",\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"value\":{\"key\":\"value\"},\"confidence\":1.1,\"rationale\":\"rationale\",\"createdAt\":\"2024-01-15T09:30:00Z\"},{\"fieldId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"name\":\"name\",\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"value\":{\"key\":\"value\"},\"confidence\":1.1,\"rationale\":\"rationale\",\"createdAt\":\"2024-01-15T09:30:00Z\"}]},\"summary\":{\"actionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"incompleteActionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"matchedCharterIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"matchedCharterNames\":[\"matchedCharterNames\",\"matchedCharterNames\"],\"matchedSegmentedCharterNames\":[\"matchedSegmentedCharterNames\",\"matchedSegmentedCharterNames\"],\"insertCount\":1,\"thumbsUpCount\":1,\"thumbsDownCount\":1,\"handoffCount\":1,\"userMessageCount\":1,\"botMessageCount\":1,\"csat\":1.1,\"handleTime\":1000000,\"humanAgentResponseDelay\":1000000,\"humanAgents\":[\"humanAgents\",\"humanAgents\"],\"humanAgentsWithInserts\":[\"humanAgentsWithInserts\",\"humanAgentsWithInserts\"],\"users\":[\"users\",\"users\"],\"userIdentifiers\":[\"userIdentifiers\",\"userIdentifiers\"],\"lastUserMessage\":\"lastUserMessage\",\"lastBotMessage\":\"lastBotMessage\",\"involvedAppIds\":[\"involvedAppIds\"]},\"deleted\":true,\"open\":true,\"llmEnabled\":true,\"simulationContext\":{\"additionalPromptText\":\"additionalPromptText\",\"persona\":\"CASUAL_BUDDY\",\"availableKnowledgeBases\":[{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"variantId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"actionMocks\":[{\"actionId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"behavior\":{\"type\":\"fixedResponse\",\"response\":\"response\",\"data\":{\"data\":{\"key\":\"value\"}},\"status\":\"SUCCESS\",\"errorMessage\":\"errorMessage\"}},{\"actionId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"behavior\":{\"type\":\"fixedResponse\",\"response\":\"response\",\"data\":{\"data\":{\"key\":\"value\"}},\"status\":\"SUCCESS\",\"errorMessage\":\"errorMessage\"}}],\"defaultActionBehavior\":{\"type\":\"fixedResponse\",\"response\":\"response\",\"data\":{\"data\":{\"key\":\"value\"}},\"status\":\"SUCCESS\",\"errorMessage\":\"errorMessage\"}},\"relatedEntities\":{\"SPAWN_FROM\":[{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}]},\"conversationMode\":\"VOICE\",\"variantId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}}"));
+            .setBody("{\"conversationId\":{\"referenceId\":\"conversation-0\",\"appId\":\"myapp\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"CONVERSATION\"},\"deleted\":false,\"open\":true,\"llmEnabled\":true,\"conversationMode\":\"TEXT\",\"analysis\":{},\"summary\":{\"actionIds\":[],\"incompleteActionIds\":[],\"matchedCharterIds\":[],\"matchedCharterNames\":[],\"matchedSegmentedCharterNames\":[],\"insertCount\":0,\"thumbsUpCount\":0,\"thumbsDownCount\":0,\"handoffCount\":0,\"userMessageCount\":0,\"botMessageCount\":0,\"humanAgents\":[],\"humanAgentsWithInserts\":[],\"users\":[],\"userIdentifiers\":[],\"involvedAppIds\":[\"myapp\"]},\"metadata\":{},\"allMetadata\":{},\"attachments\":[],\"messages\":[],\"executionMode\":\"LIVE\",\"conversationKickoffResults\":[]}"));
         InitializeConversationResponse response = client.conversation().initialize(
             ConversationRequest
                 .builder()
                 .conversationId(
                     EntityIdBase
                         .builder()
-                        .referenceId("x")
+                        .referenceId("conversation-0")
                         .build()
                 )
                 .messages(
-                    Arrays.asList(
-                        ConversationMessageRequest
-                            .builder()
-                            .conversationMessageId(
-                                EntityIdBase
-                                    .builder()
-                                    .referenceId("x")
-                                    .build()
-                            )
-                            .userId(
-                                EntityIdBase
-                                    .builder()
-                                    .referenceId("x")
-                                    .build()
-                            )
-                            .text("text")
-                            .userMessageType(UserConversationMessageType.USER)
-                            .build(),
-                        ConversationMessageRequest
-                            .builder()
-                            .conversationMessageId(
-                                EntityIdBase
-                                    .builder()
-                                    .referenceId("x")
-                                    .build()
-                            )
-                            .userId(
-                                EntityIdBase
-                                    .builder()
-                                    .referenceId("x")
-                                    .build()
-                            )
-                            .text("text")
-                            .userMessageType(UserConversationMessageType.USER)
-                            .build()
-                    )
+                    new ArrayList<ConversationMessageRequest>()
                 )
                 .build()
         );
@@ -123,30 +88,9 @@ public class ConversationWireTest {
         String expectedRequestBody = ""
             + "{\n"
             + "  \"conversationId\": {\n"
-            + "    \"referenceId\": \"x\"\n"
+            + "    \"referenceId\": \"conversation-0\"\n"
             + "  },\n"
-            + "  \"messages\": [\n"
-            + "    {\n"
-            + "      \"conversationMessageId\": {\n"
-            + "        \"referenceId\": \"x\"\n"
-            + "      },\n"
-            + "      \"userId\": {\n"
-            + "        \"referenceId\": \"x\"\n"
-            + "      },\n"
-            + "      \"text\": \"text\",\n"
-            + "      \"userMessageType\": \"USER\"\n"
-            + "    },\n"
-            + "    {\n"
-            + "      \"conversationMessageId\": {\n"
-            + "        \"referenceId\": \"x\"\n"
-            + "      },\n"
-            + "      \"userId\": {\n"
-            + "        \"referenceId\": \"x\"\n"
-            + "      },\n"
-            + "      \"text\": \"text\",\n"
-            + "      \"userMessageType\": \"USER\"\n"
-            + "    }\n"
-            + "  ]\n"
+            + "  \"messages\": []\n"
             + "}";
         JsonNode actualJson = objectMapper.readTree(actualRequestBody);
         JsonNode expectedJson = objectMapper.readTree(expectedRequestBody);
@@ -176,412 +120,44 @@ public class ConversationWireTest {
         String actualResponseJson = objectMapper.writeValueAsString(response);
         String expectedResponseBody = ""
             + "{\n"
-            + "  \"conversationKickoffResults\": [\n"
-            + "    {\n"
-            + "      \"referenceId\": \"referenceId\",\n"
-            + "      \"appId\": \"appId\",\n"
-            + "      \"status\": \"SUCCESS\",\n"
-            + "      \"message\": \"message\",\n"
-            + "      \"startedAt\": \"2024-01-15T09:30:00Z\",\n"
-            + "      \"completedAt\": \"2024-01-15T09:30:00Z\",\n"
-            + "      \"durationMs\": 1000000\n"
-            + "    },\n"
-            + "    {\n"
-            + "      \"referenceId\": \"referenceId\",\n"
-            + "      \"appId\": \"appId\",\n"
-            + "      \"status\": \"SUCCESS\",\n"
-            + "      \"message\": \"message\",\n"
-            + "      \"startedAt\": \"2024-01-15T09:30:00Z\",\n"
-            + "      \"completedAt\": \"2024-01-15T09:30:00Z\",\n"
-            + "      \"durationMs\": 1000000\n"
-            + "    }\n"
-            + "  ],\n"
-            + "  \"messages\": [\n"
-            + "    {\n"
-            + "      \"type\": \"user\",\n"
-            + "      \"conversationMessageId\": {\n"
-            + "        \"organizationId\": \"organizationId\",\n"
-            + "        \"agentId\": \"agentId\",\n"
-            + "        \"type\": \"AGENT\",\n"
-            + "        \"appId\": \"appId\",\n"
-            + "        \"referenceId\": \"x\"\n"
-            + "      },\n"
-            + "      \"language\": \"language\",\n"
-            + "      \"attachments\": [\n"
-            + "        {\n"
-            + "          \"url\": \"url\",\n"
-            + "          \"sizeBytes\": 1000000,\n"
-            + "          \"status\": \"PENDING\",\n"
-            + "          \"type\": \"type\",\n"
-            + "          \"name\": \"name\"\n"
-            + "        },\n"
-            + "        {\n"
-            + "          \"url\": \"url\",\n"
-            + "          \"sizeBytes\": 1000000,\n"
-            + "          \"status\": \"PENDING\",\n"
-            + "          \"type\": \"type\",\n"
-            + "          \"name\": \"name\"\n"
-            + "        }\n"
-            + "      ],\n"
-            + "      \"agentUserId\": \"agentUserId\",\n"
-            + "      \"userDisplayName\": \"userDisplayName\",\n"
-            + "      \"status\": \"SENDING\",\n"
-            + "      \"responseState\": \"NOT_ASKED\",\n"
-            + "      \"timezone\": \"timezone\",\n"
-            + "      \"userId\": {\n"
-            + "        \"referenceId\": \"x\"\n"
-            + "      },\n"
-            + "      \"text\": \"text\",\n"
-            + "      \"userMessageType\": \"USER\",\n"
-            + "      \"createdAt\": \"2024-01-15T09:30:00Z\",\n"
-            + "      \"updatedAt\": \"2024-01-15T09:30:00Z\",\n"
-            + "      \"appMetadata\": {\n"
-            + "        \"appMetadata\": \"appMetadata\"\n"
-            + "      }\n"
-            + "    },\n"
-            + "    {\n"
-            + "      \"type\": \"user\",\n"
-            + "      \"conversationMessageId\": {\n"
-            + "        \"organizationId\": \"organizationId\",\n"
-            + "        \"agentId\": \"agentId\",\n"
-            + "        \"type\": \"AGENT\",\n"
-            + "        \"appId\": \"appId\",\n"
-            + "        \"referenceId\": \"x\"\n"
-            + "      },\n"
-            + "      \"language\": \"language\",\n"
-            + "      \"attachments\": [\n"
-            + "        {\n"
-            + "          \"url\": \"url\",\n"
-            + "          \"sizeBytes\": 1000000,\n"
-            + "          \"status\": \"PENDING\",\n"
-            + "          \"type\": \"type\",\n"
-            + "          \"name\": \"name\"\n"
-            + "        },\n"
-            + "        {\n"
-            + "          \"url\": \"url\",\n"
-            + "          \"sizeBytes\": 1000000,\n"
-            + "          \"status\": \"PENDING\",\n"
-            + "          \"type\": \"type\",\n"
-            + "          \"name\": \"name\"\n"
-            + "        }\n"
-            + "      ],\n"
-            + "      \"agentUserId\": \"agentUserId\",\n"
-            + "      \"userDisplayName\": \"userDisplayName\",\n"
-            + "      \"status\": \"SENDING\",\n"
-            + "      \"responseState\": \"NOT_ASKED\",\n"
-            + "      \"timezone\": \"timezone\",\n"
-            + "      \"userId\": {\n"
-            + "        \"referenceId\": \"x\"\n"
-            + "      },\n"
-            + "      \"text\": \"text\",\n"
-            + "      \"userMessageType\": \"USER\",\n"
-            + "      \"createdAt\": \"2024-01-15T09:30:00Z\",\n"
-            + "      \"updatedAt\": \"2024-01-15T09:30:00Z\",\n"
-            + "      \"appMetadata\": {\n"
-            + "        \"appMetadata\": \"appMetadata\"\n"
-            + "      }\n"
-            + "    }\n"
-            + "  ],\n"
-            + "  \"attachments\": [\n"
-            + "    {\n"
-            + "      \"url\": \"url\",\n"
-            + "      \"sizeBytes\": 1000000,\n"
-            + "      \"status\": \"PENDING\",\n"
-            + "      \"type\": \"type\",\n"
-            + "      \"name\": \"name\"\n"
-            + "    },\n"
-            + "    {\n"
-            + "      \"url\": \"url\",\n"
-            + "      \"sizeBytes\": 1000000,\n"
-            + "      \"status\": \"PENDING\",\n"
-            + "      \"type\": \"type\",\n"
-            + "      \"name\": \"name\"\n"
-            + "    }\n"
-            + "  ],\n"
-            + "  \"responseConfig\": {\n"
-            + "    \"capabilities\": [\n"
-            + "      \"MARKDOWN\",\n"
-            + "      \"MARKDOWN\"\n"
-            + "    ],\n"
-            + "    \"isCopilot\": true,\n"
-            + "    \"responseLength\": \"SHORT\",\n"
-            + "    \"contextFilter\": {\n"
-            + "      \"scopeType\": \"byEntities\",\n"
-            + "      \"entities\": [\n"
-            + "        {\n"
-            + "          \"entityId\": {\n"
-            + "            \"organizationId\": \"organizationId\",\n"
-            + "            \"agentId\": \"agentId\",\n"
-            + "            \"type\": \"AGENT\",\n"
-            + "            \"appId\": \"appId\",\n"
-            + "            \"referenceId\": \"x\"\n"
-            + "          },\n"
-            + "          \"scopeEntityId\": {\n"
-            + "            \"organizationId\": \"organizationId\",\n"
-            + "            \"agentId\": \"agentId\",\n"
-            + "            \"type\": \"AGENT\",\n"
-            + "            \"appId\": \"appId\",\n"
-            + "            \"referenceId\": \"x\"\n"
-            + "          }\n"
-            + "        }\n"
-            + "      ]\n"
-            + "    }\n"
-            + "  },\n"
-            + "  \"subject\": \"subject\",\n"
-            + "  \"url\": \"url\",\n"
-            + "  \"createdAt\": \"2024-01-15T09:30:00Z\",\n"
-            + "  \"updatedAt\": \"2024-01-15T09:30:00Z\",\n"
-            + "  \"tags\": [\n"
-            + "    \"tags\"\n"
-            + "  ],\n"
-            + "  \"metadata\": {\n"
-            + "    \"metadata\": \"metadata\"\n"
-            + "  },\n"
-            + "  \"allMetadata\": {\n"
-            + "    \"allMetadata\": {\n"
-            + "      \"allMetadata\": \"allMetadata\"\n"
-            + "    }\n"
-            + "  },\n"
             + "  \"conversationId\": {\n"
-            + "    \"organizationId\": \"organizationId\",\n"
-            + "    \"agentId\": \"agentId\",\n"
-            + "    \"type\": \"AGENT\",\n"
-            + "    \"appId\": \"appId\",\n"
-            + "    \"referenceId\": \"x\"\n"
+            + "    \"referenceId\": \"conversation-0\",\n"
+            + "    \"appId\": \"myapp\",\n"
+            + "    \"organizationId\": \"acme\",\n"
+            + "    \"agentId\": \"support\",\n"
+            + "    \"type\": \"CONVERSATION\"\n"
             + "  },\n"
-            + "  \"analysis\": {\n"
-            + "    \"userRequest\": \"userRequest\",\n"
-            + "    \"agentResponse\": \"agentResponse\",\n"
-            + "    \"resolutionStatus\": \"UNKNOWN\",\n"
-            + "    \"category\": \"category\",\n"
-            + "    \"sentiment\": \"POSITIVE\",\n"
-            + "    \"quality\": \"GOOD\",\n"
-            + "    \"qualityReason\": \"MISSING_KNOWLEDGE\",\n"
-            + "    \"resolvedByMaven\": true,\n"
-            + "    \"primaryLanguage\": \"primaryLanguage\",\n"
-            + "    \"predictedNps\": 1.1,\n"
-            + "    \"csat\": 1.1,\n"
-            + "    \"intelligentFieldValues\": [\n"
-            + "      {\n"
-            + "        \"fieldId\": {\n"
-            + "          \"organizationId\": \"organizationId\",\n"
-            + "          \"agentId\": \"agentId\",\n"
-            + "          \"type\": \"AGENT\",\n"
-            + "          \"appId\": \"appId\",\n"
-            + "          \"referenceId\": \"x\"\n"
-            + "        },\n"
-            + "        \"name\": \"name\",\n"
-            + "        \"entityId\": {\n"
-            + "          \"organizationId\": \"organizationId\",\n"
-            + "          \"agentId\": \"agentId\",\n"
-            + "          \"type\": \"AGENT\",\n"
-            + "          \"appId\": \"appId\",\n"
-            + "          \"referenceId\": \"x\"\n"
-            + "        },\n"
-            + "        \"value\": {\n"
-            + "          \"key\": \"value\"\n"
-            + "        },\n"
-            + "        \"confidence\": 1.1,\n"
-            + "        \"rationale\": \"rationale\",\n"
-            + "        \"createdAt\": \"2024-01-15T09:30:00Z\"\n"
-            + "      },\n"
-            + "      {\n"
-            + "        \"fieldId\": {\n"
-            + "          \"organizationId\": \"organizationId\",\n"
-            + "          \"agentId\": \"agentId\",\n"
-            + "          \"type\": \"AGENT\",\n"
-            + "          \"appId\": \"appId\",\n"
-            + "          \"referenceId\": \"x\"\n"
-            + "        },\n"
-            + "        \"name\": \"name\",\n"
-            + "        \"entityId\": {\n"
-            + "          \"organizationId\": \"organizationId\",\n"
-            + "          \"agentId\": \"agentId\",\n"
-            + "          \"type\": \"AGENT\",\n"
-            + "          \"appId\": \"appId\",\n"
-            + "          \"referenceId\": \"x\"\n"
-            + "        },\n"
-            + "        \"value\": {\n"
-            + "          \"key\": \"value\"\n"
-            + "        },\n"
-            + "        \"confidence\": 1.1,\n"
-            + "        \"rationale\": \"rationale\",\n"
-            + "        \"createdAt\": \"2024-01-15T09:30:00Z\"\n"
-            + "      }\n"
-            + "    ]\n"
-            + "  },\n"
-            + "  \"summary\": {\n"
-            + "    \"actionIds\": [\n"
-            + "      {\n"
-            + "        \"type\": \"AGENT\",\n"
-            + "        \"appId\": \"appId\",\n"
-            + "        \"referenceId\": \"x\"\n"
-            + "      },\n"
-            + "      {\n"
-            + "        \"type\": \"AGENT\",\n"
-            + "        \"appId\": \"appId\",\n"
-            + "        \"referenceId\": \"x\"\n"
-            + "      }\n"
-            + "    ],\n"
-            + "    \"incompleteActionIds\": [\n"
-            + "      {\n"
-            + "        \"type\": \"AGENT\",\n"
-            + "        \"appId\": \"appId\",\n"
-            + "        \"referenceId\": \"x\"\n"
-            + "      },\n"
-            + "      {\n"
-            + "        \"type\": \"AGENT\",\n"
-            + "        \"appId\": \"appId\",\n"
-            + "        \"referenceId\": \"x\"\n"
-            + "      }\n"
-            + "    ],\n"
-            + "    \"matchedCharterIds\": [\n"
-            + "      {\n"
-            + "        \"type\": \"AGENT\",\n"
-            + "        \"appId\": \"appId\",\n"
-            + "        \"referenceId\": \"x\"\n"
-            + "      },\n"
-            + "      {\n"
-            + "        \"type\": \"AGENT\",\n"
-            + "        \"appId\": \"appId\",\n"
-            + "        \"referenceId\": \"x\"\n"
-            + "      }\n"
-            + "    ],\n"
-            + "    \"matchedCharterNames\": [\n"
-            + "      \"matchedCharterNames\",\n"
-            + "      \"matchedCharterNames\"\n"
-            + "    ],\n"
-            + "    \"matchedSegmentedCharterNames\": [\n"
-            + "      \"matchedSegmentedCharterNames\",\n"
-            + "      \"matchedSegmentedCharterNames\"\n"
-            + "    ],\n"
-            + "    \"insertCount\": 1,\n"
-            + "    \"thumbsUpCount\": 1,\n"
-            + "    \"thumbsDownCount\": 1,\n"
-            + "    \"handoffCount\": 1,\n"
-            + "    \"userMessageCount\": 1,\n"
-            + "    \"botMessageCount\": 1,\n"
-            + "    \"csat\": 1.1,\n"
-            + "    \"handleTime\": 1000000,\n"
-            + "    \"humanAgentResponseDelay\": 1000000,\n"
-            + "    \"humanAgents\": [\n"
-            + "      \"humanAgents\",\n"
-            + "      \"humanAgents\"\n"
-            + "    ],\n"
-            + "    \"humanAgentsWithInserts\": [\n"
-            + "      \"humanAgentsWithInserts\",\n"
-            + "      \"humanAgentsWithInserts\"\n"
-            + "    ],\n"
-            + "    \"users\": [\n"
-            + "      \"users\",\n"
-            + "      \"users\"\n"
-            + "    ],\n"
-            + "    \"userIdentifiers\": [\n"
-            + "      \"userIdentifiers\",\n"
-            + "      \"userIdentifiers\"\n"
-            + "    ],\n"
-            + "    \"lastUserMessage\": \"lastUserMessage\",\n"
-            + "    \"lastBotMessage\": \"lastBotMessage\",\n"
-            + "    \"involvedAppIds\": [\n"
-            + "      \"involvedAppIds\"\n"
-            + "    ]\n"
-            + "  },\n"
-            + "  \"deleted\": true,\n"
+            + "  \"deleted\": false,\n"
             + "  \"open\": true,\n"
             + "  \"llmEnabled\": true,\n"
-            + "  \"simulationContext\": {\n"
-            + "    \"additionalPromptText\": \"additionalPromptText\",\n"
-            + "    \"persona\": \"CASUAL_BUDDY\",\n"
-            + "    \"availableKnowledgeBases\": [\n"
-            + "      {\n"
-            + "        \"organizationId\": \"organizationId\",\n"
-            + "        \"agentId\": \"agentId\",\n"
-            + "        \"type\": \"AGENT\",\n"
-            + "        \"appId\": \"appId\",\n"
-            + "        \"referenceId\": \"x\"\n"
-            + "      }\n"
-            + "    ],\n"
-            + "    \"variantId\": {\n"
-            + "      \"type\": \"AGENT\",\n"
-            + "      \"appId\": \"appId\",\n"
-            + "      \"referenceId\": \"x\"\n"
-            + "    },\n"
-            + "    \"actionMocks\": [\n"
-            + "      {\n"
-            + "        \"actionId\": {\n"
-            + "          \"type\": \"AGENT\",\n"
-            + "          \"appId\": \"appId\",\n"
-            + "          \"referenceId\": \"x\"\n"
-            + "        },\n"
-            + "        \"behavior\": {\n"
-            + "          \"type\": \"fixedResponse\",\n"
-            + "          \"response\": \"response\",\n"
-            + "          \"data\": {\n"
-            + "            \"data\": {\n"
-            + "              \"key\": \"value\"\n"
-            + "            }\n"
-            + "          },\n"
-            + "          \"status\": \"SUCCESS\",\n"
-            + "          \"errorMessage\": \"errorMessage\"\n"
-            + "        }\n"
-            + "      },\n"
-            + "      {\n"
-            + "        \"actionId\": {\n"
-            + "          \"type\": \"AGENT\",\n"
-            + "          \"appId\": \"appId\",\n"
-            + "          \"referenceId\": \"x\"\n"
-            + "        },\n"
-            + "        \"behavior\": {\n"
-            + "          \"type\": \"fixedResponse\",\n"
-            + "          \"response\": \"response\",\n"
-            + "          \"data\": {\n"
-            + "            \"data\": {\n"
-            + "              \"key\": \"value\"\n"
-            + "            }\n"
-            + "          },\n"
-            + "          \"status\": \"SUCCESS\",\n"
-            + "          \"errorMessage\": \"errorMessage\"\n"
-            + "        }\n"
-            + "      }\n"
-            + "    ],\n"
-            + "    \"defaultActionBehavior\": {\n"
-            + "      \"type\": \"fixedResponse\",\n"
-            + "      \"response\": \"response\",\n"
-            + "      \"data\": {\n"
-            + "        \"data\": {\n"
-            + "          \"key\": \"value\"\n"
-            + "        }\n"
-            + "      },\n"
-            + "      \"status\": \"SUCCESS\",\n"
-            + "      \"errorMessage\": \"errorMessage\"\n"
-            + "    }\n"
-            + "  },\n"
-            + "  \"relatedEntities\": {\n"
-            + "    \"SPAWN_FROM\": [\n"
-            + "      {\n"
-            + "        \"organizationId\": \"organizationId\",\n"
-            + "        \"agentId\": \"agentId\",\n"
-            + "        \"type\": \"AGENT\",\n"
-            + "        \"appId\": \"appId\",\n"
-            + "        \"referenceId\": \"x\"\n"
-            + "      },\n"
-            + "      {\n"
-            + "        \"organizationId\": \"organizationId\",\n"
-            + "        \"agentId\": \"agentId\",\n"
-            + "        \"type\": \"AGENT\",\n"
-            + "        \"appId\": \"appId\",\n"
-            + "        \"referenceId\": \"x\"\n"
-            + "      }\n"
+            + "  \"conversationMode\": \"TEXT\",\n"
+            + "  \"analysis\": {},\n"
+            + "  \"summary\": {\n"
+            + "    \"actionIds\": [],\n"
+            + "    \"incompleteActionIds\": [],\n"
+            + "    \"matchedCharterIds\": [],\n"
+            + "    \"matchedCharterNames\": [],\n"
+            + "    \"matchedSegmentedCharterNames\": [],\n"
+            + "    \"insertCount\": 0,\n"
+            + "    \"thumbsUpCount\": 0,\n"
+            + "    \"thumbsDownCount\": 0,\n"
+            + "    \"handoffCount\": 0,\n"
+            + "    \"userMessageCount\": 0,\n"
+            + "    \"botMessageCount\": 0,\n"
+            + "    \"humanAgents\": [],\n"
+            + "    \"humanAgentsWithInserts\": [],\n"
+            + "    \"users\": [],\n"
+            + "    \"userIdentifiers\": [],\n"
+            + "    \"involvedAppIds\": [\n"
+            + "      \"myapp\"\n"
             + "    ]\n"
             + "  },\n"
-            + "  \"conversationMode\": \"VOICE\",\n"
-            + "  \"variantId\": {\n"
-            + "    \"organizationId\": \"organizationId\",\n"
-            + "    \"agentId\": \"agentId\",\n"
-            + "    \"type\": \"AGENT\",\n"
-            + "    \"appId\": \"appId\",\n"
-            + "    \"referenceId\": \"x\"\n"
-            + "  }\n"
+            + "  \"metadata\": {},\n"
+            + "  \"allMetadata\": {},\n"
+            + "  \"attachments\": [],\n"
+            + "  \"messages\": [],\n"
+            + "  \"executionMode\": \"LIVE\",\n"
+            + "  \"conversationKickoffResults\": []\n"
             + "}";
         JsonNode actualResponseNode = objectMapper.readTree(actualResponseJson);
         JsonNode expectedResponseNode = objectMapper.readTree(expectedResponseBody);
@@ -610,7 +186,7 @@ public class ConversationWireTest {
     public void testPatch() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"conversationId\":{\"referenceId\":\"conversation-0\",\"appId\":\"myapp\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"CONVERSATION\"},\"deleted\":false,\"open\":false,\"llmEnabled\":true,\"conversationMode\":\"TEXT\",\"analysis\":{\"resolutionStatus\":\"RESOLVED\",\"sentiment\":\"POSITIVE\",\"resolvedByMaven\":true},\"summary\":{\"actionIds\":[],\"incompleteActionIds\":[],\"matchedCharterIds\":[],\"matchedCharterNames\":[],\"matchedSegmentedCharterNames\":[],\"insertCount\":0,\"thumbsUpCount\":0,\"thumbsDownCount\":0,\"handoffCount\":0,\"userMessageCount\":1,\"botMessageCount\":1,\"humanAgents\":[],\"humanAgentsWithInserts\":[],\"users\":[],\"userIdentifiers\":[],\"involvedAppIds\":[\"myapp\"]},\"metadata\":{},\"allMetadata\":{},\"attachments\":[],\"messages\":[{\"type\":\"user\",\"userMessageType\":\"USER\",\"conversationMessageId\":{\"referenceId\":\"message-0\",\"appId\":\"myapp\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"CONVERSATION_MESSAGE\"},\"status\":\"UNKNOWN\",\"userId\":{\"referenceId\":\"user-0\"},\"text\":\"How do I reset my password?\",\"attachments\":[{\"url\":\"https://example.com/attachment-0\",\"type\":\"image/png\",\"status\":\"ACCEPTED\",\"sizeBytes\":1234}]},{\"type\":\"bot\",\"botMessageType\":\"BOT_RESPONSE\",\"conversationMessageId\":{\"referenceId\":\"message-1\",\"appId\":\"myapp\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"CONVERSATION_MESSAGE\"},\"status\":\"SENT\",\"responses\":[{\"type\":\"text\",\"text\":\"Hi! Go to acme.com/reset-password\"}],\"metadata\":{\"followupQuestions\":[\"What if I did not get the reset email?\"],\"sources\":[]}}]}"));
+            .setBody("{\"conversationId\":{\"referenceId\":\"conversation-0\",\"appId\":\"myapp\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"CONVERSATION\"},\"deleted\":false,\"open\":false,\"llmEnabled\":true,\"executionMode\":\"LIVE\",\"conversationMode\":\"TEXT\",\"analysis\":{\"resolutionStatus\":\"RESOLVED\",\"sentiment\":\"POSITIVE\",\"resolvedByMaven\":true},\"summary\":{\"actionIds\":[],\"incompleteActionIds\":[],\"matchedCharterIds\":[],\"matchedCharterNames\":[],\"matchedSegmentedCharterNames\":[],\"insertCount\":0,\"thumbsUpCount\":0,\"thumbsDownCount\":0,\"handoffCount\":0,\"userMessageCount\":1,\"botMessageCount\":1,\"humanAgents\":[],\"humanAgentsWithInserts\":[],\"users\":[],\"userIdentifiers\":[],\"involvedAppIds\":[\"myapp\"]},\"metadata\":{},\"allMetadata\":{},\"attachments\":[],\"messages\":[{\"type\":\"user\",\"userMessageType\":\"USER\",\"conversationMessageId\":{\"referenceId\":\"message-0\",\"appId\":\"myapp\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"CONVERSATION_MESSAGE\"},\"status\":\"UNKNOWN\",\"userId\":{\"referenceId\":\"user-0\"},\"text\":\"How do I reset my password?\",\"attachments\":[{\"url\":\"https://example.com/attachment-0\",\"type\":\"image/png\",\"status\":\"ACCEPTED\",\"sizeBytes\":1234}]},{\"type\":\"bot\",\"botMessageType\":\"BOT_RESPONSE\",\"conversationMessageId\":{\"referenceId\":\"message-1\",\"appId\":\"myapp\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"CONVERSATION_MESSAGE\"},\"status\":\"SENT\",\"responses\":[{\"type\":\"text\",\"text\":\"Hi! Go to acme.com/reset-password\"}],\"metadata\":{\"followupQuestions\":[\"What if I did not get the reset email?\"],\"sources\":[]}}]}"));
         ConversationResponse response = client.conversation().patch(
             "conversation-0",
             ConversationPatchRequest
@@ -665,6 +241,7 @@ public class ConversationWireTest {
             + "  \"deleted\": false,\n"
             + "  \"open\": false,\n"
             + "  \"llmEnabled\": true,\n"
+            + "  \"executionMode\": \"LIVE\",\n"
             + "  \"conversationMode\": \"TEXT\",\n"
             + "  \"analysis\": {\n"
             + "    \"resolutionStatus\": \"RESOLVED\",\n"
@@ -772,7 +349,7 @@ public class ConversationWireTest {
     public void testGet() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"messages\":[{\"type\":\"user\",\"conversationMessageId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"language\":\"language\",\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"agentUserId\":\"agentUserId\",\"userDisplayName\":\"userDisplayName\",\"status\":\"SENDING\",\"responseState\":\"NOT_ASKED\",\"timezone\":\"timezone\",\"userId\":{\"referenceId\":\"x\"},\"text\":\"text\",\"userMessageType\":\"USER\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"appMetadata\":{\"appMetadata\":\"appMetadata\"}},{\"type\":\"user\",\"conversationMessageId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"language\":\"language\",\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"agentUserId\":\"agentUserId\",\"userDisplayName\":\"userDisplayName\",\"status\":\"SENDING\",\"responseState\":\"NOT_ASKED\",\"timezone\":\"timezone\",\"userId\":{\"referenceId\":\"x\"},\"text\":\"text\",\"userMessageType\":\"USER\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"appMetadata\":{\"appMetadata\":\"appMetadata\"}}],\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"responseConfig\":{\"capabilities\":[\"MARKDOWN\",\"MARKDOWN\"],\"isCopilot\":true,\"responseLength\":\"SHORT\",\"contextFilter\":{\"scopeType\":\"byEntities\",\"entities\":[{\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"scopeEntityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}}]}},\"subject\":\"subject\",\"url\":\"url\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"tags\":[\"tags\"],\"metadata\":{\"metadata\":\"metadata\"},\"allMetadata\":{\"allMetadata\":{\"allMetadata\":\"allMetadata\"}},\"conversationId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"analysis\":{\"userRequest\":\"userRequest\",\"agentResponse\":\"agentResponse\",\"resolutionStatus\":\"UNKNOWN\",\"category\":\"category\",\"sentiment\":\"POSITIVE\",\"quality\":\"GOOD\",\"qualityReason\":\"MISSING_KNOWLEDGE\",\"resolvedByMaven\":true,\"primaryLanguage\":\"primaryLanguage\",\"predictedNps\":1.1,\"csat\":1.1,\"intelligentFieldValues\":[{\"fieldId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"name\":\"name\",\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"value\":{\"key\":\"value\"},\"confidence\":1.1,\"rationale\":\"rationale\",\"createdAt\":\"2024-01-15T09:30:00Z\"},{\"fieldId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"name\":\"name\",\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"value\":{\"key\":\"value\"},\"confidence\":1.1,\"rationale\":\"rationale\",\"createdAt\":\"2024-01-15T09:30:00Z\"}]},\"summary\":{\"actionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"incompleteActionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"matchedCharterIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"matchedCharterNames\":[\"matchedCharterNames\",\"matchedCharterNames\"],\"matchedSegmentedCharterNames\":[\"matchedSegmentedCharterNames\",\"matchedSegmentedCharterNames\"],\"insertCount\":1,\"thumbsUpCount\":1,\"thumbsDownCount\":1,\"handoffCount\":1,\"userMessageCount\":1,\"botMessageCount\":1,\"csat\":1.1,\"handleTime\":1000000,\"humanAgentResponseDelay\":1000000,\"humanAgents\":[\"humanAgents\",\"humanAgents\"],\"humanAgentsWithInserts\":[\"humanAgentsWithInserts\",\"humanAgentsWithInserts\"],\"users\":[\"users\",\"users\"],\"userIdentifiers\":[\"userIdentifiers\",\"userIdentifiers\"],\"lastUserMessage\":\"lastUserMessage\",\"lastBotMessage\":\"lastBotMessage\",\"involvedAppIds\":[\"involvedAppIds\"]},\"deleted\":true,\"open\":true,\"llmEnabled\":true,\"simulationContext\":{\"additionalPromptText\":\"additionalPromptText\",\"persona\":\"CASUAL_BUDDY\",\"availableKnowledgeBases\":[{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"variantId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"actionMocks\":[{\"actionId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"behavior\":{\"type\":\"fixedResponse\",\"response\":\"response\",\"data\":{\"data\":{\"key\":\"value\"}},\"status\":\"SUCCESS\",\"errorMessage\":\"errorMessage\"}},{\"actionId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"behavior\":{\"type\":\"fixedResponse\",\"response\":\"response\",\"data\":{\"data\":{\"key\":\"value\"}},\"status\":\"SUCCESS\",\"errorMessage\":\"errorMessage\"}}],\"defaultActionBehavior\":{\"type\":\"fixedResponse\",\"response\":\"response\",\"data\":{\"data\":{\"key\":\"value\"}},\"status\":\"SUCCESS\",\"errorMessage\":\"errorMessage\"}},\"relatedEntities\":{\"SPAWN_FROM\":[{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}]},\"conversationMode\":\"VOICE\",\"variantId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}}"));
+            .setBody("{\"messages\":[{\"type\":\"user\",\"conversationMessageId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"language\":\"language\",\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"agentUserId\":\"agentUserId\",\"userDisplayName\":\"userDisplayName\",\"status\":\"SENDING\",\"responseState\":\"NOT_ASKED\",\"timezone\":\"timezone\",\"userId\":{\"referenceId\":\"x\"},\"text\":\"text\",\"userMessageType\":\"USER\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"appMetadata\":{\"appMetadata\":\"appMetadata\"}},{\"type\":\"user\",\"conversationMessageId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"language\":\"language\",\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"agentUserId\":\"agentUserId\",\"userDisplayName\":\"userDisplayName\",\"status\":\"SENDING\",\"responseState\":\"NOT_ASKED\",\"timezone\":\"timezone\",\"userId\":{\"referenceId\":\"x\"},\"text\":\"text\",\"userMessageType\":\"USER\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"appMetadata\":{\"appMetadata\":\"appMetadata\"}}],\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"responseConfig\":{\"capabilities\":[\"MARKDOWN\",\"MARKDOWN\"],\"isCopilot\":true,\"responseLength\":\"SHORT\",\"contextFilter\":{\"scopeType\":\"byEntities\",\"entities\":[{\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"scopeEntityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}}]}},\"subject\":\"subject\",\"url\":\"url\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"tags\":[\"tags\"],\"metadata\":{\"metadata\":\"metadata\"},\"allMetadata\":{\"allMetadata\":{\"allMetadata\":\"allMetadata\"}},\"conversationId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"analysis\":{\"userRequest\":\"userRequest\",\"agentResponse\":\"agentResponse\",\"resolutionStatus\":\"UNKNOWN\",\"category\":\"category\",\"sentiment\":\"POSITIVE\",\"quality\":\"GOOD\",\"qualityReason\":\"MISSING_KNOWLEDGE\",\"resolvedByMaven\":true,\"primaryLanguage\":\"primaryLanguage\",\"predictedNps\":1.1,\"csat\":1.1,\"intelligentFieldValues\":[{\"fieldId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"name\":\"name\",\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"value\":{\"key\":\"value\"},\"confidence\":1.1,\"rationale\":\"rationale\",\"createdAt\":\"2024-01-15T09:30:00Z\"},{\"fieldId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"name\":\"name\",\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"value\":{\"key\":\"value\"},\"confidence\":1.1,\"rationale\":\"rationale\",\"createdAt\":\"2024-01-15T09:30:00Z\"}]},\"summary\":{\"actionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"incompleteActionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"matchedCharterIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"matchedCharterNames\":[\"matchedCharterNames\",\"matchedCharterNames\"],\"matchedSegmentedCharterNames\":[\"matchedSegmentedCharterNames\",\"matchedSegmentedCharterNames\"],\"insertCount\":1,\"thumbsUpCount\":1,\"thumbsDownCount\":1,\"handoffCount\":1,\"userMessageCount\":1,\"botMessageCount\":1,\"csat\":1.1,\"handleTime\":1000000,\"humanAgentResponseDelay\":1000000,\"humanAgents\":[\"humanAgents\",\"humanAgents\"],\"humanAgentsWithInserts\":[\"humanAgentsWithInserts\",\"humanAgentsWithInserts\"],\"users\":[\"users\",\"users\"],\"userIdentifiers\":[\"userIdentifiers\",\"userIdentifiers\"],\"lastUserMessage\":\"lastUserMessage\",\"lastBotMessage\":\"lastBotMessage\",\"involvedAppIds\":[\"involvedAppIds\"]},\"deleted\":true,\"open\":true,\"llmEnabled\":true,\"simulationContext\":{\"additionalPromptText\":\"additionalPromptText\",\"persona\":\"CASUAL_BUDDY\",\"availableKnowledgeBases\":[{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"variantId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"actionMocks\":[{\"actionId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"behavior\":{\"type\":\"fixedResponse\",\"response\":\"response\",\"data\":{\"data\":{\"key\":\"value\"}},\"status\":\"SUCCESS\",\"errorMessage\":\"errorMessage\"}},{\"actionId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"behavior\":{\"type\":\"fixedResponse\",\"response\":\"response\",\"data\":{\"data\":{\"key\":\"value\"}},\"status\":\"SUCCESS\",\"errorMessage\":\"errorMessage\"}}],\"defaultActionBehavior\":{\"type\":\"fixedResponse\",\"response\":\"response\",\"data\":{\"data\":{\"key\":\"value\"}},\"status\":\"SUCCESS\",\"errorMessage\":\"errorMessage\"}},\"executionMode\":\"LIVE\",\"relatedEntities\":{\"SPAWN_FROM\":[{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}]},\"conversationMode\":\"VOICE\",\"variantId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}}"));
         ConversationResponse response = client.conversation().get(
             "conversationId",
             ConversationGetRequest
@@ -1148,6 +725,7 @@ public class ConversationWireTest {
             + "      \"errorMessage\": \"errorMessage\"\n"
             + "    }\n"
             + "  },\n"
+            + "  \"executionMode\": \"LIVE\",\n"
             + "  \"relatedEntities\": {\n"
             + "    \"SPAWN_FROM\": [\n"
             + "      {\n"
@@ -1218,7 +796,7 @@ public class ConversationWireTest {
     public void testAppendNewMessages() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"messages\":[{\"type\":\"user\",\"conversationMessageId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"language\":\"language\",\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"agentUserId\":\"agentUserId\",\"userDisplayName\":\"userDisplayName\",\"status\":\"SENDING\",\"responseState\":\"NOT_ASKED\",\"timezone\":\"timezone\",\"userId\":{\"referenceId\":\"x\"},\"text\":\"text\",\"userMessageType\":\"USER\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"appMetadata\":{\"appMetadata\":\"appMetadata\"}},{\"type\":\"user\",\"conversationMessageId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"language\":\"language\",\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"agentUserId\":\"agentUserId\",\"userDisplayName\":\"userDisplayName\",\"status\":\"SENDING\",\"responseState\":\"NOT_ASKED\",\"timezone\":\"timezone\",\"userId\":{\"referenceId\":\"x\"},\"text\":\"text\",\"userMessageType\":\"USER\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"appMetadata\":{\"appMetadata\":\"appMetadata\"}}],\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"responseConfig\":{\"capabilities\":[\"MARKDOWN\",\"MARKDOWN\"],\"isCopilot\":true,\"responseLength\":\"SHORT\",\"contextFilter\":{\"scopeType\":\"byEntities\",\"entities\":[{\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"scopeEntityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}}]}},\"subject\":\"subject\",\"url\":\"url\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"tags\":[\"tags\"],\"metadata\":{\"metadata\":\"metadata\"},\"allMetadata\":{\"allMetadata\":{\"allMetadata\":\"allMetadata\"}},\"conversationId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"analysis\":{\"userRequest\":\"userRequest\",\"agentResponse\":\"agentResponse\",\"resolutionStatus\":\"UNKNOWN\",\"category\":\"category\",\"sentiment\":\"POSITIVE\",\"quality\":\"GOOD\",\"qualityReason\":\"MISSING_KNOWLEDGE\",\"resolvedByMaven\":true,\"primaryLanguage\":\"primaryLanguage\",\"predictedNps\":1.1,\"csat\":1.1,\"intelligentFieldValues\":[{\"fieldId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"name\":\"name\",\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"value\":{\"key\":\"value\"},\"confidence\":1.1,\"rationale\":\"rationale\",\"createdAt\":\"2024-01-15T09:30:00Z\"},{\"fieldId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"name\":\"name\",\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"value\":{\"key\":\"value\"},\"confidence\":1.1,\"rationale\":\"rationale\",\"createdAt\":\"2024-01-15T09:30:00Z\"}]},\"summary\":{\"actionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"incompleteActionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"matchedCharterIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"matchedCharterNames\":[\"matchedCharterNames\",\"matchedCharterNames\"],\"matchedSegmentedCharterNames\":[\"matchedSegmentedCharterNames\",\"matchedSegmentedCharterNames\"],\"insertCount\":1,\"thumbsUpCount\":1,\"thumbsDownCount\":1,\"handoffCount\":1,\"userMessageCount\":1,\"botMessageCount\":1,\"csat\":1.1,\"handleTime\":1000000,\"humanAgentResponseDelay\":1000000,\"humanAgents\":[\"humanAgents\",\"humanAgents\"],\"humanAgentsWithInserts\":[\"humanAgentsWithInserts\",\"humanAgentsWithInserts\"],\"users\":[\"users\",\"users\"],\"userIdentifiers\":[\"userIdentifiers\",\"userIdentifiers\"],\"lastUserMessage\":\"lastUserMessage\",\"lastBotMessage\":\"lastBotMessage\",\"involvedAppIds\":[\"involvedAppIds\"]},\"deleted\":true,\"open\":true,\"llmEnabled\":true,\"simulationContext\":{\"additionalPromptText\":\"additionalPromptText\",\"persona\":\"CASUAL_BUDDY\",\"availableKnowledgeBases\":[{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"variantId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"actionMocks\":[{\"actionId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"behavior\":{\"type\":\"fixedResponse\",\"response\":\"response\",\"data\":{\"data\":{\"key\":\"value\"}},\"status\":\"SUCCESS\",\"errorMessage\":\"errorMessage\"}},{\"actionId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"behavior\":{\"type\":\"fixedResponse\",\"response\":\"response\",\"data\":{\"data\":{\"key\":\"value\"}},\"status\":\"SUCCESS\",\"errorMessage\":\"errorMessage\"}}],\"defaultActionBehavior\":{\"type\":\"fixedResponse\",\"response\":\"response\",\"data\":{\"data\":{\"key\":\"value\"}},\"status\":\"SUCCESS\",\"errorMessage\":\"errorMessage\"}},\"relatedEntities\":{\"SPAWN_FROM\":[{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}]},\"conversationMode\":\"VOICE\",\"variantId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}}"));
+            .setBody("{\"messages\":[{\"type\":\"user\",\"conversationMessageId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"language\":\"language\",\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"agentUserId\":\"agentUserId\",\"userDisplayName\":\"userDisplayName\",\"status\":\"SENDING\",\"responseState\":\"NOT_ASKED\",\"timezone\":\"timezone\",\"userId\":{\"referenceId\":\"x\"},\"text\":\"text\",\"userMessageType\":\"USER\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"appMetadata\":{\"appMetadata\":\"appMetadata\"}},{\"type\":\"user\",\"conversationMessageId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"language\":\"language\",\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"agentUserId\":\"agentUserId\",\"userDisplayName\":\"userDisplayName\",\"status\":\"SENDING\",\"responseState\":\"NOT_ASKED\",\"timezone\":\"timezone\",\"userId\":{\"referenceId\":\"x\"},\"text\":\"text\",\"userMessageType\":\"USER\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"appMetadata\":{\"appMetadata\":\"appMetadata\"}}],\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"responseConfig\":{\"capabilities\":[\"MARKDOWN\",\"MARKDOWN\"],\"isCopilot\":true,\"responseLength\":\"SHORT\",\"contextFilter\":{\"scopeType\":\"byEntities\",\"entities\":[{\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"scopeEntityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}}]}},\"subject\":\"subject\",\"url\":\"url\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"tags\":[\"tags\"],\"metadata\":{\"metadata\":\"metadata\"},\"allMetadata\":{\"allMetadata\":{\"allMetadata\":\"allMetadata\"}},\"conversationId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"analysis\":{\"userRequest\":\"userRequest\",\"agentResponse\":\"agentResponse\",\"resolutionStatus\":\"UNKNOWN\",\"category\":\"category\",\"sentiment\":\"POSITIVE\",\"quality\":\"GOOD\",\"qualityReason\":\"MISSING_KNOWLEDGE\",\"resolvedByMaven\":true,\"primaryLanguage\":\"primaryLanguage\",\"predictedNps\":1.1,\"csat\":1.1,\"intelligentFieldValues\":[{\"fieldId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"name\":\"name\",\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"value\":{\"key\":\"value\"},\"confidence\":1.1,\"rationale\":\"rationale\",\"createdAt\":\"2024-01-15T09:30:00Z\"},{\"fieldId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"name\":\"name\",\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"value\":{\"key\":\"value\"},\"confidence\":1.1,\"rationale\":\"rationale\",\"createdAt\":\"2024-01-15T09:30:00Z\"}]},\"summary\":{\"actionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"incompleteActionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"matchedCharterIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"matchedCharterNames\":[\"matchedCharterNames\",\"matchedCharterNames\"],\"matchedSegmentedCharterNames\":[\"matchedSegmentedCharterNames\",\"matchedSegmentedCharterNames\"],\"insertCount\":1,\"thumbsUpCount\":1,\"thumbsDownCount\":1,\"handoffCount\":1,\"userMessageCount\":1,\"botMessageCount\":1,\"csat\":1.1,\"handleTime\":1000000,\"humanAgentResponseDelay\":1000000,\"humanAgents\":[\"humanAgents\",\"humanAgents\"],\"humanAgentsWithInserts\":[\"humanAgentsWithInserts\",\"humanAgentsWithInserts\"],\"users\":[\"users\",\"users\"],\"userIdentifiers\":[\"userIdentifiers\",\"userIdentifiers\"],\"lastUserMessage\":\"lastUserMessage\",\"lastBotMessage\":\"lastBotMessage\",\"involvedAppIds\":[\"involvedAppIds\"]},\"deleted\":true,\"open\":true,\"llmEnabled\":true,\"simulationContext\":{\"additionalPromptText\":\"additionalPromptText\",\"persona\":\"CASUAL_BUDDY\",\"availableKnowledgeBases\":[{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"variantId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"actionMocks\":[{\"actionId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"behavior\":{\"type\":\"fixedResponse\",\"response\":\"response\",\"data\":{\"data\":{\"key\":\"value\"}},\"status\":\"SUCCESS\",\"errorMessage\":\"errorMessage\"}},{\"actionId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"behavior\":{\"type\":\"fixedResponse\",\"response\":\"response\",\"data\":{\"data\":{\"key\":\"value\"}},\"status\":\"SUCCESS\",\"errorMessage\":\"errorMessage\"}}],\"defaultActionBehavior\":{\"type\":\"fixedResponse\",\"response\":\"response\",\"data\":{\"data\":{\"key\":\"value\"}},\"status\":\"SUCCESS\",\"errorMessage\":\"errorMessage\"}},\"executionMode\":\"LIVE\",\"relatedEntities\":{\"SPAWN_FROM\":[{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}]},\"conversationMode\":\"VOICE\",\"variantId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}}"));
         ConversationResponse response = client.conversation().appendNewMessages(
             "conversationId",
             Arrays.asList(
@@ -1674,6 +1252,7 @@ public class ConversationWireTest {
             + "      \"errorMessage\": \"errorMessage\"\n"
             + "    }\n"
             + "  },\n"
+            + "  \"executionMode\": \"LIVE\",\n"
             + "  \"relatedEntities\": {\n"
             + "    \"SPAWN_FROM\": [\n"
             + "      {\n"
@@ -1728,7 +1307,7 @@ public class ConversationWireTest {
     public void testAsk() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"conversationId\":{\"referenceId\":\"conversation-0\",\"appId\":\"myapp\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"CONVERSATION\"},\"deleted\":false,\"open\":false,\"llmEnabled\":true,\"conversationMode\":\"TEXT\",\"analysis\":{\"resolutionStatus\":\"RESOLVED\",\"sentiment\":\"POSITIVE\",\"resolvedByMaven\":true},\"summary\":{\"actionIds\":[],\"incompleteActionIds\":[],\"matchedCharterIds\":[],\"matchedCharterNames\":[],\"matchedSegmentedCharterNames\":[],\"insertCount\":0,\"thumbsUpCount\":0,\"thumbsDownCount\":0,\"handoffCount\":0,\"userMessageCount\":1,\"botMessageCount\":1,\"humanAgents\":[],\"humanAgentsWithInserts\":[],\"users\":[],\"userIdentifiers\":[],\"involvedAppIds\":[\"myapp\"]},\"metadata\":{},\"allMetadata\":{},\"attachments\":[],\"messages\":[{\"type\":\"user\",\"userMessageType\":\"USER\",\"conversationMessageId\":{\"referenceId\":\"message-0\",\"appId\":\"myapp\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"CONVERSATION_MESSAGE\"},\"status\":\"UNKNOWN\",\"userId\":{\"referenceId\":\"user-0\"},\"text\":\"How do I reset my password?\",\"attachments\":[{\"url\":\"https://example.com/attachment-0\",\"type\":\"image/png\",\"status\":\"ACCEPTED\",\"sizeBytes\":1234}]},{\"type\":\"bot\",\"botMessageType\":\"BOT_RESPONSE\",\"conversationMessageId\":{\"referenceId\":\"message-1\",\"appId\":\"myapp\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"CONVERSATION_MESSAGE\"},\"status\":\"SENT\",\"responses\":[{\"type\":\"text\",\"text\":\"Hi! Go to acme.com/reset-password\"}],\"metadata\":{\"followupQuestions\":[\"What if I did not get the reset email?\"],\"sources\":[]}}]}"));
+            .setBody("{\"conversationId\":{\"referenceId\":\"conversation-0\",\"appId\":\"myapp\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"CONVERSATION\"},\"deleted\":false,\"open\":false,\"llmEnabled\":true,\"executionMode\":\"LIVE\",\"conversationMode\":\"TEXT\",\"analysis\":{\"resolutionStatus\":\"RESOLVED\",\"sentiment\":\"POSITIVE\",\"resolvedByMaven\":true},\"summary\":{\"actionIds\":[],\"incompleteActionIds\":[],\"matchedCharterIds\":[],\"matchedCharterNames\":[],\"matchedSegmentedCharterNames\":[],\"insertCount\":0,\"thumbsUpCount\":0,\"thumbsDownCount\":0,\"handoffCount\":0,\"userMessageCount\":1,\"botMessageCount\":1,\"humanAgents\":[],\"humanAgentsWithInserts\":[],\"users\":[],\"userIdentifiers\":[],\"involvedAppIds\":[\"myapp\"]},\"metadata\":{},\"allMetadata\":{},\"attachments\":[],\"messages\":[{\"type\":\"user\",\"userMessageType\":\"USER\",\"conversationMessageId\":{\"referenceId\":\"message-0\",\"appId\":\"myapp\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"CONVERSATION_MESSAGE\"},\"status\":\"UNKNOWN\",\"userId\":{\"referenceId\":\"user-0\"},\"text\":\"How do I reset my password?\",\"attachments\":[{\"url\":\"https://example.com/attachment-0\",\"type\":\"image/png\",\"status\":\"ACCEPTED\",\"sizeBytes\":1234}]},{\"type\":\"bot\",\"botMessageType\":\"BOT_RESPONSE\",\"conversationMessageId\":{\"referenceId\":\"message-1\",\"appId\":\"myapp\",\"organizationId\":\"acme\",\"agentId\":\"support\",\"type\":\"CONVERSATION_MESSAGE\"},\"status\":\"SENT\",\"responses\":[{\"type\":\"text\",\"text\":\"Hi! Go to acme.com/reset-password\"}],\"metadata\":{\"followupQuestions\":[\"What if I did not get the reset email?\"],\"sources\":[]}}]}"));
         ConversationResponse response = client.conversation().ask(
             "conversation-0",
             AskRequest
@@ -1830,6 +1409,7 @@ public class ConversationWireTest {
             + "  \"deleted\": false,\n"
             + "  \"open\": false,\n"
             + "  \"llmEnabled\": true,\n"
+            + "  \"executionMode\": \"LIVE\",\n"
             + "  \"conversationMode\": \"TEXT\",\n"
             + "  \"analysis\": {\n"
             + "    \"resolutionStatus\": \"RESOLVED\",\n"
@@ -2117,7 +1697,7 @@ public class ConversationWireTest {
     public void testSubmitActionForm() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"messages\":[{\"type\":\"user\",\"conversationMessageId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"language\":\"language\",\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"agentUserId\":\"agentUserId\",\"userDisplayName\":\"userDisplayName\",\"status\":\"SENDING\",\"responseState\":\"NOT_ASKED\",\"timezone\":\"timezone\",\"userId\":{\"referenceId\":\"x\"},\"text\":\"text\",\"userMessageType\":\"USER\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"appMetadata\":{\"appMetadata\":\"appMetadata\"}},{\"type\":\"user\",\"conversationMessageId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"language\":\"language\",\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"agentUserId\":\"agentUserId\",\"userDisplayName\":\"userDisplayName\",\"status\":\"SENDING\",\"responseState\":\"NOT_ASKED\",\"timezone\":\"timezone\",\"userId\":{\"referenceId\":\"x\"},\"text\":\"text\",\"userMessageType\":\"USER\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"appMetadata\":{\"appMetadata\":\"appMetadata\"}}],\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"responseConfig\":{\"capabilities\":[\"MARKDOWN\",\"MARKDOWN\"],\"isCopilot\":true,\"responseLength\":\"SHORT\",\"contextFilter\":{\"scopeType\":\"byEntities\",\"entities\":[{\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"scopeEntityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}}]}},\"subject\":\"subject\",\"url\":\"url\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"tags\":[\"tags\"],\"metadata\":{\"metadata\":\"metadata\"},\"allMetadata\":{\"allMetadata\":{\"allMetadata\":\"allMetadata\"}},\"conversationId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"analysis\":{\"userRequest\":\"userRequest\",\"agentResponse\":\"agentResponse\",\"resolutionStatus\":\"UNKNOWN\",\"category\":\"category\",\"sentiment\":\"POSITIVE\",\"quality\":\"GOOD\",\"qualityReason\":\"MISSING_KNOWLEDGE\",\"resolvedByMaven\":true,\"primaryLanguage\":\"primaryLanguage\",\"predictedNps\":1.1,\"csat\":1.1,\"intelligentFieldValues\":[{\"fieldId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"name\":\"name\",\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"value\":{\"key\":\"value\"},\"confidence\":1.1,\"rationale\":\"rationale\",\"createdAt\":\"2024-01-15T09:30:00Z\"},{\"fieldId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"name\":\"name\",\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"value\":{\"key\":\"value\"},\"confidence\":1.1,\"rationale\":\"rationale\",\"createdAt\":\"2024-01-15T09:30:00Z\"}]},\"summary\":{\"actionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"incompleteActionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"matchedCharterIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"matchedCharterNames\":[\"matchedCharterNames\",\"matchedCharterNames\"],\"matchedSegmentedCharterNames\":[\"matchedSegmentedCharterNames\",\"matchedSegmentedCharterNames\"],\"insertCount\":1,\"thumbsUpCount\":1,\"thumbsDownCount\":1,\"handoffCount\":1,\"userMessageCount\":1,\"botMessageCount\":1,\"csat\":1.1,\"handleTime\":1000000,\"humanAgentResponseDelay\":1000000,\"humanAgents\":[\"humanAgents\",\"humanAgents\"],\"humanAgentsWithInserts\":[\"humanAgentsWithInserts\",\"humanAgentsWithInserts\"],\"users\":[\"users\",\"users\"],\"userIdentifiers\":[\"userIdentifiers\",\"userIdentifiers\"],\"lastUserMessage\":\"lastUserMessage\",\"lastBotMessage\":\"lastBotMessage\",\"involvedAppIds\":[\"involvedAppIds\"]},\"deleted\":true,\"open\":true,\"llmEnabled\":true,\"simulationContext\":{\"additionalPromptText\":\"additionalPromptText\",\"persona\":\"CASUAL_BUDDY\",\"availableKnowledgeBases\":[{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"variantId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"actionMocks\":[{\"actionId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"behavior\":{\"type\":\"fixedResponse\",\"response\":\"response\",\"data\":{\"data\":{\"key\":\"value\"}},\"status\":\"SUCCESS\",\"errorMessage\":\"errorMessage\"}},{\"actionId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"behavior\":{\"type\":\"fixedResponse\",\"response\":\"response\",\"data\":{\"data\":{\"key\":\"value\"}},\"status\":\"SUCCESS\",\"errorMessage\":\"errorMessage\"}}],\"defaultActionBehavior\":{\"type\":\"fixedResponse\",\"response\":\"response\",\"data\":{\"data\":{\"key\":\"value\"}},\"status\":\"SUCCESS\",\"errorMessage\":\"errorMessage\"}},\"relatedEntities\":{\"SPAWN_FROM\":[{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}]},\"conversationMode\":\"VOICE\",\"variantId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}}"));
+            .setBody("{\"messages\":[{\"type\":\"user\",\"conversationMessageId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"language\":\"language\",\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"agentUserId\":\"agentUserId\",\"userDisplayName\":\"userDisplayName\",\"status\":\"SENDING\",\"responseState\":\"NOT_ASKED\",\"timezone\":\"timezone\",\"userId\":{\"referenceId\":\"x\"},\"text\":\"text\",\"userMessageType\":\"USER\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"appMetadata\":{\"appMetadata\":\"appMetadata\"}},{\"type\":\"user\",\"conversationMessageId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"language\":\"language\",\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"agentUserId\":\"agentUserId\",\"userDisplayName\":\"userDisplayName\",\"status\":\"SENDING\",\"responseState\":\"NOT_ASKED\",\"timezone\":\"timezone\",\"userId\":{\"referenceId\":\"x\"},\"text\":\"text\",\"userMessageType\":\"USER\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"appMetadata\":{\"appMetadata\":\"appMetadata\"}}],\"attachments\":[{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"},{\"url\":\"url\",\"sizeBytes\":1000000,\"status\":\"PENDING\",\"type\":\"type\",\"name\":\"name\"}],\"responseConfig\":{\"capabilities\":[\"MARKDOWN\",\"MARKDOWN\"],\"isCopilot\":true,\"responseLength\":\"SHORT\",\"contextFilter\":{\"scopeType\":\"byEntities\",\"entities\":[{\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"scopeEntityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}}]}},\"subject\":\"subject\",\"url\":\"url\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"tags\":[\"tags\"],\"metadata\":{\"metadata\":\"metadata\"},\"allMetadata\":{\"allMetadata\":{\"allMetadata\":\"allMetadata\"}},\"conversationId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"analysis\":{\"userRequest\":\"userRequest\",\"agentResponse\":\"agentResponse\",\"resolutionStatus\":\"UNKNOWN\",\"category\":\"category\",\"sentiment\":\"POSITIVE\",\"quality\":\"GOOD\",\"qualityReason\":\"MISSING_KNOWLEDGE\",\"resolvedByMaven\":true,\"primaryLanguage\":\"primaryLanguage\",\"predictedNps\":1.1,\"csat\":1.1,\"intelligentFieldValues\":[{\"fieldId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"name\":\"name\",\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"value\":{\"key\":\"value\"},\"confidence\":1.1,\"rationale\":\"rationale\",\"createdAt\":\"2024-01-15T09:30:00Z\"},{\"fieldId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"name\":\"name\",\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"value\":{\"key\":\"value\"},\"confidence\":1.1,\"rationale\":\"rationale\",\"createdAt\":\"2024-01-15T09:30:00Z\"}]},\"summary\":{\"actionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"incompleteActionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"matchedCharterIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"matchedCharterNames\":[\"matchedCharterNames\",\"matchedCharterNames\"],\"matchedSegmentedCharterNames\":[\"matchedSegmentedCharterNames\",\"matchedSegmentedCharterNames\"],\"insertCount\":1,\"thumbsUpCount\":1,\"thumbsDownCount\":1,\"handoffCount\":1,\"userMessageCount\":1,\"botMessageCount\":1,\"csat\":1.1,\"handleTime\":1000000,\"humanAgentResponseDelay\":1000000,\"humanAgents\":[\"humanAgents\",\"humanAgents\"],\"humanAgentsWithInserts\":[\"humanAgentsWithInserts\",\"humanAgentsWithInserts\"],\"users\":[\"users\",\"users\"],\"userIdentifiers\":[\"userIdentifiers\",\"userIdentifiers\"],\"lastUserMessage\":\"lastUserMessage\",\"lastBotMessage\":\"lastBotMessage\",\"involvedAppIds\":[\"involvedAppIds\"]},\"deleted\":true,\"open\":true,\"llmEnabled\":true,\"simulationContext\":{\"additionalPromptText\":\"additionalPromptText\",\"persona\":\"CASUAL_BUDDY\",\"availableKnowledgeBases\":[{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"variantId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"actionMocks\":[{\"actionId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"behavior\":{\"type\":\"fixedResponse\",\"response\":\"response\",\"data\":{\"data\":{\"key\":\"value\"}},\"status\":\"SUCCESS\",\"errorMessage\":\"errorMessage\"}},{\"actionId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"behavior\":{\"type\":\"fixedResponse\",\"response\":\"response\",\"data\":{\"data\":{\"key\":\"value\"}},\"status\":\"SUCCESS\",\"errorMessage\":\"errorMessage\"}}],\"defaultActionBehavior\":{\"type\":\"fixedResponse\",\"response\":\"response\",\"data\":{\"data\":{\"key\":\"value\"}},\"status\":\"SUCCESS\",\"errorMessage\":\"errorMessage\"}},\"executionMode\":\"LIVE\",\"relatedEntities\":{\"SPAWN_FROM\":[{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}]},\"conversationMode\":\"VOICE\",\"variantId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}}"));
         ConversationResponse response = client.conversation().submitActionForm(
             "conversationId",
             SubmitActionFormRequest
@@ -2534,6 +2114,7 @@ public class ConversationWireTest {
             + "      \"errorMessage\": \"errorMessage\"\n"
             + "    }\n"
             + "  },\n"
+            + "  \"executionMode\": \"LIVE\",\n"
             + "  \"relatedEntities\": {\n"
             + "    \"SPAWN_FROM\": [\n"
             + "      {\n"
@@ -2750,7 +2331,7 @@ public class ConversationWireTest {
     public void testSearch() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"conversations\":[{\"responseConfig\":{\"capabilities\":[\"MARKDOWN\",\"MARKDOWN\"],\"isCopilot\":true,\"responseLength\":\"SHORT\",\"contextFilter\":{\"scopeType\":\"byEntities\",\"entities\":[{\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}}]}},\"subject\":\"subject\",\"url\":\"url\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"tags\":[\"tags\"],\"metadata\":{\"metadata\":\"metadata\"},\"allMetadata\":{\"allMetadata\":{\"allMetadata\":\"allMetadata\"}},\"conversationId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"analysis\":{\"userRequest\":\"userRequest\",\"agentResponse\":\"agentResponse\",\"resolutionStatus\":\"UNKNOWN\",\"category\":\"category\",\"sentiment\":\"POSITIVE\",\"quality\":\"GOOD\",\"qualityReason\":\"MISSING_KNOWLEDGE\",\"resolvedByMaven\":true,\"primaryLanguage\":\"primaryLanguage\",\"predictedNps\":1.1,\"csat\":1.1,\"intelligentFieldValues\":[{\"fieldId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"name\":\"name\",\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"value\":{\"key\":\"value\"},\"confidence\":1.1,\"rationale\":\"rationale\",\"createdAt\":\"2024-01-15T09:30:00Z\"},{\"fieldId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"name\":\"name\",\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"value\":{\"key\":\"value\"},\"confidence\":1.1,\"rationale\":\"rationale\",\"createdAt\":\"2024-01-15T09:30:00Z\"}]},\"summary\":{\"actionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"incompleteActionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"matchedCharterIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"matchedCharterNames\":[\"matchedCharterNames\",\"matchedCharterNames\"],\"matchedSegmentedCharterNames\":[\"matchedSegmentedCharterNames\",\"matchedSegmentedCharterNames\"],\"insertCount\":1,\"thumbsUpCount\":1,\"thumbsDownCount\":1,\"handoffCount\":1,\"userMessageCount\":1,\"botMessageCount\":1,\"csat\":1.1,\"handleTime\":1000000,\"humanAgentResponseDelay\":1000000,\"humanAgents\":[\"humanAgents\",\"humanAgents\"],\"humanAgentsWithInserts\":[\"humanAgentsWithInserts\",\"humanAgentsWithInserts\"],\"users\":[\"users\",\"users\"],\"userIdentifiers\":[\"userIdentifiers\",\"userIdentifiers\"],\"lastUserMessage\":\"lastUserMessage\",\"lastBotMessage\":\"lastBotMessage\",\"involvedAppIds\":[\"involvedAppIds\"]},\"deleted\":true,\"open\":true,\"llmEnabled\":true,\"simulationContext\":{\"additionalPromptText\":\"additionalPromptText\",\"persona\":\"CASUAL_BUDDY\",\"availableKnowledgeBases\":[{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"variantId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"actionMocks\":[{\"actionId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"behavior\":{\"type\":\"fixedResponse\",\"response\":\"response\",\"data\":{},\"status\":\"SUCCESS\",\"errorMessage\":\"errorMessage\"}},{\"actionId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"behavior\":{\"type\":\"fixedResponse\",\"response\":\"response\",\"data\":{},\"status\":\"SUCCESS\",\"errorMessage\":\"errorMessage\"}}],\"defaultActionBehavior\":{\"type\":\"fixedResponse\",\"response\":\"response\",\"data\":{\"data\":{\"key\":\"value\"}},\"status\":\"SUCCESS\",\"errorMessage\":\"errorMessage\"}},\"relatedEntities\":{\"SPAWN_FROM\":[{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}]},\"conversationMode\":\"VOICE\",\"variantId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}},{\"responseConfig\":{\"capabilities\":[\"MARKDOWN\",\"MARKDOWN\"],\"isCopilot\":true,\"responseLength\":\"SHORT\",\"contextFilter\":{\"scopeType\":\"byEntities\",\"entities\":[{\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}}]}},\"subject\":\"subject\",\"url\":\"url\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"tags\":[\"tags\"],\"metadata\":{\"metadata\":\"metadata\"},\"allMetadata\":{\"allMetadata\":{\"allMetadata\":\"allMetadata\"}},\"conversationId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"analysis\":{\"userRequest\":\"userRequest\",\"agentResponse\":\"agentResponse\",\"resolutionStatus\":\"UNKNOWN\",\"category\":\"category\",\"sentiment\":\"POSITIVE\",\"quality\":\"GOOD\",\"qualityReason\":\"MISSING_KNOWLEDGE\",\"resolvedByMaven\":true,\"primaryLanguage\":\"primaryLanguage\",\"predictedNps\":1.1,\"csat\":1.1,\"intelligentFieldValues\":[{\"fieldId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"name\":\"name\",\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"value\":{\"key\":\"value\"},\"confidence\":1.1,\"rationale\":\"rationale\",\"createdAt\":\"2024-01-15T09:30:00Z\"},{\"fieldId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"name\":\"name\",\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"value\":{\"key\":\"value\"},\"confidence\":1.1,\"rationale\":\"rationale\",\"createdAt\":\"2024-01-15T09:30:00Z\"}]},\"summary\":{\"actionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"incompleteActionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"matchedCharterIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"matchedCharterNames\":[\"matchedCharterNames\",\"matchedCharterNames\"],\"matchedSegmentedCharterNames\":[\"matchedSegmentedCharterNames\",\"matchedSegmentedCharterNames\"],\"insertCount\":1,\"thumbsUpCount\":1,\"thumbsDownCount\":1,\"handoffCount\":1,\"userMessageCount\":1,\"botMessageCount\":1,\"csat\":1.1,\"handleTime\":1000000,\"humanAgentResponseDelay\":1000000,\"humanAgents\":[\"humanAgents\",\"humanAgents\"],\"humanAgentsWithInserts\":[\"humanAgentsWithInserts\",\"humanAgentsWithInserts\"],\"users\":[\"users\",\"users\"],\"userIdentifiers\":[\"userIdentifiers\",\"userIdentifiers\"],\"lastUserMessage\":\"lastUserMessage\",\"lastBotMessage\":\"lastBotMessage\",\"involvedAppIds\":[\"involvedAppIds\"]},\"deleted\":true,\"open\":true,\"llmEnabled\":true,\"simulationContext\":{\"additionalPromptText\":\"additionalPromptText\",\"persona\":\"CASUAL_BUDDY\",\"availableKnowledgeBases\":[{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"variantId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"actionMocks\":[{\"actionId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"behavior\":{\"type\":\"fixedResponse\",\"response\":\"response\",\"data\":{},\"status\":\"SUCCESS\",\"errorMessage\":\"errorMessage\"}},{\"actionId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"behavior\":{\"type\":\"fixedResponse\",\"response\":\"response\",\"data\":{},\"status\":\"SUCCESS\",\"errorMessage\":\"errorMessage\"}}],\"defaultActionBehavior\":{\"type\":\"fixedResponse\",\"response\":\"response\",\"data\":{\"data\":{\"key\":\"value\"}},\"status\":\"SUCCESS\",\"errorMessage\":\"errorMessage\"}},\"relatedEntities\":{\"SPAWN_FROM\":[{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}]},\"conversationMode\":\"VOICE\",\"variantId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}}],\"number\":1,\"size\":1,\"totalElements\":1000000,\"totalPages\":1}"));
+            .setBody("{\"conversations\":[{\"responseConfig\":{\"capabilities\":[\"MARKDOWN\",\"MARKDOWN\"],\"isCopilot\":true,\"responseLength\":\"SHORT\",\"contextFilter\":{\"scopeType\":\"byEntities\",\"entities\":[{\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}}]}},\"subject\":\"subject\",\"url\":\"url\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"tags\":[\"tags\"],\"metadata\":{\"metadata\":\"metadata\"},\"allMetadata\":{\"allMetadata\":{\"allMetadata\":\"allMetadata\"}},\"conversationId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"analysis\":{\"userRequest\":\"userRequest\",\"agentResponse\":\"agentResponse\",\"resolutionStatus\":\"UNKNOWN\",\"category\":\"category\",\"sentiment\":\"POSITIVE\",\"quality\":\"GOOD\",\"qualityReason\":\"MISSING_KNOWLEDGE\",\"resolvedByMaven\":true,\"primaryLanguage\":\"primaryLanguage\",\"predictedNps\":1.1,\"csat\":1.1,\"intelligentFieldValues\":[{\"fieldId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"name\":\"name\",\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"value\":{\"key\":\"value\"},\"confidence\":1.1,\"rationale\":\"rationale\",\"createdAt\":\"2024-01-15T09:30:00Z\"},{\"fieldId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"name\":\"name\",\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"value\":{\"key\":\"value\"},\"confidence\":1.1,\"rationale\":\"rationale\",\"createdAt\":\"2024-01-15T09:30:00Z\"}]},\"summary\":{\"actionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"incompleteActionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"matchedCharterIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"matchedCharterNames\":[\"matchedCharterNames\",\"matchedCharterNames\"],\"matchedSegmentedCharterNames\":[\"matchedSegmentedCharterNames\",\"matchedSegmentedCharterNames\"],\"insertCount\":1,\"thumbsUpCount\":1,\"thumbsDownCount\":1,\"handoffCount\":1,\"userMessageCount\":1,\"botMessageCount\":1,\"csat\":1.1,\"handleTime\":1000000,\"humanAgentResponseDelay\":1000000,\"humanAgents\":[\"humanAgents\",\"humanAgents\"],\"humanAgentsWithInserts\":[\"humanAgentsWithInserts\",\"humanAgentsWithInserts\"],\"users\":[\"users\",\"users\"],\"userIdentifiers\":[\"userIdentifiers\",\"userIdentifiers\"],\"lastUserMessage\":\"lastUserMessage\",\"lastBotMessage\":\"lastBotMessage\",\"involvedAppIds\":[\"involvedAppIds\"]},\"deleted\":true,\"open\":true,\"llmEnabled\":true,\"simulationContext\":{\"additionalPromptText\":\"additionalPromptText\",\"persona\":\"CASUAL_BUDDY\",\"availableKnowledgeBases\":[{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"variantId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"actionMocks\":[{\"actionId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"behavior\":{\"type\":\"fixedResponse\",\"response\":\"response\",\"data\":{},\"status\":\"SUCCESS\",\"errorMessage\":\"errorMessage\"}},{\"actionId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"behavior\":{\"type\":\"fixedResponse\",\"response\":\"response\",\"data\":{},\"status\":\"SUCCESS\",\"errorMessage\":\"errorMessage\"}}],\"defaultActionBehavior\":{\"type\":\"fixedResponse\",\"response\":\"response\",\"data\":{\"data\":{\"key\":\"value\"}},\"status\":\"SUCCESS\",\"errorMessage\":\"errorMessage\"}},\"executionMode\":\"LIVE\",\"relatedEntities\":{\"SPAWN_FROM\":[{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}]},\"conversationMode\":\"VOICE\",\"variantId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}},{\"responseConfig\":{\"capabilities\":[\"MARKDOWN\",\"MARKDOWN\"],\"isCopilot\":true,\"responseLength\":\"SHORT\",\"contextFilter\":{\"scopeType\":\"byEntities\",\"entities\":[{\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}}]}},\"subject\":\"subject\",\"url\":\"url\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"tags\":[\"tags\"],\"metadata\":{\"metadata\":\"metadata\"},\"allMetadata\":{\"allMetadata\":{\"allMetadata\":\"allMetadata\"}},\"conversationId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"analysis\":{\"userRequest\":\"userRequest\",\"agentResponse\":\"agentResponse\",\"resolutionStatus\":\"UNKNOWN\",\"category\":\"category\",\"sentiment\":\"POSITIVE\",\"quality\":\"GOOD\",\"qualityReason\":\"MISSING_KNOWLEDGE\",\"resolvedByMaven\":true,\"primaryLanguage\":\"primaryLanguage\",\"predictedNps\":1.1,\"csat\":1.1,\"intelligentFieldValues\":[{\"fieldId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"name\":\"name\",\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"value\":{\"key\":\"value\"},\"confidence\":1.1,\"rationale\":\"rationale\",\"createdAt\":\"2024-01-15T09:30:00Z\"},{\"fieldId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"name\":\"name\",\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"value\":{\"key\":\"value\"},\"confidence\":1.1,\"rationale\":\"rationale\",\"createdAt\":\"2024-01-15T09:30:00Z\"}]},\"summary\":{\"actionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"incompleteActionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"matchedCharterIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"matchedCharterNames\":[\"matchedCharterNames\",\"matchedCharterNames\"],\"matchedSegmentedCharterNames\":[\"matchedSegmentedCharterNames\",\"matchedSegmentedCharterNames\"],\"insertCount\":1,\"thumbsUpCount\":1,\"thumbsDownCount\":1,\"handoffCount\":1,\"userMessageCount\":1,\"botMessageCount\":1,\"csat\":1.1,\"handleTime\":1000000,\"humanAgentResponseDelay\":1000000,\"humanAgents\":[\"humanAgents\",\"humanAgents\"],\"humanAgentsWithInserts\":[\"humanAgentsWithInserts\",\"humanAgentsWithInserts\"],\"users\":[\"users\",\"users\"],\"userIdentifiers\":[\"userIdentifiers\",\"userIdentifiers\"],\"lastUserMessage\":\"lastUserMessage\",\"lastBotMessage\":\"lastBotMessage\",\"involvedAppIds\":[\"involvedAppIds\"]},\"deleted\":true,\"open\":true,\"llmEnabled\":true,\"simulationContext\":{\"additionalPromptText\":\"additionalPromptText\",\"persona\":\"CASUAL_BUDDY\",\"availableKnowledgeBases\":[{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"variantId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"actionMocks\":[{\"actionId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"behavior\":{\"type\":\"fixedResponse\",\"response\":\"response\",\"data\":{},\"status\":\"SUCCESS\",\"errorMessage\":\"errorMessage\"}},{\"actionId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"behavior\":{\"type\":\"fixedResponse\",\"response\":\"response\",\"data\":{},\"status\":\"SUCCESS\",\"errorMessage\":\"errorMessage\"}}],\"defaultActionBehavior\":{\"type\":\"fixedResponse\",\"response\":\"response\",\"data\":{\"data\":{\"key\":\"value\"}},\"status\":\"SUCCESS\",\"errorMessage\":\"errorMessage\"}},\"executionMode\":\"LIVE\",\"relatedEntities\":{\"SPAWN_FROM\":[{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}]},\"conversationMode\":\"VOICE\",\"variantId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}}],\"number\":1,\"size\":1,\"totalElements\":1000000,\"totalPages\":1}"));
         ConversationsResponse response = client.conversation().search(
             ConversationsSearchRequest
                 .builder()
@@ -3036,6 +2617,7 @@ public class ConversationWireTest {
             + "          \"errorMessage\": \"errorMessage\"\n"
             + "        }\n"
             + "      },\n"
+            + "      \"executionMode\": \"LIVE\",\n"
             + "      \"relatedEntities\": {\n"
             + "        \"SPAWN_FROM\": [\n"
             + "          {\n"
@@ -3307,6 +2889,7 @@ public class ConversationWireTest {
             + "          \"errorMessage\": \"errorMessage\"\n"
             + "        }\n"
             + "      },\n"
+            + "      \"executionMode\": \"LIVE\",\n"
             + "      \"relatedEntities\": {\n"
             + "        \"SPAWN_FROM\": [\n"
             + "          {\n"
@@ -3367,7 +2950,7 @@ public class ConversationWireTest {
     public void testSearchCursor() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"conversations\":[{\"responseConfig\":{\"capabilities\":[\"MARKDOWN\",\"MARKDOWN\"],\"isCopilot\":true,\"responseLength\":\"SHORT\",\"contextFilter\":{\"scopeType\":\"byEntities\",\"entities\":[{\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}}]}},\"subject\":\"subject\",\"url\":\"url\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"tags\":[\"tags\"],\"metadata\":{\"metadata\":\"metadata\"},\"allMetadata\":{\"allMetadata\":{\"allMetadata\":\"allMetadata\"}},\"conversationId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"analysis\":{\"userRequest\":\"userRequest\",\"agentResponse\":\"agentResponse\",\"resolutionStatus\":\"UNKNOWN\",\"category\":\"category\",\"sentiment\":\"POSITIVE\",\"quality\":\"GOOD\",\"qualityReason\":\"MISSING_KNOWLEDGE\",\"resolvedByMaven\":true,\"primaryLanguage\":\"primaryLanguage\",\"predictedNps\":1.1,\"csat\":1.1,\"intelligentFieldValues\":[{\"fieldId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"name\":\"name\",\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"value\":{\"key\":\"value\"},\"confidence\":1.1,\"rationale\":\"rationale\",\"createdAt\":\"2024-01-15T09:30:00Z\"},{\"fieldId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"name\":\"name\",\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"value\":{\"key\":\"value\"},\"confidence\":1.1,\"rationale\":\"rationale\",\"createdAt\":\"2024-01-15T09:30:00Z\"}]},\"summary\":{\"actionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"incompleteActionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"matchedCharterIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"matchedCharterNames\":[\"matchedCharterNames\",\"matchedCharterNames\"],\"matchedSegmentedCharterNames\":[\"matchedSegmentedCharterNames\",\"matchedSegmentedCharterNames\"],\"insertCount\":1,\"thumbsUpCount\":1,\"thumbsDownCount\":1,\"handoffCount\":1,\"userMessageCount\":1,\"botMessageCount\":1,\"csat\":1.1,\"handleTime\":1000000,\"humanAgentResponseDelay\":1000000,\"humanAgents\":[\"humanAgents\",\"humanAgents\"],\"humanAgentsWithInserts\":[\"humanAgentsWithInserts\",\"humanAgentsWithInserts\"],\"users\":[\"users\",\"users\"],\"userIdentifiers\":[\"userIdentifiers\",\"userIdentifiers\"],\"lastUserMessage\":\"lastUserMessage\",\"lastBotMessage\":\"lastBotMessage\",\"involvedAppIds\":[\"involvedAppIds\"]},\"deleted\":true,\"open\":true,\"llmEnabled\":true,\"simulationContext\":{\"additionalPromptText\":\"additionalPromptText\",\"persona\":\"CASUAL_BUDDY\",\"availableKnowledgeBases\":[{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"variantId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"actionMocks\":[{\"actionId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"behavior\":{\"type\":\"fixedResponse\",\"response\":\"response\",\"data\":{},\"status\":\"SUCCESS\",\"errorMessage\":\"errorMessage\"}},{\"actionId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"behavior\":{\"type\":\"fixedResponse\",\"response\":\"response\",\"data\":{},\"status\":\"SUCCESS\",\"errorMessage\":\"errorMessage\"}}],\"defaultActionBehavior\":{\"type\":\"fixedResponse\",\"response\":\"response\",\"data\":{\"data\":{\"key\":\"value\"}},\"status\":\"SUCCESS\",\"errorMessage\":\"errorMessage\"}},\"relatedEntities\":{\"SPAWN_FROM\":[{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}]},\"conversationMode\":\"VOICE\",\"variantId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}},{\"responseConfig\":{\"capabilities\":[\"MARKDOWN\",\"MARKDOWN\"],\"isCopilot\":true,\"responseLength\":\"SHORT\",\"contextFilter\":{\"scopeType\":\"byEntities\",\"entities\":[{\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}}]}},\"subject\":\"subject\",\"url\":\"url\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"tags\":[\"tags\"],\"metadata\":{\"metadata\":\"metadata\"},\"allMetadata\":{\"allMetadata\":{\"allMetadata\":\"allMetadata\"}},\"conversationId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"analysis\":{\"userRequest\":\"userRequest\",\"agentResponse\":\"agentResponse\",\"resolutionStatus\":\"UNKNOWN\",\"category\":\"category\",\"sentiment\":\"POSITIVE\",\"quality\":\"GOOD\",\"qualityReason\":\"MISSING_KNOWLEDGE\",\"resolvedByMaven\":true,\"primaryLanguage\":\"primaryLanguage\",\"predictedNps\":1.1,\"csat\":1.1,\"intelligentFieldValues\":[{\"fieldId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"name\":\"name\",\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"value\":{\"key\":\"value\"},\"confidence\":1.1,\"rationale\":\"rationale\",\"createdAt\":\"2024-01-15T09:30:00Z\"},{\"fieldId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"name\":\"name\",\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"value\":{\"key\":\"value\"},\"confidence\":1.1,\"rationale\":\"rationale\",\"createdAt\":\"2024-01-15T09:30:00Z\"}]},\"summary\":{\"actionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"incompleteActionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"matchedCharterIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"matchedCharterNames\":[\"matchedCharterNames\",\"matchedCharterNames\"],\"matchedSegmentedCharterNames\":[\"matchedSegmentedCharterNames\",\"matchedSegmentedCharterNames\"],\"insertCount\":1,\"thumbsUpCount\":1,\"thumbsDownCount\":1,\"handoffCount\":1,\"userMessageCount\":1,\"botMessageCount\":1,\"csat\":1.1,\"handleTime\":1000000,\"humanAgentResponseDelay\":1000000,\"humanAgents\":[\"humanAgents\",\"humanAgents\"],\"humanAgentsWithInserts\":[\"humanAgentsWithInserts\",\"humanAgentsWithInserts\"],\"users\":[\"users\",\"users\"],\"userIdentifiers\":[\"userIdentifiers\",\"userIdentifiers\"],\"lastUserMessage\":\"lastUserMessage\",\"lastBotMessage\":\"lastBotMessage\",\"involvedAppIds\":[\"involvedAppIds\"]},\"deleted\":true,\"open\":true,\"llmEnabled\":true,\"simulationContext\":{\"additionalPromptText\":\"additionalPromptText\",\"persona\":\"CASUAL_BUDDY\",\"availableKnowledgeBases\":[{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"variantId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"actionMocks\":[{\"actionId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"behavior\":{\"type\":\"fixedResponse\",\"response\":\"response\",\"data\":{},\"status\":\"SUCCESS\",\"errorMessage\":\"errorMessage\"}},{\"actionId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"behavior\":{\"type\":\"fixedResponse\",\"response\":\"response\",\"data\":{},\"status\":\"SUCCESS\",\"errorMessage\":\"errorMessage\"}}],\"defaultActionBehavior\":{\"type\":\"fixedResponse\",\"response\":\"response\",\"data\":{\"data\":{\"key\":\"value\"}},\"status\":\"SUCCESS\",\"errorMessage\":\"errorMessage\"}},\"relatedEntities\":{\"SPAWN_FROM\":[{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}]},\"conversationMode\":\"VOICE\",\"variantId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}}],\"totalElements\":1000000,\"nextCursor\":\"nextCursor\"}"));
+            .setBody("{\"conversations\":[{\"responseConfig\":{\"capabilities\":[\"MARKDOWN\",\"MARKDOWN\"],\"isCopilot\":true,\"responseLength\":\"SHORT\",\"contextFilter\":{\"scopeType\":\"byEntities\",\"entities\":[{\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}}]}},\"subject\":\"subject\",\"url\":\"url\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"tags\":[\"tags\"],\"metadata\":{\"metadata\":\"metadata\"},\"allMetadata\":{\"allMetadata\":{\"allMetadata\":\"allMetadata\"}},\"conversationId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"analysis\":{\"userRequest\":\"userRequest\",\"agentResponse\":\"agentResponse\",\"resolutionStatus\":\"UNKNOWN\",\"category\":\"category\",\"sentiment\":\"POSITIVE\",\"quality\":\"GOOD\",\"qualityReason\":\"MISSING_KNOWLEDGE\",\"resolvedByMaven\":true,\"primaryLanguage\":\"primaryLanguage\",\"predictedNps\":1.1,\"csat\":1.1,\"intelligentFieldValues\":[{\"fieldId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"name\":\"name\",\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"value\":{\"key\":\"value\"},\"confidence\":1.1,\"rationale\":\"rationale\",\"createdAt\":\"2024-01-15T09:30:00Z\"},{\"fieldId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"name\":\"name\",\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"value\":{\"key\":\"value\"},\"confidence\":1.1,\"rationale\":\"rationale\",\"createdAt\":\"2024-01-15T09:30:00Z\"}]},\"summary\":{\"actionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"incompleteActionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"matchedCharterIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"matchedCharterNames\":[\"matchedCharterNames\",\"matchedCharterNames\"],\"matchedSegmentedCharterNames\":[\"matchedSegmentedCharterNames\",\"matchedSegmentedCharterNames\"],\"insertCount\":1,\"thumbsUpCount\":1,\"thumbsDownCount\":1,\"handoffCount\":1,\"userMessageCount\":1,\"botMessageCount\":1,\"csat\":1.1,\"handleTime\":1000000,\"humanAgentResponseDelay\":1000000,\"humanAgents\":[\"humanAgents\",\"humanAgents\"],\"humanAgentsWithInserts\":[\"humanAgentsWithInserts\",\"humanAgentsWithInserts\"],\"users\":[\"users\",\"users\"],\"userIdentifiers\":[\"userIdentifiers\",\"userIdentifiers\"],\"lastUserMessage\":\"lastUserMessage\",\"lastBotMessage\":\"lastBotMessage\",\"involvedAppIds\":[\"involvedAppIds\"]},\"deleted\":true,\"open\":true,\"llmEnabled\":true,\"simulationContext\":{\"additionalPromptText\":\"additionalPromptText\",\"persona\":\"CASUAL_BUDDY\",\"availableKnowledgeBases\":[{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"variantId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"actionMocks\":[{\"actionId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"behavior\":{\"type\":\"fixedResponse\",\"response\":\"response\",\"data\":{},\"status\":\"SUCCESS\",\"errorMessage\":\"errorMessage\"}},{\"actionId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"behavior\":{\"type\":\"fixedResponse\",\"response\":\"response\",\"data\":{},\"status\":\"SUCCESS\",\"errorMessage\":\"errorMessage\"}}],\"defaultActionBehavior\":{\"type\":\"fixedResponse\",\"response\":\"response\",\"data\":{\"data\":{\"key\":\"value\"}},\"status\":\"SUCCESS\",\"errorMessage\":\"errorMessage\"}},\"executionMode\":\"LIVE\",\"relatedEntities\":{\"SPAWN_FROM\":[{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}]},\"conversationMode\":\"VOICE\",\"variantId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}},{\"responseConfig\":{\"capabilities\":[\"MARKDOWN\",\"MARKDOWN\"],\"isCopilot\":true,\"responseLength\":\"SHORT\",\"contextFilter\":{\"scopeType\":\"byEntities\",\"entities\":[{\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}}]}},\"subject\":\"subject\",\"url\":\"url\",\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"tags\":[\"tags\"],\"metadata\":{\"metadata\":\"metadata\"},\"allMetadata\":{\"allMetadata\":{\"allMetadata\":\"allMetadata\"}},\"conversationId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"analysis\":{\"userRequest\":\"userRequest\",\"agentResponse\":\"agentResponse\",\"resolutionStatus\":\"UNKNOWN\",\"category\":\"category\",\"sentiment\":\"POSITIVE\",\"quality\":\"GOOD\",\"qualityReason\":\"MISSING_KNOWLEDGE\",\"resolvedByMaven\":true,\"primaryLanguage\":\"primaryLanguage\",\"predictedNps\":1.1,\"csat\":1.1,\"intelligentFieldValues\":[{\"fieldId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"name\":\"name\",\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"value\":{\"key\":\"value\"},\"confidence\":1.1,\"rationale\":\"rationale\",\"createdAt\":\"2024-01-15T09:30:00Z\"},{\"fieldId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"name\":\"name\",\"entityId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"value\":{\"key\":\"value\"},\"confidence\":1.1,\"rationale\":\"rationale\",\"createdAt\":\"2024-01-15T09:30:00Z\"}]},\"summary\":{\"actionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"incompleteActionIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"matchedCharterIds\":[{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"matchedCharterNames\":[\"matchedCharterNames\",\"matchedCharterNames\"],\"matchedSegmentedCharterNames\":[\"matchedSegmentedCharterNames\",\"matchedSegmentedCharterNames\"],\"insertCount\":1,\"thumbsUpCount\":1,\"thumbsDownCount\":1,\"handoffCount\":1,\"userMessageCount\":1,\"botMessageCount\":1,\"csat\":1.1,\"handleTime\":1000000,\"humanAgentResponseDelay\":1000000,\"humanAgents\":[\"humanAgents\",\"humanAgents\"],\"humanAgentsWithInserts\":[\"humanAgentsWithInserts\",\"humanAgentsWithInserts\"],\"users\":[\"users\",\"users\"],\"userIdentifiers\":[\"userIdentifiers\",\"userIdentifiers\"],\"lastUserMessage\":\"lastUserMessage\",\"lastBotMessage\":\"lastBotMessage\",\"involvedAppIds\":[\"involvedAppIds\"]},\"deleted\":true,\"open\":true,\"llmEnabled\":true,\"simulationContext\":{\"additionalPromptText\":\"additionalPromptText\",\"persona\":\"CASUAL_BUDDY\",\"availableKnowledgeBases\":[{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}],\"variantId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"actionMocks\":[{\"actionId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"behavior\":{\"type\":\"fixedResponse\",\"response\":\"response\",\"data\":{},\"status\":\"SUCCESS\",\"errorMessage\":\"errorMessage\"}},{\"actionId\":{\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"behavior\":{\"type\":\"fixedResponse\",\"response\":\"response\",\"data\":{},\"status\":\"SUCCESS\",\"errorMessage\":\"errorMessage\"}}],\"defaultActionBehavior\":{\"type\":\"fixedResponse\",\"response\":\"response\",\"data\":{\"data\":{\"key\":\"value\"}},\"status\":\"SUCCESS\",\"errorMessage\":\"errorMessage\"}},\"executionMode\":\"LIVE\",\"relatedEntities\":{\"SPAWN_FROM\":[{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}]},\"conversationMode\":\"VOICE\",\"variantId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"}}],\"totalElements\":1000000,\"nextCursor\":\"nextCursor\"}"));
         ConversationsCursorSearchResponse response = client.conversation().searchCursor(
             ConversationsCursorSearchRequest
                 .builder()
@@ -3653,6 +3236,7 @@ public class ConversationWireTest {
             + "          \"errorMessage\": \"errorMessage\"\n"
             + "        }\n"
             + "      },\n"
+            + "      \"executionMode\": \"LIVE\",\n"
             + "      \"relatedEntities\": {\n"
             + "        \"SPAWN_FROM\": [\n"
             + "          {\n"
@@ -3924,6 +3508,7 @@ public class ConversationWireTest {
             + "          \"errorMessage\": \"errorMessage\"\n"
             + "        }\n"
             + "      },\n"
+            + "      \"executionMode\": \"LIVE\",\n"
             + "      \"relatedEntities\": {\n"
             + "        \"SPAWN_FROM\": [\n"
             + "          {\n"

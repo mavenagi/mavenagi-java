@@ -32,6 +32,8 @@ public final class EventBaseNoId implements IEventBaseNoId {
 
     private final Optional<ContextInfo> contextInfo;
 
+    private final Optional<ExecutionMode> executionMode;
+
     private final Map<String, Object> additionalProperties;
 
     private EventBaseNoId(
@@ -40,12 +42,14 @@ public final class EventBaseNoId implements IEventBaseNoId {
             Optional<SourceInfo> sourceInfo,
             Optional<SessionInfo> sessionInfo,
             Optional<ContextInfo> contextInfo,
+            Optional<ExecutionMode> executionMode,
             Map<String, Object> additionalProperties) {
         this.timestamp = timestamp;
         this.references = references;
         this.sourceInfo = sourceInfo;
         this.sessionInfo = sessionInfo;
         this.contextInfo = contextInfo;
+        this.executionMode = executionMode;
         this.additionalProperties = additionalProperties;
     }
 
@@ -79,6 +83,17 @@ public final class EventBaseNoId implements IEventBaseNoId {
         return contextInfo;
     }
 
+    /**
+     * @return Whether the event happened on live data or in a simulation. Defaults to <code>LIVE</code> when
+     * creating an event, and is always set on a returned event. Creating a <code>SIMULATION</code> event
+     * requires the <code>create:simulations</code> permission.
+     */
+    @JsonProperty("executionMode")
+    @java.lang.Override
+    public Optional<ExecutionMode> getExecutionMode() {
+        return executionMode;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -95,12 +110,19 @@ public final class EventBaseNoId implements IEventBaseNoId {
                 && references.equals(other.references)
                 && sourceInfo.equals(other.sourceInfo)
                 && sessionInfo.equals(other.sessionInfo)
-                && contextInfo.equals(other.contextInfo);
+                && contextInfo.equals(other.contextInfo)
+                && executionMode.equals(other.executionMode);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.timestamp, this.references, this.sourceInfo, this.sessionInfo, this.contextInfo);
+        return Objects.hash(
+                this.timestamp,
+                this.references,
+                this.sourceInfo,
+                this.sessionInfo,
+                this.contextInfo,
+                this.executionMode);
     }
 
     @java.lang.Override
@@ -124,6 +146,8 @@ public final class EventBaseNoId implements IEventBaseNoId {
 
         private Optional<ContextInfo> contextInfo = Optional.empty();
 
+        private Optional<ExecutionMode> executionMode = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -135,6 +159,7 @@ public final class EventBaseNoId implements IEventBaseNoId {
             sourceInfo(other.getSourceInfo());
             sessionInfo(other.getSessionInfo());
             contextInfo(other.getContextInfo());
+            executionMode(other.getExecutionMode());
             return this;
         }
 
@@ -193,8 +218,25 @@ public final class EventBaseNoId implements IEventBaseNoId {
             return this;
         }
 
+        /**
+         * <p>Whether the event happened on live data or in a simulation. Defaults to <code>LIVE</code> when
+         * creating an event, and is always set on a returned event. Creating a <code>SIMULATION</code> event
+         * requires the <code>create:simulations</code> permission.</p>
+         */
+        @JsonSetter(value = "executionMode", nulls = Nulls.SKIP)
+        public Builder executionMode(Optional<ExecutionMode> executionMode) {
+            this.executionMode = executionMode;
+            return this;
+        }
+
+        public Builder executionMode(ExecutionMode executionMode) {
+            this.executionMode = Optional.ofNullable(executionMode);
+            return this;
+        }
+
         public EventBaseNoId build() {
-            return new EventBaseNoId(timestamp, references, sourceInfo, sessionInfo, contextInfo, additionalProperties);
+            return new EventBaseNoId(
+                    timestamp, references, sourceInfo, sessionInfo, contextInfo, executionMode, additionalProperties);
         }
     }
 }

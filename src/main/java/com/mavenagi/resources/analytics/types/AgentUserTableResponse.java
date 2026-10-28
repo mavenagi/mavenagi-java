@@ -44,7 +44,8 @@ public final class AgentUserTableResponse implements ITableResponseBase {
     }
 
     /**
-     * @return Each row contains the user count for the given search query and corresponding time grouping.
+     * @return One row per combination of time bucket and field grouping values, each holding the user
+     * count for the given filter.
      */
     @JsonProperty("rows")
     public List<AgentUserRow> getRows() {
@@ -122,7 +123,8 @@ public final class AgentUserTableResponse implements ITableResponseBase {
         }
 
         /**
-         * <p>Each row contains the user count for the given search query and corresponding time grouping.</p>
+         * <p>One row per combination of time bucket and field grouping values, each holding the user
+         * count for the given filter.</p>
          */
         @JsonSetter(value = "rows", nulls = Nulls.SKIP)
         public Builder rows(List<AgentUserRow> rows) {

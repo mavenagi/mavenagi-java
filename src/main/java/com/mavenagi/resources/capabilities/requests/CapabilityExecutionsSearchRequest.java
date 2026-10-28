@@ -16,6 +16,7 @@ import com.mavenagi.resources.capabilities.types.CapabilityExecutionStatus;
 import com.mavenagi.resources.commons.types.CapabilityType;
 import com.mavenagi.resources.commons.types.EntityId;
 import com.mavenagi.resources.commons.types.IBaseCappedPaginatedRequest;
+import com.mavenagi.resources.commons.types.SimulationFilter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +40,8 @@ public final class CapabilityExecutionsSearchRequest implements IBaseCappedPagin
 
     private final Optional<List<CapabilityExecutionStatus>> statuses;
 
+    private final Optional<SimulationFilter> simulationFilter;
+
     private final Map<String, Object> additionalProperties;
 
     private CapabilityExecutionsSearchRequest(
@@ -49,6 +52,7 @@ public final class CapabilityExecutionsSearchRequest implements IBaseCappedPagin
             Optional<List<CapabilityType>> capabilityTypes,
             Optional<List<EntityId>> capabilityIds,
             Optional<List<CapabilityExecutionStatus>> statuses,
+            Optional<SimulationFilter> simulationFilter,
             Map<String, Object> additionalProperties) {
         this.page = page;
         this.size = size;
@@ -57,6 +61,7 @@ public final class CapabilityExecutionsSearchRequest implements IBaseCappedPagin
         this.capabilityTypes = capabilityTypes;
         this.capabilityIds = capabilityIds;
         this.statuses = statuses;
+        this.simulationFilter = simulationFilter;
         this.additionalProperties = additionalProperties;
     }
 
@@ -125,6 +130,15 @@ public final class CapabilityExecutionsSearchRequest implements IBaseCappedPagin
         return statuses;
     }
 
+    /**
+     * @return Whether to include executions from simulations. Defaults to <code>ALL</code>, so a
+     * simulation conversation's executions are found by its ID like any other.
+     */
+    @JsonProperty("simulationFilter")
+    public Optional<SimulationFilter> getSimulationFilter() {
+        return simulationFilter;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -143,7 +157,8 @@ public final class CapabilityExecutionsSearchRequest implements IBaseCappedPagin
                 && subjectIds.equals(other.subjectIds)
                 && capabilityTypes.equals(other.capabilityTypes)
                 && capabilityIds.equals(other.capabilityIds)
-                && statuses.equals(other.statuses);
+                && statuses.equals(other.statuses)
+                && simulationFilter.equals(other.simulationFilter);
     }
 
     @java.lang.Override
@@ -155,7 +170,8 @@ public final class CapabilityExecutionsSearchRequest implements IBaseCappedPagin
                 this.subjectIds,
                 this.capabilityTypes,
                 this.capabilityIds,
-                this.statuses);
+                this.statuses,
+                this.simulationFilter);
     }
 
     @java.lang.Override
@@ -183,6 +199,8 @@ public final class CapabilityExecutionsSearchRequest implements IBaseCappedPagin
 
         private Optional<List<CapabilityExecutionStatus>> statuses = Optional.empty();
 
+        private Optional<SimulationFilter> simulationFilter = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -196,6 +214,7 @@ public final class CapabilityExecutionsSearchRequest implements IBaseCappedPagin
             capabilityTypes(other.getCapabilityTypes());
             capabilityIds(other.getCapabilityIds());
             statuses(other.getStatuses());
+            simulationFilter(other.getSimulationFilter());
             return this;
         }
 
@@ -303,9 +322,32 @@ public final class CapabilityExecutionsSearchRequest implements IBaseCappedPagin
             return this;
         }
 
+        /**
+         * <p>Whether to include executions from simulations. Defaults to <code>ALL</code>, so a
+         * simulation conversation's executions are found by its ID like any other.</p>
+         */
+        @JsonSetter(value = "simulationFilter", nulls = Nulls.SKIP)
+        public Builder simulationFilter(Optional<SimulationFilter> simulationFilter) {
+            this.simulationFilter = simulationFilter;
+            return this;
+        }
+
+        public Builder simulationFilter(SimulationFilter simulationFilter) {
+            this.simulationFilter = Optional.ofNullable(simulationFilter);
+            return this;
+        }
+
         public CapabilityExecutionsSearchRequest build() {
             return new CapabilityExecutionsSearchRequest(
-                    page, size, sortDesc, subjectIds, capabilityTypes, capabilityIds, statuses, additionalProperties);
+                    page,
+                    size,
+                    sortDesc,
+                    subjectIds,
+                    capabilityTypes,
+                    capabilityIds,
+                    statuses,
+                    simulationFilter,
+                    additionalProperties);
         }
     }
 }

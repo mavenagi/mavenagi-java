@@ -37,7 +37,7 @@ public class UsersWireTest {
         server.start();
         client = MavenAGI.builder()
             .url(server.url("/").toString())
-            .credentials("testuser", "testpass")
+            .token("test-token")
             .build();
     }
     @AfterEach

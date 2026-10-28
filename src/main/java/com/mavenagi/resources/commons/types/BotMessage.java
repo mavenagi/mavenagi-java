@@ -131,7 +131,7 @@ public final class BotMessage implements IConversationMessageBase {
     }
 
     /**
-     * @return The logic that was used to generate the response. Response size may be large; only present on the getConversation request.
+     * @return The logic that was used to generate the response. Response size may be large; only present on the getConversation request, unless it passes <code>includeLogic=false</code>.
      */
     @JsonProperty("logic")
     public Optional<BotLogic> getLogic() {
@@ -251,7 +251,7 @@ public final class BotMessage implements IConversationMessageBase {
         _FinalStage addAllResponses(List<BotResponse> responses);
 
         /**
-         * <p>The logic that was used to generate the response. Response size may be large; only present on the getConversation request.</p>
+         * <p>The logic that was used to generate the response. Response size may be large; only present on the getConversation request, unless it passes <code>includeLogic=false</code>.</p>
          */
         _FinalStage logic(Optional<BotLogic> logic);
 
@@ -366,7 +366,7 @@ public final class BotMessage implements IConversationMessageBase {
         }
 
         /**
-         * <p>The logic that was used to generate the response. Response size may be large; only present on the getConversation request.</p>
+         * <p>The logic that was used to generate the response. Response size may be large; only present on the getConversation request, unless it passes <code>includeLogic=false</code>.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -376,7 +376,7 @@ public final class BotMessage implements IConversationMessageBase {
         }
 
         /**
-         * <p>The logic that was used to generate the response. Response size may be large; only present on the getConversation request.</p>
+         * <p>The logic that was used to generate the response. Response size may be large; only present on the getConversation request, unless it passes <code>includeLogic=false</code>.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "logic", nulls = Nulls.SKIP)
