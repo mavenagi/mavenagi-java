@@ -183,7 +183,8 @@ public final class IntelligentFieldResponse
 
     /**
      * @return The finite set of values this field may take. Omit to let the LLM produce any value of
-     * the <code>validationType</code>. Options may be added later with the patch endpoint, but not removed.
+     * the <code>validationType</code>. Options may be added or removed later with the patch endpoint, as long
+     * as at least one remains.
      * <p>Shown in Agent Designer as &quot;Select Options&quot;.</p>
      */
     @JsonProperty("enumOptions")
@@ -330,7 +331,8 @@ public final class IntelligentFieldResponse
 
         /**
          * <p>The finite set of values this field may take. Omit to let the LLM produce any value of
-         * the <code>validationType</code>. Options may be added later with the patch endpoint, but not removed.</p>
+         * the <code>validationType</code>. Options may be added or removed later with the patch endpoint, as long
+         * as at least one remains.</p>
          * <p>Shown in Agent Designer as &quot;Select Options&quot;.</p>
          */
         _FinalStage enumOptions(Optional<List<EnumOption>> enumOptions);
@@ -510,7 +512,8 @@ public final class IntelligentFieldResponse
 
         /**
          * <p>The finite set of values this field may take. Omit to let the LLM produce any value of
-         * the <code>validationType</code>. Options may be added later with the patch endpoint, but not removed.</p>
+         * the <code>validationType</code>. Options may be added or removed later with the patch endpoint, as long
+         * as at least one remains.</p>
          * <p>Shown in Agent Designer as &quot;Select Options&quot;.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -522,7 +525,8 @@ public final class IntelligentFieldResponse
 
         /**
          * <p>The finite set of values this field may take. Omit to let the LLM produce any value of
-         * the <code>validationType</code>. Options may be added later with the patch endpoint, but not removed.</p>
+         * the <code>validationType</code>. Options may be added or removed later with the patch endpoint, as long
+         * as at least one remains.</p>
          * <p>Shown in Agent Designer as &quot;Select Options&quot;.</p>
          */
         @java.lang.Override

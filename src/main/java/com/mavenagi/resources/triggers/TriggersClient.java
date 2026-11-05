@@ -32,6 +32,7 @@ public class TriggersClient {
      * Deprecated. Use <code>POST /v1/capabilities/search</code>, which searches every kind of capability
      * at once. It returns the fields every capability shares rather than the whole Event
      * Trigger; fetch one by its kind and reference ID for the rest.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public EventTriggersSearchResponse search() {
         return this.rawClient.search().body();
@@ -41,6 +42,7 @@ public class TriggersClient {
      * Deprecated. Use <code>POST /v1/capabilities/search</code>, which searches every kind of capability
      * at once. It returns the fields every capability shares rather than the whole Event
      * Trigger; fetch one by its kind and reference ID for the rest.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public EventTriggersSearchResponse search(EventTriggersSearchRequest request) {
         return this.rawClient.search(request).body();
@@ -50,6 +52,7 @@ public class TriggersClient {
      * Deprecated. Use <code>POST /v1/capabilities/search</code>, which searches every kind of capability
      * at once. It returns the fields every capability shares rather than the whole Event
      * Trigger; fetch one by its kind and reference ID for the rest.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public EventTriggersSearchResponse search(EventTriggersSearchRequest request, RequestOptions requestOptions) {
         return this.rawClient.search(request, requestOptions).body();
@@ -57,6 +60,7 @@ public class TriggersClient {
 
     /**
      * Update an event trigger or create it if it doesn't exist.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public EventTriggerResponse createOrUpdate(EventTriggerRequest request) {
         return this.rawClient.createOrUpdate(request).body();
@@ -64,6 +68,7 @@ public class TriggersClient {
 
     /**
      * Update an event trigger or create it if it doesn't exist.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public EventTriggerResponse createOrUpdate(EventTriggerRequest request, RequestOptions requestOptions) {
         return this.rawClient.createOrUpdate(request, requestOptions).body();
@@ -73,6 +78,7 @@ public class TriggersClient {
      * Deprecated. Use <code>GET /v1/capabilities/TRIGGER/{referenceId}</code>, which returns this same
      * object for a trigger and the equivalent for every other kind of capability.
      * <p>Get an event trigger by its supplied ID</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public EventTriggerResponse get(String triggerReferenceId) {
         return this.rawClient.get(triggerReferenceId).body();
@@ -82,6 +88,7 @@ public class TriggersClient {
      * Deprecated. Use <code>GET /v1/capabilities/TRIGGER/{referenceId}</code>, which returns this same
      * object for a trigger and the equivalent for every other kind of capability.
      * <p>Get an event trigger by its supplied ID</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public EventTriggerResponse get(String triggerReferenceId, RequestOptions requestOptions) {
         return this.rawClient.get(triggerReferenceId, requestOptions).body();
@@ -91,6 +98,7 @@ public class TriggersClient {
      * Deprecated. Use <code>DELETE /v1/capabilities/TRIGGER/{referenceId}</code>, which deletes any kind
      * of capability the same way.
      * <p>Delete an event trigger</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public void delete(String triggerReferenceId) {
         this.rawClient.delete(triggerReferenceId).body();
@@ -100,6 +108,7 @@ public class TriggersClient {
      * Deprecated. Use <code>DELETE /v1/capabilities/TRIGGER/{referenceId}</code>, which deletes any kind
      * of capability the same way.
      * <p>Delete an event trigger</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public void delete(String triggerReferenceId, RequestOptions requestOptions) {
         this.rawClient.delete(triggerReferenceId, requestOptions).body();
@@ -109,6 +118,7 @@ public class TriggersClient {
      * Updates an event trigger. <code>enabled</code> and <code>condition</code> are the editable fields.
      * <p><code>PATCH /v1/capabilities/TRIGGER/{referenceId}</code> with a <code>status</code> also turns a trigger on and
      * off, the same way it publishes and unpublishes any kind of capability.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public EventTriggerResponse partialUpdate(String triggerReferenceId) {
         return this.rawClient.partialUpdate(triggerReferenceId).body();
@@ -118,6 +128,7 @@ public class TriggersClient {
      * Updates an event trigger. <code>enabled</code> and <code>condition</code> are the editable fields.
      * <p><code>PATCH /v1/capabilities/TRIGGER/{referenceId}</code> with a <code>status</code> also turns a trigger on and
      * off, the same way it publishes and unpublishes any kind of capability.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public EventTriggerResponse partialUpdate(String triggerReferenceId, PartialUpdateRequest request) {
         return this.rawClient.partialUpdate(triggerReferenceId, request).body();
@@ -127,6 +138,7 @@ public class TriggersClient {
      * Updates an event trigger. <code>enabled</code> and <code>condition</code> are the editable fields.
      * <p><code>PATCH /v1/capabilities/TRIGGER/{referenceId}</code> with a <code>status</code> also turns a trigger on and
      * off, the same way it publishes and unpublishes any kind of capability.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public EventTriggerResponse partialUpdate(
             String triggerReferenceId, PartialUpdateRequest request, RequestOptions requestOptions) {

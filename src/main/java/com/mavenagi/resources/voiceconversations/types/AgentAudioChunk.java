@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
+import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -19,22 +20,25 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = AgentAudioChunk.Builder.class)
 public final class AgentAudioChunk implements IServerEventBase {
-    private final String eventId;
+    private final OffsetDateTime timestamp;
 
     private final String data;
 
     private final Map<String, Object> additionalProperties;
 
-    private AgentAudioChunk(String eventId, String data, Map<String, Object> additionalProperties) {
-        this.eventId = eventId;
+    private AgentAudioChunk(OffsetDateTime timestamp, String data, Map<String, Object> additionalProperties) {
+        this.timestamp = timestamp;
         this.data = data;
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("eventId")
+    /**
+     * @return When the server sent the event.
+     */
+    @JsonProperty("timestamp")
     @java.lang.Override
-    public String getEventId() {
-        return eventId;
+    public OffsetDateTime getTimestamp() {
+        return timestamp;
     }
 
     @JsonProperty("type")
@@ -43,7 +47,7 @@ public final class AgentAudioChunk implements IServerEventBase {
     }
 
     /**
-     * @return Base64-encoded AI audio data
+     * @return Base64-encoded agent audio, in the <code>outputFormat</code> from the <code>Config</code> message.
      */
     @JsonProperty("data")
     public String getData() {
@@ -62,12 +66,12 @@ public final class AgentAudioChunk implements IServerEventBase {
     }
 
     private boolean equalTo(AgentAudioChunk other) {
-        return eventId.equals(other.eventId) && data.equals(other.data);
+        return timestamp.equals(other.timestamp) && data.equals(other.data);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.eventId, this.data);
+        return Objects.hash(this.timestamp, this.data);
     }
 
     @java.lang.Override
@@ -75,19 +79,22 @@ public final class AgentAudioChunk implements IServerEventBase {
         return ObjectMappers.stringify(this);
     }
 
-    public static EventIdStage builder() {
+    public static TimestampStage builder() {
         return new Builder();
     }
 
-    public interface EventIdStage {
-        DataStage eventId(@NotNull String eventId);
+    public interface TimestampStage {
+        /**
+         * <p>When the server sent the event.</p>
+         */
+        DataStage timestamp(@NotNull OffsetDateTime timestamp);
 
         Builder from(AgentAudioChunk other);
     }
 
     public interface DataStage {
         /**
-         * <p>Base64-encoded AI audio data</p>
+         * <p>Base64-encoded agent audio, in the <code>outputFormat</code> from the <code>Config</code> message.</p>
          */
         _FinalStage data(@NotNull String data);
     }
@@ -97,8 +104,8 @@ public final class AgentAudioChunk implements IServerEventBase {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements EventIdStage, DataStage, _FinalStage {
-        private String eventId;
+    public static final class Builder implements TimestampStage, DataStage, _FinalStage {
+        private OffsetDateTime timestamp;
 
         private String data;
 
@@ -109,21 +116,26 @@ public final class AgentAudioChunk implements IServerEventBase {
 
         @java.lang.Override
         public Builder from(AgentAudioChunk other) {
-            eventId(other.getEventId());
+            timestamp(other.getTimestamp());
             data(other.getData());
             return this;
         }
 
+        /**
+         * <p>When the server sent the event.</p>
+         * <p>When the server sent the event.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
-        @JsonSetter("eventId")
-        public DataStage eventId(@NotNull String eventId) {
-            this.eventId = Objects.requireNonNull(eventId, "eventId must not be null");
+        @JsonSetter("timestamp")
+        public DataStage timestamp(@NotNull OffsetDateTime timestamp) {
+            this.timestamp = Objects.requireNonNull(timestamp, "timestamp must not be null");
             return this;
         }
 
         /**
-         * <p>Base64-encoded AI audio data</p>
-         * <p>Base64-encoded AI audio data</p>
+         * <p>Base64-encoded agent audio, in the <code>outputFormat</code> from the <code>Config</code> message.</p>
+         * <p>Base64-encoded agent audio, in the <code>outputFormat</code> from the <code>Config</code> message.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -135,7 +147,7 @@ public final class AgentAudioChunk implements IServerEventBase {
 
         @java.lang.Override
         public AgentAudioChunk build() {
-            return new AgentAudioChunk(eventId, data, additionalProperties);
+            return new AgentAudioChunk(timestamp, data, additionalProperties);
         }
     }
 }

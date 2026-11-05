@@ -30,6 +30,7 @@ import com.mavenagi.resources.knowledge.types.KnowledgeBaseVersionsListResponse;
 import com.mavenagi.resources.knowledge.types.KnowledgeBasesResponse;
 import com.mavenagi.resources.knowledge.types.KnowledgeDeleteRequest;
 import com.mavenagi.resources.knowledge.types.KnowledgeDocumentContentType;
+import com.mavenagi.resources.knowledge.types.KnowledgeDocumentMetadataValue;
 import com.mavenagi.resources.knowledge.types.KnowledgeDocumentRequest;
 import com.mavenagi.resources.knowledge.types.KnowledgeDocumentResponse;
 import com.mavenagi.resources.knowledge.types.KnowledgeDocumentSearchRequest;
@@ -1427,8 +1428,8 @@ public class KnowledgeWireTest {
                 )
                 .content("## Getting started\\nThis is a getting started guide for the help center.")
                 .metadata(
-                    new HashMap<String, String>() {{
-                        put("category", "getting-started");
+                    new HashMap<String, KnowledgeDocumentMetadataValue>() {{
+                        put("category", KnowledgeDocumentMetadataValue.of("getting-started"));
                     }}
                 )
                 .build()

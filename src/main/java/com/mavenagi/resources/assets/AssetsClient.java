@@ -29,6 +29,7 @@ public class AssetsClient {
     /**
      * Initiate an upload.
      * Returns a pre-signed URL for direct file upload and an asset ID for subsequent operations.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>ask:agent</code>&lt;/Note&gt;</p>
      */
     public InitiateAssetUploadResponse initiateUpload(InitiateAssetUploadRequest request) {
         return this.rawClient.initiateUpload(request).body();
@@ -37,6 +38,7 @@ public class AssetsClient {
     /**
      * Initiate an upload.
      * Returns a pre-signed URL for direct file upload and an asset ID for subsequent operations.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>ask:agent</code>&lt;/Note&gt;</p>
      */
     public InitiateAssetUploadResponse initiateUpload(
             InitiateAssetUploadRequest request, RequestOptions requestOptions) {
@@ -46,6 +48,7 @@ public class AssetsClient {
     /**
      * Commit an upload after successful file transfer.
      * Updates the asset status and makes it available for use.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>ask:agent</code>&lt;/Note&gt;</p>
      */
     public void commitUpload(String assetReferenceId) {
         this.rawClient.commitUpload(assetReferenceId).body();
@@ -54,6 +57,7 @@ public class AssetsClient {
     /**
      * Commit an upload after successful file transfer.
      * Updates the asset status and makes it available for use.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>ask:agent</code>&lt;/Note&gt;</p>
      */
     public void commitUpload(String assetReferenceId, CommitAssetUploadRequest request) {
         this.rawClient.commitUpload(assetReferenceId, request).body();
@@ -62,6 +66,7 @@ public class AssetsClient {
     /**
      * Commit an upload after successful file transfer.
      * Updates the asset status and makes it available for use.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>ask:agent</code>&lt;/Note&gt;</p>
      */
     public void commitUpload(String assetReferenceId, CommitAssetUploadRequest request, RequestOptions requestOptions) {
         this.rawClient.commitUpload(assetReferenceId, request, requestOptions).body();

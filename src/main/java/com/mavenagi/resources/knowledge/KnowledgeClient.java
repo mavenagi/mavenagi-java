@@ -46,6 +46,10 @@ public class KnowledgeClient {
 
     /**
      * Search knowledge bases
+     * <p>Pagination is limited to the first 10,000 matching knowledge bases: <code>(page + 1) * size</code> must
+     * not exceed 10,000, and a request beyond that is rejected with a 400. Narrow the filter to
+     * reach later results.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public KnowledgeBasesResponse searchKnowledgeBases() {
         return this.rawClient.searchKnowledgeBases().body();
@@ -53,6 +57,10 @@ public class KnowledgeClient {
 
     /**
      * Search knowledge bases
+     * <p>Pagination is limited to the first 10,000 matching knowledge bases: <code>(page + 1) * size</code> must
+     * not exceed 10,000, and a request beyond that is rejected with a 400. Narrow the filter to
+     * reach later results.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public KnowledgeBasesResponse searchKnowledgeBases(KnowledgeBaseSearchRequest request) {
         return this.rawClient.searchKnowledgeBases(request).body();
@@ -60,6 +68,10 @@ public class KnowledgeClient {
 
     /**
      * Search knowledge bases
+     * <p>Pagination is limited to the first 10,000 matching knowledge bases: <code>(page + 1) * size</code> must
+     * not exceed 10,000, and a request beyond that is rejected with a 400. Narrow the filter to
+     * reach later results.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public KnowledgeBasesResponse searchKnowledgeBases(
             KnowledgeBaseSearchRequest request, RequestOptions requestOptions) {
@@ -68,6 +80,7 @@ public class KnowledgeClient {
 
     /**
      * Update a knowledge base or create it if it doesn't exist.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public KnowledgeBaseResponse createOrUpdateKnowledgeBase(KnowledgeBaseRequest request) {
         return this.rawClient.createOrUpdateKnowledgeBase(request).body();
@@ -75,6 +88,7 @@ public class KnowledgeClient {
 
     /**
      * Update a knowledge base or create it if it doesn't exist.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public KnowledgeBaseResponse createOrUpdateKnowledgeBase(
             KnowledgeBaseRequest request, RequestOptions requestOptions) {
@@ -85,6 +99,7 @@ public class KnowledgeClient {
 
     /**
      * Get an existing knowledge base by its supplied ID
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public KnowledgeBaseResponse getKnowledgeBase(String knowledgeBaseReferenceId) {
         return this.rawClient.getKnowledgeBase(knowledgeBaseReferenceId).body();
@@ -92,6 +107,7 @@ public class KnowledgeClient {
 
     /**
      * Get an existing knowledge base by its supplied ID
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public KnowledgeBaseResponse getKnowledgeBase(String knowledgeBaseReferenceId, KnowledgeBaseGetRequest request) {
         return this.rawClient
@@ -101,6 +117,7 @@ public class KnowledgeClient {
 
     /**
      * Get an existing knowledge base by its supplied ID
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public KnowledgeBaseResponse getKnowledgeBase(
             String knowledgeBaseReferenceId, KnowledgeBaseGetRequest request, RequestOptions requestOptions) {
@@ -113,6 +130,7 @@ public class KnowledgeClient {
      * Request that a knowledge base refresh itself.
      * <p>Knowledge bases refresh on a schedule determined by the <code>refreshFrequency</code> field.
      * They can also be refreshed on demand by calling this endpoint.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public void refreshKnowledgeBase(String knowledgeBaseReferenceId) {
         this.rawClient.refreshKnowledgeBase(knowledgeBaseReferenceId).body();
@@ -122,6 +140,7 @@ public class KnowledgeClient {
      * Request that a knowledge base refresh itself.
      * <p>Knowledge bases refresh on a schedule determined by the <code>refreshFrequency</code> field.
      * They can also be refreshed on demand by calling this endpoint.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public void refreshKnowledgeBase(String knowledgeBaseReferenceId, KnowledgeBaseRefreshRequest request) {
         this.rawClient.refreshKnowledgeBase(knowledgeBaseReferenceId, request).body();
@@ -131,6 +150,7 @@ public class KnowledgeClient {
      * Request that a knowledge base refresh itself.
      * <p>Knowledge bases refresh on a schedule determined by the <code>refreshFrequency</code> field.
      * They can also be refreshed on demand by calling this endpoint.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public void refreshKnowledgeBase(
             String knowledgeBaseReferenceId, KnowledgeBaseRefreshRequest request, RequestOptions requestOptions) {
@@ -145,6 +165,7 @@ public class KnowledgeClient {
      * ingestion workflow and sets the version status to CANCELED.</p>
      * <p>An app still refreshing that version finds out on its next write to it: adding or
      * removing a document on a canceled version is rejected rather than succeeding.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public void cancelKnowledgeBaseVersion(String knowledgeBaseReferenceId) {
         this.rawClient.cancelKnowledgeBaseVersion(knowledgeBaseReferenceId).body();
@@ -156,6 +177,7 @@ public class KnowledgeClient {
      * ingestion workflow and sets the version status to CANCELED.</p>
      * <p>An app still refreshing that version finds out on its next write to it: adding or
      * removing a document on a canceled version is rejected rather than succeeding.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public void cancelKnowledgeBaseVersion(String knowledgeBaseReferenceId, CancelKnowledgeBaseVersionRequest request) {
         this.rawClient
@@ -169,6 +191,7 @@ public class KnowledgeClient {
      * ingestion workflow and sets the version status to CANCELED.</p>
      * <p>An app still refreshing that version finds out on its next write to it: adding or
      * removing a document on a canceled version is rejected rather than succeeding.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public void cancelKnowledgeBaseVersion(
             String knowledgeBaseReferenceId, CancelKnowledgeBaseVersionRequest request, RequestOptions requestOptions) {
@@ -179,6 +202,7 @@ public class KnowledgeClient {
 
     /**
      * Rolls the knowledge base back to its previous published version.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public void rollbackKnowledgeBaseVersion(String knowledgeBaseReferenceId) {
         this.rawClient.rollbackKnowledgeBaseVersion(knowledgeBaseReferenceId).body();
@@ -186,6 +210,7 @@ public class KnowledgeClient {
 
     /**
      * Rolls the knowledge base back to its previous published version.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public void rollbackKnowledgeBaseVersion(String knowledgeBaseReferenceId, RequestOptions requestOptions) {
         this.rawClient
@@ -197,6 +222,7 @@ public class KnowledgeClient {
      * Update mutable knowledge base fields
      * <p>The <code>appId</code> field can be provided to update a knowledge base owned by a different app.
      * All other fields will overwrite the existing value on the knowledge base only if provided.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public KnowledgeBaseResponse patchKnowledgeBase(String knowledgeBaseReferenceId) {
         return this.rawClient.patchKnowledgeBase(knowledgeBaseReferenceId).body();
@@ -206,6 +232,7 @@ public class KnowledgeClient {
      * Update mutable knowledge base fields
      * <p>The <code>appId</code> field can be provided to update a knowledge base owned by a different app.
      * All other fields will overwrite the existing value on the knowledge base only if provided.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public KnowledgeBaseResponse patchKnowledgeBase(
             String knowledgeBaseReferenceId, KnowledgeBasePatchRequest request) {
@@ -218,6 +245,7 @@ public class KnowledgeClient {
      * Update mutable knowledge base fields
      * <p>The <code>appId</code> field can be provided to update a knowledge base owned by a different app.
      * All other fields will overwrite the existing value on the knowledge base only if provided.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public KnowledgeBaseResponse patchKnowledgeBase(
             String knowledgeBaseReferenceId, KnowledgeBasePatchRequest request, RequestOptions requestOptions) {
@@ -231,6 +259,7 @@ public class KnowledgeClient {
      * <p>If an existing version is in progress, then that version will be finalized in an error state.</p>
      * <p>If another version create for the same knowledge base is still in progress, this request may
      * return 503 with a <code>Retry-After</code> header. Nothing is changed in that case, so it is safe to retry.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public KnowledgeBaseVersion createKnowledgeBaseVersion(
             String knowledgeBaseReferenceId, KnowledgeBaseVersionRequest request) {
@@ -244,6 +273,7 @@ public class KnowledgeClient {
      * <p>If an existing version is in progress, then that version will be finalized in an error state.</p>
      * <p>If another version create for the same knowledge base is still in progress, this request may
      * return 503 with a <code>Retry-After</code> header. Nothing is changed in that case, so it is safe to retry.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public KnowledgeBaseVersion createKnowledgeBaseVersion(
             String knowledgeBaseReferenceId, KnowledgeBaseVersionRequest request, RequestOptions requestOptions) {
@@ -254,6 +284,7 @@ public class KnowledgeClient {
 
     /**
      * Finalize the latest knowledge base version. Required to indicate the version is complete. Will throw an exception if the latest version is not in progress.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public KnowledgeBaseVersion finalizeKnowledgeBaseVersion(String knowledgeBaseReferenceId) {
         return this.rawClient
@@ -263,6 +294,7 @@ public class KnowledgeClient {
 
     /**
      * Finalize the latest knowledge base version. Required to indicate the version is complete. Will throw an exception if the latest version is not in progress.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public KnowledgeBaseVersion finalizeKnowledgeBaseVersion(
             String knowledgeBaseReferenceId, FinalizeKnowledgeBaseVersionRequest request) {
@@ -273,6 +305,7 @@ public class KnowledgeClient {
 
     /**
      * Finalize the latest knowledge base version. Required to indicate the version is complete. Will throw an exception if the latest version is not in progress.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public KnowledgeBaseVersion finalizeKnowledgeBaseVersion(
             String knowledgeBaseReferenceId,
@@ -288,6 +321,7 @@ public class KnowledgeClient {
      * <p>Progress is advisory and shown to users while a refresh runs. Each call replaces the
      * version's entire progress state - no history is kept, only the most recent value is
      * retained. Will throw an exception if the target version is not in progress.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public KnowledgeBaseVersion updateKnowledgeBaseVersionProgress(
             String knowledgeBaseReferenceId, KnowledgeBaseVersionProgressRequest request) {
@@ -301,6 +335,7 @@ public class KnowledgeClient {
      * <p>Progress is advisory and shown to users while a refresh runs. Each call replaces the
      * version's entire progress state - no history is kept, only the most recent value is
      * retained. Will throw an exception if the target version is not in progress.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public KnowledgeBaseVersion updateKnowledgeBaseVersionProgress(
             String knowledgeBaseReferenceId,
@@ -313,6 +348,7 @@ public class KnowledgeClient {
 
     /**
      * List all active versions for a knowledge base. Returns the most recent versions first.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public KnowledgeBaseVersionsListResponse listKnowledgeBaseVersions(String knowledgeBaseReferenceId) {
         return this.rawClient
@@ -322,6 +358,7 @@ public class KnowledgeClient {
 
     /**
      * List all active versions for a knowledge base. Returns the most recent versions first.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public KnowledgeBaseVersionsListResponse listKnowledgeBaseVersions(
             String knowledgeBaseReferenceId, KnowledgeBaseVersionsListRequest request) {
@@ -332,6 +369,7 @@ public class KnowledgeClient {
 
     /**
      * List all active versions for a knowledge base. Returns the most recent versions first.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public KnowledgeBaseVersionsListResponse listKnowledgeBaseVersions(
             String knowledgeBaseReferenceId, KnowledgeBaseVersionsListRequest request, RequestOptions requestOptions) {
@@ -342,6 +380,10 @@ public class KnowledgeClient {
 
     /**
      * Search knowledge documents
+     * <p>Pagination is limited to the first 10,000 matching knowledge documents: <code>(page + 1) * size</code>
+     * must not exceed 10,000, and a request beyond that is rejected with a 400. Narrow the filter
+     * to reach later results.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:documents</code>&lt;/Note&gt;</p>
      */
     public KnowledgeDocumentsResponse searchKnowledgeDocuments() {
         return this.rawClient.searchKnowledgeDocuments().body();
@@ -349,6 +391,10 @@ public class KnowledgeClient {
 
     /**
      * Search knowledge documents
+     * <p>Pagination is limited to the first 10,000 matching knowledge documents: <code>(page + 1) * size</code>
+     * must not exceed 10,000, and a request beyond that is rejected with a 400. Narrow the filter
+     * to reach later results.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:documents</code>&lt;/Note&gt;</p>
      */
     public KnowledgeDocumentsResponse searchKnowledgeDocuments(KnowledgeDocumentSearchRequest request) {
         return this.rawClient.searchKnowledgeDocuments(request).body();
@@ -356,6 +402,10 @@ public class KnowledgeClient {
 
     /**
      * Search knowledge documents
+     * <p>Pagination is limited to the first 10,000 matching knowledge documents: <code>(page + 1) * size</code>
+     * must not exceed 10,000, and a request beyond that is rejected with a 400. Narrow the filter
+     * to reach later results.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:documents</code>&lt;/Note&gt;</p>
      */
     public KnowledgeDocumentsResponse searchKnowledgeDocuments(
             KnowledgeDocumentSearchRequest request, RequestOptions requestOptions) {
@@ -369,6 +419,7 @@ public class KnowledgeClient {
      * This API maintains document version history. If for the same reference ID none of the `title`, `text`, `sourceUrl`, `metadata` fields
      * have changed, a new document version will not be created. The existing version will be reused.
      * &lt;/Tip&gt;</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>create:documents</code>&lt;/Note&gt;</p>
      */
     public KnowledgeDocumentResponse createKnowledgeDocument(
             String knowledgeBaseReferenceId, KnowledgeDocumentRequest request) {
@@ -384,6 +435,7 @@ public class KnowledgeClient {
      * This API maintains document version history. If for the same reference ID none of the `title`, `text`, `sourceUrl`, `metadata` fields
      * have changed, a new document version will not be created. The existing version will be reused.
      * &lt;/Tip&gt;</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>create:documents</code>&lt;/Note&gt;</p>
      */
     public KnowledgeDocumentResponse createKnowledgeDocument(
             String knowledgeBaseReferenceId, KnowledgeDocumentRequest request, RequestOptions requestOptions) {
@@ -395,6 +447,7 @@ public class KnowledgeClient {
     /**
      * Delete knowledge document from a specific version.
      * Requires an existing knowledge base with an in progress version of type PARTIAL. Will throw an exception if the version is not in progress.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>delete:documents</code>&lt;/Note&gt;</p>
      */
     public void deleteKnowledgeDocument(
             String knowledgeBaseReferenceId, String knowledgeDocumentReferenceId, KnowledgeDeleteRequest request) {
@@ -406,6 +459,7 @@ public class KnowledgeClient {
     /**
      * Delete knowledge document from a specific version.
      * Requires an existing knowledge base with an in progress version of type PARTIAL. Will throw an exception if the version is not in progress.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>delete:documents</code>&lt;/Note&gt;</p>
      */
     public void deleteKnowledgeDocument(
             String knowledgeBaseReferenceId,
@@ -420,6 +474,7 @@ public class KnowledgeClient {
 
     /**
      * Get a knowledge document by its supplied version and document IDs. Response includes document content in markdown format.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:documents</code>&lt;/Note&gt;</p>
      */
     public KnowledgeDocumentResponse getKnowledgeDocument(
             String knowledgeBaseVersionReferenceId,
@@ -432,6 +487,7 @@ public class KnowledgeClient {
 
     /**
      * Get a knowledge document by its supplied version and document IDs. Response includes document content in markdown format.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:documents</code>&lt;/Note&gt;</p>
      */
     public KnowledgeDocumentResponse getKnowledgeDocument(
             String knowledgeBaseVersionReferenceId,
@@ -449,6 +505,7 @@ public class KnowledgeClient {
      * <p>For any changes in document content see the <code>createKnowledgeBaseVersion</code> and <code>createKnowledgeDocument</code> endpoints.</p>
      * <p>The <code>knowledgeBaseAppId</code> field can be provided to update a knowledge document in a knowledge base owned by a different app.
      * All other fields will overwrite the existing value on the knowledge document only if provided.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:documents</code>&lt;/Note&gt;</p>
      */
     public KnowledgeDocumentResponse patchKnowledgeDocument(
             String knowledgeBaseReferenceId, String knowledgeDocumentReferenceId) {
@@ -462,6 +519,7 @@ public class KnowledgeClient {
      * <p>For any changes in document content see the <code>createKnowledgeBaseVersion</code> and <code>createKnowledgeDocument</code> endpoints.</p>
      * <p>The <code>knowledgeBaseAppId</code> field can be provided to update a knowledge document in a knowledge base owned by a different app.
      * All other fields will overwrite the existing value on the knowledge document only if provided.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:documents</code>&lt;/Note&gt;</p>
      */
     public KnowledgeDocumentResponse patchKnowledgeDocument(
             String knowledgeBaseReferenceId,
@@ -477,6 +535,7 @@ public class KnowledgeClient {
      * <p>For any changes in document content see the <code>createKnowledgeBaseVersion</code> and <code>createKnowledgeDocument</code> endpoints.</p>
      * <p>The <code>knowledgeBaseAppId</code> field can be provided to update a knowledge document in a knowledge base owned by a different app.
      * All other fields will overwrite the existing value on the knowledge document only if provided.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:documents</code>&lt;/Note&gt;</p>
      */
     public KnowledgeDocumentResponse patchKnowledgeDocument(
             String knowledgeBaseReferenceId,

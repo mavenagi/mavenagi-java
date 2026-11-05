@@ -31,9 +31,8 @@ public class AgentsClient {
 
     /**
      * Search for agents across all organizations.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>Only Maven staff hold this permission.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:all-organizations</code>&lt;/Note&gt;</p>
      */
     public AgentsSearchResponse search() {
         return this.rawClient.search().body();
@@ -41,9 +40,8 @@ public class AgentsClient {
 
     /**
      * Search for agents across all organizations.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>Only Maven staff hold this permission.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:all-organizations</code>&lt;/Note&gt;</p>
      */
     public AgentsSearchResponse search(AgentsSearchRequest request) {
         return this.rawClient.search(request).body();
@@ -51,9 +49,8 @@ public class AgentsClient {
 
     /**
      * Search for agents across all organizations.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>Only Maven staff hold this permission.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:all-organizations</code>&lt;/Note&gt;</p>
      */
     public AgentsSearchResponse search(AgentsSearchRequest request, RequestOptions requestOptions) {
         return this.rawClient.search(request, requestOptions).body();
@@ -61,6 +58,7 @@ public class AgentsClient {
 
     /**
      * Lists all agents for an organization
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public List<Agent> list(String organizationReferenceId) {
         return this.rawClient.list(organizationReferenceId).body();
@@ -68,6 +66,7 @@ public class AgentsClient {
 
     /**
      * Lists all agents for an organization
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public List<Agent> list(String organizationReferenceId, RequestOptions requestOptions) {
         return this.rawClient.list(organizationReferenceId, requestOptions).body();
@@ -75,9 +74,7 @@ public class AgentsClient {
 
     /**
      * Create a new agent
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>create:agents</code>&lt;/Note&gt;</p>
      */
     public Agent create(String organizationReferenceId, String agentReferenceId, CreateAgentRequest request) {
         return this.rawClient
@@ -87,9 +84,7 @@ public class AgentsClient {
 
     /**
      * Create a new agent
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>create:agents</code>&lt;/Note&gt;</p>
      */
     public Agent create(
             String organizationReferenceId,
@@ -103,6 +98,7 @@ public class AgentsClient {
 
     /**
      * Get an agent
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public Agent get(String organizationReferenceId, String agentReferenceId) {
         return this.rawClient.get(organizationReferenceId, agentReferenceId).body();
@@ -110,6 +106,7 @@ public class AgentsClient {
 
     /**
      * Get an agent
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public Agent get(String organizationReferenceId, String agentReferenceId, RequestOptions requestOptions) {
         return this.rawClient
@@ -120,9 +117,7 @@ public class AgentsClient {
     /**
      * Update mutable agent fields
      * All fields will overwrite the existing value on the agent only if provided.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public Agent patch(String organizationReferenceId, String agentReferenceId) {
         return this.rawClient.patch(organizationReferenceId, agentReferenceId).body();
@@ -131,9 +126,7 @@ public class AgentsClient {
     /**
      * Update mutable agent fields
      * All fields will overwrite the existing value on the agent only if provided.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public Agent patch(String organizationReferenceId, String agentReferenceId, AgentPatchRequest request) {
         return this.rawClient
@@ -144,9 +137,7 @@ public class AgentsClient {
     /**
      * Update mutable agent fields
      * All fields will overwrite the existing value on the agent only if provided.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public Agent patch(
             String organizationReferenceId,
@@ -160,9 +151,7 @@ public class AgentsClient {
 
     /**
      * Delete an agent.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>delete:agents</code>&lt;/Note&gt;</p>
      */
     public void delete(String organizationReferenceId, String agentReferenceId) {
         this.rawClient.delete(organizationReferenceId, agentReferenceId).body();
@@ -170,9 +159,7 @@ public class AgentsClient {
 
     /**
      * Delete an agent.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>delete:agents</code>&lt;/Note&gt;</p>
      */
     public void delete(String organizationReferenceId, String agentReferenceId, RequestOptions requestOptions) {
         this.rawClient

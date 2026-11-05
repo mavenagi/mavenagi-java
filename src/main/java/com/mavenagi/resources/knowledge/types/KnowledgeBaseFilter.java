@@ -131,7 +131,9 @@ public final class KnowledgeBaseFilter {
     }
 
     /**
-     * @return Filter knowledge bases by the most recent version status
+     * @return Deprecated. Do not use this filter: it does not filter on the status of the most recent
+     * version and its results are often inaccurate. To check a knowledge base's latest refresh,
+     * call <code>listKnowledgeBaseVersions</code>.
      */
     @JsonProperty("mostRecentVersionStatus")
     public Optional<List<KnowledgeBaseVersionStatus>> getMostRecentVersionStatus() {
@@ -349,7 +351,9 @@ public final class KnowledgeBaseFilter {
         }
 
         /**
-         * <p>Filter knowledge bases by the most recent version status</p>
+         * <p>Deprecated. Do not use this filter: it does not filter on the status of the most recent
+         * version and its results are often inaccurate. To check a knowledge base's latest refresh,
+         * call <code>listKnowledgeBaseVersions</code>.</p>
          */
         @JsonSetter(value = "mostRecentVersionStatus", nulls = Nulls.SKIP)
         public Builder mostRecentVersionStatus(Optional<List<KnowledgeBaseVersionStatus>> mostRecentVersionStatus) {

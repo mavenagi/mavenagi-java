@@ -29,20 +29,42 @@ public class CustomersClient {
         return this.rawClient;
     }
 
+    /**
+     * Search customers of an agent.
+     * <p>Pagination is limited to the first 10,000 matching customers: <code>(page + 1) * size</code> must not
+     * exceed 10,000, and a request beyond that is rejected with a 400. Narrow the filter to reach
+     * later results.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
+     */
     public CustomersSearchResponse search() {
         return this.rawClient.search().body();
     }
 
+    /**
+     * Search customers of an agent.
+     * <p>Pagination is limited to the first 10,000 matching customers: <code>(page + 1) * size</code> must not
+     * exceed 10,000, and a request beyond that is rejected with a 400. Narrow the filter to reach
+     * later results.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
+     */
     public CustomersSearchResponse search(CustomersSearchRequest request) {
         return this.rawClient.search(request).body();
     }
 
+    /**
+     * Search customers of an agent.
+     * <p>Pagination is limited to the first 10,000 matching customers: <code>(page + 1) * size</code> must not
+     * exceed 10,000, and a request beyond that is rejected with a 400. Narrow the filter to reach
+     * later results.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
+     */
     public CustomersSearchResponse search(CustomersSearchRequest request, RequestOptions requestOptions) {
         return this.rawClient.search(request, requestOptions).body();
     }
 
     /**
      * Update a customer of an agent or create it if it doesn't exist. In case of an update, fields not provided (e.g., description, status) will be preserved.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CustomerResponse createOrUpdate(CustomerRequest request) {
         return this.rawClient.createOrUpdate(request).body();
@@ -50,6 +72,7 @@ public class CustomersClient {
 
     /**
      * Update a customer of an agent or create it if it doesn't exist. In case of an update, fields not provided (e.g., description, status) will be preserved.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CustomerResponse createOrUpdate(CustomerRequest request, RequestOptions requestOptions) {
         return this.rawClient.createOrUpdate(request, requestOptions).body();
@@ -57,6 +80,7 @@ public class CustomersClient {
 
     /**
      * Get a customer by its supplied ID
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CustomerResponse get(String customerReferenceId) {
         return this.rawClient.get(customerReferenceId).body();
@@ -64,6 +88,7 @@ public class CustomersClient {
 
     /**
      * Get a customer by its supplied ID
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CustomerResponse get(String customerReferenceId, CustomerGetRequest request) {
         return this.rawClient.get(customerReferenceId, request).body();
@@ -71,6 +96,7 @@ public class CustomersClient {
 
     /**
      * Get a customer by its supplied ID
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CustomerResponse get(String customerReferenceId, CustomerGetRequest request, RequestOptions requestOptions) {
         return this.rawClient.get(customerReferenceId, request, requestOptions).body();
@@ -80,6 +106,7 @@ public class CustomersClient {
      * Update mutable customer fields
      * <p>The <code>appId</code> field can be provided to update a customer owned by a different app.
      * All other fields will overwrite the existing value on the customer only if provided.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CustomerResponse patch(String customerReferenceId) {
         return this.rawClient.patch(customerReferenceId).body();
@@ -89,6 +116,7 @@ public class CustomersClient {
      * Update mutable customer fields
      * <p>The <code>appId</code> field can be provided to update a customer owned by a different app.
      * All other fields will overwrite the existing value on the customer only if provided.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CustomerResponse patch(String customerReferenceId, CustomerPatchRequest request) {
         return this.rawClient.patch(customerReferenceId, request).body();
@@ -98,6 +126,7 @@ public class CustomersClient {
      * Update mutable customer fields
      * <p>The <code>appId</code> field can be provided to update a customer owned by a different app.
      * All other fields will overwrite the existing value on the customer only if provided.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CustomerResponse patch(
             String customerReferenceId, CustomerPatchRequest request, RequestOptions requestOptions) {

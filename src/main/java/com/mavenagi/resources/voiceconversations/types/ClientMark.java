@@ -17,32 +17,34 @@ import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
-@JsonDeserialize(builder = UserFinishedSpeaking.Builder.class)
-public final class UserFinishedSpeaking implements IServerEventBase {
-    private final String eventId;
+@JsonDeserialize(builder = ClientMark.Builder.class)
+public final class ClientMark {
+    private final String name;
 
     private final Map<String, Object> additionalProperties;
 
-    private UserFinishedSpeaking(String eventId, Map<String, Object> additionalProperties) {
-        this.eventId = eventId;
+    private ClientMark(String name, Map<String, Object> additionalProperties) {
+        this.name = name;
         this.additionalProperties = additionalProperties;
-    }
-
-    @JsonProperty("eventId")
-    @java.lang.Override
-    public String getEventId() {
-        return eventId;
     }
 
     @JsonProperty("type")
     public String getType() {
-        return "user_finished_speaking";
+        return "mark";
+    }
+
+    /**
+     * @return The <code>name</code> from the server <code>mark</code> message.
+     */
+    @JsonProperty("name")
+    public String getName() {
+        return name;
     }
 
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
-        return other instanceof UserFinishedSpeaking && equalTo((UserFinishedSpeaking) other);
+        return other instanceof ClientMark && equalTo((ClientMark) other);
     }
 
     @JsonAnyGetter
@@ -50,13 +52,13 @@ public final class UserFinishedSpeaking implements IServerEventBase {
         return this.additionalProperties;
     }
 
-    private boolean equalTo(UserFinishedSpeaking other) {
-        return eventId.equals(other.eventId);
+    private boolean equalTo(ClientMark other) {
+        return name.equals(other.name);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.eventId);
+        return Objects.hash(this.name);
     }
 
     @java.lang.Override
@@ -64,23 +66,26 @@ public final class UserFinishedSpeaking implements IServerEventBase {
         return ObjectMappers.stringify(this);
     }
 
-    public static EventIdStage builder() {
+    public static NameStage builder() {
         return new Builder();
     }
 
-    public interface EventIdStage {
-        _FinalStage eventId(@NotNull String eventId);
+    public interface NameStage {
+        /**
+         * <p>The <code>name</code> from the server <code>mark</code> message.</p>
+         */
+        _FinalStage name(@NotNull String name);
 
-        Builder from(UserFinishedSpeaking other);
+        Builder from(ClientMark other);
     }
 
     public interface _FinalStage {
-        UserFinishedSpeaking build();
+        ClientMark build();
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements EventIdStage, _FinalStage {
-        private String eventId;
+    public static final class Builder implements NameStage, _FinalStage {
+        private String name;
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -88,21 +93,26 @@ public final class UserFinishedSpeaking implements IServerEventBase {
         private Builder() {}
 
         @java.lang.Override
-        public Builder from(UserFinishedSpeaking other) {
-            eventId(other.getEventId());
+        public Builder from(ClientMark other) {
+            name(other.getName());
+            return this;
+        }
+
+        /**
+         * <p>The <code>name</code> from the server <code>mark</code> message.</p>
+         * <p>The <code>name</code> from the server <code>mark</code> message.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("name")
+        public _FinalStage name(@NotNull String name) {
+            this.name = Objects.requireNonNull(name, "name must not be null");
             return this;
         }
 
         @java.lang.Override
-        @JsonSetter("eventId")
-        public _FinalStage eventId(@NotNull String eventId) {
-            this.eventId = Objects.requireNonNull(eventId, "eventId must not be null");
-            return this;
-        }
-
-        @java.lang.Override
-        public UserFinishedSpeaking build() {
-            return new UserFinishedSpeaking(eventId, additionalProperties);
+        public ClientMark build() {
+            return new ClientMark(name, additionalProperties);
         }
     }
 }

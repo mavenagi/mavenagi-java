@@ -48,6 +48,10 @@ public class AsyncRawUsersClient {
     /**
      * Search across all agent users on an agent.
      * <p>Agent users are a merged view of the users created by individual apps.</p>
+     * <p>Pagination is limited to the first 10,000 matching agent users: <code>(page + 1) * size</code> must not
+     * exceed 10,000, and a request beyond that is rejected with a 400. Narrow the filter to reach
+     * later results.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<AgentUserSearchResponse>> search() {
         return search(AgentUserSearchRequest.builder().build());
@@ -56,6 +60,10 @@ public class AsyncRawUsersClient {
     /**
      * Search across all agent users on an agent.
      * <p>Agent users are a merged view of the users created by individual apps.</p>
+     * <p>Pagination is limited to the first 10,000 matching agent users: <code>(page + 1) * size</code> must not
+     * exceed 10,000, and a request beyond that is rejected with a 400. Narrow the filter to reach
+     * later results.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<AgentUserSearchResponse>> search(AgentUserSearchRequest request) {
         return search(request, null);
@@ -64,6 +72,10 @@ public class AsyncRawUsersClient {
     /**
      * Search across all agent users on an agent.
      * <p>Agent users are a merged view of the users created by individual apps.</p>
+     * <p>Pagination is limited to the first 10,000 matching agent users: <code>(page + 1) * size</code> must not
+     * exceed 10,000, and a request beyond that is rejected with a 400. Narrow the filter to reach
+     * later results.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<AgentUserSearchResponse>> search(
             AgentUserSearchRequest request, RequestOptions requestOptions) {
@@ -156,6 +168,7 @@ public class AsyncRawUsersClient {
     /**
      * Get an agent user by its supplied ID.
      * <p>Agent users are a merged view of the users created by individual apps.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<AgentUser>> getAgentUser(String agentUserId) {
         return getAgentUser(agentUserId, null);
@@ -164,6 +177,7 @@ public class AsyncRawUsersClient {
     /**
      * Get an agent user by its supplied ID.
      * <p>Agent users are a merged view of the users created by individual apps.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<AgentUser>> getAgentUser(
             String agentUserId, RequestOptions requestOptions) {
@@ -255,6 +269,7 @@ public class AsyncRawUsersClient {
      * <h3>Intelligent fields</h3>
      * <p>The agent user's intelligent field values are deleted too, and removed from their <code>INTELLIGENT_FIELD_VALUE_CHANGED</code> events; the events themselves are kept.
      * Unlike <code>DELETE /users/{userId}</code>, the wipe does not recompute the values. They can be computed again later from the user's remaining conversations, for example after the user sends another message; wipe those conversations first to prevent that.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<Void>> deleteAgentUser(String agentUserId) {
         return deleteAgentUser(agentUserId, null);
@@ -271,6 +286,7 @@ public class AsyncRawUsersClient {
      * <h3>Intelligent fields</h3>
      * <p>The agent user's intelligent field values are deleted too, and removed from their <code>INTELLIGENT_FIELD_VALUE_CHANGED</code> events; the events themselves are kept.
      * Unlike <code>DELETE /users/{userId}</code>, the wipe does not recompute the values. They can be computed again later from the user's remaining conversations, for example after the user sends another message; wipe those conversations first to prevent that.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<Void>> deleteAgentUser(
             String agentUserId, RequestOptions requestOptions) {
@@ -352,6 +368,7 @@ public class AsyncRawUsersClient {
 
     /**
      * Update an app user or create it if it doesn't exist.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>. A user with <code>executionMode</code> <code>SIMULATION</code> also needs <code>create:simulations</code>.&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<AppUserResponse>> createOrUpdate(AppUserRequest request) {
         return createOrUpdate(request, null);
@@ -359,6 +376,7 @@ public class AsyncRawUsersClient {
 
     /**
      * Update an app user or create it if it doesn't exist.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>. A user with <code>executionMode</code> <code>SIMULATION</code> also needs <code>create:simulations</code>.&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<AppUserResponse>> createOrUpdate(
             AppUserRequest request, RequestOptions requestOptions) {
@@ -449,6 +467,7 @@ public class AsyncRawUsersClient {
 
     /**
      * Get an app user by its supplied ID
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<AppUserResponse>> get(String userId) {
         return get(userId, UserGetRequest.builder().build());
@@ -456,6 +475,7 @@ public class AsyncRawUsersClient {
 
     /**
      * Get an app user by its supplied ID
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<AppUserResponse>> get(String userId, UserGetRequest request) {
         return get(userId, request, null);
@@ -463,6 +483,7 @@ public class AsyncRawUsersClient {
 
     /**
      * Get an app user by its supplied ID
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<AppUserResponse>> get(
             String userId, UserGetRequest request, RequestOptions requestOptions) {
@@ -556,6 +577,7 @@ public class AsyncRawUsersClient {
      * To wipe a conversation, use <code>DELETE /conversations/{conversationId}</code>. To wipe every app's data for a user, use <code>DELETE /agentusers/{agentUserId}</code>.</p>
      * <p>If this user is linked to a user from another app, it will not be unlinked. Unlinking of users is not yet supported.</p>
      * <p>&lt;Warning&gt;This is a destructive operation and cannot be undone.&lt;/Warning&gt;</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<Void>> delete(String userId) {
         return delete(userId, UserDeleteRequest.builder().build());
@@ -570,6 +592,7 @@ public class AsyncRawUsersClient {
      * To wipe a conversation, use <code>DELETE /conversations/{conversationId}</code>. To wipe every app's data for a user, use <code>DELETE /agentusers/{agentUserId}</code>.</p>
      * <p>If this user is linked to a user from another app, it will not be unlinked. Unlinking of users is not yet supported.</p>
      * <p>&lt;Warning&gt;This is a destructive operation and cannot be undone.&lt;/Warning&gt;</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<Void>> delete(String userId, UserDeleteRequest request) {
         return delete(userId, request, null);
@@ -584,6 +607,7 @@ public class AsyncRawUsersClient {
      * To wipe a conversation, use <code>DELETE /conversations/{conversationId}</code>. To wipe every app's data for a user, use <code>DELETE /agentusers/{agentUserId}</code>.</p>
      * <p>If this user is linked to a user from another app, it will not be unlinked. Unlinking of users is not yet supported.</p>
      * <p>&lt;Warning&gt;This is a destructive operation and cannot be undone.&lt;/Warning&gt;</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<Void>> delete(
             String userId, UserDeleteRequest request, RequestOptions requestOptions) {

@@ -333,14 +333,16 @@ public class AsyncRawAppDirectoryClient {
     }
 
     /**
-     * Uninstalls the app from the agent.
+     * Uninstalls the app from the agent, and deletes the actions and triggers it created.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>install:apps</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<Void>> uninstall(String appId) {
         return uninstall(appId, null);
     }
 
     /**
-     * Uninstalls the app from the agent.
+     * Uninstalls the app from the agent, and deletes the actions and triggers it created.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>install:apps</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<Void>> uninstall(String appId, RequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())

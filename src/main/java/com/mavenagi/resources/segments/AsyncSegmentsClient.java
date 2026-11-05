@@ -31,14 +31,35 @@ public class AsyncSegmentsClient {
         return this.rawClient;
     }
 
+    /**
+     * Search segments.
+     * <p>Pagination is limited to the first 10,000 matching segments: <code>(page + 1) * size</code> must not
+     * exceed 10,000, and a request beyond that is rejected with a 400. Narrow the filter to reach
+     * later results.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
+     */
     public CompletableFuture<SegmentsSearchResponse> search() {
         return this.rawClient.search().thenApply(response -> response.body());
     }
 
+    /**
+     * Search segments.
+     * <p>Pagination is limited to the first 10,000 matching segments: <code>(page + 1) * size</code> must not
+     * exceed 10,000, and a request beyond that is rejected with a 400. Narrow the filter to reach
+     * later results.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
+     */
     public CompletableFuture<SegmentsSearchResponse> search(SegmentsSearchRequest request) {
         return this.rawClient.search(request).thenApply(response -> response.body());
     }
 
+    /**
+     * Search segments.
+     * <p>Pagination is limited to the first 10,000 matching segments: <code>(page + 1) * size</code> must not
+     * exceed 10,000, and a request beyond that is rejected with a 400. Narrow the filter to reach
+     * later results.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
+     */
     public CompletableFuture<SegmentsSearchResponse> search(
             SegmentsSearchRequest request, RequestOptions requestOptions) {
         return this.rawClient.search(request, requestOptions).thenApply(response -> response.body());
@@ -46,6 +67,7 @@ public class AsyncSegmentsClient {
 
     /**
      * Update a segment or create it if it doesn't exist.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<SegmentResponse> createOrUpdate(SegmentRequest request) {
         return this.rawClient.createOrUpdate(request).thenApply(response -> response.body());
@@ -53,6 +75,7 @@ public class AsyncSegmentsClient {
 
     /**
      * Update a segment or create it if it doesn't exist.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<SegmentResponse> createOrUpdate(SegmentRequest request, RequestOptions requestOptions) {
         return this.rawClient.createOrUpdate(request, requestOptions).thenApply(response -> response.body());
@@ -60,6 +83,7 @@ public class AsyncSegmentsClient {
 
     /**
      * Get a segment by its supplied ID
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<SegmentResponse> get(String segmentReferenceId) {
         return this.rawClient.get(segmentReferenceId).thenApply(response -> response.body());
@@ -67,6 +91,7 @@ public class AsyncSegmentsClient {
 
     /**
      * Get a segment by its supplied ID
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<SegmentResponse> get(String segmentReferenceId, SegmentGetRequest request) {
         return this.rawClient.get(segmentReferenceId, request).thenApply(response -> response.body());
@@ -74,6 +99,7 @@ public class AsyncSegmentsClient {
 
     /**
      * Get a segment by its supplied ID
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<SegmentResponse> get(
             String segmentReferenceId, SegmentGetRequest request, RequestOptions requestOptions) {
@@ -84,6 +110,7 @@ public class AsyncSegmentsClient {
      * Update mutable segment fields
      * <p>The <code>appId</code> field can be provided to update a segment owned by a different app.
      * All other fields will overwrite the existing value on the segment only if provided.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<SegmentResponse> patch(String segmentReferenceId) {
         return this.rawClient.patch(segmentReferenceId).thenApply(response -> response.body());
@@ -93,6 +120,7 @@ public class AsyncSegmentsClient {
      * Update mutable segment fields
      * <p>The <code>appId</code> field can be provided to update a segment owned by a different app.
      * All other fields will overwrite the existing value on the segment only if provided.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<SegmentResponse> patch(String segmentReferenceId, SegmentPatchRequest request) {
         return this.rawClient.patch(segmentReferenceId, request).thenApply(response -> response.body());
@@ -102,6 +130,7 @@ public class AsyncSegmentsClient {
      * Update mutable segment fields
      * <p>The <code>appId</code> field can be provided to update a segment owned by a different app.
      * All other fields will overwrite the existing value on the segment only if provided.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<SegmentResponse> patch(
             String segmentReferenceId, SegmentPatchRequest request, RequestOptions requestOptions) {
@@ -112,6 +141,7 @@ public class AsyncSegmentsClient {
      * Soft delete a segment. Only INACTIVE segments can be deleted.
      * <p>Deleted segments are excluded from search results but can still be retrieved by ID for archival purposes. Creating a segment with the same referenceId as a deleted segment reclaims it: the segment keeps its identity, and every other setting comes from the request.</p>
      * <p>Deleted segments cannot be modified.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<SegmentResponse> delete(String segmentReferenceId) {
         return this.rawClient.delete(segmentReferenceId).thenApply(response -> response.body());
@@ -121,6 +151,7 @@ public class AsyncSegmentsClient {
      * Soft delete a segment. Only INACTIVE segments can be deleted.
      * <p>Deleted segments are excluded from search results but can still be retrieved by ID for archival purposes. Creating a segment with the same referenceId as a deleted segment reclaims it: the segment keeps its identity, and every other setting comes from the request.</p>
      * <p>Deleted segments cannot be modified.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<SegmentResponse> delete(String segmentReferenceId, SegmentDeleteRequest request) {
         return this.rawClient.delete(segmentReferenceId, request).thenApply(response -> response.body());
@@ -130,6 +161,7 @@ public class AsyncSegmentsClient {
      * Soft delete a segment. Only INACTIVE segments can be deleted.
      * <p>Deleted segments are excluded from search results but can still be retrieved by ID for archival purposes. Creating a segment with the same referenceId as a deleted segment reclaims it: the segment keeps its identity, and every other setting comes from the request.</p>
      * <p>Deleted segments cannot be modified.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<SegmentResponse> delete(
             String segmentReferenceId, SegmentDeleteRequest request, RequestOptions requestOptions) {

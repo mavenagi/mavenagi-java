@@ -17,6 +17,7 @@ import com.mavenagi.resources.commons.types.CapabilityType;
 import com.mavenagi.resources.commons.types.EntityId;
 import com.mavenagi.resources.commons.types.IBaseCappedPaginatedRequest;
 import com.mavenagi.resources.commons.types.SimulationFilter;
+import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +43,10 @@ public final class CapabilityExecutionsSearchRequest implements IBaseCappedPagin
 
     private final Optional<SimulationFilter> simulationFilter;
 
+    private final Optional<OffsetDateTime> createdAfter;
+
+    private final Optional<OffsetDateTime> createdBefore;
+
     private final Map<String, Object> additionalProperties;
 
     private CapabilityExecutionsSearchRequest(
@@ -53,6 +58,8 @@ public final class CapabilityExecutionsSearchRequest implements IBaseCappedPagin
             Optional<List<EntityId>> capabilityIds,
             Optional<List<CapabilityExecutionStatus>> statuses,
             Optional<SimulationFilter> simulationFilter,
+            Optional<OffsetDateTime> createdAfter,
+            Optional<OffsetDateTime> createdBefore,
             Map<String, Object> additionalProperties) {
         this.page = page;
         this.size = size;
@@ -62,6 +69,8 @@ public final class CapabilityExecutionsSearchRequest implements IBaseCappedPagin
         this.capabilityIds = capabilityIds;
         this.statuses = statuses;
         this.simulationFilter = simulationFilter;
+        this.createdAfter = createdAfter;
+        this.createdBefore = createdBefore;
         this.additionalProperties = additionalProperties;
     }
 
@@ -139,6 +148,22 @@ public final class CapabilityExecutionsSearchRequest implements IBaseCappedPagin
         return simulationFilter;
     }
 
+    /**
+     * @return Only return executions whose <code>createdAt</code> is on or after this timestamp.
+     */
+    @JsonProperty("createdAfter")
+    public Optional<OffsetDateTime> getCreatedAfter() {
+        return createdAfter;
+    }
+
+    /**
+     * @return Only return executions whose <code>createdAt</code> is on or before this timestamp.
+     */
+    @JsonProperty("createdBefore")
+    public Optional<OffsetDateTime> getCreatedBefore() {
+        return createdBefore;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -158,7 +183,9 @@ public final class CapabilityExecutionsSearchRequest implements IBaseCappedPagin
                 && capabilityTypes.equals(other.capabilityTypes)
                 && capabilityIds.equals(other.capabilityIds)
                 && statuses.equals(other.statuses)
-                && simulationFilter.equals(other.simulationFilter);
+                && simulationFilter.equals(other.simulationFilter)
+                && createdAfter.equals(other.createdAfter)
+                && createdBefore.equals(other.createdBefore);
     }
 
     @java.lang.Override
@@ -171,7 +198,9 @@ public final class CapabilityExecutionsSearchRequest implements IBaseCappedPagin
                 this.capabilityTypes,
                 this.capabilityIds,
                 this.statuses,
-                this.simulationFilter);
+                this.simulationFilter,
+                this.createdAfter,
+                this.createdBefore);
     }
 
     @java.lang.Override
@@ -201,6 +230,10 @@ public final class CapabilityExecutionsSearchRequest implements IBaseCappedPagin
 
         private Optional<SimulationFilter> simulationFilter = Optional.empty();
 
+        private Optional<OffsetDateTime> createdAfter = Optional.empty();
+
+        private Optional<OffsetDateTime> createdBefore = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -215,6 +248,8 @@ public final class CapabilityExecutionsSearchRequest implements IBaseCappedPagin
             capabilityIds(other.getCapabilityIds());
             statuses(other.getStatuses());
             simulationFilter(other.getSimulationFilter());
+            createdAfter(other.getCreatedAfter());
+            createdBefore(other.getCreatedBefore());
             return this;
         }
 
@@ -337,6 +372,34 @@ public final class CapabilityExecutionsSearchRequest implements IBaseCappedPagin
             return this;
         }
 
+        /**
+         * <p>Only return executions whose <code>createdAt</code> is on or after this timestamp.</p>
+         */
+        @JsonSetter(value = "createdAfter", nulls = Nulls.SKIP)
+        public Builder createdAfter(Optional<OffsetDateTime> createdAfter) {
+            this.createdAfter = createdAfter;
+            return this;
+        }
+
+        public Builder createdAfter(OffsetDateTime createdAfter) {
+            this.createdAfter = Optional.ofNullable(createdAfter);
+            return this;
+        }
+
+        /**
+         * <p>Only return executions whose <code>createdAt</code> is on or before this timestamp.</p>
+         */
+        @JsonSetter(value = "createdBefore", nulls = Nulls.SKIP)
+        public Builder createdBefore(Optional<OffsetDateTime> createdBefore) {
+            this.createdBefore = createdBefore;
+            return this;
+        }
+
+        public Builder createdBefore(OffsetDateTime createdBefore) {
+            this.createdBefore = Optional.ofNullable(createdBefore);
+            return this;
+        }
+
         public CapabilityExecutionsSearchRequest build() {
             return new CapabilityExecutionsSearchRequest(
                     page,
@@ -347,6 +410,8 @@ public final class CapabilityExecutionsSearchRequest implements IBaseCappedPagin
                     capabilityIds,
                     statuses,
                     simulationFilter,
+                    createdAfter,
+                    createdBefore,
                     additionalProperties);
         }
     }

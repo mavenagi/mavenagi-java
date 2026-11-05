@@ -43,9 +43,8 @@ public class RawAgentsClient {
 
     /**
      * Search for agents across all organizations.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>Only Maven staff hold this permission.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:all-organizations</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<AgentsSearchResponse> search() {
         return search(AgentsSearchRequest.builder().build());
@@ -53,9 +52,8 @@ public class RawAgentsClient {
 
     /**
      * Search for agents across all organizations.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>Only Maven staff hold this permission.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:all-organizations</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<AgentsSearchResponse> search(AgentsSearchRequest request) {
         return search(request, null);
@@ -63,9 +61,8 @@ public class RawAgentsClient {
 
     /**
      * Search for agents across all organizations.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>Only Maven staff hold this permission.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:all-organizations</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<AgentsSearchResponse> search(
             AgentsSearchRequest request, RequestOptions requestOptions) {
@@ -133,6 +130,7 @@ public class RawAgentsClient {
 
     /**
      * Lists all agents for an organization
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<List<Agent>> list(String organizationReferenceId) {
         return list(organizationReferenceId, null);
@@ -140,6 +138,7 @@ public class RawAgentsClient {
 
     /**
      * Lists all agents for an organization
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<List<Agent>> list(String organizationReferenceId, RequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
@@ -200,9 +199,7 @@ public class RawAgentsClient {
 
     /**
      * Create a new agent
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>create:agents</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<Agent> create(
             String organizationReferenceId, String agentReferenceId, CreateAgentRequest request) {
@@ -211,9 +208,7 @@ public class RawAgentsClient {
 
     /**
      * Create a new agent
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>create:agents</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<Agent> create(
             String organizationReferenceId,
@@ -286,6 +281,7 @@ public class RawAgentsClient {
 
     /**
      * Get an agent
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<Agent> get(String organizationReferenceId, String agentReferenceId) {
         return get(organizationReferenceId, agentReferenceId, null);
@@ -293,6 +289,7 @@ public class RawAgentsClient {
 
     /**
      * Get an agent
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<Agent> get(
             String organizationReferenceId, String agentReferenceId, RequestOptions requestOptions) {
@@ -355,9 +352,7 @@ public class RawAgentsClient {
     /**
      * Update mutable agent fields
      * All fields will overwrite the existing value on the agent only if provided.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<Agent> patch(String organizationReferenceId, String agentReferenceId) {
         return patch(
@@ -369,9 +364,7 @@ public class RawAgentsClient {
     /**
      * Update mutable agent fields
      * All fields will overwrite the existing value on the agent only if provided.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<Agent> patch(
             String organizationReferenceId, String agentReferenceId, AgentPatchRequest request) {
@@ -381,9 +374,7 @@ public class RawAgentsClient {
     /**
      * Update mutable agent fields
      * All fields will overwrite the existing value on the agent only if provided.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<Agent> patch(
             String organizationReferenceId,
@@ -457,9 +448,7 @@ public class RawAgentsClient {
 
     /**
      * Delete an agent.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>delete:agents</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<Void> delete(String organizationReferenceId, String agentReferenceId) {
         return delete(organizationReferenceId, agentReferenceId, null);
@@ -467,9 +456,7 @@ public class RawAgentsClient {
 
     /**
      * Delete an agent.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>delete:agents</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<Void> delete(
             String organizationReferenceId, String agentReferenceId, RequestOptions requestOptions) {

@@ -43,6 +43,7 @@ public final class VoiceSessionTokenRequest {
     /**
      * @return The end user identity for the voice session.
      * Must contain only alphanumeric characters, dots, hyphens, or underscores.
+     * For &quot;webrtc&quot; tokens, at most 184 characters. A longer value fails with 400.
      */
     @JsonProperty("appUserId")
     public String getAppUserId() {
@@ -60,11 +61,12 @@ public final class VoiceSessionTokenRequest {
 
     /**
      * @return Arbitrary key-value metadata to associate with this session (e.g., conversationId, topic).
-     * <p><strong>Constraints</strong>: at most 50 keys, each key up to 256 characters, each value up to 4096 characters.
+     * <p><strong>Constraints</strong>: at most 10 keys, each key up to 256 characters, each value up to 500 characters.
+     * A request that exceeds any limit fails with 400 and lists each field that exceeded it; values are never truncated.
+     * For WebRTC calls, each key is stored in conversation metadata as <code>custom_&lt;key&gt;</code>.
      * Values are stored as-is — for small data, embed the value directly (e.g., <code>&quot;callerName&quot;: &quot;John Doe&quot;</code>).</p>
      * <p>For WebRTC tokens, this data is stored server-side and referenced by a secure ID
-     * encoded in the token identity, ensuring it cannot be tampered with by the client.
-     * For WebSocket tokens, clients can also pass data directly in the Config message.</p>
+     * encoded in the token identity, ensuring it cannot be tampered with by the client.</p>
      */
     @JsonProperty("customData")
     public Optional<Map<String, String>> getCustomData() {
@@ -103,7 +105,8 @@ public final class VoiceSessionTokenRequest {
     public interface AppUserIdStage {
         /**
          * <p>The end user identity for the voice session.
-         * Must contain only alphanumeric characters, dots, hyphens, or underscores.</p>
+         * Must contain only alphanumeric characters, dots, hyphens, or underscores.
+         * For &quot;webrtc&quot; tokens, at most 184 characters. A longer value fails with 400.</p>
          */
         TypeStage appUserId(@NotNull String appUserId);
 
@@ -123,11 +126,12 @@ public final class VoiceSessionTokenRequest {
 
         /**
          * <p>Arbitrary key-value metadata to associate with this session (e.g., conversationId, topic).</p>
-         * <p><strong>Constraints</strong>: at most 50 keys, each key up to 256 characters, each value up to 4096 characters.
+         * <p><strong>Constraints</strong>: at most 10 keys, each key up to 256 characters, each value up to 500 characters.
+         * A request that exceeds any limit fails with 400 and lists each field that exceeded it; values are never truncated.
+         * For WebRTC calls, each key is stored in conversation metadata as <code>custom_&lt;key&gt;</code>.
          * Values are stored as-is — for small data, embed the value directly (e.g., <code>&quot;callerName&quot;: &quot;John Doe&quot;</code>).</p>
          * <p>For WebRTC tokens, this data is stored server-side and referenced by a secure ID
-         * encoded in the token identity, ensuring it cannot be tampered with by the client.
-         * For WebSocket tokens, clients can also pass data directly in the Config message.</p>
+         * encoded in the token identity, ensuring it cannot be tampered with by the client.</p>
          */
         _FinalStage customData(Optional<Map<String, String>> customData);
 
@@ -157,9 +161,11 @@ public final class VoiceSessionTokenRequest {
 
         /**
          * <p>The end user identity for the voice session.
-         * Must contain only alphanumeric characters, dots, hyphens, or underscores.</p>
+         * Must contain only alphanumeric characters, dots, hyphens, or underscores.
+         * For &quot;webrtc&quot; tokens, at most 184 characters. A longer value fails with 400.</p>
          * <p>The end user identity for the voice session.
-         * Must contain only alphanumeric characters, dots, hyphens, or underscores.</p>
+         * Must contain only alphanumeric characters, dots, hyphens, or underscores.
+         * For &quot;webrtc&quot; tokens, at most 184 characters. A longer value fails with 400.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -185,11 +191,12 @@ public final class VoiceSessionTokenRequest {
 
         /**
          * <p>Arbitrary key-value metadata to associate with this session (e.g., conversationId, topic).</p>
-         * <p><strong>Constraints</strong>: at most 50 keys, each key up to 256 characters, each value up to 4096 characters.
+         * <p><strong>Constraints</strong>: at most 10 keys, each key up to 256 characters, each value up to 500 characters.
+         * A request that exceeds any limit fails with 400 and lists each field that exceeded it; values are never truncated.
+         * For WebRTC calls, each key is stored in conversation metadata as <code>custom_&lt;key&gt;</code>.
          * Values are stored as-is — for small data, embed the value directly (e.g., <code>&quot;callerName&quot;: &quot;John Doe&quot;</code>).</p>
          * <p>For WebRTC tokens, this data is stored server-side and referenced by a secure ID
-         * encoded in the token identity, ensuring it cannot be tampered with by the client.
-         * For WebSocket tokens, clients can also pass data directly in the Config message.</p>
+         * encoded in the token identity, ensuring it cannot be tampered with by the client.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -200,11 +207,12 @@ public final class VoiceSessionTokenRequest {
 
         /**
          * <p>Arbitrary key-value metadata to associate with this session (e.g., conversationId, topic).</p>
-         * <p><strong>Constraints</strong>: at most 50 keys, each key up to 256 characters, each value up to 4096 characters.
+         * <p><strong>Constraints</strong>: at most 10 keys, each key up to 256 characters, each value up to 500 characters.
+         * A request that exceeds any limit fails with 400 and lists each field that exceeded it; values are never truncated.
+         * For WebRTC calls, each key is stored in conversation metadata as <code>custom_&lt;key&gt;</code>.
          * Values are stored as-is — for small data, embed the value directly (e.g., <code>&quot;callerName&quot;: &quot;John Doe&quot;</code>).</p>
          * <p>For WebRTC tokens, this data is stored server-side and referenced by a secure ID
-         * encoded in the token identity, ensuring it cannot be tampered with by the client.
-         * For WebSocket tokens, clients can also pass data directly in the Config message.</p>
+         * encoded in the token identity, ensuring it cannot be tampered with by the client.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "customData", nulls = Nulls.SKIP)

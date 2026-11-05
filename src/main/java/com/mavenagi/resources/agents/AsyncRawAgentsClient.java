@@ -47,9 +47,8 @@ public class AsyncRawAgentsClient {
 
     /**
      * Search for agents across all organizations.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>Only Maven staff hold this permission.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:all-organizations</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<AgentsSearchResponse>> search() {
         return search(AgentsSearchRequest.builder().build());
@@ -57,9 +56,8 @@ public class AsyncRawAgentsClient {
 
     /**
      * Search for agents across all organizations.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>Only Maven staff hold this permission.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:all-organizations</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<AgentsSearchResponse>> search(AgentsSearchRequest request) {
         return search(request, null);
@@ -67,9 +65,8 @@ public class AsyncRawAgentsClient {
 
     /**
      * Search for agents across all organizations.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>Only Maven staff hold this permission.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:all-organizations</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<AgentsSearchResponse>> search(
             AgentsSearchRequest request, RequestOptions requestOptions) {
@@ -160,6 +157,7 @@ public class AsyncRawAgentsClient {
 
     /**
      * Lists all agents for an organization
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<List<Agent>>> list(String organizationReferenceId) {
         return list(organizationReferenceId, null);
@@ -167,6 +165,7 @@ public class AsyncRawAgentsClient {
 
     /**
      * Lists all agents for an organization
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<List<Agent>>> list(
             String organizationReferenceId, RequestOptions requestOptions) {
@@ -252,9 +251,7 @@ public class AsyncRawAgentsClient {
 
     /**
      * Create a new agent
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>create:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<Agent>> create(
             String organizationReferenceId, String agentReferenceId, CreateAgentRequest request) {
@@ -263,9 +260,7 @@ public class AsyncRawAgentsClient {
 
     /**
      * Create a new agent
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>create:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<Agent>> create(
             String organizationReferenceId,
@@ -361,6 +356,7 @@ public class AsyncRawAgentsClient {
 
     /**
      * Get an agent
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<Agent>> get(String organizationReferenceId, String agentReferenceId) {
         return get(organizationReferenceId, agentReferenceId, null);
@@ -368,6 +364,7 @@ public class AsyncRawAgentsClient {
 
     /**
      * Get an agent
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<Agent>> get(
             String organizationReferenceId, String agentReferenceId, RequestOptions requestOptions) {
@@ -453,9 +450,7 @@ public class AsyncRawAgentsClient {
     /**
      * Update mutable agent fields
      * All fields will overwrite the existing value on the agent only if provided.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<Agent>> patch(
             String organizationReferenceId, String agentReferenceId) {
@@ -468,9 +463,7 @@ public class AsyncRawAgentsClient {
     /**
      * Update mutable agent fields
      * All fields will overwrite the existing value on the agent only if provided.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<Agent>> patch(
             String organizationReferenceId, String agentReferenceId, AgentPatchRequest request) {
@@ -480,9 +473,7 @@ public class AsyncRawAgentsClient {
     /**
      * Update mutable agent fields
      * All fields will overwrite the existing value on the agent only if provided.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<Agent>> patch(
             String organizationReferenceId,
@@ -579,9 +570,7 @@ public class AsyncRawAgentsClient {
 
     /**
      * Delete an agent.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>delete:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<Void>> delete(
             String organizationReferenceId, String agentReferenceId) {
@@ -590,9 +579,7 @@ public class AsyncRawAgentsClient {
 
     /**
      * Delete an agent.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>delete:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<Void>> delete(
             String organizationReferenceId, String agentReferenceId, RequestOptions requestOptions) {

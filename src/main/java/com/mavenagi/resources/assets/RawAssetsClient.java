@@ -39,6 +39,7 @@ public class RawAssetsClient {
     /**
      * Initiate an upload.
      * Returns a pre-signed URL for direct file upload and an asset ID for subsequent operations.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>ask:agent</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<InitiateAssetUploadResponse> initiateUpload(InitiateAssetUploadRequest request) {
         return initiateUpload(request, null);
@@ -47,6 +48,7 @@ public class RawAssetsClient {
     /**
      * Initiate an upload.
      * Returns a pre-signed URL for direct file upload and an asset ID for subsequent operations.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>ask:agent</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<InitiateAssetUploadResponse> initiateUpload(
             InitiateAssetUploadRequest request, RequestOptions requestOptions) {
@@ -114,6 +116,7 @@ public class RawAssetsClient {
     /**
      * Commit an upload after successful file transfer.
      * Updates the asset status and makes it available for use.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>ask:agent</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<Void> commitUpload(String assetReferenceId) {
         return commitUpload(assetReferenceId, CommitAssetUploadRequest.builder().build());
@@ -122,6 +125,7 @@ public class RawAssetsClient {
     /**
      * Commit an upload after successful file transfer.
      * Updates the asset status and makes it available for use.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>ask:agent</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<Void> commitUpload(String assetReferenceId, CommitAssetUploadRequest request) {
         return commitUpload(assetReferenceId, request, null);
@@ -130,6 +134,7 @@ public class RawAssetsClient {
     /**
      * Commit an upload after successful file transfer.
      * Updates the asset status and makes it available for use.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>ask:agent</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<Void> commitUpload(
             String assetReferenceId, CommitAssetUploadRequest request, RequestOptions requestOptions) {

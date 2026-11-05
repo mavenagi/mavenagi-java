@@ -7,13 +7,13 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public final class AudioFormat {
-    public static final AudioFormat PCM16000 = new AudioFormat(Value.PCM16000, "PCM_16000");
-
-    public static final AudioFormat PCM44100 = new AudioFormat(Value.PCM44100, "PCM_44100");
-
     public static final AudioFormat PCM8000 = new AudioFormat(Value.PCM8000, "PCM_8000");
 
     public static final AudioFormat MULAW8000 = new AudioFormat(Value.MULAW8000, "MULAW_8000");
+
+    public static final AudioFormat PCM16000 = new AudioFormat(Value.PCM16000, "PCM_16000");
+
+    public static final AudioFormat PCM44100 = new AudioFormat(Value.PCM44100, "PCM_44100");
 
     private final Value value;
 
@@ -46,14 +46,14 @@ public final class AudioFormat {
 
     public <T> T visit(Visitor<T> visitor) {
         switch (value) {
-            case PCM16000:
-                return visitor.visitPcm16000();
-            case PCM44100:
-                return visitor.visitPcm44100();
             case PCM8000:
                 return visitor.visitPcm8000();
             case MULAW8000:
                 return visitor.visitMulaw8000();
+            case PCM16000:
+                return visitor.visitPcm16000();
+            case PCM44100:
+                return visitor.visitPcm44100();
             case UNKNOWN:
             default:
                 return visitor.visitUnknown(string);
@@ -63,14 +63,14 @@ public final class AudioFormat {
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static AudioFormat valueOf(String value) {
         switch (value) {
-            case "PCM_16000":
-                return PCM16000;
-            case "PCM_44100":
-                return PCM44100;
             case "PCM_8000":
                 return PCM8000;
             case "MULAW_8000":
                 return MULAW8000;
+            case "PCM_16000":
+                return PCM16000;
+            case "PCM_44100":
+                return PCM44100;
             default:
                 return new AudioFormat(Value.UNKNOWN, value);
         }

@@ -7,6 +7,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public final class SystemEventName {
+    public static final SystemEventName USER_MESSAGE_CREATED =
+            new SystemEventName(Value.USER_MESSAGE_CREATED, "USER_MESSAGE_CREATED");
+
     public static final SystemEventName SYNC_FAILED = new SystemEventName(Value.SYNC_FAILED, "SYNC_FAILED");
 
     public static final SystemEventName BOT_REPLY_CREATED =
@@ -75,6 +78,8 @@ public final class SystemEventName {
 
     public <T> T visit(Visitor<T> visitor) {
         switch (value) {
+            case USER_MESSAGE_CREATED:
+                return visitor.visitUserMessageCreated();
             case SYNC_FAILED:
                 return visitor.visitSyncFailed();
             case BOT_REPLY_CREATED:
@@ -112,6 +117,8 @@ public final class SystemEventName {
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static SystemEventName valueOf(String value) {
         switch (value) {
+            case "USER_MESSAGE_CREATED":
+                return USER_MESSAGE_CREATED;
             case "SYNC_FAILED":
                 return SYNC_FAILED;
             case "BOT_REPLY_CREATED":
@@ -172,6 +179,8 @@ public final class SystemEventName {
 
         BOT_REPLY_CREATED,
 
+        USER_MESSAGE_CREATED,
+
         INTELLIGENT_FIELD_VALUE_CHANGED,
 
         UNKNOWN
@@ -203,6 +212,8 @@ public final class SystemEventName {
         T visitConversationClosed();
 
         T visitBotReplyCreated();
+
+        T visitUserMessageCreated();
 
         T visitIntelligentFieldValueChanged();
 

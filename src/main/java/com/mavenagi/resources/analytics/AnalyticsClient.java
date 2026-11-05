@@ -35,6 +35,7 @@ public class AnalyticsClient {
 
     /**
      * Retrieves structured conversation data formatted as a table, allowing users to group, filter, and define specific metrics to display as columns.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:conversations</code>&lt;/Note&gt;</p>
      */
     public ConversationTableResponse getConversationTable(ConversationTableRequest request) {
         return this.rawClient.getConversationTable(request).body();
@@ -42,6 +43,7 @@ public class AnalyticsClient {
 
     /**
      * Retrieves structured conversation data formatted as a table, allowing users to group, filter, and define specific metrics to display as columns.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:conversations</code>&lt;/Note&gt;</p>
      */
     public ConversationTableResponse getConversationTable(
             ConversationTableRequest request, RequestOptions requestOptions) {
@@ -50,6 +52,7 @@ public class AnalyticsClient {
 
     /**
      * Fetches conversation data visualized in a chart format. Supported chart types include pie chart, date histogram, and stacked bar charts.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:conversations</code>&lt;/Note&gt;</p>
      */
     public ChartResponse getConversationChart(ConversationChartRequest request) {
         return this.rawClient.getConversationChart(request).body();
@@ -57,6 +60,7 @@ public class AnalyticsClient {
 
     /**
      * Fetches conversation data visualized in a chart format. Supported chart types include pie chart, date histogram, and stacked bar charts.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:conversations</code>&lt;/Note&gt;</p>
      */
     public ChartResponse getConversationChart(ConversationChartRequest request, RequestOptions requestOptions) {
         return this.rawClient.getConversationChart(request, requestOptions).body();
@@ -65,6 +69,7 @@ public class AnalyticsClient {
     /**
      * Export the conversation analytics table to a CSV file.
      * <p>This outputs the current table view defined by the request. For most programmatic use cases, prefer <code>getConversationTable</code> and format client-side. The CSV format may change and should not be relied upon by code consumers. A maximum of 10,000 rows can be exported at a time.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:conversations</code>&lt;/Note&gt;</p>
      */
     public InputStream exportConversationTable(ConversationTableRequest request) {
         return this.rawClient.exportConversationTable(request).body();
@@ -73,6 +78,7 @@ public class AnalyticsClient {
     /**
      * Export the conversation analytics table to a CSV file.
      * <p>This outputs the current table view defined by the request. For most programmatic use cases, prefer <code>getConversationTable</code> and format client-side. The CSV format may change and should not be relied upon by code consumers. A maximum of 10,000 rows can be exported at a time.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:conversations</code>&lt;/Note&gt;</p>
      */
     public InputStream exportConversationTable(ConversationTableRequest request, RequestOptions requestOptions) {
         return this.rawClient.exportConversationTable(request, requestOptions).body();
@@ -80,6 +86,7 @@ public class AnalyticsClient {
 
     /**
      * Retrieves structured agent user data formatted as a table, allowing users to group, filter,  and define specific metrics to display as columns.
+     * &lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;
      */
     public AgentUserTableResponse getAgentUserTable(AgentUserTableRequest request) {
         return this.rawClient.getAgentUserTable(request).body();
@@ -87,6 +94,7 @@ public class AnalyticsClient {
 
     /**
      * Retrieves structured agent user data formatted as a table, allowing users to group, filter,  and define specific metrics to display as columns.
+     * &lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;
      */
     public AgentUserTableResponse getAgentUserTable(AgentUserTableRequest request, RequestOptions requestOptions) {
         return this.rawClient.getAgentUserTable(request, requestOptions).body();
@@ -94,6 +102,7 @@ public class AnalyticsClient {
 
     /**
      * Retrieves structured event data formatted as a table, allowing users to group, filter,  and define specific metrics to display as columns.
+     * &lt;Note&gt;<strong>Required permission:</strong> <code>read:events</code>&lt;/Note&gt;
      */
     public EventTableResponse getEventTable(EventTableRequest request) {
         return this.rawClient.getEventTable(request).body();
@@ -101,6 +110,7 @@ public class AnalyticsClient {
 
     /**
      * Retrieves structured event data formatted as a table, allowing users to group, filter,  and define specific metrics to display as columns.
+     * &lt;Note&gt;<strong>Required permission:</strong> <code>read:events</code>&lt;/Note&gt;
      */
     public EventTableResponse getEventTable(EventTableRequest request, RequestOptions requestOptions) {
         return this.rawClient.getEventTable(request, requestOptions).body();
@@ -108,6 +118,7 @@ public class AnalyticsClient {
 
     /**
      * Fetches event data visualized in a chart format. Supported chart types include pie chart, date histogram, and stacked bar charts.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:events</code>&lt;/Note&gt;</p>
      */
     public ChartResponse getEventChart(EventChartRequest request) {
         return this.rawClient.getEventChart(request).body();
@@ -115,6 +126,7 @@ public class AnalyticsClient {
 
     /**
      * Fetches event data visualized in a chart format. Supported chart types include pie chart, date histogram, and stacked bar charts.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:events</code>&lt;/Note&gt;</p>
      */
     public ChartResponse getEventChart(EventChartRequest request, RequestOptions requestOptions) {
         return this.rawClient.getEventChart(request, requestOptions).body();

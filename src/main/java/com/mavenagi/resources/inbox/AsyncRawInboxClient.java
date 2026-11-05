@@ -51,6 +51,10 @@ public class AsyncRawInboxClient {
 
     /**
      * Retrieve a paginated list of inbox items for an agent.
+     * <p>Pagination is limited to the first 10,000 matching inbox items: <code>(page + 1) * size</code> must not
+     * exceed 10,000, and a request beyond that is rejected with a 400. Narrow the filter to reach
+     * later results.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>. A search whose results include a Duplicate Documents item also needs <code>read:documents</code>.&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<InboxSearchResponse>> search() {
         return search(InboxSearchRequest.builder().build());
@@ -58,6 +62,10 @@ public class AsyncRawInboxClient {
 
     /**
      * Retrieve a paginated list of inbox items for an agent.
+     * <p>Pagination is limited to the first 10,000 matching inbox items: <code>(page + 1) * size</code> must not
+     * exceed 10,000, and a request beyond that is rejected with a 400. Narrow the filter to reach
+     * later results.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>. A search whose results include a Duplicate Documents item also needs <code>read:documents</code>.&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<InboxSearchResponse>> search(InboxSearchRequest request) {
         return search(request, null);
@@ -65,6 +73,10 @@ public class AsyncRawInboxClient {
 
     /**
      * Retrieve a paginated list of inbox items for an agent.
+     * <p>Pagination is limited to the first 10,000 matching inbox items: <code>(page + 1) * size</code> must not
+     * exceed 10,000, and a request beyond that is rejected with a 400. Narrow the filter to reach
+     * later results.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>. A search whose results include a Duplicate Documents item also needs <code>read:documents</code>.&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<InboxSearchResponse>> search(
             InboxSearchRequest request, RequestOptions requestOptions) {
@@ -155,6 +167,7 @@ public class AsyncRawInboxClient {
 
     /**
      * Update an inbox item or create it if it doesn't exist.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<InboxItem>> createOrUpdate(InboxItemCreateRequest request) {
         return createOrUpdate(request, null);
@@ -162,6 +175,7 @@ public class AsyncRawInboxClient {
 
     /**
      * Update an inbox item or create it if it doesn't exist.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<InboxItem>> createOrUpdate(
             InboxItemCreateRequest request, RequestOptions requestOptions) {
@@ -252,6 +266,7 @@ public class AsyncRawInboxClient {
      * Update mutable inbox item fields. Only supported for custom inbox items.
      * <p>The <code>appId</code> field can be provided to update a inbox item owned by a different app.
      * All other fields will overwrite the existing value on the inbox item only if provided.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>. Patching a Duplicate Documents item also needs <code>read:documents</code>.&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<InboxItem>> patch(String inboxItemId) {
         return patch(inboxItemId, InboxItemPatchRequest.builder().build());
@@ -261,6 +276,7 @@ public class AsyncRawInboxClient {
      * Update mutable inbox item fields. Only supported for custom inbox items.
      * <p>The <code>appId</code> field can be provided to update a inbox item owned by a different app.
      * All other fields will overwrite the existing value on the inbox item only if provided.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>. Patching a Duplicate Documents item also needs <code>read:documents</code>.&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<InboxItem>> patch(String inboxItemId, InboxItemPatchRequest request) {
         return patch(inboxItemId, request, null);
@@ -270,6 +286,7 @@ public class AsyncRawInboxClient {
      * Update mutable inbox item fields. Only supported for custom inbox items.
      * <p>The <code>appId</code> field can be provided to update a inbox item owned by a different app.
      * All other fields will overwrite the existing value on the inbox item only if provided.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>. Patching a Duplicate Documents item also needs <code>read:documents</code>.&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<InboxItem>> patch(
             String inboxItemId, InboxItemPatchRequest request, RequestOptions requestOptions) {
@@ -359,6 +376,7 @@ public class AsyncRawInboxClient {
 
     /**
      * Update inbox item tag fields. All tags provided will overwrite the existing tags on the inbox item.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>. Updating tags on a Missing Knowledge or Duplicate Documents item also needs <code>read:agents</code>, and on a Duplicate Documents item <code>read:documents</code> too.&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<InboxItem>> applyTags(
             String inboxItemId, InboxItemApplyTagsRequest request) {
@@ -367,6 +385,7 @@ public class AsyncRawInboxClient {
 
     /**
      * Update inbox item tag fields. All tags provided will overwrite the existing tags on the inbox item.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>. Updating tags on a Missing Knowledge or Duplicate Documents item also needs <code>read:agents</code>, and on a Duplicate Documents item <code>read:documents</code> too.&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<InboxItem>> applyTags(
             String inboxItemId, InboxItemApplyTagsRequest request, RequestOptions requestOptions) {
@@ -457,6 +476,7 @@ public class AsyncRawInboxClient {
 
     /**
      * Retrieve details of a specific inbox item by its ID.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>. Getting a Duplicate Documents item also needs <code>read:documents</code>.&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<InboxItem>> get(String inboxItemId, InboxItemRequest request) {
         return get(inboxItemId, request, null);
@@ -464,6 +484,7 @@ public class AsyncRawInboxClient {
 
     /**
      * Retrieve details of a specific inbox item by its ID.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>. Getting a Duplicate Documents item also needs <code>read:documents</code>.&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<InboxItem>> get(
             String inboxItemId, InboxItemRequest request, RequestOptions requestOptions) {
@@ -545,6 +566,7 @@ public class AsyncRawInboxClient {
 
     /**
      * Retrieve a suggested fix. Includes document information if the fix is a Missing Knowledge suggestion.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>. Getting a Duplicate Documents fix also needs <code>read:documents</code>.&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<InboxItemFix>> getFix(
             String inboxItemFixId, InboxItemFixRequest request) {
@@ -553,6 +575,7 @@ public class AsyncRawInboxClient {
 
     /**
      * Retrieve a suggested fix. Includes document information if the fix is a Missing Knowledge suggestion.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>. Getting a Duplicate Documents fix also needs <code>read:documents</code>.&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<InboxItemFix>> getFix(
             String inboxItemFixId, InboxItemFixRequest request, RequestOptions requestOptions) {
@@ -636,6 +659,7 @@ public class AsyncRawInboxClient {
 
     /**
      * Apply a list of fixes belonging to an inbox item.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>. Applying fixes also needs <code>read:agents</code>. A Missing Knowledge fix also needs <code>create:documents</code>, and a Duplicate Documents fix also needs <code>read:documents</code>, <code>edit:documents</code> and <code>create:documents</code>.&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<Void>> applyFixes(String inboxItemId, ApplyFixesRequest request) {
         return applyFixes(inboxItemId, request, null);
@@ -643,6 +667,7 @@ public class AsyncRawInboxClient {
 
     /**
      * Apply a list of fixes belonging to an inbox item.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>. Applying fixes also needs <code>read:agents</code>. A Missing Knowledge fix also needs <code>create:documents</code>, and a Duplicate Documents fix also needs <code>read:documents</code>, <code>edit:documents</code> and <code>create:documents</code>.&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<Void>> applyFixes(
             String inboxItemId, ApplyFixesRequest request, RequestOptions requestOptions) {
@@ -732,6 +757,7 @@ public class AsyncRawInboxClient {
 
     /**
      * Ignore a specific inbox item by its ID.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<Void>> ignore(String inboxItemId, InboxItemIgnoreRequest request) {
         return ignore(inboxItemId, request, null);
@@ -739,6 +765,7 @@ public class AsyncRawInboxClient {
 
     /**
      * Ignore a specific inbox item by its ID.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<Void>> ignore(
             String inboxItemId, InboxItemIgnoreRequest request, RequestOptions requestOptions) {

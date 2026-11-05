@@ -46,6 +46,7 @@ public class RawAnalyticsClient {
 
     /**
      * Retrieves structured conversation data formatted as a table, allowing users to group, filter, and define specific metrics to display as columns.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:conversations</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<ConversationTableResponse> getConversationTable(ConversationTableRequest request) {
         return getConversationTable(request, null);
@@ -53,6 +54,7 @@ public class RawAnalyticsClient {
 
     /**
      * Retrieves structured conversation data formatted as a table, allowing users to group, filter, and define specific metrics to display as columns.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:conversations</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<ConversationTableResponse> getConversationTable(
             ConversationTableRequest request, RequestOptions requestOptions) {
@@ -120,6 +122,7 @@ public class RawAnalyticsClient {
 
     /**
      * Fetches conversation data visualized in a chart format. Supported chart types include pie chart, date histogram, and stacked bar charts.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:conversations</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<ChartResponse> getConversationChart(ConversationChartRequest request) {
         return getConversationChart(request, null);
@@ -127,6 +130,7 @@ public class RawAnalyticsClient {
 
     /**
      * Fetches conversation data visualized in a chart format. Supported chart types include pie chart, date histogram, and stacked bar charts.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:conversations</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<ChartResponse> getConversationChart(
             ConversationChartRequest request, RequestOptions requestOptions) {
@@ -194,6 +198,7 @@ public class RawAnalyticsClient {
     /**
      * Export the conversation analytics table to a CSV file.
      * <p>This outputs the current table view defined by the request. For most programmatic use cases, prefer <code>getConversationTable</code> and format client-side. The CSV format may change and should not be relied upon by code consumers. A maximum of 10,000 rows can be exported at a time.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:conversations</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<InputStream> exportConversationTable(ConversationTableRequest request) {
         return exportConversationTable(request, null);
@@ -202,6 +207,7 @@ public class RawAnalyticsClient {
     /**
      * Export the conversation analytics table to a CSV file.
      * <p>This outputs the current table view defined by the request. For most programmatic use cases, prefer <code>getConversationTable</code> and format client-side. The CSV format may change and should not be relied upon by code consumers. A maximum of 10,000 rows can be exported at a time.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:conversations</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<InputStream> exportConversationTable(
             ConversationTableRequest request, RequestOptions requestOptions) {
@@ -268,6 +274,7 @@ public class RawAnalyticsClient {
 
     /**
      * Retrieves structured agent user data formatted as a table, allowing users to group, filter,  and define specific metrics to display as columns.
+     * &lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;
      */
     public MavenAGIHttpResponse<AgentUserTableResponse> getAgentUserTable(AgentUserTableRequest request) {
         return getAgentUserTable(request, null);
@@ -275,6 +282,7 @@ public class RawAnalyticsClient {
 
     /**
      * Retrieves structured agent user data formatted as a table, allowing users to group, filter,  and define specific metrics to display as columns.
+     * &lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;
      */
     public MavenAGIHttpResponse<AgentUserTableResponse> getAgentUserTable(
             AgentUserTableRequest request, RequestOptions requestOptions) {
@@ -342,6 +350,7 @@ public class RawAnalyticsClient {
 
     /**
      * Retrieves structured event data formatted as a table, allowing users to group, filter,  and define specific metrics to display as columns.
+     * &lt;Note&gt;<strong>Required permission:</strong> <code>read:events</code>&lt;/Note&gt;
      */
     public MavenAGIHttpResponse<EventTableResponse> getEventTable(EventTableRequest request) {
         return getEventTable(request, null);
@@ -349,6 +358,7 @@ public class RawAnalyticsClient {
 
     /**
      * Retrieves structured event data formatted as a table, allowing users to group, filter,  and define specific metrics to display as columns.
+     * &lt;Note&gt;<strong>Required permission:</strong> <code>read:events</code>&lt;/Note&gt;
      */
     public MavenAGIHttpResponse<EventTableResponse> getEventTable(
             EventTableRequest request, RequestOptions requestOptions) {
@@ -415,6 +425,7 @@ public class RawAnalyticsClient {
 
     /**
      * Fetches event data visualized in a chart format. Supported chart types include pie chart, date histogram, and stacked bar charts.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:events</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<ChartResponse> getEventChart(EventChartRequest request) {
         return getEventChart(request, null);
@@ -422,6 +433,7 @@ public class RawAnalyticsClient {
 
     /**
      * Fetches event data visualized in a chart format. Supported chart types include pie chart, date histogram, and stacked bar charts.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:events</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<ChartResponse> getEventChart(EventChartRequest request, RequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())

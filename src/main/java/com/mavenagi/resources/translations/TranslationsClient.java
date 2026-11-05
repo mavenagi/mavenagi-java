@@ -27,6 +27,7 @@ public class TranslationsClient {
 
     /**
      * Translate text from one language to another
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>ask:agent</code>&lt;/Note&gt;</p>
      */
     public TranslationResponse translate(TranslationRequest request) {
         return this.rawClient.translate(request).body();
@@ -34,6 +35,7 @@ public class TranslationsClient {
 
     /**
      * Translate text from one language to another
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>ask:agent</code>&lt;/Note&gt;</p>
      */
     public TranslationResponse translate(TranslationRequest request, RequestOptions requestOptions) {
         return this.rawClient.translate(request, requestOptions).body();

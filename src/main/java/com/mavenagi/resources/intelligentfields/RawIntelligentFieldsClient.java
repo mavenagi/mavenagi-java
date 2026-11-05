@@ -56,6 +56,7 @@ public class RawIntelligentFieldsClient {
      * variant has it, or it is rejected with reason <code>INTELLIGENT_FIELD_TYPE_CHANGED</code>. To use
      * a different type, create a new field. A field deleted in the variant may be recreated
      * with any type.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<IntelligentFieldResponse> createOrUpdate(IntelligentFieldRequest request) {
         return createOrUpdate(request, null);
@@ -74,6 +75,7 @@ public class RawIntelligentFieldsClient {
      * variant has it, or it is rejected with reason <code>INTELLIGENT_FIELD_TYPE_CHANGED</code>. To use
      * a different type, create a new field. A field deleted in the variant may be recreated
      * with any type.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<IntelligentFieldResponse> createOrUpdate(
             IntelligentFieldRequest request, RequestOptions requestOptions) {
@@ -143,6 +145,7 @@ public class RawIntelligentFieldsClient {
      * kind of capability the same way. It does not carry <code>referencingCharters</code>; search
      * charters to find the ones that reference a capability.
      * <p>Get an intelligent field by its supplied ID</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<IntelligentFieldDetailResponse> get(String fieldReferenceId) {
         return get(fieldReferenceId, IntelligentFieldGetRequest.builder().build());
@@ -153,6 +156,7 @@ public class RawIntelligentFieldsClient {
      * kind of capability the same way. It does not carry <code>referencingCharters</code>; search
      * charters to find the ones that reference a capability.
      * <p>Get an intelligent field by its supplied ID</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<IntelligentFieldDetailResponse> get(
             String fieldReferenceId, IntelligentFieldGetRequest request) {
@@ -164,6 +168,7 @@ public class RawIntelligentFieldsClient {
      * kind of capability the same way. It does not carry <code>referencingCharters</code>; search
      * charters to find the ones that reference a capability.
      * <p>Get an intelligent field by its supplied ID</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<IntelligentFieldDetailResponse> get(
             String fieldReferenceId, IntelligentFieldGetRequest request, RequestOptions requestOptions) {
@@ -242,6 +247,7 @@ public class RawIntelligentFieldsClient {
      * <p>This is also how a field is activated and deactivated: set <code>status</code> to <code>ACTIVE</code> to
      * start evaluating it, or <code>INACTIVE</code> to stop. <code>name</code>, <code>entityType</code>, and <code>validationType</code>
      * cannot be changed after creation.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<IntelligentFieldResponse> patch(String fieldReferenceId) {
         return patch(fieldReferenceId, IntelligentFieldPatchRequest.builder().build());
@@ -253,6 +259,7 @@ public class RawIntelligentFieldsClient {
      * <p>This is also how a field is activated and deactivated: set <code>status</code> to <code>ACTIVE</code> to
      * start evaluating it, or <code>INACTIVE</code> to stop. <code>name</code>, <code>entityType</code>, and <code>validationType</code>
      * cannot be changed after creation.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<IntelligentFieldResponse> patch(
             String fieldReferenceId, IntelligentFieldPatchRequest request) {
@@ -265,6 +272,7 @@ public class RawIntelligentFieldsClient {
      * <p>This is also how a field is activated and deactivated: set <code>status</code> to <code>ACTIVE</code> to
      * start evaluating it, or <code>INACTIVE</code> to stop. <code>name</code>, <code>entityType</code>, and <code>validationType</code>
      * cannot be changed after creation.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<IntelligentFieldResponse> patch(
             String fieldReferenceId, IntelligentFieldPatchRequest request, RequestOptions requestOptions) {
@@ -340,6 +348,7 @@ public class RawIntelligentFieldsClient {
      * its identity and entityType, every other setting comes from the request, and it gets the
      * status a new field gets.</p>
      * <p>Deleted fields cannot be modified.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<IntelligentFieldResponse> delete(String fieldReferenceId) {
         return delete(fieldReferenceId, IntelligentFieldDeleteRequest.builder().build());
@@ -354,6 +363,7 @@ public class RawIntelligentFieldsClient {
      * its identity and entityType, every other setting comes from the request, and it gets the
      * status a new field gets.</p>
      * <p>Deleted fields cannot be modified.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<IntelligentFieldResponse> delete(
             String fieldReferenceId, IntelligentFieldDeleteRequest request) {
@@ -369,6 +379,7 @@ public class RawIntelligentFieldsClient {
      * its identity and entityType, every other setting comes from the request, and it gets the
      * status a new field gets.</p>
      * <p>Deleted fields cannot be modified.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<IntelligentFieldResponse> delete(
             String fieldReferenceId, IntelligentFieldDeleteRequest request, RequestOptions requestOptions) {
@@ -446,6 +457,7 @@ public class RawIntelligentFieldsClient {
      * value was computed.
      * <p>Values only exist for fields that were ACTIVE when the entity was evaluated, so a
      * newly activated field returns nothing until evaluation has run.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<IntelligentFieldValueSearchResponse> searchValues() {
         return searchValues(IntelligentFieldValueSearchRequest.builder().build());
@@ -457,6 +469,7 @@ public class RawIntelligentFieldsClient {
      * value was computed.
      * <p>Values only exist for fields that were ACTIVE when the entity was evaluated, so a
      * newly activated field returns nothing until evaluation has run.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<IntelligentFieldValueSearchResponse> searchValues(
             IntelligentFieldValueSearchRequest request) {
@@ -469,6 +482,7 @@ public class RawIntelligentFieldsClient {
      * value was computed.
      * <p>Values only exist for fields that were ACTIVE when the entity was evaluated, so a
      * newly activated field returns nothing until evaluation has run.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<IntelligentFieldValueSearchResponse> searchValues(
             IntelligentFieldValueSearchRequest request, RequestOptions requestOptions) {

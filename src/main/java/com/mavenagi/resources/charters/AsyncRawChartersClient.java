@@ -63,6 +63,7 @@ public class AsyncRawChartersClient {
      * for leaf charters as we enforce mutual exclusion among the leafs and
      * pick only the highest ranked (lowest numerical value) leaf to include in
      * the round. userRank may have gaps.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<CharterResponse>> createOrUpdate(CharterRequest request) {
         return createOrUpdate(request, null);
@@ -81,6 +82,7 @@ public class AsyncRawChartersClient {
      * for leaf charters as we enforce mutual exclusion among the leafs and
      * pick only the highest ranked (lowest numerical value) leaf to include in
      * the round. userRank may have gaps.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<CharterResponse>> createOrUpdate(
             CharterRequest request, RequestOptions requestOptions) {
@@ -170,6 +172,7 @@ public class AsyncRawChartersClient {
 
     /**
      * Get a charter by its reference ID.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<CharterResponse>> get(String charterReferenceId) {
         return get(charterReferenceId, CharterGetRequest.builder().build());
@@ -177,6 +180,7 @@ public class AsyncRawChartersClient {
 
     /**
      * Get a charter by its reference ID.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<CharterResponse>> get(
             String charterReferenceId, CharterGetRequest request) {
@@ -185,6 +189,7 @@ public class AsyncRawChartersClient {
 
     /**
      * Get a charter by its reference ID.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<CharterResponse>> get(
             String charterReferenceId, CharterGetRequest request, RequestOptions requestOptions) {
@@ -295,6 +300,7 @@ public class AsyncRawChartersClient {
      * <p><strong>userRank conflict resolution</strong>: When <code>userRank</code> is set to a value already held by a
      * sibling, siblings at that rank and above are shifted up by 1 (like linked list semantics).
      * The caller does not need to manage uniqueness explicitly.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<CharterResponse>> patch(String charterReferenceId) {
         return patch(charterReferenceId, CharterPatchRequest.builder().build());
@@ -316,6 +322,7 @@ public class AsyncRawChartersClient {
      * <p><strong>userRank conflict resolution</strong>: When <code>userRank</code> is set to a value already held by a
      * sibling, siblings at that rank and above are shifted up by 1 (like linked list semantics).
      * The caller does not need to manage uniqueness explicitly.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<CharterResponse>> patch(
             String charterReferenceId, CharterPatchRequest request) {
@@ -338,6 +345,7 @@ public class AsyncRawChartersClient {
      * <p><strong>userRank conflict resolution</strong>: When <code>userRank</code> is set to a value already held by a
      * sibling, siblings at that rank and above are shifted up by 1 (like linked list semantics).
      * The caller does not need to manage uniqueness explicitly.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<CharterResponse>> patch(
             String charterReferenceId, CharterPatchRequest request, RequestOptions requestOptions) {
@@ -434,6 +442,7 @@ public class AsyncRawChartersClient {
      * soft-deleted regardless.</p>
      * <p>Deleted charters are excluded from list results but can be retrieved by ID for archival purposes.</p>
      * <p>Deleted charters cannot be modified.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<CharterResponse>> delete(String charterReferenceId) {
         return delete(charterReferenceId, CharterDeleteRequest.builder().build());
@@ -446,6 +455,7 @@ public class AsyncRawChartersClient {
      * soft-deleted regardless.</p>
      * <p>Deleted charters are excluded from list results but can be retrieved by ID for archival purposes.</p>
      * <p>Deleted charters cannot be modified.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<CharterResponse>> delete(
             String charterReferenceId, CharterDeleteRequest request) {
@@ -459,6 +469,7 @@ public class AsyncRawChartersClient {
      * soft-deleted regardless.</p>
      * <p>Deleted charters are excluded from list results but can be retrieved by ID for archival purposes.</p>
      * <p>Deleted charters cannot be modified.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<CharterResponse>> delete(
             String charterReferenceId, CharterDeleteRequest request, RequestOptions requestOptions) {
@@ -561,6 +572,10 @@ public class AsyncRawChartersClient {
      * <p>Results are ordered by the <code>sort</code> field (defaults to CreatedAt). Use <code>sortDesc</code>
      * to control direction (defaults to descending). An empty filter list is
      * equivalent to omitting the field (no filter applied).</p>
+     * <p>Pagination is limited to the first 10,000 matching charters: <code>(page + 1) * size</code> must not
+     * exceed 10,000, and a request beyond that is rejected with a 400. Narrow the filter to reach
+     * later results.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<CharterSearchResponse>> search() {
         return search(CharterSearchRequest.builder().build());
@@ -574,6 +589,10 @@ public class AsyncRawChartersClient {
      * <p>Results are ordered by the <code>sort</code> field (defaults to CreatedAt). Use <code>sortDesc</code>
      * to control direction (defaults to descending). An empty filter list is
      * equivalent to omitting the field (no filter applied).</p>
+     * <p>Pagination is limited to the first 10,000 matching charters: <code>(page + 1) * size</code> must not
+     * exceed 10,000, and a request beyond that is rejected with a 400. Narrow the filter to reach
+     * later results.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<CharterSearchResponse>> search(CharterSearchRequest request) {
         return search(request, null);
@@ -587,6 +606,10 @@ public class AsyncRawChartersClient {
      * <p>Results are ordered by the <code>sort</code> field (defaults to CreatedAt). Use <code>sortDesc</code>
      * to control direction (defaults to descending). An empty filter list is
      * equivalent to omitting the field (no filter applied).</p>
+     * <p>Pagination is limited to the first 10,000 matching charters: <code>(page + 1) * size</code> must not
+     * exceed 10,000, and a request beyond that is rejected with a 400. Narrow the filter to reach
+     * later results.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<CharterSearchResponse>> search(
             CharterSearchRequest request, RequestOptions requestOptions) {
@@ -683,6 +706,7 @@ public class AsyncRawChartersClient {
      * <p>The list is always finite: charter hierarchies are acyclic, so a charter is never its own
      * ancestor and the walk to the root terminates.</p>
      * <p>Returns 404 if the charter does not exist or is deleted.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<CharterAncestorsResponse>> getAncestors(String charterReferenceId) {
         return getAncestors(
@@ -697,6 +721,7 @@ public class AsyncRawChartersClient {
      * <p>The list is always finite: charter hierarchies are acyclic, so a charter is never its own
      * ancestor and the walk to the root terminates.</p>
      * <p>Returns 404 if the charter does not exist or is deleted.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<CharterAncestorsResponse>> getAncestors(
             String charterReferenceId, CharterGetAncestorsRequest request) {
@@ -711,6 +736,7 @@ public class AsyncRawChartersClient {
      * <p>The list is always finite: charter hierarchies are acyclic, so a charter is never its own
      * ancestor and the walk to the root terminates.</p>
      * <p>Returns 404 if the charter does not exist or is deleted.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<CharterAncestorsResponse>> getAncestors(
             String charterReferenceId, CharterGetAncestorsRequest request, RequestOptions requestOptions) {
@@ -816,6 +842,7 @@ public class AsyncRawChartersClient {
      * at mixed levels are allowed. Roots and specific parents cannot be mixed
      * in one request.</p>
      * <p>DELETED charters are never returned.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<CharterListChildrenResponse>> listChildren(
             CharterListChildrenRequest request) {
@@ -831,6 +858,7 @@ public class AsyncRawChartersClient {
      * at mixed levels are allowed. Roots and specific parents cannot be mixed
      * in one request.</p>
      * <p>DELETED charters are never returned.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<CharterListChildrenResponse>> listChildren(
             CharterListChildrenRequest request, RequestOptions requestOptions) {

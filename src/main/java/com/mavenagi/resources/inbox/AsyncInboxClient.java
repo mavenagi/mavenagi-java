@@ -37,6 +37,10 @@ public class AsyncInboxClient {
 
     /**
      * Retrieve a paginated list of inbox items for an agent.
+     * <p>Pagination is limited to the first 10,000 matching inbox items: <code>(page + 1) * size</code> must not
+     * exceed 10,000, and a request beyond that is rejected with a 400. Narrow the filter to reach
+     * later results.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>. A search whose results include a Duplicate Documents item also needs <code>read:documents</code>.&lt;/Note&gt;</p>
      */
     public CompletableFuture<InboxSearchResponse> search() {
         return this.rawClient.search().thenApply(response -> response.body());
@@ -44,6 +48,10 @@ public class AsyncInboxClient {
 
     /**
      * Retrieve a paginated list of inbox items for an agent.
+     * <p>Pagination is limited to the first 10,000 matching inbox items: <code>(page + 1) * size</code> must not
+     * exceed 10,000, and a request beyond that is rejected with a 400. Narrow the filter to reach
+     * later results.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>. A search whose results include a Duplicate Documents item also needs <code>read:documents</code>.&lt;/Note&gt;</p>
      */
     public CompletableFuture<InboxSearchResponse> search(InboxSearchRequest request) {
         return this.rawClient.search(request).thenApply(response -> response.body());
@@ -51,6 +59,10 @@ public class AsyncInboxClient {
 
     /**
      * Retrieve a paginated list of inbox items for an agent.
+     * <p>Pagination is limited to the first 10,000 matching inbox items: <code>(page + 1) * size</code> must not
+     * exceed 10,000, and a request beyond that is rejected with a 400. Narrow the filter to reach
+     * later results.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>. A search whose results include a Duplicate Documents item also needs <code>read:documents</code>.&lt;/Note&gt;</p>
      */
     public CompletableFuture<InboxSearchResponse> search(InboxSearchRequest request, RequestOptions requestOptions) {
         return this.rawClient.search(request, requestOptions).thenApply(response -> response.body());
@@ -58,6 +70,7 @@ public class AsyncInboxClient {
 
     /**
      * Update an inbox item or create it if it doesn't exist.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<InboxItem> createOrUpdate(InboxItemCreateRequest request) {
         return this.rawClient.createOrUpdate(request).thenApply(response -> response.body());
@@ -65,6 +78,7 @@ public class AsyncInboxClient {
 
     /**
      * Update an inbox item or create it if it doesn't exist.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<InboxItem> createOrUpdate(InboxItemCreateRequest request, RequestOptions requestOptions) {
         return this.rawClient.createOrUpdate(request, requestOptions).thenApply(response -> response.body());
@@ -74,6 +88,7 @@ public class AsyncInboxClient {
      * Update mutable inbox item fields. Only supported for custom inbox items.
      * <p>The <code>appId</code> field can be provided to update a inbox item owned by a different app.
      * All other fields will overwrite the existing value on the inbox item only if provided.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>. Patching a Duplicate Documents item also needs <code>read:documents</code>.&lt;/Note&gt;</p>
      */
     public CompletableFuture<InboxItem> patch(String inboxItemId) {
         return this.rawClient.patch(inboxItemId).thenApply(response -> response.body());
@@ -83,6 +98,7 @@ public class AsyncInboxClient {
      * Update mutable inbox item fields. Only supported for custom inbox items.
      * <p>The <code>appId</code> field can be provided to update a inbox item owned by a different app.
      * All other fields will overwrite the existing value on the inbox item only if provided.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>. Patching a Duplicate Documents item also needs <code>read:documents</code>.&lt;/Note&gt;</p>
      */
     public CompletableFuture<InboxItem> patch(String inboxItemId, InboxItemPatchRequest request) {
         return this.rawClient.patch(inboxItemId, request).thenApply(response -> response.body());
@@ -92,6 +108,7 @@ public class AsyncInboxClient {
      * Update mutable inbox item fields. Only supported for custom inbox items.
      * <p>The <code>appId</code> field can be provided to update a inbox item owned by a different app.
      * All other fields will overwrite the existing value on the inbox item only if provided.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>. Patching a Duplicate Documents item also needs <code>read:documents</code>.&lt;/Note&gt;</p>
      */
     public CompletableFuture<InboxItem> patch(
             String inboxItemId, InboxItemPatchRequest request, RequestOptions requestOptions) {
@@ -100,6 +117,7 @@ public class AsyncInboxClient {
 
     /**
      * Update inbox item tag fields. All tags provided will overwrite the existing tags on the inbox item.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>. Updating tags on a Missing Knowledge or Duplicate Documents item also needs <code>read:agents</code>, and on a Duplicate Documents item <code>read:documents</code> too.&lt;/Note&gt;</p>
      */
     public CompletableFuture<InboxItem> applyTags(String inboxItemId, InboxItemApplyTagsRequest request) {
         return this.rawClient.applyTags(inboxItemId, request).thenApply(response -> response.body());
@@ -107,6 +125,7 @@ public class AsyncInboxClient {
 
     /**
      * Update inbox item tag fields. All tags provided will overwrite the existing tags on the inbox item.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>. Updating tags on a Missing Knowledge or Duplicate Documents item also needs <code>read:agents</code>, and on a Duplicate Documents item <code>read:documents</code> too.&lt;/Note&gt;</p>
      */
     public CompletableFuture<InboxItem> applyTags(
             String inboxItemId, InboxItemApplyTagsRequest request, RequestOptions requestOptions) {
@@ -115,6 +134,7 @@ public class AsyncInboxClient {
 
     /**
      * Retrieve details of a specific inbox item by its ID.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>. Getting a Duplicate Documents item also needs <code>read:documents</code>.&lt;/Note&gt;</p>
      */
     public CompletableFuture<InboxItem> get(String inboxItemId, InboxItemRequest request) {
         return this.rawClient.get(inboxItemId, request).thenApply(response -> response.body());
@@ -122,6 +142,7 @@ public class AsyncInboxClient {
 
     /**
      * Retrieve details of a specific inbox item by its ID.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>. Getting a Duplicate Documents item also needs <code>read:documents</code>.&lt;/Note&gt;</p>
      */
     public CompletableFuture<InboxItem> get(
             String inboxItemId, InboxItemRequest request, RequestOptions requestOptions) {
@@ -130,6 +151,7 @@ public class AsyncInboxClient {
 
     /**
      * Retrieve a suggested fix. Includes document information if the fix is a Missing Knowledge suggestion.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>. Getting a Duplicate Documents fix also needs <code>read:documents</code>.&lt;/Note&gt;</p>
      */
     public CompletableFuture<InboxItemFix> getFix(String inboxItemFixId, InboxItemFixRequest request) {
         return this.rawClient.getFix(inboxItemFixId, request).thenApply(response -> response.body());
@@ -137,6 +159,7 @@ public class AsyncInboxClient {
 
     /**
      * Retrieve a suggested fix. Includes document information if the fix is a Missing Knowledge suggestion.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>. Getting a Duplicate Documents fix also needs <code>read:documents</code>.&lt;/Note&gt;</p>
      */
     public CompletableFuture<InboxItemFix> getFix(
             String inboxItemFixId, InboxItemFixRequest request, RequestOptions requestOptions) {
@@ -145,6 +168,7 @@ public class AsyncInboxClient {
 
     /**
      * Apply a list of fixes belonging to an inbox item.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>. Applying fixes also needs <code>read:agents</code>. A Missing Knowledge fix also needs <code>create:documents</code>, and a Duplicate Documents fix also needs <code>read:documents</code>, <code>edit:documents</code> and <code>create:documents</code>.&lt;/Note&gt;</p>
      */
     public CompletableFuture<Void> applyFixes(String inboxItemId, ApplyFixesRequest request) {
         return this.rawClient.applyFixes(inboxItemId, request).thenApply(response -> response.body());
@@ -152,6 +176,7 @@ public class AsyncInboxClient {
 
     /**
      * Apply a list of fixes belonging to an inbox item.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>. Applying fixes also needs <code>read:agents</code>. A Missing Knowledge fix also needs <code>create:documents</code>, and a Duplicate Documents fix also needs <code>read:documents</code>, <code>edit:documents</code> and <code>create:documents</code>.&lt;/Note&gt;</p>
      */
     public CompletableFuture<Void> applyFixes(
             String inboxItemId, ApplyFixesRequest request, RequestOptions requestOptions) {
@@ -160,6 +185,7 @@ public class AsyncInboxClient {
 
     /**
      * Ignore a specific inbox item by its ID.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<Void> ignore(String inboxItemId, InboxItemIgnoreRequest request) {
         return this.rawClient.ignore(inboxItemId, request).thenApply(response -> response.body());
@@ -167,6 +193,7 @@ public class AsyncInboxClient {
 
     /**
      * Ignore a specific inbox item by its ID.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<Void> ignore(
             String inboxItemId, InboxItemIgnoreRequest request, RequestOptions requestOptions) {

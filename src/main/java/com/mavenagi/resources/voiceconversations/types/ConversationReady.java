@@ -8,18 +8,37 @@ import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
+import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ConversationReady.Builder.class)
-public final class ConversationReady {
+public final class ConversationReady implements IServerEventBase {
+    private final OffsetDateTime timestamp;
+
+    private final String sessionId;
+
     private final Map<String, Object> additionalProperties;
 
-    private ConversationReady(Map<String, Object> additionalProperties) {
+    private ConversationReady(OffsetDateTime timestamp, String sessionId, Map<String, Object> additionalProperties) {
+        this.timestamp = timestamp;
+        this.sessionId = sessionId;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return When the server sent the event.
+     */
+    @JsonProperty("timestamp")
+    @java.lang.Override
+    public OffsetDateTime getTimestamp() {
+        return timestamp;
     }
 
     @JsonProperty("type")
@@ -27,10 +46,18 @@ public final class ConversationReady {
         return "conversation_ready";
     }
 
+    /**
+     * @return The conversation ID the server created for this connection.
+     */
+    @JsonProperty("sessionId")
+    public String getSessionId() {
+        return sessionId;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
-        return other instanceof ConversationReady;
+        return other instanceof ConversationReady && equalTo((ConversationReady) other);
     }
 
     @JsonAnyGetter
@@ -38,28 +65,89 @@ public final class ConversationReady {
         return this.additionalProperties;
     }
 
+    private boolean equalTo(ConversationReady other) {
+        return timestamp.equals(other.timestamp) && sessionId.equals(other.sessionId);
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return Objects.hash(this.timestamp, this.sessionId);
+    }
+
     @java.lang.Override
     public String toString() {
         return ObjectMappers.stringify(this);
     }
 
-    public static Builder builder() {
+    public static TimestampStage builder() {
         return new Builder();
     }
 
+    public interface TimestampStage {
+        /**
+         * <p>When the server sent the event.</p>
+         */
+        SessionIdStage timestamp(@NotNull OffsetDateTime timestamp);
+
+        Builder from(ConversationReady other);
+    }
+
+    public interface SessionIdStage {
+        /**
+         * <p>The conversation ID the server created for this connection.</p>
+         */
+        _FinalStage sessionId(@NotNull String sessionId);
+    }
+
+    public interface _FinalStage {
+        ConversationReady build();
+    }
+
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder {
+    public static final class Builder implements TimestampStage, SessionIdStage, _FinalStage {
+        private OffsetDateTime timestamp;
+
+        private String sessionId;
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
 
+        @java.lang.Override
         public Builder from(ConversationReady other) {
+            timestamp(other.getTimestamp());
+            sessionId(other.getSessionId());
             return this;
         }
 
+        /**
+         * <p>When the server sent the event.</p>
+         * <p>When the server sent the event.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("timestamp")
+        public SessionIdStage timestamp(@NotNull OffsetDateTime timestamp) {
+            this.timestamp = Objects.requireNonNull(timestamp, "timestamp must not be null");
+            return this;
+        }
+
+        /**
+         * <p>The conversation ID the server created for this connection.</p>
+         * <p>The conversation ID the server created for this connection.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("sessionId")
+        public _FinalStage sessionId(@NotNull String sessionId) {
+            this.sessionId = Objects.requireNonNull(sessionId, "sessionId must not be null");
+            return this;
+        }
+
+        @java.lang.Override
         public ConversationReady build() {
-            return new ConversationReady(additionalProperties);
+            return new ConversationReady(timestamp, sessionId, additionalProperties);
         }
     }
 }

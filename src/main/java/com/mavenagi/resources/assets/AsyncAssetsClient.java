@@ -30,6 +30,7 @@ public class AsyncAssetsClient {
     /**
      * Initiate an upload.
      * Returns a pre-signed URL for direct file upload and an asset ID for subsequent operations.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>ask:agent</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<InitiateAssetUploadResponse> initiateUpload(InitiateAssetUploadRequest request) {
         return this.rawClient.initiateUpload(request).thenApply(response -> response.body());
@@ -38,6 +39,7 @@ public class AsyncAssetsClient {
     /**
      * Initiate an upload.
      * Returns a pre-signed URL for direct file upload and an asset ID for subsequent operations.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>ask:agent</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<InitiateAssetUploadResponse> initiateUpload(
             InitiateAssetUploadRequest request, RequestOptions requestOptions) {
@@ -47,6 +49,7 @@ public class AsyncAssetsClient {
     /**
      * Commit an upload after successful file transfer.
      * Updates the asset status and makes it available for use.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>ask:agent</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<Void> commitUpload(String assetReferenceId) {
         return this.rawClient.commitUpload(assetReferenceId).thenApply(response -> response.body());
@@ -55,6 +58,7 @@ public class AsyncAssetsClient {
     /**
      * Commit an upload after successful file transfer.
      * Updates the asset status and makes it available for use.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>ask:agent</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<Void> commitUpload(String assetReferenceId, CommitAssetUploadRequest request) {
         return this.rawClient.commitUpload(assetReferenceId, request).thenApply(response -> response.body());
@@ -63,6 +67,7 @@ public class AsyncAssetsClient {
     /**
      * Commit an upload after successful file transfer.
      * Updates the asset status and makes it available for use.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>ask:agent</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<Void> commitUpload(
             String assetReferenceId, CommitAssetUploadRequest request, RequestOptions requestOptions) {

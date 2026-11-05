@@ -33,6 +33,7 @@ public class AsyncTriggersClient {
      * Deprecated. Use <code>POST /v1/capabilities/search</code>, which searches every kind of capability
      * at once. It returns the fields every capability shares rather than the whole Event
      * Trigger; fetch one by its kind and reference ID for the rest.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<EventTriggersSearchResponse> search() {
         return this.rawClient.search().thenApply(response -> response.body());
@@ -42,6 +43,7 @@ public class AsyncTriggersClient {
      * Deprecated. Use <code>POST /v1/capabilities/search</code>, which searches every kind of capability
      * at once. It returns the fields every capability shares rather than the whole Event
      * Trigger; fetch one by its kind and reference ID for the rest.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<EventTriggersSearchResponse> search(EventTriggersSearchRequest request) {
         return this.rawClient.search(request).thenApply(response -> response.body());
@@ -51,6 +53,7 @@ public class AsyncTriggersClient {
      * Deprecated. Use <code>POST /v1/capabilities/search</code>, which searches every kind of capability
      * at once. It returns the fields every capability shares rather than the whole Event
      * Trigger; fetch one by its kind and reference ID for the rest.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<EventTriggersSearchResponse> search(
             EventTriggersSearchRequest request, RequestOptions requestOptions) {
@@ -59,6 +62,7 @@ public class AsyncTriggersClient {
 
     /**
      * Update an event trigger or create it if it doesn't exist.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<EventTriggerResponse> createOrUpdate(EventTriggerRequest request) {
         return this.rawClient.createOrUpdate(request).thenApply(response -> response.body());
@@ -66,6 +70,7 @@ public class AsyncTriggersClient {
 
     /**
      * Update an event trigger or create it if it doesn't exist.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<EventTriggerResponse> createOrUpdate(
             EventTriggerRequest request, RequestOptions requestOptions) {
@@ -76,6 +81,7 @@ public class AsyncTriggersClient {
      * Deprecated. Use <code>GET /v1/capabilities/TRIGGER/{referenceId}</code>, which returns this same
      * object for a trigger and the equivalent for every other kind of capability.
      * <p>Get an event trigger by its supplied ID</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<EventTriggerResponse> get(String triggerReferenceId) {
         return this.rawClient.get(triggerReferenceId).thenApply(response -> response.body());
@@ -85,6 +91,7 @@ public class AsyncTriggersClient {
      * Deprecated. Use <code>GET /v1/capabilities/TRIGGER/{referenceId}</code>, which returns this same
      * object for a trigger and the equivalent for every other kind of capability.
      * <p>Get an event trigger by its supplied ID</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<EventTriggerResponse> get(String triggerReferenceId, RequestOptions requestOptions) {
         return this.rawClient.get(triggerReferenceId, requestOptions).thenApply(response -> response.body());
@@ -94,6 +101,7 @@ public class AsyncTriggersClient {
      * Deprecated. Use <code>DELETE /v1/capabilities/TRIGGER/{referenceId}</code>, which deletes any kind
      * of capability the same way.
      * <p>Delete an event trigger</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<Void> delete(String triggerReferenceId) {
         return this.rawClient.delete(triggerReferenceId).thenApply(response -> response.body());
@@ -103,6 +111,7 @@ public class AsyncTriggersClient {
      * Deprecated. Use <code>DELETE /v1/capabilities/TRIGGER/{referenceId}</code>, which deletes any kind
      * of capability the same way.
      * <p>Delete an event trigger</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<Void> delete(String triggerReferenceId, RequestOptions requestOptions) {
         return this.rawClient.delete(triggerReferenceId, requestOptions).thenApply(response -> response.body());
@@ -112,6 +121,7 @@ public class AsyncTriggersClient {
      * Updates an event trigger. <code>enabled</code> and <code>condition</code> are the editable fields.
      * <p><code>PATCH /v1/capabilities/TRIGGER/{referenceId}</code> with a <code>status</code> also turns a trigger on and
      * off, the same way it publishes and unpublishes any kind of capability.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<EventTriggerResponse> partialUpdate(String triggerReferenceId) {
         return this.rawClient.partialUpdate(triggerReferenceId).thenApply(response -> response.body());
@@ -121,6 +131,7 @@ public class AsyncTriggersClient {
      * Updates an event trigger. <code>enabled</code> and <code>condition</code> are the editable fields.
      * <p><code>PATCH /v1/capabilities/TRIGGER/{referenceId}</code> with a <code>status</code> also turns a trigger on and
      * off, the same way it publishes and unpublishes any kind of capability.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<EventTriggerResponse> partialUpdate(
             String triggerReferenceId, PartialUpdateRequest request) {
@@ -131,6 +142,7 @@ public class AsyncTriggersClient {
      * Updates an event trigger. <code>enabled</code> and <code>condition</code> are the editable fields.
      * <p><code>PATCH /v1/capabilities/TRIGGER/{referenceId}</code> with a <code>status</code> also turns a trigger on and
      * off, the same way it publishes and unpublishes any kind of capability.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<EventTriggerResponse> partialUpdate(
             String triggerReferenceId, PartialUpdateRequest request, RequestOptions requestOptions) {

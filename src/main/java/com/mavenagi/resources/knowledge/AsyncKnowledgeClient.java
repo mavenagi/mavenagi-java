@@ -47,6 +47,10 @@ public class AsyncKnowledgeClient {
 
     /**
      * Search knowledge bases
+     * <p>Pagination is limited to the first 10,000 matching knowledge bases: <code>(page + 1) * size</code> must
+     * not exceed 10,000, and a request beyond that is rejected with a 400. Narrow the filter to
+     * reach later results.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<KnowledgeBasesResponse> searchKnowledgeBases() {
         return this.rawClient.searchKnowledgeBases().thenApply(response -> response.body());
@@ -54,6 +58,10 @@ public class AsyncKnowledgeClient {
 
     /**
      * Search knowledge bases
+     * <p>Pagination is limited to the first 10,000 matching knowledge bases: <code>(page + 1) * size</code> must
+     * not exceed 10,000, and a request beyond that is rejected with a 400. Narrow the filter to
+     * reach later results.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<KnowledgeBasesResponse> searchKnowledgeBases(KnowledgeBaseSearchRequest request) {
         return this.rawClient.searchKnowledgeBases(request).thenApply(response -> response.body());
@@ -61,6 +69,10 @@ public class AsyncKnowledgeClient {
 
     /**
      * Search knowledge bases
+     * <p>Pagination is limited to the first 10,000 matching knowledge bases: <code>(page + 1) * size</code> must
+     * not exceed 10,000, and a request beyond that is rejected with a 400. Narrow the filter to
+     * reach later results.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<KnowledgeBasesResponse> searchKnowledgeBases(
             KnowledgeBaseSearchRequest request, RequestOptions requestOptions) {
@@ -69,6 +81,7 @@ public class AsyncKnowledgeClient {
 
     /**
      * Update a knowledge base or create it if it doesn't exist.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<KnowledgeBaseResponse> createOrUpdateKnowledgeBase(KnowledgeBaseRequest request) {
         return this.rawClient.createOrUpdateKnowledgeBase(request).thenApply(response -> response.body());
@@ -76,6 +89,7 @@ public class AsyncKnowledgeClient {
 
     /**
      * Update a knowledge base or create it if it doesn't exist.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<KnowledgeBaseResponse> createOrUpdateKnowledgeBase(
             KnowledgeBaseRequest request, RequestOptions requestOptions) {
@@ -86,6 +100,7 @@ public class AsyncKnowledgeClient {
 
     /**
      * Get an existing knowledge base by its supplied ID
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<KnowledgeBaseResponse> getKnowledgeBase(String knowledgeBaseReferenceId) {
         return this.rawClient.getKnowledgeBase(knowledgeBaseReferenceId).thenApply(response -> response.body());
@@ -93,6 +108,7 @@ public class AsyncKnowledgeClient {
 
     /**
      * Get an existing knowledge base by its supplied ID
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<KnowledgeBaseResponse> getKnowledgeBase(
             String knowledgeBaseReferenceId, KnowledgeBaseGetRequest request) {
@@ -103,6 +119,7 @@ public class AsyncKnowledgeClient {
 
     /**
      * Get an existing knowledge base by its supplied ID
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<KnowledgeBaseResponse> getKnowledgeBase(
             String knowledgeBaseReferenceId, KnowledgeBaseGetRequest request, RequestOptions requestOptions) {
@@ -115,6 +132,7 @@ public class AsyncKnowledgeClient {
      * Request that a knowledge base refresh itself.
      * <p>Knowledge bases refresh on a schedule determined by the <code>refreshFrequency</code> field.
      * They can also be refreshed on demand by calling this endpoint.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<Void> refreshKnowledgeBase(String knowledgeBaseReferenceId) {
         return this.rawClient.refreshKnowledgeBase(knowledgeBaseReferenceId).thenApply(response -> response.body());
@@ -124,6 +142,7 @@ public class AsyncKnowledgeClient {
      * Request that a knowledge base refresh itself.
      * <p>Knowledge bases refresh on a schedule determined by the <code>refreshFrequency</code> field.
      * They can also be refreshed on demand by calling this endpoint.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<Void> refreshKnowledgeBase(
             String knowledgeBaseReferenceId, KnowledgeBaseRefreshRequest request) {
@@ -136,6 +155,7 @@ public class AsyncKnowledgeClient {
      * Request that a knowledge base refresh itself.
      * <p>Knowledge bases refresh on a schedule determined by the <code>refreshFrequency</code> field.
      * They can also be refreshed on demand by calling this endpoint.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<Void> refreshKnowledgeBase(
             String knowledgeBaseReferenceId, KnowledgeBaseRefreshRequest request, RequestOptions requestOptions) {
@@ -150,6 +170,7 @@ public class AsyncKnowledgeClient {
      * ingestion workflow and sets the version status to CANCELED.</p>
      * <p>An app still refreshing that version finds out on its next write to it: adding or
      * removing a document on a canceled version is rejected rather than succeeding.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<Void> cancelKnowledgeBaseVersion(String knowledgeBaseReferenceId) {
         return this.rawClient
@@ -163,6 +184,7 @@ public class AsyncKnowledgeClient {
      * ingestion workflow and sets the version status to CANCELED.</p>
      * <p>An app still refreshing that version finds out on its next write to it: adding or
      * removing a document on a canceled version is rejected rather than succeeding.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<Void> cancelKnowledgeBaseVersion(
             String knowledgeBaseReferenceId, CancelKnowledgeBaseVersionRequest request) {
@@ -177,6 +199,7 @@ public class AsyncKnowledgeClient {
      * ingestion workflow and sets the version status to CANCELED.</p>
      * <p>An app still refreshing that version finds out on its next write to it: adding or
      * removing a document on a canceled version is rejected rather than succeeding.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<Void> cancelKnowledgeBaseVersion(
             String knowledgeBaseReferenceId, CancelKnowledgeBaseVersionRequest request, RequestOptions requestOptions) {
@@ -187,6 +210,7 @@ public class AsyncKnowledgeClient {
 
     /**
      * Rolls the knowledge base back to its previous published version.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<Void> rollbackKnowledgeBaseVersion(String knowledgeBaseReferenceId) {
         return this.rawClient
@@ -196,6 +220,7 @@ public class AsyncKnowledgeClient {
 
     /**
      * Rolls the knowledge base back to its previous published version.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<Void> rollbackKnowledgeBaseVersion(
             String knowledgeBaseReferenceId, RequestOptions requestOptions) {
@@ -208,6 +233,7 @@ public class AsyncKnowledgeClient {
      * Update mutable knowledge base fields
      * <p>The <code>appId</code> field can be provided to update a knowledge base owned by a different app.
      * All other fields will overwrite the existing value on the knowledge base only if provided.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<KnowledgeBaseResponse> patchKnowledgeBase(String knowledgeBaseReferenceId) {
         return this.rawClient.patchKnowledgeBase(knowledgeBaseReferenceId).thenApply(response -> response.body());
@@ -217,6 +243,7 @@ public class AsyncKnowledgeClient {
      * Update mutable knowledge base fields
      * <p>The <code>appId</code> field can be provided to update a knowledge base owned by a different app.
      * All other fields will overwrite the existing value on the knowledge base only if provided.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<KnowledgeBaseResponse> patchKnowledgeBase(
             String knowledgeBaseReferenceId, KnowledgeBasePatchRequest request) {
@@ -229,6 +256,7 @@ public class AsyncKnowledgeClient {
      * Update mutable knowledge base fields
      * <p>The <code>appId</code> field can be provided to update a knowledge base owned by a different app.
      * All other fields will overwrite the existing value on the knowledge base only if provided.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<KnowledgeBaseResponse> patchKnowledgeBase(
             String knowledgeBaseReferenceId, KnowledgeBasePatchRequest request, RequestOptions requestOptions) {
@@ -242,6 +270,7 @@ public class AsyncKnowledgeClient {
      * <p>If an existing version is in progress, then that version will be finalized in an error state.</p>
      * <p>If another version create for the same knowledge base is still in progress, this request may
      * return 503 with a <code>Retry-After</code> header. Nothing is changed in that case, so it is safe to retry.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<KnowledgeBaseVersion> createKnowledgeBaseVersion(
             String knowledgeBaseReferenceId, KnowledgeBaseVersionRequest request) {
@@ -255,6 +284,7 @@ public class AsyncKnowledgeClient {
      * <p>If an existing version is in progress, then that version will be finalized in an error state.</p>
      * <p>If another version create for the same knowledge base is still in progress, this request may
      * return 503 with a <code>Retry-After</code> header. Nothing is changed in that case, so it is safe to retry.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<KnowledgeBaseVersion> createKnowledgeBaseVersion(
             String knowledgeBaseReferenceId, KnowledgeBaseVersionRequest request, RequestOptions requestOptions) {
@@ -265,6 +295,7 @@ public class AsyncKnowledgeClient {
 
     /**
      * Finalize the latest knowledge base version. Required to indicate the version is complete. Will throw an exception if the latest version is not in progress.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<KnowledgeBaseVersion> finalizeKnowledgeBaseVersion(String knowledgeBaseReferenceId) {
         return this.rawClient
@@ -274,6 +305,7 @@ public class AsyncKnowledgeClient {
 
     /**
      * Finalize the latest knowledge base version. Required to indicate the version is complete. Will throw an exception if the latest version is not in progress.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<KnowledgeBaseVersion> finalizeKnowledgeBaseVersion(
             String knowledgeBaseReferenceId, FinalizeKnowledgeBaseVersionRequest request) {
@@ -284,6 +316,7 @@ public class AsyncKnowledgeClient {
 
     /**
      * Finalize the latest knowledge base version. Required to indicate the version is complete. Will throw an exception if the latest version is not in progress.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<KnowledgeBaseVersion> finalizeKnowledgeBaseVersion(
             String knowledgeBaseReferenceId,
@@ -299,6 +332,7 @@ public class AsyncKnowledgeClient {
      * <p>Progress is advisory and shown to users while a refresh runs. Each call replaces the
      * version's entire progress state - no history is kept, only the most recent value is
      * retained. Will throw an exception if the target version is not in progress.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<KnowledgeBaseVersion> updateKnowledgeBaseVersionProgress(
             String knowledgeBaseReferenceId, KnowledgeBaseVersionProgressRequest request) {
@@ -312,6 +346,7 @@ public class AsyncKnowledgeClient {
      * <p>Progress is advisory and shown to users while a refresh runs. Each call replaces the
      * version's entire progress state - no history is kept, only the most recent value is
      * retained. Will throw an exception if the target version is not in progress.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<KnowledgeBaseVersion> updateKnowledgeBaseVersionProgress(
             String knowledgeBaseReferenceId,
@@ -324,6 +359,7 @@ public class AsyncKnowledgeClient {
 
     /**
      * List all active versions for a knowledge base. Returns the most recent versions first.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<KnowledgeBaseVersionsListResponse> listKnowledgeBaseVersions(
             String knowledgeBaseReferenceId) {
@@ -334,6 +370,7 @@ public class AsyncKnowledgeClient {
 
     /**
      * List all active versions for a knowledge base. Returns the most recent versions first.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<KnowledgeBaseVersionsListResponse> listKnowledgeBaseVersions(
             String knowledgeBaseReferenceId, KnowledgeBaseVersionsListRequest request) {
@@ -344,6 +381,7 @@ public class AsyncKnowledgeClient {
 
     /**
      * List all active versions for a knowledge base. Returns the most recent versions first.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<KnowledgeBaseVersionsListResponse> listKnowledgeBaseVersions(
             String knowledgeBaseReferenceId, KnowledgeBaseVersionsListRequest request, RequestOptions requestOptions) {
@@ -354,6 +392,10 @@ public class AsyncKnowledgeClient {
 
     /**
      * Search knowledge documents
+     * <p>Pagination is limited to the first 10,000 matching knowledge documents: <code>(page + 1) * size</code>
+     * must not exceed 10,000, and a request beyond that is rejected with a 400. Narrow the filter
+     * to reach later results.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:documents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<KnowledgeDocumentsResponse> searchKnowledgeDocuments() {
         return this.rawClient.searchKnowledgeDocuments().thenApply(response -> response.body());
@@ -361,6 +403,10 @@ public class AsyncKnowledgeClient {
 
     /**
      * Search knowledge documents
+     * <p>Pagination is limited to the first 10,000 matching knowledge documents: <code>(page + 1) * size</code>
+     * must not exceed 10,000, and a request beyond that is rejected with a 400. Narrow the filter
+     * to reach later results.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:documents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<KnowledgeDocumentsResponse> searchKnowledgeDocuments(
             KnowledgeDocumentSearchRequest request) {
@@ -369,6 +415,10 @@ public class AsyncKnowledgeClient {
 
     /**
      * Search knowledge documents
+     * <p>Pagination is limited to the first 10,000 matching knowledge documents: <code>(page + 1) * size</code>
+     * must not exceed 10,000, and a request beyond that is rejected with a 400. Narrow the filter
+     * to reach later results.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:documents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<KnowledgeDocumentsResponse> searchKnowledgeDocuments(
             KnowledgeDocumentSearchRequest request, RequestOptions requestOptions) {
@@ -382,6 +432,7 @@ public class AsyncKnowledgeClient {
      * This API maintains document version history. If for the same reference ID none of the `title`, `text`, `sourceUrl`, `metadata` fields
      * have changed, a new document version will not be created. The existing version will be reused.
      * &lt;/Tip&gt;</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>create:documents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<KnowledgeDocumentResponse> createKnowledgeDocument(
             String knowledgeBaseReferenceId, KnowledgeDocumentRequest request) {
@@ -397,6 +448,7 @@ public class AsyncKnowledgeClient {
      * This API maintains document version history. If for the same reference ID none of the `title`, `text`, `sourceUrl`, `metadata` fields
      * have changed, a new document version will not be created. The existing version will be reused.
      * &lt;/Tip&gt;</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>create:documents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<KnowledgeDocumentResponse> createKnowledgeDocument(
             String knowledgeBaseReferenceId, KnowledgeDocumentRequest request, RequestOptions requestOptions) {
@@ -408,6 +460,7 @@ public class AsyncKnowledgeClient {
     /**
      * Delete knowledge document from a specific version.
      * Requires an existing knowledge base with an in progress version of type PARTIAL. Will throw an exception if the version is not in progress.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>delete:documents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<Void> deleteKnowledgeDocument(
             String knowledgeBaseReferenceId, String knowledgeDocumentReferenceId, KnowledgeDeleteRequest request) {
@@ -419,6 +472,7 @@ public class AsyncKnowledgeClient {
     /**
      * Delete knowledge document from a specific version.
      * Requires an existing knowledge base with an in progress version of type PARTIAL. Will throw an exception if the version is not in progress.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>delete:documents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<Void> deleteKnowledgeDocument(
             String knowledgeBaseReferenceId,
@@ -433,6 +487,7 @@ public class AsyncKnowledgeClient {
 
     /**
      * Get a knowledge document by its supplied version and document IDs. Response includes document content in markdown format.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:documents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<KnowledgeDocumentResponse> getKnowledgeDocument(
             String knowledgeBaseVersionReferenceId,
@@ -445,6 +500,7 @@ public class AsyncKnowledgeClient {
 
     /**
      * Get a knowledge document by its supplied version and document IDs. Response includes document content in markdown format.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:documents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<KnowledgeDocumentResponse> getKnowledgeDocument(
             String knowledgeBaseVersionReferenceId,
@@ -462,6 +518,7 @@ public class AsyncKnowledgeClient {
      * <p>For any changes in document content see the <code>createKnowledgeBaseVersion</code> and <code>createKnowledgeDocument</code> endpoints.</p>
      * <p>The <code>knowledgeBaseAppId</code> field can be provided to update a knowledge document in a knowledge base owned by a different app.
      * All other fields will overwrite the existing value on the knowledge document only if provided.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:documents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<KnowledgeDocumentResponse> patchKnowledgeDocument(
             String knowledgeBaseReferenceId, String knowledgeDocumentReferenceId) {
@@ -475,6 +532,7 @@ public class AsyncKnowledgeClient {
      * <p>For any changes in document content see the <code>createKnowledgeBaseVersion</code> and <code>createKnowledgeDocument</code> endpoints.</p>
      * <p>The <code>knowledgeBaseAppId</code> field can be provided to update a knowledge document in a knowledge base owned by a different app.
      * All other fields will overwrite the existing value on the knowledge document only if provided.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:documents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<KnowledgeDocumentResponse> patchKnowledgeDocument(
             String knowledgeBaseReferenceId,
@@ -490,6 +548,7 @@ public class AsyncKnowledgeClient {
      * <p>For any changes in document content see the <code>createKnowledgeBaseVersion</code> and <code>createKnowledgeDocument</code> endpoints.</p>
      * <p>The <code>knowledgeBaseAppId</code> field can be provided to update a knowledge document in a knowledge base owned by a different app.
      * All other fields will overwrite the existing value on the knowledge document only if provided.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:documents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<KnowledgeDocumentResponse> patchKnowledgeDocument(
             String knowledgeBaseReferenceId,

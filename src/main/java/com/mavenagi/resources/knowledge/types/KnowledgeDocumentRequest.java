@@ -44,7 +44,7 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
 
     private final Optional<String> content;
 
-    private final Optional<Map<String, String>> metadata;
+    private final Optional<Map<String, KnowledgeDocumentMetadataValue>> metadata;
 
     private final Optional<OffsetDateTime> createdAt;
 
@@ -64,7 +64,7 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
             String title,
             Optional<EntityIdWithoutAgent> assetId,
             Optional<String> content,
-            Optional<Map<String, String>> metadata,
+            Optional<Map<String, KnowledgeDocumentMetadataValue>> metadata,
             Optional<OffsetDateTime> createdAt,
             Optional<OffsetDateTime> updatedAt,
             Optional<Set<ScopedEntity>> relevantEntities,
@@ -178,11 +178,16 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
      * @return Set of 16 key-value pairs that can be attached to the knowledge document. This can be useful
      * for storing additional information about the object in a structured format, and querying for
      * objects via API or the dashboard.
-     * <p>Keys are strings with a maximum length of 64 characters. Values are strings with a maximum
-     * length of 512 characters.</p>
+     * <p>Keys are strings with a maximum length of 64 characters. A value is a string, or a list of up
+     * to 100 strings for a document with several values under one key (for example the states it
+     * applies to). A list is a set: it is stored sorted and without duplicates, so reordering it
+     * doesn't change the document. Each string has a maximum length of 512 characters.</p>
+     * <p>A charter document filter treats a list as &quot;contains&quot;: <code>EQ</code> and <code>IN</code> match when any value in
+     * the list matches, and <code>NEQ</code> and <code>NOT_IN</code> match when none does. An empty list is the same as
+     * no value.</p>
      */
     @JsonProperty("metadata")
-    public Optional<Map<String, String>> getMetadata() {
+    public Optional<Map<String, KnowledgeDocumentMetadataValue>> getMetadata() {
         return metadata;
     }
 
@@ -361,12 +366,17 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
          * <p>Set of 16 key-value pairs that can be attached to the knowledge document. This can be useful
          * for storing additional information about the object in a structured format, and querying for
          * objects via API or the dashboard.</p>
-         * <p>Keys are strings with a maximum length of 64 characters. Values are strings with a maximum
-         * length of 512 characters.</p>
+         * <p>Keys are strings with a maximum length of 64 characters. A value is a string, or a list of up
+         * to 100 strings for a document with several values under one key (for example the states it
+         * applies to). A list is a set: it is stored sorted and without duplicates, so reordering it
+         * doesn't change the document. Each string has a maximum length of 512 characters.</p>
+         * <p>A charter document filter treats a list as &quot;contains&quot;: <code>EQ</code> and <code>IN</code> match when any value in
+         * the list matches, and <code>NEQ</code> and <code>NOT_IN</code> match when none does. An empty list is the same as
+         * no value.</p>
          */
-        _FinalStage metadata(Optional<Map<String, String>> metadata);
+        _FinalStage metadata(Optional<Map<String, KnowledgeDocumentMetadataValue>> metadata);
 
-        _FinalStage metadata(Map<String, String> metadata);
+        _FinalStage metadata(Map<String, KnowledgeDocumentMetadataValue> metadata);
 
         /**
          * <p>The time at which this document was created.</p>
@@ -415,7 +425,7 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
 
         private Optional<OffsetDateTime> createdAt = Optional.empty();
 
-        private Optional<Map<String, String>> metadata = Optional.empty();
+        private Optional<Map<String, KnowledgeDocumentMetadataValue>> metadata = Optional.empty();
 
         private Optional<String> content = Optional.empty();
 
@@ -575,12 +585,17 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
          * <p>Set of 16 key-value pairs that can be attached to the knowledge document. This can be useful
          * for storing additional information about the object in a structured format, and querying for
          * objects via API or the dashboard.</p>
-         * <p>Keys are strings with a maximum length of 64 characters. Values are strings with a maximum
-         * length of 512 characters.</p>
+         * <p>Keys are strings with a maximum length of 64 characters. A value is a string, or a list of up
+         * to 100 strings for a document with several values under one key (for example the states it
+         * applies to). A list is a set: it is stored sorted and without duplicates, so reordering it
+         * doesn't change the document. Each string has a maximum length of 512 characters.</p>
+         * <p>A charter document filter treats a list as &quot;contains&quot;: <code>EQ</code> and <code>IN</code> match when any value in
+         * the list matches, and <code>NEQ</code> and <code>NOT_IN</code> match when none does. An empty list is the same as
+         * no value.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage metadata(Map<String, String> metadata) {
+        public _FinalStage metadata(Map<String, KnowledgeDocumentMetadataValue> metadata) {
             this.metadata = Optional.ofNullable(metadata);
             return this;
         }
@@ -589,12 +604,17 @@ public final class KnowledgeDocumentRequest implements IBaseKnowledgeDocument {
          * <p>Set of 16 key-value pairs that can be attached to the knowledge document. This can be useful
          * for storing additional information about the object in a structured format, and querying for
          * objects via API or the dashboard.</p>
-         * <p>Keys are strings with a maximum length of 64 characters. Values are strings with a maximum
-         * length of 512 characters.</p>
+         * <p>Keys are strings with a maximum length of 64 characters. A value is a string, or a list of up
+         * to 100 strings for a document with several values under one key (for example the states it
+         * applies to). A list is a set: it is stored sorted and without duplicates, so reordering it
+         * doesn't change the document. Each string has a maximum length of 512 characters.</p>
+         * <p>A charter document filter treats a list as &quot;contains&quot;: <code>EQ</code> and <code>IN</code> match when any value in
+         * the list matches, and <code>NEQ</code> and <code>NOT_IN</code> match when none does. An empty list is the same as
+         * no value.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "metadata", nulls = Nulls.SKIP)
-        public _FinalStage metadata(Optional<Map<String, String>> metadata) {
+        public _FinalStage metadata(Optional<Map<String, KnowledgeDocumentMetadataValue>> metadata) {
             this.metadata = metadata;
             return this;
         }

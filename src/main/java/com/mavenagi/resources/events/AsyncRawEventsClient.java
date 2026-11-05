@@ -46,14 +46,18 @@ public class AsyncRawEventsClient {
     }
 
     /**
-     * Create a new event. Events are immutable, so a create that reuses the <code>referenceId</code> of an existing event in the same app is rejected with a 409 and leaves that event unchanged.
+     * Create a new event. Events are immutable, so a create that reuses the <code>referenceId</code> of an
+     * existing event in the same app is rejected with a 409 and leaves that event unchanged.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>ask:agent</code>. An event with <code>executionMode: SIMULATION</code> also needs <code>create:simulations</code>.&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<EventResponse>> create(EventRequest request) {
         return create(request, null);
     }
 
     /**
-     * Create a new event. Events are immutable, so a create that reuses the <code>referenceId</code> of an existing event in the same app is rejected with a 409 and leaves that event unchanged.
+     * Create a new event. Events are immutable, so a create that reuses the <code>referenceId</code> of an
+     * existing event in the same app is rejected with a 409 and leaves that event unchanged.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>ask:agent</code>. An event with <code>executionMode: SIMULATION</code> also needs <code>create:simulations</code>.&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<EventResponse>> create(
             EventRequest request, RequestOptions requestOptions) {
@@ -142,21 +146,33 @@ public class AsyncRawEventsClient {
     }
 
     /**
-     * Search events
+     * Search events.
+     * <p>Pagination is limited to the first 10,000 matching events: <code>(page + 1) * size</code> must not
+     * exceed 10,000, and a request beyond that is rejected with a 400. Narrow the filter to reach
+     * later results.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:events</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<EventsSearchResponse>> search() {
         return search(EventsSearchRequest.builder().build());
     }
 
     /**
-     * Search events
+     * Search events.
+     * <p>Pagination is limited to the first 10,000 matching events: <code>(page + 1) * size</code> must not
+     * exceed 10,000, and a request beyond that is rejected with a 400. Narrow the filter to reach
+     * later results.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:events</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<EventsSearchResponse>> search(EventsSearchRequest request) {
         return search(request, null);
     }
 
     /**
-     * Search events
+     * Search events.
+     * <p>Pagination is limited to the first 10,000 matching events: <code>(page + 1) * size</code> must not
+     * exceed 10,000, and a request beyond that is rejected with a 400. Narrow the filter to reach
+     * later results.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:events</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<EventsSearchResponse>> search(
             EventsSearchRequest request, RequestOptions requestOptions) {
@@ -247,6 +263,7 @@ public class AsyncRawEventsClient {
 
     /**
      * Retrieve details of a specific Event item by its ID.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:events</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<EventResponse>> get(String eventId, EventGetRequest request) {
         return get(eventId, request, null);
@@ -254,6 +271,7 @@ public class AsyncRawEventsClient {
 
     /**
      * Retrieve details of a specific Event item by its ID.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:events</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<EventResponse>> get(
             String eventId, EventGetRequest request, RequestOptions requestOptions) {
@@ -336,7 +354,8 @@ public class AsyncRawEventsClient {
 
     /**
      * Export events to a CSV file.
-     * <p>This will output a summary of each event that matches the supplied filter. A maximum of 10,000 events can be exported at a time. For most use cases it is recommended to use the search API instead and convert the JSON response to your desired format. The CSV format may change over time and should not be relied upon by code consumers.</p>
+     * <p>This will output a summary of each event that matches the supplied filter. Only the first 10,000 matching events can be exported: <code>(page + 1) * size</code> must not exceed 10,000, and a request beyond that is rejected with a 400. For most use cases it is recommended to use the search API instead and convert the JSON response to your desired format. The CSV format may change over time and should not be relied upon by code consumers.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:events</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<InputStream>> export() {
         return export(EventsSearchRequest.builder().build());
@@ -344,7 +363,8 @@ public class AsyncRawEventsClient {
 
     /**
      * Export events to a CSV file.
-     * <p>This will output a summary of each event that matches the supplied filter. A maximum of 10,000 events can be exported at a time. For most use cases it is recommended to use the search API instead and convert the JSON response to your desired format. The CSV format may change over time and should not be relied upon by code consumers.</p>
+     * <p>This will output a summary of each event that matches the supplied filter. Only the first 10,000 matching events can be exported: <code>(page + 1) * size</code> must not exceed 10,000, and a request beyond that is rejected with a 400. For most use cases it is recommended to use the search API instead and convert the JSON response to your desired format. The CSV format may change over time and should not be relied upon by code consumers.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:events</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<InputStream>> export(EventsSearchRequest request) {
         return export(request, null);
@@ -352,7 +372,8 @@ public class AsyncRawEventsClient {
 
     /**
      * Export events to a CSV file.
-     * <p>This will output a summary of each event that matches the supplied filter. A maximum of 10,000 events can be exported at a time. For most use cases it is recommended to use the search API instead and convert the JSON response to your desired format. The CSV format may change over time and should not be relied upon by code consumers.</p>
+     * <p>This will output a summary of each event that matches the supplied filter. Only the first 10,000 matching events can be exported: <code>(page + 1) * size</code> must not exceed 10,000, and a request beyond that is rejected with a 400. For most use cases it is recommended to use the search API instead and convert the JSON response to your desired format. The CSV format may change over time and should not be relied upon by code consumers.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:events</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<InputStream>> export(
             EventsSearchRequest request, RequestOptions requestOptions) {

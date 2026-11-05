@@ -25,10 +25,8 @@ import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = AskRequest.Builder.class)
-public final class AskRequest {
+public final class AskRequest implements IAskRequestBase {
     private final EntityIdBase conversationMessageId;
-
-    private final EntityIdBase userId;
 
     private final Optional<AskType> type;
 
@@ -44,11 +42,12 @@ public final class AskRequest {
 
     private final Optional<Map<String, String>> appMetadata;
 
+    private final EntityIdBase userId;
+
     private final Map<String, Object> additionalProperties;
 
     private AskRequest(
             EntityIdBase conversationMessageId,
-            EntityIdBase userId,
             Optional<AskType> type,
             Optional<String> text,
             Optional<TextFormat> textFormat,
@@ -56,9 +55,9 @@ public final class AskRequest {
             Optional<Map<String, String>> transientData,
             Optional<String> timezone,
             Optional<Map<String, String>> appMetadata,
+            EntityIdBase userId,
             Map<String, Object> additionalProperties) {
         this.conversationMessageId = conversationMessageId;
-        this.userId = userId;
         this.type = type;
         this.text = text;
         this.textFormat = textFormat;
@@ -66,6 +65,7 @@ public final class AskRequest {
         this.transientData = transientData;
         this.timezone = timezone;
         this.appMetadata = appMetadata;
+        this.userId = userId;
         this.additionalProperties = additionalProperties;
     }
 
@@ -73,16 +73,9 @@ public final class AskRequest {
      * @return Externally supplied ID to uniquely identify this message within the conversation. If a message with this ID already exists it will be reused and will not be updated.
      */
     @JsonProperty("conversationMessageId")
+    @java.lang.Override
     public EntityIdBase getConversationMessageId() {
         return conversationMessageId;
-    }
-
-    /**
-     * @return Externally supplied ID to uniquely identify the user that created this message
-     */
-    @JsonProperty("userId")
-    public EntityIdBase getUserId() {
-        return userId;
     }
 
     /**
@@ -91,6 +84,7 @@ public final class AskRequest {
      * opener, or PROACTIVE for a message the user did not prompt.
      */
     @JsonProperty("type")
+    @java.lang.Override
     public Optional<AskType> getType() {
         return type;
     }
@@ -103,6 +97,7 @@ public final class AskRequest {
      * are unaffected.)
      */
     @JsonProperty("text")
+    @java.lang.Override
     public Optional<String> getText() {
         return text;
     }
@@ -129,6 +124,7 @@ public final class AskRequest {
      * nothing to shape into the requested schema — the round returns the manual as <code>text</code> alone.</p>
      */
     @JsonProperty("textFormat")
+    @java.lang.Override
     public Optional<TextFormat> getTextFormat() {
         return textFormat;
     }
@@ -138,6 +134,7 @@ public final class AskRequest {
      * Non-image attachments can be stored and downloaded from the API but will not be sent to the LLM.
      */
     @JsonProperty("attachments")
+    @java.lang.Override
     public Optional<List<AttachmentRequest>> getAttachments() {
         return attachments;
     }
@@ -146,6 +143,7 @@ public final class AskRequest {
      * @return Transient data which the Maven platform will not persist. This data will only be forwarded to actions taken by this ask request. For example, one may put in user tokens as transient data.
      */
     @JsonProperty("transientData")
+    @java.lang.Override
     public Optional<Map<String, String>> getTransientData() {
         return transientData;
     }
@@ -154,6 +152,7 @@ public final class AskRequest {
      * @return IANA timezone identifier (e.g. &quot;America/New_York&quot;, &quot;Europe/London&quot;) to be used for time-based operations in the conversation.
      */
     @JsonProperty("timezone")
+    @java.lang.Override
     public Optional<String> getTimezone() {
         return timezone;
     }
@@ -167,8 +166,17 @@ public final class AskRequest {
      * with a maximum length of 500 characters each.
      */
     @JsonProperty("appMetadata")
+    @java.lang.Override
     public Optional<Map<String, String>> getAppMetadata() {
         return appMetadata;
+    }
+
+    /**
+     * @return Externally supplied ID to uniquely identify the user that created this message
+     */
+    @JsonProperty("userId")
+    public EntityIdBase getUserId() {
+        return userId;
     }
 
     @java.lang.Override
@@ -184,28 +192,28 @@ public final class AskRequest {
 
     private boolean equalTo(AskRequest other) {
         return conversationMessageId.equals(other.conversationMessageId)
-                && userId.equals(other.userId)
                 && type.equals(other.type)
                 && text.equals(other.text)
                 && textFormat.equals(other.textFormat)
                 && attachments.equals(other.attachments)
                 && transientData.equals(other.transientData)
                 && timezone.equals(other.timezone)
-                && appMetadata.equals(other.appMetadata);
+                && appMetadata.equals(other.appMetadata)
+                && userId.equals(other.userId);
     }
 
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
                 this.conversationMessageId,
-                this.userId,
                 this.type,
                 this.text,
                 this.textFormat,
                 this.attachments,
                 this.transientData,
                 this.timezone,
-                this.appMetadata);
+                this.appMetadata,
+                this.userId);
     }
 
     @java.lang.Override
@@ -344,7 +352,6 @@ public final class AskRequest {
         @java.lang.Override
         public Builder from(AskRequest other) {
             conversationMessageId(other.getConversationMessageId());
-            userId(other.getUserId());
             type(other.getType());
             text(other.getText());
             textFormat(other.getTextFormat());
@@ -352,6 +359,7 @@ public final class AskRequest {
             transientData(other.getTransientData());
             timezone(other.getTimezone());
             appMetadata(other.getAppMetadata());
+            userId(other.getUserId());
             return this;
         }
 
@@ -584,7 +592,6 @@ public final class AskRequest {
         public AskRequest build() {
             return new AskRequest(
                     conversationMessageId,
-                    userId,
                     type,
                     text,
                     textFormat,
@@ -592,6 +599,7 @@ public final class AskRequest {
                     transientData,
                     timezone,
                     appMetadata,
+                    userId,
                     additionalProperties);
         }
     }

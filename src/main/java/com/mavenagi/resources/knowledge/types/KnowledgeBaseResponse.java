@@ -155,10 +155,9 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
     }
 
     /**
-     * @return The status of the most recent version of the knowledge base.
-     * The <code>activeVersionId</code> will only be populated if this status is <code>SUCCEEDED</code>.
-     * Use the <code>listKnowledgeBaseVersions</code> endpoint to get the full list of versions.
-     * <p>Shown in Agent Designer as &quot;Refresh status&quot;.</p>
+     * @return Deprecated. Do not use this field: it is not the status of the most recent version and is
+     * often inaccurate. To get the status of the latest refresh, call
+     * <code>listKnowledgeBaseVersions</code> and read the first version.
      */
     @JsonProperty("mostRecentVersionStatus")
     public KnowledgeBaseVersionStatus getMostRecentVersionStatus() {
@@ -343,10 +342,9 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
 
     public interface MostRecentVersionStatusStage {
         /**
-         * <p>The status of the most recent version of the knowledge base.
-         * The <code>activeVersionId</code> will only be populated if this status is <code>SUCCEEDED</code>.
-         * Use the <code>listKnowledgeBaseVersions</code> endpoint to get the full list of versions.</p>
-         * <p>Shown in Agent Designer as &quot;Refresh status&quot;.</p>
+         * <p>Deprecated. Do not use this field: it is not the status of the most recent version and is
+         * often inaccurate. To get the status of the latest refresh, call
+         * <code>listKnowledgeBaseVersions</code> and read the first version.</p>
          */
         TypeStage mostRecentVersionStatus(@NotNull KnowledgeBaseVersionStatus mostRecentVersionStatus);
     }
@@ -571,14 +569,12 @@ public final class KnowledgeBaseResponse implements IKnowledgeBaseProperties {
         }
 
         /**
-         * <p>The status of the most recent version of the knowledge base.
-         * The <code>activeVersionId</code> will only be populated if this status is <code>SUCCEEDED</code>.
-         * Use the <code>listKnowledgeBaseVersions</code> endpoint to get the full list of versions.</p>
-         * <p>Shown in Agent Designer as &quot;Refresh status&quot;.</p>
-         * <p>The status of the most recent version of the knowledge base.
-         * The <code>activeVersionId</code> will only be populated if this status is <code>SUCCEEDED</code>.
-         * Use the <code>listKnowledgeBaseVersions</code> endpoint to get the full list of versions.</p>
-         * <p>Shown in Agent Designer as &quot;Refresh status&quot;.</p>
+         * <p>Deprecated. Do not use this field: it is not the status of the most recent version and is
+         * often inaccurate. To get the status of the latest refresh, call
+         * <code>listKnowledgeBaseVersions</code> and read the first version.</p>
+         * <p>Deprecated. Do not use this field: it is not the status of the most recent version and is
+         * often inaccurate. To get the status of the latest refresh, call
+         * <code>listKnowledgeBaseVersions</code> and read the first version.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override

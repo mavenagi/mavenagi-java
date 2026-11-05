@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
+import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -19,19 +20,22 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ServerEventBase.Builder.class)
 public final class ServerEventBase implements IServerEventBase {
-    private final String eventId;
+    private final OffsetDateTime timestamp;
 
     private final Map<String, Object> additionalProperties;
 
-    private ServerEventBase(String eventId, Map<String, Object> additionalProperties) {
-        this.eventId = eventId;
+    private ServerEventBase(OffsetDateTime timestamp, Map<String, Object> additionalProperties) {
+        this.timestamp = timestamp;
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("eventId")
+    /**
+     * @return When the server sent the event.
+     */
+    @JsonProperty("timestamp")
     @java.lang.Override
-    public String getEventId() {
-        return eventId;
+    public OffsetDateTime getTimestamp() {
+        return timestamp;
     }
 
     @java.lang.Override
@@ -46,12 +50,12 @@ public final class ServerEventBase implements IServerEventBase {
     }
 
     private boolean equalTo(ServerEventBase other) {
-        return eventId.equals(other.eventId);
+        return timestamp.equals(other.timestamp);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.eventId);
+        return Objects.hash(this.timestamp);
     }
 
     @java.lang.Override
@@ -59,12 +63,15 @@ public final class ServerEventBase implements IServerEventBase {
         return ObjectMappers.stringify(this);
     }
 
-    public static EventIdStage builder() {
+    public static TimestampStage builder() {
         return new Builder();
     }
 
-    public interface EventIdStage {
-        _FinalStage eventId(@NotNull String eventId);
+    public interface TimestampStage {
+        /**
+         * <p>When the server sent the event.</p>
+         */
+        _FinalStage timestamp(@NotNull OffsetDateTime timestamp);
 
         Builder from(ServerEventBase other);
     }
@@ -74,8 +81,8 @@ public final class ServerEventBase implements IServerEventBase {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements EventIdStage, _FinalStage {
-        private String eventId;
+    public static final class Builder implements TimestampStage, _FinalStage {
+        private OffsetDateTime timestamp;
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -84,20 +91,25 @@ public final class ServerEventBase implements IServerEventBase {
 
         @java.lang.Override
         public Builder from(ServerEventBase other) {
-            eventId(other.getEventId());
+            timestamp(other.getTimestamp());
             return this;
         }
 
+        /**
+         * <p>When the server sent the event.</p>
+         * <p>When the server sent the event.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
-        @JsonSetter("eventId")
-        public _FinalStage eventId(@NotNull String eventId) {
-            this.eventId = Objects.requireNonNull(eventId, "eventId must not be null");
+        @JsonSetter("timestamp")
+        public _FinalStage timestamp(@NotNull OffsetDateTime timestamp) {
+            this.timestamp = Objects.requireNonNull(timestamp, "timestamp must not be null");
             return this;
         }
 
         @java.lang.Override
         public ServerEventBase build() {
-            return new ServerEventBase(eventId, additionalProperties);
+            return new ServerEventBase(timestamp, additionalProperties);
         }
     }
 }

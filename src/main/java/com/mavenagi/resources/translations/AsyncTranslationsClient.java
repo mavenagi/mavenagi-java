@@ -28,6 +28,7 @@ public class AsyncTranslationsClient {
 
     /**
      * Translate text from one language to another
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>ask:agent</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<TranslationResponse> translate(TranslationRequest request) {
         return this.rawClient.translate(request).thenApply(response -> response.body());
@@ -35,6 +36,7 @@ public class AsyncTranslationsClient {
 
     /**
      * Translate text from one language to another
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>ask:agent</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<TranslationResponse> translate(TranslationRequest request, RequestOptions requestOptions) {
         return this.rawClient.translate(request, requestOptions).thenApply(response -> response.body());

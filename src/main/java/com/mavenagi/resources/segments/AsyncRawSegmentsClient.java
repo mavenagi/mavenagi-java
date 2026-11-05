@@ -46,14 +46,35 @@ public class AsyncRawSegmentsClient {
         this.clientOptions = clientOptions;
     }
 
+    /**
+     * Search segments.
+     * <p>Pagination is limited to the first 10,000 matching segments: <code>(page + 1) * size</code> must not
+     * exceed 10,000, and a request beyond that is rejected with a 400. Narrow the filter to reach
+     * later results.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
+     */
     public CompletableFuture<MavenAGIHttpResponse<SegmentsSearchResponse>> search() {
         return search(SegmentsSearchRequest.builder().build());
     }
 
+    /**
+     * Search segments.
+     * <p>Pagination is limited to the first 10,000 matching segments: <code>(page + 1) * size</code> must not
+     * exceed 10,000, and a request beyond that is rejected with a 400. Narrow the filter to reach
+     * later results.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
+     */
     public CompletableFuture<MavenAGIHttpResponse<SegmentsSearchResponse>> search(SegmentsSearchRequest request) {
         return search(request, null);
     }
 
+    /**
+     * Search segments.
+     * <p>Pagination is limited to the first 10,000 matching segments: <code>(page + 1) * size</code> must not
+     * exceed 10,000, and a request beyond that is rejected with a 400. Narrow the filter to reach
+     * later results.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
+     */
     public CompletableFuture<MavenAGIHttpResponse<SegmentsSearchResponse>> search(
             SegmentsSearchRequest request, RequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
@@ -143,6 +164,7 @@ public class AsyncRawSegmentsClient {
 
     /**
      * Update a segment or create it if it doesn't exist.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<SegmentResponse>> createOrUpdate(SegmentRequest request) {
         return createOrUpdate(request, null);
@@ -150,6 +172,7 @@ public class AsyncRawSegmentsClient {
 
     /**
      * Update a segment or create it if it doesn't exist.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<SegmentResponse>> createOrUpdate(
             SegmentRequest request, RequestOptions requestOptions) {
@@ -239,6 +262,7 @@ public class AsyncRawSegmentsClient {
 
     /**
      * Get a segment by its supplied ID
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<SegmentResponse>> get(String segmentReferenceId) {
         return get(segmentReferenceId, SegmentGetRequest.builder().build());
@@ -246,6 +270,7 @@ public class AsyncRawSegmentsClient {
 
     /**
      * Get a segment by its supplied ID
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<SegmentResponse>> get(
             String segmentReferenceId, SegmentGetRequest request) {
@@ -254,6 +279,7 @@ public class AsyncRawSegmentsClient {
 
     /**
      * Get a segment by its supplied ID
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<SegmentResponse>> get(
             String segmentReferenceId, SegmentGetRequest request, RequestOptions requestOptions) {
@@ -341,6 +367,7 @@ public class AsyncRawSegmentsClient {
      * Update mutable segment fields
      * <p>The <code>appId</code> field can be provided to update a segment owned by a different app.
      * All other fields will overwrite the existing value on the segment only if provided.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<SegmentResponse>> patch(String segmentReferenceId) {
         return patch(segmentReferenceId, SegmentPatchRequest.builder().build());
@@ -350,6 +377,7 @@ public class AsyncRawSegmentsClient {
      * Update mutable segment fields
      * <p>The <code>appId</code> field can be provided to update a segment owned by a different app.
      * All other fields will overwrite the existing value on the segment only if provided.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<SegmentResponse>> patch(
             String segmentReferenceId, SegmentPatchRequest request) {
@@ -360,6 +388,7 @@ public class AsyncRawSegmentsClient {
      * Update mutable segment fields
      * <p>The <code>appId</code> field can be provided to update a segment owned by a different app.
      * All other fields will overwrite the existing value on the segment only if provided.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<SegmentResponse>> patch(
             String segmentReferenceId, SegmentPatchRequest request, RequestOptions requestOptions) {
@@ -453,6 +482,7 @@ public class AsyncRawSegmentsClient {
      * Soft delete a segment. Only INACTIVE segments can be deleted.
      * <p>Deleted segments are excluded from search results but can still be retrieved by ID for archival purposes. Creating a segment with the same referenceId as a deleted segment reclaims it: the segment keeps its identity, and every other setting comes from the request.</p>
      * <p>Deleted segments cannot be modified.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<SegmentResponse>> delete(String segmentReferenceId) {
         return delete(segmentReferenceId, SegmentDeleteRequest.builder().build());
@@ -462,6 +492,7 @@ public class AsyncRawSegmentsClient {
      * Soft delete a segment. Only INACTIVE segments can be deleted.
      * <p>Deleted segments are excluded from search results but can still be retrieved by ID for archival purposes. Creating a segment with the same referenceId as a deleted segment reclaims it: the segment keeps its identity, and every other setting comes from the request.</p>
      * <p>Deleted segments cannot be modified.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<SegmentResponse>> delete(
             String segmentReferenceId, SegmentDeleteRequest request) {
@@ -472,6 +503,7 @@ public class AsyncRawSegmentsClient {
      * Soft delete a segment. Only INACTIVE segments can be deleted.
      * <p>Deleted segments are excluded from search results but can still be retrieved by ID for archival purposes. Creating a segment with the same referenceId as a deleted segment reclaims it: the segment keeps its identity, and every other setting comes from the request.</p>
      * <p>Deleted segments cannot be modified.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<SegmentResponse>> delete(
             String segmentReferenceId, SegmentDeleteRequest request, RequestOptions requestOptions) {

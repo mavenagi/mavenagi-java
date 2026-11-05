@@ -41,6 +41,7 @@ public class AsyncRawTranslationsClient {
 
     /**
      * Translate text from one language to another
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>ask:agent</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<TranslationResponse>> translate(TranslationRequest request) {
         return translate(request, null);
@@ -48,6 +49,7 @@ public class AsyncRawTranslationsClient {
 
     /**
      * Translate text from one language to another
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>ask:agent</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<TranslationResponse>> translate(
             TranslationRequest request, RequestOptions requestOptions) {

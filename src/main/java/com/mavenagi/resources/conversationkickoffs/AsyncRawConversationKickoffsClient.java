@@ -47,6 +47,7 @@ public class AsyncRawConversationKickoffsClient {
      * its status alone, so re-registering on every install refresh never deactivates a kickoff
      * that is already live. Use the capability APIs to activate it, and to read, search or delete
      * it afterwards.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<ConversationKickoff>> createOrUpdate(
             CreateConversationKickoffRequest request) {
@@ -61,6 +62,7 @@ public class AsyncRawConversationKickoffsClient {
      * its status alone, so re-registering on every install refresh never deactivates a kickoff
      * that is already live. Use the capability APIs to activate it, and to read, search or delete
      * it afterwards.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<ConversationKickoff>> createOrUpdate(
             CreateConversationKickoffRequest request, RequestOptions requestOptions) {

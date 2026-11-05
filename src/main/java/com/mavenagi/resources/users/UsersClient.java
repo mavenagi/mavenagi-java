@@ -33,6 +33,10 @@ public class UsersClient {
     /**
      * Search across all agent users on an agent.
      * <p>Agent users are a merged view of the users created by individual apps.</p>
+     * <p>Pagination is limited to the first 10,000 matching agent users: <code>(page + 1) * size</code> must not
+     * exceed 10,000, and a request beyond that is rejected with a 400. Narrow the filter to reach
+     * later results.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public AgentUserSearchResponse search() {
         return this.rawClient.search().body();
@@ -41,6 +45,10 @@ public class UsersClient {
     /**
      * Search across all agent users on an agent.
      * <p>Agent users are a merged view of the users created by individual apps.</p>
+     * <p>Pagination is limited to the first 10,000 matching agent users: <code>(page + 1) * size</code> must not
+     * exceed 10,000, and a request beyond that is rejected with a 400. Narrow the filter to reach
+     * later results.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public AgentUserSearchResponse search(AgentUserSearchRequest request) {
         return this.rawClient.search(request).body();
@@ -49,6 +57,10 @@ public class UsersClient {
     /**
      * Search across all agent users on an agent.
      * <p>Agent users are a merged view of the users created by individual apps.</p>
+     * <p>Pagination is limited to the first 10,000 matching agent users: <code>(page + 1) * size</code> must not
+     * exceed 10,000, and a request beyond that is rejected with a 400. Narrow the filter to reach
+     * later results.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public AgentUserSearchResponse search(AgentUserSearchRequest request, RequestOptions requestOptions) {
         return this.rawClient.search(request, requestOptions).body();
@@ -57,6 +69,7 @@ public class UsersClient {
     /**
      * Get an agent user by its supplied ID.
      * <p>Agent users are a merged view of the users created by individual apps.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public AgentUser getAgentUser(String agentUserId) {
         return this.rawClient.getAgentUser(agentUserId).body();
@@ -65,6 +78,7 @@ public class UsersClient {
     /**
      * Get an agent user by its supplied ID.
      * <p>Agent users are a merged view of the users created by individual apps.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public AgentUser getAgentUser(String agentUserId, RequestOptions requestOptions) {
         return this.rawClient.getAgentUser(agentUserId, requestOptions).body();
@@ -81,6 +95,7 @@ public class UsersClient {
      * <h3>Intelligent fields</h3>
      * <p>The agent user's intelligent field values are deleted too, and removed from their <code>INTELLIGENT_FIELD_VALUE_CHANGED</code> events; the events themselves are kept.
      * Unlike <code>DELETE /users/{userId}</code>, the wipe does not recompute the values. They can be computed again later from the user's remaining conversations, for example after the user sends another message; wipe those conversations first to prevent that.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public void deleteAgentUser(String agentUserId) {
         this.rawClient.deleteAgentUser(agentUserId).body();
@@ -97,6 +112,7 @@ public class UsersClient {
      * <h3>Intelligent fields</h3>
      * <p>The agent user's intelligent field values are deleted too, and removed from their <code>INTELLIGENT_FIELD_VALUE_CHANGED</code> events; the events themselves are kept.
      * Unlike <code>DELETE /users/{userId}</code>, the wipe does not recompute the values. They can be computed again later from the user's remaining conversations, for example after the user sends another message; wipe those conversations first to prevent that.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public void deleteAgentUser(String agentUserId, RequestOptions requestOptions) {
         this.rawClient.deleteAgentUser(agentUserId, requestOptions).body();
@@ -104,6 +120,7 @@ public class UsersClient {
 
     /**
      * Update an app user or create it if it doesn't exist.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>. A user with <code>executionMode</code> <code>SIMULATION</code> also needs <code>create:simulations</code>.&lt;/Note&gt;</p>
      */
     public AppUserResponse createOrUpdate(AppUserRequest request) {
         return this.rawClient.createOrUpdate(request).body();
@@ -111,6 +128,7 @@ public class UsersClient {
 
     /**
      * Update an app user or create it if it doesn't exist.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>. A user with <code>executionMode</code> <code>SIMULATION</code> also needs <code>create:simulations</code>.&lt;/Note&gt;</p>
      */
     public AppUserResponse createOrUpdate(AppUserRequest request, RequestOptions requestOptions) {
         return this.rawClient.createOrUpdate(request, requestOptions).body();
@@ -118,6 +136,7 @@ public class UsersClient {
 
     /**
      * Get an app user by its supplied ID
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public AppUserResponse get(String userId) {
         return this.rawClient.get(userId).body();
@@ -125,6 +144,7 @@ public class UsersClient {
 
     /**
      * Get an app user by its supplied ID
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public AppUserResponse get(String userId, UserGetRequest request) {
         return this.rawClient.get(userId, request).body();
@@ -132,6 +152,7 @@ public class UsersClient {
 
     /**
      * Get an app user by its supplied ID
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public AppUserResponse get(String userId, UserGetRequest request, RequestOptions requestOptions) {
         return this.rawClient.get(userId, request, requestOptions).body();
@@ -146,6 +167,7 @@ public class UsersClient {
      * To wipe a conversation, use <code>DELETE /conversations/{conversationId}</code>. To wipe every app's data for a user, use <code>DELETE /agentusers/{agentUserId}</code>.</p>
      * <p>If this user is linked to a user from another app, it will not be unlinked. Unlinking of users is not yet supported.</p>
      * <p>&lt;Warning&gt;This is a destructive operation and cannot be undone.&lt;/Warning&gt;</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public void delete(String userId) {
         this.rawClient.delete(userId).body();
@@ -160,6 +182,7 @@ public class UsersClient {
      * To wipe a conversation, use <code>DELETE /conversations/{conversationId}</code>. To wipe every app's data for a user, use <code>DELETE /agentusers/{agentUserId}</code>.</p>
      * <p>If this user is linked to a user from another app, it will not be unlinked. Unlinking of users is not yet supported.</p>
      * <p>&lt;Warning&gt;This is a destructive operation and cannot be undone.&lt;/Warning&gt;</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public void delete(String userId, UserDeleteRequest request) {
         this.rawClient.delete(userId, request).body();
@@ -174,6 +197,7 @@ public class UsersClient {
      * To wipe a conversation, use <code>DELETE /conversations/{conversationId}</code>. To wipe every app's data for a user, use <code>DELETE /agentusers/{agentUserId}</code>.</p>
      * <p>If this user is linked to a user from another app, it will not be unlinked. Unlinking of users is not yet supported.</p>
      * <p>&lt;Warning&gt;This is a destructive operation and cannot be undone.&lt;/Warning&gt;</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public void delete(String userId, UserDeleteRequest request, RequestOptions requestOptions) {
         this.rawClient.delete(userId, request, requestOptions).body();

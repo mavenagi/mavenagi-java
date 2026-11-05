@@ -47,6 +47,7 @@ public class ChartersClient {
      * for leaf charters as we enforce mutual exclusion among the leafs and
      * pick only the highest ranked (lowest numerical value) leaf to include in
      * the round. userRank may have gaps.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CharterResponse createOrUpdate(CharterRequest request) {
         return this.rawClient.createOrUpdate(request).body();
@@ -65,6 +66,7 @@ public class ChartersClient {
      * for leaf charters as we enforce mutual exclusion among the leafs and
      * pick only the highest ranked (lowest numerical value) leaf to include in
      * the round. userRank may have gaps.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CharterResponse createOrUpdate(CharterRequest request, RequestOptions requestOptions) {
         return this.rawClient.createOrUpdate(request, requestOptions).body();
@@ -72,6 +74,7 @@ public class ChartersClient {
 
     /**
      * Get a charter by its reference ID.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CharterResponse get(String charterReferenceId) {
         return this.rawClient.get(charterReferenceId).body();
@@ -79,6 +82,7 @@ public class ChartersClient {
 
     /**
      * Get a charter by its reference ID.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CharterResponse get(String charterReferenceId, CharterGetRequest request) {
         return this.rawClient.get(charterReferenceId, request).body();
@@ -86,6 +90,7 @@ public class ChartersClient {
 
     /**
      * Get a charter by its reference ID.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CharterResponse get(String charterReferenceId, CharterGetRequest request, RequestOptions requestOptions) {
         return this.rawClient.get(charterReferenceId, request, requestOptions).body();
@@ -107,6 +112,7 @@ public class ChartersClient {
      * <p><strong>userRank conflict resolution</strong>: When <code>userRank</code> is set to a value already held by a
      * sibling, siblings at that rank and above are shifted up by 1 (like linked list semantics).
      * The caller does not need to manage uniqueness explicitly.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CharterResponse patch(String charterReferenceId) {
         return this.rawClient.patch(charterReferenceId).body();
@@ -128,6 +134,7 @@ public class ChartersClient {
      * <p><strong>userRank conflict resolution</strong>: When <code>userRank</code> is set to a value already held by a
      * sibling, siblings at that rank and above are shifted up by 1 (like linked list semantics).
      * The caller does not need to manage uniqueness explicitly.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CharterResponse patch(String charterReferenceId, CharterPatchRequest request) {
         return this.rawClient.patch(charterReferenceId, request).body();
@@ -149,6 +156,7 @@ public class ChartersClient {
      * <p><strong>userRank conflict resolution</strong>: When <code>userRank</code> is set to a value already held by a
      * sibling, siblings at that rank and above are shifted up by 1 (like linked list semantics).
      * The caller does not need to manage uniqueness explicitly.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CharterResponse patch(
             String charterReferenceId, CharterPatchRequest request, RequestOptions requestOptions) {
@@ -162,6 +170,7 @@ public class ChartersClient {
      * soft-deleted regardless.</p>
      * <p>Deleted charters are excluded from list results but can be retrieved by ID for archival purposes.</p>
      * <p>Deleted charters cannot be modified.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CharterResponse delete(String charterReferenceId) {
         return this.rawClient.delete(charterReferenceId).body();
@@ -174,6 +183,7 @@ public class ChartersClient {
      * soft-deleted regardless.</p>
      * <p>Deleted charters are excluded from list results but can be retrieved by ID for archival purposes.</p>
      * <p>Deleted charters cannot be modified.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CharterResponse delete(String charterReferenceId, CharterDeleteRequest request) {
         return this.rawClient.delete(charterReferenceId, request).body();
@@ -186,6 +196,7 @@ public class ChartersClient {
      * soft-deleted regardless.</p>
      * <p>Deleted charters are excluded from list results but can be retrieved by ID for archival purposes.</p>
      * <p>Deleted charters cannot be modified.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CharterResponse delete(
             String charterReferenceId, CharterDeleteRequest request, RequestOptions requestOptions) {
@@ -202,6 +213,10 @@ public class ChartersClient {
      * <p>Results are ordered by the <code>sort</code> field (defaults to CreatedAt). Use <code>sortDesc</code>
      * to control direction (defaults to descending). An empty filter list is
      * equivalent to omitting the field (no filter applied).</p>
+     * <p>Pagination is limited to the first 10,000 matching charters: <code>(page + 1) * size</code> must not
+     * exceed 10,000, and a request beyond that is rejected with a 400. Narrow the filter to reach
+     * later results.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CharterSearchResponse search() {
         return this.rawClient.search().body();
@@ -215,6 +230,10 @@ public class ChartersClient {
      * <p>Results are ordered by the <code>sort</code> field (defaults to CreatedAt). Use <code>sortDesc</code>
      * to control direction (defaults to descending). An empty filter list is
      * equivalent to omitting the field (no filter applied).</p>
+     * <p>Pagination is limited to the first 10,000 matching charters: <code>(page + 1) * size</code> must not
+     * exceed 10,000, and a request beyond that is rejected with a 400. Narrow the filter to reach
+     * later results.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CharterSearchResponse search(CharterSearchRequest request) {
         return this.rawClient.search(request).body();
@@ -228,6 +247,10 @@ public class ChartersClient {
      * <p>Results are ordered by the <code>sort</code> field (defaults to CreatedAt). Use <code>sortDesc</code>
      * to control direction (defaults to descending). An empty filter list is
      * equivalent to omitting the field (no filter applied).</p>
+     * <p>Pagination is limited to the first 10,000 matching charters: <code>(page + 1) * size</code> must not
+     * exceed 10,000, and a request beyond that is rejected with a 400. Narrow the filter to reach
+     * later results.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CharterSearchResponse search(CharterSearchRequest request, RequestOptions requestOptions) {
         return this.rawClient.search(request, requestOptions).body();
@@ -241,6 +264,7 @@ public class ChartersClient {
      * <p>The list is always finite: charter hierarchies are acyclic, so a charter is never its own
      * ancestor and the walk to the root terminates.</p>
      * <p>Returns 404 if the charter does not exist or is deleted.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CharterAncestorsResponse getAncestors(String charterReferenceId) {
         return this.rawClient.getAncestors(charterReferenceId).body();
@@ -254,6 +278,7 @@ public class ChartersClient {
      * <p>The list is always finite: charter hierarchies are acyclic, so a charter is never its own
      * ancestor and the walk to the root terminates.</p>
      * <p>Returns 404 if the charter does not exist or is deleted.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CharterAncestorsResponse getAncestors(String charterReferenceId, CharterGetAncestorsRequest request) {
         return this.rawClient.getAncestors(charterReferenceId, request).body();
@@ -267,6 +292,7 @@ public class ChartersClient {
      * <p>The list is always finite: charter hierarchies are acyclic, so a charter is never its own
      * ancestor and the walk to the root terminates.</p>
      * <p>Returns 404 if the charter does not exist or is deleted.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CharterAncestorsResponse getAncestors(
             String charterReferenceId, CharterGetAncestorsRequest request, RequestOptions requestOptions) {
@@ -284,6 +310,7 @@ public class ChartersClient {
      * at mixed levels are allowed. Roots and specific parents cannot be mixed
      * in one request.</p>
      * <p>DELETED charters are never returned.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CharterListChildrenResponse listChildren(CharterListChildrenRequest request) {
         return this.rawClient.listChildren(request).body();
@@ -298,6 +325,7 @@ public class ChartersClient {
      * at mixed levels are allowed. Roots and specific parents cannot be mixed
      * in one request.</p>
      * <p>DELETED charters are never returned.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CharterListChildrenResponse listChildren(CharterListChildrenRequest request, RequestOptions requestOptions) {
         return this.rawClient.listChildren(request, requestOptions).body();

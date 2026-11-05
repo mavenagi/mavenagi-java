@@ -3,6 +3,8 @@
  */
 package com.mavenagi.resources.voiceconversations.types;
 
+import java.time.OffsetDateTime;
+
 public interface IServerEventBase {
-    String getEventId();
+    OffsetDateTime getTimestamp();
 }

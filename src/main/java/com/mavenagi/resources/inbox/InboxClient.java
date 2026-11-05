@@ -36,6 +36,10 @@ public class InboxClient {
 
     /**
      * Retrieve a paginated list of inbox items for an agent.
+     * <p>Pagination is limited to the first 10,000 matching inbox items: <code>(page + 1) * size</code> must not
+     * exceed 10,000, and a request beyond that is rejected with a 400. Narrow the filter to reach
+     * later results.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>. A search whose results include a Duplicate Documents item also needs <code>read:documents</code>.&lt;/Note&gt;</p>
      */
     public InboxSearchResponse search() {
         return this.rawClient.search().body();
@@ -43,6 +47,10 @@ public class InboxClient {
 
     /**
      * Retrieve a paginated list of inbox items for an agent.
+     * <p>Pagination is limited to the first 10,000 matching inbox items: <code>(page + 1) * size</code> must not
+     * exceed 10,000, and a request beyond that is rejected with a 400. Narrow the filter to reach
+     * later results.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>. A search whose results include a Duplicate Documents item also needs <code>read:documents</code>.&lt;/Note&gt;</p>
      */
     public InboxSearchResponse search(InboxSearchRequest request) {
         return this.rawClient.search(request).body();
@@ -50,6 +58,10 @@ public class InboxClient {
 
     /**
      * Retrieve a paginated list of inbox items for an agent.
+     * <p>Pagination is limited to the first 10,000 matching inbox items: <code>(page + 1) * size</code> must not
+     * exceed 10,000, and a request beyond that is rejected with a 400. Narrow the filter to reach
+     * later results.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>. A search whose results include a Duplicate Documents item also needs <code>read:documents</code>.&lt;/Note&gt;</p>
      */
     public InboxSearchResponse search(InboxSearchRequest request, RequestOptions requestOptions) {
         return this.rawClient.search(request, requestOptions).body();
@@ -57,6 +69,7 @@ public class InboxClient {
 
     /**
      * Update an inbox item or create it if it doesn't exist.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public InboxItem createOrUpdate(InboxItemCreateRequest request) {
         return this.rawClient.createOrUpdate(request).body();
@@ -64,6 +77,7 @@ public class InboxClient {
 
     /**
      * Update an inbox item or create it if it doesn't exist.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public InboxItem createOrUpdate(InboxItemCreateRequest request, RequestOptions requestOptions) {
         return this.rawClient.createOrUpdate(request, requestOptions).body();
@@ -73,6 +87,7 @@ public class InboxClient {
      * Update mutable inbox item fields. Only supported for custom inbox items.
      * <p>The <code>appId</code> field can be provided to update a inbox item owned by a different app.
      * All other fields will overwrite the existing value on the inbox item only if provided.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>. Patching a Duplicate Documents item also needs <code>read:documents</code>.&lt;/Note&gt;</p>
      */
     public InboxItem patch(String inboxItemId) {
         return this.rawClient.patch(inboxItemId).body();
@@ -82,6 +97,7 @@ public class InboxClient {
      * Update mutable inbox item fields. Only supported for custom inbox items.
      * <p>The <code>appId</code> field can be provided to update a inbox item owned by a different app.
      * All other fields will overwrite the existing value on the inbox item only if provided.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>. Patching a Duplicate Documents item also needs <code>read:documents</code>.&lt;/Note&gt;</p>
      */
     public InboxItem patch(String inboxItemId, InboxItemPatchRequest request) {
         return this.rawClient.patch(inboxItemId, request).body();
@@ -91,6 +107,7 @@ public class InboxClient {
      * Update mutable inbox item fields. Only supported for custom inbox items.
      * <p>The <code>appId</code> field can be provided to update a inbox item owned by a different app.
      * All other fields will overwrite the existing value on the inbox item only if provided.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>. Patching a Duplicate Documents item also needs <code>read:documents</code>.&lt;/Note&gt;</p>
      */
     public InboxItem patch(String inboxItemId, InboxItemPatchRequest request, RequestOptions requestOptions) {
         return this.rawClient.patch(inboxItemId, request, requestOptions).body();
@@ -98,6 +115,7 @@ public class InboxClient {
 
     /**
      * Update inbox item tag fields. All tags provided will overwrite the existing tags on the inbox item.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>. Updating tags on a Missing Knowledge or Duplicate Documents item also needs <code>read:agents</code>, and on a Duplicate Documents item <code>read:documents</code> too.&lt;/Note&gt;</p>
      */
     public InboxItem applyTags(String inboxItemId, InboxItemApplyTagsRequest request) {
         return this.rawClient.applyTags(inboxItemId, request).body();
@@ -105,6 +123,7 @@ public class InboxClient {
 
     /**
      * Update inbox item tag fields. All tags provided will overwrite the existing tags on the inbox item.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>. Updating tags on a Missing Knowledge or Duplicate Documents item also needs <code>read:agents</code>, and on a Duplicate Documents item <code>read:documents</code> too.&lt;/Note&gt;</p>
      */
     public InboxItem applyTags(String inboxItemId, InboxItemApplyTagsRequest request, RequestOptions requestOptions) {
         return this.rawClient.applyTags(inboxItemId, request, requestOptions).body();
@@ -112,6 +131,7 @@ public class InboxClient {
 
     /**
      * Retrieve details of a specific inbox item by its ID.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>. Getting a Duplicate Documents item also needs <code>read:documents</code>.&lt;/Note&gt;</p>
      */
     public InboxItem get(String inboxItemId, InboxItemRequest request) {
         return this.rawClient.get(inboxItemId, request).body();
@@ -119,6 +139,7 @@ public class InboxClient {
 
     /**
      * Retrieve details of a specific inbox item by its ID.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>. Getting a Duplicate Documents item also needs <code>read:documents</code>.&lt;/Note&gt;</p>
      */
     public InboxItem get(String inboxItemId, InboxItemRequest request, RequestOptions requestOptions) {
         return this.rawClient.get(inboxItemId, request, requestOptions).body();
@@ -126,6 +147,7 @@ public class InboxClient {
 
     /**
      * Retrieve a suggested fix. Includes document information if the fix is a Missing Knowledge suggestion.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>. Getting a Duplicate Documents fix also needs <code>read:documents</code>.&lt;/Note&gt;</p>
      */
     public InboxItemFix getFix(String inboxItemFixId, InboxItemFixRequest request) {
         return this.rawClient.getFix(inboxItemFixId, request).body();
@@ -133,6 +155,7 @@ public class InboxClient {
 
     /**
      * Retrieve a suggested fix. Includes document information if the fix is a Missing Knowledge suggestion.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>. Getting a Duplicate Documents fix also needs <code>read:documents</code>.&lt;/Note&gt;</p>
      */
     public InboxItemFix getFix(String inboxItemFixId, InboxItemFixRequest request, RequestOptions requestOptions) {
         return this.rawClient.getFix(inboxItemFixId, request, requestOptions).body();
@@ -140,6 +163,7 @@ public class InboxClient {
 
     /**
      * Apply a list of fixes belonging to an inbox item.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>. Applying fixes also needs <code>read:agents</code>. A Missing Knowledge fix also needs <code>create:documents</code>, and a Duplicate Documents fix also needs <code>read:documents</code>, <code>edit:documents</code> and <code>create:documents</code>.&lt;/Note&gt;</p>
      */
     public void applyFixes(String inboxItemId, ApplyFixesRequest request) {
         this.rawClient.applyFixes(inboxItemId, request).body();
@@ -147,6 +171,7 @@ public class InboxClient {
 
     /**
      * Apply a list of fixes belonging to an inbox item.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>. Applying fixes also needs <code>read:agents</code>. A Missing Knowledge fix also needs <code>create:documents</code>, and a Duplicate Documents fix also needs <code>read:documents</code>, <code>edit:documents</code> and <code>create:documents</code>.&lt;/Note&gt;</p>
      */
     public void applyFixes(String inboxItemId, ApplyFixesRequest request, RequestOptions requestOptions) {
         this.rawClient.applyFixes(inboxItemId, request, requestOptions).body();
@@ -154,6 +179,7 @@ public class InboxClient {
 
     /**
      * Ignore a specific inbox item by its ID.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public void ignore(String inboxItemId, InboxItemIgnoreRequest request) {
         this.rawClient.ignore(inboxItemId, request).body();
@@ -161,6 +187,7 @@ public class InboxClient {
 
     /**
      * Ignore a specific inbox item by its ID.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public void ignore(String inboxItemId, InboxItemIgnoreRequest request, RequestOptions requestOptions) {
         this.rawClient.ignore(inboxItemId, request, requestOptions).body();

@@ -41,14 +41,35 @@ public class RawCustomersClient {
         this.clientOptions = clientOptions;
     }
 
+    /**
+     * Search customers of an agent.
+     * <p>Pagination is limited to the first 10,000 matching customers: <code>(page + 1) * size</code> must not
+     * exceed 10,000, and a request beyond that is rejected with a 400. Narrow the filter to reach
+     * later results.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
+     */
     public MavenAGIHttpResponse<CustomersSearchResponse> search() {
         return search(CustomersSearchRequest.builder().build());
     }
 
+    /**
+     * Search customers of an agent.
+     * <p>Pagination is limited to the first 10,000 matching customers: <code>(page + 1) * size</code> must not
+     * exceed 10,000, and a request beyond that is rejected with a 400. Narrow the filter to reach
+     * later results.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
+     */
     public MavenAGIHttpResponse<CustomersSearchResponse> search(CustomersSearchRequest request) {
         return search(request, null);
     }
 
+    /**
+     * Search customers of an agent.
+     * <p>Pagination is limited to the first 10,000 matching customers: <code>(page + 1) * size</code> must not
+     * exceed 10,000, and a request beyond that is rejected with a 400. Narrow the filter to reach
+     * later results.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
+     */
     public MavenAGIHttpResponse<CustomersSearchResponse> search(
             CustomersSearchRequest request, RequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
@@ -114,6 +135,7 @@ public class RawCustomersClient {
 
     /**
      * Update a customer of an agent or create it if it doesn't exist. In case of an update, fields not provided (e.g., description, status) will be preserved.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<CustomerResponse> createOrUpdate(CustomerRequest request) {
         return createOrUpdate(request, null);
@@ -121,6 +143,7 @@ public class RawCustomersClient {
 
     /**
      * Update a customer of an agent or create it if it doesn't exist. In case of an update, fields not provided (e.g., description, status) will be preserved.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<CustomerResponse> createOrUpdate(
             CustomerRequest request, RequestOptions requestOptions) {
@@ -186,6 +209,7 @@ public class RawCustomersClient {
 
     /**
      * Get a customer by its supplied ID
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<CustomerResponse> get(String customerReferenceId) {
         return get(customerReferenceId, CustomerGetRequest.builder().build());
@@ -193,6 +217,7 @@ public class RawCustomersClient {
 
     /**
      * Get a customer by its supplied ID
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<CustomerResponse> get(String customerReferenceId, CustomerGetRequest request) {
         return get(customerReferenceId, request, null);
@@ -200,6 +225,7 @@ public class RawCustomersClient {
 
     /**
      * Get a customer by its supplied ID
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<CustomerResponse> get(
             String customerReferenceId, CustomerGetRequest request, RequestOptions requestOptions) {
@@ -263,6 +289,7 @@ public class RawCustomersClient {
      * Update mutable customer fields
      * <p>The <code>appId</code> field can be provided to update a customer owned by a different app.
      * All other fields will overwrite the existing value on the customer only if provided.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<CustomerResponse> patch(String customerReferenceId) {
         return patch(customerReferenceId, CustomerPatchRequest.builder().build());
@@ -272,6 +299,7 @@ public class RawCustomersClient {
      * Update mutable customer fields
      * <p>The <code>appId</code> field can be provided to update a customer owned by a different app.
      * All other fields will overwrite the existing value on the customer only if provided.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<CustomerResponse> patch(String customerReferenceId, CustomerPatchRequest request) {
         return patch(customerReferenceId, request, null);
@@ -281,6 +309,7 @@ public class RawCustomersClient {
      * Update mutable customer fields
      * <p>The <code>appId</code> field can be provided to update a customer owned by a different app.
      * All other fields will overwrite the existing value on the customer only if provided.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public MavenAGIHttpResponse<CustomerResponse> patch(
             String customerReferenceId, CustomerPatchRequest request, RequestOptions requestOptions) {

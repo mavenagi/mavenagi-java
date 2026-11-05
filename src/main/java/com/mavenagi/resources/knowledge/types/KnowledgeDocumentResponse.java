@@ -59,7 +59,7 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
 
     private final Optional<AttachmentResponse> asset;
 
-    private final Map<String, String> metadata;
+    private final Map<String, KnowledgeDocumentMetadataValue> metadata;
 
     private final Map<String, Object> additionalProperties;
 
@@ -79,7 +79,7 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
             Optional<KnowledgeDocumentStatus> processingStatus,
             Optional<String> content,
             Optional<AttachmentResponse> asset,
-            Map<String, String> metadata,
+            Map<String, KnowledgeDocumentMetadataValue> metadata,
             Map<String, Object> additionalProperties) {
         this.knowledgeDocumentId = knowledgeDocumentId;
         this.knowledgeBaseVersionId = knowledgeBaseVersionId;
@@ -235,10 +235,10 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
     }
 
     /**
-     * @return Metadata for the knowledge document.
+     * @return Metadata for the knowledge document. A value is a string or a list of strings.
      */
     @JsonProperty("metadata")
-    public Map<String, String> getMetadata() {
+    public Map<String, KnowledgeDocumentMetadataValue> getMetadata() {
         return metadata;
     }
 
@@ -417,13 +417,13 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
         _FinalStage asset(AttachmentResponse asset);
 
         /**
-         * <p>Metadata for the knowledge document.</p>
+         * <p>Metadata for the knowledge document. A value is a string or a list of strings.</p>
          */
-        _FinalStage metadata(Map<String, String> metadata);
+        _FinalStage metadata(Map<String, KnowledgeDocumentMetadataValue> metadata);
 
-        _FinalStage putAllMetadata(Map<String, String> metadata);
+        _FinalStage putAllMetadata(Map<String, KnowledgeDocumentMetadataValue> metadata);
 
-        _FinalStage metadata(String key, String value);
+        _FinalStage metadata(String key, KnowledgeDocumentMetadataValue value);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -447,7 +447,7 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
 
         private OffsetDateTime updatedAt;
 
-        private Map<String, String> metadata = new LinkedHashMap<>();
+        private Map<String, KnowledgeDocumentMetadataValue> metadata = new LinkedHashMap<>();
 
         private Optional<AttachmentResponse> asset = Optional.empty();
 
@@ -569,21 +569,21 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
         }
 
         /**
-         * <p>Metadata for the knowledge document.</p>
+         * <p>Metadata for the knowledge document. A value is a string or a list of strings.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage metadata(String key, String value) {
+        public _FinalStage metadata(String key, KnowledgeDocumentMetadataValue value) {
             this.metadata.put(key, value);
             return this;
         }
 
         /**
-         * <p>Metadata for the knowledge document.</p>
+         * <p>Metadata for the knowledge document. A value is a string or a list of strings.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage putAllMetadata(Map<String, String> metadata) {
+        public _FinalStage putAllMetadata(Map<String, KnowledgeDocumentMetadataValue> metadata) {
             if (metadata != null) {
                 this.metadata.putAll(metadata);
             }
@@ -591,11 +591,11 @@ public final class KnowledgeDocumentResponse implements IKnowledgeDocumentSearch
         }
 
         /**
-         * <p>Metadata for the knowledge document.</p>
+         * <p>Metadata for the knowledge document. A value is a string or a list of strings.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "metadata", nulls = Nulls.SKIP)
-        public _FinalStage metadata(Map<String, String> metadata) {
+        public _FinalStage metadata(Map<String, KnowledgeDocumentMetadataValue> metadata) {
             this.metadata.clear();
             if (metadata != null) {
                 this.metadata.putAll(metadata);

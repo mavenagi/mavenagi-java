@@ -92,7 +92,7 @@ public final class IntelligentFieldPatchRequest {
     }
 
     /**
-     * @return Updated enum options for fields that constrain the LLM to a finite set. Omit to leave unchanged. The new list must be a superset of the existing options (add-only; removals are rejected).
+     * @return Updated enum options for fields that constrain the LLM to a finite set. Omit to leave unchanged. The list replaces the existing options: an option left out is removed and is no longer offered to the LLM, while values already computed with it are kept. A field that has options must keep at least one, so an empty list is rejected. An option kept from the existing list must keep its <code>label</code>; changing it is rejected.
      */
     @JsonProperty("enumOptions")
     public Optional<List<EnumOption>> getEnumOptions() {
@@ -232,7 +232,7 @@ public final class IntelligentFieldPatchRequest {
         }
 
         /**
-         * <p>Updated enum options for fields that constrain the LLM to a finite set. Omit to leave unchanged. The new list must be a superset of the existing options (add-only; removals are rejected).</p>
+         * <p>Updated enum options for fields that constrain the LLM to a finite set. Omit to leave unchanged. The list replaces the existing options: an option left out is removed and is no longer offered to the LLM, while values already computed with it are kept. A field that has options must keep at least one, so an empty list is rejected. An option kept from the existing list must keep its <code>label</code>; changing it is rejected.</p>
          */
         @JsonSetter(value = "enumOptions", nulls = Nulls.SKIP)
         public Builder enumOptions(Optional<List<EnumOption>> enumOptions) {

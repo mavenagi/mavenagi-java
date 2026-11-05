@@ -50,6 +50,7 @@ public class AsyncRawAnalyticsClient {
 
     /**
      * Retrieves structured conversation data formatted as a table, allowing users to group, filter, and define specific metrics to display as columns.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:conversations</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<ConversationTableResponse>> getConversationTable(
             ConversationTableRequest request) {
@@ -58,6 +59,7 @@ public class AsyncRawAnalyticsClient {
 
     /**
      * Retrieves structured conversation data formatted as a table, allowing users to group, filter, and define specific metrics to display as columns.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:conversations</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<ConversationTableResponse>> getConversationTable(
             ConversationTableRequest request, RequestOptions requestOptions) {
@@ -149,6 +151,7 @@ public class AsyncRawAnalyticsClient {
 
     /**
      * Fetches conversation data visualized in a chart format. Supported chart types include pie chart, date histogram, and stacked bar charts.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:conversations</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<ChartResponse>> getConversationChart(
             ConversationChartRequest request) {
@@ -157,6 +160,7 @@ public class AsyncRawAnalyticsClient {
 
     /**
      * Fetches conversation data visualized in a chart format. Supported chart types include pie chart, date histogram, and stacked bar charts.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:conversations</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<ChartResponse>> getConversationChart(
             ConversationChartRequest request, RequestOptions requestOptions) {
@@ -248,6 +252,7 @@ public class AsyncRawAnalyticsClient {
     /**
      * Export the conversation analytics table to a CSV file.
      * <p>This outputs the current table view defined by the request. For most programmatic use cases, prefer <code>getConversationTable</code> and format client-side. The CSV format may change and should not be relied upon by code consumers. A maximum of 10,000 rows can be exported at a time.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:conversations</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<InputStream>> exportConversationTable(
             ConversationTableRequest request) {
@@ -257,6 +262,7 @@ public class AsyncRawAnalyticsClient {
     /**
      * Export the conversation analytics table to a CSV file.
      * <p>This outputs the current table view defined by the request. For most programmatic use cases, prefer <code>getConversationTable</code> and format client-side. The CSV format may change and should not be relied upon by code consumers. A maximum of 10,000 rows can be exported at a time.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:conversations</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<InputStream>> exportConversationTable(
             ConversationTableRequest request, RequestOptions requestOptions) {
@@ -346,6 +352,7 @@ public class AsyncRawAnalyticsClient {
 
     /**
      * Retrieves structured agent user data formatted as a table, allowing users to group, filter,  and define specific metrics to display as columns.
+     * &lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;
      */
     public CompletableFuture<MavenAGIHttpResponse<AgentUserTableResponse>> getAgentUserTable(
             AgentUserTableRequest request) {
@@ -354,6 +361,7 @@ public class AsyncRawAnalyticsClient {
 
     /**
      * Retrieves structured agent user data formatted as a table, allowing users to group, filter,  and define specific metrics to display as columns.
+     * &lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;
      */
     public CompletableFuture<MavenAGIHttpResponse<AgentUserTableResponse>> getAgentUserTable(
             AgentUserTableRequest request, RequestOptions requestOptions) {
@@ -445,6 +453,7 @@ public class AsyncRawAnalyticsClient {
 
     /**
      * Retrieves structured event data formatted as a table, allowing users to group, filter,  and define specific metrics to display as columns.
+     * &lt;Note&gt;<strong>Required permission:</strong> <code>read:events</code>&lt;/Note&gt;
      */
     public CompletableFuture<MavenAGIHttpResponse<EventTableResponse>> getEventTable(EventTableRequest request) {
         return getEventTable(request, null);
@@ -452,6 +461,7 @@ public class AsyncRawAnalyticsClient {
 
     /**
      * Retrieves structured event data formatted as a table, allowing users to group, filter,  and define specific metrics to display as columns.
+     * &lt;Note&gt;<strong>Required permission:</strong> <code>read:events</code>&lt;/Note&gt;
      */
     public CompletableFuture<MavenAGIHttpResponse<EventTableResponse>> getEventTable(
             EventTableRequest request, RequestOptions requestOptions) {
@@ -542,6 +552,7 @@ public class AsyncRawAnalyticsClient {
 
     /**
      * Fetches event data visualized in a chart format. Supported chart types include pie chart, date histogram, and stacked bar charts.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:events</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<ChartResponse>> getEventChart(EventChartRequest request) {
         return getEventChart(request, null);
@@ -549,6 +560,7 @@ public class AsyncRawAnalyticsClient {
 
     /**
      * Fetches event data visualized in a chart format. Supported chart types include pie chart, date histogram, and stacked bar charts.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:events</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<ChartResponse>> getEventChart(
             EventChartRequest request, RequestOptions requestOptions) {

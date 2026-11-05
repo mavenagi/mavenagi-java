@@ -58,6 +58,7 @@ public class ConversationClient {
      * <li>metadata can be changed using the <code>updateConversationMetadata</code> API.</li>
      * <li>messages can be added to the conversation with the <code>appendNewMessages</code> or <code>ask</code> APIs.</li>
      * </ul>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>ask:agent</code>&lt;/Note&gt;</p>
      */
     public InitializeConversationResponse initialize(ConversationRequest request) {
         return this.rawClient.initialize(request).body();
@@ -72,6 +73,7 @@ public class ConversationClient {
      * <li>metadata can be changed using the <code>updateConversationMetadata</code> API.</li>
      * <li>messages can be added to the conversation with the <code>appendNewMessages</code> or <code>ask</code> APIs.</li>
      * </ul>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>ask:agent</code>&lt;/Note&gt;</p>
      */
     public InitializeConversationResponse initialize(ConversationRequest request, RequestOptions requestOptions) {
         return this.rawClient.initialize(request, requestOptions).body();
@@ -83,6 +85,7 @@ public class ConversationClient {
      * All other fields will overwrite the existing value on the conversation only if provided.</p>
      * <p>A closed conversation (<code>open</code> set to false) cannot be reopened: a patch setting <code>open</code> to true
      * returns a 400. Its other fields can still be patched.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>ask:agent</code>&lt;/Note&gt;</p>
      */
     public ConversationResponse patch(String conversationId) {
         return this.rawClient.patch(conversationId).body();
@@ -94,6 +97,7 @@ public class ConversationClient {
      * All other fields will overwrite the existing value on the conversation only if provided.</p>
      * <p>A closed conversation (<code>open</code> set to false) cannot be reopened: a patch setting <code>open</code> to true
      * returns a 400. Its other fields can still be patched.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>ask:agent</code>&lt;/Note&gt;</p>
      */
     public ConversationResponse patch(String conversationId, ConversationPatchRequest request) {
         return this.rawClient.patch(conversationId, request).body();
@@ -105,6 +109,7 @@ public class ConversationClient {
      * All other fields will overwrite the existing value on the conversation only if provided.</p>
      * <p>A closed conversation (<code>open</code> set to false) cannot be reopened: a patch setting <code>open</code> to true
      * returns a 400. Its other fields can still be patched.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>ask:agent</code>&lt;/Note&gt;</p>
      */
     public ConversationResponse patch(
             String conversationId, ConversationPatchRequest request, RequestOptions requestOptions) {
@@ -113,6 +118,7 @@ public class ConversationClient {
 
     /**
      * Get a conversation
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:conversations</code>&lt;/Note&gt;</p>
      */
     public ConversationResponse get(String conversationId) {
         return this.rawClient.get(conversationId).body();
@@ -120,6 +126,7 @@ public class ConversationClient {
 
     /**
      * Get a conversation
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:conversations</code>&lt;/Note&gt;</p>
      */
     public ConversationResponse get(String conversationId, ConversationGetRequest request) {
         return this.rawClient.get(conversationId, request).body();
@@ -127,6 +134,7 @@ public class ConversationClient {
 
     /**
      * Get a conversation
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:conversations</code>&lt;/Note&gt;</p>
      */
     public ConversationResponse get(
             String conversationId, ConversationGetRequest request, RequestOptions requestOptions) {
@@ -137,7 +145,7 @@ public class ConversationClient {
      * Wipes the user content from a conversation.
      * The conversation and its ID still exist afterwards, and so does its non-content data, so it still counts in metrics.
      * The conversation is sealed against further writes as soon as this call returns: adding or changing messages fails with <code>409 Conflict</code>, and so does deleting it again once the wipe has finished.
-     * A <code>202 Accepted</code> response means the wipe is still completing and will finish on its own.
+     * The call answers <code>202 Accepted</code> and the wipe finishes on its own shortly after. Until it does, getting or searching the conversation can still return its original message text.
      * <p>Simulation conversations will no longer be visible in search results nor metrics.
      * Non-simulation conversations remain visible; they cannot be fully removed from the system.</p>
      * <p>&lt;Warning&gt;This is a destructive operation and cannot be undone. &lt;br/&gt;&lt;br/&gt;
@@ -145,6 +153,7 @@ public class ConversationClient {
      * Every message's text, from the user and the agent alike, is replaced with <code>reason</code>, and its attachments, follow-up questions, backend LLM prompt and history, the data actions returned, and action arguments are cleared.
      * Evaluation results for the conversation are deleted, and the payloads recorded on its trigger and action executions are cleared. &lt;br/&gt;&lt;br/&gt;
      * What is kept: the conversation's metadata, each message's charts, structured answer and app-supplied metadata, the conversation's intelligent field values, its feedback and events, and the users who took part. To wipe a user's data, use <code>DELETE /users/{userId}</code> or <code>DELETE /agentusers/{agentUserId}</code>.&lt;/Warning&gt;</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>delete:conversations</code>&lt;/Note&gt;</p>
      */
     public void delete(String conversationId, ConversationDeleteRequest request) {
         this.rawClient.delete(conversationId, request).body();
@@ -154,7 +163,7 @@ public class ConversationClient {
      * Wipes the user content from a conversation.
      * The conversation and its ID still exist afterwards, and so does its non-content data, so it still counts in metrics.
      * The conversation is sealed against further writes as soon as this call returns: adding or changing messages fails with <code>409 Conflict</code>, and so does deleting it again once the wipe has finished.
-     * A <code>202 Accepted</code> response means the wipe is still completing and will finish on its own.
+     * The call answers <code>202 Accepted</code> and the wipe finishes on its own shortly after. Until it does, getting or searching the conversation can still return its original message text.
      * <p>Simulation conversations will no longer be visible in search results nor metrics.
      * Non-simulation conversations remain visible; they cannot be fully removed from the system.</p>
      * <p>&lt;Warning&gt;This is a destructive operation and cannot be undone. &lt;br/&gt;&lt;br/&gt;
@@ -162,6 +171,7 @@ public class ConversationClient {
      * Every message's text, from the user and the agent alike, is replaced with <code>reason</code>, and its attachments, follow-up questions, backend LLM prompt and history, the data actions returned, and action arguments are cleared.
      * Evaluation results for the conversation are deleted, and the payloads recorded on its trigger and action executions are cleared. &lt;br/&gt;&lt;br/&gt;
      * What is kept: the conversation's metadata, each message's charts, structured answer and app-supplied metadata, the conversation's intelligent field values, its feedback and events, and the users who took part. To wipe a user's data, use <code>DELETE /users/{userId}</code> or <code>DELETE /agentusers/{agentUserId}</code>.&lt;/Warning&gt;</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>delete:conversations</code>&lt;/Note&gt;</p>
      */
     public void delete(String conversationId, ConversationDeleteRequest request, RequestOptions requestOptions) {
         this.rawClient.delete(conversationId, request, requestOptions).body();
@@ -170,6 +180,7 @@ public class ConversationClient {
     /**
      * Append messages to an existing conversation. The conversation must be initialized first. If a message with the same ID already exists, it will be ignored. Messages do not allow modification.
      * <p>A closed conversation (<code>open</code> set to false) takes no new messages and returns a 400.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>ask:agent</code>&lt;/Note&gt;</p>
      */
     public ConversationResponse appendNewMessages(String conversationId, List<ConversationMessageRequest> request) {
         return this.rawClient.appendNewMessages(conversationId, request).body();
@@ -178,6 +189,7 @@ public class ConversationClient {
     /**
      * Append messages to an existing conversation. The conversation must be initialized first. If a message with the same ID already exists, it will be ignored. Messages do not allow modification.
      * <p>A closed conversation (<code>open</code> set to false) takes no new messages and returns a 400.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>ask:agent</code>&lt;/Note&gt;</p>
      */
     public ConversationResponse appendNewMessages(
             String conversationId, List<ConversationMessageRequest> request, RequestOptions requestOptions) {
@@ -199,6 +211,7 @@ public class ConversationClient {
      * <ul>
      * <li>The API does not currently expose metadata indicating whether a response or message is incomplete. This will be addressed in a future update.</li>
      * </ul>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>ask:agent</code>&lt;/Note&gt;</p>
      */
     public ConversationResponse ask(String conversationId, AskRequest request) {
         return this.rawClient.ask(conversationId, request).body();
@@ -217,6 +230,7 @@ public class ConversationClient {
      * <ul>
      * <li>The API does not currently expose metadata indicating whether a response or message is incomplete. This will be addressed in a future update.</li>
      * </ul>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>ask:agent</code>&lt;/Note&gt;</p>
      */
     public ConversationResponse ask(String conversationId, AskRequest request, RequestOptions requestOptions) {
         return this.rawClient.ask(conversationId, request, requestOptions).body();
@@ -238,6 +252,7 @@ public class ConversationClient {
      * <ul>
      * <li>The API does not currently expose metadata indicating whether a response or message is incomplete. This will be addressed in a future update.</li>
      * </ul>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>ask:agent</code>&lt;/Note&gt;</p>
      */
     public Iterable<StreamResponse> askStream(String conversationId, AskRequest request) {
         return this.rawClient.askStream(conversationId, request).body();
@@ -259,6 +274,7 @@ public class ConversationClient {
      * <ul>
      * <li>The API does not currently expose metadata indicating whether a response or message is incomplete. This will be addressed in a future update.</li>
      * </ul>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>ask:agent</code>&lt;/Note&gt;</p>
      */
     public Iterable<StreamResponse> askStream(
             String conversationId, AskRequest request, RequestOptions requestOptions) {
@@ -309,6 +325,7 @@ public class ConversationClient {
      * <p>Additionally, form submission is only allowed when the form is the last message in the conversation.
      * Forms should be disabled in surface UI if a conversation continues and they remain unsubmitted.</p>
      * <p>A form cannot be submitted on a closed conversation (<code>open</code> set to false): that returns a 400.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>ask:agent</code>&lt;/Note&gt;</p>
      */
     public ConversationResponse submitActionForm(String conversationId, SubmitActionFormRequest request) {
         return this.rawClient.submitActionForm(conversationId, request).body();
@@ -320,6 +337,7 @@ public class ConversationClient {
      * <p>Additionally, form submission is only allowed when the form is the last message in the conversation.
      * Forms should be disabled in surface UI if a conversation continues and they remain unsubmitted.</p>
      * <p>A form cannot be submitted on a closed conversation (<code>open</code> set to false): that returns a 400.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>ask:agent</code>&lt;/Note&gt;</p>
      */
     public ConversationResponse submitActionForm(
             String conversationId, SubmitActionFormRequest request, RequestOptions requestOptions) {
@@ -356,6 +374,7 @@ public class ConversationClient {
      * If it does not exist, it will be added. Will not remove metadata fields.</p>
      * <p>Returns all metadata saved by any app on the conversation.</p>
      * <p>A closed conversation (<code>open</code> set to false) takes no new metadata and returns a 400.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>ask:agent</code>&lt;/Note&gt;</p>
      */
     public ConversationMetadata updateConversationMetadata(String conversationId, UpdateMetadataRequest request) {
         return this.rawClient
@@ -370,6 +389,7 @@ public class ConversationClient {
      * If it does not exist, it will be added. Will not remove metadata fields.</p>
      * <p>Returns all metadata saved by any app on the conversation.</p>
      * <p>A closed conversation (<code>open</code> set to false) takes no new metadata and returns a 400.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>ask:agent</code>&lt;/Note&gt;</p>
      */
     public ConversationMetadata updateConversationMetadata(
             String conversationId, UpdateMetadataRequest request, RequestOptions requestOptions) {
@@ -379,21 +399,57 @@ public class ConversationClient {
     }
 
     /**
-     * Search conversations
+     * Search conversations.
+     * <p>Pagination is limited to the first 10,000 matching conversations: <code>(page + 1) * size</code> must
+     * not exceed 10,000, and a request beyond that is rejected with a 400. To read past the
+     * 10,000th result, use <code>searchCursor</code>.</p>
+     * <p><code>searchCursor</code> orders results by creation time and has no <code>sort</code> field. Its defaults differ
+     * from <code>search</code> in two ways:</p>
+     * <ul>
+     * <li>Without <code>sort</code>, <code>search</code> returns the oldest conversations first. <code>searchCursor</code> returns the
+     * newest first unless <code>sortDesc</code> is <code>false</code>.</li>
+     * <li>Without a <code>filter</code>, <code>search</code> returns conversations of every <code>billable</code> value.
+     * <code>searchCursor</code> leaves out <code>INELIGIBLE</code> ones unless <code>filter.billable</code> includes it.</li>
+     * </ul>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:conversations</code>&lt;/Note&gt;</p>
      */
     public ConversationsResponse search() {
         return this.rawClient.search().body();
     }
 
     /**
-     * Search conversations
+     * Search conversations.
+     * <p>Pagination is limited to the first 10,000 matching conversations: <code>(page + 1) * size</code> must
+     * not exceed 10,000, and a request beyond that is rejected with a 400. To read past the
+     * 10,000th result, use <code>searchCursor</code>.</p>
+     * <p><code>searchCursor</code> orders results by creation time and has no <code>sort</code> field. Its defaults differ
+     * from <code>search</code> in two ways:</p>
+     * <ul>
+     * <li>Without <code>sort</code>, <code>search</code> returns the oldest conversations first. <code>searchCursor</code> returns the
+     * newest first unless <code>sortDesc</code> is <code>false</code>.</li>
+     * <li>Without a <code>filter</code>, <code>search</code> returns conversations of every <code>billable</code> value.
+     * <code>searchCursor</code> leaves out <code>INELIGIBLE</code> ones unless <code>filter.billable</code> includes it.</li>
+     * </ul>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:conversations</code>&lt;/Note&gt;</p>
      */
     public ConversationsResponse search(ConversationsSearchRequest request) {
         return this.rawClient.search(request).body();
     }
 
     /**
-     * Search conversations
+     * Search conversations.
+     * <p>Pagination is limited to the first 10,000 matching conversations: <code>(page + 1) * size</code> must
+     * not exceed 10,000, and a request beyond that is rejected with a 400. To read past the
+     * 10,000th result, use <code>searchCursor</code>.</p>
+     * <p><code>searchCursor</code> orders results by creation time and has no <code>sort</code> field. Its defaults differ
+     * from <code>search</code> in two ways:</p>
+     * <ul>
+     * <li>Without <code>sort</code>, <code>search</code> returns the oldest conversations first. <code>searchCursor</code> returns the
+     * newest first unless <code>sortDesc</code> is <code>false</code>.</li>
+     * <li>Without a <code>filter</code>, <code>search</code> returns conversations of every <code>billable</code> value.
+     * <code>searchCursor</code> leaves out <code>INELIGIBLE</code> ones unless <code>filter.billable</code> includes it.</li>
+     * </ul>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:conversations</code>&lt;/Note&gt;</p>
      */
     public ConversationsResponse search(ConversationsSearchRequest request, RequestOptions requestOptions) {
         return this.rawClient.search(request, requestOptions).body();
@@ -409,6 +465,7 @@ public class ConversationClient {
      * <p><code>nextCursor</code> is the only reliable end-of-results signal. Do not stop early because a page
      * came back with fewer conversations than you asked for: that happens legitimately, and more
      * pages may still remain.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:conversations</code>&lt;/Note&gt;</p>
      */
     public ConversationsCursorSearchResponse searchCursor() {
         return this.rawClient.searchCursor().body();
@@ -424,6 +481,7 @@ public class ConversationClient {
      * <p><code>nextCursor</code> is the only reliable end-of-results signal. Do not stop early because a page
      * came back with fewer conversations than you asked for: that happens legitimately, and more
      * pages may still remain.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:conversations</code>&lt;/Note&gt;</p>
      */
     public ConversationsCursorSearchResponse searchCursor(ConversationsCursorSearchRequest request) {
         return this.rawClient.searchCursor(request).body();
@@ -439,6 +497,7 @@ public class ConversationClient {
      * <p><code>nextCursor</code> is the only reliable end-of-results signal. Do not stop early because a page
      * came back with fewer conversations than you asked for: that happens legitimately, and more
      * pages may still remain.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:conversations</code>&lt;/Note&gt;</p>
      */
     public ConversationsCursorSearchResponse searchCursor(
             ConversationsCursorSearchRequest request, RequestOptions requestOptions) {
@@ -447,9 +506,10 @@ public class ConversationClient {
 
     /**
      * Export conversations to a CSV file.
-     * <p>This will output a summary of each conversation that matches the supplied filter. A maximum of 10,000 conversations can be exported at a time.</p>
+     * <p>This will output a summary of each conversation that matches the supplied filter. Only the first 10,000 matching conversations can be exported: <code>(page + 1) * size</code> must not exceed 10,000, and a request beyond that is rejected with a 400.</p>
      * <p>For most use cases it is recommended to use the <code>search</code> API instead and convert the JSON response to your desired format.
      * The CSV format may change over time and should not be relied upon by code consumers.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:conversations</code>&lt;/Note&gt;</p>
      */
     public InputStream export() {
         return this.rawClient.export().body();
@@ -457,9 +517,10 @@ public class ConversationClient {
 
     /**
      * Export conversations to a CSV file.
-     * <p>This will output a summary of each conversation that matches the supplied filter. A maximum of 10,000 conversations can be exported at a time.</p>
+     * <p>This will output a summary of each conversation that matches the supplied filter. Only the first 10,000 matching conversations can be exported: <code>(page + 1) * size</code> must not exceed 10,000, and a request beyond that is rejected with a 400.</p>
      * <p>For most use cases it is recommended to use the <code>search</code> API instead and convert the JSON response to your desired format.
      * The CSV format may change over time and should not be relied upon by code consumers.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:conversations</code>&lt;/Note&gt;</p>
      */
     public InputStream export(ConversationsSearchRequest request) {
         return this.rawClient.export(request).body();
@@ -467,9 +528,10 @@ public class ConversationClient {
 
     /**
      * Export conversations to a CSV file.
-     * <p>This will output a summary of each conversation that matches the supplied filter. A maximum of 10,000 conversations can be exported at a time.</p>
+     * <p>This will output a summary of each conversation that matches the supplied filter. Only the first 10,000 matching conversations can be exported: <code>(page + 1) * size</code> must not exceed 10,000, and a request beyond that is rejected with a 400.</p>
      * <p>For most use cases it is recommended to use the <code>search</code> API instead and convert the JSON response to your desired format.
      * The CSV format may change over time and should not be relied upon by code consumers.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:conversations</code>&lt;/Note&gt;</p>
      */
     public InputStream export(ConversationsSearchRequest request, RequestOptions requestOptions) {
         return this.rawClient.export(request, requestOptions).body();
@@ -482,6 +544,7 @@ public class ConversationClient {
      * <p>This API is offered for backwards compatibility.
      * Most API callers should create simulations programmatically to allow for more flexibility.</p>
      * <p>Shown in Agent Designer as &quot;Import questions&quot;.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>ask:agent</code>. Importing simulations also needs <code>read:agents</code> and <code>edit:agents</code>.&lt;/Note&gt;</p>
      */
     public void importSimulations(File file, SimulationImportRequest request) {
         this.rawClient.importSimulations(file, request).body();
@@ -494,6 +557,7 @@ public class ConversationClient {
      * <p>This API is offered for backwards compatibility.
      * Most API callers should create simulations programmatically to allow for more flexibility.</p>
      * <p>Shown in Agent Designer as &quot;Import questions&quot;.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>ask:agent</code>. Importing simulations also needs <code>read:agents</code> and <code>edit:agents</code>.&lt;/Note&gt;</p>
      */
     public void importSimulations(File file, SimulationImportRequest request, RequestOptions requestOptions) {
         this.rawClient.importSimulations(file, request, requestOptions).body();
@@ -506,6 +570,7 @@ public class ConversationClient {
      * Currently, messages can only be successfully delivered to conversations with the `ASYNC` capability.
      * User message delivery is not yet supported and returns a 400.
      * &lt;/Warning&gt;</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>ask:agent</code>&lt;/Note&gt;</p>
      */
     public DeliverMessageResponse deliverMessage(DeliverMessageRequest request) {
         return this.rawClient.deliverMessage(request).body();
@@ -518,6 +583,7 @@ public class ConversationClient {
      * Currently, messages can only be successfully delivered to conversations with the `ASYNC` capability.
      * User message delivery is not yet supported and returns a 400.
      * &lt;/Warning&gt;</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>ask:agent</code>&lt;/Note&gt;</p>
      */
     public DeliverMessageResponse deliverMessage(DeliverMessageRequest request, RequestOptions requestOptions) {
         return this.rawClient.deliverMessage(request, requestOptions).body();

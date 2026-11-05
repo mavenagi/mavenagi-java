@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
+import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -19,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = Error.Builder.class)
 public final class Error implements IServerEventBase {
-    private final String eventId;
+    private final OffsetDateTime timestamp;
 
     private final String message;
 
@@ -27,17 +28,20 @@ public final class Error implements IServerEventBase {
 
     private final Map<String, Object> additionalProperties;
 
-    private Error(String eventId, String message, String code, Map<String, Object> additionalProperties) {
-        this.eventId = eventId;
+    private Error(OffsetDateTime timestamp, String message, String code, Map<String, Object> additionalProperties) {
+        this.timestamp = timestamp;
         this.message = message;
         this.code = code;
         this.additionalProperties = additionalProperties;
     }
 
-    @JsonProperty("eventId")
+    /**
+     * @return When the server sent the event.
+     */
+    @JsonProperty("timestamp")
     @java.lang.Override
-    public String getEventId() {
-        return eventId;
+    public OffsetDateTime getTimestamp() {
+        return timestamp;
     }
 
     @JsonProperty("type")
@@ -50,6 +54,16 @@ public final class Error implements IServerEventBase {
         return message;
     }
 
+    /**
+     * @return One of:
+     * <ul>
+     * <li><code>invalid_message</code>: the server could not parse a client message, or its <code>type</code> is unknown.</li>
+     * <li><code>invalid_configuration</code>: <code>outputFormat</code> differs from <code>inputFormat</code>.</li>
+     * <li><code>invalid_audio_format</code>: the format is not <code>PCM_8000</code> or <code>MULAW_8000</code>.</li>
+     * <li><code>initialization_error</code>: the connection failed before the conversation started, including authentication and rate-limit failures.</li>
+     * <li><code>internal_error</code>: the voice model reported an error during the conversation.</li>
+     * </ul>
+     */
     @JsonProperty("code")
     public String getCode() {
         return code;
@@ -67,12 +81,12 @@ public final class Error implements IServerEventBase {
     }
 
     private boolean equalTo(Error other) {
-        return eventId.equals(other.eventId) && message.equals(other.message) && code.equals(other.code);
+        return timestamp.equals(other.timestamp) && message.equals(other.message) && code.equals(other.code);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.eventId, this.message, this.code);
+        return Objects.hash(this.timestamp, this.message, this.code);
     }
 
     @java.lang.Override
@@ -80,12 +94,15 @@ public final class Error implements IServerEventBase {
         return ObjectMappers.stringify(this);
     }
 
-    public static EventIdStage builder() {
+    public static TimestampStage builder() {
         return new Builder();
     }
 
-    public interface EventIdStage {
-        MessageStage eventId(@NotNull String eventId);
+    public interface TimestampStage {
+        /**
+         * <p>When the server sent the event.</p>
+         */
+        MessageStage timestamp(@NotNull OffsetDateTime timestamp);
 
         Builder from(Error other);
     }
@@ -95,6 +112,16 @@ public final class Error implements IServerEventBase {
     }
 
     public interface CodeStage {
+        /**
+         * <p>One of:</p>
+         * <ul>
+         * <li><code>invalid_message</code>: the server could not parse a client message, or its <code>type</code> is unknown.</li>
+         * <li><code>invalid_configuration</code>: <code>outputFormat</code> differs from <code>inputFormat</code>.</li>
+         * <li><code>invalid_audio_format</code>: the format is not <code>PCM_8000</code> or <code>MULAW_8000</code>.</li>
+         * <li><code>initialization_error</code>: the connection failed before the conversation started, including authentication and rate-limit failures.</li>
+         * <li><code>internal_error</code>: the voice model reported an error during the conversation.</li>
+         * </ul>
+         */
         _FinalStage code(@NotNull String code);
     }
 
@@ -103,8 +130,8 @@ public final class Error implements IServerEventBase {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements EventIdStage, MessageStage, CodeStage, _FinalStage {
-        private String eventId;
+    public static final class Builder implements TimestampStage, MessageStage, CodeStage, _FinalStage {
+        private OffsetDateTime timestamp;
 
         private String message;
 
@@ -117,16 +144,21 @@ public final class Error implements IServerEventBase {
 
         @java.lang.Override
         public Builder from(Error other) {
-            eventId(other.getEventId());
+            timestamp(other.getTimestamp());
             message(other.getMessage());
             code(other.getCode());
             return this;
         }
 
+        /**
+         * <p>When the server sent the event.</p>
+         * <p>When the server sent the event.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
-        @JsonSetter("eventId")
-        public MessageStage eventId(@NotNull String eventId) {
-            this.eventId = Objects.requireNonNull(eventId, "eventId must not be null");
+        @JsonSetter("timestamp")
+        public MessageStage timestamp(@NotNull OffsetDateTime timestamp) {
+            this.timestamp = Objects.requireNonNull(timestamp, "timestamp must not be null");
             return this;
         }
 
@@ -137,6 +169,25 @@ public final class Error implements IServerEventBase {
             return this;
         }
 
+        /**
+         * <p>One of:</p>
+         * <ul>
+         * <li><code>invalid_message</code>: the server could not parse a client message, or its <code>type</code> is unknown.</li>
+         * <li><code>invalid_configuration</code>: <code>outputFormat</code> differs from <code>inputFormat</code>.</li>
+         * <li><code>invalid_audio_format</code>: the format is not <code>PCM_8000</code> or <code>MULAW_8000</code>.</li>
+         * <li><code>initialization_error</code>: the connection failed before the conversation started, including authentication and rate-limit failures.</li>
+         * <li><code>internal_error</code>: the voice model reported an error during the conversation.</li>
+         * </ul>
+         * <p>One of:</p>
+         * <ul>
+         * <li><code>invalid_message</code>: the server could not parse a client message, or its <code>type</code> is unknown.</li>
+         * <li><code>invalid_configuration</code>: <code>outputFormat</code> differs from <code>inputFormat</code>.</li>
+         * <li><code>invalid_audio_format</code>: the format is not <code>PCM_8000</code> or <code>MULAW_8000</code>.</li>
+         * <li><code>initialization_error</code>: the connection failed before the conversation started, including authentication and rate-limit failures.</li>
+         * <li><code>internal_error</code>: the voice model reported an error during the conversation.</li>
+         * </ul>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
         @JsonSetter("code")
         public _FinalStage code(@NotNull String code) {
@@ -146,7 +197,7 @@ public final class Error implements IServerEventBase {
 
         @java.lang.Override
         public Error build() {
-            return new Error(eventId, message, code, additionalProperties);
+            return new Error(timestamp, message, code, additionalProperties);
         }
     }
 }

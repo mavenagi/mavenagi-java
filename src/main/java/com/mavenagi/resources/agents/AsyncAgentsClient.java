@@ -32,9 +32,8 @@ public class AsyncAgentsClient {
 
     /**
      * Search for agents across all organizations.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>Only Maven staff hold this permission.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:all-organizations</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<AgentsSearchResponse> search() {
         return this.rawClient.search().thenApply(response -> response.body());
@@ -42,9 +41,8 @@ public class AsyncAgentsClient {
 
     /**
      * Search for agents across all organizations.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>Only Maven staff hold this permission.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:all-organizations</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<AgentsSearchResponse> search(AgentsSearchRequest request) {
         return this.rawClient.search(request).thenApply(response -> response.body());
@@ -52,9 +50,8 @@ public class AsyncAgentsClient {
 
     /**
      * Search for agents across all organizations.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>Only Maven staff hold this permission.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:all-organizations</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<AgentsSearchResponse> search(AgentsSearchRequest request, RequestOptions requestOptions) {
         return this.rawClient.search(request, requestOptions).thenApply(response -> response.body());
@@ -62,6 +59,7 @@ public class AsyncAgentsClient {
 
     /**
      * Lists all agents for an organization
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<List<Agent>> list(String organizationReferenceId) {
         return this.rawClient.list(organizationReferenceId).thenApply(response -> response.body());
@@ -69,6 +67,7 @@ public class AsyncAgentsClient {
 
     /**
      * Lists all agents for an organization
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<List<Agent>> list(String organizationReferenceId, RequestOptions requestOptions) {
         return this.rawClient.list(organizationReferenceId, requestOptions).thenApply(response -> response.body());
@@ -76,9 +75,7 @@ public class AsyncAgentsClient {
 
     /**
      * Create a new agent
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>create:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<Agent> create(
             String organizationReferenceId, String agentReferenceId, CreateAgentRequest request) {
@@ -89,9 +86,7 @@ public class AsyncAgentsClient {
 
     /**
      * Create a new agent
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>create:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<Agent> create(
             String organizationReferenceId,
@@ -105,6 +100,7 @@ public class AsyncAgentsClient {
 
     /**
      * Get an agent
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<Agent> get(String organizationReferenceId, String agentReferenceId) {
         return this.rawClient.get(organizationReferenceId, agentReferenceId).thenApply(response -> response.body());
@@ -112,6 +108,7 @@ public class AsyncAgentsClient {
 
     /**
      * Get an agent
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<Agent> get(
             String organizationReferenceId, String agentReferenceId, RequestOptions requestOptions) {
@@ -123,9 +120,7 @@ public class AsyncAgentsClient {
     /**
      * Update mutable agent fields
      * All fields will overwrite the existing value on the agent only if provided.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<Agent> patch(String organizationReferenceId, String agentReferenceId) {
         return this.rawClient.patch(organizationReferenceId, agentReferenceId).thenApply(response -> response.body());
@@ -134,9 +129,7 @@ public class AsyncAgentsClient {
     /**
      * Update mutable agent fields
      * All fields will overwrite the existing value on the agent only if provided.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<Agent> patch(
             String organizationReferenceId, String agentReferenceId, AgentPatchRequest request) {
@@ -148,9 +141,7 @@ public class AsyncAgentsClient {
     /**
      * Update mutable agent fields
      * All fields will overwrite the existing value on the agent only if provided.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<Agent> patch(
             String organizationReferenceId,
@@ -164,9 +155,7 @@ public class AsyncAgentsClient {
 
     /**
      * Delete an agent.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>delete:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<Void> delete(String organizationReferenceId, String agentReferenceId) {
         return this.rawClient.delete(organizationReferenceId, agentReferenceId).thenApply(response -> response.body());
@@ -174,9 +163,7 @@ public class AsyncAgentsClient {
 
     /**
      * Delete an agent.
-     * <p>&lt;Tip&gt;
-     * This endpoint requires additional permissions. Contact support to request access.
-     * &lt;/Tip&gt;</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>delete:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<Void> delete(
             String organizationReferenceId, String agentReferenceId, RequestOptions requestOptions) {

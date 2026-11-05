@@ -82,14 +82,16 @@ public class AsyncAppDirectoryClient {
     }
 
     /**
-     * Uninstalls the app from the agent.
+     * Uninstalls the app from the agent, and deletes the actions and triggers it created.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>install:apps</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<Void> uninstall(String appId) {
         return this.rawClient.uninstall(appId).thenApply(response -> response.body());
     }
 
     /**
-     * Uninstalls the app from the agent.
+     * Uninstalls the app from the agent, and deletes the actions and triggers it created.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>install:apps</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<Void> uninstall(String appId, RequestOptions requestOptions) {
         return this.rawClient.uninstall(appId, requestOptions).thenApply(response -> response.body());

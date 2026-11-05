@@ -33,6 +33,10 @@ public class ActionsClient {
      * Deprecated. Use <code>POST /v1/capabilities/search</code>, which searches every kind of capability
      * at once. It returns the fields every capability shares rather than the whole Action;
      * fetch one by its kind and reference ID for the rest.
+     * <p>Pagination is limited to the first 10,000 matching actions: <code>(page + 1) * size</code> must not
+     * exceed 10,000, and a request beyond that is rejected with a 400. Narrow the filter to reach
+     * later results.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public ActionsResponse search() {
         return this.rawClient.search().body();
@@ -42,6 +46,10 @@ public class ActionsClient {
      * Deprecated. Use <code>POST /v1/capabilities/search</code>, which searches every kind of capability
      * at once. It returns the fields every capability shares rather than the whole Action;
      * fetch one by its kind and reference ID for the rest.
+     * <p>Pagination is limited to the first 10,000 matching actions: <code>(page + 1) * size</code> must not
+     * exceed 10,000, and a request beyond that is rejected with a 400. Narrow the filter to reach
+     * later results.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public ActionsResponse search(ActionsSearchRequest request) {
         return this.rawClient.search(request).body();
@@ -51,6 +59,10 @@ public class ActionsClient {
      * Deprecated. Use <code>POST /v1/capabilities/search</code>, which searches every kind of capability
      * at once. It returns the fields every capability shares rather than the whole Action;
      * fetch one by its kind and reference ID for the rest.
+     * <p>Pagination is limited to the first 10,000 matching actions: <code>(page + 1) * size</code> must not
+     * exceed 10,000, and a request beyond that is rejected with a 400. Narrow the filter to reach
+     * later results.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public ActionsResponse search(ActionsSearchRequest request, RequestOptions requestOptions) {
         return this.rawClient.search(request, requestOptions).body();
@@ -58,6 +70,7 @@ public class ActionsClient {
 
     /**
      * Update an action or create it if it doesn't exist
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public ActionResponse createOrUpdate(ActionRequest request) {
         return this.rawClient.createOrUpdate(request).body();
@@ -65,6 +78,7 @@ public class ActionsClient {
 
     /**
      * Update an action or create it if it doesn't exist
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public ActionResponse createOrUpdate(ActionRequest request, RequestOptions requestOptions) {
         return this.rawClient.createOrUpdate(request, requestOptions).body();
@@ -74,6 +88,7 @@ public class ActionsClient {
      * Deprecated. Use <code>GET /v1/capabilities/ACTION/{referenceId}</code>, which returns this same
      * object for an action and the equivalent for every other kind of capability.
      * <p>Get an action by its supplied ID</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public ActionResponse get(String actionReferenceId) {
         return this.rawClient.get(actionReferenceId).body();
@@ -83,6 +98,7 @@ public class ActionsClient {
      * Deprecated. Use <code>GET /v1/capabilities/ACTION/{referenceId}</code>, which returns this same
      * object for an action and the equivalent for every other kind of capability.
      * <p>Get an action by its supplied ID</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public ActionResponse get(String actionReferenceId, ActionGetRequest request) {
         return this.rawClient.get(actionReferenceId, request).body();
@@ -92,6 +108,7 @@ public class ActionsClient {
      * Deprecated. Use <code>GET /v1/capabilities/ACTION/{referenceId}</code>, which returns this same
      * object for an action and the equivalent for every other kind of capability.
      * <p>Get an action by its supplied ID</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public ActionResponse get(String actionReferenceId, ActionGetRequest request, RequestOptions requestOptions) {
         return this.rawClient.get(actionReferenceId, request, requestOptions).body();
@@ -101,6 +118,7 @@ public class ActionsClient {
      * Update mutable action fields
      * <p>The <code>appId</code> field can be provided to update an action owned by a different app.
      * All other fields will overwrite the existing value on the action only if provided.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public ActionResponse patch(String actionReferenceId) {
         return this.rawClient.patch(actionReferenceId).body();
@@ -110,6 +128,7 @@ public class ActionsClient {
      * Update mutable action fields
      * <p>The <code>appId</code> field can be provided to update an action owned by a different app.
      * All other fields will overwrite the existing value on the action only if provided.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public ActionResponse patch(String actionReferenceId, ActionPatchRequest request) {
         return this.rawClient.patch(actionReferenceId, request).body();
@@ -119,6 +138,7 @@ public class ActionsClient {
      * Update mutable action fields
      * <p>The <code>appId</code> field can be provided to update an action owned by a different app.
      * All other fields will overwrite the existing value on the action only if provided.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public ActionResponse patch(String actionReferenceId, ActionPatchRequest request, RequestOptions requestOptions) {
         return this.rawClient.patch(actionReferenceId, request, requestOptions).body();
@@ -128,6 +148,7 @@ public class ActionsClient {
      * Deprecated. Use <code>DELETE /v1/capabilities/ACTION/{referenceId}</code>, which deletes any kind of
      * capability the same way.
      * <p>Delete an action</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public void delete(String actionReferenceId) {
         this.rawClient.delete(actionReferenceId).body();
@@ -137,6 +158,7 @@ public class ActionsClient {
      * Deprecated. Use <code>DELETE /v1/capabilities/ACTION/{referenceId}</code>, which deletes any kind of
      * capability the same way.
      * <p>Delete an action</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public void delete(String actionReferenceId, RequestOptions requestOptions) {
         this.rawClient.delete(actionReferenceId, requestOptions).body();

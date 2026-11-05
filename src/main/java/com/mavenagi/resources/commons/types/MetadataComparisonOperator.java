@@ -7,8 +7,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public final class MetadataComparisonOperator {
-    public static final MetadataComparisonOperator NEQ = new MetadataComparisonOperator(Value.NEQ, "NEQ");
-
     public static final MetadataComparisonOperator NOT_STARTS_WITH =
             new MetadataComparisonOperator(Value.NOT_STARTS_WITH, "NOT_STARTS_WITH");
 
@@ -16,6 +14,8 @@ public final class MetadataComparisonOperator {
             new MetadataComparisonOperator(Value.STARTS_WITH, "STARTS_WITH");
 
     public static final MetadataComparisonOperator EQ = new MetadataComparisonOperator(Value.EQ, "EQ");
+
+    public static final MetadataComparisonOperator NEQ = new MetadataComparisonOperator(Value.NEQ, "NEQ");
 
     private final Value value;
 
@@ -50,14 +50,14 @@ public final class MetadataComparisonOperator {
 
     public <T> T visit(Visitor<T> visitor) {
         switch (value) {
-            case NEQ:
-                return visitor.visitNeq();
             case NOT_STARTS_WITH:
                 return visitor.visitNotStartsWith();
             case STARTS_WITH:
                 return visitor.visitStartsWith();
             case EQ:
                 return visitor.visitEq();
+            case NEQ:
+                return visitor.visitNeq();
             case UNKNOWN:
             default:
                 return visitor.visitUnknown(string);
@@ -67,14 +67,14 @@ public final class MetadataComparisonOperator {
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static MetadataComparisonOperator valueOf(String value) {
         switch (value) {
-            case "NEQ":
-                return NEQ;
             case "NOT_STARTS_WITH":
                 return NOT_STARTS_WITH;
             case "STARTS_WITH":
                 return STARTS_WITH;
             case "EQ":
                 return EQ;
+            case "NEQ":
+                return NEQ;
             default:
                 return new MetadataComparisonOperator(Value.UNKNOWN, value);
         }

@@ -31,35 +31,51 @@ public class AsyncEventsClient {
     }
 
     /**
-     * Create a new event. Events are immutable, so a create that reuses the <code>referenceId</code> of an existing event in the same app is rejected with a 409 and leaves that event unchanged.
+     * Create a new event. Events are immutable, so a create that reuses the <code>referenceId</code> of an
+     * existing event in the same app is rejected with a 409 and leaves that event unchanged.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>ask:agent</code>. An event with <code>executionMode: SIMULATION</code> also needs <code>create:simulations</code>.&lt;/Note&gt;</p>
      */
     public CompletableFuture<EventResponse> create(EventRequest request) {
         return this.rawClient.create(request).thenApply(response -> response.body());
     }
 
     /**
-     * Create a new event. Events are immutable, so a create that reuses the <code>referenceId</code> of an existing event in the same app is rejected with a 409 and leaves that event unchanged.
+     * Create a new event. Events are immutable, so a create that reuses the <code>referenceId</code> of an
+     * existing event in the same app is rejected with a 409 and leaves that event unchanged.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>ask:agent</code>. An event with <code>executionMode: SIMULATION</code> also needs <code>create:simulations</code>.&lt;/Note&gt;</p>
      */
     public CompletableFuture<EventResponse> create(EventRequest request, RequestOptions requestOptions) {
         return this.rawClient.create(request, requestOptions).thenApply(response -> response.body());
     }
 
     /**
-     * Search events
+     * Search events.
+     * <p>Pagination is limited to the first 10,000 matching events: <code>(page + 1) * size</code> must not
+     * exceed 10,000, and a request beyond that is rejected with a 400. Narrow the filter to reach
+     * later results.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:events</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<EventsSearchResponse> search() {
         return this.rawClient.search().thenApply(response -> response.body());
     }
 
     /**
-     * Search events
+     * Search events.
+     * <p>Pagination is limited to the first 10,000 matching events: <code>(page + 1) * size</code> must not
+     * exceed 10,000, and a request beyond that is rejected with a 400. Narrow the filter to reach
+     * later results.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:events</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<EventsSearchResponse> search(EventsSearchRequest request) {
         return this.rawClient.search(request).thenApply(response -> response.body());
     }
 
     /**
-     * Search events
+     * Search events.
+     * <p>Pagination is limited to the first 10,000 matching events: <code>(page + 1) * size</code> must not
+     * exceed 10,000, and a request beyond that is rejected with a 400. Narrow the filter to reach
+     * later results.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:events</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<EventsSearchResponse> search(EventsSearchRequest request, RequestOptions requestOptions) {
         return this.rawClient.search(request, requestOptions).thenApply(response -> response.body());
@@ -67,6 +83,7 @@ public class AsyncEventsClient {
 
     /**
      * Retrieve details of a specific Event item by its ID.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:events</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<EventResponse> get(String eventId, EventGetRequest request) {
         return this.rawClient.get(eventId, request).thenApply(response -> response.body());
@@ -74,6 +91,7 @@ public class AsyncEventsClient {
 
     /**
      * Retrieve details of a specific Event item by its ID.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:events</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<EventResponse> get(
             String eventId, EventGetRequest request, RequestOptions requestOptions) {
@@ -82,7 +100,8 @@ public class AsyncEventsClient {
 
     /**
      * Export events to a CSV file.
-     * <p>This will output a summary of each event that matches the supplied filter. A maximum of 10,000 events can be exported at a time. For most use cases it is recommended to use the search API instead and convert the JSON response to your desired format. The CSV format may change over time and should not be relied upon by code consumers.</p>
+     * <p>This will output a summary of each event that matches the supplied filter. Only the first 10,000 matching events can be exported: <code>(page + 1) * size</code> must not exceed 10,000, and a request beyond that is rejected with a 400. For most use cases it is recommended to use the search API instead and convert the JSON response to your desired format. The CSV format may change over time and should not be relied upon by code consumers.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:events</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<InputStream> export() {
         return this.rawClient.export().thenApply(response -> response.body());
@@ -90,7 +109,8 @@ public class AsyncEventsClient {
 
     /**
      * Export events to a CSV file.
-     * <p>This will output a summary of each event that matches the supplied filter. A maximum of 10,000 events can be exported at a time. For most use cases it is recommended to use the search API instead and convert the JSON response to your desired format. The CSV format may change over time and should not be relied upon by code consumers.</p>
+     * <p>This will output a summary of each event that matches the supplied filter. Only the first 10,000 matching events can be exported: <code>(page + 1) * size</code> must not exceed 10,000, and a request beyond that is rejected with a 400. For most use cases it is recommended to use the search API instead and convert the JSON response to your desired format. The CSV format may change over time and should not be relied upon by code consumers.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:events</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<InputStream> export(EventsSearchRequest request) {
         return this.rawClient.export(request).thenApply(response -> response.body());
@@ -98,7 +118,8 @@ public class AsyncEventsClient {
 
     /**
      * Export events to a CSV file.
-     * <p>This will output a summary of each event that matches the supplied filter. A maximum of 10,000 events can be exported at a time. For most use cases it is recommended to use the search API instead and convert the JSON response to your desired format. The CSV format may change over time and should not be relied upon by code consumers.</p>
+     * <p>This will output a summary of each event that matches the supplied filter. Only the first 10,000 matching events can be exported: <code>(page + 1) * size</code> must not exceed 10,000, and a request beyond that is rejected with a 400. For most use cases it is recommended to use the search API instead and convert the JSON response to your desired format. The CSV format may change over time and should not be relied upon by code consumers.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:events</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<InputStream> export(EventsSearchRequest request, RequestOptions requestOptions) {
         return this.rawClient.export(request, requestOptions).thenApply(response -> response.body());

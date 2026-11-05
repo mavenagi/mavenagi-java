@@ -50,6 +50,7 @@ public class AsyncRawTriggersClient {
      * Deprecated. Use <code>POST /v1/capabilities/search</code>, which searches every kind of capability
      * at once. It returns the fields every capability shares rather than the whole Event
      * Trigger; fetch one by its kind and reference ID for the rest.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<EventTriggersSearchResponse>> search() {
         return search(EventTriggersSearchRequest.builder().build());
@@ -59,6 +60,7 @@ public class AsyncRawTriggersClient {
      * Deprecated. Use <code>POST /v1/capabilities/search</code>, which searches every kind of capability
      * at once. It returns the fields every capability shares rather than the whole Event
      * Trigger; fetch one by its kind and reference ID for the rest.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<EventTriggersSearchResponse>> search(
             EventTriggersSearchRequest request) {
@@ -69,6 +71,7 @@ public class AsyncRawTriggersClient {
      * Deprecated. Use <code>POST /v1/capabilities/search</code>, which searches every kind of capability
      * at once. It returns the fields every capability shares rather than the whole Event
      * Trigger; fetch one by its kind and reference ID for the rest.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<EventTriggersSearchResponse>> search(
             EventTriggersSearchRequest request, RequestOptions requestOptions) {
@@ -159,6 +162,7 @@ public class AsyncRawTriggersClient {
 
     /**
      * Update an event trigger or create it if it doesn't exist.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<EventTriggerResponse>> createOrUpdate(EventTriggerRequest request) {
         return createOrUpdate(request, null);
@@ -166,6 +170,7 @@ public class AsyncRawTriggersClient {
 
     /**
      * Update an event trigger or create it if it doesn't exist.
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<EventTriggerResponse>> createOrUpdate(
             EventTriggerRequest request, RequestOptions requestOptions) {
@@ -257,6 +262,7 @@ public class AsyncRawTriggersClient {
      * Deprecated. Use <code>GET /v1/capabilities/TRIGGER/{referenceId}</code>, which returns this same
      * object for a trigger and the equivalent for every other kind of capability.
      * <p>Get an event trigger by its supplied ID</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<EventTriggerResponse>> get(String triggerReferenceId) {
         return get(triggerReferenceId, null);
@@ -266,6 +272,7 @@ public class AsyncRawTriggersClient {
      * Deprecated. Use <code>GET /v1/capabilities/TRIGGER/{referenceId}</code>, which returns this same
      * object for a trigger and the equivalent for every other kind of capability.
      * <p>Get an event trigger by its supplied ID</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<EventTriggerResponse>> get(
             String triggerReferenceId, RequestOptions requestOptions) {
@@ -350,6 +357,7 @@ public class AsyncRawTriggersClient {
      * Deprecated. Use <code>DELETE /v1/capabilities/TRIGGER/{referenceId}</code>, which deletes any kind
      * of capability the same way.
      * <p>Delete an event trigger</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<Void>> delete(String triggerReferenceId) {
         return delete(triggerReferenceId, null);
@@ -359,6 +367,7 @@ public class AsyncRawTriggersClient {
      * Deprecated. Use <code>DELETE /v1/capabilities/TRIGGER/{referenceId}</code>, which deletes any kind
      * of capability the same way.
      * <p>Delete an event trigger</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<Void>> delete(
             String triggerReferenceId, RequestOptions requestOptions) {
@@ -441,6 +450,7 @@ public class AsyncRawTriggersClient {
      * Updates an event trigger. <code>enabled</code> and <code>condition</code> are the editable fields.
      * <p><code>PATCH /v1/capabilities/TRIGGER/{referenceId}</code> with a <code>status</code> also turns a trigger on and
      * off, the same way it publishes and unpublishes any kind of capability.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<EventTriggerResponse>> partialUpdate(String triggerReferenceId) {
         return partialUpdate(triggerReferenceId, PartialUpdateRequest.builder().build());
@@ -450,6 +460,7 @@ public class AsyncRawTriggersClient {
      * Updates an event trigger. <code>enabled</code> and <code>condition</code> are the editable fields.
      * <p><code>PATCH /v1/capabilities/TRIGGER/{referenceId}</code> with a <code>status</code> also turns a trigger on and
      * off, the same way it publishes and unpublishes any kind of capability.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<EventTriggerResponse>> partialUpdate(
             String triggerReferenceId, PartialUpdateRequest request) {
@@ -460,6 +471,7 @@ public class AsyncRawTriggersClient {
      * Updates an event trigger. <code>enabled</code> and <code>condition</code> are the editable fields.
      * <p><code>PATCH /v1/capabilities/TRIGGER/{referenceId}</code> with a <code>status</code> also turns a trigger on and
      * off, the same way it publishes and unpublishes any kind of capability.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<EventTriggerResponse>> partialUpdate(
             String triggerReferenceId, PartialUpdateRequest request, RequestOptions requestOptions) {

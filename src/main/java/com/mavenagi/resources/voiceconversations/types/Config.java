@@ -23,22 +23,11 @@ public final class Config {
 
     private final AudioFormat outputFormat;
 
-    private final String conversationId;
-
-    private final String appId;
-
     private final Map<String, Object> additionalProperties;
 
-    private Config(
-            AudioFormat inputFormat,
-            AudioFormat outputFormat,
-            String conversationId,
-            String appId,
-            Map<String, Object> additionalProperties) {
+    private Config(AudioFormat inputFormat, AudioFormat outputFormat, Map<String, Object> additionalProperties) {
         this.inputFormat = inputFormat;
         this.outputFormat = outputFormat;
-        this.conversationId = conversationId;
-        this.appId = appId;
         this.additionalProperties = additionalProperties;
     }
 
@@ -48,7 +37,7 @@ public final class Config {
     }
 
     /**
-     * @return The input audio format from the client.
+     * @return The audio format the client sends. Must be <code>PCM_8000</code> or <code>MULAW_8000</code>.
      */
     @JsonProperty("inputFormat")
     public AudioFormat getInputFormat() {
@@ -56,27 +45,11 @@ public final class Config {
     }
 
     /**
-     * @return The output audio format to send to the client.
+     * @return The audio format the server sends. Must equal <code>inputFormat</code>, or the server returns an <code>invalid_configuration</code> error.
      */
     @JsonProperty("outputFormat")
     public AudioFormat getOutputFormat() {
         return outputFormat;
-    }
-
-    /**
-     * @return The conversation ID which was created prior to starting this conversation.
-     */
-    @JsonProperty("conversationId")
-    public String getConversationId() {
-        return conversationId;
-    }
-
-    /**
-     * @return The app ID this conversation ID is associated with.
-     */
-    @JsonProperty("appId")
-    public String getAppId() {
-        return appId;
     }
 
     @java.lang.Override
@@ -91,15 +64,12 @@ public final class Config {
     }
 
     private boolean equalTo(Config other) {
-        return inputFormat.equals(other.inputFormat)
-                && outputFormat.equals(other.outputFormat)
-                && conversationId.equals(other.conversationId)
-                && appId.equals(other.appId);
+        return inputFormat.equals(other.inputFormat) && outputFormat.equals(other.outputFormat);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.inputFormat, this.outputFormat, this.conversationId, this.appId);
+        return Objects.hash(this.inputFormat, this.outputFormat);
     }
 
     @java.lang.Override
@@ -113,7 +83,7 @@ public final class Config {
 
     public interface InputFormatStage {
         /**
-         * <p>The input audio format from the client.</p>
+         * <p>The audio format the client sends. Must be <code>PCM_8000</code> or <code>MULAW_8000</code>.</p>
          */
         OutputFormatStage inputFormat(@NotNull AudioFormat inputFormat);
 
@@ -122,23 +92,9 @@ public final class Config {
 
     public interface OutputFormatStage {
         /**
-         * <p>The output audio format to send to the client.</p>
+         * <p>The audio format the server sends. Must equal <code>inputFormat</code>, or the server returns an <code>invalid_configuration</code> error.</p>
          */
-        ConversationIdStage outputFormat(@NotNull AudioFormat outputFormat);
-    }
-
-    public interface ConversationIdStage {
-        /**
-         * <p>The conversation ID which was created prior to starting this conversation.</p>
-         */
-        AppIdStage conversationId(@NotNull String conversationId);
-    }
-
-    public interface AppIdStage {
-        /**
-         * <p>The app ID this conversation ID is associated with.</p>
-         */
-        _FinalStage appId(@NotNull String appId);
+        _FinalStage outputFormat(@NotNull AudioFormat outputFormat);
     }
 
     public interface _FinalStage {
@@ -146,15 +102,10 @@ public final class Config {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder
-            implements InputFormatStage, OutputFormatStage, ConversationIdStage, AppIdStage, _FinalStage {
+    public static final class Builder implements InputFormatStage, OutputFormatStage, _FinalStage {
         private AudioFormat inputFormat;
 
         private AudioFormat outputFormat;
-
-        private String conversationId;
-
-        private String appId;
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -165,14 +116,12 @@ public final class Config {
         public Builder from(Config other) {
             inputFormat(other.getInputFormat());
             outputFormat(other.getOutputFormat());
-            conversationId(other.getConversationId());
-            appId(other.getAppId());
             return this;
         }
 
         /**
-         * <p>The input audio format from the client.</p>
-         * <p>The input audio format from the client.</p>
+         * <p>The audio format the client sends. Must be <code>PCM_8000</code> or <code>MULAW_8000</code>.</p>
+         * <p>The audio format the client sends. Must be <code>PCM_8000</code> or <code>MULAW_8000</code>.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -183,44 +132,20 @@ public final class Config {
         }
 
         /**
-         * <p>The output audio format to send to the client.</p>
-         * <p>The output audio format to send to the client.</p>
+         * <p>The audio format the server sends. Must equal <code>inputFormat</code>, or the server returns an <code>invalid_configuration</code> error.</p>
+         * <p>The audio format the server sends. Must equal <code>inputFormat</code>, or the server returns an <code>invalid_configuration</code> error.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("outputFormat")
-        public ConversationIdStage outputFormat(@NotNull AudioFormat outputFormat) {
+        public _FinalStage outputFormat(@NotNull AudioFormat outputFormat) {
             this.outputFormat = Objects.requireNonNull(outputFormat, "outputFormat must not be null");
-            return this;
-        }
-
-        /**
-         * <p>The conversation ID which was created prior to starting this conversation.</p>
-         * <p>The conversation ID which was created prior to starting this conversation.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("conversationId")
-        public AppIdStage conversationId(@NotNull String conversationId) {
-            this.conversationId = Objects.requireNonNull(conversationId, "conversationId must not be null");
-            return this;
-        }
-
-        /**
-         * <p>The app ID this conversation ID is associated with.</p>
-         * <p>The app ID this conversation ID is associated with.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("appId")
-        public _FinalStage appId(@NotNull String appId) {
-            this.appId = Objects.requireNonNull(appId, "appId must not be null");
             return this;
         }
 
         @java.lang.Override
         public Config build() {
-            return new Config(inputFormat, outputFormat, conversationId, appId, additionalProperties);
+            return new Config(inputFormat, outputFormat, additionalProperties);
         }
     }
 }

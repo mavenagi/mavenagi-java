@@ -41,6 +41,7 @@ public class AsyncCapabilitiesClient {
      * here and an Action read from the Actions API are the same object. Intelligent Fields are the
      * one exception: their own API also returns the charters referencing the field, which this
      * endpoint leaves out.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<CapabilityResponse> getCapability(CapabilityType capabilityType, String referenceId) {
         return this.rawClient.getCapability(capabilityType, referenceId).thenApply(response -> response.body());
@@ -52,6 +53,7 @@ public class AsyncCapabilitiesClient {
      * here and an Action read from the Actions API are the same object. Intelligent Fields are the
      * one exception: their own API also returns the charters referencing the field, which this
      * endpoint leaves out.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<CapabilityResponse> getCapability(
             CapabilityType capabilityType, String referenceId, GetCapabilityByTypeRequest request) {
@@ -66,6 +68,7 @@ public class AsyncCapabilitiesClient {
      * here and an Action read from the Actions API are the same object. Intelligent Fields are the
      * one exception: their own API also returns the charters referencing the field, which this
      * endpoint leaves out.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<CapabilityResponse> getCapability(
             CapabilityType capabilityType,
@@ -82,6 +85,7 @@ public class AsyncCapabilitiesClient {
      * unpublish operation, and it works the same way for every capability type.
      * <p>Everything else about a capability -- its name, its description, and any settings
      * particular to its kind -- is changed through that capability's own API.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<CapabilityResponse> patchCapability(CapabilityType capabilityType, String referenceId) {
         return this.rawClient.patchCapability(capabilityType, referenceId).thenApply(response -> response.body());
@@ -92,6 +96,7 @@ public class AsyncCapabilitiesClient {
      * unpublish operation, and it works the same way for every capability type.
      * <p>Everything else about a capability -- its name, its description, and any settings
      * particular to its kind -- is changed through that capability's own API.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<CapabilityResponse> patchCapability(
             CapabilityType capabilityType, String referenceId, PatchCapabilityByTypeRequest request) {
@@ -105,6 +110,7 @@ public class AsyncCapabilitiesClient {
      * unpublish operation, and it works the same way for every capability type.
      * <p>Everything else about a capability -- its name, its description, and any settings
      * particular to its kind -- is changed through that capability's own API.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<CapabilityResponse> patchCapability(
             CapabilityType capabilityType,
@@ -123,6 +129,7 @@ public class AsyncCapabilitiesClient {
      * <p>With <code>variantReferenceId</code>, an intelligent field's delete is staged in that variant instead,
      * and takes effect when the variant is committed. Until then the agent keeps using the field,
      * and only a later patch or delete through the same variant is a 404.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<Void> deleteCapability(CapabilityType capabilityType, String referenceId) {
         return this.rawClient.deleteCapability(capabilityType, referenceId).thenApply(response -> response.body());
@@ -135,6 +142,7 @@ public class AsyncCapabilitiesClient {
      * <p>With <code>variantReferenceId</code>, an intelligent field's delete is staged in that variant instead,
      * and takes effect when the variant is committed. Until then the agent keeps using the field,
      * and only a later patch or delete through the same variant is a 404.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<Void> deleteCapability(
             CapabilityType capabilityType, String referenceId, DeleteCapabilityByTypeRequest request) {
@@ -150,6 +158,7 @@ public class AsyncCapabilitiesClient {
      * <p>With <code>variantReferenceId</code>, an intelligent field's delete is staged in that variant instead,
      * and takes effect when the variant is committed. Until then the agent keeps using the field,
      * and only a later patch or delete through the same variant is a 404.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<Void> deleteCapability(
             CapabilityType capabilityType,
@@ -169,6 +178,7 @@ public class AsyncCapabilitiesClient {
      * effects in real systems. Nothing here runs a capability live.</p>
      * <p>Only actions can be simulated today. Triggers and conversation kickoffs are rejected with a
      * 400 until they can run as simulations. Intelligent fields cannot be simulated.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>create:simulations</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<CapabilitySimulationResult> simulateCapability(
             CapabilityType capabilityType, String referenceId, SimulateCapabilityByTypeRequest request) {
@@ -185,6 +195,7 @@ public class AsyncCapabilitiesClient {
      * effects in real systems. Nothing here runs a capability live.</p>
      * <p>Only actions can be simulated today. Triggers and conversation kickoffs are rejected with a
      * 400 until they can run as simulations. Intelligent fields cannot be simulated.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>create:simulations</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<CapabilitySimulationResult> simulateCapability(
             CapabilityType capabilityType,
@@ -203,6 +214,10 @@ public class AsyncCapabilitiesClient {
      * <p>Sorting by <code>NAME</code> or <code>TYPE</code> instead orders ascending unless <code>sortDesc</code> says otherwise;
      * <code>sortDesc</code> overrides the default either way.</p>
      * <p>Deleted capabilities are never returned.</p>
+     * <p>Pagination is limited to the first 10,000 matching capabilities: <code>(page + 1) * size</code> must
+     * not exceed 10,000, and a request beyond that is rejected with a 400. Add filters to reach
+     * later results.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<CapabilitiesSearchResponse> searchCapabilities() {
         return this.rawClient.searchCapabilities().thenApply(response -> response.body());
@@ -215,6 +230,10 @@ public class AsyncCapabilitiesClient {
      * <p>Sorting by <code>NAME</code> or <code>TYPE</code> instead orders ascending unless <code>sortDesc</code> says otherwise;
      * <code>sortDesc</code> overrides the default either way.</p>
      * <p>Deleted capabilities are never returned.</p>
+     * <p>Pagination is limited to the first 10,000 matching capabilities: <code>(page + 1) * size</code> must
+     * not exceed 10,000, and a request beyond that is rejected with a 400. Add filters to reach
+     * later results.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<CapabilitiesSearchResponse> searchCapabilities(CapabilitiesSearchRequest request) {
         return this.rawClient.searchCapabilities(request).thenApply(response -> response.body());
@@ -227,6 +246,10 @@ public class AsyncCapabilitiesClient {
      * <p>Sorting by <code>NAME</code> or <code>TYPE</code> instead orders ascending unless <code>sortDesc</code> says otherwise;
      * <code>sortDesc</code> overrides the default either way.</p>
      * <p>Deleted capabilities are never returned.</p>
+     * <p>Pagination is limited to the first 10,000 matching capabilities: <code>(page + 1) * size</code> must
+     * not exceed 10,000, and a request beyond that is rejected with a 400. Add filters to reach
+     * later results.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<CapabilitiesSearchResponse> searchCapabilities(
             CapabilitiesSearchRequest request, RequestOptions requestOptions) {
@@ -241,6 +264,10 @@ public class AsyncCapabilitiesClient {
      * <code>EVENT_CREATED</code> trigger records the event as its subject, so pass the event's ID to find
      * those.</p>
      * <p>Results can trail a run by a few seconds. Executions are searchable for 90 days.</p>
+     * <p>Pagination is limited to the first 10,000 matching executions: <code>(page + 1) * size</code> must not
+     * exceed 10,000, and a request beyond that is rejected with a 400. Narrow <code>createdAfter</code> and
+     * <code>createdBefore</code> to reach later results.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<CapabilityExecutionsSearchResponse> searchCapabilityExecutions() {
         return this.rawClient.searchCapabilityExecutions().thenApply(response -> response.body());
@@ -254,6 +281,10 @@ public class AsyncCapabilitiesClient {
      * <code>EVENT_CREATED</code> trigger records the event as its subject, so pass the event's ID to find
      * those.</p>
      * <p>Results can trail a run by a few seconds. Executions are searchable for 90 days.</p>
+     * <p>Pagination is limited to the first 10,000 matching executions: <code>(page + 1) * size</code> must not
+     * exceed 10,000, and a request beyond that is rejected with a 400. Narrow <code>createdAfter</code> and
+     * <code>createdBefore</code> to reach later results.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<CapabilityExecutionsSearchResponse> searchCapabilityExecutions(
             CapabilityExecutionsSearchRequest request) {
@@ -268,6 +299,10 @@ public class AsyncCapabilitiesClient {
      * <code>EVENT_CREATED</code> trigger records the event as its subject, so pass the event's ID to find
      * those.</p>
      * <p>Results can trail a run by a few seconds. Executions are searchable for 90 days.</p>
+     * <p>Pagination is limited to the first 10,000 matching executions: <code>(page + 1) * size</code> must not
+     * exceed 10,000, and a request beyond that is rejected with a 400. Narrow <code>createdAfter</code> and
+     * <code>createdBefore</code> to reach later results.</p>
+     * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<CapabilityExecutionsSearchResponse> searchCapabilityExecutions(
             CapabilityExecutionsSearchRequest request, RequestOptions requestOptions) {
