@@ -25,6 +25,8 @@ public final class VoiceSessionTokenRequest {
 
     private final VoiceTokenType type;
 
+    private final Optional<VoiceWebRtcTransport> transport;
+
     private final Optional<Map<String, String>> customData;
 
     private final Map<String, Object> additionalProperties;
@@ -32,10 +34,12 @@ public final class VoiceSessionTokenRequest {
     private VoiceSessionTokenRequest(
             String appUserId,
             VoiceTokenType type,
+            Optional<VoiceWebRtcTransport> transport,
             Optional<Map<String, String>> customData,
             Map<String, Object> additionalProperties) {
         this.appUserId = appUserId;
         this.type = type;
+        this.transport = transport;
         this.customData = customData;
         this.additionalProperties = additionalProperties;
     }
@@ -52,11 +56,25 @@ public final class VoiceSessionTokenRequest {
 
     /**
      * @return The type of session token to generate.
-     * Use &quot;webrtc&quot; for browser-based calls via Twilio, or &quot;websocket&quot; for direct WebSocket connections.
+     * Use &quot;webrtc&quot; for browser-based calls, or &quot;websocket&quot; for direct WebSocket connections.
+     * For &quot;webrtc&quot;, <code>transport</code> selects the Maven telephony gateway (default) or Twilio.
      */
     @JsonProperty("type")
     public VoiceTokenType getType() {
         return type;
+    }
+
+    /**
+     * @return The transport for a &quot;webrtc&quot; call. Default: &quot;gateway&quot;.
+     * <ul>
+     * <li>&quot;gateway&quot;: the response <code>token</code> is a token for the Maven telephony gateway, and the response includes <code>connectUrl</code>.</li>
+     * <li>&quot;twilio&quot;: the response <code>token</code> is a Twilio access token.</li>
+     * </ul>
+     * <p>The server ignores this field for &quot;websocket&quot; tokens.</p>
+     */
+    @JsonProperty("transport")
+    public Optional<VoiceWebRtcTransport> getTransport() {
+        return transport;
     }
 
     /**
@@ -85,12 +103,15 @@ public final class VoiceSessionTokenRequest {
     }
 
     private boolean equalTo(VoiceSessionTokenRequest other) {
-        return appUserId.equals(other.appUserId) && type.equals(other.type) && customData.equals(other.customData);
+        return appUserId.equals(other.appUserId)
+                && type.equals(other.type)
+                && transport.equals(other.transport)
+                && customData.equals(other.customData);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.appUserId, this.type, this.customData);
+        return Objects.hash(this.appUserId, this.type, this.transport, this.customData);
     }
 
     @java.lang.Override
@@ -116,13 +137,26 @@ public final class VoiceSessionTokenRequest {
     public interface TypeStage {
         /**
          * <p>The type of session token to generate.
-         * Use &quot;webrtc&quot; for browser-based calls via Twilio, or &quot;websocket&quot; for direct WebSocket connections.</p>
+         * Use &quot;webrtc&quot; for browser-based calls, or &quot;websocket&quot; for direct WebSocket connections.
+         * For &quot;webrtc&quot;, <code>transport</code> selects the Maven telephony gateway (default) or Twilio.</p>
          */
         _FinalStage type(@NotNull VoiceTokenType type);
     }
 
     public interface _FinalStage {
         VoiceSessionTokenRequest build();
+
+        /**
+         * <p>The transport for a &quot;webrtc&quot; call. Default: &quot;gateway&quot;.</p>
+         * <ul>
+         * <li>&quot;gateway&quot;: the response <code>token</code> is a token for the Maven telephony gateway, and the response includes <code>connectUrl</code>.</li>
+         * <li>&quot;twilio&quot;: the response <code>token</code> is a Twilio access token.</li>
+         * </ul>
+         * <p>The server ignores this field for &quot;websocket&quot; tokens.</p>
+         */
+        _FinalStage transport(Optional<VoiceWebRtcTransport> transport);
+
+        _FinalStage transport(VoiceWebRtcTransport transport);
 
         /**
          * <p>Arbitrary key-value metadata to associate with this session (e.g., conversationId, topic).</p>
@@ -146,6 +180,8 @@ public final class VoiceSessionTokenRequest {
 
         private Optional<Map<String, String>> customData = Optional.empty();
 
+        private Optional<VoiceWebRtcTransport> transport = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -155,6 +191,7 @@ public final class VoiceSessionTokenRequest {
         public Builder from(VoiceSessionTokenRequest other) {
             appUserId(other.getAppUserId());
             type(other.getType());
+            transport(other.getTransport());
             customData(other.getCustomData());
             return this;
         }
@@ -177,9 +214,11 @@ public final class VoiceSessionTokenRequest {
 
         /**
          * <p>The type of session token to generate.
-         * Use &quot;webrtc&quot; for browser-based calls via Twilio, or &quot;websocket&quot; for direct WebSocket connections.</p>
+         * Use &quot;webrtc&quot; for browser-based calls, or &quot;websocket&quot; for direct WebSocket connections.
+         * For &quot;webrtc&quot;, <code>transport</code> selects the Maven telephony gateway (default) or Twilio.</p>
          * <p>The type of session token to generate.
-         * Use &quot;webrtc&quot; for browser-based calls via Twilio, or &quot;websocket&quot; for direct WebSocket connections.</p>
+         * Use &quot;webrtc&quot; for browser-based calls, or &quot;websocket&quot; for direct WebSocket connections.
+         * For &quot;webrtc&quot;, <code>transport</code> selects the Maven telephony gateway (default) or Twilio.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -221,9 +260,39 @@ public final class VoiceSessionTokenRequest {
             return this;
         }
 
+        /**
+         * <p>The transport for a &quot;webrtc&quot; call. Default: &quot;gateway&quot;.</p>
+         * <ul>
+         * <li>&quot;gateway&quot;: the response <code>token</code> is a token for the Maven telephony gateway, and the response includes <code>connectUrl</code>.</li>
+         * <li>&quot;twilio&quot;: the response <code>token</code> is a Twilio access token.</li>
+         * </ul>
+         * <p>The server ignores this field for &quot;websocket&quot; tokens.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage transport(VoiceWebRtcTransport transport) {
+            this.transport = Optional.ofNullable(transport);
+            return this;
+        }
+
+        /**
+         * <p>The transport for a &quot;webrtc&quot; call. Default: &quot;gateway&quot;.</p>
+         * <ul>
+         * <li>&quot;gateway&quot;: the response <code>token</code> is a token for the Maven telephony gateway, and the response includes <code>connectUrl</code>.</li>
+         * <li>&quot;twilio&quot;: the response <code>token</code> is a Twilio access token.</li>
+         * </ul>
+         * <p>The server ignores this field for &quot;websocket&quot; tokens.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "transport", nulls = Nulls.SKIP)
+        public _FinalStage transport(Optional<VoiceWebRtcTransport> transport) {
+            this.transport = transport;
+            return this;
+        }
+
         @java.lang.Override
         public VoiceSessionTokenRequest build() {
-            return new VoiceSessionTokenRequest(appUserId, type, customData, additionalProperties);
+            return new VoiceSessionTokenRequest(appUserId, type, transport, customData, additionalProperties);
         }
     }
 }

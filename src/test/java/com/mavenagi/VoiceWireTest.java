@@ -36,7 +36,7 @@ public class VoiceWireTest {
     public void testSessionToken() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"token\":\"token\",\"identity\":\"identity\",\"type\":\"webrtc\",\"expiresIn\":1}"));
+            .setBody("{\"token\":\"token\",\"identity\":\"identity\",\"type\":\"webrtc\",\"expiresIn\":1,\"connectUrl\":\"connectUrl\"}"));
         VoiceSessionTokenResponse response = client.voice().sessionToken(
             VoiceSessionTokenRequest
                 .builder()
@@ -85,7 +85,8 @@ public class VoiceWireTest {
             + "  \"token\": \"token\",\n"
             + "  \"identity\": \"identity\",\n"
             + "  \"type\": \"webrtc\",\n"
-            + "  \"expiresIn\": 1\n"
+            + "  \"expiresIn\": 1,\n"
+            + "  \"connectUrl\": \"connectUrl\"\n"
             + "}";
         JsonNode actualResponseNode = objectMapper.readTree(actualResponseJson);
         JsonNode expectedResponseNode = objectMapper.readTree(expectedResponseBody);

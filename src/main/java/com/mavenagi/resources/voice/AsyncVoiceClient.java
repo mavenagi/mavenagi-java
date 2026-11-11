@@ -30,7 +30,8 @@ public class AsyncVoiceClient {
      * Creates a short-lived session token for authenticating voice connections.
      * <p>Supports two token types:</p>
      * <ul>
-     * <li><strong>webrtc</strong>: A Twilio-compatible access token for browser-based WebRTC calls</li>
+     * <li><strong>webrtc</strong>: A token for browser-based WebRTC calls. The <code>transport</code> field selects the token format:
+     * a token for the Maven telephony gateway (default) or a Twilio access token.</li>
      * <li><strong>websocket</strong>: An ES256 JWT for direct WebSocket connections to /v1/realtime/conversations</li>
      * </ul>
      * <p>Session tokens are required before establishing any voice connection.</p>
@@ -43,7 +44,8 @@ public class AsyncVoiceClient {
      * Creates a short-lived session token for authenticating voice connections.
      * <p>Supports two token types:</p>
      * <ul>
-     * <li><strong>webrtc</strong>: A Twilio-compatible access token for browser-based WebRTC calls</li>
+     * <li><strong>webrtc</strong>: A token for browser-based WebRTC calls. The <code>transport</code> field selects the token format:
+     * a token for the Maven telephony gateway (default) or a Twilio access token.</li>
      * <li><strong>websocket</strong>: An ES256 JWT for direct WebSocket connections to /v1/realtime/conversations</li>
      * </ul>
      * <p>Session tokens are required before establishing any voice connection.</p>

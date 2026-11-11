@@ -9,11 +9,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
@@ -27,6 +29,8 @@ public final class VoiceSessionTokenResponse {
 
     private final int expiresIn;
 
+    private final Optional<String> connectUrl;
+
     private final Map<String, Object> additionalProperties;
 
     private VoiceSessionTokenResponse(
@@ -34,16 +38,20 @@ public final class VoiceSessionTokenResponse {
             String identity,
             VoiceTokenType type,
             int expiresIn,
+            Optional<String> connectUrl,
             Map<String, Object> additionalProperties) {
         this.token = token;
         this.identity = identity;
         this.type = type;
         this.expiresIn = expiresIn;
+        this.connectUrl = connectUrl;
         this.additionalProperties = additionalProperties;
     }
 
     /**
-     * @return Opaque JWT session token. Pass this in the Authorization header when connecting.
+     * @return Opaque session token. Pass this in the Authorization header when connecting.
+     * For &quot;websocket&quot;, the token is an ES256 JWT.
+     * For &quot;webrtc&quot;, the token format depends on <code>transport</code>.
      */
     @JsonProperty("token")
     public String getToken() {
@@ -74,6 +82,16 @@ public final class VoiceSessionTokenResponse {
         return expiresIn;
     }
 
+    /**
+     * @return The URL that starts a &quot;webrtc&quot; call through the Maven telephony gateway.
+     * The client sends <code>token</code> to this URL to start the call.
+     * Present only when the request sets <code>transport</code> to &quot;gateway&quot;.
+     */
+    @JsonProperty("connectUrl")
+    public Optional<String> getConnectUrl() {
+        return connectUrl;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -89,12 +107,13 @@ public final class VoiceSessionTokenResponse {
         return token.equals(other.token)
                 && identity.equals(other.identity)
                 && type.equals(other.type)
-                && expiresIn == other.expiresIn;
+                && expiresIn == other.expiresIn
+                && connectUrl.equals(other.connectUrl);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.token, this.identity, this.type, this.expiresIn);
+        return Objects.hash(this.token, this.identity, this.type, this.expiresIn, this.connectUrl);
     }
 
     @java.lang.Override
@@ -108,7 +127,9 @@ public final class VoiceSessionTokenResponse {
 
     public interface TokenStage {
         /**
-         * <p>Opaque JWT session token. Pass this in the Authorization header when connecting.</p>
+         * <p>Opaque session token. Pass this in the Authorization header when connecting.
+         * For &quot;websocket&quot;, the token is an ES256 JWT.
+         * For &quot;webrtc&quot;, the token format depends on <code>transport</code>.</p>
          */
         IdentityStage token(@NotNull String token);
 
@@ -138,6 +159,15 @@ public final class VoiceSessionTokenResponse {
 
     public interface _FinalStage {
         VoiceSessionTokenResponse build();
+
+        /**
+         * <p>The URL that starts a &quot;webrtc&quot; call through the Maven telephony gateway.
+         * The client sends <code>token</code> to this URL to start the call.
+         * Present only when the request sets <code>transport</code> to &quot;gateway&quot;.</p>
+         */
+        _FinalStage connectUrl(Optional<String> connectUrl);
+
+        _FinalStage connectUrl(String connectUrl);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -150,6 +180,8 @@ public final class VoiceSessionTokenResponse {
 
         private int expiresIn;
 
+        private Optional<String> connectUrl = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -161,12 +193,17 @@ public final class VoiceSessionTokenResponse {
             identity(other.getIdentity());
             type(other.getType());
             expiresIn(other.getExpiresIn());
+            connectUrl(other.getConnectUrl());
             return this;
         }
 
         /**
-         * <p>Opaque JWT session token. Pass this in the Authorization header when connecting.</p>
-         * <p>Opaque JWT session token. Pass this in the Authorization header when connecting.</p>
+         * <p>Opaque session token. Pass this in the Authorization header when connecting.
+         * For &quot;websocket&quot;, the token is an ES256 JWT.
+         * For &quot;webrtc&quot;, the token format depends on <code>transport</code>.</p>
+         * <p>Opaque session token. Pass this in the Authorization header when connecting.
+         * For &quot;websocket&quot;, the token is an ES256 JWT.
+         * For &quot;webrtc&quot;, the token format depends on <code>transport</code>.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -212,9 +249,33 @@ public final class VoiceSessionTokenResponse {
             return this;
         }
 
+        /**
+         * <p>The URL that starts a &quot;webrtc&quot; call through the Maven telephony gateway.
+         * The client sends <code>token</code> to this URL to start the call.
+         * Present only when the request sets <code>transport</code> to &quot;gateway&quot;.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage connectUrl(String connectUrl) {
+            this.connectUrl = Optional.ofNullable(connectUrl);
+            return this;
+        }
+
+        /**
+         * <p>The URL that starts a &quot;webrtc&quot; call through the Maven telephony gateway.
+         * The client sends <code>token</code> to this URL to start the call.
+         * Present only when the request sets <code>transport</code> to &quot;gateway&quot;.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "connectUrl", nulls = Nulls.SKIP)
+        public _FinalStage connectUrl(Optional<String> connectUrl) {
+            this.connectUrl = connectUrl;
+            return this;
+        }
+
         @java.lang.Override
         public VoiceSessionTokenResponse build() {
-            return new VoiceSessionTokenResponse(token, identity, type, expiresIn, additionalProperties);
+            return new VoiceSessionTokenResponse(token, identity, type, expiresIn, connectUrl, additionalProperties);
         }
     }
 }
