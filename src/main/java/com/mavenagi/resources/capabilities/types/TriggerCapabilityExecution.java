@@ -24,10 +24,13 @@ import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = TriggerCapabilityExecution.Builder.class)
-public final class TriggerCapabilityExecution implements ICapabilityExecutionBase {
-    private final EntityId capabilityId;
-
+public final class TriggerCapabilityExecution
+        implements ICapabilityExecutionBase, ICapabilityRunBase, ITriggerRunDetails {
     private final EntityId subjectId;
+
+    private final OffsetDateTime createdAt;
+
+    private final EntityId capabilityId;
 
     private final CapabilityExecutionStatus status;
 
@@ -41,60 +44,49 @@ public final class TriggerCapabilityExecution implements ICapabilityExecutionBas
 
     private final Optional<Long> durationMs;
 
-    private final OffsetDateTime createdAt;
-
     private final ExecutionMode executionMode;
 
     private final EventTriggerType eventType;
-
-    private final int attempt;
 
     private final Optional<CapabilityExecutionRetryability> retryability;
 
     private final Optional<Integer> httpStatus;
 
+    private final int attempt;
+
     private final Map<String, Object> additionalProperties;
 
     private TriggerCapabilityExecution(
-            EntityId capabilityId,
             EntityId subjectId,
+            OffsetDateTime createdAt,
+            EntityId capabilityId,
             CapabilityExecutionStatus status,
             Optional<CapabilityExecutionCompletionReason> completionReason,
             Optional<String> message,
             OffsetDateTime startedAt,
             Optional<OffsetDateTime> completedAt,
             Optional<Long> durationMs,
-            OffsetDateTime createdAt,
             ExecutionMode executionMode,
             EventTriggerType eventType,
-            int attempt,
             Optional<CapabilityExecutionRetryability> retryability,
             Optional<Integer> httpStatus,
+            int attempt,
             Map<String, Object> additionalProperties) {
-        this.capabilityId = capabilityId;
         this.subjectId = subjectId;
+        this.createdAt = createdAt;
+        this.capabilityId = capabilityId;
         this.status = status;
         this.completionReason = completionReason;
         this.message = message;
         this.startedAt = startedAt;
         this.completedAt = completedAt;
         this.durationMs = durationMs;
-        this.createdAt = createdAt;
         this.executionMode = executionMode;
         this.eventType = eventType;
-        this.attempt = attempt;
         this.retryability = retryability;
         this.httpStatus = httpStatus;
+        this.attempt = attempt;
         this.additionalProperties = additionalProperties;
-    }
-
-    /**
-     * @return The capability that ran.
-     */
-    @JsonProperty("capabilityId")
-    @java.lang.Override
-    public EntityId getCapabilityId() {
-        return capabilityId;
     }
 
     /**
@@ -107,6 +99,24 @@ public final class TriggerCapabilityExecution implements ICapabilityExecutionBas
     @java.lang.Override
     public EntityId getSubjectId() {
         return subjectId;
+    }
+
+    /**
+     * @return When the execution was recorded. Results are ordered by this field.
+     */
+    @JsonProperty("createdAt")
+    @java.lang.Override
+    public OffsetDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    /**
+     * @return The capability that ran.
+     */
+    @JsonProperty("capabilityId")
+    @java.lang.Override
+    public EntityId getCapabilityId() {
+        return capabilityId;
     }
 
     @JsonProperty("status")
@@ -163,15 +173,6 @@ public final class TriggerCapabilityExecution implements ICapabilityExecutionBas
     }
 
     /**
-     * @return When the execution was recorded. Results are ordered by this field.
-     */
-    @JsonProperty("createdAt")
-    @java.lang.Override
-    public OffsetDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    /**
      * @return Whether the execution ran on live data or in a simulation. A Conversation Kickoff takes
      * its conversation's mode, and an Event Trigger its event's.
      */
@@ -185,8 +186,27 @@ public final class TriggerCapabilityExecution implements ICapabilityExecutionBas
      * @return The kind of event that caused this run.
      */
     @JsonProperty("eventType")
+    @java.lang.Override
     public EventTriggerType getEventType() {
         return eventType;
+    }
+
+    /**
+     * @return How a failure should be treated. Present only on FAILED executions.
+     */
+    @JsonProperty("retryability")
+    @java.lang.Override
+    public Optional<CapabilityExecutionRetryability> getRetryability() {
+        return retryability;
+    }
+
+    /**
+     * @return HTTP status returned by the app, when the failure carried one.
+     */
+    @JsonProperty("httpStatus")
+    @java.lang.Override
+    public Optional<Integer> getHttpStatus() {
+        return httpStatus;
     }
 
     /**
@@ -197,22 +217,6 @@ public final class TriggerCapabilityExecution implements ICapabilityExecutionBas
     @JsonProperty("attempt")
     public int getAttempt() {
         return attempt;
-    }
-
-    /**
-     * @return How a failure should be treated. Present only on FAILED executions.
-     */
-    @JsonProperty("retryability")
-    public Optional<CapabilityExecutionRetryability> getRetryability() {
-        return retryability;
-    }
-
-    /**
-     * @return HTTP status returned by the app, when the failure carried one.
-     */
-    @JsonProperty("httpStatus")
-    public Optional<Integer> getHttpStatus() {
-        return httpStatus;
     }
 
     @java.lang.Override
@@ -227,39 +231,39 @@ public final class TriggerCapabilityExecution implements ICapabilityExecutionBas
     }
 
     private boolean equalTo(TriggerCapabilityExecution other) {
-        return capabilityId.equals(other.capabilityId)
-                && subjectId.equals(other.subjectId)
+        return subjectId.equals(other.subjectId)
+                && createdAt.equals(other.createdAt)
+                && capabilityId.equals(other.capabilityId)
                 && status.equals(other.status)
                 && completionReason.equals(other.completionReason)
                 && message.equals(other.message)
                 && startedAt.equals(other.startedAt)
                 && completedAt.equals(other.completedAt)
                 && durationMs.equals(other.durationMs)
-                && createdAt.equals(other.createdAt)
                 && executionMode.equals(other.executionMode)
                 && eventType.equals(other.eventType)
-                && attempt == other.attempt
                 && retryability.equals(other.retryability)
-                && httpStatus.equals(other.httpStatus);
+                && httpStatus.equals(other.httpStatus)
+                && attempt == other.attempt;
     }
 
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
-                this.capabilityId,
                 this.subjectId,
+                this.createdAt,
+                this.capabilityId,
                 this.status,
                 this.completionReason,
                 this.message,
                 this.startedAt,
                 this.completedAt,
                 this.durationMs,
-                this.createdAt,
                 this.executionMode,
                 this.eventType,
-                this.attempt,
                 this.retryability,
-                this.httpStatus);
+                this.httpStatus,
+                this.attempt);
     }
 
     @java.lang.Override
@@ -267,17 +271,8 @@ public final class TriggerCapabilityExecution implements ICapabilityExecutionBas
         return ObjectMappers.stringify(this);
     }
 
-    public static CapabilityIdStage builder() {
+    public static SubjectIdStage builder() {
         return new Builder();
-    }
-
-    public interface CapabilityIdStage {
-        /**
-         * <p>The capability that ran.</p>
-         */
-        SubjectIdStage capabilityId(@NotNull EntityId capabilityId);
-
-        Builder from(TriggerCapabilityExecution other);
     }
 
     public interface SubjectIdStage {
@@ -287,7 +282,23 @@ public final class TriggerCapabilityExecution implements ICapabilityExecutionBas
          * <p>A deprecated <code>FEEDBACK_CREATED</code> trigger records a feedback here, which <code>subjectIds</code>
          * cannot filter on. Switch those triggers to <code>EVENT_CREATED</code>.</p>
          */
-        StatusStage subjectId(@NotNull EntityId subjectId);
+        CreatedAtStage subjectId(@NotNull EntityId subjectId);
+
+        Builder from(TriggerCapabilityExecution other);
+    }
+
+    public interface CreatedAtStage {
+        /**
+         * <p>When the execution was recorded. Results are ordered by this field.</p>
+         */
+        CapabilityIdStage createdAt(@NotNull OffsetDateTime createdAt);
+    }
+
+    public interface CapabilityIdStage {
+        /**
+         * <p>The capability that ran.</p>
+         */
+        StatusStage capabilityId(@NotNull EntityId capabilityId);
     }
 
     public interface StatusStage {
@@ -298,14 +309,7 @@ public final class TriggerCapabilityExecution implements ICapabilityExecutionBas
         /**
          * <p>When the execution began.</p>
          */
-        CreatedAtStage startedAt(@NotNull OffsetDateTime startedAt);
-    }
-
-    public interface CreatedAtStage {
-        /**
-         * <p>When the execution was recorded. Results are ordered by this field.</p>
-         */
-        ExecutionModeStage createdAt(@NotNull OffsetDateTime createdAt);
+        ExecutionModeStage startedAt(@NotNull OffsetDateTime startedAt);
     }
 
     public interface ExecutionModeStage {
@@ -382,24 +386,24 @@ public final class TriggerCapabilityExecution implements ICapabilityExecutionBas
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
-            implements CapabilityIdStage,
-                    SubjectIdStage,
+            implements SubjectIdStage,
+                    CreatedAtStage,
+                    CapabilityIdStage,
                     StatusStage,
                     StartedAtStage,
-                    CreatedAtStage,
                     ExecutionModeStage,
                     EventTypeStage,
                     AttemptStage,
                     _FinalStage {
-        private EntityId capabilityId;
-
         private EntityId subjectId;
+
+        private OffsetDateTime createdAt;
+
+        private EntityId capabilityId;
 
         private CapabilityExecutionStatus status;
 
         private OffsetDateTime startedAt;
-
-        private OffsetDateTime createdAt;
 
         private ExecutionMode executionMode;
 
@@ -426,32 +430,20 @@ public final class TriggerCapabilityExecution implements ICapabilityExecutionBas
 
         @java.lang.Override
         public Builder from(TriggerCapabilityExecution other) {
-            capabilityId(other.getCapabilityId());
             subjectId(other.getSubjectId());
+            createdAt(other.getCreatedAt());
+            capabilityId(other.getCapabilityId());
             status(other.getStatus());
             completionReason(other.getCompletionReason());
             message(other.getMessage());
             startedAt(other.getStartedAt());
             completedAt(other.getCompletedAt());
             durationMs(other.getDurationMs());
-            createdAt(other.getCreatedAt());
             executionMode(other.getExecutionMode());
             eventType(other.getEventType());
-            attempt(other.getAttempt());
             retryability(other.getRetryability());
             httpStatus(other.getHttpStatus());
-            return this;
-        }
-
-        /**
-         * <p>The capability that ran.</p>
-         * <p>The capability that ran.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("capabilityId")
-        public SubjectIdStage capabilityId(@NotNull EntityId capabilityId) {
-            this.capabilityId = Objects.requireNonNull(capabilityId, "capabilityId must not be null");
+            attempt(other.getAttempt());
             return this;
         }
 
@@ -468,8 +460,32 @@ public final class TriggerCapabilityExecution implements ICapabilityExecutionBas
          */
         @java.lang.Override
         @JsonSetter("subjectId")
-        public StatusStage subjectId(@NotNull EntityId subjectId) {
+        public CreatedAtStage subjectId(@NotNull EntityId subjectId) {
             this.subjectId = Objects.requireNonNull(subjectId, "subjectId must not be null");
+            return this;
+        }
+
+        /**
+         * <p>When the execution was recorded. Results are ordered by this field.</p>
+         * <p>When the execution was recorded. Results are ordered by this field.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("createdAt")
+        public CapabilityIdStage createdAt(@NotNull OffsetDateTime createdAt) {
+            this.createdAt = Objects.requireNonNull(createdAt, "createdAt must not be null");
+            return this;
+        }
+
+        /**
+         * <p>The capability that ran.</p>
+         * <p>The capability that ran.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("capabilityId")
+        public StatusStage capabilityId(@NotNull EntityId capabilityId) {
+            this.capabilityId = Objects.requireNonNull(capabilityId, "capabilityId must not be null");
             return this;
         }
 
@@ -487,20 +503,8 @@ public final class TriggerCapabilityExecution implements ICapabilityExecutionBas
          */
         @java.lang.Override
         @JsonSetter("startedAt")
-        public CreatedAtStage startedAt(@NotNull OffsetDateTime startedAt) {
+        public ExecutionModeStage startedAt(@NotNull OffsetDateTime startedAt) {
             this.startedAt = Objects.requireNonNull(startedAt, "startedAt must not be null");
-            return this;
-        }
-
-        /**
-         * <p>When the execution was recorded. Results are ordered by this field.</p>
-         * <p>When the execution was recorded. Results are ordered by this field.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("createdAt")
-        public ExecutionModeStage createdAt(@NotNull OffsetDateTime createdAt) {
-            this.createdAt = Objects.requireNonNull(createdAt, "createdAt must not be null");
             return this;
         }
 
@@ -673,20 +677,20 @@ public final class TriggerCapabilityExecution implements ICapabilityExecutionBas
         @java.lang.Override
         public TriggerCapabilityExecution build() {
             return new TriggerCapabilityExecution(
-                    capabilityId,
                     subjectId,
+                    createdAt,
+                    capabilityId,
                     status,
                     completionReason,
                     message,
                     startedAt,
                     completedAt,
                     durationMs,
-                    createdAt,
                     executionMode,
                     eventType,
-                    attempt,
                     retryability,
                     httpStatus,
+                    attempt,
                     additionalProperties);
         }
     }

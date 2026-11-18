@@ -4,28 +4,10 @@
 package com.mavenagi.resources.capabilities.types;
 
 import com.mavenagi.resources.commons.types.EntityId;
-import com.mavenagi.resources.commons.types.ExecutionMode;
 import java.time.OffsetDateTime;
-import java.util.Optional;
 
-public interface ICapabilityExecutionBase {
-    EntityId getCapabilityId();
-
+public interface ICapabilityExecutionBase extends ICapabilityRunBase {
     EntityId getSubjectId();
 
-    CapabilityExecutionStatus getStatus();
-
-    Optional<CapabilityExecutionCompletionReason> getCompletionReason();
-
-    Optional<String> getMessage();
-
-    OffsetDateTime getStartedAt();
-
-    Optional<OffsetDateTime> getCompletedAt();
-
-    Optional<Long> getDurationMs();
-
     OffsetDateTime getCreatedAt();
-
-    ExecutionMode getExecutionMode();
 }

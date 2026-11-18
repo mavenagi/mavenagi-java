@@ -56,6 +56,8 @@ public final class EntityType {
 
     public static final EntityType KNOWLEDGE_BASE = new EntityType(Value.KNOWLEDGE_BASE, "KNOWLEDGE_BASE");
 
+    public static final EntityType MAVEN_USER = new EntityType(Value.MAVEN_USER, "MAVEN_USER");
+
     public static final EntityType CUSTOMER = new EntityType(Value.CUSTOMER, "CUSTOMER");
 
     public static final EntityType SEGMENT = new EntityType(Value.SEGMENT, "SEGMENT");
@@ -143,6 +145,8 @@ public final class EntityType {
                 return visitor.visitUser();
             case KNOWLEDGE_BASE:
                 return visitor.visitKnowledgeBase();
+            case MAVEN_USER:
+                return visitor.visitMavenUser();
             case CUSTOMER:
                 return visitor.visitCustomer();
             case SEGMENT:
@@ -208,6 +212,8 @@ public final class EntityType {
                 return USER;
             case "KNOWLEDGE_BASE":
                 return KNOWLEDGE_BASE;
+            case "MAVEN_USER":
+                return MAVEN_USER;
             case "CUSTOMER":
                 return CUSTOMER;
             case "SEGMENT":
@@ -280,6 +286,8 @@ public final class EntityType {
 
         FUNCTION_VERSION,
 
+        MAVEN_USER,
+
         UNKNOWN
     }
 
@@ -339,6 +347,8 @@ public final class EntityType {
         T visitFunction();
 
         T visitFunctionVersion();
+
+        T visitMavenUser();
 
         T visitUnknown(String unknownType);
     }

@@ -44,6 +44,14 @@ public final class AppUser implements IAppUser {
         return identifiers;
     }
 
+    /**
+     * @return Data about the user, keyed by field name.
+     * <p>Do not store credentials, tokens or other secrets here, whatever their <code>visibility</code>.
+     * User data is not secret storage: values are stored as given, and the users API returns
+     * them in full to callers that can read users. To pass a per-user credential to your
+     * app's actions, send it as <code>transientData</code> on the ask or submit-action-form request, which
+     * is forwarded to the actions of that request and not stored.</p>
+     */
     @JsonProperty("data")
     @java.lang.Override
     public Map<String, UserData> getData() {
@@ -120,6 +128,14 @@ public final class AppUser implements IAppUser {
             return this;
         }
 
+        /**
+         * <p>Data about the user, keyed by field name.</p>
+         * <p>Do not store credentials, tokens or other secrets here, whatever their <code>visibility</code>.
+         * User data is not secret storage: values are stored as given, and the users API returns
+         * them in full to callers that can read users. To pass a per-user credential to your
+         * app's actions, send it as <code>transientData</code> on the ask or submit-action-form request, which
+         * is forwarded to the actions of that request and not stored.</p>
+         */
         @JsonSetter(value = "data", nulls = Nulls.SKIP)
         public Builder data(Map<String, UserData> data) {
             this.data.clear();

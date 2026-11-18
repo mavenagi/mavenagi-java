@@ -25,14 +25,14 @@ import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = AskRequestBase.Builder.class)
-public final class AskRequestBase implements IAskRequestBase {
+public final class AskRequestBase implements IAskRequestBase, IAskRequestFields {
+    private final Optional<TextFormat> textFormat;
+
     private final EntityIdBase conversationMessageId;
 
     private final Optional<AskType> type;
 
     private final Optional<String> text;
-
-    private final Optional<TextFormat> textFormat;
 
     private final Optional<List<AttachmentRequest>> attachments;
 
@@ -45,24 +45,51 @@ public final class AskRequestBase implements IAskRequestBase {
     private final Map<String, Object> additionalProperties;
 
     private AskRequestBase(
+            Optional<TextFormat> textFormat,
             EntityIdBase conversationMessageId,
             Optional<AskType> type,
             Optional<String> text,
-            Optional<TextFormat> textFormat,
             Optional<List<AttachmentRequest>> attachments,
             Optional<Map<String, String>> transientData,
             Optional<String> timezone,
             Optional<Map<String, String>> appMetadata,
             Map<String, Object> additionalProperties) {
+        this.textFormat = textFormat;
         this.conversationMessageId = conversationMessageId;
         this.type = type;
         this.text = text;
-        this.textFormat = textFormat;
         this.attachments = attachments;
         this.transientData = transientData;
         this.timezone = timezone;
         this.appMetadata = appMetadata;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return What form the answer takes. Omit it for prose, or send <code>jsonSchema</code> to additionally get a
+     * <code>BotObjectResponse</code> matching a schema you supply.
+     * <p>Set per ask and independent of <code>type</code>, so one conversation can mix prose and structured
+     * rounds. Only the answer's form changes: knowledge, actions, charters and segments apply
+     * the same way either way.</p>
+     * <p>A structured answer accompanies the prose one rather than replacing it — the same round
+     * produces both, so the conversation stays readable. On <code>ask_stream</code> the prose still streams
+     * on <code>text</code> events as it always has, and the object arrives whole on a single <code>object</code> event
+     * near the end.</p>
+     * <p>Every answering round carries an object, including one where the agent asks a clarifying
+     * question rather than answering. Shape the schema so it can say &quot;not enough information&quot;
+     * — a populated object is not on its own evidence of a confident answer.</p>
+     * <p>Two exceptions. A round that asks the user to <em>act</em> produces an action form from the
+     * action rather than from an answer, so it carries no object; the round that answers after
+     * the form is submitted does carry one. Leave the <code>FORMS</code> capability off if you need an
+     * object on every round.</p>
+     * <p>A round answered verbatim by a <code>STRICT_RETURN</code> charter also carries no object. That
+     * charter's manual is returned exactly as written without consulting the agent, so there is
+     * nothing to shape into the requested schema — the round returns the manual as <code>text</code> alone.</p>
+     */
+    @JsonProperty("textFormat")
+    @java.lang.Override
+    public Optional<TextFormat> getTextFormat() {
+        return textFormat;
     }
 
     /**
@@ -96,33 +123,6 @@ public final class AskRequestBase implements IAskRequestBase {
     @java.lang.Override
     public Optional<String> getText() {
         return text;
-    }
-
-    /**
-     * @return What form the answer takes. Omit it for prose, or send <code>jsonSchema</code> to additionally get a
-     * <code>BotObjectResponse</code> matching a schema you supply.
-     * <p>Set per ask and independent of <code>type</code>, so one conversation can mix prose and structured
-     * rounds. Only the answer's form changes: knowledge, actions, charters and segments apply
-     * the same way either way.</p>
-     * <p>A structured answer accompanies the prose one rather than replacing it — the same round
-     * produces both, so the conversation stays readable. On <code>ask_stream</code> the prose still streams
-     * on <code>text</code> events as it always has, and the object arrives whole on a single <code>object</code> event
-     * near the end.</p>
-     * <p>Every answering round carries an object, including one where the agent asks a clarifying
-     * question rather than answering. Shape the schema so it can say &quot;not enough information&quot;
-     * — a populated object is not on its own evidence of a confident answer.</p>
-     * <p>Two exceptions. A round that asks the user to <em>act</em> produces an action form from the
-     * action rather than from an answer, so it carries no object; the round that answers after
-     * the form is submitted does carry one. Leave the <code>FORMS</code> capability off if you need an
-     * object on every round.</p>
-     * <p>A round answered verbatim by a <code>STRICT_RETURN</code> charter also carries no object. That
-     * charter's manual is returned exactly as written without consulting the agent, so there is
-     * nothing to shape into the requested schema — the round returns the manual as <code>text</code> alone.</p>
-     */
-    @JsonProperty("textFormat")
-    @java.lang.Override
-    public Optional<TextFormat> getTextFormat() {
-        return textFormat;
     }
 
     /**
@@ -179,10 +179,10 @@ public final class AskRequestBase implements IAskRequestBase {
     }
 
     private boolean equalTo(AskRequestBase other) {
-        return conversationMessageId.equals(other.conversationMessageId)
+        return textFormat.equals(other.textFormat)
+                && conversationMessageId.equals(other.conversationMessageId)
                 && type.equals(other.type)
                 && text.equals(other.text)
-                && textFormat.equals(other.textFormat)
                 && attachments.equals(other.attachments)
                 && transientData.equals(other.transientData)
                 && timezone.equals(other.timezone)
@@ -192,10 +192,10 @@ public final class AskRequestBase implements IAskRequestBase {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
+                this.textFormat,
                 this.conversationMessageId,
                 this.type,
                 this.text,
-                this.textFormat,
                 this.attachments,
                 this.transientData,
                 this.timezone,
@@ -224,26 +224,6 @@ public final class AskRequestBase implements IAskRequestBase {
         AskRequestBase build();
 
         /**
-         * <p>What prompts this assistant response. Omit (or send USER_MESSAGE) for a normal user
-         * question — this is the backwards-compatible default. Use WELCOME for an agent-authored
-         * opener, or PROACTIVE for a message the user did not prompt.</p>
-         */
-        _FinalStage type(Optional<AskType> type);
-
-        _FinalStage type(AskType type);
-
-        /**
-         * <p>For USER_MESSAGE (the default) this is the user's message, in the user's own words, and
-         * is required. For WELCOME and PROACTIVE it is optional and, when provided, steers the
-         * agent's response (a directive to the agent, not the user's own words). (Changed from
-         * required to optional to support the non-user ask types — existing USER_MESSAGE callers
-         * are unaffected.)</p>
-         */
-        _FinalStage text(Optional<String> text);
-
-        _FinalStage text(String text);
-
-        /**
          * <p>What form the answer takes. Omit it for prose, or send <code>jsonSchema</code> to additionally get a
          * <code>BotObjectResponse</code> matching a schema you supply.</p>
          * <p>Set per ask and independent of <code>type</code>, so one conversation can mix prose and structured
@@ -267,6 +247,26 @@ public final class AskRequestBase implements IAskRequestBase {
         _FinalStage textFormat(Optional<TextFormat> textFormat);
 
         _FinalStage textFormat(TextFormat textFormat);
+
+        /**
+         * <p>What prompts this assistant response. Omit (or send USER_MESSAGE) for a normal user
+         * question — this is the backwards-compatible default. Use WELCOME for an agent-authored
+         * opener, or PROACTIVE for a message the user did not prompt.</p>
+         */
+        _FinalStage type(Optional<AskType> type);
+
+        _FinalStage type(AskType type);
+
+        /**
+         * <p>For USER_MESSAGE (the default) this is the user's message, in the user's own words, and
+         * is required. For WELCOME and PROACTIVE it is optional and, when provided, steers the
+         * agent's response (a directive to the agent, not the user's own words). (Changed from
+         * required to optional to support the non-user ask types — existing USER_MESSAGE callers
+         * are unaffected.)</p>
+         */
+        _FinalStage text(Optional<String> text);
+
+        _FinalStage text(String text);
 
         /**
          * <p>The attachments to the message. Image attachments will be sent to the LLM as additional data.
@@ -315,11 +315,11 @@ public final class AskRequestBase implements IAskRequestBase {
 
         private Optional<List<AttachmentRequest>> attachments = Optional.empty();
 
-        private Optional<TextFormat> textFormat = Optional.empty();
-
         private Optional<String> text = Optional.empty();
 
         private Optional<AskType> type = Optional.empty();
+
+        private Optional<TextFormat> textFormat = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -328,10 +328,10 @@ public final class AskRequestBase implements IAskRequestBase {
 
         @java.lang.Override
         public Builder from(AskRequestBase other) {
+            textFormat(other.getTextFormat());
             conversationMessageId(other.getConversationMessageId());
             type(other.getType());
             text(other.getText());
-            textFormat(other.getTextFormat());
             attachments(other.getAttachments());
             transientData(other.getTransientData());
             timezone(other.getTimezone());
@@ -445,6 +445,58 @@ public final class AskRequestBase implements IAskRequestBase {
         }
 
         /**
+         * <p>For USER_MESSAGE (the default) this is the user's message, in the user's own words, and
+         * is required. For WELCOME and PROACTIVE it is optional and, when provided, steers the
+         * agent's response (a directive to the agent, not the user's own words). (Changed from
+         * required to optional to support the non-user ask types — existing USER_MESSAGE callers
+         * are unaffected.)</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage text(String text) {
+            this.text = Optional.ofNullable(text);
+            return this;
+        }
+
+        /**
+         * <p>For USER_MESSAGE (the default) this is the user's message, in the user's own words, and
+         * is required. For WELCOME and PROACTIVE it is optional and, when provided, steers the
+         * agent's response (a directive to the agent, not the user's own words). (Changed from
+         * required to optional to support the non-user ask types — existing USER_MESSAGE callers
+         * are unaffected.)</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "text", nulls = Nulls.SKIP)
+        public _FinalStage text(Optional<String> text) {
+            this.text = text;
+            return this;
+        }
+
+        /**
+         * <p>What prompts this assistant response. Omit (or send USER_MESSAGE) for a normal user
+         * question — this is the backwards-compatible default. Use WELCOME for an agent-authored
+         * opener, or PROACTIVE for a message the user did not prompt.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage type(AskType type) {
+            this.type = Optional.ofNullable(type);
+            return this;
+        }
+
+        /**
+         * <p>What prompts this assistant response. Omit (or send USER_MESSAGE) for a normal user
+         * question — this is the backwards-compatible default. Use WELCOME for an agent-authored
+         * opener, or PROACTIVE for a message the user did not prompt.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "type", nulls = Nulls.SKIP)
+        public _FinalStage type(Optional<AskType> type) {
+            this.type = type;
+            return this;
+        }
+
+        /**
          * <p>What form the answer takes. Omit it for prose, or send <code>jsonSchema</code> to additionally get a
          * <code>BotObjectResponse</code> matching a schema you supply.</p>
          * <p>Set per ask and independent of <code>type</code>, so one conversation can mix prose and structured
@@ -500,65 +552,13 @@ public final class AskRequestBase implements IAskRequestBase {
             return this;
         }
 
-        /**
-         * <p>For USER_MESSAGE (the default) this is the user's message, in the user's own words, and
-         * is required. For WELCOME and PROACTIVE it is optional and, when provided, steers the
-         * agent's response (a directive to the agent, not the user's own words). (Changed from
-         * required to optional to support the non-user ask types — existing USER_MESSAGE callers
-         * are unaffected.)</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage text(String text) {
-            this.text = Optional.ofNullable(text);
-            return this;
-        }
-
-        /**
-         * <p>For USER_MESSAGE (the default) this is the user's message, in the user's own words, and
-         * is required. For WELCOME and PROACTIVE it is optional and, when provided, steers the
-         * agent's response (a directive to the agent, not the user's own words). (Changed from
-         * required to optional to support the non-user ask types — existing USER_MESSAGE callers
-         * are unaffected.)</p>
-         */
-        @java.lang.Override
-        @JsonSetter(value = "text", nulls = Nulls.SKIP)
-        public _FinalStage text(Optional<String> text) {
-            this.text = text;
-            return this;
-        }
-
-        /**
-         * <p>What prompts this assistant response. Omit (or send USER_MESSAGE) for a normal user
-         * question — this is the backwards-compatible default. Use WELCOME for an agent-authored
-         * opener, or PROACTIVE for a message the user did not prompt.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage type(AskType type) {
-            this.type = Optional.ofNullable(type);
-            return this;
-        }
-
-        /**
-         * <p>What prompts this assistant response. Omit (or send USER_MESSAGE) for a normal user
-         * question — this is the backwards-compatible default. Use WELCOME for an agent-authored
-         * opener, or PROACTIVE for a message the user did not prompt.</p>
-         */
-        @java.lang.Override
-        @JsonSetter(value = "type", nulls = Nulls.SKIP)
-        public _FinalStage type(Optional<AskType> type) {
-            this.type = type;
-            return this;
-        }
-
         @java.lang.Override
         public AskRequestBase build() {
             return new AskRequestBase(
+                    textFormat,
                     conversationMessageId,
                     type,
                     text,
-                    textFormat,
                     attachments,
                     transientData,
                     timezone,

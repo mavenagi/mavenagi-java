@@ -21,7 +21,11 @@ import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ArraySettingsSchemaEntry.Builder.class)
-public final class ArraySettingsSchemaEntry implements ISettingsSchemaEntryBase {
+public final class ArraySettingsSchemaEntry implements IValidatedSettingsSchemaEntryBase, ISettingsSchemaEntryBase {
+    private final Optional<SettingsSchemaValidation> validation;
+
+    private final Optional<List<SettingsSchemaValidation>> validations;
+
     private final String key;
 
     private final String displayName;
@@ -34,27 +38,45 @@ public final class ArraySettingsSchemaEntry implements ISettingsSchemaEntryBase 
 
     private final Optional<List<String>> defaultValue;
 
-    private final Optional<SettingsSchemaValidation> validation;
-
     private final Map<String, Object> additionalProperties;
 
     private ArraySettingsSchemaEntry(
+            Optional<SettingsSchemaValidation> validation,
+            Optional<List<SettingsSchemaValidation>> validations,
             String key,
             String displayName,
             Optional<String> description,
             Optional<VisibilityType> visibility,
             Optional<Boolean> required,
             Optional<List<String>> defaultValue,
-            Optional<SettingsSchemaValidation> validation,
             Map<String, Object> additionalProperties) {
+        this.validation = validation;
+        this.validations = validations;
         this.key = key;
         this.displayName = displayName;
         this.description = description;
         this.visibility = visibility;
         this.required = required;
         this.defaultValue = defaultValue;
-        this.validation = validation;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return Use <code>validations</code>.
+     */
+    @JsonProperty("validation")
+    @java.lang.Override
+    public Optional<SettingsSchemaValidation> getValidation() {
+        return validation;
+    }
+
+    /**
+     * @return More rules for the value, each with its own <code>errorMessage</code>, in order after <code>validation</code>.
+     */
+    @JsonProperty("validations")
+    @java.lang.Override
+    public Optional<List<SettingsSchemaValidation>> getValidations() {
+        return validations;
     }
 
     @JsonProperty("key")
@@ -95,11 +117,6 @@ public final class ArraySettingsSchemaEntry implements ISettingsSchemaEntryBase 
         return defaultValue;
     }
 
-    @JsonProperty("validation")
-    public Optional<SettingsSchemaValidation> getValidation() {
-        return validation;
-    }
-
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -112,25 +129,27 @@ public final class ArraySettingsSchemaEntry implements ISettingsSchemaEntryBase 
     }
 
     private boolean equalTo(ArraySettingsSchemaEntry other) {
-        return key.equals(other.key)
+        return validation.equals(other.validation)
+                && validations.equals(other.validations)
+                && key.equals(other.key)
                 && displayName.equals(other.displayName)
                 && description.equals(other.description)
                 && visibility.equals(other.visibility)
                 && required.equals(other.required)
-                && defaultValue.equals(other.defaultValue)
-                && validation.equals(other.validation);
+                && defaultValue.equals(other.defaultValue);
     }
 
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
+                this.validation,
+                this.validations,
                 this.key,
                 this.displayName,
                 this.description,
                 this.visibility,
                 this.required,
-                this.defaultValue,
-                this.validation);
+                this.defaultValue);
     }
 
     @java.lang.Override
@@ -155,6 +174,20 @@ public final class ArraySettingsSchemaEntry implements ISettingsSchemaEntryBase 
     public interface _FinalStage {
         ArraySettingsSchemaEntry build();
 
+        /**
+         * <p>Use <code>validations</code>.</p>
+         */
+        _FinalStage validation(Optional<SettingsSchemaValidation> validation);
+
+        _FinalStage validation(SettingsSchemaValidation validation);
+
+        /**
+         * <p>More rules for the value, each with its own <code>errorMessage</code>, in order after <code>validation</code>.</p>
+         */
+        _FinalStage validations(Optional<List<SettingsSchemaValidation>> validations);
+
+        _FinalStage validations(List<SettingsSchemaValidation> validations);
+
         _FinalStage description(Optional<String> description);
 
         _FinalStage description(String description);
@@ -173,10 +206,6 @@ public final class ArraySettingsSchemaEntry implements ISettingsSchemaEntryBase 
         _FinalStage defaultValue(Optional<List<String>> defaultValue);
 
         _FinalStage defaultValue(List<String> defaultValue);
-
-        _FinalStage validation(Optional<SettingsSchemaValidation> validation);
-
-        _FinalStage validation(SettingsSchemaValidation validation);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -184,8 +213,6 @@ public final class ArraySettingsSchemaEntry implements ISettingsSchemaEntryBase 
         private String key;
 
         private String displayName;
-
-        private Optional<SettingsSchemaValidation> validation = Optional.empty();
 
         private Optional<List<String>> defaultValue = Optional.empty();
 
@@ -195,6 +222,10 @@ public final class ArraySettingsSchemaEntry implements ISettingsSchemaEntryBase 
 
         private Optional<String> description = Optional.empty();
 
+        private Optional<List<SettingsSchemaValidation>> validations = Optional.empty();
+
+        private Optional<SettingsSchemaValidation> validation = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -202,13 +233,14 @@ public final class ArraySettingsSchemaEntry implements ISettingsSchemaEntryBase 
 
         @java.lang.Override
         public Builder from(ArraySettingsSchemaEntry other) {
+            validation(other.getValidation());
+            validations(other.getValidations());
             key(other.getKey());
             displayName(other.getDisplayName());
             description(other.getDescription());
             visibility(other.getVisibility());
             required(other.getRequired());
             defaultValue(other.getDefaultValue());
-            validation(other.getValidation());
             return this;
         }
 
@@ -223,19 +255,6 @@ public final class ArraySettingsSchemaEntry implements ISettingsSchemaEntryBase 
         @JsonSetter("displayName")
         public _FinalStage displayName(@NotNull String displayName) {
             this.displayName = Objects.requireNonNull(displayName, "displayName must not be null");
-            return this;
-        }
-
-        @java.lang.Override
-        public _FinalStage validation(SettingsSchemaValidation validation) {
-            this.validation = Optional.ofNullable(validation);
-            return this;
-        }
-
-        @java.lang.Override
-        @JsonSetter(value = "validation", nulls = Nulls.SKIP)
-        public _FinalStage validation(Optional<SettingsSchemaValidation> validation) {
-            this.validation = validation;
             return this;
         }
 
@@ -298,16 +317,57 @@ public final class ArraySettingsSchemaEntry implements ISettingsSchemaEntryBase 
             return this;
         }
 
+        /**
+         * <p>More rules for the value, each with its own <code>errorMessage</code>, in order after <code>validation</code>.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage validations(List<SettingsSchemaValidation> validations) {
+            this.validations = Optional.ofNullable(validations);
+            return this;
+        }
+
+        /**
+         * <p>More rules for the value, each with its own <code>errorMessage</code>, in order after <code>validation</code>.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "validations", nulls = Nulls.SKIP)
+        public _FinalStage validations(Optional<List<SettingsSchemaValidation>> validations) {
+            this.validations = validations;
+            return this;
+        }
+
+        /**
+         * <p>Use <code>validations</code>.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage validation(SettingsSchemaValidation validation) {
+            this.validation = Optional.ofNullable(validation);
+            return this;
+        }
+
+        /**
+         * <p>Use <code>validations</code>.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "validation", nulls = Nulls.SKIP)
+        public _FinalStage validation(Optional<SettingsSchemaValidation> validation) {
+            this.validation = validation;
+            return this;
+        }
+
         @java.lang.Override
         public ArraySettingsSchemaEntry build() {
             return new ArraySettingsSchemaEntry(
+                    validation,
+                    validations,
                     key,
                     displayName,
                     description,
                     visibility,
                     required,
                     defaultValue,
-                    validation,
                     additionalProperties);
         }
     }

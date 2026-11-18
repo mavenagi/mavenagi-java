@@ -45,7 +45,18 @@ public final class UserDataWithReference implements IUserData {
     }
 
     /**
-     * @return The visibility of the user metadata
+     * @return Who sees the value.
+     * <ul>
+     * <li><code>VISIBLE</code>: the agent (the LLM) is given the value.</li>
+     * <li><code>PARTIALLY_VISIBLE</code>: the agent is not given the value. Agent user responses mask all
+     * but its last 3 characters.</li>
+     * <li><code>HIDDEN</code>: the agent is not given the value. Agent user responses show it as <code>********</code>.</li>
+     * </ul>
+     * <p>Visibility only controls what the agent is given and how agent user responses
+     * (<code>visibleData</code>) mask the value. It is not encryption or access control. Every value,
+     * whatever its visibility, is returned in full by <code>GET /users/{userId}</code> and
+     * <code>PUT /users</code> (in <code>data</code>, <code>allUserData</code> and <code>agentUserData</code>) and is passed to the
+     * actions and functions of every app that run for the user.</p>
      */
     @JsonProperty("visibility")
     @java.lang.Override
@@ -101,7 +112,18 @@ public final class UserDataWithReference implements IUserData {
 
     public interface VisibilityStage {
         /**
-         * <p>The visibility of the user metadata</p>
+         * <p>Who sees the value.</p>
+         * <ul>
+         * <li><code>VISIBLE</code>: the agent (the LLM) is given the value.</li>
+         * <li><code>PARTIALLY_VISIBLE</code>: the agent is not given the value. Agent user responses mask all
+         * but its last 3 characters.</li>
+         * <li><code>HIDDEN</code>: the agent is not given the value. Agent user responses show it as <code>********</code>.</li>
+         * </ul>
+         * <p>Visibility only controls what the agent is given and how agent user responses
+         * (<code>visibleData</code>) mask the value. It is not encryption or access control. Every value,
+         * whatever its visibility, is returned in full by <code>GET /users/{userId}</code> and
+         * <code>PUT /users</code> (in <code>data</code>, <code>allUserData</code> and <code>agentUserData</code>) and is passed to the
+         * actions and functions of every app that run for the user.</p>
          */
         UserIdStage visibility(@NotNull VisibilityType visibility);
     }
@@ -151,8 +173,30 @@ public final class UserDataWithReference implements IUserData {
         }
 
         /**
-         * <p>The visibility of the user metadata</p>
-         * <p>The visibility of the user metadata</p>
+         * <p>Who sees the value.</p>
+         * <ul>
+         * <li><code>VISIBLE</code>: the agent (the LLM) is given the value.</li>
+         * <li><code>PARTIALLY_VISIBLE</code>: the agent is not given the value. Agent user responses mask all
+         * but its last 3 characters.</li>
+         * <li><code>HIDDEN</code>: the agent is not given the value. Agent user responses show it as <code>********</code>.</li>
+         * </ul>
+         * <p>Visibility only controls what the agent is given and how agent user responses
+         * (<code>visibleData</code>) mask the value. It is not encryption or access control. Every value,
+         * whatever its visibility, is returned in full by <code>GET /users/{userId}</code> and
+         * <code>PUT /users</code> (in <code>data</code>, <code>allUserData</code> and <code>agentUserData</code>) and is passed to the
+         * actions and functions of every app that run for the user.</p>
+         * <p>Who sees the value.</p>
+         * <ul>
+         * <li><code>VISIBLE</code>: the agent (the LLM) is given the value.</li>
+         * <li><code>PARTIALLY_VISIBLE</code>: the agent is not given the value. Agent user responses mask all
+         * but its last 3 characters.</li>
+         * <li><code>HIDDEN</code>: the agent is not given the value. Agent user responses show it as <code>********</code>.</li>
+         * </ul>
+         * <p>Visibility only controls what the agent is given and how agent user responses
+         * (<code>visibleData</code>) mask the value. It is not encryption or access control. Every value,
+         * whatever its visibility, is returned in full by <code>GET /users/{userId}</code> and
+         * <code>PUT /users</code> (in <code>data</code>, <code>allUserData</code> and <code>agentUserData</code>) and is passed to the
+         * actions and functions of every app that run for the user.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override

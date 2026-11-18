@@ -48,6 +48,10 @@ public class AssetsClient {
     /**
      * Commit an upload after successful file transfer.
      * Updates the asset status and makes it available for use.
+     * <p>An asset is committed once. Committing it again with the same checksum is safe while its file
+     * is unchanged, so a client can retry a commit; a different checksum returns a 409. Once
+     * committed, don't write to the upload URL again, even with the same bytes: committing after
+     * that may return a 409, and the file then has to be uploaded as a new asset.</p>
      * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>ask:agent</code>&lt;/Note&gt;</p>
      */
     public void commitUpload(String assetReferenceId) {
@@ -57,6 +61,10 @@ public class AssetsClient {
     /**
      * Commit an upload after successful file transfer.
      * Updates the asset status and makes it available for use.
+     * <p>An asset is committed once. Committing it again with the same checksum is safe while its file
+     * is unchanged, so a client can retry a commit; a different checksum returns a 409. Once
+     * committed, don't write to the upload URL again, even with the same bytes: committing after
+     * that may return a 409, and the file then has to be uploaded as a new asset.</p>
      * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>ask:agent</code>&lt;/Note&gt;</p>
      */
     public void commitUpload(String assetReferenceId, CommitAssetUploadRequest request) {
@@ -66,6 +74,10 @@ public class AssetsClient {
     /**
      * Commit an upload after successful file transfer.
      * Updates the asset status and makes it available for use.
+     * <p>An asset is committed once. Committing it again with the same checksum is safe while its file
+     * is unchanged, so a client can retry a commit; a different checksum returns a 409. Once
+     * committed, don't write to the upload URL again, even with the same bytes: committing after
+     * that may return a 409, and the file then has to be uploaded as a new asset.</p>
      * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>ask:agent</code>&lt;/Note&gt;</p>
      */
     public void commitUpload(String assetReferenceId, CommitAssetUploadRequest request, RequestOptions requestOptions) {

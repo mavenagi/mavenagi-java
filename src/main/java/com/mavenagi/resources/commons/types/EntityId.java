@@ -65,7 +65,7 @@ public final class EntityId implements IEntityIdWithoutAgent, IEntityIdBase {
     }
 
     /**
-     * @return Externally supplied ID to uniquely identify this object. Is globally unique when combined with all other entityId fields (type, appId, organizationId, agentId).
+     * @return Externally supplied ID to uniquely identify this object. Is globally unique when combined with the other fields of its ID.
      * <p>Must be less than 192 characters and contain only:</p>
      * <ul>
      * <li>alphanumeric characters (<code>a-z</code>, <code>A-Z</code>, <code>0-9</code>)</li>
@@ -150,7 +150,7 @@ public final class EntityId implements IEntityIdWithoutAgent, IEntityIdBase {
 
     public interface ReferenceIdStage {
         /**
-         * <p>Externally supplied ID to uniquely identify this object. Is globally unique when combined with all other entityId fields (type, appId, organizationId, agentId).</p>
+         * <p>Externally supplied ID to uniquely identify this object. Is globally unique when combined with the other fields of its ID.</p>
          * <p>Must be less than 192 characters and contain only:</p>
          * <ul>
          * <li>alphanumeric characters (<code>a-z</code>, <code>A-Z</code>, <code>0-9</code>)</li>
@@ -236,7 +236,7 @@ public final class EntityId implements IEntityIdWithoutAgent, IEntityIdBase {
         }
 
         /**
-         * <p>Externally supplied ID to uniquely identify this object. Is globally unique when combined with all other entityId fields (type, appId, organizationId, agentId).</p>
+         * <p>Externally supplied ID to uniquely identify this object. Is globally unique when combined with the other fields of its ID.</p>
          * <p>Must be less than 192 characters and contain only:</p>
          * <ul>
          * <li>alphanumeric characters (<code>a-z</code>, <code>A-Z</code>, <code>0-9</code>)</li>
@@ -247,7 +247,7 @@ public final class EntityId implements IEntityIdWithoutAgent, IEntityIdBase {
          * <li>at symbol (<code>@</code>)</li>
          * <li>pipe symbol (<code>|</code>)</li>
          * </ul>
-         * <p>Externally supplied ID to uniquely identify this object. Is globally unique when combined with all other entityId fields (type, appId, organizationId, agentId).</p>
+         * <p>Externally supplied ID to uniquely identify this object. Is globally unique when combined with the other fields of its ID.</p>
          * <p>Must be less than 192 characters and contain only:</p>
          * <ul>
          * <li>alphanumeric characters (<code>a-z</code>, <code>A-Z</code>, <code>0-9</code>)</li>

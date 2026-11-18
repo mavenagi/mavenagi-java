@@ -61,7 +61,7 @@ public final class AppUserSummary {
     }
 
     /**
-     * @return App provided data masked according to the data's visibility type. <code>HIDDEN</code> or <code>PARTIALLY_VISIBLE</code> data values will be not be fully returned.
+     * @return App provided data, masked by each value's visibility. <code>HIDDEN</code> values are returned as <code>********</code>, and <code>PARTIALLY_VISIBLE</code> values have all but their last 3 characters masked. The masking applies to this response only; <code>GET /users/{userId}</code> returns the full values.
      */
     @JsonProperty("visibleData")
     public Map<String, String> getVisibleData() {
@@ -121,7 +121,7 @@ public final class AppUserSummary {
         _FinalStage addAllIdentifiers(Set<AppUserIdentifier> identifiers);
 
         /**
-         * <p>App provided data masked according to the data's visibility type. <code>HIDDEN</code> or <code>PARTIALLY_VISIBLE</code> data values will be not be fully returned.</p>
+         * <p>App provided data, masked by each value's visibility. <code>HIDDEN</code> values are returned as <code>********</code>, and <code>PARTIALLY_VISIBLE</code> values have all but their last 3 characters masked. The masking applies to this response only; <code>GET /users/{userId}</code> returns the full values.</p>
          */
         _FinalStage visibleData(Map<String, String> visibleData);
 
@@ -164,7 +164,7 @@ public final class AppUserSummary {
         }
 
         /**
-         * <p>App provided data masked according to the data's visibility type. <code>HIDDEN</code> or <code>PARTIALLY_VISIBLE</code> data values will be not be fully returned.</p>
+         * <p>App provided data, masked by each value's visibility. <code>HIDDEN</code> values are returned as <code>********</code>, and <code>PARTIALLY_VISIBLE</code> values have all but their last 3 characters masked. The masking applies to this response only; <code>GET /users/{userId}</code> returns the full values.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -174,7 +174,7 @@ public final class AppUserSummary {
         }
 
         /**
-         * <p>App provided data masked according to the data's visibility type. <code>HIDDEN</code> or <code>PARTIALLY_VISIBLE</code> data values will be not be fully returned.</p>
+         * <p>App provided data, masked by each value's visibility. <code>HIDDEN</code> values are returned as <code>********</code>, and <code>PARTIALLY_VISIBLE</code> values have all but their last 3 characters masked. The masking applies to this response only; <code>GET /users/{userId}</code> returns the full values.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -186,7 +186,7 @@ public final class AppUserSummary {
         }
 
         /**
-         * <p>App provided data masked according to the data's visibility type. <code>HIDDEN</code> or <code>PARTIALLY_VISIBLE</code> data values will be not be fully returned.</p>
+         * <p>App provided data, masked by each value's visibility. <code>HIDDEN</code> values are returned as <code>********</code>, and <code>PARTIALLY_VISIBLE</code> values have all but their last 3 characters masked. The masking applies to this response only; <code>GET /users/{userId}</code> returns the full values.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "visibleData", nulls = Nulls.SKIP)

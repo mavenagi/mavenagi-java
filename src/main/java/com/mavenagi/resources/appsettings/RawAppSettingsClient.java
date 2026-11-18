@@ -180,6 +180,7 @@ public class RawAppSettingsClient {
      * <li>No keys will be removed.</li>
      * </ul>
      * <p>Note that if an array value is provided it will fully replace an existing value as arrays cannot be merged.</p>
+     * <p>Returns the full app settings after the merge, including keys that were not in the request. This is the same object that Get app settings returns.</p>
      */
     public MavenAGIHttpResponse<Map<String, Object>> update(Map<String, Object> request) {
         return update(request, null);
@@ -193,6 +194,7 @@ public class RawAppSettingsClient {
      * <li>No keys will be removed.</li>
      * </ul>
      * <p>Note that if an array value is provided it will fully replace an existing value as arrays cannot be merged.</p>
+     * <p>Returns the full app settings after the merge, including keys that were not in the request. This is the same object that Get app settings returns.</p>
      */
     public MavenAGIHttpResponse<Map<String, Object>> update(
             Map<String, Object> request, RequestOptions requestOptions) {

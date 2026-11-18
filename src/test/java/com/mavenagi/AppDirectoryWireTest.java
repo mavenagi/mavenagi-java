@@ -184,7 +184,7 @@ public class AppDirectoryWireTest {
     public void testGet() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"installed\":\"INSTALLED\",\"settings\":{\"key\":\"value\"},\"installationInstructions\":\"installationInstructions\",\"instructions\":\"instructions\",\"previewUrl\":\"previewUrl\",\"links\":[{\"title\":\"title\",\"description\":\"description\",\"url\":\"url\"},{\"title\":\"title\",\"description\":\"description\",\"url\":\"url\"}],\"settingsSchema\":[{\"type\":\"text\",\"defaultValue\":\"defaultValue\",\"validation\":{\"pattern\":\"pattern\",\"errorMessage\":\"errorMessage\"},\"key\":\"key\",\"displayName\":\"displayName\",\"description\":\"description\",\"visibility\":\"VISIBLE\",\"required\":true},{\"type\":\"text\",\"defaultValue\":\"defaultValue\",\"validation\":{\"pattern\":\"pattern\",\"errorMessage\":\"errorMessage\"},\"key\":\"key\",\"displayName\":\"displayName\",\"description\":\"description\",\"visibility\":\"VISIBLE\",\"required\":true}],\"id\":\"id\",\"name\":\"name\",\"developerOrganizationId\":\"developerOrganizationId\",\"creator\":{\"organizationId\":\"organizationId\",\"name\":\"name\",\"website\":\"website\",\"email\":\"email\",\"phone\":\"phone\"},\"visibility\":\"IN_DEVELOPMENT\",\"description\":\"description\",\"shortDescription\":\"shortDescription\",\"logoUrl\":\"logoUrl\",\"categories\":[\"COMMUNICATION\",\"COMMUNICATION\"],\"capabilities\":[\"ACTIONS\",\"ACTIONS\"],\"isAgentApp\":true}"));
+            .setBody("{\"installed\":\"INSTALLED\",\"settings\":{\"key\":\"value\"},\"installationInstructions\":\"installationInstructions\",\"instructions\":\"instructions\",\"previewUrl\":\"previewUrl\",\"links\":[{\"title\":\"title\",\"description\":\"description\",\"url\":\"url\"},{\"title\":\"title\",\"description\":\"description\",\"url\":\"url\"}],\"settingsSchema\":[{\"type\":\"text\",\"defaultValue\":\"defaultValue\",\"validation\":{\"pattern\":\"pattern\",\"errorMessage\":\"errorMessage\"},\"validations\":[{\"pattern\":\"pattern\",\"errorMessage\":\"errorMessage\"},{\"pattern\":\"pattern\",\"errorMessage\":\"errorMessage\"}],\"key\":\"key\",\"displayName\":\"displayName\",\"description\":\"description\",\"visibility\":\"VISIBLE\",\"required\":true},{\"type\":\"text\",\"defaultValue\":\"defaultValue\",\"validation\":{\"pattern\":\"pattern\",\"errorMessage\":\"errorMessage\"},\"validations\":[{\"pattern\":\"pattern\",\"errorMessage\":\"errorMessage\"},{\"pattern\":\"pattern\",\"errorMessage\":\"errorMessage\"}],\"key\":\"key\",\"displayName\":\"displayName\",\"description\":\"description\",\"visibility\":\"VISIBLE\",\"required\":true}],\"id\":\"id\",\"name\":\"name\",\"developerOrganizationId\":\"developerOrganizationId\",\"creator\":{\"organizationId\":\"organizationId\",\"name\":\"name\",\"website\":\"website\",\"email\":\"email\",\"phone\":\"phone\"},\"visibility\":\"IN_DEVELOPMENT\",\"description\":\"description\",\"shortDescription\":\"shortDescription\",\"logoUrl\":\"logoUrl\",\"categories\":[\"COMMUNICATION\",\"COMMUNICATION\"],\"capabilities\":[\"ACTIONS\",\"ACTIONS\"],\"isAgentApp\":true}"));
         MarketplaceAppDetail response = client.appDirectory().get("appId");
         RecordedRequest request = server.takeRequest();
         Assertions.assertNotNull(request);
@@ -222,6 +222,16 @@ public class AppDirectoryWireTest {
             + "        \"pattern\": \"pattern\",\n"
             + "        \"errorMessage\": \"errorMessage\"\n"
             + "      },\n"
+            + "      \"validations\": [\n"
+            + "        {\n"
+            + "          \"pattern\": \"pattern\",\n"
+            + "          \"errorMessage\": \"errorMessage\"\n"
+            + "        },\n"
+            + "        {\n"
+            + "          \"pattern\": \"pattern\",\n"
+            + "          \"errorMessage\": \"errorMessage\"\n"
+            + "        }\n"
+            + "      ],\n"
             + "      \"key\": \"key\",\n"
             + "      \"displayName\": \"displayName\",\n"
             + "      \"description\": \"description\",\n"
@@ -235,6 +245,16 @@ public class AppDirectoryWireTest {
             + "        \"pattern\": \"pattern\",\n"
             + "        \"errorMessage\": \"errorMessage\"\n"
             + "      },\n"
+            + "      \"validations\": [\n"
+            + "        {\n"
+            + "          \"pattern\": \"pattern\",\n"
+            + "          \"errorMessage\": \"errorMessage\"\n"
+            + "        },\n"
+            + "        {\n"
+            + "          \"pattern\": \"pattern\",\n"
+            + "          \"errorMessage\": \"errorMessage\"\n"
+            + "        }\n"
+            + "      ],\n"
             + "      \"key\": \"key\",\n"
             + "      \"displayName\": \"displayName\",\n"
             + "      \"description\": \"description\",\n"

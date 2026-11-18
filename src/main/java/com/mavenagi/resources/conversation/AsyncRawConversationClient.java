@@ -429,7 +429,7 @@ public class AsyncRawConversationClient {
      * <p>&lt;Warning&gt;This is a destructive operation and cannot be undone. &lt;br/&gt;&lt;br/&gt;
      * What is wiped: the conversation's <code>subject</code> and <code>analysis.agentResponse</code> are cleared, and <code>analysis.userRequest</code> is replaced with <code>reason</code>.
      * Every message's text, from the user and the agent alike, is replaced with <code>reason</code>, and its attachments, follow-up questions, backend LLM prompt and history, the data actions returned, and action arguments are cleared.
-     * Evaluation results for the conversation are deleted, and the payloads recorded on its trigger and action executions are cleared. &lt;br/&gt;&lt;br/&gt;
+     * Evaluation results for the conversation are deleted, the payloads recorded on its trigger and action executions are cleared, and the message recorded on each of its Conversation Kickoff executions is cleared. &lt;br/&gt;&lt;br/&gt;
      * What is kept: the conversation's metadata, each message's charts, structured answer and app-supplied metadata, the conversation's intelligent field values, its feedback and events, and the users who took part. To wipe a user's data, use <code>DELETE /users/{userId}</code> or <code>DELETE /agentusers/{agentUserId}</code>.&lt;/Warning&gt;</p>
      * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>delete:conversations</code>&lt;/Note&gt;</p>
      */
@@ -448,7 +448,7 @@ public class AsyncRawConversationClient {
      * <p>&lt;Warning&gt;This is a destructive operation and cannot be undone. &lt;br/&gt;&lt;br/&gt;
      * What is wiped: the conversation's <code>subject</code> and <code>analysis.agentResponse</code> are cleared, and <code>analysis.userRequest</code> is replaced with <code>reason</code>.
      * Every message's text, from the user and the agent alike, is replaced with <code>reason</code>, and its attachments, follow-up questions, backend LLM prompt and history, the data actions returned, and action arguments are cleared.
-     * Evaluation results for the conversation are deleted, and the payloads recorded on its trigger and action executions are cleared. &lt;br/&gt;&lt;br/&gt;
+     * Evaluation results for the conversation are deleted, the payloads recorded on its trigger and action executions are cleared, and the message recorded on each of its Conversation Kickoff executions is cleared. &lt;br/&gt;&lt;br/&gt;
      * What is kept: the conversation's metadata, each message's charts, structured answer and app-supplied metadata, the conversation's intelligent field values, its feedback and events, and the users who took part. To wipe a user's data, use <code>DELETE /users/{userId}</code> or <code>DELETE /agentusers/{agentUserId}</code>.&lt;/Warning&gt;</p>
      * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>delete:conversations</code>&lt;/Note&gt;</p>
      */
@@ -1197,6 +1197,7 @@ public class AsyncRawConversationClient {
     /**
      * Replaced by <code>updateConversationMetadata</code>.
      * <p>Adds metadata to an existing conversation. If a metadata field already exists, it will be overwritten.</p>
+     * <p>When a metadata size limit is enforced for the agent, each entry may be at most 8,192 bytes by default, counting the key and value together, plus one byte, in UTF-8. A larger entry returns a 400 that names the key.</p>
      * <p>A closed conversation (<code>open</code> set to false) takes no new metadata and returns a 400.</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<Map<String, String>>> addConversationMetadata(
@@ -1207,6 +1208,7 @@ public class AsyncRawConversationClient {
     /**
      * Replaced by <code>updateConversationMetadata</code>.
      * <p>Adds metadata to an existing conversation. If a metadata field already exists, it will be overwritten.</p>
+     * <p>When a metadata size limit is enforced for the agent, each entry may be at most 8,192 bytes by default, counting the key and value together, plus one byte, in UTF-8. A larger entry returns a 400 that names the key.</p>
      * <p>A closed conversation (<code>open</code> set to false) takes no new metadata and returns a 400.</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<Map<String, String>>> addConversationMetadata(
@@ -1912,6 +1914,9 @@ public class AsyncRawConversationClient {
 
     /**
      * Deliver a message to a user or conversation.
+     * <p>Send <code>content</code> with <code>contentType: message</code> to deliver a message as written, or <code>contentType: ask</code>
+     * to have the agent take a <code>WELCOME</code> or <code>PROACTIVE</code> turn and deliver its reply. Either way the app
+     * that owns the conversation receives the message through its <code>handleMessage</code> hook.</p>
      * <p>A closed conversation (<code>open</code> set to false) takes no new messages and returns a 400.</p>
      * <p>&lt;Warning&gt;
      * Currently, messages can only be successfully delivered to conversations with the `ASYNC` capability.
@@ -1926,6 +1931,9 @@ public class AsyncRawConversationClient {
 
     /**
      * Deliver a message to a user or conversation.
+     * <p>Send <code>content</code> with <code>contentType: message</code> to deliver a message as written, or <code>contentType: ask</code>
+     * to have the agent take a <code>WELCOME</code> or <code>PROACTIVE</code> turn and deliver its reply. Either way the app
+     * that owns the conversation receives the message through its <code>handleMessage</code> hook.</p>
      * <p>A closed conversation (<code>open</code> set to false) takes no new messages and returns a 400.</p>
      * <p>&lt;Warning&gt;
      * Currently, messages can only be successfully delivered to conversations with the `ASYNC` capability.

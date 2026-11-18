@@ -357,10 +357,11 @@ public final class ConversationFilter {
     }
 
     /**
-     * @return Filter by conversation resolution status which is determined by AI based on the conversation content.
+     * @return Filter by conversation resolution status. Matches conversations with any of the listed
+     * statuses. See <code>ResolutionStatus</code> for how each status is set.
      * <p>When <code>resolutionStatus</code>, <code>resolvedByMaven</code>, and <code>billable</code> are combined in a single filter,
-     * precedence is applied in the following order: <code>resolutionStatus</code>, <code>resolvedByMaven</code>,
-     * and then <code>billable</code>.</p>
+     * only the first one set is applied, in this order: <code>resolutionStatus</code>, <code>resolvedByMaven</code>,
+     * then <code>billable</code>. The others are ignored.</p>
      */
     @JsonProperty("resolutionStatus")
     public Optional<List<ResolutionStatus>> getResolutionStatus() {
@@ -368,10 +369,12 @@ public final class ConversationFilter {
     }
 
     /**
-     * @return Filter conversations based on whether they were resolved by Maven AI.
+     * @return Filter conversations based on whether they were resolved by Maven. <code>true</code> is the same as
+     * <code>billable: [ELIGIBLE_AND_BILLABLE]</code> and <code>false</code> the same as
+     * <code>billable: [ELIGIBLE_AND_NOT_BILLABLE]</code>. Use <code>billable</code> or <code>resolutionStatus</code> instead.
      * <p>When <code>resolutionStatus</code>, <code>resolvedByMaven</code>, and <code>billable</code> are combined in a single filter,
-     * precedence is applied in the following order: <code>resolutionStatus</code>, <code>resolvedByMaven</code>,
-     * and then <code>billable</code>.</p>
+     * only the first one set is applied, in this order: <code>resolutionStatus</code>, <code>resolvedByMaven</code>,
+     * then <code>billable</code>. The others are ignored.</p>
      */
     @JsonProperty("resolvedByMaven")
     public Optional<Boolean> getResolvedByMaven() {
@@ -464,8 +467,8 @@ public final class ConversationFilter {
      * @return Filter by whether the conversation is billable. Defaults to all eligible conversations,
      * which means ELIGIBLE_AND_BILLABLE and ELIGIBLE_AND_NOT_BILLABLE.
      * <p>When <code>resolutionStatus</code>, <code>resolvedByMaven</code>, and <code>billable</code> are combined in a single filter,
-     * precedence is applied in the following order: <code>resolutionStatus</code>, <code>resolvedByMaven</code>,
-     * and then <code>billable</code>.</p>
+     * only the first one set is applied, in this order: <code>resolutionStatus</code>, <code>resolvedByMaven</code>,
+     * then <code>billable</code>. The others are ignored.</p>
      * <p>If billable is <code>null</code> or <code>[]</code> then defaults to all eligible conversations,
      * which means ELIGIBLE_AND_BILLABLE and ELIGIBLE_AND_NOT_BILLABLE.</p>
      * <p>Shown in Agent Designer as &quot;Billing status&quot;.</p>
@@ -983,10 +986,11 @@ public final class ConversationFilter {
         }
 
         /**
-         * <p>Filter by conversation resolution status which is determined by AI based on the conversation content.</p>
+         * <p>Filter by conversation resolution status. Matches conversations with any of the listed
+         * statuses. See <code>ResolutionStatus</code> for how each status is set.</p>
          * <p>When <code>resolutionStatus</code>, <code>resolvedByMaven</code>, and <code>billable</code> are combined in a single filter,
-         * precedence is applied in the following order: <code>resolutionStatus</code>, <code>resolvedByMaven</code>,
-         * and then <code>billable</code>.</p>
+         * only the first one set is applied, in this order: <code>resolutionStatus</code>, <code>resolvedByMaven</code>,
+         * then <code>billable</code>. The others are ignored.</p>
          */
         @JsonSetter(value = "resolutionStatus", nulls = Nulls.SKIP)
         public Builder resolutionStatus(Optional<List<ResolutionStatus>> resolutionStatus) {
@@ -1000,10 +1004,12 @@ public final class ConversationFilter {
         }
 
         /**
-         * <p>Filter conversations based on whether they were resolved by Maven AI.</p>
+         * <p>Filter conversations based on whether they were resolved by Maven. <code>true</code> is the same as
+         * <code>billable: [ELIGIBLE_AND_BILLABLE]</code> and <code>false</code> the same as
+         * <code>billable: [ELIGIBLE_AND_NOT_BILLABLE]</code>. Use <code>billable</code> or <code>resolutionStatus</code> instead.</p>
          * <p>When <code>resolutionStatus</code>, <code>resolvedByMaven</code>, and <code>billable</code> are combined in a single filter,
-         * precedence is applied in the following order: <code>resolutionStatus</code>, <code>resolvedByMaven</code>,
-         * and then <code>billable</code>.</p>
+         * only the first one set is applied, in this order: <code>resolutionStatus</code>, <code>resolvedByMaven</code>,
+         * then <code>billable</code>. The others are ignored.</p>
          */
         @JsonSetter(value = "resolvedByMaven", nulls = Nulls.SKIP)
         public Builder resolvedByMaven(Optional<Boolean> resolvedByMaven) {
@@ -1156,8 +1162,8 @@ public final class ConversationFilter {
          * <p>Filter by whether the conversation is billable. Defaults to all eligible conversations,
          * which means ELIGIBLE_AND_BILLABLE and ELIGIBLE_AND_NOT_BILLABLE.</p>
          * <p>When <code>resolutionStatus</code>, <code>resolvedByMaven</code>, and <code>billable</code> are combined in a single filter,
-         * precedence is applied in the following order: <code>resolutionStatus</code>, <code>resolvedByMaven</code>,
-         * and then <code>billable</code>.</p>
+         * only the first one set is applied, in this order: <code>resolutionStatus</code>, <code>resolvedByMaven</code>,
+         * then <code>billable</code>. The others are ignored.</p>
          * <p>If billable is <code>null</code> or <code>[]</code> then defaults to all eligible conversations,
          * which means ELIGIBLE_AND_BILLABLE and ELIGIBLE_AND_NOT_BILLABLE.</p>
          * <p>Shown in Agent Designer as &quot;Billing status&quot;.</p>

@@ -79,9 +79,9 @@ public final class AgentPrompting {
     }
 
     /**
-     * @return LLM prompt for generating a response when the user's question has been detected as unsafe.
-     * <p>Use this to provide custom LLM generated replies when dealing with content safety violations.
-     * When not set, a default response is sent and replies will not be personalized by the LLM as it will not be involved.</p>
+     * @return Instructions to an LLM that writes the reply when the user's message is blocked for harmful content (hate, self-harm, sexual or violence). The LLM sees only these instructions and the blocked message, not the agent's charters, knowledge or earlier messages. To send fixed wording, say so in the instructions, for example <code>Always reply with exactly: &quot;…&quot;</code>.
+     * <p>A message flagged as a prompt attack always gets the default reply, even when it was also flagged for harmful content. So does every blocked message while this is not set.</p>
+     * <p>Shown in Agent Designer as &quot;Content Safety Violation Message&quot;.</p>
      * <p>Omitted while <code>CONTENT_SAFETY_VIOLATION_RESPONSE_PROMPT_TEXT</code> is in <code>getVersionedEntityTypes</code>; read it through <code>getVersionedSettings</code>.</p>
      */
     @JsonProperty("contentSafetyViolationResponsePromptText")
@@ -178,9 +178,9 @@ public final class AgentPrompting {
         _FinalStage categoryGenerationPromptText(String categoryGenerationPromptText);
 
         /**
-         * <p>LLM prompt for generating a response when the user's question has been detected as unsafe.</p>
-         * <p>Use this to provide custom LLM generated replies when dealing with content safety violations.
-         * When not set, a default response is sent and replies will not be personalized by the LLM as it will not be involved.</p>
+         * <p>Instructions to an LLM that writes the reply when the user's message is blocked for harmful content (hate, self-harm, sexual or violence). The LLM sees only these instructions and the blocked message, not the agent's charters, knowledge or earlier messages. To send fixed wording, say so in the instructions, for example <code>Always reply with exactly: &quot;…&quot;</code>.</p>
+         * <p>A message flagged as a prompt attack always gets the default reply, even when it was also flagged for harmful content. So does every blocked message while this is not set.</p>
+         * <p>Shown in Agent Designer as &quot;Content Safety Violation Message&quot;.</p>
          * <p>Omitted while <code>CONTENT_SAFETY_VIOLATION_RESPONSE_PROMPT_TEXT</code> is in <code>getVersionedEntityTypes</code>; read it through <code>getVersionedSettings</code>.</p>
          */
         _FinalStage contentSafetyViolationResponsePromptText(Optional<String> contentSafetyViolationResponsePromptText);
@@ -244,9 +244,9 @@ public final class AgentPrompting {
         }
 
         /**
-         * <p>LLM prompt for generating a response when the user's question has been detected as unsafe.</p>
-         * <p>Use this to provide custom LLM generated replies when dealing with content safety violations.
-         * When not set, a default response is sent and replies will not be personalized by the LLM as it will not be involved.</p>
+         * <p>Instructions to an LLM that writes the reply when the user's message is blocked for harmful content (hate, self-harm, sexual or violence). The LLM sees only these instructions and the blocked message, not the agent's charters, knowledge or earlier messages. To send fixed wording, say so in the instructions, for example <code>Always reply with exactly: &quot;…&quot;</code>.</p>
+         * <p>A message flagged as a prompt attack always gets the default reply, even when it was also flagged for harmful content. So does every blocked message while this is not set.</p>
+         * <p>Shown in Agent Designer as &quot;Content Safety Violation Message&quot;.</p>
          * <p>Omitted while <code>CONTENT_SAFETY_VIOLATION_RESPONSE_PROMPT_TEXT</code> is in <code>getVersionedEntityTypes</code>; read it through <code>getVersionedSettings</code>.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -258,9 +258,9 @@ public final class AgentPrompting {
         }
 
         /**
-         * <p>LLM prompt for generating a response when the user's question has been detected as unsafe.</p>
-         * <p>Use this to provide custom LLM generated replies when dealing with content safety violations.
-         * When not set, a default response is sent and replies will not be personalized by the LLM as it will not be involved.</p>
+         * <p>Instructions to an LLM that writes the reply when the user's message is blocked for harmful content (hate, self-harm, sexual or violence). The LLM sees only these instructions and the blocked message, not the agent's charters, knowledge or earlier messages. To send fixed wording, say so in the instructions, for example <code>Always reply with exactly: &quot;…&quot;</code>.</p>
+         * <p>A message flagged as a prompt attack always gets the default reply, even when it was also flagged for harmful content. So does every blocked message while this is not set.</p>
+         * <p>Shown in Agent Designer as &quot;Content Safety Violation Message&quot;.</p>
          * <p>Omitted while <code>CONTENT_SAFETY_VIOLATION_RESPONSE_PROMPT_TEXT</code> is in <code>getVersionedEntityTypes</code>; read it through <code>getVersionedSettings</code>.</p>
          */
         @java.lang.Override

@@ -9,30 +9,55 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
 import com.mavenagi.resources.commons.types.EntityIdWithoutAgent;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = DeliverConversationMessageRequest.Builder.class)
-public final class DeliverConversationMessageRequest {
-    private final EntityIdWithoutAgent conversationId;
+public final class DeliverConversationMessageRequest implements IDeliverMessageBase {
+    private final Optional<ConversationMessageRequest> message;
 
-    private final ConversationMessageRequest message;
+    private final Optional<DeliverContent> content;
+
+    private final EntityIdWithoutAgent conversationId;
 
     private final Map<String, Object> additionalProperties;
 
     private DeliverConversationMessageRequest(
+            Optional<ConversationMessageRequest> message,
+            Optional<DeliverContent> content,
             EntityIdWithoutAgent conversationId,
-            ConversationMessageRequest message,
             Map<String, Object> additionalProperties) {
-        this.conversationId = conversationId;
         this.message = message;
+        this.content = content;
+        this.conversationId = conversationId;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return Deprecated. Use <code>content</code> with <code>contentType: message</code>, which takes the same message.
+     * <p>A message to deliver as written. Set exactly one of <code>message</code> or <code>content</code>.</p>
+     */
+    @JsonProperty("message")
+    @java.lang.Override
+    public Optional<ConversationMessageRequest> getMessage() {
+        return message;
+    }
+
+    /**
+     * @return What to deliver. Set exactly one of <code>message</code> or <code>content</code>.
+     */
+    @JsonProperty("content")
+    @java.lang.Override
+    public Optional<DeliverContent> getContent() {
+        return content;
     }
 
     /**
@@ -41,14 +66,6 @@ public final class DeliverConversationMessageRequest {
     @JsonProperty("conversationId")
     public EntityIdWithoutAgent getConversationId() {
         return conversationId;
-    }
-
-    /**
-     * @return The message to deliver.
-     */
-    @JsonProperty("message")
-    public ConversationMessageRequest getMessage() {
-        return message;
     }
 
     @java.lang.Override
@@ -63,12 +80,14 @@ public final class DeliverConversationMessageRequest {
     }
 
     private boolean equalTo(DeliverConversationMessageRequest other) {
-        return conversationId.equals(other.conversationId) && message.equals(other.message);
+        return message.equals(other.message)
+                && content.equals(other.content)
+                && conversationId.equals(other.conversationId);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.conversationId, this.message);
+        return Objects.hash(this.message, this.content, this.conversationId);
     }
 
     @java.lang.Override
@@ -84,27 +103,37 @@ public final class DeliverConversationMessageRequest {
         /**
          * <p>The ID of the conversation to deliver the message to. Message delivery will fail if the conversation does not have the <code>ASYNC</code> capability, and a closed conversation (<code>open</code> set to false) returns a 400.</p>
          */
-        MessageStage conversationId(@NotNull EntityIdWithoutAgent conversationId);
+        _FinalStage conversationId(@NotNull EntityIdWithoutAgent conversationId);
 
         Builder from(DeliverConversationMessageRequest other);
     }
 
-    public interface MessageStage {
-        /**
-         * <p>The message to deliver.</p>
-         */
-        _FinalStage message(@NotNull ConversationMessageRequest message);
-    }
-
     public interface _FinalStage {
         DeliverConversationMessageRequest build();
+
+        /**
+         * <p>Deprecated. Use <code>content</code> with <code>contentType: message</code>, which takes the same message.</p>
+         * <p>A message to deliver as written. Set exactly one of <code>message</code> or <code>content</code>.</p>
+         */
+        _FinalStage message(Optional<ConversationMessageRequest> message);
+
+        _FinalStage message(ConversationMessageRequest message);
+
+        /**
+         * <p>What to deliver. Set exactly one of <code>message</code> or <code>content</code>.</p>
+         */
+        _FinalStage content(Optional<DeliverContent> content);
+
+        _FinalStage content(DeliverContent content);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements ConversationIdStage, MessageStage, _FinalStage {
+    public static final class Builder implements ConversationIdStage, _FinalStage {
         private EntityIdWithoutAgent conversationId;
 
-        private ConversationMessageRequest message;
+        private Optional<DeliverContent> content = Optional.empty();
+
+        private Optional<ConversationMessageRequest> message = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -113,8 +142,9 @@ public final class DeliverConversationMessageRequest {
 
         @java.lang.Override
         public Builder from(DeliverConversationMessageRequest other) {
-            conversationId(other.getConversationId());
             message(other.getMessage());
+            content(other.getContent());
+            conversationId(other.getConversationId());
             return this;
         }
 
@@ -125,26 +155,56 @@ public final class DeliverConversationMessageRequest {
          */
         @java.lang.Override
         @JsonSetter("conversationId")
-        public MessageStage conversationId(@NotNull EntityIdWithoutAgent conversationId) {
+        public _FinalStage conversationId(@NotNull EntityIdWithoutAgent conversationId) {
             this.conversationId = Objects.requireNonNull(conversationId, "conversationId must not be null");
             return this;
         }
 
         /**
-         * <p>The message to deliver.</p>
-         * <p>The message to deliver.</p>
+         * <p>What to deliver. Set exactly one of <code>message</code> or <code>content</code>.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        @JsonSetter("message")
-        public _FinalStage message(@NotNull ConversationMessageRequest message) {
-            this.message = Objects.requireNonNull(message, "message must not be null");
+        public _FinalStage content(DeliverContent content) {
+            this.content = Optional.ofNullable(content);
+            return this;
+        }
+
+        /**
+         * <p>What to deliver. Set exactly one of <code>message</code> or <code>content</code>.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "content", nulls = Nulls.SKIP)
+        public _FinalStage content(Optional<DeliverContent> content) {
+            this.content = content;
+            return this;
+        }
+
+        /**
+         * <p>Deprecated. Use <code>content</code> with <code>contentType: message</code>, which takes the same message.</p>
+         * <p>A message to deliver as written. Set exactly one of <code>message</code> or <code>content</code>.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage message(ConversationMessageRequest message) {
+            this.message = Optional.ofNullable(message);
+            return this;
+        }
+
+        /**
+         * <p>Deprecated. Use <code>content</code> with <code>contentType: message</code>, which takes the same message.</p>
+         * <p>A message to deliver as written. Set exactly one of <code>message</code> or <code>content</code>.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "message", nulls = Nulls.SKIP)
+        public _FinalStage message(Optional<ConversationMessageRequest> message) {
+            this.message = message;
             return this;
         }
 
         @java.lang.Override
         public DeliverConversationMessageRequest build() {
-            return new DeliverConversationMessageRequest(conversationId, message, additionalProperties);
+            return new DeliverConversationMessageRequest(message, content, conversationId, additionalProperties);
         }
     }
 }

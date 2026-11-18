@@ -26,9 +26,10 @@ import com.mavenagi.resources.conversation.types.ConversationsCursorSearchReques
 import com.mavenagi.resources.conversation.types.ConversationsCursorSearchResponse;
 import com.mavenagi.resources.conversation.types.ConversationsResponse;
 import com.mavenagi.resources.conversation.types.ConversationsSearchRequest;
+import com.mavenagi.resources.conversation.types.DeliverContent;
+import com.mavenagi.resources.conversation.types.DeliverConversationMessageRequest;
 import com.mavenagi.resources.conversation.types.DeliverMessageRequest;
 import com.mavenagi.resources.conversation.types.DeliverMessageResponse;
-import com.mavenagi.resources.conversation.types.DeliverUserMessageRequest;
 import com.mavenagi.resources.conversation.types.FeedbackRequest;
 import com.mavenagi.resources.conversation.types.SubmitActionFormRequest;
 import com.mavenagi.resources.conversation.types.UpdateMetadataRequest;
@@ -3576,35 +3577,37 @@ public class ConversationWireTest {
             .setResponseCode(200)
             .setBody("{\"status\":\"DELIVERED\"}"));
         DeliverMessageResponse response = client.conversation().deliverMessage(
-            DeliverMessageRequest.user(
-                DeliverUserMessageRequest
+            DeliverMessageRequest.conversation(
+                DeliverConversationMessageRequest
                     .builder()
-                    .userId(
+                    .conversationId(
                         EntityIdWithoutAgent
                             .builder()
-                            .type(EntityType.AGENT)
-                            .appId("appId")
-                            .referenceId("x")
+                            .type(EntityType.CONVERSATION)
+                            .appId("chat-app")
+                            .referenceId("conversation-0")
                             .build()
                     )
-                    .message(
-                        ConversationMessageRequest
-                            .builder()
-                            .conversationMessageId(
-                                EntityIdBase
-                                    .builder()
-                                    .referenceId("x")
-                                    .build()
-                            )
-                            .userId(
-                                EntityIdBase
-                                    .builder()
-                                    .referenceId("x")
-                                    .build()
-                            )
-                            .text("text")
-                            .userMessageType(UserConversationMessageType.USER)
-                            .build()
+                    .content(
+                        DeliverContent.message(
+                            ConversationMessageRequest
+                                .builder()
+                                .conversationMessageId(
+                                    EntityIdBase
+                                        .builder()
+                                        .referenceId("message-0")
+                                        .build()
+                                )
+                                .userId(
+                                    EntityIdBase
+                                        .builder()
+                                        .referenceId("human-agent-0")
+                                        .build()
+                                )
+                                .text("Hi, I'm Priya. I can help with your refund.")
+                                .userMessageType(UserConversationMessageType.HUMAN_AGENT)
+                                .build()
+                        )
                     )
                     .build()
             )
@@ -3616,21 +3619,22 @@ public class ConversationWireTest {
         String actualRequestBody = request.getBody().readUtf8();
         String expectedRequestBody = ""
             + "{\n"
-            + "  \"type\": \"user\",\n"
-            + "  \"userId\": {\n"
-            + "    \"type\": \"AGENT\",\n"
-            + "    \"appId\": \"appId\",\n"
-            + "    \"referenceId\": \"x\"\n"
+            + "  \"type\": \"conversation\",\n"
+            + "  \"conversationId\": {\n"
+            + "    \"type\": \"CONVERSATION\",\n"
+            + "    \"appId\": \"chat-app\",\n"
+            + "    \"referenceId\": \"conversation-0\"\n"
             + "  },\n"
-            + "  \"message\": {\n"
+            + "  \"content\": {\n"
+            + "    \"contentType\": \"message\",\n"
             + "    \"conversationMessageId\": {\n"
-            + "      \"referenceId\": \"x\"\n"
+            + "      \"referenceId\": \"message-0\"\n"
             + "    },\n"
             + "    \"userId\": {\n"
-            + "      \"referenceId\": \"x\"\n"
+            + "      \"referenceId\": \"human-agent-0\"\n"
             + "    },\n"
-            + "    \"text\": \"text\",\n"
-            + "    \"userMessageType\": \"USER\"\n"
+            + "    \"text\": \"Hi, I'm Priya. I can help with your refund.\",\n"
+            + "    \"userMessageType\": \"HUMAN_AGENT\"\n"
             + "  }\n"
             + "}";
         JsonNode actualJson = objectMapper.readTree(actualRequestBody);

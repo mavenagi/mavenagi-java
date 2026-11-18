@@ -30,8 +30,24 @@ public final class CapabilitySimulationInput {
         return new CapabilitySimulationInput(new ActionValue(value));
     }
 
+    public static CapabilitySimulationInput conversationKickoff(ConversationKickoffSimulationInput value) {
+        return new CapabilitySimulationInput(new ConversationKickoffValue(value));
+    }
+
+    public static CapabilitySimulationInput trigger(TriggerSimulationInput value) {
+        return new CapabilitySimulationInput(new TriggerValue(value));
+    }
+
     public boolean isAction() {
         return value instanceof ActionValue;
+    }
+
+    public boolean isConversationKickoff() {
+        return value instanceof ConversationKickoffValue;
+    }
+
+    public boolean isTrigger() {
+        return value instanceof TriggerValue;
     }
 
     public boolean _isUnknown() {
@@ -41,6 +57,20 @@ public final class CapabilitySimulationInput {
     public Optional<ActionSimulationInput> getAction() {
         if (isAction()) {
             return Optional.of(((ActionValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<ConversationKickoffSimulationInput> getConversationKickoff() {
+        if (isConversationKickoff()) {
+            return Optional.of(((ConversationKickoffValue) value).value);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<TriggerSimulationInput> getTrigger() {
+        if (isTrigger()) {
+            return Optional.of(((TriggerValue) value).value);
         }
         return Optional.empty();
     }
@@ -60,6 +90,10 @@ public final class CapabilitySimulationInput {
     public interface Visitor<T> {
         T visitAction(ActionSimulationInput action);
 
+        T visitConversationKickoff(ConversationKickoffSimulationInput conversationKickoff);
+
+        T visitTrigger(TriggerSimulationInput trigger);
+
         T _visitUnknown(Object unknownType);
     }
 
@@ -68,7 +102,11 @@ public final class CapabilitySimulationInput {
             property = "capabilityType",
             visible = true,
             defaultImpl = _UnknownValue.class)
-    @JsonSubTypes(@JsonSubTypes.Type(ActionValue.class))
+    @JsonSubTypes({
+        @JsonSubTypes.Type(ActionValue.class),
+        @JsonSubTypes.Type(ConversationKickoffValue.class),
+        @JsonSubTypes.Type(TriggerValue.class)
+    })
     @JsonIgnoreProperties(ignoreUnknown = true)
     private interface Value {
         <T> T visit(Visitor<T> visitor);
@@ -99,6 +137,84 @@ public final class CapabilitySimulationInput {
         }
 
         private boolean equalTo(ActionValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "CapabilitySimulationInput{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("CONVERSATION_KICKOFF")
+    @JsonIgnoreProperties("capabilityType")
+    private static final class ConversationKickoffValue implements Value {
+        @JsonUnwrapped
+        private ConversationKickoffSimulationInput value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private ConversationKickoffValue() {}
+
+        private ConversationKickoffValue(ConversationKickoffSimulationInput value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitConversationKickoff(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof ConversationKickoffValue && equalTo((ConversationKickoffValue) other);
+        }
+
+        private boolean equalTo(ConversationKickoffValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "CapabilitySimulationInput{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("TRIGGER")
+    @JsonIgnoreProperties("capabilityType")
+    private static final class TriggerValue implements Value {
+        @JsonUnwrapped
+        private TriggerSimulationInput value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private TriggerValue() {}
+
+        private TriggerValue(TriggerSimulationInput value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitTrigger(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof TriggerValue && equalTo((TriggerValue) other);
+        }
+
+        private boolean equalTo(TriggerValue other) {
             return value.equals(other.value);
         }
 

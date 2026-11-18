@@ -56,6 +56,14 @@ public final class AppUserRequest implements IAppUser {
         return identifiers;
     }
 
+    /**
+     * @return Data about the user, keyed by field name.
+     * <p>Do not store credentials, tokens or other secrets here, whatever their <code>visibility</code>.
+     * User data is not secret storage: values are stored as given, and the users API returns
+     * them in full to callers that can read users. To pass a per-user credential to your
+     * app's actions, send it as <code>transientData</code> on the ask or submit-action-form request, which
+     * is forwarded to the actions of that request and not stored.</p>
+     */
     @JsonProperty("data")
     @java.lang.Override
     public Map<String, UserData> getData() {
@@ -137,6 +145,14 @@ public final class AppUserRequest implements IAppUser {
 
         _FinalStage addAllIdentifiers(Set<AppUserIdentifier> identifiers);
 
+        /**
+         * <p>Data about the user, keyed by field name.</p>
+         * <p>Do not store credentials, tokens or other secrets here, whatever their <code>visibility</code>.
+         * User data is not secret storage: values are stored as given, and the users API returns
+         * them in full to callers that can read users. To pass a per-user credential to your
+         * app's actions, send it as <code>transientData</code> on the ask or submit-action-form request, which
+         * is forwarded to the actions of that request and not stored.</p>
+         */
         _FinalStage data(Map<String, UserData> data);
 
         _FinalStage putAllData(Map<String, UserData> data);
@@ -225,12 +241,30 @@ public final class AppUserRequest implements IAppUser {
             return this;
         }
 
+        /**
+         * <p>Data about the user, keyed by field name.</p>
+         * <p>Do not store credentials, tokens or other secrets here, whatever their <code>visibility</code>.
+         * User data is not secret storage: values are stored as given, and the users API returns
+         * them in full to callers that can read users. To pass a per-user credential to your
+         * app's actions, send it as <code>transientData</code> on the ask or submit-action-form request, which
+         * is forwarded to the actions of that request and not stored.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
         public _FinalStage data(String key, UserData value) {
             this.data.put(key, value);
             return this;
         }
 
+        /**
+         * <p>Data about the user, keyed by field name.</p>
+         * <p>Do not store credentials, tokens or other secrets here, whatever their <code>visibility</code>.
+         * User data is not secret storage: values are stored as given, and the users API returns
+         * them in full to callers that can read users. To pass a per-user credential to your
+         * app's actions, send it as <code>transientData</code> on the ask or submit-action-form request, which
+         * is forwarded to the actions of that request and not stored.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
         public _FinalStage putAllData(Map<String, UserData> data) {
             if (data != null) {
@@ -239,6 +273,14 @@ public final class AppUserRequest implements IAppUser {
             return this;
         }
 
+        /**
+         * <p>Data about the user, keyed by field name.</p>
+         * <p>Do not store credentials, tokens or other secrets here, whatever their <code>visibility</code>.
+         * User data is not secret storage: values are stored as given, and the users API returns
+         * them in full to callers that can read users. To pass a per-user credential to your
+         * app's actions, send it as <code>transientData</code> on the ask or submit-action-form request, which
+         * is forwarded to the actions of that request and not stored.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "data", nulls = Nulls.SKIP)
         public _FinalStage data(Map<String, UserData> data) {

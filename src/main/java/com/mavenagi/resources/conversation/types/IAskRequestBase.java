@@ -3,28 +3,9 @@
  */
 package com.mavenagi.resources.conversation.types;
 
-import com.mavenagi.resources.commons.types.AskType;
-import com.mavenagi.resources.commons.types.AttachmentRequest;
-import com.mavenagi.resources.commons.types.EntityIdBase;
 import com.mavenagi.resources.commons.types.TextFormat;
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
-public interface IAskRequestBase {
-    EntityIdBase getConversationMessageId();
-
-    Optional<AskType> getType();
-
-    Optional<String> getText();
-
+public interface IAskRequestBase extends IAskRequestFields {
     Optional<TextFormat> getTextFormat();
-
-    Optional<List<AttachmentRequest>> getAttachments();
-
-    Optional<Map<String, String>> getTransientData();
-
-    Optional<String> getTimezone();
-
-    Optional<Map<String, String>> getAppMetadata();
 }

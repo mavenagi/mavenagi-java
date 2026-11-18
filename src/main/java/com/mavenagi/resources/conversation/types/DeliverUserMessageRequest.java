@@ -9,28 +9,55 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
 import com.mavenagi.resources.commons.types.EntityIdWithoutAgent;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = DeliverUserMessageRequest.Builder.class)
-public final class DeliverUserMessageRequest {
-    private final EntityIdWithoutAgent userId;
+public final class DeliverUserMessageRequest implements IDeliverMessageBase {
+    private final Optional<ConversationMessageRequest> message;
 
-    private final ConversationMessageRequest message;
+    private final Optional<DeliverContent> content;
+
+    private final EntityIdWithoutAgent userId;
 
     private final Map<String, Object> additionalProperties;
 
     private DeliverUserMessageRequest(
-            EntityIdWithoutAgent userId, ConversationMessageRequest message, Map<String, Object> additionalProperties) {
-        this.userId = userId;
+            Optional<ConversationMessageRequest> message,
+            Optional<DeliverContent> content,
+            EntityIdWithoutAgent userId,
+            Map<String, Object> additionalProperties) {
         this.message = message;
+        this.content = content;
+        this.userId = userId;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return Deprecated. Use <code>content</code> with <code>contentType: message</code>, which takes the same message.
+     * <p>A message to deliver as written. Set exactly one of <code>message</code> or <code>content</code>.</p>
+     */
+    @JsonProperty("message")
+    @java.lang.Override
+    public Optional<ConversationMessageRequest> getMessage() {
+        return message;
+    }
+
+    /**
+     * @return What to deliver. Set exactly one of <code>message</code> or <code>content</code>.
+     */
+    @JsonProperty("content")
+    @java.lang.Override
+    public Optional<DeliverContent> getContent() {
+        return content;
     }
 
     /**
@@ -39,14 +66,6 @@ public final class DeliverUserMessageRequest {
     @JsonProperty("userId")
     public EntityIdWithoutAgent getUserId() {
         return userId;
-    }
-
-    /**
-     * @return The message to deliver.
-     */
-    @JsonProperty("message")
-    public ConversationMessageRequest getMessage() {
-        return message;
     }
 
     @java.lang.Override
@@ -61,12 +80,12 @@ public final class DeliverUserMessageRequest {
     }
 
     private boolean equalTo(DeliverUserMessageRequest other) {
-        return userId.equals(other.userId) && message.equals(other.message);
+        return message.equals(other.message) && content.equals(other.content) && userId.equals(other.userId);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.userId, this.message);
+        return Objects.hash(this.message, this.content, this.userId);
     }
 
     @java.lang.Override
@@ -82,27 +101,37 @@ public final class DeliverUserMessageRequest {
         /**
          * <p>The ID of the user to deliver the message to.</p>
          */
-        MessageStage userId(@NotNull EntityIdWithoutAgent userId);
+        _FinalStage userId(@NotNull EntityIdWithoutAgent userId);
 
         Builder from(DeliverUserMessageRequest other);
     }
 
-    public interface MessageStage {
-        /**
-         * <p>The message to deliver.</p>
-         */
-        _FinalStage message(@NotNull ConversationMessageRequest message);
-    }
-
     public interface _FinalStage {
         DeliverUserMessageRequest build();
+
+        /**
+         * <p>Deprecated. Use <code>content</code> with <code>contentType: message</code>, which takes the same message.</p>
+         * <p>A message to deliver as written. Set exactly one of <code>message</code> or <code>content</code>.</p>
+         */
+        _FinalStage message(Optional<ConversationMessageRequest> message);
+
+        _FinalStage message(ConversationMessageRequest message);
+
+        /**
+         * <p>What to deliver. Set exactly one of <code>message</code> or <code>content</code>.</p>
+         */
+        _FinalStage content(Optional<DeliverContent> content);
+
+        _FinalStage content(DeliverContent content);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements UserIdStage, MessageStage, _FinalStage {
+    public static final class Builder implements UserIdStage, _FinalStage {
         private EntityIdWithoutAgent userId;
 
-        private ConversationMessageRequest message;
+        private Optional<DeliverContent> content = Optional.empty();
+
+        private Optional<ConversationMessageRequest> message = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -111,8 +140,9 @@ public final class DeliverUserMessageRequest {
 
         @java.lang.Override
         public Builder from(DeliverUserMessageRequest other) {
-            userId(other.getUserId());
             message(other.getMessage());
+            content(other.getContent());
+            userId(other.getUserId());
             return this;
         }
 
@@ -123,26 +153,56 @@ public final class DeliverUserMessageRequest {
          */
         @java.lang.Override
         @JsonSetter("userId")
-        public MessageStage userId(@NotNull EntityIdWithoutAgent userId) {
+        public _FinalStage userId(@NotNull EntityIdWithoutAgent userId) {
             this.userId = Objects.requireNonNull(userId, "userId must not be null");
             return this;
         }
 
         /**
-         * <p>The message to deliver.</p>
-         * <p>The message to deliver.</p>
+         * <p>What to deliver. Set exactly one of <code>message</code> or <code>content</code>.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        @JsonSetter("message")
-        public _FinalStage message(@NotNull ConversationMessageRequest message) {
-            this.message = Objects.requireNonNull(message, "message must not be null");
+        public _FinalStage content(DeliverContent content) {
+            this.content = Optional.ofNullable(content);
+            return this;
+        }
+
+        /**
+         * <p>What to deliver. Set exactly one of <code>message</code> or <code>content</code>.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "content", nulls = Nulls.SKIP)
+        public _FinalStage content(Optional<DeliverContent> content) {
+            this.content = content;
+            return this;
+        }
+
+        /**
+         * <p>Deprecated. Use <code>content</code> with <code>contentType: message</code>, which takes the same message.</p>
+         * <p>A message to deliver as written. Set exactly one of <code>message</code> or <code>content</code>.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage message(ConversationMessageRequest message) {
+            this.message = Optional.ofNullable(message);
+            return this;
+        }
+
+        /**
+         * <p>Deprecated. Use <code>content</code> with <code>contentType: message</code>, which takes the same message.</p>
+         * <p>A message to deliver as written. Set exactly one of <code>message</code> or <code>content</code>.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "message", nulls = Nulls.SKIP)
+        public _FinalStage message(Optional<ConversationMessageRequest> message) {
+            this.message = message;
             return this;
         }
 
         @java.lang.Override
         public DeliverUserMessageRequest build() {
-            return new DeliverUserMessageRequest(userId, message, additionalProperties);
+            return new DeliverUserMessageRequest(message, content, userId, additionalProperties);
         }
     }
 }

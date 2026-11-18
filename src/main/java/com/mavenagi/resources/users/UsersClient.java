@@ -120,6 +120,8 @@ public class UsersClient {
 
     /**
      * Update an app user or create it if it doesn't exist.
+     * <p>&lt;Warning&gt;User data is not secret storage, even with <code>HIDDEN</code> visibility: <code>HIDDEN</code> only keeps a value away from the agent and masks it in agent user responses. Do not store credentials, tokens or other secrets in user data. To pass a per-user credential to your actions, send it as <code>transientData</code> on each ask request instead.&lt;/Warning&gt;</p>
+     * <p>When a metadata size limit is enforced for the agent, each <code>data</code> entry may be at most 8,192 bytes by default, counting the key and value together, plus one byte, in UTF-8. A larger entry returns a 400 that names the key.</p>
      * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>. A user with <code>executionMode</code> <code>SIMULATION</code> also needs <code>create:simulations</code>.&lt;/Note&gt;</p>
      */
     public AppUserResponse createOrUpdate(AppUserRequest request) {
@@ -128,6 +130,8 @@ public class UsersClient {
 
     /**
      * Update an app user or create it if it doesn't exist.
+     * <p>&lt;Warning&gt;User data is not secret storage, even with <code>HIDDEN</code> visibility: <code>HIDDEN</code> only keeps a value away from the agent and masks it in agent user responses. Do not store credentials, tokens or other secrets in user data. To pass a per-user credential to your actions, send it as <code>transientData</code> on each ask request instead.&lt;/Warning&gt;</p>
+     * <p>When a metadata size limit is enforced for the agent, each <code>data</code> entry may be at most 8,192 bytes by default, counting the key and value together, plus one byte, in UTF-8. A larger entry returns a 400 that names the key.</p>
      * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>. A user with <code>executionMode</code> <code>SIMULATION</code> also needs <code>create:simulations</code>.&lt;/Note&gt;</p>
      */
     public AppUserResponse createOrUpdate(AppUserRequest request, RequestOptions requestOptions) {
@@ -135,7 +139,8 @@ public class UsersClient {
     }
 
     /**
-     * Get an app user by its supplied ID
+     * Get an app user by its supplied ID.
+     * <p>Returns every user data value in full, including <code>HIDDEN</code> and <code>PARTIALLY_VISIBLE</code> ones.</p>
      * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public AppUserResponse get(String userId) {
@@ -143,7 +148,8 @@ public class UsersClient {
     }
 
     /**
-     * Get an app user by its supplied ID
+     * Get an app user by its supplied ID.
+     * <p>Returns every user data value in full, including <code>HIDDEN</code> and <code>PARTIALLY_VISIBLE</code> ones.</p>
      * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public AppUserResponse get(String userId, UserGetRequest request) {
@@ -151,7 +157,8 @@ public class UsersClient {
     }
 
     /**
-     * Get an app user by its supplied ID
+     * Get an app user by its supplied ID.
+     * <p>Returns every user data value in full, including <code>HIDDEN</code> and <code>PARTIALLY_VISIBLE</code> ones.</p>
      * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:agents</code>&lt;/Note&gt;</p>
      */
     public AppUserResponse get(String userId, UserGetRequest request, RequestOptions requestOptions) {

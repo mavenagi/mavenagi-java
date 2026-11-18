@@ -31,6 +31,9 @@ public final class BotLogicIntelligentFieldsItem {
         this.additionalProperties = additionalProperties;
     }
 
+    /**
+     * @return The fields and their values, as evaluated before the request's first step.
+     */
     @JsonProperty("refreshedFields")
     public List<BotLogicIntelligentFieldDetail> getRefreshedFields() {
         return refreshedFields;
@@ -79,6 +82,9 @@ public final class BotLogicIntelligentFieldsItem {
             return this;
         }
 
+        /**
+         * <p>The fields and their values, as evaluated before the request's first step.</p>
+         */
         @JsonSetter(value = "refreshedFields", nulls = Nulls.SKIP)
         public Builder refreshedFields(List<BotLogicIntelligentFieldDetail> refreshedFields) {
             this.refreshedFields.clear();

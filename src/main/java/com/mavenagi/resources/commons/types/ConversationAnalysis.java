@@ -93,7 +93,9 @@ public final class ConversationAnalysis {
     }
 
     /**
-     * @return Generated resolution status of the conversation
+     * @return Resolution status of the conversation. Code computes it from the messages, feedback,
+     * CSAT and inserts. The one AI input is the transcript summary, which can report a
+     * handoff and set <code>ESCALATED</code>. See <code>ResolutionStatus</code> for how each status is set.
      */
     @JsonProperty("resolutionStatus")
     public Optional<ResolutionStatus> getResolutionStatus() {
@@ -133,7 +135,9 @@ public final class ConversationAnalysis {
     }
 
     /**
-     * @return Whether the conversation was resolved by Maven
+     * @return Whether the conversation was resolved by Maven: <code>true</code> exactly when <code>resolutionStatus</code>
+     * is <code>RESOLVED</code>. These are the conversations billed under resolution-based pricing, and
+     * the ones the <code>ELIGIBLE_AND_BILLABLE</code> billing status matches.
      */
     @JsonProperty("resolvedByMaven")
     public Optional<Boolean> getResolvedByMaven() {
@@ -300,7 +304,9 @@ public final class ConversationAnalysis {
         }
 
         /**
-         * <p>Generated resolution status of the conversation</p>
+         * <p>Resolution status of the conversation. Code computes it from the messages, feedback,
+         * CSAT and inserts. The one AI input is the transcript summary, which can report a
+         * handoff and set <code>ESCALATED</code>. See <code>ResolutionStatus</code> for how each status is set.</p>
          */
         @JsonSetter(value = "resolutionStatus", nulls = Nulls.SKIP)
         public Builder resolutionStatus(Optional<ResolutionStatus> resolutionStatus) {
@@ -370,7 +376,9 @@ public final class ConversationAnalysis {
         }
 
         /**
-         * <p>Whether the conversation was resolved by Maven</p>
+         * <p>Whether the conversation was resolved by Maven: <code>true</code> exactly when <code>resolutionStatus</code>
+         * is <code>RESOLVED</code>. These are the conversations billed under resolution-based pricing, and
+         * the ones the <code>ELIGIBLE_AND_BILLABLE</code> billing status matches.</p>
          */
         @JsonSetter(value = "resolvedByMaven", nulls = Nulls.SKIP)
         public Builder resolvedByMaven(Optional<Boolean> resolvedByMaven) {

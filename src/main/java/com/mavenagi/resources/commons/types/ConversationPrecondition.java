@@ -58,6 +58,10 @@ public final class ConversationPrecondition {
         return new ConversationPrecondition(new IntelligentFieldValue(value));
     }
 
+    public static ConversationPrecondition time(TimePrecondition value) {
+        return new ConversationPrecondition(new TimeValue(value));
+    }
+
     public boolean isTags() {
         return value instanceof TagsValue;
     }
@@ -88,6 +92,10 @@ public final class ConversationPrecondition {
 
     public boolean isIntelligentField() {
         return value instanceof IntelligentFieldValue;
+    }
+
+    public boolean isTime() {
+        return value instanceof TimeValue;
     }
 
     public boolean _isUnknown() {
@@ -150,6 +158,13 @@ public final class ConversationPrecondition {
         return Optional.empty();
     }
 
+    public Optional<TimePrecondition> getTime() {
+        if (isTime()) {
+            return Optional.of(((TimeValue) value).value);
+        }
+        return Optional.empty();
+    }
+
     public Optional<Object> _getUnknown() {
         if (_isUnknown()) {
             return Optional.of(((_UnknownValue) value).value);
@@ -179,6 +194,8 @@ public final class ConversationPrecondition {
 
         T visitIntelligentField(IntelligentFieldPrecondition intelligentField);
 
+        T visitTime(TimePrecondition time);
+
         T _visitUnknown(Object unknownType);
     }
 
@@ -195,7 +212,8 @@ public final class ConversationPrecondition {
         @JsonSubTypes.Type(AppValue.class),
         @JsonSubTypes.Type(ConversationStateValue.class),
         @JsonSubTypes.Type(ConversationModeValue.class),
-        @JsonSubTypes.Type(IntelligentFieldValue.class)
+        @JsonSubTypes.Type(IntelligentFieldValue.class),
+        @JsonSubTypes.Type(TimeValue.class)
     })
     @JsonIgnoreProperties(ignoreUnknown = true)
     private interface Value {
@@ -500,6 +518,45 @@ public final class ConversationPrecondition {
         }
 
         private boolean equalTo(IntelligentFieldValue other) {
+            return value.equals(other.value);
+        }
+
+        @java.lang.Override
+        public int hashCode() {
+            return Objects.hash(this.value);
+        }
+
+        @java.lang.Override
+        public String toString() {
+            return "ConversationPrecondition{" + "value: " + value + "}";
+        }
+    }
+
+    @JsonTypeName("time")
+    @JsonIgnoreProperties("conversationPreconditionType")
+    private static final class TimeValue implements Value {
+        @JsonUnwrapped
+        private TimePrecondition value;
+
+        @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+        private TimeValue() {}
+
+        private TimeValue(TimePrecondition value) {
+            this.value = value;
+        }
+
+        @java.lang.Override
+        public <T> T visit(Visitor<T> visitor) {
+            return visitor.visitTime(value);
+        }
+
+        @java.lang.Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            return other instanceof TimeValue && equalTo((TimeValue) other);
+        }
+
+        private boolean equalTo(TimeValue other) {
             return value.equals(other.value);
         }
 
