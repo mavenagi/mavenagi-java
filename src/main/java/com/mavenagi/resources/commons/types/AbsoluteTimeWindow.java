@@ -21,6 +21,8 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = AbsoluteTimeWindow.Builder.class)
 public final class AbsoluteTimeWindow {
+    private final Optional<String> timezone;
+
     private final Optional<OffsetDateTime> start;
 
     private final Optional<OffsetDateTime> end;
@@ -28,10 +30,22 @@ public final class AbsoluteTimeWindow {
     private final Map<String, Object> additionalProperties;
 
     private AbsoluteTimeWindow(
-            Optional<OffsetDateTime> start, Optional<OffsetDateTime> end, Map<String, Object> additionalProperties) {
+            Optional<String> timezone,
+            Optional<OffsetDateTime> start,
+            Optional<OffsetDateTime> end,
+            Map<String, Object> additionalProperties) {
+        this.timezone = timezone;
         this.start = start;
         this.end = end;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return The IANA timezone the window was written in (e.g. &quot;America/New_York&quot;), kept so an editor can show the ends in it again. It does not change which instants match. Fixed offsets (e.g. &quot;-08:00&quot;) and legacy IDs (e.g. &quot;EST&quot;) are accepted, but the ends then read back at a fixed offset that ignores daylight saving. Clients can prefill it from the agent's <code>defaultTimezone</code>.
+     */
+    @JsonProperty("timezone")
+    public Optional<String> getTimezone() {
+        return timezone;
     }
 
     /**
@@ -62,12 +76,12 @@ public final class AbsoluteTimeWindow {
     }
 
     private boolean equalTo(AbsoluteTimeWindow other) {
-        return start.equals(other.start) && end.equals(other.end);
+        return timezone.equals(other.timezone) && start.equals(other.start) && end.equals(other.end);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.start, this.end);
+        return Objects.hash(this.timezone, this.start, this.end);
     }
 
     @java.lang.Override
@@ -81,6 +95,8 @@ public final class AbsoluteTimeWindow {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
+        private Optional<String> timezone = Optional.empty();
+
         private Optional<OffsetDateTime> start = Optional.empty();
 
         private Optional<OffsetDateTime> end = Optional.empty();
@@ -91,8 +107,23 @@ public final class AbsoluteTimeWindow {
         private Builder() {}
 
         public Builder from(AbsoluteTimeWindow other) {
+            timezone(other.getTimezone());
             start(other.getStart());
             end(other.getEnd());
+            return this;
+        }
+
+        /**
+         * <p>The IANA timezone the window was written in (e.g. &quot;America/New_York&quot;), kept so an editor can show the ends in it again. It does not change which instants match. Fixed offsets (e.g. &quot;-08:00&quot;) and legacy IDs (e.g. &quot;EST&quot;) are accepted, but the ends then read back at a fixed offset that ignores daylight saving. Clients can prefill it from the agent's <code>defaultTimezone</code>.</p>
+         */
+        @JsonSetter(value = "timezone", nulls = Nulls.SKIP)
+        public Builder timezone(Optional<String> timezone) {
+            this.timezone = timezone;
+            return this;
+        }
+
+        public Builder timezone(String timezone) {
+            this.timezone = Optional.ofNullable(timezone);
             return this;
         }
 
@@ -125,7 +156,7 @@ public final class AbsoluteTimeWindow {
         }
 
         public AbsoluteTimeWindow build() {
-            return new AbsoluteTimeWindow(start, end, additionalProperties);
+            return new AbsoluteTimeWindow(timezone, start, end, additionalProperties);
         }
     }
 }

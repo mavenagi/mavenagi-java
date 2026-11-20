@@ -9,11 +9,11 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public final class KnowledgeBaseType {
     public static final KnowledgeBaseType URL = new KnowledgeBaseType(Value.URL, "URL");
 
+    public static final KnowledgeBaseType RSS = new KnowledgeBaseType(Value.RSS, "RSS");
+
     public static final KnowledgeBaseType LEGACY = new KnowledgeBaseType(Value.LEGACY, "LEGACY");
 
     public static final KnowledgeBaseType MANUAL = new KnowledgeBaseType(Value.MANUAL, "MANUAL");
-
-    public static final KnowledgeBaseType RSS = new KnowledgeBaseType(Value.RSS, "RSS");
 
     public static final KnowledgeBaseType API = new KnowledgeBaseType(Value.API, "API");
 
@@ -51,12 +51,12 @@ public final class KnowledgeBaseType {
         switch (value) {
             case URL:
                 return visitor.visitUrl();
+            case RSS:
+                return visitor.visitRss();
             case LEGACY:
                 return visitor.visitLegacy();
             case MANUAL:
                 return visitor.visitManual();
-            case RSS:
-                return visitor.visitRss();
             case API:
                 return visitor.visitApi();
             case UNKNOWN:
@@ -70,12 +70,12 @@ public final class KnowledgeBaseType {
         switch (value) {
             case "URL":
                 return URL;
+            case "RSS":
+                return RSS;
             case "LEGACY":
                 return LEGACY;
             case "MANUAL":
                 return MANUAL;
-            case "RSS":
-                return RSS;
             case "API":
                 return API;
             default:

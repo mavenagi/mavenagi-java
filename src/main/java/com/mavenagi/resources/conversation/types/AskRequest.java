@@ -172,7 +172,8 @@ public final class AskRequest implements IAskRequestBase, IAskRequestFields {
     }
 
     /**
-     * @return Externally supplied ID to uniquely identify the user that created this message
+     * @return Externally supplied ID to uniquely identify the user that created this message. On a conversation
+     * with a <code>users</code> audience, a <code>USER_MESSAGE</code> ask from a user outside it is rejected with a 400.
      */
     @JsonProperty("userId")
     public EntityIdBase getUserId() {
@@ -236,7 +237,8 @@ public final class AskRequest implements IAskRequestBase, IAskRequestFields {
 
     public interface UserIdStage {
         /**
-         * <p>Externally supplied ID to uniquely identify the user that created this message</p>
+         * <p>Externally supplied ID to uniquely identify the user that created this message. On a conversation
+         * with a <code>users</code> audience, a <code>USER_MESSAGE</code> ask from a user outside it is rejected with a 400.</p>
          */
         _FinalStage userId(@NotNull EntityIdBase userId);
     }
@@ -377,8 +379,10 @@ public final class AskRequest implements IAskRequestBase, IAskRequestFields {
         }
 
         /**
-         * <p>Externally supplied ID to uniquely identify the user that created this message</p>
-         * <p>Externally supplied ID to uniquely identify the user that created this message</p>
+         * <p>Externally supplied ID to uniquely identify the user that created this message. On a conversation
+         * with a <code>users</code> audience, a <code>USER_MESSAGE</code> ask from a user outside it is rejected with a 400.</p>
+         * <p>Externally supplied ID to uniquely identify the user that created this message. On a conversation
+         * with a <code>users</code> audience, a <code>USER_MESSAGE</code> ask from a user outside it is rejected with a 400.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override

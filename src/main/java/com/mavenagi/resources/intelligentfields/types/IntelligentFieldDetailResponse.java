@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
 import com.mavenagi.resources.charters.types.CharterSummary;
 import com.mavenagi.resources.commons.types.CapabilityStatus;
+import com.mavenagi.resources.commons.types.ChangeAuthor;
 import com.mavenagi.resources.commons.types.EntityId;
 import com.mavenagi.resources.commons.types.EntityIdWithoutAgent;
 import com.mavenagi.resources.commons.types.EntityType;
@@ -31,6 +32,10 @@ import org.jetbrains.annotations.NotNull;
 public final class IntelligentFieldDetailResponse
         implements IIntelligentFieldResponse, IIntelligentFieldBase, ICapabilityBase, IIntelligentFieldCore {
     private final EntityId fieldId;
+
+    private final Optional<ChangeAuthor> createdBy;
+
+    private final Optional<ChangeAuthor> updatedBy;
 
     private final EntityType entityType;
 
@@ -58,6 +63,8 @@ public final class IntelligentFieldDetailResponse
 
     private IntelligentFieldDetailResponse(
             EntityId fieldId,
+            Optional<ChangeAuthor> createdBy,
+            Optional<ChangeAuthor> updatedBy,
             EntityType entityType,
             Optional<EntityIdWithoutAgent> variantId,
             String name,
@@ -71,6 +78,8 @@ public final class IntelligentFieldDetailResponse
             Optional<List<CharterSummary>> referencingCharters,
             Map<String, Object> additionalProperties) {
         this.fieldId = fieldId;
+        this.createdBy = createdBy;
+        this.updatedBy = updatedBy;
         this.entityType = entityType;
         this.variantId = variantId;
         this.name = name;
@@ -92,6 +101,24 @@ public final class IntelligentFieldDetailResponse
     @java.lang.Override
     public EntityId getFieldId() {
         return fieldId;
+    }
+
+    /**
+     * @return Who wrote this version of the field. Absent when no one was recorded. Shown in Agent Designer as &quot;Created by&quot; on a field a variant adds.
+     */
+    @JsonProperty("createdBy")
+    @java.lang.Override
+    public Optional<ChangeAuthor> getCreatedBy() {
+        return createdBy;
+    }
+
+    /**
+     * @return Who last changed this version of the field. Absent when no one was recorded. Shown in Agent Designer as &quot;Modified by&quot; on a field a variant changes.
+     */
+    @JsonProperty("updatedBy")
+    @java.lang.Override
+    public Optional<ChangeAuthor> getUpdatedBy() {
+        return updatedBy;
     }
 
     /**
@@ -220,6 +247,8 @@ public final class IntelligentFieldDetailResponse
 
     private boolean equalTo(IntelligentFieldDetailResponse other) {
         return fieldId.equals(other.fieldId)
+                && createdBy.equals(other.createdBy)
+                && updatedBy.equals(other.updatedBy)
                 && entityType.equals(other.entityType)
                 && variantId.equals(other.variantId)
                 && name.equals(other.name)
@@ -237,6 +266,8 @@ public final class IntelligentFieldDetailResponse
     public int hashCode() {
         return Objects.hash(
                 this.fieldId,
+                this.createdBy,
+                this.updatedBy,
                 this.entityType,
                 this.variantId,
                 this.name,
@@ -331,6 +362,20 @@ public final class IntelligentFieldDetailResponse
         IntelligentFieldDetailResponse build();
 
         /**
+         * <p>Who wrote this version of the field. Absent when no one was recorded. Shown in Agent Designer as &quot;Created by&quot; on a field a variant adds.</p>
+         */
+        _FinalStage createdBy(Optional<ChangeAuthor> createdBy);
+
+        _FinalStage createdBy(ChangeAuthor createdBy);
+
+        /**
+         * <p>Who last changed this version of the field. Absent when no one was recorded. Shown in Agent Designer as &quot;Modified by&quot; on a field a variant changes.</p>
+         */
+        _FinalStage updatedBy(Optional<ChangeAuthor> updatedBy);
+
+        _FinalStage updatedBy(ChangeAuthor updatedBy);
+
+        /**
          * <p>On a request, the agent variant to stage the write in. On a response, the variant the request named, if any; absent when it named none.</p>
          */
         _FinalStage variantId(Optional<EntityIdWithoutAgent> variantId);
@@ -399,6 +444,10 @@ public final class IntelligentFieldDetailResponse
 
         private Optional<EntityIdWithoutAgent> variantId = Optional.empty();
 
+        private Optional<ChangeAuthor> updatedBy = Optional.empty();
+
+        private Optional<ChangeAuthor> createdBy = Optional.empty();
+
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -407,6 +456,8 @@ public final class IntelligentFieldDetailResponse
         @java.lang.Override
         public Builder from(IntelligentFieldDetailResponse other) {
             fieldId(other.getFieldId());
+            createdBy(other.getCreatedBy());
+            updatedBy(other.getUpdatedBy());
             entityType(other.getEntityType());
             variantId(other.getVariantId());
             name(other.getName());
@@ -627,10 +678,52 @@ public final class IntelligentFieldDetailResponse
             return this;
         }
 
+        /**
+         * <p>Who last changed this version of the field. Absent when no one was recorded. Shown in Agent Designer as &quot;Modified by&quot; on a field a variant changes.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage updatedBy(ChangeAuthor updatedBy) {
+            this.updatedBy = Optional.ofNullable(updatedBy);
+            return this;
+        }
+
+        /**
+         * <p>Who last changed this version of the field. Absent when no one was recorded. Shown in Agent Designer as &quot;Modified by&quot; on a field a variant changes.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "updatedBy", nulls = Nulls.SKIP)
+        public _FinalStage updatedBy(Optional<ChangeAuthor> updatedBy) {
+            this.updatedBy = updatedBy;
+            return this;
+        }
+
+        /**
+         * <p>Who wrote this version of the field. Absent when no one was recorded. Shown in Agent Designer as &quot;Created by&quot; on a field a variant adds.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage createdBy(ChangeAuthor createdBy) {
+            this.createdBy = Optional.ofNullable(createdBy);
+            return this;
+        }
+
+        /**
+         * <p>Who wrote this version of the field. Absent when no one was recorded. Shown in Agent Designer as &quot;Created by&quot; on a field a variant adds.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "createdBy", nulls = Nulls.SKIP)
+        public _FinalStage createdBy(Optional<ChangeAuthor> createdBy) {
+            this.createdBy = createdBy;
+            return this;
+        }
+
         @java.lang.Override
         public IntelligentFieldDetailResponse build() {
             return new IntelligentFieldDetailResponse(
                     fieldId,
+                    createdBy,
+                    updatedBy,
                     entityType,
                     variantId,
                     name,

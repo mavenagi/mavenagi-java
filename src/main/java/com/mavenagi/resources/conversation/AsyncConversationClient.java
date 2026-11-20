@@ -581,9 +581,18 @@ public class AsyncConversationClient {
      * to have the agent take a <code>WELCOME</code> or <code>PROACTIVE</code> turn and deliver its reply. Either way the app
      * that owns the conversation receives the message through its <code>handleMessage</code> hook.</p>
      * <p>A closed conversation (<code>open</code> set to false) takes no new messages and returns a 400.</p>
+     * <p>To reach a user rather than a known conversation, send <code>type: user</code>. The message goes to one of that
+     * user's open conversations, chosen as described on <code>appIds</code>. The response's <code>conversationId</code> names the
+     * conversation it went to.</p>
      * <p>&lt;Warning&gt;
      * Currently, messages can only be successfully delivered to conversations with the `ASYNC` capability.
-     * User message delivery is not yet supported and returns a 400.
+     * Delivering to a user only reaches a conversation that already exists; it never starts a new one.
+     * &lt;/Warning&gt;</p>
+     * <p>&lt;Warning&gt;
+     * Retrying a delivery is not supported. Sending the same `conversationMessageId` again saves the message, or an
+     * `ask`'s reply, only once in a conversation, but calls the app's `handleMessage` hook again each time. With
+     * `type: user`, a repeat can also go to a different conversation if the user's conversations changed in between,
+     * so the message is saved and delivered twice.
      * &lt;/Warning&gt;</p>
      * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>ask:agent</code>&lt;/Note&gt;</p>
      */
@@ -597,9 +606,18 @@ public class AsyncConversationClient {
      * to have the agent take a <code>WELCOME</code> or <code>PROACTIVE</code> turn and deliver its reply. Either way the app
      * that owns the conversation receives the message through its <code>handleMessage</code> hook.</p>
      * <p>A closed conversation (<code>open</code> set to false) takes no new messages and returns a 400.</p>
+     * <p>To reach a user rather than a known conversation, send <code>type: user</code>. The message goes to one of that
+     * user's open conversations, chosen as described on <code>appIds</code>. The response's <code>conversationId</code> names the
+     * conversation it went to.</p>
      * <p>&lt;Warning&gt;
      * Currently, messages can only be successfully delivered to conversations with the `ASYNC` capability.
-     * User message delivery is not yet supported and returns a 400.
+     * Delivering to a user only reaches a conversation that already exists; it never starts a new one.
+     * &lt;/Warning&gt;</p>
+     * <p>&lt;Warning&gt;
+     * Retrying a delivery is not supported. Sending the same `conversationMessageId` again saves the message, or an
+     * `ask`'s reply, only once in a conversation, but calls the app's `handleMessage` hook again each time. With
+     * `type: user`, a repeat can also go to a different conversation if the user's conversations changed in between,
+     * so the message is saved and delivered twice.
      * &lt;/Warning&gt;</p>
      * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>ask:agent</code>&lt;/Note&gt;</p>
      */

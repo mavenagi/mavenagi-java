@@ -9,11 +9,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
@@ -21,10 +23,16 @@ import org.jetbrains.annotations.NotNull;
 public final class KnowledgeBaseVersionRequest implements IKnowledgeBaseVersionRequest {
     private final KnowledgeBaseVersionType type;
 
+    private final Optional<KnowledgeBaseFunctionBindings> functionVersions;
+
     private final Map<String, Object> additionalProperties;
 
-    private KnowledgeBaseVersionRequest(KnowledgeBaseVersionType type, Map<String, Object> additionalProperties) {
+    private KnowledgeBaseVersionRequest(
+            KnowledgeBaseVersionType type,
+            Optional<KnowledgeBaseFunctionBindings> functionVersions,
+            Map<String, Object> additionalProperties) {
         this.type = type;
+        this.functionVersions = functionVersions;
         this.additionalProperties = additionalProperties;
     }
 
@@ -35,6 +43,15 @@ public final class KnowledgeBaseVersionRequest implements IKnowledgeBaseVersionR
     @java.lang.Override
     public KnowledgeBaseVersionType getType() {
         return type;
+    }
+
+    /**
+     * @return The Function versions that build this version. On a version, absent for historical versions and for versions created without them.
+     */
+    @JsonProperty("functionVersions")
+    @java.lang.Override
+    public Optional<KnowledgeBaseFunctionBindings> getFunctionVersions() {
+        return functionVersions;
     }
 
     @java.lang.Override
@@ -49,12 +66,12 @@ public final class KnowledgeBaseVersionRequest implements IKnowledgeBaseVersionR
     }
 
     private boolean equalTo(KnowledgeBaseVersionRequest other) {
-        return type.equals(other.type);
+        return type.equals(other.type) && functionVersions.equals(other.functionVersions);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.type);
+        return Objects.hash(this.type, this.functionVersions);
     }
 
     @java.lang.Override
@@ -77,11 +94,20 @@ public final class KnowledgeBaseVersionRequest implements IKnowledgeBaseVersionR
 
     public interface _FinalStage {
         KnowledgeBaseVersionRequest build();
+
+        /**
+         * <p>The Function versions that build this version. On a version, absent for historical versions and for versions created without them.</p>
+         */
+        _FinalStage functionVersions(Optional<KnowledgeBaseFunctionBindings> functionVersions);
+
+        _FinalStage functionVersions(KnowledgeBaseFunctionBindings functionVersions);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements TypeStage, _FinalStage {
         private KnowledgeBaseVersionType type;
+
+        private Optional<KnowledgeBaseFunctionBindings> functionVersions = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -91,6 +117,7 @@ public final class KnowledgeBaseVersionRequest implements IKnowledgeBaseVersionR
         @java.lang.Override
         public Builder from(KnowledgeBaseVersionRequest other) {
             type(other.getType());
+            functionVersions(other.getFunctionVersions());
             return this;
         }
 
@@ -106,9 +133,29 @@ public final class KnowledgeBaseVersionRequest implements IKnowledgeBaseVersionR
             return this;
         }
 
+        /**
+         * <p>The Function versions that build this version. On a version, absent for historical versions and for versions created without them.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage functionVersions(KnowledgeBaseFunctionBindings functionVersions) {
+            this.functionVersions = Optional.ofNullable(functionVersions);
+            return this;
+        }
+
+        /**
+         * <p>The Function versions that build this version. On a version, absent for historical versions and for versions created without them.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "functionVersions", nulls = Nulls.SKIP)
+        public _FinalStage functionVersions(Optional<KnowledgeBaseFunctionBindings> functionVersions) {
+            this.functionVersions = functionVersions;
+            return this;
+        }
+
         @java.lang.Override
         public KnowledgeBaseVersionRequest build() {
-            return new KnowledgeBaseVersionRequest(type, additionalProperties);
+            return new KnowledgeBaseVersionRequest(type, functionVersions, additionalProperties);
         }
     }
 }

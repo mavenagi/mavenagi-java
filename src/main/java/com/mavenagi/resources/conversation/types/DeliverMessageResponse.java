@@ -9,11 +9,14 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
+import com.mavenagi.resources.commons.types.EntityId;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
@@ -21,16 +24,29 @@ import org.jetbrains.annotations.NotNull;
 public final class DeliverMessageResponse {
     private final DeliveryStatus status;
 
+    private final Optional<EntityId> conversationId;
+
     private final Map<String, Object> additionalProperties;
 
-    private DeliverMessageResponse(DeliveryStatus status, Map<String, Object> additionalProperties) {
+    private DeliverMessageResponse(
+            DeliveryStatus status, Optional<EntityId> conversationId, Map<String, Object> additionalProperties) {
         this.status = status;
+        this.conversationId = conversationId;
         this.additionalProperties = additionalProperties;
     }
 
     @JsonProperty("status")
     public DeliveryStatus getStatus() {
         return status;
+    }
+
+    /**
+     * @return The conversation the message was delivered to, or attempted on when <code>status</code> is <code>FAILED</code>. Absent when
+     * no conversation qualified for a delivery to a user.
+     */
+    @JsonProperty("conversationId")
+    public Optional<EntityId> getConversationId() {
+        return conversationId;
     }
 
     @java.lang.Override
@@ -45,12 +61,12 @@ public final class DeliverMessageResponse {
     }
 
     private boolean equalTo(DeliverMessageResponse other) {
-        return status.equals(other.status);
+        return status.equals(other.status) && conversationId.equals(other.conversationId);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.status);
+        return Objects.hash(this.status, this.conversationId);
     }
 
     @java.lang.Override
@@ -70,11 +86,21 @@ public final class DeliverMessageResponse {
 
     public interface _FinalStage {
         DeliverMessageResponse build();
+
+        /**
+         * <p>The conversation the message was delivered to, or attempted on when <code>status</code> is <code>FAILED</code>. Absent when
+         * no conversation qualified for a delivery to a user.</p>
+         */
+        _FinalStage conversationId(Optional<EntityId> conversationId);
+
+        _FinalStage conversationId(EntityId conversationId);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements StatusStage, _FinalStage {
         private DeliveryStatus status;
+
+        private Optional<EntityId> conversationId = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -84,6 +110,7 @@ public final class DeliverMessageResponse {
         @java.lang.Override
         public Builder from(DeliverMessageResponse other) {
             status(other.getStatus());
+            conversationId(other.getConversationId());
             return this;
         }
 
@@ -94,9 +121,31 @@ public final class DeliverMessageResponse {
             return this;
         }
 
+        /**
+         * <p>The conversation the message was delivered to, or attempted on when <code>status</code> is <code>FAILED</code>. Absent when
+         * no conversation qualified for a delivery to a user.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage conversationId(EntityId conversationId) {
+            this.conversationId = Optional.ofNullable(conversationId);
+            return this;
+        }
+
+        /**
+         * <p>The conversation the message was delivered to, or attempted on when <code>status</code> is <code>FAILED</code>. Absent when
+         * no conversation qualified for a delivery to a user.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "conversationId", nulls = Nulls.SKIP)
+        public _FinalStage conversationId(Optional<EntityId> conversationId) {
+            this.conversationId = conversationId;
+            return this;
+        }
+
         @java.lang.Override
         public DeliverMessageResponse build() {
-            return new DeliverMessageResponse(status, additionalProperties);
+            return new DeliverMessageResponse(status, conversationId, additionalProperties);
         }
     }
 }

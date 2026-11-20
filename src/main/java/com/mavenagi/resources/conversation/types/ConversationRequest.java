@@ -12,8 +12,10 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
+import com.mavenagi.resources.commons.types.ConversationAudience;
 import com.mavenagi.resources.commons.types.EntityId;
 import com.mavenagi.resources.commons.types.EntityIdBase;
+import com.mavenagi.resources.commons.types.IConversationSetupFields;
 import com.mavenagi.resources.commons.types.ResponseConfig;
 import com.mavenagi.resources.commons.types.SimulationContext;
 import java.time.OffsetDateTime;
@@ -28,12 +30,16 @@ import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ConversationRequest.Builder.class)
-public final class ConversationRequest {
+public final class ConversationRequest implements IConversationSetupFields {
+    private final Optional<ResponseConfig> responseConfig;
+
+    private final Optional<Set<String>> tags;
+
+    private final Optional<Map<String, String>> metadata;
+
     private final EntityIdBase conversationId;
 
     private final Optional<SimulationContext> simulationContext;
-
-    private final Optional<ResponseConfig> responseConfig;
 
     private final Optional<String> subject;
 
@@ -43,41 +49,73 @@ public final class ConversationRequest {
 
     private final Optional<OffsetDateTime> updatedAt;
 
-    private final Optional<Set<String>> tags;
-
-    private final Optional<Map<String, String>> metadata;
-
     private final List<ConversationMessageRequest> messages;
 
     private final Optional<EntityId> spawnedFromConversationId;
 
+    private final Optional<ConversationAudience> audience;
+
     private final Map<String, Object> additionalProperties;
 
     private ConversationRequest(
+            Optional<ResponseConfig> responseConfig,
+            Optional<Set<String>> tags,
+            Optional<Map<String, String>> metadata,
             EntityIdBase conversationId,
             Optional<SimulationContext> simulationContext,
-            Optional<ResponseConfig> responseConfig,
             Optional<String> subject,
             Optional<String> url,
             Optional<OffsetDateTime> createdAt,
             Optional<OffsetDateTime> updatedAt,
-            Optional<Set<String>> tags,
-            Optional<Map<String, String>> metadata,
             List<ConversationMessageRequest> messages,
             Optional<EntityId> spawnedFromConversationId,
+            Optional<ConversationAudience> audience,
             Map<String, Object> additionalProperties) {
+        this.responseConfig = responseConfig;
+        this.tags = tags;
+        this.metadata = metadata;
         this.conversationId = conversationId;
         this.simulationContext = simulationContext;
-        this.responseConfig = responseConfig;
         this.subject = subject;
         this.url = url;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.tags = tags;
-        this.metadata = metadata;
         this.messages = messages;
         this.spawnedFromConversationId = spawnedFromConversationId;
+        this.audience = audience;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return Optional configurations for responses to this conversation
+     */
+    @JsonProperty("responseConfig")
+    @java.lang.Override
+    public Optional<ResponseConfig> getResponseConfig() {
+        return responseConfig;
+    }
+
+    /**
+     * @return The tags of the conversation. Used for filtering in Agent Designer.
+     */
+    @JsonProperty("tags")
+    @java.lang.Override
+    public Optional<Set<String>> getTags() {
+        return tags;
+    }
+
+    /**
+     * @return Set of 16 key-value pairs that can be attached to an object. This can be useful for storing
+     * additional information about the object in a structured format, and querying for objects
+     * via API or the dashboard.
+     * <p>Keys are strings with a maximum length of 500 characters. Values are strings with a maximum
+     * length of 512 characters.</p>
+     * <p>The metadata of the conversation supplied by the app which created the conversation.</p>
+     */
+    @JsonProperty("metadata")
+    @java.lang.Override
+    public Optional<Map<String, String>> getMetadata() {
+        return metadata;
     }
 
     /**
@@ -96,14 +134,6 @@ public final class ConversationRequest {
     @JsonProperty("simulationContext")
     public Optional<SimulationContext> getSimulationContext() {
         return simulationContext;
-    }
-
-    /**
-     * @return Optional configurations for responses to this conversation
-     */
-    @JsonProperty("responseConfig")
-    public Optional<ResponseConfig> getResponseConfig() {
-        return responseConfig;
     }
 
     /**
@@ -139,27 +169,6 @@ public final class ConversationRequest {
     }
 
     /**
-     * @return The tags of the conversation. Used for filtering in Agent Designer.
-     */
-    @JsonProperty("tags")
-    public Optional<Set<String>> getTags() {
-        return tags;
-    }
-
-    /**
-     * @return Set of 16 key-value pairs that can be attached to an object. This can be useful for storing
-     * additional information about the object in a structured format, and querying for objects
-     * via API or the dashboard.
-     * <p>Keys are strings with a maximum length of 500 characters. Values are strings with a maximum
-     * length of 512 characters.</p>
-     * <p>The metadata of the conversation supplied by the app which created the conversation.</p>
-     */
-    @JsonProperty("metadata")
-    public Optional<Map<String, String>> getMetadata() {
-        return metadata;
-    }
-
-    /**
      * @return The messages in the conversation
      */
     @JsonProperty("messages")
@@ -182,6 +191,20 @@ public final class ConversationRequest {
         return spawnedFromConversationId;
     }
 
+    /**
+     * @return Who the conversation is for. Omit this field or send <code>allUsers</code> for a conversation that any of
+     * the agent's users may take part in. Send <code>users</code> to restrict the conversation to the listed users.
+     * A <code>USER</code> message from any other user, sent through <code>ask</code>, <code>askStream</code>, <code>appendNewMessages</code> or
+     * this request's <code>messages</code> when this request creates the conversation, is rejected with a 400.
+     * Initializing an existing conversation saves none of its <code>messages</code>.
+     * <p>The audience is set when the conversation is created and cannot be changed. Initializing an
+     * existing conversation leaves its audience unchanged.</p>
+     */
+    @JsonProperty("audience")
+    public Optional<ConversationAudience> getAudience() {
+        return audience;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -194,33 +217,35 @@ public final class ConversationRequest {
     }
 
     private boolean equalTo(ConversationRequest other) {
-        return conversationId.equals(other.conversationId)
+        return responseConfig.equals(other.responseConfig)
+                && tags.equals(other.tags)
+                && metadata.equals(other.metadata)
+                && conversationId.equals(other.conversationId)
                 && simulationContext.equals(other.simulationContext)
-                && responseConfig.equals(other.responseConfig)
                 && subject.equals(other.subject)
                 && url.equals(other.url)
                 && createdAt.equals(other.createdAt)
                 && updatedAt.equals(other.updatedAt)
-                && tags.equals(other.tags)
-                && metadata.equals(other.metadata)
                 && messages.equals(other.messages)
-                && spawnedFromConversationId.equals(other.spawnedFromConversationId);
+                && spawnedFromConversationId.equals(other.spawnedFromConversationId)
+                && audience.equals(other.audience);
     }
 
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
+                this.responseConfig,
+                this.tags,
+                this.metadata,
                 this.conversationId,
                 this.simulationContext,
-                this.responseConfig,
                 this.subject,
                 this.url,
                 this.createdAt,
                 this.updatedAt,
-                this.tags,
-                this.metadata,
                 this.messages,
-                this.spawnedFromConversationId);
+                this.spawnedFromConversationId,
+                this.audience);
     }
 
     @java.lang.Override
@@ -245,6 +270,32 @@ public final class ConversationRequest {
         ConversationRequest build();
 
         /**
+         * <p>Optional configurations for responses to this conversation</p>
+         */
+        _FinalStage responseConfig(Optional<ResponseConfig> responseConfig);
+
+        _FinalStage responseConfig(ResponseConfig responseConfig);
+
+        /**
+         * <p>The tags of the conversation. Used for filtering in Agent Designer.</p>
+         */
+        _FinalStage tags(Optional<Set<String>> tags);
+
+        _FinalStage tags(Set<String> tags);
+
+        /**
+         * <p>Set of 16 key-value pairs that can be attached to an object. This can be useful for storing
+         * additional information about the object in a structured format, and querying for objects
+         * via API or the dashboard.</p>
+         * <p>Keys are strings with a maximum length of 500 characters. Values are strings with a maximum
+         * length of 512 characters.</p>
+         * <p>The metadata of the conversation supplied by the app which created the conversation.</p>
+         */
+        _FinalStage metadata(Optional<Map<String, String>> metadata);
+
+        _FinalStage metadata(Map<String, String> metadata);
+
+        /**
          * <p>Additional context used for simulation runs. When provided, this conversation will be treated as a simulation and
          * may only be created by apps with the appropriate permission. Simulation conversations are excluded from normal
          * search results unless explicitly included via the <code>simulationFilter</code> field.</p>
@@ -252,13 +303,6 @@ public final class ConversationRequest {
         _FinalStage simulationContext(Optional<SimulationContext> simulationContext);
 
         _FinalStage simulationContext(SimulationContext simulationContext);
-
-        /**
-         * <p>Optional configurations for responses to this conversation</p>
-         */
-        _FinalStage responseConfig(Optional<ResponseConfig> responseConfig);
-
-        _FinalStage responseConfig(ResponseConfig responseConfig);
 
         /**
          * <p>The subject of the conversation</p>
@@ -289,25 +333,6 @@ public final class ConversationRequest {
         _FinalStage updatedAt(OffsetDateTime updatedAt);
 
         /**
-         * <p>The tags of the conversation. Used for filtering in Agent Designer.</p>
-         */
-        _FinalStage tags(Optional<Set<String>> tags);
-
-        _FinalStage tags(Set<String> tags);
-
-        /**
-         * <p>Set of 16 key-value pairs that can be attached to an object. This can be useful for storing
-         * additional information about the object in a structured format, and querying for objects
-         * via API or the dashboard.</p>
-         * <p>Keys are strings with a maximum length of 500 characters. Values are strings with a maximum
-         * length of 512 characters.</p>
-         * <p>The metadata of the conversation supplied by the app which created the conversation.</p>
-         */
-        _FinalStage metadata(Optional<Map<String, String>> metadata);
-
-        _FinalStage metadata(Map<String, String> metadata);
-
-        /**
          * <p>The messages in the conversation</p>
          */
         _FinalStage messages(List<ConversationMessageRequest> messages);
@@ -329,19 +354,30 @@ public final class ConversationRequest {
         _FinalStage spawnedFromConversationId(Optional<EntityId> spawnedFromConversationId);
 
         _FinalStage spawnedFromConversationId(EntityId spawnedFromConversationId);
+
+        /**
+         * <p>Who the conversation is for. Omit this field or send <code>allUsers</code> for a conversation that any of
+         * the agent's users may take part in. Send <code>users</code> to restrict the conversation to the listed users.
+         * A <code>USER</code> message from any other user, sent through <code>ask</code>, <code>askStream</code>, <code>appendNewMessages</code> or
+         * this request's <code>messages</code> when this request creates the conversation, is rejected with a 400.
+         * Initializing an existing conversation saves none of its <code>messages</code>.</p>
+         * <p>The audience is set when the conversation is created and cannot be changed. Initializing an
+         * existing conversation leaves its audience unchanged.</p>
+         */
+        _FinalStage audience(Optional<ConversationAudience> audience);
+
+        _FinalStage audience(ConversationAudience audience);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements ConversationIdStage, _FinalStage {
         private EntityIdBase conversationId;
 
+        private Optional<ConversationAudience> audience = Optional.empty();
+
         private Optional<EntityId> spawnedFromConversationId = Optional.empty();
 
         private List<ConversationMessageRequest> messages = new ArrayList<>();
-
-        private Optional<Map<String, String>> metadata = Optional.empty();
-
-        private Optional<Set<String>> tags = Optional.empty();
 
         private Optional<OffsetDateTime> updatedAt = Optional.empty();
 
@@ -351,9 +387,13 @@ public final class ConversationRequest {
 
         private Optional<String> subject = Optional.empty();
 
-        private Optional<ResponseConfig> responseConfig = Optional.empty();
-
         private Optional<SimulationContext> simulationContext = Optional.empty();
+
+        private Optional<Map<String, String>> metadata = Optional.empty();
+
+        private Optional<Set<String>> tags = Optional.empty();
+
+        private Optional<ResponseConfig> responseConfig = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -362,17 +402,18 @@ public final class ConversationRequest {
 
         @java.lang.Override
         public Builder from(ConversationRequest other) {
+            responseConfig(other.getResponseConfig());
+            tags(other.getTags());
+            metadata(other.getMetadata());
             conversationId(other.getConversationId());
             simulationContext(other.getSimulationContext());
-            responseConfig(other.getResponseConfig());
             subject(other.getSubject());
             url(other.getUrl());
             createdAt(other.getCreatedAt());
             updatedAt(other.getUpdatedAt());
-            tags(other.getTags());
-            metadata(other.getMetadata());
             messages(other.getMessages());
             spawnedFromConversationId(other.getSpawnedFromConversationId());
+            audience(other.getAudience());
             return this;
         }
 
@@ -385,6 +426,38 @@ public final class ConversationRequest {
         @JsonSetter("conversationId")
         public _FinalStage conversationId(@NotNull EntityIdBase conversationId) {
             this.conversationId = Objects.requireNonNull(conversationId, "conversationId must not be null");
+            return this;
+        }
+
+        /**
+         * <p>Who the conversation is for. Omit this field or send <code>allUsers</code> for a conversation that any of
+         * the agent's users may take part in. Send <code>users</code> to restrict the conversation to the listed users.
+         * A <code>USER</code> message from any other user, sent through <code>ask</code>, <code>askStream</code>, <code>appendNewMessages</code> or
+         * this request's <code>messages</code> when this request creates the conversation, is rejected with a 400.
+         * Initializing an existing conversation saves none of its <code>messages</code>.</p>
+         * <p>The audience is set when the conversation is created and cannot be changed. Initializing an
+         * existing conversation leaves its audience unchanged.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage audience(ConversationAudience audience) {
+            this.audience = Optional.ofNullable(audience);
+            return this;
+        }
+
+        /**
+         * <p>Who the conversation is for. Omit this field or send <code>allUsers</code> for a conversation that any of
+         * the agent's users may take part in. Send <code>users</code> to restrict the conversation to the listed users.
+         * A <code>USER</code> message from any other user, sent through <code>ask</code>, <code>askStream</code>, <code>appendNewMessages</code> or
+         * this request's <code>messages</code> when this request creates the conversation, is rejected with a 400.
+         * Initializing an existing conversation saves none of its <code>messages</code>.</p>
+         * <p>The audience is set when the conversation is created and cannot be changed. Initializing an
+         * existing conversation leaves its audience unchanged.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "audience", nulls = Nulls.SKIP)
+        public _FinalStage audience(Optional<ConversationAudience> audience) {
+            this.audience = audience;
             return this;
         }
 
@@ -454,56 +527,6 @@ public final class ConversationRequest {
             if (messages != null) {
                 this.messages.addAll(messages);
             }
-            return this;
-        }
-
-        /**
-         * <p>Set of 16 key-value pairs that can be attached to an object. This can be useful for storing
-         * additional information about the object in a structured format, and querying for objects
-         * via API or the dashboard.</p>
-         * <p>Keys are strings with a maximum length of 500 characters. Values are strings with a maximum
-         * length of 512 characters.</p>
-         * <p>The metadata of the conversation supplied by the app which created the conversation.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage metadata(Map<String, String> metadata) {
-            this.metadata = Optional.ofNullable(metadata);
-            return this;
-        }
-
-        /**
-         * <p>Set of 16 key-value pairs that can be attached to an object. This can be useful for storing
-         * additional information about the object in a structured format, and querying for objects
-         * via API or the dashboard.</p>
-         * <p>Keys are strings with a maximum length of 500 characters. Values are strings with a maximum
-         * length of 512 characters.</p>
-         * <p>The metadata of the conversation supplied by the app which created the conversation.</p>
-         */
-        @java.lang.Override
-        @JsonSetter(value = "metadata", nulls = Nulls.SKIP)
-        public _FinalStage metadata(Optional<Map<String, String>> metadata) {
-            this.metadata = metadata;
-            return this;
-        }
-
-        /**
-         * <p>The tags of the conversation. Used for filtering in Agent Designer.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage tags(Set<String> tags) {
-            this.tags = Optional.ofNullable(tags);
-            return this;
-        }
-
-        /**
-         * <p>The tags of the conversation. Used for filtering in Agent Designer.</p>
-         */
-        @java.lang.Override
-        @JsonSetter(value = "tags", nulls = Nulls.SKIP)
-        public _FinalStage tags(Optional<Set<String>> tags) {
-            this.tags = tags;
             return this;
         }
 
@@ -588,26 +611,6 @@ public final class ConversationRequest {
         }
 
         /**
-         * <p>Optional configurations for responses to this conversation</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        public _FinalStage responseConfig(ResponseConfig responseConfig) {
-            this.responseConfig = Optional.ofNullable(responseConfig);
-            return this;
-        }
-
-        /**
-         * <p>Optional configurations for responses to this conversation</p>
-         */
-        @java.lang.Override
-        @JsonSetter(value = "responseConfig", nulls = Nulls.SKIP)
-        public _FinalStage responseConfig(Optional<ResponseConfig> responseConfig) {
-            this.responseConfig = responseConfig;
-            return this;
-        }
-
-        /**
          * <p>Additional context used for simulation runs. When provided, this conversation will be treated as a simulation and
          * may only be created by apps with the appropriate permission. Simulation conversations are excluded from normal
          * search results unless explicitly included via the <code>simulationFilter</code> field.</p>
@@ -631,20 +634,91 @@ public final class ConversationRequest {
             return this;
         }
 
+        /**
+         * <p>Set of 16 key-value pairs that can be attached to an object. This can be useful for storing
+         * additional information about the object in a structured format, and querying for objects
+         * via API or the dashboard.</p>
+         * <p>Keys are strings with a maximum length of 500 characters. Values are strings with a maximum
+         * length of 512 characters.</p>
+         * <p>The metadata of the conversation supplied by the app which created the conversation.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage metadata(Map<String, String> metadata) {
+            this.metadata = Optional.ofNullable(metadata);
+            return this;
+        }
+
+        /**
+         * <p>Set of 16 key-value pairs that can be attached to an object. This can be useful for storing
+         * additional information about the object in a structured format, and querying for objects
+         * via API or the dashboard.</p>
+         * <p>Keys are strings with a maximum length of 500 characters. Values are strings with a maximum
+         * length of 512 characters.</p>
+         * <p>The metadata of the conversation supplied by the app which created the conversation.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "metadata", nulls = Nulls.SKIP)
+        public _FinalStage metadata(Optional<Map<String, String>> metadata) {
+            this.metadata = metadata;
+            return this;
+        }
+
+        /**
+         * <p>The tags of the conversation. Used for filtering in Agent Designer.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage tags(Set<String> tags) {
+            this.tags = Optional.ofNullable(tags);
+            return this;
+        }
+
+        /**
+         * <p>The tags of the conversation. Used for filtering in Agent Designer.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "tags", nulls = Nulls.SKIP)
+        public _FinalStage tags(Optional<Set<String>> tags) {
+            this.tags = tags;
+            return this;
+        }
+
+        /**
+         * <p>Optional configurations for responses to this conversation</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage responseConfig(ResponseConfig responseConfig) {
+            this.responseConfig = Optional.ofNullable(responseConfig);
+            return this;
+        }
+
+        /**
+         * <p>Optional configurations for responses to this conversation</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "responseConfig", nulls = Nulls.SKIP)
+        public _FinalStage responseConfig(Optional<ResponseConfig> responseConfig) {
+            this.responseConfig = responseConfig;
+            return this;
+        }
+
         @java.lang.Override
         public ConversationRequest build() {
             return new ConversationRequest(
+                    responseConfig,
+                    tags,
+                    metadata,
                     conversationId,
                     simulationContext,
-                    responseConfig,
                     subject,
                     url,
                     createdAt,
                     updatedAt,
-                    tags,
-                    metadata,
                     messages,
                     spawnedFromConversationId,
+                    audience,
                     additionalProperties);
         }
     }

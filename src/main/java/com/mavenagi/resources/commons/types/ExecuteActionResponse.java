@@ -20,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ExecuteActionResponse.Builder.class)
-public final class ExecuteActionResponse {
+public final class ExecuteActionResponse implements IExecuteActionResponse {
     private final String response;
 
     private final Optional<Map<String, Object>> data;
@@ -48,6 +48,7 @@ public final class ExecuteActionResponse {
      * @return The action's result. This is what the agent is given, whether it succeeded or failed.
      */
     @JsonProperty("response")
+    @java.lang.Override
     public String getResponse() {
         return response;
     }
@@ -56,6 +57,7 @@ public final class ExecuteActionResponse {
      * @return Structured data returned alongside the response. Must serialize to fewer than 10,000 characters of JSON; data over that limit is omitted and the response is kept.
      */
     @JsonProperty("data")
+    @java.lang.Override
     public Optional<Map<String, Object>> getData() {
         return data;
     }
@@ -64,6 +66,7 @@ public final class ExecuteActionResponse {
      * @return Whether the action succeeded. Defaults to SUCCESS when absent.
      */
     @JsonProperty("status")
+    @java.lang.Override
     public Optional<ActionExecutionStatus> getStatus() {
         return status;
     }
@@ -72,6 +75,7 @@ public final class ExecuteActionResponse {
      * @return Why the action failed, when status is ERROR. Never given to the agent. Truncated to 2,000 characters; a blank value is treated as if it were absent.
      */
     @JsonProperty("errorMessage")
+    @java.lang.Override
     public Optional<String> getErrorMessage() {
         return errorMessage;
     }

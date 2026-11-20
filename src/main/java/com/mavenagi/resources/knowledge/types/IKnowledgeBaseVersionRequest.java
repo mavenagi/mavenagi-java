@@ -3,6 +3,10 @@
  */
 package com.mavenagi.resources.knowledge.types;
 
+import java.util.Optional;
+
 public interface IKnowledgeBaseVersionRequest {
     KnowledgeBaseVersionType getType();
+
+    Optional<KnowledgeBaseFunctionBindings> getFunctionVersions();
 }

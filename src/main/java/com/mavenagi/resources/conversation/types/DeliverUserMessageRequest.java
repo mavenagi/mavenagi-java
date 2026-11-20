@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mavenagi.core.ObjectMappers;
 import com.mavenagi.resources.commons.types.EntityIdWithoutAgent;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -28,16 +29,20 @@ public final class DeliverUserMessageRequest implements IDeliverMessageBase {
 
     private final EntityIdWithoutAgent userId;
 
+    private final Optional<List<String>> appIds;
+
     private final Map<String, Object> additionalProperties;
 
     private DeliverUserMessageRequest(
             Optional<ConversationMessageRequest> message,
             Optional<DeliverContent> content,
             EntityIdWithoutAgent userId,
+            Optional<List<String>> appIds,
             Map<String, Object> additionalProperties) {
         this.message = message;
         this.content = content;
         this.userId = userId;
+        this.appIds = appIds;
         this.additionalProperties = additionalProperties;
     }
 
@@ -68,6 +73,26 @@ public final class DeliverUserMessageRequest implements IDeliverMessageBase {
         return userId;
     }
 
+    /**
+     * @return The apps whose conversations may receive the message, in order of preference. Omit it to allow any app; an empty list is rejected with a 400.
+     * <p>The message goes to a conversation that already exists, is open, has the <code>ASYNC</code> capability, is owned
+     * by an allowed app, and lists this user in a <code>users</code> audience (set by <code>initialize</code>'s <code>audience</code>). A
+     * conversation with an <code>allUsers</code> audience, or with none, is never chosen. Apps are tried in the order
+     * given, and within an app the most recently updated conversation wins; with <code>appIds</code> omitted, the most
+     * recently updated conversation of any app wins. An <code>ask</code> also skips conversations with <code>llmEnabled</code>
+     * set to false.</p>
+     * <p>The message goes to one conversation only. To reach the user in several apps, send one request per app.
+     * Whether an app is installed is not checked when choosing: the message is handed to the chosen
+     * conversation's app, and if that app fails to take it, <code>status</code> is <code>FAILED</code> and no other app is tried.</p>
+     * <p>When no conversation qualifies, nothing is delivered and <code>status</code> is <code>FAILED</code>.</p>
+     * <p>Only 20 of a user's open <code>ASYNC</code> conversations are considered. If a user has more, an arbitrary 20
+     * are, so the most recent one may be missed. Close conversations that no longer take messages.</p>
+     */
+    @JsonProperty("appIds")
+    public Optional<List<String>> getAppIds() {
+        return appIds;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -80,12 +105,15 @@ public final class DeliverUserMessageRequest implements IDeliverMessageBase {
     }
 
     private boolean equalTo(DeliverUserMessageRequest other) {
-        return message.equals(other.message) && content.equals(other.content) && userId.equals(other.userId);
+        return message.equals(other.message)
+                && content.equals(other.content)
+                && userId.equals(other.userId)
+                && appIds.equals(other.appIds);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.message, this.content, this.userId);
+        return Objects.hash(this.message, this.content, this.userId, this.appIds);
     }
 
     @java.lang.Override
@@ -123,11 +151,32 @@ public final class DeliverUserMessageRequest implements IDeliverMessageBase {
         _FinalStage content(Optional<DeliverContent> content);
 
         _FinalStage content(DeliverContent content);
+
+        /**
+         * <p>The apps whose conversations may receive the message, in order of preference. Omit it to allow any app; an empty list is rejected with a 400.</p>
+         * <p>The message goes to a conversation that already exists, is open, has the <code>ASYNC</code> capability, is owned
+         * by an allowed app, and lists this user in a <code>users</code> audience (set by <code>initialize</code>'s <code>audience</code>). A
+         * conversation with an <code>allUsers</code> audience, or with none, is never chosen. Apps are tried in the order
+         * given, and within an app the most recently updated conversation wins; with <code>appIds</code> omitted, the most
+         * recently updated conversation of any app wins. An <code>ask</code> also skips conversations with <code>llmEnabled</code>
+         * set to false.</p>
+         * <p>The message goes to one conversation only. To reach the user in several apps, send one request per app.
+         * Whether an app is installed is not checked when choosing: the message is handed to the chosen
+         * conversation's app, and if that app fails to take it, <code>status</code> is <code>FAILED</code> and no other app is tried.</p>
+         * <p>When no conversation qualifies, nothing is delivered and <code>status</code> is <code>FAILED</code>.</p>
+         * <p>Only 20 of a user's open <code>ASYNC</code> conversations are considered. If a user has more, an arbitrary 20
+         * are, so the most recent one may be missed. Close conversations that no longer take messages.</p>
+         */
+        _FinalStage appIds(Optional<List<String>> appIds);
+
+        _FinalStage appIds(List<String> appIds);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements UserIdStage, _FinalStage {
         private EntityIdWithoutAgent userId;
+
+        private Optional<List<String>> appIds = Optional.empty();
 
         private Optional<DeliverContent> content = Optional.empty();
 
@@ -143,6 +192,7 @@ public final class DeliverUserMessageRequest implements IDeliverMessageBase {
             message(other.getMessage());
             content(other.getContent());
             userId(other.getUserId());
+            appIds(other.getAppIds());
             return this;
         }
 
@@ -155,6 +205,50 @@ public final class DeliverUserMessageRequest implements IDeliverMessageBase {
         @JsonSetter("userId")
         public _FinalStage userId(@NotNull EntityIdWithoutAgent userId) {
             this.userId = Objects.requireNonNull(userId, "userId must not be null");
+            return this;
+        }
+
+        /**
+         * <p>The apps whose conversations may receive the message, in order of preference. Omit it to allow any app; an empty list is rejected with a 400.</p>
+         * <p>The message goes to a conversation that already exists, is open, has the <code>ASYNC</code> capability, is owned
+         * by an allowed app, and lists this user in a <code>users</code> audience (set by <code>initialize</code>'s <code>audience</code>). A
+         * conversation with an <code>allUsers</code> audience, or with none, is never chosen. Apps are tried in the order
+         * given, and within an app the most recently updated conversation wins; with <code>appIds</code> omitted, the most
+         * recently updated conversation of any app wins. An <code>ask</code> also skips conversations with <code>llmEnabled</code>
+         * set to false.</p>
+         * <p>The message goes to one conversation only. To reach the user in several apps, send one request per app.
+         * Whether an app is installed is not checked when choosing: the message is handed to the chosen
+         * conversation's app, and if that app fails to take it, <code>status</code> is <code>FAILED</code> and no other app is tried.</p>
+         * <p>When no conversation qualifies, nothing is delivered and <code>status</code> is <code>FAILED</code>.</p>
+         * <p>Only 20 of a user's open <code>ASYNC</code> conversations are considered. If a user has more, an arbitrary 20
+         * are, so the most recent one may be missed. Close conversations that no longer take messages.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage appIds(List<String> appIds) {
+            this.appIds = Optional.ofNullable(appIds);
+            return this;
+        }
+
+        /**
+         * <p>The apps whose conversations may receive the message, in order of preference. Omit it to allow any app; an empty list is rejected with a 400.</p>
+         * <p>The message goes to a conversation that already exists, is open, has the <code>ASYNC</code> capability, is owned
+         * by an allowed app, and lists this user in a <code>users</code> audience (set by <code>initialize</code>'s <code>audience</code>). A
+         * conversation with an <code>allUsers</code> audience, or with none, is never chosen. Apps are tried in the order
+         * given, and within an app the most recently updated conversation wins; with <code>appIds</code> omitted, the most
+         * recently updated conversation of any app wins. An <code>ask</code> also skips conversations with <code>llmEnabled</code>
+         * set to false.</p>
+         * <p>The message goes to one conversation only. To reach the user in several apps, send one request per app.
+         * Whether an app is installed is not checked when choosing: the message is handed to the chosen
+         * conversation's app, and if that app fails to take it, <code>status</code> is <code>FAILED</code> and no other app is tried.</p>
+         * <p>When no conversation qualifies, nothing is delivered and <code>status</code> is <code>FAILED</code>.</p>
+         * <p>Only 20 of a user's open <code>ASYNC</code> conversations are considered. If a user has more, an arbitrary 20
+         * are, so the most recent one may be missed. Close conversations that no longer take messages.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "appIds", nulls = Nulls.SKIP)
+        public _FinalStage appIds(Optional<List<String>> appIds) {
+            this.appIds = appIds;
             return this;
         }
 
@@ -202,7 +296,7 @@ public final class DeliverUserMessageRequest implements IDeliverMessageBase {
 
         @java.lang.Override
         public DeliverUserMessageRequest build() {
-            return new DeliverUserMessageRequest(message, content, userId, additionalProperties);
+            return new DeliverUserMessageRequest(message, content, userId, appIds, additionalProperties);
         }
     }
 }

@@ -30,6 +30,8 @@ public final class InitializeConversationResponse implements IConversationRespon
 
     private final List<AttachmentResponse> attachments;
 
+    private final ConversationAudienceResponse audience;
+
     private final Optional<ResponseConfig> responseConfig;
 
     private final Optional<String> subject;
@@ -75,6 +77,7 @@ public final class InitializeConversationResponse implements IConversationRespon
     private InitializeConversationResponse(
             List<ConversationMessageResponse> messages,
             List<AttachmentResponse> attachments,
+            ConversationAudienceResponse audience,
             Optional<ResponseConfig> responseConfig,
             Optional<String> subject,
             Optional<String> url,
@@ -98,6 +101,7 @@ public final class InitializeConversationResponse implements IConversationRespon
             Map<String, Object> additionalProperties) {
         this.messages = messages;
         this.attachments = attachments;
+        this.audience = audience;
         this.responseConfig = responseConfig;
         this.subject = subject;
         this.url = url;
@@ -138,6 +142,16 @@ public final class InitializeConversationResponse implements IConversationRespon
     @java.lang.Override
     public List<AttachmentResponse> getAttachments() {
         return attachments;
+    }
+
+    /**
+     * @return Who the conversation is for, as set when it was initialized. <code>allUsers</code> for a conversation
+     * initialized without an audience or created by an ask.
+     */
+    @JsonProperty("audience")
+    @java.lang.Override
+    public ConversationAudienceResponse getAudience() {
+        return audience;
     }
 
     /**
@@ -350,6 +364,7 @@ public final class InitializeConversationResponse implements IConversationRespon
     private boolean equalTo(InitializeConversationResponse other) {
         return messages.equals(other.messages)
                 && attachments.equals(other.attachments)
+                && audience.equals(other.audience)
                 && responseConfig.equals(other.responseConfig)
                 && subject.equals(other.subject)
                 && url.equals(other.url)
@@ -377,6 +392,7 @@ public final class InitializeConversationResponse implements IConversationRespon
         return Objects.hash(
                 this.messages,
                 this.attachments,
+                this.audience,
                 this.responseConfig,
                 this.subject,
                 this.url,
@@ -404,8 +420,18 @@ public final class InitializeConversationResponse implements IConversationRespon
         return ObjectMappers.stringify(this);
     }
 
-    public static ConversationIdStage builder() {
+    public static AudienceStage builder() {
         return new Builder();
+    }
+
+    public interface AudienceStage {
+        /**
+         * <p>Who the conversation is for, as set when it was initialized. <code>allUsers</code> for a conversation
+         * initialized without an audience or created by an ask.</p>
+         */
+        ConversationIdStage audience(@NotNull ConversationAudienceResponse audience);
+
+        Builder from(InitializeConversationResponse other);
     }
 
     public interface ConversationIdStage {
@@ -413,8 +439,6 @@ public final class InitializeConversationResponse implements IConversationRespon
          * <p>The ID that uniquely identifies this conversation</p>
          */
         AnalysisStage conversationId(@NotNull EntityId conversationId);
-
-        Builder from(InitializeConversationResponse other);
     }
 
     public interface AnalysisStage {
@@ -597,7 +621,8 @@ public final class InitializeConversationResponse implements IConversationRespon
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
-            implements ConversationIdStage,
+            implements AudienceStage,
+                    ConversationIdStage,
                     AnalysisStage,
                     SummaryStage,
                     DeletedStage,
@@ -605,6 +630,8 @@ public final class InitializeConversationResponse implements IConversationRespon
                     LlmEnabledStage,
                     ExecutionModeStage,
                     _FinalStage {
+        private ConversationAudienceResponse audience;
+
         private EntityId conversationId;
 
         private ConversationAnalysis analysis;
@@ -658,6 +685,7 @@ public final class InitializeConversationResponse implements IConversationRespon
         public Builder from(InitializeConversationResponse other) {
             messages(other.getMessages());
             attachments(other.getAttachments());
+            audience(other.getAudience());
             responseConfig(other.getResponseConfig());
             subject(other.getSubject());
             url(other.getUrl());
@@ -678,6 +706,20 @@ public final class InitializeConversationResponse implements IConversationRespon
             conversationMode(other.getConversationMode());
             variantId(other.getVariantId());
             conversationKickoffResults(other.getConversationKickoffResults());
+            return this;
+        }
+
+        /**
+         * <p>Who the conversation is for, as set when it was initialized. <code>allUsers</code> for a conversation
+         * initialized without an audience or created by an ask.</p>
+         * <p>Who the conversation is for, as set when it was initialized. <code>allUsers</code> for a conversation
+         * initialized without an audience or created by an ask.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("audience")
+        public ConversationIdStage audience(@NotNull ConversationAudienceResponse audience) {
+            this.audience = Objects.requireNonNull(audience, "audience must not be null");
             return this;
         }
 
@@ -1173,6 +1215,7 @@ public final class InitializeConversationResponse implements IConversationRespon
             return new InitializeConversationResponse(
                     messages,
                     attachments,
+                    audience,
                     responseConfig,
                     subject,
                     url,

@@ -26,7 +26,7 @@ public final class SimulationActionBehavior {
         return value.visit(visitor);
     }
 
-    public static SimulationActionBehavior fixedResponse(ExecuteActionResponse value) {
+    public static SimulationActionBehavior fixedResponse(SimulationFixedResponse value) {
         return new SimulationActionBehavior(new FixedResponseValue(value));
     }
 
@@ -46,7 +46,7 @@ public final class SimulationActionBehavior {
         return value instanceof _UnknownValue;
     }
 
-    public Optional<ExecuteActionResponse> getFixedResponse() {
+    public Optional<SimulationFixedResponse> getFixedResponse() {
         if (isFixedResponse()) {
             return Optional.of(((FixedResponseValue) value).value);
         }
@@ -73,7 +73,7 @@ public final class SimulationActionBehavior {
     }
 
     public interface Visitor<T> {
-        T visitFixedResponse(ExecuteActionResponse fixedResponse);
+        T visitFixedResponse(SimulationFixedResponse fixedResponse);
 
         T visitCallApp(SimulationActionCallApp callApp);
 
@@ -91,12 +91,12 @@ public final class SimulationActionBehavior {
     @JsonIgnoreProperties("type")
     private static final class FixedResponseValue implements Value {
         @JsonUnwrapped
-        private ExecuteActionResponse value;
+        private SimulationFixedResponse value;
 
         @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
         private FixedResponseValue() {}
 
-        private FixedResponseValue(ExecuteActionResponse value) {
+        private FixedResponseValue(SimulationFixedResponse value) {
             this.value = value;
         }
 

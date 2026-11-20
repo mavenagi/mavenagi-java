@@ -3,9 +3,15 @@
  */
 package com.mavenagi.resources.intelligentfields.types;
 
+import com.mavenagi.resources.commons.types.ChangeAuthor;
 import com.mavenagi.resources.commons.types.EntityId;
 import com.mavenagi.resources.commons.types.ICapabilityBase;
+import java.util.Optional;
 
 public interface IIntelligentFieldResponse extends IIntelligentFieldBase, ICapabilityBase {
     EntityId getFieldId();
+
+    Optional<ChangeAuthor> getCreatedBy();
+
+    Optional<ChangeAuthor> getUpdatedBy();
 }

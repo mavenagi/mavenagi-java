@@ -30,6 +30,8 @@ public final class ConversationResponse implements IConversationResponse, IBaseC
 
     private final List<AttachmentResponse> attachments;
 
+    private final ConversationAudienceResponse audience;
+
     private final Optional<ResponseConfig> responseConfig;
 
     private final Optional<String> subject;
@@ -73,6 +75,7 @@ public final class ConversationResponse implements IConversationResponse, IBaseC
     private ConversationResponse(
             List<ConversationMessageResponse> messages,
             List<AttachmentResponse> attachments,
+            ConversationAudienceResponse audience,
             Optional<ResponseConfig> responseConfig,
             Optional<String> subject,
             Optional<String> url,
@@ -95,6 +98,7 @@ public final class ConversationResponse implements IConversationResponse, IBaseC
             Map<String, Object> additionalProperties) {
         this.messages = messages;
         this.attachments = attachments;
+        this.audience = audience;
         this.responseConfig = responseConfig;
         this.subject = subject;
         this.url = url;
@@ -134,6 +138,16 @@ public final class ConversationResponse implements IConversationResponse, IBaseC
     @java.lang.Override
     public List<AttachmentResponse> getAttachments() {
         return attachments;
+    }
+
+    /**
+     * @return Who the conversation is for, as set when it was initialized. <code>allUsers</code> for a conversation
+     * initialized without an audience or created by an ask.
+     */
+    @JsonProperty("audience")
+    @java.lang.Override
+    public ConversationAudienceResponse getAudience() {
+        return audience;
     }
 
     /**
@@ -335,6 +349,7 @@ public final class ConversationResponse implements IConversationResponse, IBaseC
     private boolean equalTo(ConversationResponse other) {
         return messages.equals(other.messages)
                 && attachments.equals(other.attachments)
+                && audience.equals(other.audience)
                 && responseConfig.equals(other.responseConfig)
                 && subject.equals(other.subject)
                 && url.equals(other.url)
@@ -361,6 +376,7 @@ public final class ConversationResponse implements IConversationResponse, IBaseC
         return Objects.hash(
                 this.messages,
                 this.attachments,
+                this.audience,
                 this.responseConfig,
                 this.subject,
                 this.url,
@@ -387,8 +403,18 @@ public final class ConversationResponse implements IConversationResponse, IBaseC
         return ObjectMappers.stringify(this);
     }
 
-    public static ConversationIdStage builder() {
+    public static AudienceStage builder() {
         return new Builder();
+    }
+
+    public interface AudienceStage {
+        /**
+         * <p>Who the conversation is for, as set when it was initialized. <code>allUsers</code> for a conversation
+         * initialized without an audience or created by an ask.</p>
+         */
+        ConversationIdStage audience(@NotNull ConversationAudienceResponse audience);
+
+        Builder from(ConversationResponse other);
     }
 
     public interface ConversationIdStage {
@@ -396,8 +422,6 @@ public final class ConversationResponse implements IConversationResponse, IBaseC
          * <p>The ID that uniquely identifies this conversation</p>
          */
         AnalysisStage conversationId(@NotNull EntityId conversationId);
-
-        Builder from(ConversationResponse other);
     }
 
     public interface AnalysisStage {
@@ -567,7 +591,8 @@ public final class ConversationResponse implements IConversationResponse, IBaseC
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
-            implements ConversationIdStage,
+            implements AudienceStage,
+                    ConversationIdStage,
                     AnalysisStage,
                     SummaryStage,
                     DeletedStage,
@@ -575,6 +600,8 @@ public final class ConversationResponse implements IConversationResponse, IBaseC
                     LlmEnabledStage,
                     ExecutionModeStage,
                     _FinalStage {
+        private ConversationAudienceResponse audience;
+
         private EntityId conversationId;
 
         private ConversationAnalysis analysis;
@@ -626,6 +653,7 @@ public final class ConversationResponse implements IConversationResponse, IBaseC
         public Builder from(ConversationResponse other) {
             messages(other.getMessages());
             attachments(other.getAttachments());
+            audience(other.getAudience());
             responseConfig(other.getResponseConfig());
             subject(other.getSubject());
             url(other.getUrl());
@@ -645,6 +673,20 @@ public final class ConversationResponse implements IConversationResponse, IBaseC
             relatedEntities(other.getRelatedEntities());
             conversationMode(other.getConversationMode());
             variantId(other.getVariantId());
+            return this;
+        }
+
+        /**
+         * <p>Who the conversation is for, as set when it was initialized. <code>allUsers</code> for a conversation
+         * initialized without an audience or created by an ask.</p>
+         * <p>Who the conversation is for, as set when it was initialized. <code>allUsers</code> for a conversation
+         * initialized without an audience or created by an ask.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        @JsonSetter("audience")
+        public ConversationIdStage audience(@NotNull ConversationAudienceResponse audience) {
+            this.audience = Objects.requireNonNull(audience, "audience must not be null");
             return this;
         }
 
@@ -1093,6 +1135,7 @@ public final class ConversationResponse implements IConversationResponse, IBaseC
             return new ConversationResponse(
                     messages,
                     attachments,
+                    audience,
                     responseConfig,
                     subject,
                     url,

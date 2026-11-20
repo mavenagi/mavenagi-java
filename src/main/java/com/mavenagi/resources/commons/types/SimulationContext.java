@@ -21,7 +21,13 @@ import java.util.Set;
 
 @JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = SimulationContext.Builder.class)
-public final class SimulationContext {
+public final class SimulationContext implements ISimulationSetupFields {
+    private final Optional<Boolean> evaluateWithCharters;
+
+    private final Optional<List<SimulationActionMock>> actionMocks;
+
+    private final Optional<SimulationActionBehavior> defaultActionBehavior;
+
     private final Optional<String> additionalPromptText;
 
     private final Optional<LlmPersona> persona;
@@ -30,31 +36,63 @@ public final class SimulationContext {
 
     private final Optional<EntityIdWithoutAgent> variantId;
 
-    private final Optional<Boolean> evaluateWithCharters;
-
-    private final Optional<List<SimulationActionMock>> actionMocks;
-
-    private final Optional<SimulationActionBehavior> defaultActionBehavior;
-
     private final Map<String, Object> additionalProperties;
 
     private SimulationContext(
+            Optional<Boolean> evaluateWithCharters,
+            Optional<List<SimulationActionMock>> actionMocks,
+            Optional<SimulationActionBehavior> defaultActionBehavior,
             Optional<String> additionalPromptText,
             Optional<LlmPersona> persona,
             Optional<Set<EntityId>> availableKnowledgeBases,
             Optional<EntityIdWithoutAgent> variantId,
-            Optional<Boolean> evaluateWithCharters,
-            Optional<List<SimulationActionMock>> actionMocks,
-            Optional<SimulationActionBehavior> defaultActionBehavior,
             Map<String, Object> additionalProperties) {
+        this.evaluateWithCharters = evaluateWithCharters;
+        this.actionMocks = actionMocks;
+        this.defaultActionBehavior = defaultActionBehavior;
         this.additionalPromptText = additionalPromptText;
         this.persona = persona;
         this.availableKnowledgeBases = availableKnowledgeBases;
         this.variantId = variantId;
-        this.evaluateWithCharters = evaluateWithCharters;
-        this.actionMocks = actionMocks;
-        this.defaultActionBehavior = defaultActionBehavior;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return When true, the simulation evaluates the agent's charters even if charter evaluation is
+     * turned off for the agent. When absent or false, the simulation follows the agent's own
+     * charter evaluation setting, like any other conversation. While charters are evaluated,
+     * <code>additionalPromptText</code> has no effect. Not yet enabled for every agent: until it is, the
+     * value is stored and returned, and the agent's own setting applies. A conversation that
+     * already exists keeps the value it was created with.
+     */
+    @JsonProperty("evaluateWithCharters")
+    @java.lang.Override
+    public Optional<Boolean> getEvaluateWithCharters() {
+        return evaluateWithCharters;
+    }
+
+    /**
+     * @return What the platform does when the agent executes each action during this simulation. At
+     * most one entry per action; a request that names an action twice is rejected. An action
+     * with no entry follows <code>defaultActionBehavior</code>. A conversation that already exists keeps
+     * the mocks and default it was created with.
+     */
+    @JsonProperty("actionMocks")
+    @java.lang.Override
+    public Optional<List<SimulationActionMock>> getActionMocks() {
+        return actionMocks;
+    }
+
+    /**
+     * @return What the platform does when the agent executes an action that has no <code>actionMocks</code>
+     * entry. When absent, the action's app is called as usual. A <code>fixedResponse</code> here keeps the
+     * simulation from calling any action's app that <code>actionMocks</code> doesn't name with <code>callApp</code>;
+     * its templates are rendered over the parameters of whichever action was called.
+     */
+    @JsonProperty("defaultActionBehavior")
+    @java.lang.Override
+    public Optional<SimulationActionBehavior> getDefaultActionBehavior() {
+        return defaultActionBehavior;
     }
 
     /**
@@ -98,41 +136,6 @@ public final class SimulationContext {
         return variantId;
     }
 
-    /**
-     * @return When true, the simulation evaluates the agent's charters even if charter evaluation is
-     * turned off for the agent. When absent or false, the simulation follows the agent's own
-     * charter evaluation setting, like any other conversation. While charters are evaluated,
-     * <code>additionalPromptText</code> has no effect. Not yet enabled for every agent: until it is, the
-     * value is stored and returned, and the agent's own setting applies. A conversation that
-     * already exists keeps the value it was created with.
-     */
-    @JsonProperty("evaluateWithCharters")
-    public Optional<Boolean> getEvaluateWithCharters() {
-        return evaluateWithCharters;
-    }
-
-    /**
-     * @return What the platform does when the agent executes each action during this simulation. At
-     * most one entry per action; a request that names an action twice is rejected. An action
-     * with no entry follows <code>defaultActionBehavior</code>. A conversation that already exists keeps
-     * the mocks and default it was created with.
-     */
-    @JsonProperty("actionMocks")
-    public Optional<List<SimulationActionMock>> getActionMocks() {
-        return actionMocks;
-    }
-
-    /**
-     * @return What the platform does when the agent executes an action that has no <code>actionMocks</code>
-     * entry. When absent, the action's app is called as usual. A <code>fixedResponse</code> here keeps the
-     * simulation from calling any action's app that <code>actionMocks</code> doesn't name with <code>callApp</code>;
-     * its templates are rendered over the parameters of whichever action was called.
-     */
-    @JsonProperty("defaultActionBehavior")
-    public Optional<SimulationActionBehavior> getDefaultActionBehavior() {
-        return defaultActionBehavior;
-    }
-
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -145,25 +148,25 @@ public final class SimulationContext {
     }
 
     private boolean equalTo(SimulationContext other) {
-        return additionalPromptText.equals(other.additionalPromptText)
+        return evaluateWithCharters.equals(other.evaluateWithCharters)
+                && actionMocks.equals(other.actionMocks)
+                && defaultActionBehavior.equals(other.defaultActionBehavior)
+                && additionalPromptText.equals(other.additionalPromptText)
                 && persona.equals(other.persona)
                 && availableKnowledgeBases.equals(other.availableKnowledgeBases)
-                && variantId.equals(other.variantId)
-                && evaluateWithCharters.equals(other.evaluateWithCharters)
-                && actionMocks.equals(other.actionMocks)
-                && defaultActionBehavior.equals(other.defaultActionBehavior);
+                && variantId.equals(other.variantId);
     }
 
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
+                this.evaluateWithCharters,
+                this.actionMocks,
+                this.defaultActionBehavior,
                 this.additionalPromptText,
                 this.persona,
                 this.availableKnowledgeBases,
-                this.variantId,
-                this.evaluateWithCharters,
-                this.actionMocks,
-                this.defaultActionBehavior);
+                this.variantId);
     }
 
     @java.lang.Override
@@ -177,6 +180,12 @@ public final class SimulationContext {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
+        private Optional<Boolean> evaluateWithCharters = Optional.empty();
+
+        private Optional<List<SimulationActionMock>> actionMocks = Optional.empty();
+
+        private Optional<SimulationActionBehavior> defaultActionBehavior = Optional.empty();
+
         private Optional<String> additionalPromptText = Optional.empty();
 
         private Optional<LlmPersona> persona = Optional.empty();
@@ -185,25 +194,72 @@ public final class SimulationContext {
 
         private Optional<EntityIdWithoutAgent> variantId = Optional.empty();
 
-        private Optional<Boolean> evaluateWithCharters = Optional.empty();
-
-        private Optional<List<SimulationActionMock>> actionMocks = Optional.empty();
-
-        private Optional<SimulationActionBehavior> defaultActionBehavior = Optional.empty();
-
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
 
         public Builder from(SimulationContext other) {
+            evaluateWithCharters(other.getEvaluateWithCharters());
+            actionMocks(other.getActionMocks());
+            defaultActionBehavior(other.getDefaultActionBehavior());
             additionalPromptText(other.getAdditionalPromptText());
             persona(other.getPersona());
             availableKnowledgeBases(other.getAvailableKnowledgeBases());
             variantId(other.getVariantId());
-            evaluateWithCharters(other.getEvaluateWithCharters());
-            actionMocks(other.getActionMocks());
-            defaultActionBehavior(other.getDefaultActionBehavior());
+            return this;
+        }
+
+        /**
+         * <p>When true, the simulation evaluates the agent's charters even if charter evaluation is
+         * turned off for the agent. When absent or false, the simulation follows the agent's own
+         * charter evaluation setting, like any other conversation. While charters are evaluated,
+         * <code>additionalPromptText</code> has no effect. Not yet enabled for every agent: until it is, the
+         * value is stored and returned, and the agent's own setting applies. A conversation that
+         * already exists keeps the value it was created with.</p>
+         */
+        @JsonSetter(value = "evaluateWithCharters", nulls = Nulls.SKIP)
+        public Builder evaluateWithCharters(Optional<Boolean> evaluateWithCharters) {
+            this.evaluateWithCharters = evaluateWithCharters;
+            return this;
+        }
+
+        public Builder evaluateWithCharters(Boolean evaluateWithCharters) {
+            this.evaluateWithCharters = Optional.ofNullable(evaluateWithCharters);
+            return this;
+        }
+
+        /**
+         * <p>What the platform does when the agent executes each action during this simulation. At
+         * most one entry per action; a request that names an action twice is rejected. An action
+         * with no entry follows <code>defaultActionBehavior</code>. A conversation that already exists keeps
+         * the mocks and default it was created with.</p>
+         */
+        @JsonSetter(value = "actionMocks", nulls = Nulls.SKIP)
+        public Builder actionMocks(Optional<List<SimulationActionMock>> actionMocks) {
+            this.actionMocks = actionMocks;
+            return this;
+        }
+
+        public Builder actionMocks(List<SimulationActionMock> actionMocks) {
+            this.actionMocks = Optional.ofNullable(actionMocks);
+            return this;
+        }
+
+        /**
+         * <p>What the platform does when the agent executes an action that has no <code>actionMocks</code>
+         * entry. When absent, the action's app is called as usual. A <code>fixedResponse</code> here keeps the
+         * simulation from calling any action's app that <code>actionMocks</code> doesn't name with <code>callApp</code>;
+         * its templates are rendered over the parameters of whichever action was called.</p>
+         */
+        @JsonSetter(value = "defaultActionBehavior", nulls = Nulls.SKIP)
+        public Builder defaultActionBehavior(Optional<SimulationActionBehavior> defaultActionBehavior) {
+            this.defaultActionBehavior = defaultActionBehavior;
+            return this;
+        }
+
+        public Builder defaultActionBehavior(SimulationActionBehavior defaultActionBehavior) {
+            this.defaultActionBehavior = Optional.ofNullable(defaultActionBehavior);
             return this;
         }
 
@@ -272,68 +328,15 @@ public final class SimulationContext {
             return this;
         }
 
-        /**
-         * <p>When true, the simulation evaluates the agent's charters even if charter evaluation is
-         * turned off for the agent. When absent or false, the simulation follows the agent's own
-         * charter evaluation setting, like any other conversation. While charters are evaluated,
-         * <code>additionalPromptText</code> has no effect. Not yet enabled for every agent: until it is, the
-         * value is stored and returned, and the agent's own setting applies. A conversation that
-         * already exists keeps the value it was created with.</p>
-         */
-        @JsonSetter(value = "evaluateWithCharters", nulls = Nulls.SKIP)
-        public Builder evaluateWithCharters(Optional<Boolean> evaluateWithCharters) {
-            this.evaluateWithCharters = evaluateWithCharters;
-            return this;
-        }
-
-        public Builder evaluateWithCharters(Boolean evaluateWithCharters) {
-            this.evaluateWithCharters = Optional.ofNullable(evaluateWithCharters);
-            return this;
-        }
-
-        /**
-         * <p>What the platform does when the agent executes each action during this simulation. At
-         * most one entry per action; a request that names an action twice is rejected. An action
-         * with no entry follows <code>defaultActionBehavior</code>. A conversation that already exists keeps
-         * the mocks and default it was created with.</p>
-         */
-        @JsonSetter(value = "actionMocks", nulls = Nulls.SKIP)
-        public Builder actionMocks(Optional<List<SimulationActionMock>> actionMocks) {
-            this.actionMocks = actionMocks;
-            return this;
-        }
-
-        public Builder actionMocks(List<SimulationActionMock> actionMocks) {
-            this.actionMocks = Optional.ofNullable(actionMocks);
-            return this;
-        }
-
-        /**
-         * <p>What the platform does when the agent executes an action that has no <code>actionMocks</code>
-         * entry. When absent, the action's app is called as usual. A <code>fixedResponse</code> here keeps the
-         * simulation from calling any action's app that <code>actionMocks</code> doesn't name with <code>callApp</code>;
-         * its templates are rendered over the parameters of whichever action was called.</p>
-         */
-        @JsonSetter(value = "defaultActionBehavior", nulls = Nulls.SKIP)
-        public Builder defaultActionBehavior(Optional<SimulationActionBehavior> defaultActionBehavior) {
-            this.defaultActionBehavior = defaultActionBehavior;
-            return this;
-        }
-
-        public Builder defaultActionBehavior(SimulationActionBehavior defaultActionBehavior) {
-            this.defaultActionBehavior = Optional.ofNullable(defaultActionBehavior);
-            return this;
-        }
-
         public SimulationContext build() {
             return new SimulationContext(
+                    evaluateWithCharters,
+                    actionMocks,
+                    defaultActionBehavior,
                     additionalPromptText,
                     persona,
                     availableKnowledgeBases,
                     variantId,
-                    evaluateWithCharters,
-                    actionMocks,
-                    defaultActionBehavior,
                     additionalProperties);
         }
     }

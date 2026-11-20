@@ -9,4 +9,6 @@ public interface IConversationResponse extends IBaseConversationResponse {
     List<ConversationMessageResponse> getMessages();
 
     List<AttachmentResponse> getAttachments();
+
+    ConversationAudienceResponse getAudience();
 }
