@@ -170,9 +170,9 @@ public class CapabilitiesClient {
     /**
      * Run one of an agent's capabilities once, as a simulation, and return what it produced.
      * <p>The caller supplies everything the capability reads, so it runs in isolation: no
-     * conversation or agent user has to exist first. The capability is told its mode is
-     * <code>SIMULATION</code>, the same as in a test suite run, so an app that honours it can avoid side
-     * effects in real systems. Nothing here runs a capability live.</p>
+     * conversation or agent user has to exist first. The capability's app is called with mode
+     * <code>SIMULATION</code>. What the app does in that mode is up to the app, and the platform does not
+     * stop it from acting on real systems.</p>
      * <p>A simulated run is not recorded. It returns its result here and never appears in
      * capability execution search.</p>
      * <p>Actions, conversation kickoffs and event triggers can be simulated today. An event trigger
@@ -190,9 +190,9 @@ public class CapabilitiesClient {
     /**
      * Run one of an agent's capabilities once, as a simulation, and return what it produced.
      * <p>The caller supplies everything the capability reads, so it runs in isolation: no
-     * conversation or agent user has to exist first. The capability is told its mode is
-     * <code>SIMULATION</code>, the same as in a test suite run, so an app that honours it can avoid side
-     * effects in real systems. Nothing here runs a capability live.</p>
+     * conversation or agent user has to exist first. The capability's app is called with mode
+     * <code>SIMULATION</code>. What the app does in that mode is up to the app, and the platform does not
+     * stop it from acting on real systems.</p>
      * <p>A simulated run is not recorded. It returns its result here and never appears in
      * capability execution search.</p>
      * <p>Actions, conversation kickoffs and event triggers can be simulated today. An event trigger

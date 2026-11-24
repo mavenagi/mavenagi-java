@@ -45,7 +45,7 @@ public final class TagsPrecondition implements IPreconditionBase {
     }
 
     /**
-     * @return The tags that must be present in the conversation context for the precondition to be met
+     * @return The tags the <code>operator</code> checks the conversation's tags against.
      */
     @JsonProperty("tags")
     public Set<String> getTags() {
@@ -113,7 +113,7 @@ public final class TagsPrecondition implements IPreconditionBase {
         }
 
         /**
-         * <p>The tags that must be present in the conversation context for the precondition to be met</p>
+         * <p>The tags the <code>operator</code> checks the conversation's tags against.</p>
          */
         @JsonSetter(value = "tags", nulls = Nulls.SKIP)
         public Builder tags(Set<String> tags) {

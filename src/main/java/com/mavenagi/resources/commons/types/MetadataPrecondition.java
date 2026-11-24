@@ -30,6 +30,8 @@ public final class MetadataPrecondition implements IPreconditionBase {
 
     private final Optional<List<String>> values;
 
+    private final Optional<FieldCondition> fieldCondition;
+
     private final Map<String, Object> additionalProperties;
 
     private MetadataPrecondition(
@@ -37,11 +39,13 @@ public final class MetadataPrecondition implements IPreconditionBase {
             String key,
             Optional<String> value,
             Optional<List<String>> values,
+            Optional<FieldCondition> fieldCondition,
             Map<String, Object> additionalProperties) {
         this.operator = operator;
         this.key = key;
         this.value = value;
         this.values = values;
+        this.fieldCondition = fieldCondition;
         this.additionalProperties = additionalProperties;
     }
 
@@ -55,7 +59,7 @@ public final class MetadataPrecondition implements IPreconditionBase {
     }
 
     /**
-     * @return The key that must be present in the metadata for a precondition to be met
+     * @return The metadata key the precondition reads. Without a <code>fieldCondition</code>, a missing key fails the precondition, or meets it when <code>operator</code> is <code>NOT</code>. With a <code>fieldCondition</code>, a missing key is undetermined: it meets only <code>IS_UNDETERMINED</code>.
      */
     @JsonProperty("key")
     public String getKey() {
@@ -63,7 +67,7 @@ public final class MetadataPrecondition implements IPreconditionBase {
     }
 
     /**
-     * @return Single value for CONTAINS operator or exact match
+     * @return Single value for CONTAINS operator or exact match. Superseded by <code>fieldCondition</code>, which carries its own value; this field and the inherited <code>operator</code> apply only without one. Keep using it until <code>fieldCondition</code> is generally available.
      */
     @JsonProperty("value")
     public Optional<String> getValue() {
@@ -71,11 +75,35 @@ public final class MetadataPrecondition implements IPreconditionBase {
     }
 
     /**
-     * @return Multiple values for CONTAINS_ANY and CONTAINS_ALL operators
+     * @return Multiple values for CONTAINS_ANY and CONTAINS_ALL operators. Superseded by <code>fieldCondition</code>, which carries its own values; this field and the inherited <code>operator</code> apply only without one. Keep using it until <code>fieldCondition</code> is generally available.
      */
     @JsonProperty("values")
     public Optional<List<String>> getValues() {
         return values;
+    }
+
+    /**
+     * @return A typed condition on the value stored under <code>key</code>, used instead of <code>operator</code>, <code>value</code>
+     * and <code>values</code>. On charters, segments and knowledge bases, setting it together with
+     * <code>operator</code>, <code>value</code> or a non-empty <code>values</code> is a 400.
+     * <p>Pick the arm by how the value is stored: <code>string</code> for a plain string, such as a prefix
+     * or suffix match, and <code>set</code> for a JSON array of strings, such as <code>[&quot;us-east&quot;,&quot;eu-west&quot;]</code>.
+     * <code>numeric</code> and <code>boolean</code> read a value written as a number or <code>true</code>/<code>false</code>.</p>
+     * <p>A missing key meets only <code>universal</code> <code>IS_UNDETERMINED</code>. Every other condition is unmet,
+     * negated ones such as <code>NOT_STARTS_WITH</code> and <code>NEQ</code> included, unlike <code>operator: NOT</code>,
+     * which a missing key meets. To also match a conversation without the key, put the
+     * condition in an <code>OR</code> group with <code>IS_UNDETERMINED</code>.</p>
+     * <p>A <code>string</code> condition compares the stored text, unwrapping a JSON-quoted string first, so
+     * a JSON array or number is compared as its raw text. An empty comparison value matches
+     * every value for <code>STARTS_WITH</code>, <code>ENDS_WITH</code> and <code>CONTAINS_SUBSTRING</code>. A <code>numeric</code> or
+     * <code>boolean</code> condition is unmet when the value cannot be read as that type. A <code>set</code>
+     * condition reads a value that is not a JSON array as a one-element set, and skips <code>null</code>
+     * elements, so <code>[null]</code> is an empty set. A <code>numeric</code> <code>comparison</code> or <code>boolean</code> condition
+     * without a <code>value</code> is saved with <code>0</code> or <code>false</code>, so <code>{&quot;opType&quot;: &quot;comparison&quot;, &quot;operator&quot;: &quot;GT&quot;}</code> means greater than 0.</p>
+     */
+    @JsonProperty("fieldCondition")
+    public Optional<FieldCondition> getFieldCondition() {
+        return fieldCondition;
     }
 
     @java.lang.Override
@@ -93,12 +121,13 @@ public final class MetadataPrecondition implements IPreconditionBase {
         return operator.equals(other.operator)
                 && key.equals(other.key)
                 && value.equals(other.value)
-                && values.equals(other.values);
+                && values.equals(other.values)
+                && fieldCondition.equals(other.fieldCondition);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.operator, this.key, this.value, this.values);
+        return Objects.hash(this.operator, this.key, this.value, this.values, this.fieldCondition);
     }
 
     @java.lang.Override
@@ -112,7 +141,7 @@ public final class MetadataPrecondition implements IPreconditionBase {
 
     public interface KeyStage {
         /**
-         * <p>The key that must be present in the metadata for a precondition to be met</p>
+         * <p>The metadata key the precondition reads. Without a <code>fieldCondition</code>, a missing key fails the precondition, or meets it when <code>operator</code> is <code>NOT</code>. With a <code>fieldCondition</code>, a missing key is undetermined: it meets only <code>IS_UNDETERMINED</code>.</p>
          */
         _FinalStage key(@NotNull String key);
 
@@ -130,23 +159,48 @@ public final class MetadataPrecondition implements IPreconditionBase {
         _FinalStage operator(PreconditionOperator operator);
 
         /**
-         * <p>Single value for CONTAINS operator or exact match</p>
+         * <p>Single value for CONTAINS operator or exact match. Superseded by <code>fieldCondition</code>, which carries its own value; this field and the inherited <code>operator</code> apply only without one. Keep using it until <code>fieldCondition</code> is generally available.</p>
          */
         _FinalStage value(Optional<String> value);
 
         _FinalStage value(String value);
 
         /**
-         * <p>Multiple values for CONTAINS_ANY and CONTAINS_ALL operators</p>
+         * <p>Multiple values for CONTAINS_ANY and CONTAINS_ALL operators. Superseded by <code>fieldCondition</code>, which carries its own values; this field and the inherited <code>operator</code> apply only without one. Keep using it until <code>fieldCondition</code> is generally available.</p>
          */
         _FinalStage values(Optional<List<String>> values);
 
         _FinalStage values(List<String> values);
+
+        /**
+         * <p>A typed condition on the value stored under <code>key</code>, used instead of <code>operator</code>, <code>value</code>
+         * and <code>values</code>. On charters, segments and knowledge bases, setting it together with
+         * <code>operator</code>, <code>value</code> or a non-empty <code>values</code> is a 400.</p>
+         * <p>Pick the arm by how the value is stored: <code>string</code> for a plain string, such as a prefix
+         * or suffix match, and <code>set</code> for a JSON array of strings, such as <code>[&quot;us-east&quot;,&quot;eu-west&quot;]</code>.
+         * <code>numeric</code> and <code>boolean</code> read a value written as a number or <code>true</code>/<code>false</code>.</p>
+         * <p>A missing key meets only <code>universal</code> <code>IS_UNDETERMINED</code>. Every other condition is unmet,
+         * negated ones such as <code>NOT_STARTS_WITH</code> and <code>NEQ</code> included, unlike <code>operator: NOT</code>,
+         * which a missing key meets. To also match a conversation without the key, put the
+         * condition in an <code>OR</code> group with <code>IS_UNDETERMINED</code>.</p>
+         * <p>A <code>string</code> condition compares the stored text, unwrapping a JSON-quoted string first, so
+         * a JSON array or number is compared as its raw text. An empty comparison value matches
+         * every value for <code>STARTS_WITH</code>, <code>ENDS_WITH</code> and <code>CONTAINS_SUBSTRING</code>. A <code>numeric</code> or
+         * <code>boolean</code> condition is unmet when the value cannot be read as that type. A <code>set</code>
+         * condition reads a value that is not a JSON array as a one-element set, and skips <code>null</code>
+         * elements, so <code>[null]</code> is an empty set. A <code>numeric</code> <code>comparison</code> or <code>boolean</code> condition
+         * without a <code>value</code> is saved with <code>0</code> or <code>false</code>, so <code>{&quot;opType&quot;: &quot;comparison&quot;, &quot;operator&quot;: &quot;GT&quot;}</code> means greater than 0.</p>
+         */
+        _FinalStage fieldCondition(Optional<FieldCondition> fieldCondition);
+
+        _FinalStage fieldCondition(FieldCondition fieldCondition);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements KeyStage, _FinalStage {
         private String key;
+
+        private Optional<FieldCondition> fieldCondition = Optional.empty();
 
         private Optional<List<String>> values = Optional.empty();
 
@@ -165,12 +219,13 @@ public final class MetadataPrecondition implements IPreconditionBase {
             key(other.getKey());
             value(other.getValue());
             values(other.getValues());
+            fieldCondition(other.getFieldCondition());
             return this;
         }
 
         /**
-         * <p>The key that must be present in the metadata for a precondition to be met</p>
-         * <p>The key that must be present in the metadata for a precondition to be met</p>
+         * <p>The metadata key the precondition reads. Without a <code>fieldCondition</code>, a missing key fails the precondition, or meets it when <code>operator</code> is <code>NOT</code>. With a <code>fieldCondition</code>, a missing key is undetermined: it meets only <code>IS_UNDETERMINED</code>.</p>
+         * <p>The metadata key the precondition reads. Without a <code>fieldCondition</code>, a missing key fails the precondition, or meets it when <code>operator</code> is <code>NOT</code>. With a <code>fieldCondition</code>, a missing key is undetermined: it meets only <code>IS_UNDETERMINED</code>.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -181,7 +236,59 @@ public final class MetadataPrecondition implements IPreconditionBase {
         }
 
         /**
-         * <p>Multiple values for CONTAINS_ANY and CONTAINS_ALL operators</p>
+         * <p>A typed condition on the value stored under <code>key</code>, used instead of <code>operator</code>, <code>value</code>
+         * and <code>values</code>. On charters, segments and knowledge bases, setting it together with
+         * <code>operator</code>, <code>value</code> or a non-empty <code>values</code> is a 400.</p>
+         * <p>Pick the arm by how the value is stored: <code>string</code> for a plain string, such as a prefix
+         * or suffix match, and <code>set</code> for a JSON array of strings, such as <code>[&quot;us-east&quot;,&quot;eu-west&quot;]</code>.
+         * <code>numeric</code> and <code>boolean</code> read a value written as a number or <code>true</code>/<code>false</code>.</p>
+         * <p>A missing key meets only <code>universal</code> <code>IS_UNDETERMINED</code>. Every other condition is unmet,
+         * negated ones such as <code>NOT_STARTS_WITH</code> and <code>NEQ</code> included, unlike <code>operator: NOT</code>,
+         * which a missing key meets. To also match a conversation without the key, put the
+         * condition in an <code>OR</code> group with <code>IS_UNDETERMINED</code>.</p>
+         * <p>A <code>string</code> condition compares the stored text, unwrapping a JSON-quoted string first, so
+         * a JSON array or number is compared as its raw text. An empty comparison value matches
+         * every value for <code>STARTS_WITH</code>, <code>ENDS_WITH</code> and <code>CONTAINS_SUBSTRING</code>. A <code>numeric</code> or
+         * <code>boolean</code> condition is unmet when the value cannot be read as that type. A <code>set</code>
+         * condition reads a value that is not a JSON array as a one-element set, and skips <code>null</code>
+         * elements, so <code>[null]</code> is an empty set. A <code>numeric</code> <code>comparison</code> or <code>boolean</code> condition
+         * without a <code>value</code> is saved with <code>0</code> or <code>false</code>, so <code>{&quot;opType&quot;: &quot;comparison&quot;, &quot;operator&quot;: &quot;GT&quot;}</code> means greater than 0.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage fieldCondition(FieldCondition fieldCondition) {
+            this.fieldCondition = Optional.ofNullable(fieldCondition);
+            return this;
+        }
+
+        /**
+         * <p>A typed condition on the value stored under <code>key</code>, used instead of <code>operator</code>, <code>value</code>
+         * and <code>values</code>. On charters, segments and knowledge bases, setting it together with
+         * <code>operator</code>, <code>value</code> or a non-empty <code>values</code> is a 400.</p>
+         * <p>Pick the arm by how the value is stored: <code>string</code> for a plain string, such as a prefix
+         * or suffix match, and <code>set</code> for a JSON array of strings, such as <code>[&quot;us-east&quot;,&quot;eu-west&quot;]</code>.
+         * <code>numeric</code> and <code>boolean</code> read a value written as a number or <code>true</code>/<code>false</code>.</p>
+         * <p>A missing key meets only <code>universal</code> <code>IS_UNDETERMINED</code>. Every other condition is unmet,
+         * negated ones such as <code>NOT_STARTS_WITH</code> and <code>NEQ</code> included, unlike <code>operator: NOT</code>,
+         * which a missing key meets. To also match a conversation without the key, put the
+         * condition in an <code>OR</code> group with <code>IS_UNDETERMINED</code>.</p>
+         * <p>A <code>string</code> condition compares the stored text, unwrapping a JSON-quoted string first, so
+         * a JSON array or number is compared as its raw text. An empty comparison value matches
+         * every value for <code>STARTS_WITH</code>, <code>ENDS_WITH</code> and <code>CONTAINS_SUBSTRING</code>. A <code>numeric</code> or
+         * <code>boolean</code> condition is unmet when the value cannot be read as that type. A <code>set</code>
+         * condition reads a value that is not a JSON array as a one-element set, and skips <code>null</code>
+         * elements, so <code>[null]</code> is an empty set. A <code>numeric</code> <code>comparison</code> or <code>boolean</code> condition
+         * without a <code>value</code> is saved with <code>0</code> or <code>false</code>, so <code>{&quot;opType&quot;: &quot;comparison&quot;, &quot;operator&quot;: &quot;GT&quot;}</code> means greater than 0.</p>
+         */
+        @java.lang.Override
+        @JsonSetter(value = "fieldCondition", nulls = Nulls.SKIP)
+        public _FinalStage fieldCondition(Optional<FieldCondition> fieldCondition) {
+            this.fieldCondition = fieldCondition;
+            return this;
+        }
+
+        /**
+         * <p>Multiple values for CONTAINS_ANY and CONTAINS_ALL operators. Superseded by <code>fieldCondition</code>, which carries its own values; this field and the inherited <code>operator</code> apply only without one. Keep using it until <code>fieldCondition</code> is generally available.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -191,7 +298,7 @@ public final class MetadataPrecondition implements IPreconditionBase {
         }
 
         /**
-         * <p>Multiple values for CONTAINS_ANY and CONTAINS_ALL operators</p>
+         * <p>Multiple values for CONTAINS_ANY and CONTAINS_ALL operators. Superseded by <code>fieldCondition</code>, which carries its own values; this field and the inherited <code>operator</code> apply only without one. Keep using it until <code>fieldCondition</code> is generally available.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "values", nulls = Nulls.SKIP)
@@ -201,7 +308,7 @@ public final class MetadataPrecondition implements IPreconditionBase {
         }
 
         /**
-         * <p>Single value for CONTAINS operator or exact match</p>
+         * <p>Single value for CONTAINS operator or exact match. Superseded by <code>fieldCondition</code>, which carries its own value; this field and the inherited <code>operator</code> apply only without one. Keep using it until <code>fieldCondition</code> is generally available.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -211,7 +318,7 @@ public final class MetadataPrecondition implements IPreconditionBase {
         }
 
         /**
-         * <p>Single value for CONTAINS operator or exact match</p>
+         * <p>Single value for CONTAINS operator or exact match. Superseded by <code>fieldCondition</code>, which carries its own value; this field and the inherited <code>operator</code> apply only without one. Keep using it until <code>fieldCondition</code> is generally available.</p>
          */
         @java.lang.Override
         @JsonSetter(value = "value", nulls = Nulls.SKIP)
@@ -242,7 +349,7 @@ public final class MetadataPrecondition implements IPreconditionBase {
 
         @java.lang.Override
         public MetadataPrecondition build() {
-            return new MetadataPrecondition(operator, key, value, values, additionalProperties);
+            return new MetadataPrecondition(operator, key, value, values, fieldCondition, additionalProperties);
         }
     }
 }

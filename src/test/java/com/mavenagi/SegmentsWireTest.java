@@ -46,7 +46,7 @@ public class SegmentsWireTest {
     public void testSearch() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"segments\":[{\"segmentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"precondition\":{\"preconditionType\":\"user\",\"key\":\"key\",\"value\":\"value\",\"values\":[\"values\",\"values\"],\"operator\":\"NOT\"},\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"referencedKnowledgeBaseCount\":1000000,\"referencedDocumentCount\":1000000,\"referencedActionCount\":1000000,\"status\":\"ACTIVE\",\"name\":\"name\",\"description\":\"description\"},{\"segmentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"precondition\":{\"preconditionType\":\"user\",\"key\":\"key\",\"value\":\"value\",\"values\":[\"values\",\"values\"],\"operator\":\"NOT\"},\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"referencedKnowledgeBaseCount\":1000000,\"referencedDocumentCount\":1000000,\"referencedActionCount\":1000000,\"status\":\"ACTIVE\",\"name\":\"name\",\"description\":\"description\"}],\"number\":1,\"size\":1,\"totalElements\":1000000,\"totalPages\":1}"));
+            .setBody("{\"segments\":[{\"segmentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"precondition\":{\"preconditionType\":\"user\",\"key\":\"key\",\"value\":\"value\",\"values\":[\"values\",\"values\"],\"fieldCondition\":{\"fieldValidationType\":\"string\",\"value\":{\"opType\":\"comparison\",\"operator\":\"EQ\",\"value\":\"value\"}},\"operator\":\"NOT\"},\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"referencedKnowledgeBaseCount\":1000000,\"referencedDocumentCount\":1000000,\"referencedActionCount\":1000000,\"status\":\"ACTIVE\",\"name\":\"name\",\"description\":\"description\"},{\"segmentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"precondition\":{\"preconditionType\":\"user\",\"key\":\"key\",\"value\":\"value\",\"values\":[\"values\",\"values\"],\"fieldCondition\":{\"fieldValidationType\":\"string\",\"value\":{\"opType\":\"comparison\",\"operator\":\"EQ\",\"value\":\"value\"}},\"operator\":\"NOT\"},\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"referencedKnowledgeBaseCount\":1000000,\"referencedDocumentCount\":1000000,\"referencedActionCount\":1000000,\"status\":\"ACTIVE\",\"name\":\"name\",\"description\":\"description\"}],\"number\":1,\"size\":1,\"totalElements\":1000000,\"totalPages\":1}"));
         SegmentsSearchResponse response = client.segments().search(
             SegmentsSearchRequest
                 .builder()
@@ -104,6 +104,14 @@ public class SegmentsWireTest {
             + "          \"values\",\n"
             + "          \"values\"\n"
             + "        ],\n"
+            + "        \"fieldCondition\": {\n"
+            + "          \"fieldValidationType\": \"string\",\n"
+            + "          \"value\": {\n"
+            + "            \"opType\": \"comparison\",\n"
+            + "            \"operator\": \"EQ\",\n"
+            + "            \"value\": \"value\"\n"
+            + "          }\n"
+            + "        },\n"
             + "        \"operator\": \"NOT\"\n"
             + "      },\n"
             + "      \"createdAt\": \"2024-01-15T09:30:00Z\",\n"
@@ -131,6 +139,14 @@ public class SegmentsWireTest {
             + "          \"values\",\n"
             + "          \"values\"\n"
             + "        ],\n"
+            + "        \"fieldCondition\": {\n"
+            + "          \"fieldValidationType\": \"string\",\n"
+            + "          \"value\": {\n"
+            + "            \"opType\": \"comparison\",\n"
+            + "            \"operator\": \"EQ\",\n"
+            + "            \"value\": \"value\"\n"
+            + "          }\n"
+            + "        },\n"
             + "        \"operator\": \"NOT\"\n"
             + "      },\n"
             + "      \"createdAt\": \"2024-01-15T09:30:00Z\",\n"
@@ -394,7 +410,7 @@ public class SegmentsWireTest {
     public void testPatch() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"segmentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"precondition\":{\"preconditionType\":\"user\",\"key\":\"key\",\"value\":\"value\",\"values\":[\"values\",\"values\"],\"operator\":\"NOT\"},\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"referencedKnowledgeBaseCount\":1000000,\"referencedDocumentCount\":1000000,\"referencedActionCount\":1000000,\"status\":\"ACTIVE\",\"name\":\"name\",\"description\":\"description\"}"));
+            .setBody("{\"segmentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"precondition\":{\"preconditionType\":\"user\",\"key\":\"key\",\"value\":\"value\",\"values\":[\"values\",\"values\"],\"fieldCondition\":{\"fieldValidationType\":\"string\",\"value\":{\"opType\":\"comparison\",\"operator\":\"EQ\",\"value\":\"value\"}},\"operator\":\"NOT\"},\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"referencedKnowledgeBaseCount\":1000000,\"referencedDocumentCount\":1000000,\"referencedActionCount\":1000000,\"status\":\"ACTIVE\",\"name\":\"name\",\"description\":\"description\"}"));
         SegmentResponse response = client.segments().patch(
             "segmentReferenceId",
             SegmentPatchRequest
@@ -451,6 +467,14 @@ public class SegmentsWireTest {
             + "      \"values\",\n"
             + "      \"values\"\n"
             + "    ],\n"
+            + "    \"fieldCondition\": {\n"
+            + "      \"fieldValidationType\": \"string\",\n"
+            + "      \"value\": {\n"
+            + "        \"opType\": \"comparison\",\n"
+            + "        \"operator\": \"EQ\",\n"
+            + "        \"value\": \"value\"\n"
+            + "      }\n"
+            + "    },\n"
             + "    \"operator\": \"NOT\"\n"
             + "  },\n"
             + "  \"createdAt\": \"2024-01-15T09:30:00Z\",\n"
@@ -489,7 +513,7 @@ public class SegmentsWireTest {
     public void testDelete() throws Exception {
         server.enqueue(new MockResponse()
             .setResponseCode(200)
-            .setBody("{\"segmentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"precondition\":{\"preconditionType\":\"user\",\"key\":\"key\",\"value\":\"value\",\"values\":[\"values\",\"values\"],\"operator\":\"NOT\"},\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"referencedKnowledgeBaseCount\":1000000,\"referencedDocumentCount\":1000000,\"referencedActionCount\":1000000,\"status\":\"ACTIVE\",\"name\":\"name\",\"description\":\"description\"}"));
+            .setBody("{\"segmentId\":{\"organizationId\":\"organizationId\",\"agentId\":\"agentId\",\"type\":\"AGENT\",\"appId\":\"appId\",\"referenceId\":\"x\"},\"precondition\":{\"preconditionType\":\"user\",\"key\":\"key\",\"value\":\"value\",\"values\":[\"values\",\"values\"],\"fieldCondition\":{\"fieldValidationType\":\"string\",\"value\":{\"opType\":\"comparison\",\"operator\":\"EQ\",\"value\":\"value\"}},\"operator\":\"NOT\"},\"createdAt\":\"2024-01-15T09:30:00Z\",\"updatedAt\":\"2024-01-15T09:30:00Z\",\"referencedKnowledgeBaseCount\":1000000,\"referencedDocumentCount\":1000000,\"referencedActionCount\":1000000,\"status\":\"ACTIVE\",\"name\":\"name\",\"description\":\"description\"}"));
         SegmentResponse response = client.segments().delete(
             "segmentReferenceId",
             SegmentDeleteRequest
@@ -520,6 +544,14 @@ public class SegmentsWireTest {
             + "      \"values\",\n"
             + "      \"values\"\n"
             + "    ],\n"
+            + "    \"fieldCondition\": {\n"
+            + "      \"fieldValidationType\": \"string\",\n"
+            + "      \"value\": {\n"
+            + "        \"opType\": \"comparison\",\n"
+            + "        \"operator\": \"EQ\",\n"
+            + "        \"value\": \"value\"\n"
+            + "      }\n"
+            + "    },\n"
             + "    \"operator\": \"NOT\"\n"
             + "  },\n"
             + "  \"createdAt\": \"2024-01-15T09:30:00Z\",\n"

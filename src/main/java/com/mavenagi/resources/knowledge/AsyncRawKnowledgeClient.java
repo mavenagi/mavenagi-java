@@ -933,6 +933,11 @@ public class AsyncRawKnowledgeClient {
 
     /**
      * Finalize the latest knowledge base version. Required to indicate the version is complete. Will throw an exception if the latest version is not in progress.
+     * <p>A <code>FULL</code> version starts empty and replaces the live documents. Finalizing a <code>FULL</code> version
+     * with status <code>SUCCEEDED</code> (the default when <code>status</code> is omitted) succeeds even if no
+     * documents were added to it, and once it is processed the knowledge base has no documents.
+     * A <code>PARTIAL</code> version starts from the live version's documents, so finalizing it keeps the
+     * documents it didn't change.</p>
      * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<KnowledgeBaseVersion>> finalizeKnowledgeBaseVersion(
@@ -944,6 +949,11 @@ public class AsyncRawKnowledgeClient {
 
     /**
      * Finalize the latest knowledge base version. Required to indicate the version is complete. Will throw an exception if the latest version is not in progress.
+     * <p>A <code>FULL</code> version starts empty and replaces the live documents. Finalizing a <code>FULL</code> version
+     * with status <code>SUCCEEDED</code> (the default when <code>status</code> is omitted) succeeds even if no
+     * documents were added to it, and once it is processed the knowledge base has no documents.
+     * A <code>PARTIAL</code> version starts from the live version's documents, so finalizing it keeps the
+     * documents it didn't change.</p>
      * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<KnowledgeBaseVersion>> finalizeKnowledgeBaseVersion(
@@ -953,6 +963,11 @@ public class AsyncRawKnowledgeClient {
 
     /**
      * Finalize the latest knowledge base version. Required to indicate the version is complete. Will throw an exception if the latest version is not in progress.
+     * <p>A <code>FULL</code> version starts empty and replaces the live documents. Finalizing a <code>FULL</code> version
+     * with status <code>SUCCEEDED</code> (the default when <code>status</code> is omitted) succeeds even if no
+     * documents were added to it, and once it is processed the knowledge base has no documents.
+     * A <code>PARTIAL</code> version starts from the live version's documents, so finalizing it keeps the
+     * documents it didn't change.</p>
      * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>edit:agents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<KnowledgeBaseVersion>> finalizeKnowledgeBaseVersion(
@@ -1599,6 +1614,9 @@ public class AsyncRawKnowledgeClient {
 
     /**
      * Get a knowledge document by its supplied version and document IDs. Response includes document content in markdown format.
+     * <p>The path takes the reference ID of a knowledge base version, not of the knowledge base.
+     * <code>searchKnowledgeDocuments</code> returns it as <code>knowledgeBaseVersionId.referenceId</code> when the
+     * document has one.</p>
      * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:documents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<KnowledgeDocumentResponse>> getKnowledgeDocument(
@@ -1610,6 +1628,9 @@ public class AsyncRawKnowledgeClient {
 
     /**
      * Get a knowledge document by its supplied version and document IDs. Response includes document content in markdown format.
+     * <p>The path takes the reference ID of a knowledge base version, not of the knowledge base.
+     * <code>searchKnowledgeDocuments</code> returns it as <code>knowledgeBaseVersionId.referenceId</code> when the
+     * document has one.</p>
      * <p>&lt;Note&gt;<strong>Required permission:</strong> <code>read:documents</code>&lt;/Note&gt;</p>
      */
     public CompletableFuture<MavenAGIHttpResponse<KnowledgeDocumentResponse>> getKnowledgeDocument(
@@ -1701,6 +1722,9 @@ public class AsyncRawKnowledgeClient {
 
     /**
      * Update mutable knowledge document fields that can be set independently of a knowledge base version.
+     * <p>Unlike <code>getKnowledgeDocument</code>, the path takes the knowledge base's reference ID, not a
+     * version's. The document is looked up in the knowledge base's live version, so a document
+     * that is only in a version still in progress is not found.</p>
      * <p>For any changes in document content see the <code>createKnowledgeBaseVersion</code> and <code>createKnowledgeDocument</code> endpoints.</p>
      * <p>The <code>knowledgeBaseAppId</code> field can be provided to update a knowledge document in a knowledge base owned by a different app.
      * All other fields will overwrite the existing value on the knowledge document only if provided.</p>
@@ -1716,6 +1740,9 @@ public class AsyncRawKnowledgeClient {
 
     /**
      * Update mutable knowledge document fields that can be set independently of a knowledge base version.
+     * <p>Unlike <code>getKnowledgeDocument</code>, the path takes the knowledge base's reference ID, not a
+     * version's. The document is looked up in the knowledge base's live version, so a document
+     * that is only in a version still in progress is not found.</p>
      * <p>For any changes in document content see the <code>createKnowledgeBaseVersion</code> and <code>createKnowledgeDocument</code> endpoints.</p>
      * <p>The <code>knowledgeBaseAppId</code> field can be provided to update a knowledge document in a knowledge base owned by a different app.
      * All other fields will overwrite the existing value on the knowledge document only if provided.</p>
@@ -1730,6 +1757,9 @@ public class AsyncRawKnowledgeClient {
 
     /**
      * Update mutable knowledge document fields that can be set independently of a knowledge base version.
+     * <p>Unlike <code>getKnowledgeDocument</code>, the path takes the knowledge base's reference ID, not a
+     * version's. The document is looked up in the knowledge base's live version, so a document
+     * that is only in a version still in progress is not found.</p>
      * <p>For any changes in document content see the <code>createKnowledgeBaseVersion</code> and <code>createKnowledgeDocument</code> endpoints.</p>
      * <p>The <code>knowledgeBaseAppId</code> field can be provided to update a knowledge document in a knowledge base owned by a different app.
      * All other fields will overwrite the existing value on the knowledge document only if provided.</p>

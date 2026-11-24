@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public final class ResolutionStatus {
+    public static final ResolutionStatus ESCALATED = new ResolutionStatus(Value.ESCALATED, "ESCALATED");
+
     public static final ResolutionStatus CONTENT_SAFETY_FLAGGED =
             new ResolutionStatus(Value.CONTENT_SAFETY_FLAGGED, "CONTENT_SAFETY_FLAGGED");
 
@@ -19,16 +21,14 @@ public final class ResolutionStatus {
 
     public static final ResolutionStatus HANGUP = new ResolutionStatus(Value.HANGUP, "HANGUP");
 
-    public static final ResolutionStatus ESCALATED = new ResolutionStatus(Value.ESCALATED, "ESCALATED");
-
     public static final ResolutionStatus ERROR = new ResolutionStatus(Value.ERROR, "ERROR");
+
+    public static final ResolutionStatus INELIGIBLE = new ResolutionStatus(Value.INELIGIBLE, "INELIGIBLE");
 
     public static final ResolutionStatus NEGATIVE_FEEDBACK =
             new ResolutionStatus(Value.NEGATIVE_FEEDBACK, "NEGATIVE_FEEDBACK");
 
     public static final ResolutionStatus RESOLVED = new ResolutionStatus(Value.RESOLVED, "RESOLVED");
-
-    public static final ResolutionStatus INELIGIBLE = new ResolutionStatus(Value.INELIGIBLE, "INELIGIBLE");
 
     public static final ResolutionStatus UNKNOWN = new ResolutionStatus(Value.UNKNOWN, "UNKNOWN");
 
@@ -64,6 +64,8 @@ public final class ResolutionStatus {
 
     public <T> T visit(Visitor<T> visitor) {
         switch (value) {
+            case ESCALATED:
+                return visitor.visitEscalated();
             case CONTENT_SAFETY_FLAGGED:
                 return visitor.visitContentSafetyFlagged();
             case INCOMPLETE:
@@ -74,16 +76,14 @@ public final class ResolutionStatus {
                 return visitor.visitInProgress();
             case HANGUP:
                 return visitor.visitHangup();
-            case ESCALATED:
-                return visitor.visitEscalated();
             case ERROR:
                 return visitor.visitError();
+            case INELIGIBLE:
+                return visitor.visitIneligible();
             case NEGATIVE_FEEDBACK:
                 return visitor.visitNegativeFeedback();
             case RESOLVED:
                 return visitor.visitResolved();
-            case INELIGIBLE:
-                return visitor.visitIneligible();
             case UNKNOWN:
                 return visitor.visitUnknown();
             case _UNKNOWN:
@@ -95,6 +95,8 @@ public final class ResolutionStatus {
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static ResolutionStatus valueOf(String value) {
         switch (value) {
+            case "ESCALATED":
+                return ESCALATED;
             case "CONTENT_SAFETY_FLAGGED":
                 return CONTENT_SAFETY_FLAGGED;
             case "INCOMPLETE":
@@ -105,16 +107,14 @@ public final class ResolutionStatus {
                 return IN_PROGRESS;
             case "HANGUP":
                 return HANGUP;
-            case "ESCALATED":
-                return ESCALATED;
             case "ERROR":
                 return ERROR;
+            case "INELIGIBLE":
+                return INELIGIBLE;
             case "NEGATIVE_FEEDBACK":
                 return NEGATIVE_FEEDBACK;
             case "RESOLVED":
                 return RESOLVED;
-            case "INELIGIBLE":
-                return INELIGIBLE;
             case "UNKNOWN":
                 return UNKNOWN;
             default:

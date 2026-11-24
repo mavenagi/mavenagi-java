@@ -7,10 +7,10 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public final class PresenceOperator {
+    public static final PresenceOperator IS_DETERMINED = new PresenceOperator(Value.IS_DETERMINED, "IS_DETERMINED");
+
     public static final PresenceOperator IS_UNDETERMINED =
             new PresenceOperator(Value.IS_UNDETERMINED, "IS_UNDETERMINED");
-
-    public static final PresenceOperator IS_DETERMINED = new PresenceOperator(Value.IS_DETERMINED, "IS_DETERMINED");
 
     private final Value value;
 
@@ -44,10 +44,10 @@ public final class PresenceOperator {
 
     public <T> T visit(Visitor<T> visitor) {
         switch (value) {
-            case IS_UNDETERMINED:
-                return visitor.visitIsUndetermined();
             case IS_DETERMINED:
                 return visitor.visitIsDetermined();
+            case IS_UNDETERMINED:
+                return visitor.visitIsUndetermined();
             case UNKNOWN:
             default:
                 return visitor.visitUnknown(string);
@@ -57,10 +57,10 @@ public final class PresenceOperator {
     @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static PresenceOperator valueOf(String value) {
         switch (value) {
-            case "IS_UNDETERMINED":
-                return IS_UNDETERMINED;
             case "IS_DETERMINED":
                 return IS_DETERMINED;
+            case "IS_UNDETERMINED":
+                return IS_UNDETERMINED;
             default:
                 return new PresenceOperator(Value.UNKNOWN, value);
         }

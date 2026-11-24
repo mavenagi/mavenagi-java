@@ -542,7 +542,8 @@ public class ConversationClient {
     /**
      * Import simulation conversations from a CSV file.
      * <p>This CSV format is very simple and only allows for one column: <code>question</code>. A header containing this column is required.
-     * Each row will generate one simulation conversation, using the provided response config, if present.</p>
+     * Each row will generate one simulation conversation, using the provided response config, if present.
+     * The file can have at most 1,000 non-blank rows; a larger file is rejected with a 400.</p>
      * <p>This API is offered for backwards compatibility.
      * Most API callers should create simulations programmatically to allow for more flexibility.</p>
      * <p>Shown in Agent Designer as &quot;Import questions&quot;.</p>
@@ -555,7 +556,8 @@ public class ConversationClient {
     /**
      * Import simulation conversations from a CSV file.
      * <p>This CSV format is very simple and only allows for one column: <code>question</code>. A header containing this column is required.
-     * Each row will generate one simulation conversation, using the provided response config, if present.</p>
+     * Each row will generate one simulation conversation, using the provided response config, if present.
+     * The file can have at most 1,000 non-blank rows; a larger file is rejected with a 400.</p>
      * <p>This API is offered for backwards compatibility.
      * Most API callers should create simulations programmatically to allow for more flexibility.</p>
      * <p>Shown in Agent Designer as &quot;Import questions&quot;.</p>
